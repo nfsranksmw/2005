@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFS Most Wanted 2005 - Leaderboards & Records</title>
+    <style>
+        :root {
+            --bg-color: #121214;
+            --card-bg: #202024;
+            --border-color: #323238;
+            --text-main: #e1e1e6;
+            --accent: #00b37e;
+            --youtube-red: #e52e2e;
+            --youtube-hover: #ff0000;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #1a1a1e;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        h1 {
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0 0 5px 0;
+        }
+
+        p.subtitle {
+            color: #8d8d99;
+            margin: 0;
+        }
+
+        /* Menú de Navegación */
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #161619;
+            padding: 10px;
+            gap: 15px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        nav button {
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            padding: 10px 15px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            border-radius: 4px;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        nav button:hover, nav button.active {
+            background-color: var(--accent);
+            color: #121214;
+        }
+
+        /* Contenedores de Secciones */
+        .section-content {
+            display: none;
+            padding: 30px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-content.active {
+            display: block;
+        }
+
+        .table-container {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            margin-top: 20px;
+        }
+
+        h2 {
+            color: var(--accent);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+            text-transform: uppercase;
+            font-size: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 14px 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: #29292e;
+            color: var(--accent);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        tr:hover {
+            background-color: #29292e;
+        }
+
+        .rank-badge {
+            font-weight: bold;
+            color: #fba94c;
+        }
+
+        .btn-youtube {
+            background-color: var(--youtube-red);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            transition: background 0.2s;
+        }
+
+        .btn-youtube:hover {
+            background-color: var(--youtube-hover);
+        }
+
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .route-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .route-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent);
+        }
+
+        .route-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            color: var(--text-main);
+        }
+
+        .route-card span {
+            font-size: 12px;
+            color: #8d8d99;
+            background: #29292e;
+            padding: 3px 8px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Need for Speed: Most Wanted (2005)</h1>
+        <p class="subtitle">Comunidad Oficial de Récords y Leaderboards</p>
+    </header>
+
+    <!-- Menú de navegación principal -->
+    <nav>
+        <button onclick="switchTab('inicio')" class="active" id="btn-inicio">Inicio</button>
+        <button onclick="switchTab('sprint')" id="btn-sprint">Rutas: Sprint</button>
+        <button onclick="switchTab('circuito')" id="btn-circuito">Rutas: Circuito</button>
+        <button onclick="switchTab('drag')" id="btn-drag">Rutas: Drag</button>
+        <button onclick="switchTab('rank-circuito')" id="btn-rank-circuito">Rank: Circuito</button>
+        <button onclick="switchTab('rank-sprint')" id="btn-rank-sprint">Rank: Sprint</button>
+        <button onclick="switchTab('rank-bmw')" id="btn-rank-bmw">Rank: BMW</button>
+        <button onclick="switchTab('rank-jumbo')" id="btn-rank-jumbo">Rank: Jumbo</button>
+    </nav>
+
+    <!-- SECCIÓN: INICIO -->
+    <div id="inicio" class="section-content active">
+        <h2>Bienvenido a la CENTRAL DE RÉCORDS MW 2005</h2>
+        <p>Este espacio recopila los mejores tiempos históricos de la comunidad en las diferentes modalidades de juego: Sprint, Circuito y Drag. Navega por las pestañas superiores para consultar las tablas de clasificación globales y específicas por categoría.</p>
+        <div class="table-container">
+            <h3>Estadísticas Rápidas</h3>
+            <p>🏁 <strong>Total de Rutas Registradas:</strong> Más de 100 pistas configuradas.</p>
+            <p>🏆 <strong>Categorías Activas:</strong> Sprint, Circuito, Drag, BMW Class y Jumbo Class.</p>
+        </div>
+    </div>
+
+    <!-- SECCIÓN: RUTAS SPRINT -->
+    <div id="sprint" class="section-content">
+        <h2>Rutas de Sprint</h2>
+        <p>Selecciona una ruta para ver sus leaderboards detallados:</p>
+        <div class="grid-cards">
+            <div class="route-card"><h3>Diamond & First</h3><span>Sprint</span></div>
+            <div class="route-card"><h3>Bay Bridge</h3><span>Sprint</span></div>
+            <div class="route-card"><h3>Rockridge & 14th</h3><span>Sprint</span></div>
+            <div class="route-card"><h3>Camden & Dunwich</h3><span>Sprint</span></div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN: RUTAS CIRCUITO -->
+    <div id="circuito" class="section-content">
+        <h2>Rutas de Circuito</h2>
+        <p>Circuitos oficiales de Rockport City:</p>
+        <div class="grid-cards">
+            <div class="route-card"><h3>Beacon & Station</h3><span>Circuito</span></div>
+            <div class="route-card"><h3>Heritage Heights</h3><span>Circuito</span></div>
+            <div class="route-card"><h3>Dunwich Bay</h3><span>Circuito</span></div>
+            <div class="route-card"><h3>University Square</h3><span>Circuito</span></div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN: RUTAS DRAG -->
+    <div id="drag" class="section-content">
+        <h2>Rutas de Drag</h2>
+        <p>Aceleración pura en las autopistas y calles:</p>
+        <div class="grid-cards">
+            <div class="route-card"><h3>Highway 99</h3><span>Drag</span></div>
+            <div class="route-card"><h3>North Bay & Central</h3><span>Drag</span></div>
+            <div class="route-card"><h3>SE 3rd Boulevard</h3><span>Drag</span></div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN: RANKING GLOBAL - CIRCUITO -->
+    <div id="rank-circuito" class="section-content">
+        <h2>Ranking Global de Pilotos - Circuito</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Driver</th>
+                        <th>Carro Frecuente</th>
+                        <th>Puntuación / Tiempo Global</th>
+                        <th>Prueba (Video)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><span class="rank-badge">#1</span></td><td>DJALIL</td><td>BMW M3 GTR (E46)</td><td><strong>9,850 Pts</strong></td><td><a href="https://youtube.com" target="_blank" class="btn-youtube">Ver YouTube</a></td></tr>
+                    <tr><td><span class="rank-badge">#2</span></td><td>DRAGMILL</td><td>Lamborghini Gallardo</td><td><strong>9,420 Pts</strong></td><td><a href="https://youtube.com" target="_blank" class="btn-youtube">Ver YouTube</a></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- SECCIÓN: RANKING GLOBAL - SPRINT -->
+    <div id="rank-sprint" class="section-content">
+        <h2>Ranking Global de Pilotos - Sprint</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Driver</th>
+                        <th>Carro Frecuente</th>
+                        <th>Puntuación Global</th>
+                        <th>Prueba (Video)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><span class="rank-badge">#1</span></td><td>XTINGCRISTAKE</td><td>Porsche Carrera GT</td><td><strong>9,910 Pts</strong></td><td><a href="https://youtube.com" target="_blank" class="btn-youtube">Ver YouTube</a></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- SECCIÓN: RANKING CATEGORÍA BMW -->
+    <div id="rank-bmw" class="section-content">
+        <h2>Ranking de Pilotos - Categoría BMW</h2>
+        <p>Clasificación exclusiva para competidores que utilizan vehículos de la marca BMW (E46, M3, etc.).</p>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Driver</th>
+                        <th>Modelo BMW</th>
+                        <th>Mejor Tiempo / Récord</th>
+                        <th>Prueba (Video)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><span class="rank-badge">#1</span></td><td>MOSTWANTED_PRO</td><td>BMW M3 GTR (E46)</td><td><strong>01:28.400</strong></td><td><a href="https://youtube.com" target="_blank" class="btn-youtube">Ver YouTube</a></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- SECCIÓN: RANKING CATEGORÍA JUMBO -->
+    <div id="rank-jumbo" class="section-content">
+        <h2>Ranking de Pilotos - Categoría Jumbo</h2>
+        <p>Clasificación dedicada a vehículos pesados / clase especial de la comunidad (SUVs y autos de mayor tamaño).</p>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Driver</th>
+                        <th>Vehículo (SUV/Jumbo)</th>
+                        <th>Mejor Tiempo / Récord</th>
+                        <th>Prueba (Video)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><span class="rank-badge">#1</span></td><td>TANK_DRIVER</td><td>Cadillac Escalade</td><td><strong>01:42.100</strong></td><td><a href="https://youtube.com" target="_blank" class="btn-youtube">Ver YouTube</a></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Script de navegación interactiva entre pestañas -->
+    <script>
+        function switchTab(tabId) {
+            // Ocultar todas las secciones
+            const sections = document.querySelectorAll('.section-content');
+            sections.forEach(sec => sec.classList.remove('active'));
+
+            // Quitar la clase active de todos los botones
+            const buttons = document.querySelectorAll('nav button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Mostrar la sección seleccionada y activar su botón
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('btn-' + tabId).classList.add('active');
+        }
+    </script>
+
+</body>
+                                                          </html>
+                                                          
