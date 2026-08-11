@@ -3,132 +3,390 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NFS Most Wanted 2005 - Leaderboards & Records</title>
+    <title>NFS Most Wanted (2005) - World Records</title>
     <style>
         :root {
-            --bg-color: #121214;
-            --card-bg: #202024;
-            --border-color: #323238;
-            --text-main: #e1e1e6;
-            --accent: #00b37e;
-            --youtube-red: #e52e2e;
-            --youtube-hover: #ff0000;
+            --bg-dark: #0b0b0d;
+            --bg-panel: rgba(22, 22, 26, 0.85);
+            --nfs-orange: #ff8833;
+            --text-main: #f0f0f5;
+            --text-muted: #9999a6;
+            --border-color: #2a2a33;
         }
 
         body {
-            background-color: var(--bg-color);
+            background-color: var(--bg-dark);
             color: var(--text-main);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
+            background-image: radial-gradient(circle at 50% 20%, #1a1528 0%, #0b0b0d 70%);
+            background-attachment: fixed;
         }
 
+        /* Navegación Superior Estilo Gamer / Pegajosa */
         header {
-            background-color: #1a1a1e;
-            padding: 20px;
-            text-align: center;
-            border-bottom: 2px solid var(--border-color);
+            background-color: rgba(22, 22, 26, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--nfs-orange);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
-        h1 {
-            color: var(--accent);
+        .logo {
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--nfs-orange);
             text-transform: uppercase;
             letter-spacing: 2px;
-            margin: 0 0 5px 0;
+            text-shadow: 0 0 12px rgba(255, 136, 51, 0.5);
         }
 
-        p.subtitle {
-            color: #8d8d99;
-            margin: 0;
+        @media(min-width: 768px) {
+            header { padding: 15px 30px; }
+            .logo { font-size: 22px; }
         }
 
-        /* Menú de Navegación */
-        nav {
-            display: flex;
-            justify-content: center;
-            background-color: #161619;
-            padding: 10px;
-            gap: 15px;
-            flex-wrap: wrap;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        nav button {
-            background: transparent;
-            border: none;
+        nav a {
             color: var(--text-main);
-            padding: 10px 15px;
+            text-decoration: none;
+            margin-left: 15px;
+            font-weight: 600;
             font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-            border-radius: 4px;
-            transition: background 0.2s, color 0.2s;
+            transition: color 0.3s;
         }
 
-        nav button:hover, nav button.active {
-            background-color: var(--accent);
-            color: #121214;
+        @media(min-width: 768px) {
+            nav a { margin-left: 20px; font-size: 16px; }
         }
 
-        /* Contenedores de Secciones */
-        .section-content {
+        nav a:hover, nav a.active {
+            color: var(--nfs-orange);
+        }
+
+        /* Contenedores de Vistas */
+        .view-section {
             display: none;
-            padding: 30px 20px;
+            padding: 30px 15px;
             max-width: 1100px;
             margin: 0 auto;
         }
 
-        .section-content.active {
+        @media(min-width: 768px) {
+            .view-section { padding: 40px 20px; }
+        }
+
+        .view-section.active {
             display: block;
         }
 
-        .table-container {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            margin-top: 20px;
+        /* Hero Banner */
+        .hero-banner {
+            position: relative;
+            width: 100%;
+            height: 420px;
+            background: linear-gradient(rgba(11, 11, 13, 0.4), rgba(11, 11, 13, 0.85)), 
+                url('bmw-m3-gtr.jpg') no-repeat center center/cover;
+            display: flex;
+            align-items: center;
+            padding-left: 20px;
+            border-bottom: 3px solid var(--nfs-orange);
         }
 
-        h2 {
-            color: var(--accent);
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 8px;
+        @media(min-width: 768px) {
+            .hero-banner { height: 480px; padding-left: 60px; }
+        }
+
+        .hero-banner-content {
+            max-width: 700px;
+            z-index: 2;
+        }
+
+        .hero-banner-content h1 {
+            font-size: 32px;
+            font-weight: 900;
+            color: #fff;
+            line-height: 1.1;
             text-transform: uppercase;
+            margin: 0;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9);
+            letter-spacing: 1px;
+        }
+
+        @media(min-width: 768px) {
+            .hero-banner-content h1 { font-size: 42px; }
+        }
+
+        .hero-btn-container {
+            margin-top: 25px;
+        }
+
+        .btn-explored {
+            background-color: transparent;
+            color: #fff;
+            border: 2px solid #fff;
+            padding: 10px 24px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 20px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            letter-spacing: 1px;
+        }
+
+        .btn-explored:hover {
+            background-color: #fff;
+            color: #0b0b0d;
+            box-shadow: 0 0 15px rgba(255,255,255,0.6);
+        }
+
+        /* Drivers Banner */
+        .drivers-banner {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            background: linear-gradient(rgba(20, 20, 60, 0.75), rgba(15, 15, 40, 0.9)), 
+                        url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1400&q=80') no-repeat center center/cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border-bottom: 3px solid var(--nfs-orange);
+            padding: 0 15px;
+        }
+
+        @media(min-width: 768px) {
+            .drivers-banner { height: 420px; }
+        }
+
+        .drivers-banner h2 {
+            font-size: 38px;
+            font-weight: 900;
+            color: #ffaa33;
+            text-transform: uppercase;
+            margin: 0 0 10px 0;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.9);
+        }
+
+        @media(min-width: 768px) {
+            .drivers-banner h2 { font-size: 50px; }
+        }
+
+        .drivers-banner h3 {
+            font-size: 32px;
+            font-weight: 900;
+            color: #ffaa33;
+            text-transform: uppercase;
+            margin: 0;
+            line-height: 1.1;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.9);
+        }
+
+        @media(min-width: 768px) {
+            .drivers-banner h3 { font-size: 42px; }
+        }
+
+        /* Controles y Búsqueda */
+        .controls-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        @media(min-width: 768px) {
+            .controls-wrapper {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        .search-input {
+            background-color: var(--bg-panel);
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            width: 100%;
+            max-width: 100%;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        @media(min-width: 768px) {
+            .search-input { max-width: 320px; }
+        }
+
+        .search-input:focus {
+            border-color: var(--nfs-orange);
+            box-shadow: 0 0 8px rgba(255, 136, 51, 0.4);
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: var(--bg-panel);
+            backdrop-filter: blur(5px);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 13px;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background-color: var(--nfs-orange);
+            color: #0b0b0d;
+            border-color: var(--nfs-orange);
+            box-shadow: 0 0 10px rgba(255, 136, 51, 0.5);
+        }
+
+        /* Grid de Tarjetas Garage */
+        .routes-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        @media(min-width: 576px) {
+            .routes-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+        }
+
+        .route-card {
+            background: var(--bg-panel);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .route-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--border-color);
+            transition: background 0.3s;
+        }
+
+        .route-card:hover {
+            border-color: var(--nfs-orange);
+            transform: translateY(-4px);
+            box-shadow: 0 6px 20px rgba(255, 136, 51, 0.15);
+        }
+
+        .route-card:hover::before {
+            background: var(--nfs-orange);
+            box-shadow: 0 0 10px var(--nfs-orange);
+        }
+
+        .route-card h3 {
+            margin: 0 0 8px 0;
+            color: var(--text-main);
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .route-card span {
+            display: inline-block;
+            background: rgba(34, 34, 42, 0.8);
+            color: var(--nfs-orange);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        /* Tabla Leaderboard Optimizada para Móviles */
+        .table-container {
+            background: var(--bg-panel);
+            backdrop-filter: blur(10px);
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            overflow-x: auto;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+        }
+
+        @media(min-width: 768px) {
+            .table-container { padding: 20px; }
+        }
+
+        h2.section-title {
+            color: var(--nfs-orange);
+            text-transform: uppercase;
+            border-left: 4px solid var(--nfs-orange);
+            padding-left: 10px;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
             font-size: 20px;
+        }
+
+        @media(min-width: 768px) {
+            h2.section-title { font-size: 24px; }
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             text-align: left;
+            min-width: 600px; /* Asegura scroll horizontal fluido en móviles estrechos */
         }
 
         th, td {
-            padding: 14px 15px;
+            padding: 12px 14px;
             border-bottom: 1px solid var(--border-color);
+            font-size: 14px;
         }
 
         th {
-            background-color: #29292e;
-            color: var(--accent);
-            font-size: 13px;
+            background-color: rgba(31, 31, 38, 0.9);
+            color: var(--nfs-orange);
+            font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
         tr:hover {
-            background-color: #29292e;
+            background-color: rgba(26, 26, 33, 0.6);
         }
 
-        .rank-badge {
-            font-weight: bold;
-            color: #fba94c;
-        }
+        .rank-1 { color: #ffd700; font-weight: bold; text-shadow: 0 0 8px rgba(255, 215, 0, 0.4); }
+        .rank-2 { color: #c0c0c0; font-weight: bold; }
+        .rank-3 { color: #cd7f32; font-weight: bold; }
 
         .btn-youtube {
-            background-color: var(--youtube-red);
+            background-color: #cc0000;
             color: white;
             padding: 6px 12px;
             border-radius: 4px;
@@ -136,218 +394,321 @@
             font-size: 12px;
             font-weight: bold;
             display: inline-block;
-            transition: background 0.2s;
+            transition: background 0.2s, box-shadow 0.2s;
         }
 
         .btn-youtube:hover {
-            background-color: var(--youtube-hover);
+            background-color: #ff0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
         }
 
-        .grid-cards {
+        /* Tarjeta de Novedades / Récords Recientes en Home */
+        .news-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-top: 40px;
         }
 
-        .route-card {
-            background: var(--card-bg);
+        @media(min-width: 768px) {
+            .news-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        .news-card {
+            background: var(--bg-panel);
+            backdrop-filter: blur(8px);
+            padding: 20px;
+            border-radius: 8px;
             border: 1px solid var(--border-color);
-            padding: 15px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: transform 0.2s, border-color 0.2s;
-        }
-
-        .route-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--accent);
-        }
-
-        .route-card h3 {
-            margin: 0 0 10px 0;
-            font-size: 16px;
-            color: var(--text-main);
-        }
-
-        .route-card span {
-            font-size: 12px;
-            color: #8d8d99;
-            background: #29292e;
-            padding: 3px 8px;
-            border-radius: 3px;
         }
     </style>
 </head>
 <body>
 
+    <!-- Menú de Navegación Principal -->
     <header>
-        <h1>Need for Speed: Most Wanted (2005)</h1>
-        <p class="subtitle">Comunidad Oficial de Récords y Leaderboards</p>
+        <div class="logo">NFS: MW 2005 - Récords</div>
+        <nav>
+            <a href="#" onclick="switchView('home')" class="active" id="nav-home">Inicio</a>
+            <a href="#" onclick="switchView('routes')" id="nav-routes">Rutas & Pistas</a>
+            <a href="#" onclick="switchView('leaderboard')" id="nav-leaderboard">Ejemplo Leaderboard</a>
+        </nav>
     </header>
 
-    <!-- Menú de navegación principal -->
-    <nav>
-        <button onclick="switchTab('inicio')" class="active" id="btn-inicio">Inicio</button>
-        <button onclick="switchTab('sprint')" id="btn-sprint">Rutas: Sprint</button>
-        <button onclick="switchTab('circuito')" id="btn-circuito">Rutas: Circuito</button>
-        <button onclick="switchTab('drag')" id="btn-drag">Rutas: Drag</button>
-        <button onclick="switchTab('rank-circuito')" id="btn-rank-circuito">Rank: Circuito</button>
-        <button onclick="switchTab('rank-sprint')" id="btn-rank-sprint">Rank: Sprint</button>
-        <button onclick="switchTab('rank-bmw')" id="btn-rank-bmw">Rank: BMW</button>
-        <button onclick="switchTab('rank-jumbo')" id="btn-rank-jumbo">Rank: Jumbo</button>
-    </nav>
-
-    <!-- SECCIÓN: INICIO -->
-    <div id="inicio" class="section-content active">
-        <h2>Bienvenido a la CENTRAL DE RÉCORDS MW 2005</h2>
-        <p>Este espacio recopila los mejores tiempos históricos de la comunidad en las diferentes modalidades de juego: Sprint, Circuito y Drag. Navega por las pestañas superiores para consultar las tablas de clasificación globales y específicas por categoría.</p>
-        <div class="table-container">
-            <h3>Estadísticas Rápidas</h3>
-            <p>🏁 <strong>Total de Rutas Registradas:</strong> Más de 100 pistas configuradas.</p>
-            <p>🏆 <strong>Categorías Activas:</strong> Sprint, Circuito, Drag, BMW Class y Jumbo Class.</p>
+    <!-- 1. VISTA DE INICIO -->
+    <section id="view-home" class="view-section active" style="padding: 0; max-width: 100%;">
+        <div class="hero-banner">
+            <div class="hero-banner-content">
+                <h1>LEADERBOARD<br>WORLD<br>RANKING NFS<br>MOST WANTED</h1>
+                <div class="hero-btn-container">
+                    <a href="#" class="btn-explored" onclick="switchView('routes')">Explored</a>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <!-- SECCIÓN: RUTAS SPRINT -->
-    <div id="sprint" class="section-content">
-        <h2>Rutas de Sprint</h2>
-        <p>Selecciona una ruta para ver sus leaderboards detallados:</p>
-        <div class="grid-cards">
-            <div class="route-card"><h3>Diamond & First</h3><span>Sprint</span></div>
-            <div class="route-card"><h3>Bay Bridge</h3><span>Sprint</span></div>
-            <div class="route-card"><h3>Rockridge & 14th</h3><span>Sprint</span></div>
-            <div class="route-card"><h3>Camden & Dunwich</h3><span>Sprint</span></div>
+        <div class="drivers-banner">
+            <h2>DRIVERS</h2>
+            <h3>100%<br>COMPETITIVE</h3>
         </div>
-    </div>
-
-    <!-- SECCIÓN: RUTAS CIRCUITO -->
-    <div id="circuito" class="section-content">
-        <h2>Rutas de Circuito</h2>
-        <p>Circuitos oficiales de Rockport City:</p>
-        <div class="grid-cards">
-            <div class="route-card"><h3>Beacon & Station</h3><span>Circuito</span></div>
-            <div class="route-card"><h3>Heritage Heights</h3><span>Circuito</span></div>
-            <div class="route-card"><h3>Dunwich Bay</h3><span>Circuito</span></div>
-            <div class="route-card"><h3>University Square</h3><span>Circuito</span></div>
+        
+        <div style="max-width: 1100px; margin: 30px auto; padding: 0 15px;">
+            <div class="news-grid">
+                <div class="news-card">
+                    <h3 style="color: var(--nfs-orange); margin-top:0;">¿De qué trata este sitio?</h3>
+                    <p style="color: var(--text-muted); line-height: 1.6; font-size: 14px;">Recopilamos los tiempos más rápidos de la historia en las más de 100 rutas de Rockport City. Filtra por circuitos, sprints, drags y comprueba los videos de prueba de cada corredor.</p>
+                </div>
+                <div class="news-card">
+                    <h3 style="color: var(--nfs-orange); margin-top:0;">🚀 Récords Recientes (Live Feed)</h3>
+                    <p style="color: var(--text-muted); line-height: 1.6; font-size: 14px;"><strong>DJALIL</strong> rompió el récord mundial en <em>City Perimeter</em> con un tiempo de <strong>01:30.680</strong> a bordo de su BMW M3 GTR.</p>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <!-- SECCIÓN: RUTAS DRAG -->
-    <div id="drag" class="section-content">
-        <h2>Rutas de Drag</h2>
-        <p>Aceleración pura en las autopistas y calles:</p>
-        <div class="grid-cards">
-            <div class="route-card"><h3>Highway 99</h3><span>Drag</span></div>
-            <div class="route-card"><h3>North Bay & Central</h3><span>Drag</span></div>
-            <div class="route-card"><h3>SE 3rd Boulevard</h3><span>Drag</span></div>
+    <!-- 2. VISTA DE RUTAS -->
+    <section id="view-routes" class="view-section">
+        <h2 class="section-title">Índice de Rutas y Pruebas</h2>
+        
+        <div class="controls-wrapper">
+            <input type="text" id="route-search" class="search-input" placeholder="🔍 Buscar pista o ruta..." onkeyup="filterRoutes()">
+            
+            <div class="filter-bar">
+                <button class="filter-btn active" onclick="setCategory('all', this)">Todas</button>
+                <button class="filter-btn" onclick="setCategory('Sprint', this)">Sprint</button>
+                <button class="filter-btn" onclick="setCategory('Circuito', this)">Circuito</button>
+                <button class="filter-btn" onclick="setCategory('Drag', this)">Drag</button>
+            </div>
         </div>
-    </div>
+        
+        <div class="routes-grid" id="routes-grid-container">
+            <!-- Renderizado dinámico -->
+        </div>
+    </section>
 
-    <!-- SECCIÓN: RANKING GLOBAL - CIRCUITO -->
-    <div id="rank-circuito" class="section-content">
-        <h2>Ranking Global de Pilotos - Circuito</h2>
+    <!-- 3. VISTA DE LEADERBOARD -->
+    <section id="view-leaderboard" class="view-section">
+        <h2 class="section-title" id="leaderboard-title">Leaderboard: Ruta</h2>
         <div class="table-container">
             <table>
                 <thead>
                     <tr>
                         <th>Rank</th>
                         <th>Driver</th>
-                        <th>Carro Frecuente</th>
-                        <th>Puntuación / Tiempo Global</th>
-                        <th>Prueba (Video)</th>
+                        <th>Car</th>
+                        <th>Time</th>
+                        <th>Top Speed</th>
+                        <th>Prueba (YouTube)</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr><td><span class="rank-badge">#1</span></td><td>DJALIL</td><td>BMW M3 GTR (E46)</td><td><strong>9,850 Pts</strong></td><td><a href="https://youtube.com" target="_blank" class="btn-youtube">Ver YouTube</a></td></tr>
-                    <tr><td><span class="rank-badge">#2</span></td><td>DRAGMILL</td><td>Lamborghini Gallardo</td><td><strong>9,420 Pts</strong></td><td><a href="https://youtube.com" target="_blank" class="btn-youtube">Ver YouTube</a></td></tr>
+                <tbody id="dynamic-tbody">
+                    <!-- Datos inyectados de forma asíncrona -->
                 </tbody>
             </table>
         </div>
-    </div>
+        <br>
+        <button class="filter-btn" onclick="switchView('routes')">← Volver al Índice de Rutas</button>
+    </section>
 
-    <!-- SECCIÓN: RANKING GLOBAL - SPRINT -->
-    <div id="rank-sprint" class="section-content">
-        <h2>Ranking Global de Pilotos - Sprint</h2>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Driver</th>
-                        <th>Carro Frecuente</th>
-                        <th>Puntuación Global</th>
-                        <th>Prueba (Video)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td><span class="rank-badge">#1</span></td><td>XTINGCRISTAKE</td><td>Porsche Carrera GT</td><td><strong>9,910 Pts</strong></td><td><a href="https://youtube.com" target="_blank" class="btn-youtube">Ver YouTube</a></td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- SECCIÓN: RANKING CATEGORÍA BMW -->
-    <div id="rank-bmw" class="section-content">
-        <h2>Ranking de Pilotos - Categoría BMW</h2>
-        <p>Clasificación exclusiva para competidores que utilizan vehículos de la marca BMW (E46, M3, etc.).</p>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Driver</th>
-                        <th>Modelo BMW</th>
-                        <th>Mejor Tiempo / Récord</th>
-                        <th>Prueba (Video)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td><span class="rank-badge">#1</span></td><td>MOSTWANTED_PRO</td><td>BMW M3 GTR (E46)</td><td><strong>01:28.400</strong></td><td><a href="https://youtube.com" target="_blank" class="btn-youtube">Ver YouTube</a></td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- SECCIÓN: RANKING CATEGORÍA JUMBO -->
-    <div id="rank-jumbo" class="section-content">
-        <h2>Ranking de Pilotos - Categoría Jumbo</h2>
-        <p>Clasificación dedicada a vehículos pesados / clase especial de la comunidad (SUVs y autos de mayor tamaño).</p>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Driver</th>
-                        <th>Vehículo (SUV/Jumbo)</th>
-                        <th>Mejor Tiempo / Récord</th>
-                        <th>Prueba (Video)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td><span class="rank-badge">#1</span></td><td>TANK_DRIVER</td><td>Cadillac Escalade</td><td><strong>01:42.100</strong></td><td><a href="https://youtube.com" target="_blank" class="btn-youtube">Ver YouTube</a></td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- Script de navegación interactiva entre pestañas -->
+    <!-- JavaScript Avanzado: Conectividad Modular (Punto 3) y UI Responsiva (Punto 4) -->
     <script>
-        function switchTab(tabId) {
-            // Ocultar todas las secciones
-            const sections = document.querySelectorAll('.section-content');
-            sections.forEach(sec => sec.classList.remove('active'));
+        function switchView(viewId) {
+            document.querySelectorAll('.view-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelectorAll('nav a').forEach(link => {
+                link.classList.remove('active');
+            });
 
-            // Quitar la clase active de todos los botones
-            const buttons = document.querySelectorAll('nav button');
-            buttons.forEach(btn => btn.classList.remove('active'));
-
-            // Mostrar la sección seleccionada y activar su botón
-            document.getElementById(tabId).classList.add('active');
-            document.getElementById('btn-' + tabId).classList.add('active');
+            document.getElementById('view-' + viewId).classList.add('active');
+            if(document.getElementById('nav-' + viewId)) {
+                document.getElementById('nav-' + viewId).classList.add('active');
+            }
+            window.scrollTo(0, 0);
         }
-    </script>
 
+        const routesData = [
+            // Circuitos
+            { name: "City Perimeter", type: "Circuito" },
+            { name: "Ironwood States", type: "Circuito" },
+            { name: "Campus Way", type: "Circuito" },
+            { name: "Highlands", type: "Circuito" },
+            { name: "Petersburgs", type: "Circuito" },
+            { name: "Heritage Height", type: "Circuito" },
+            { name: "Omega", type: "Circuito" },
+            { name: "Diamond", type: "Circuito" },
+            { name: "Hillcrest Boundary", type: "Circuito" },
+            { name: "Circle Rose", type: "Circuito" },
+            { name: "Switchback", type: "Circuito" },
+            { name: "Hospital Switchback", type: "Circuito" },
+            { name: "Dunwich Bay", type: "Circuito" },
+            { name: "Boundary", type: "Circuito" },
+            { name: "Century Square", type: "Circuito" },
+            { name: "Heritage & Omega", type: "Circuito" },
+            { name: "Little Italy", type: "Circuito" },
+            { name: "Ironhorse", type: "Circuito" },
+            { name: "Waterfront", type: "Circuito" },
+            { name: "Gray Point", type: "Circuito" },
+            { name: "Omega & Industries", type: "Circuito" },
+            { name: "Bay Bridge", type: "Circuito" },
+            { name: "Camden Tunnel", type: "Circuito" },
+            { name: "Campus Interchange", type: "Circuito" },
+            { name: "Country Club", type: "Circuito" },
+            { name: "East Park", type: "Circuito" },
+            { name: "Oil Refinery", type: "Circuito" },
+            { name: "Hastings", type: "Circuito" },
+            { name: "ClubHouse", type: "Circuito" },
+
+            // Sprints
+            { name: "Seaside & Power Station", type: "Sprint" },
+            { name: "NFS World Loop", type: "Sprint" },
+            { name: "Diamond & Unión", type: "Sprint" },
+            { name: "Hwy 99 & States", type: "Sprint" },
+            { name: "Clubhouse & Hollis", type: "Sprint" },
+            { name: "Stadium & Hwy 99", type: "Sprint" },
+            { name: "Rosewood & State", type: "Sprint" },
+            { name: "Rosewood & Lyon", type: "Sprint" },
+            { name: "Unión & Hollis", type: "Sprint" },
+            { name: "Heritage & Campus", type: "Sprint" },
+            { name: "Campus Chancellor", type: "Sprint" },
+            { name: "Rockridge & Unión", type: "Sprint" },
+            { name: "Chace & Bristol", type: "Sprint" },
+            { name: "Beacon & Station", type: "Sprint" },
+            { name: "Bristol & Bayshore", type: "Sprint" },
+            { name: "Boundary & Marina", type: "Sprint" },
+            { name: "Stadium & Hwy 1", type: "Sprint" },
+            { name: "North Bay & Harbor", type: "Sprint" },
+            { name: "Camden & Route 55", type: "Sprint" },
+            { name: "Heritage & Diamond", type: "Sprint" },
+            { name: "Camden & Ironwood", type: "Sprint" },
+            { name: "Interchange & Bond", type: "Sprint" },
+            { name: "Union Row & Ocean", type: "Sprint" },
+            { name: "Diamond Valley", type: "Sprint" },
+            { name: "Stadium & Chace", type: "Sprint" },
+            { name: "West Park & Lyon", type: "Sprint" },
+            { name: "Hwy 201 & Lyons", type: "Sprint" },
+            { name: "Bond & Country Club", type: "Sprint" },
+            { name: "Lyon & States", type: "Sprint" },
+            { name: "Camden & Fisher", type: "Sprint" },
+            { name: "Beach & Chancellor", type: "Sprint" },
+            { name: "State & Warren", type: "Sprint" },
+            { name: "Valley & State", type: "Sprint" },
+            { name: "Seagate & Camden", type: "Sprint" },
+            { name: "Bond & Forest Green", type: "Sprint" },
+            { name: "Hwy 99 & Projects", type: "Sprint" },
+            { name: "Seaside & Lennox", type: "Sprint" },
+            { name: "Camden & Dunwich", type: "Sprint" },
+            { name: "Ironhorse & Coast", type: "Sprint" },
+            { name: "Seaside & Interchange", type: "Sprint" },
+            { name: "Hwy 2001", type: "Sprint" },
+            { name: "Diamond Park", type: "Sprint" },
+            { name: "Industrial & Bristol", type: "Sprint" },
+            { name: "Bay Bridge & Seaside", type: "Sprint" },
+            { name: "Forest Green", type: "Sprint" },
+            { name: "Clubhouse & Lennox", type: "Sprint" },
+
+            // Drags
+            { name: "Bayshore & Boardwalk", type: "Drag" },
+            { name: "Heritage & Rosewood", type: "Drag" },
+            { name: "Harbor & Ocean", type: "Drag" },
+            { name: "Seaside & Camden", type: "Drag" },
+            { name: "Union & Rockridge", type: "Drag" },
+            { name: "Ocean & Harbor", type: "Drag" },
+            { name: "Riverside & Terrace", type: "Drag" },
+            { name: "Rosewood & Heritage", type: "Drag" },
+            { name: "Boardwalk & Bayshore", type: "Drag" },
+            { name: "Camden & Seaside", type: "Drag" },
+            { name: "Terrace & Riverside", type: "Drag" }
+        ];
+
+        let currentCategory = 'all';
+
+        function renderRoutes(dataToRender) {
+            const container = document.getElementById('routes-grid-container');
+            container.innerHTML = '';
+
+            if(dataToRender.length === 0) {
+                container.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 20px;">No se encontraron rutas con ese nombre.</p>`;
+                return;
+            }
+
+            dataToRender.forEach(route => {
+                let icon = "🔄";
+                if(route.type === "Sprint") icon = "⚡";
+                if(route.type === "Drag") icon = "🏎️";
+
+                const card = document.createElement('div');
+                card.className = 'route-card';
+                card.onclick = () => {
+                    document.getElementById('leaderboard-title').innerText = `Leaderboard: ${route.name} (${route.type})`;
+                    loadLeaderboardForRoute(route.name);
+                    switchView('leaderboard');
+                };
+                card.innerHTML = `
+                    <span>${icon} ${route.type}</span>
+                    <h3>${route.name}</h3>
+                    <p style="color: var(--text-muted); font-size: 13px; margin: 0;">Clic para ver tiempos récord</p>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterRoutes() {
+            const query = document.getElementById('route-search').value.toLowerCase();
+            const filtered = routesData.filter(route => {
+                const matchesCategory = currentCategory === 'all' || route.type === currentCategory;
+                const matchesSearch = route.name.toLowerCase().includes(query);
+                return matchesCategory && matchesSearch;
+            });
+            renderRoutes(filtered);
+        }
+
+        function setCategory(category, btn) {
+            document.querySelectorAll('.filter-bar .filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentCategory = category;
+            filterRoutes();
+        }
+
+        // SIMULACIÓN DE CARGA ASÍNCRONA DESDE API / JSON EXTERNO (Punto 3)
+        async function fetchLeaderboardData(routeName) {
+            const tbody = document.getElementById('dynamic-tbody');
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--nfs-orange); padding: 20px;">Sincronizando registros globales...</td></tr>`;
+
+            // Aquí puedes reemplazar este bloque por un fetch real: 
+            // const response = await fetch('tu-archivo-o-api.json'); const data = await response.json();
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve([
+                        { rank: 1, driver: "DJALIL", car: "BMW M3 GTR (E46)", time: "01:30.680", speed: "282 km/h", yt: "https://youtube.com" },
+                        { rank: 2, driver: "DRAGMILL", car: "Lamborghini Gallardo", time: "01:31.012", speed: "318 km/h", yt: "https://youtube.com" },
+                        { rank: 3, driver: "XTINGCRISTAKE", car: "Porsche Carrera GT", time: "01:31.883", speed: "294 km/h", yt: "https://youtube.com" }
+                    ]);
+                }, 300); // Pequeño delay simulando la consulta externa
+            });
+        }
+
+        async function loadLeaderboardForRoute(routeName) {
+            const leaderboardData = await fetchLeaderboardData(routeName);
+            const tbody = document.getElementById('dynamic-tbody');
+            tbody.innerHTML = '';
+
+            leaderboardData.forEach(row => {
+                const tr = document.createElement('tr');
+                let rankClass = row.rank === 1 ? "rank-1" : (row.rank === 2 ? "rank-2" : "rank-3");
+                tr.innerHTML = `
+                    <td class="${rankClass}">#${row.rank}</td>
+                    <td><strong>${row.driver}</strong></td>
+                    <td>${row.car}</td>
+                    <td style="color: var(--nfs-orange); font-weight: bold;">${row.time}</td>
+                    <td>${row.speed}</td>
+                    <td><a href="${row.yt}" target="_blank" class="btn-youtube">Ver Video</a></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Inicializar
+        renderRoutes(routesData);
+    </script>
 </body>
-                                                          </html>
-                                                          
+</html>
