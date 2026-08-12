@@ -346,8 +346,8 @@
             letter-spacing: 0.5px;
         }
 
-        /* Sistema Multi-Tablas / Pestañas para Circuitos */
-        .circuit-tabs-container {
+        /* Sistema Multi-Tablas / Pestañas */
+        .circuit-tabs-container, .sprint-drag-tabs-container {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
@@ -544,20 +544,26 @@
         </div>
     </section>
 
-    <!-- 3. VISTA DE LEADERBOARD MULTI-TABLA (ESTRUCTURA POR CIRCUITO) -->
+    <!-- 3. VISTA DE LEADERBOARD MULTI-TABLA DINÁMICA -->
     <section id="view-leaderboard" class="view-section">
         <h2 class="section-title" id="leaderboard-title">Leaderboard: Ruta</h2>
         
-        <!-- Pestañas de las 4 Categorías de Circuito -->
-        <div class="circuit-tabs-container">
+        <!-- Pestañas para Circuitos (4 tablas) -->
+        <div id="container-tabs-circuit" class="circuit-tabs-container" style="display: none;">
             <button class="tab-btn active" onclick="switchCircuitTab('junkman-single', this)">Junkman (Single Lap)</button>
             <button class="tab-btn" onclick="switchCircuitTab('junkman-fast', this)">Junkman (Fast Lap)</button>
             <button class="tab-btn" onclick="switchCircuitTab('bmw-single', this)">BMW M3 GTR (Single Lap)</button>
             <button class="tab-btn" onclick="switchCircuitTab('bmw-fast', this)">BMW M3 GTR (Fast Lap)</button>
         </div>
 
-        <!-- Tabla 1: Junkman (Single Lap) -->
-        <div id="tab-junkman-single" class="table-section active">
+        <!-- Pestañas para Sprint y Drag (2 tablas) -->
+        <div id="container-tabs-sprintdrag" class="sprint-drag-tabs-container" style="display: none;">
+            <button class="tab-btn active" onclick="switchSprintDragTab('sprintdrag-junkman', this)">Junkman</button>
+            <button class="tab-btn" onclick="switchSprintDragTab('sprintdrag-bmw', this)">BMW M3 GTR</button>
+        </div>
+
+        <!-- Tablas de Circuitos -->
+        <div id="tab-junkman-single" class="table-section circuit-section">
             <h3 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">Junkman — Una sola vuelta (Single Lap)</h3>
             <div class="table-container">
                 <table>
@@ -576,8 +582,7 @@
             </div>
         </div>
 
-        <!-- Tabla 2: Junkman (Fast Lap) -->
-        <div id="tab-junkman-fast" class="table-section">
+        <div id="tab-junkman-fast" class="table-section circuit-section">
             <h3 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">Junkman — Vuelta rápida (Fast Lap)</h3>
             <div class="table-container">
                 <table>
@@ -596,8 +601,7 @@
             </div>
         </div>
 
-        <!-- Tabla 3: BMW M3 GTR (Single Lap) -->
-        <div id="tab-bmw-single" class="table-section">
+        <div id="tab-bmw-single" class="table-section circuit-section">
             <h3 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">BMW M3 GTR — Una sola vuelta (Single Lap)</h3>
             <div class="table-container">
                 <table>
@@ -616,8 +620,7 @@
             </div>
         </div>
 
-        <!-- Tabla 4: BMW M3 GTR (Fast Lap) -->
-        <div id="tab-bmw-fast" class="table-section">
+        <div id="tab-bmw-fast" class="table-section circuit-section">
             <h3 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">BMW M3 GTR — Vuelta rápida (Fast Lap)</h3>
             <div class="table-container">
                 <table>
@@ -636,11 +639,50 @@
             </div>
         </div>
 
+        <!-- Tablas para Sprint y Drag -->
+        <div id="tab-sprintdrag-junkman" class="table-section sprintdrag-section">
+            <h3 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">Categoría: Junkman</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Driver</th>
+                            <th>Car</th>
+                            <th>Time</th>
+                            <th>Top Speed</th>
+                            <th>Prueba (YouTube)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-sprintdrag-junkman"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab-sprintdrag-bmw" class="table-section sprintdrag-section">
+            <h3 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">Categoría: BMW M3 GTR</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Driver</th>
+                            <th>Car</th>
+                            <th>Time</th>
+                            <th>Top Speed</th>
+                            <th>Prueba (YouTube)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-sprintdrag-bmw"></tbody>
+                </table>
+            </div>
+        </div>
+
         <br>
         <button class="filter-btn" onclick="switchView('routes')">← Volver al Índice de Rutas</button>
     </section>
 
-    <!-- JavaScript Avanzado: Menú Hamburguesa, Sincronización Multi-Tabla y Google Sheets Modular -->
+    <!-- JavaScript Avanzado: Gestión Dinámica de Pestañas y Google Sheets Modular -->
     <script>
         function toggleMenu() {
             document.getElementById('main-nav').classList.toggle('open');
@@ -663,8 +705,16 @@
         }
 
         function switchCircuitTab(tabId, btn) {
-            document.querySelectorAll('.table-section').forEach(sec => sec.classList.remove('active'));
-            document.querySelectorAll('.circuit-tabs-container .tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.circuit-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('#container-tabs-circuit .tab-btn').forEach(b => b.classList.remove('active'));
+
+            document.getElementById('tab-' + tabId).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        function switchSprintDragTab(tabId, btn) {
+            document.querySelectorAll('.sprintdrag-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('#container-tabs-sprintdrag .tab-btn').forEach(b => b.classList.remove('active'));
 
             document.getElementById('tab-' + tabId).classList.add('active');
             btn.classList.add('active');
@@ -784,7 +834,7 @@
                 card.className = 'route-card';
                 card.onclick = () => {
                     document.getElementById('leaderboard-title').innerText = `Leaderboard: ${route.name} (${route.type})`;
-                    loadLeaderboardForRoute(route.name);
+                    loadLeaderboardForRoute(route.name, route.type);
                     switchView('leaderboard');
                 };
                 card.innerHTML = `
@@ -813,7 +863,7 @@
             filterRoutes();
         }
 
-        // --- SISTEMA MODULAR ASÍNCRONO PARA GOOGLE SHEETS (4 TABLAS INDEPENDIENTES) ---
+        // --- SISTEMA MODULAR ASÍNCRONO PARA GOOGLE SHEETS ---
         async function fetchGoogleSheetData(sheetUrl) {
             try {
                 // Función preparada para conectar con formato CSV de Google Sheets o API externa
@@ -822,57 +872,76 @@
                 // Parsear CSV a JSON aquí si se conecta a un enlace público real de hoja de cálculo.
                 throw new Error("Usando datos simulados por defecto");
             } catch (error) {
-                // Simulación interna de respaldo si no hay URL activa conectada
                 return null; 
             }
         }
 
-        async function loadLeaderboardForRoute(routeName) {
-            // URLs de ejemplo independientes para las 4 tablas (Caso de prueba City Perimeter o generales)
-            const sheetsConfig = {
-                junkmanSingle: "https://docs.google.com/spreadsheets/d/TU_SHEET_ID_1/export?format=csv",
-                junkmanFast:   "https://docs.google.com/spreadsheets/d/TU_SHEET_ID_2/export?format=csv",
-                bmwSingle:     "https://docs.google.com/spreadsheets/d/TU_SHEET_ID_3/export?format=csv",
-                bmwFast:       "https://docs.google.com/spreadsheets/d/TU_SHEET_ID_4/export?format=csv"
-            };
+        async function loadLeaderboardForRoute(routeName, routeType) {
+            const circuitTabs = document.getElementById('container-tabs-circuit');
+            const sprintDragTabs = document.getElementById('container-tabs-sprintdrag');
 
-            // Mostrar estado de carga en las 4 tablas
-            const tables = ['tbody-junkman-single', 'tbody-junkman-fast', 'tbody-bmw-single', 'tbody-bmw-fast'];
-            tables.forEach(id => {
-                document.getElementById(id).innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--nfs-orange); padding: 15px;">Sincronizando con Google Sheets...</td></tr>`;
-            });
+            // Control dinámico de visibilidad de pestañas según sea Circuito o Sprint/Drag
+            if (routeType === "Circuito") {
+                circuitTabs.style.display = "flex";
+                sprintDragTabs.style.display = "none";
+                
+                // Activar por defecto la primera pestaña de circuito
+                switchCircuitTab('junkman-single', circuitTabs.querySelector('.tab-btn'));
 
-            // Consulta asíncrona modular independiente para cada tabla
-            setTimeout(async () => {
-                // Intentar consumir de Google Sheets (o fallback simulado si no configurado)
-                let dataJunkmanSingle = await fetchGoogleSheetData(sheetsConfig.junkmanSingle) || [
-                    { rank: 1, driver: "DJALIL", car: "BMW M3 GTR", time: "01:30.680", speed: "282 km/h", yt: "https://youtube.com" },
-                    { rank: 2, driver: "DRAGMILL", car: "Lamborghini Gallardo", time: "01:31.012", speed: "318 km/h", yt: "https://youtube.com" }
-                ];
+                // Cargar datos para circuitos (4 tablas)
+                const tables = ['tbody-junkman-single', 'tbody-junkman-fast', 'tbody-bmw-single', 'tbody-bmw-fast'];
+                tables.forEach(id => {
+                    document.getElementById(id).innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--nfs-orange); padding: 15px;">Sincronizando con Google Sheets...</td></tr>`;
+                });
 
-                let dataJunkmanFast = await fetchGoogleSheetData(sheetsConfig.junkmanFast) || [
-                    { rank: 1, driver: "XTINGCRISTAKE", car: "Porsche Carrera GT", time: "00:29.410", speed: "294 km/h", yt: "https://youtube.com" },
-                    { rank: 2, driver: "DJALIL", car: "BMW M3 GTR", time: "00:29.850", speed: "285 km/h", yt: "https://youtube.com" }
-                ];
+                setTimeout(async () => {
+                    let d1 = await fetchGoogleSheetData("URL_1") || [
+                        { rank: 1, driver: "DJALIL", car: "BMW M3 GTR", time: "01:30.680", speed: "282 km/h", yt: "https://youtube.com" },
+                        { rank: 2, driver: "DRAGMILL", car: "Lamborghini Gallardo", time: "01:31.012", speed: "318 km/h", yt: "https://youtube.com" }
+                    ];
+                    let d2 = await fetchGoogleSheetData("URL_2") || [
+                        { rank: 1, driver: "XTINGCRISTAKE", car: "Porsche Carrera GT", time: "00:29.410", speed: "294 km/h", yt: "https://youtube.com" }
+                    ];
+                    let d3 = await fetchGoogleSheetData("URL_3") || [
+                        { rank: 1, driver: "GHOST_RIDER", car: "BMW M3 GTR", time: "01:32.100", speed: "278 km/h", yt: "https://youtube.com" }
+                    ];
+                    let d4 = await fetchGoogleSheetData("URL_4") || [
+                        { rank: 1, driver: "ROCKPORT_KING", car: "BMW M3 GTR", time: "00:30.120", speed: "280 km/h", yt: "https://youtube.com" }
+                    ];
 
-                let dataBmwSingle = await fetchGoogleSheetData(sheetsConfig.bmwSingle) || [
-                    { rank: 1, driver: "GHOST_RIDER", car: "BMW M3 GTR", time: "01:32.100", speed: "278 km/h", yt: "https://youtube.com" }
-                ];
+                    renderTableRows('tbody-junkman-single', d1);
+                    renderTableRows('tbody-junkman-fast', d2);
+                    renderTableRows('tbody-bmw-single', d3);
+                    renderTableRows('tbody-bmw-fast', d4);
+                }, 400);
 
-                let dataBmwFast = await fetchGoogleSheetData(sheetsConfig.bmwFast) || [
-                    { rank: 1, driver: "ROCKPORT_KING", car: "BMW M3 GTR", time: "00:30.120", speed: "280 km/h", yt: "https://youtube.com" }
-                ];
+            } else {
+                // Es Sprint o Drag (Aplica estructura de 2 tablas)
+                circuitTabs.style.display = "none";
+                sprintDragTabs.style.display = "flex";
 
-                // Renderizar Tabla 1: Junkman Single Lap
-                renderTableRows('tbody-junkman-single', dataJunkmanSingle);
-                // Renderizar Tabla 2: Junkman Fast Lap
-                renderTableRows('tbody-junkman-fast', dataJunkmanFast);
-                // Renderizar Tabla 3: BMW Single Lap
-                renderTableRows('tbody-bmw-single', dataBmwSingle);
-                // Renderizar Tabla 4: BMW Fast Lap
-                renderTableRows('tbody-bmw-fast', dataBmwFast);
+                // Activar por defecto la primera pestaña de Sprint/Drag
+                switchSprintDragTab('sprintdrag-junkman', sprintDragTabs.querySelector('.tab-btn'));
 
-            }, 400);
+                const tables = ['tbody-sprintdrag-junkman', 'tbody-sprintdrag-bmw'];
+                tables.forEach(id => {
+                    document.getElementById(id).innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--nfs-orange); padding: 15px;">Sincronizando con Google Sheets...</td></tr>`;
+                });
+
+                setTimeout(async () => {
+                    let dJunkman = await fetchGoogleSheetData("URL_SD_1") || [
+                        { rank: 1, driver: "SPEED_DEMON", car: "Chevrolet Corvette Z06", time: "02:10.150", speed: "315 km/h", yt: "https://youtube.com" },
+                        { rank: 2, driver: "VIPER_X", car: "Dodge Viper SRT10", time: "02:11.400", speed: "322 km/h", yt: "https://youtube.com" }
+                    ];
+                    let dBmw = await fetchGoogleSheetData("URL_SD_2") || [
+                        { rank: 1, driver: "DJALIL", car: "BMW M3 GTR", time: "02:12.800", speed: "290 km/h", yt: "https://youtube.com" },
+                        { rank: 2, driver: "MOST_WANTED", car: "BMW M3 GTR", time: "02:14.050", speed: "288 km/h", yt: "https://youtube.com" }
+                    ];
+
+                    renderTableRows('tbody-sprintdrag-junkman', dJunkman);
+                    renderTableRows('tbody-sprintdrag-bmw', dBmw);
+                }, 400);
+            }
         }
 
         function renderTableRows(tbodyId, dataRows) {
@@ -899,4 +968,3 @@
     </script>
 </body>
 </html>
-
