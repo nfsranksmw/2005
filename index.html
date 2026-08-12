@@ -47,6 +47,15 @@
             text-shadow: 0 0 12px rgba(255, 136, 51, 0.5);
         }
 
+        .menu-toggle { display: none; font-size: 24px; cursor: pointer; color: var(--nfs-orange); }
+
+        @media(max-width: 600px) {
+            .menu-toggle { display: block; }
+            nav { display: none; flex-direction: column; position: absolute; top: 60px; right: 0; background: var(--bg-dark); width: 100%; text-align: center; border-bottom: 2px solid var(--nfs-orange); padding: 20px 0; }
+            nav.open { display: flex; }
+            nav a { margin: 10px 0 !important; display: block; }
+        }
+
         @media(min-width: 768px) {
             header { padding: 15px 30px; }
             .logo { font-size: 22px; }
@@ -68,6 +77,16 @@
         nav a:hover, nav a.active {
             color: var(--nfs-orange);
         }
+
+        /* Sección Sobre Nosotros */
+        .about-section {
+            background: rgba(22, 22, 26, 0.9);
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .about-section h2 { color: var(--nfs-orange); margin-bottom: 15px; }
+        .about-section p { max-width: 800px; margin: 0 auto; color: var(--text-muted); line-height: 1.6; }
 
         /* Contenedores de Vistas */
         .view-section {
@@ -327,6 +346,40 @@
             letter-spacing: 0.5px;
         }
 
+        /* Sistema Multi-Tablas / Pestañas para Circuitos */
+        .circuit-tabs-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: var(--bg-panel);
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            background-color: var(--nfs-orange);
+            color: #0b0b0d;
+            border-color: var(--nfs-orange);
+        }
+
+        .table-section {
+            display: none;
+        }
+
+        .table-section.active {
+            display: block;
+        }
+
         /* Tabla Leaderboard Optimizada para Móviles */
         .table-container {
             background: var(--bg-panel);
@@ -336,6 +389,7 @@
             border: 1px solid var(--border-color);
             overflow-x: auto;
             box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
         }
 
         @media(min-width: 768px) {
@@ -360,7 +414,7 @@
             width: 100%;
             border-collapse: collapse;
             text-align: left;
-            min-width: 600px; /* Asegura scroll horizontal fluido en móviles estrechos */
+            min-width: 600px;
         }
 
         th, td {
@@ -402,7 +456,6 @@
             box-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
         }
 
-        /* Tarjeta de Novedades / Récords Recientes en Home */
         .news-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -428,7 +481,8 @@
     <!-- Menú de Navegación Principal -->
     <header>
         <div class="logo">NFS: MW 2005 - Récords</div>
-        <nav>
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+        <nav id="main-nav">
             <a href="#" onclick="switchView('home')" class="active" id="nav-home">Inicio</a>
             <a href="#" onclick="switchView('routes')" id="nav-routes">Rutas & Pistas</a>
             <a href="#" onclick="switchView('leaderboard')" id="nav-leaderboard">Ejemplo Leaderboard</a>
@@ -437,6 +491,11 @@
 
     <!-- 1. VISTA DE INICIO -->
     <section id="view-home" class="view-section active" style="padding: 0; max-width: 100%;">
+        <div class="about-section">
+            <h2>SOBRE ESTE PROYECTO</h2>
+            <p>Bienvenido al archivo definitivo de tiempos de Need for Speed: Most Wanted (2005). Nuestro objetivo es registrar los récords mundiales en todas las rutas de Rockport City y ofrecer a la comunidad una base de datos centralizada de pruebas y tiempos de alto nivel.</p>
+        </div>
+
         <div class="hero-banner">
             <div class="hero-banner-content">
                 <h1>LEADERBOARD<br>WORLD<br>RANKING NFS<br>MOST WANTED</h1>
@@ -485,32 +544,108 @@
         </div>
     </section>
 
-    <!-- 3. VISTA DE LEADERBOARD -->
+    <!-- 3. VISTA DE LEADERBOARD MULTI-TABLA (ESTRUCTURA POR CIRCUITO) -->
     <section id="view-leaderboard" class="view-section">
         <h2 class="section-title" id="leaderboard-title">Leaderboard: Ruta</h2>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Driver</th>
-                        <th>Car</th>
-                        <th>Time</th>
-                        <th>Top Speed</th>
-                        <th>Prueba (YouTube)</th>
-                    </tr>
-                </thead>
-                <tbody id="dynamic-tbody">
-                    <!-- Datos inyectados de forma asíncrona -->
-                </tbody>
-            </table>
+        
+        <!-- Pestañas de las 4 Categorías de Circuito -->
+        <div class="circuit-tabs-container">
+            <button class="tab-btn active" onclick="switchCircuitTab('junkman-single', this)">Junkman (Single Lap)</button>
+            <button class="tab-btn" onclick="switchCircuitTab('junkman-fast', this)">Junkman (Fast Lap)</button>
+            <button class="tab-btn" onclick="switchCircuitTab('bmw-single', this)">BMW M3 GTR (Single Lap)</button>
+            <button class="tab-btn" onclick="switchCircuitTab('bmw-fast', this)">BMW M3 GTR (Fast Lap)</button>
         </div>
+
+        <!-- Tabla 1: Junkman (Single Lap) -->
+        <div id="tab-junkman-single" class="table-section active">
+            <h3 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">Junkman — Una sola vuelta (Single Lap)</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Driver</th>
+                            <th>Car</th>
+                            <th>Time</th>
+                            <th>Top Speed</th>
+                            <th>Prueba (YouTube)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-junkman-single"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tabla 2: Junkman (Fast Lap) -->
+        <div id="tab-junkman-fast" class="table-section">
+            <h3 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">Junkman — Vuelta rápida (Fast Lap)</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Driver</th>
+                            <th>Car</th>
+                            <th>Time</th>
+                            <th>Top Speed</th>
+                            <th>Prueba (YouTube)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-junkman-fast"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tabla 3: BMW M3 GTR (Single Lap) -->
+        <div id="tab-bmw-single" class="table-section">
+            <h3 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">BMW M3 GTR — Una sola vuelta (Single Lap)</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Driver</th>
+                            <th>Car</th>
+                            <th>Time</th>
+                            <th>Top Speed</th>
+                            <th>Prueba (YouTube)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-bmw-single"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tabla 4: BMW M3 GTR (Fast Lap) -->
+        <div id="tab-bmw-fast" class="table-section">
+            <h3 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">BMW M3 GTR — Vuelta rápida (Fast Lap)</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Driver</th>
+                            <th>Car</th>
+                            <th>Time</th>
+                            <th>Top Speed</th>
+                            <th>Prueba (YouTube)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-bmw-fast"></tbody>
+                </table>
+            </div>
+        </div>
+
         <br>
         <button class="filter-btn" onclick="switchView('routes')">← Volver al Índice de Rutas</button>
     </section>
 
-    <!-- JavaScript Avanzado: Conectividad Modular (Punto 3) y UI Responsiva (Punto 4) -->
+    <!-- JavaScript Avanzado: Menú Hamburguesa, Sincronización Multi-Tabla y Google Sheets Modular -->
     <script>
+        function toggleMenu() {
+            document.getElementById('main-nav').classList.toggle('open');
+        }
+
         function switchView(viewId) {
             document.querySelectorAll('.view-section').forEach(section => {
                 section.classList.remove('active');
@@ -523,7 +658,16 @@
             if(document.getElementById('nav-' + viewId)) {
                 document.getElementById('nav-' + viewId).classList.add('active');
             }
+            document.getElementById('main-nav').classList.remove('open');
             window.scrollTo(0, 0);
+        }
+
+        function switchCircuitTab(tabId, btn) {
+            document.querySelectorAll('.table-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.circuit-tabs-container .tab-btn').forEach(b => b.classList.remove('active'));
+
+            document.getElementById('tab-' + tabId).classList.add('active');
+            btn.classList.add('active');
         }
 
         const routesData = [
@@ -669,30 +813,73 @@
             filterRoutes();
         }
 
-        // SIMULACIÓN DE CARGA ASÍNCRONA DESDE API / JSON EXTERNO (Punto 3)
-        async function fetchLeaderboardData(routeName) {
-            const tbody = document.getElementById('dynamic-tbody');
-            tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--nfs-orange); padding: 20px;">Sincronizando registros globales...</td></tr>`;
-
-            // Aquí puedes reemplazar este bloque por un fetch real: 
-            // const response = await fetch('tu-archivo-o-api.json'); const data = await response.json();
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    resolve([
-                        { rank: 1, driver: "DJALIL", car: "BMW M3 GTR (E46)", time: "01:30.680", speed: "282 km/h", yt: "https://youtube.com" },
-                        { rank: 2, driver: "DRAGMILL", car: "Lamborghini Gallardo", time: "01:31.012", speed: "318 km/h", yt: "https://youtube.com" },
-                        { rank: 3, driver: "XTINGCRISTAKE", car: "Porsche Carrera GT", time: "01:31.883", speed: "294 km/h", yt: "https://youtube.com" }
-                    ]);
-                }, 300); // Pequeño delay simulando la consulta externa
-            });
+        // --- SISTEMA MODULAR ASÍNCRONO PARA GOOGLE SHEETS (4 TABLAS INDEPENDIENTES) ---
+        async function fetchGoogleSheetData(sheetUrl) {
+            try {
+                // Función preparada para conectar con formato CSV de Google Sheets o API externa
+                // const response = await fetch(sheetUrl);
+                // const csvText = await response.text();
+                // Parsear CSV a JSON aquí si se conecta a un enlace público real de hoja de cálculo.
+                throw new Error("Usando datos simulados por defecto");
+            } catch (error) {
+                // Simulación interna de respaldo si no hay URL activa conectada
+                return null; 
+            }
         }
 
         async function loadLeaderboardForRoute(routeName) {
-            const leaderboardData = await fetchLeaderboardData(routeName);
-            const tbody = document.getElementById('dynamic-tbody');
-            tbody.innerHTML = '';
+            // URLs de ejemplo independientes para las 4 tablas (Caso de prueba City Perimeter o generales)
+            const sheetsConfig = {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/TU_SHEET_ID_1/export?format=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/TU_SHEET_ID_2/export?format=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/TU_SHEET_ID_3/export?format=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/TU_SHEET_ID_4/export?format=csv"
+            };
 
-            leaderboardData.forEach(row => {
+            // Mostrar estado de carga en las 4 tablas
+            const tables = ['tbody-junkman-single', 'tbody-junkman-fast', 'tbody-bmw-single', 'tbody-bmw-fast'];
+            tables.forEach(id => {
+                document.getElementById(id).innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--nfs-orange); padding: 15px;">Sincronizando con Google Sheets...</td></tr>`;
+            });
+
+            // Consulta asíncrona modular independiente para cada tabla
+            setTimeout(async () => {
+                // Intentar consumir de Google Sheets (o fallback simulado si no configurado)
+                let dataJunkmanSingle = await fetchGoogleSheetData(sheetsConfig.junkmanSingle) || [
+                    { rank: 1, driver: "DJALIL", car: "BMW M3 GTR", time: "01:30.680", speed: "282 km/h", yt: "https://youtube.com" },
+                    { rank: 2, driver: "DRAGMILL", car: "Lamborghini Gallardo", time: "01:31.012", speed: "318 km/h", yt: "https://youtube.com" }
+                ];
+
+                let dataJunkmanFast = await fetchGoogleSheetData(sheetsConfig.junkmanFast) || [
+                    { rank: 1, driver: "XTINGCRISTAKE", car: "Porsche Carrera GT", time: "00:29.410", speed: "294 km/h", yt: "https://youtube.com" },
+                    { rank: 2, driver: "DJALIL", car: "BMW M3 GTR", time: "00:29.850", speed: "285 km/h", yt: "https://youtube.com" }
+                ];
+
+                let dataBmwSingle = await fetchGoogleSheetData(sheetsConfig.bmwSingle) || [
+                    { rank: 1, driver: "GHOST_RIDER", car: "BMW M3 GTR", time: "01:32.100", speed: "278 km/h", yt: "https://youtube.com" }
+                ];
+
+                let dataBmwFast = await fetchGoogleSheetData(sheetsConfig.bmwFast) || [
+                    { rank: 1, driver: "ROCKPORT_KING", car: "BMW M3 GTR", time: "00:30.120", speed: "280 km/h", yt: "https://youtube.com" }
+                ];
+
+                // Renderizar Tabla 1: Junkman Single Lap
+                renderTableRows('tbody-junkman-single', dataJunkmanSingle);
+                // Renderizar Tabla 2: Junkman Fast Lap
+                renderTableRows('tbody-junkman-fast', dataJunkmanFast);
+                // Renderizar Tabla 3: BMW Single Lap
+                renderTableRows('tbody-bmw-single', dataBmwSingle);
+                // Renderizar Tabla 4: BMW Fast Lap
+                renderTableRows('tbody-bmw-fast', dataBmwFast);
+
+            }, 400);
+        }
+
+        function renderTableRows(tbodyId, dataRows) {
+            const tbody = document.getElementById(tbodyId);
+            tbody.innerHTML = '';
+            
+            dataRows.forEach(row => {
                 const tr = document.createElement('tr');
                 let rankClass = row.rank === 1 ? "rank-1" : (row.rank === 2 ? "rank-2" : "rank-3");
                 tr.innerHTML = `
@@ -712,3 +899,4 @@
     </script>
 </body>
 </html>
+
