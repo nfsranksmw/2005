@@ -24,7 +24,6 @@
             background-attachment: fixed;
         }
 
-        /* Navegación Superior Estilo Gamer / Pegajosa */
         header {
             background-color: rgba(22, 22, 26, 0.95);
             backdrop-filter: blur(10px);
@@ -78,7 +77,6 @@
             color: var(--nfs-orange);
         }
 
-        /* Sección Sobre Nosotros */
         .about-section {
             background: rgba(22, 22, 26, 0.9);
             padding: 40px 20px;
@@ -88,7 +86,6 @@
         .about-section h2 { color: var(--nfs-orange); margin-bottom: 15px; }
         .about-section p { max-width: 800px; margin: 0 auto; color: var(--text-muted); line-height: 1.6; }
 
-        /* Contenedores de Vistas */
         .view-section {
             display: none;
             padding: 30px 15px;
@@ -104,7 +101,6 @@
             display: block;
         }
 
-        /* Hero Banner */
         .hero-banner {
             position: relative;
             width: 100%;
@@ -167,7 +163,6 @@
             box-shadow: 0 0 15px rgba(255,255,255,0.6);
         }
 
-        /* Drivers Banner */
         .drivers-banner {
             position: relative;
             width: 100%;
@@ -216,7 +211,6 @@
             .drivers-banner h3 { font-size: 42px; }
         }
 
-        /* Controles y Búsqueda */
         .controls-wrapper {
             display: flex;
             flex-direction: column;
@@ -281,7 +275,6 @@
             box-shadow: 0 0 10px rgba(255, 136, 51, 0.5);
         }
 
-        /* Grid de Tarjetas Garage */
         .routes-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -346,12 +339,15 @@
             letter-spacing: 0.5px;
         }
 
-        /* Sistema Multi-Tablas / Pestañas */
-        .circuit-tabs-container, .sprint-drag-tabs-container {
-            display: flex;
+        .tabs-group {
+            display: none;
             gap: 10px;
             margin-bottom: 20px;
             flex-wrap: wrap;
+        }
+
+        .tabs-group.active-group {
+            display: flex;
         }
 
         .tab-btn {
@@ -380,7 +376,6 @@
             display: block;
         }
 
-        /* Tabla Leaderboard Optimizada para Móviles */
         .table-container {
             background: var(--bg-panel);
             backdrop-filter: blur(10px);
@@ -414,7 +409,7 @@
             width: 100%;
             border-collapse: collapse;
             text-align: left;
-            min-width: 600px;
+            min-width: 750px;
         }
 
         th, td {
@@ -478,7 +473,6 @@
 </head>
 <body>
 
-    <!-- Menú de Navegación Principal -->
     <header>
         <div class="logo">NFS: MW 2005 - Récords</div>
         <div class="menu-toggle" onclick="toggleMenu()">☰</div>
@@ -489,7 +483,6 @@
         </nav>
     </header>
 
-    <!-- 1. VISTA DE INICIO -->
     <section id="view-home" class="view-section active" style="padding: 0; max-width: 100%;">
         <div class="about-section">
             <h2>SOBRE ESTE PROYECTO</h2>
@@ -524,7 +517,6 @@
         </div>
     </section>
 
-    <!-- 2. VISTA DE RUTAS -->
     <section id="view-routes" class="view-section">
         <h2 class="section-title">Índice de Rutas y Pruebas</h2>
         
@@ -539,25 +531,22 @@
             </div>
         </div>
         
-        <div class="routes-grid" id="routes-grid-container">
-            <!-- Renderizado dinámico -->
-        </div>
+        <div class="routes-grid" id="routes-grid-container"></div>
     </section>
 
-    <!-- 3. VISTA DE LEADERBOARD MULTI-TABLA DINÁMICA -->
     <section id="view-leaderboard" class="view-section">
         <h2 class="section-title" id="leaderboard-title">Leaderboard: Ruta</h2>
         
-        <!-- Pestañas para Circuitos (4 tablas) -->
-        <div id="container-tabs-circuit" class="circuit-tabs-container" style="display: none;">
+        <!-- Pestañas para Circuitos -->
+        <div id="container-tabs-circuit" class="tabs-group">
             <button class="tab-btn active" onclick="switchCircuitTab('junkman-single', this)">Junkman (Single Lap)</button>
             <button class="tab-btn" onclick="switchCircuitTab('junkman-fast', this)">Junkman (Fast Lap)</button>
             <button class="tab-btn" onclick="switchCircuitTab('bmw-single', this)">BMW M3 GTR (Single Lap)</button>
             <button class="tab-btn" onclick="switchCircuitTab('bmw-fast', this)">BMW M3 GTR (Fast Lap)</button>
         </div>
 
-        <!-- Pestañas para Sprint y Drag (2 tablas) -->
-        <div id="container-tabs-sprintdrag" class="sprint-drag-tabs-container" style="display: none;">
+        <!-- Pestañas para Sprint y Drag -->
+        <div id="container-tabs-sprintdrag" class="tabs-group">
             <button class="tab-btn active" onclick="switchSprintDragTab('sprintdrag-junkman', this)">Junkman</button>
             <button class="tab-btn" onclick="switchSprintDragTab('sprintdrag-bmw', this)">BMW M3 GTR</button>
         </div>
@@ -571,10 +560,12 @@
                         <tr>
                             <th>Rank</th>
                             <th>Driver</th>
-                            <th>Car</th>
                             <th>Time</th>
-                            <th>Top Speed</th>
-                            <th>Prueba (YouTube)</th>
+                            <th>Device</th>
+                            <th>Car</th>
+                            <th>GearBox</th>
+                            <th>Date</th>
+                            <th>Video</th>
                         </tr>
                     </thead>
                     <tbody id="tbody-junkman-single"></tbody>
@@ -590,10 +581,12 @@
                         <tr>
                             <th>Rank</th>
                             <th>Driver</th>
-                            <th>Car</th>
                             <th>Time</th>
-                            <th>Top Speed</th>
-                            <th>Prueba (YouTube)</th>
+                            <th>Device</th>
+                            <th>Car</th>
+                            <th>GearBox</th>
+                            <th>Date</th>
+                            <th>Video</th>
                         </tr>
                     </thead>
                     <tbody id="tbody-junkman-fast"></tbody>
@@ -609,10 +602,12 @@
                         <tr>
                             <th>Rank</th>
                             <th>Driver</th>
-                            <th>Car</th>
                             <th>Time</th>
-                            <th>Top Speed</th>
-                            <th>Prueba (YouTube)</th>
+                            <th>Device</th>
+                            <th>Car</th>
+                            <th>GearBox</th>
+                            <th>Date</th>
+                            <th>Video</th>
                         </tr>
                     </thead>
                     <tbody id="tbody-bmw-single"></tbody>
@@ -623,15 +618,17 @@
         <div id="tab-bmw-fast" class="table-section circuit-section">
             <h3 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">BMW M3 GTR — Vuelta rápida (Fast Lap)</h3>
             <div class="table-container">
-                <table>
+                <table> 
                     <thead>
                         <tr>
                             <th>Rank</th>
                             <th>Driver</th>
-                            <th>Car</th>
                             <th>Time</th>
-                            <th>Top Speed</th>
-                            <th>Prueba (YouTube)</th>
+                            <th>Device</th>
+                            <th>Car</th>
+                            <th>GearBox</th>
+                            <th>Date</th>
+                            <th>Video</th>
                         </tr>
                     </thead>
                     <tbody id="tbody-bmw-fast"></tbody>
@@ -648,10 +645,12 @@
                         <tr>
                             <th>Rank</th>
                             <th>Driver</th>
-                            <th>Car</th>
                             <th>Time</th>
-                            <th>Top Speed</th>
-                            <th>Prueba (YouTube)</th>
+                            <th>Device</th>
+                            <th>Car</th>
+                            <th>GearBox</th>
+                            <th>Date</th>
+                            <th>Video</th>
                         </tr>
                     </thead>
                     <tbody id="tbody-sprintdrag-junkman"></tbody>
@@ -667,10 +666,12 @@
                         <tr>
                             <th>Rank</th>
                             <th>Driver</th>
-                            <th>Car</th>
                             <th>Time</th>
-                            <th>Top Speed</th>
-                            <th>Prueba (YouTube)</th>
+                            <th>Device</th>
+                            <th>Car</th>
+                            <th>GearBox</th>
+                            <th>Date</th>
+                            <th>Video</th>
                         </tr>
                     </thead>
                     <tbody id="tbody-sprintdrag-bmw"></tbody>
@@ -682,7 +683,6 @@
         <button class="filter-btn" onclick="switchView('routes')">← Volver al Índice de Rutas</button>
     </section>
 
-    <!-- JavaScript Avanzado: Gestión Dinámica de Pestañas y Google Sheets Modular -->
     <script>
         function toggleMenu() {
             document.getElementById('main-nav').classList.toggle('open');
@@ -721,7 +721,6 @@
         }
 
         const routesData = [
-            // Circuitos
             { name: "City Perimeter", type: "Circuito" },
             { name: "Ironwood States", type: "Circuito" },
             { name: "Campus Way", type: "Circuito" },
@@ -751,8 +750,6 @@
             { name: "Oil Refinery", type: "Circuito" },
             { name: "Hastings", type: "Circuito" },
             { name: "ClubHouse", type: "Circuito" },
-
-            // Sprints
             { name: "Seaside & Power Station", type: "Sprint" },
             { name: "NFS World Loop", type: "Sprint" },
             { name: "Diamond & Unión", type: "Sprint" },
@@ -799,8 +796,6 @@
             { name: "Bay Bridge & Seaside", type: "Sprint" },
             { name: "Forest Green", type: "Sprint" },
             { name: "Clubhouse & Lennox", type: "Sprint" },
-
-            // Drags
             { name: "Bayshore & Boardwalk", type: "Drag" },
             { name: "Heritage & Rosewood", type: "Drag" },
             { name: "Harbor & Ocean", type: "Drag" },
@@ -863,13 +858,8 @@
             filterRoutes();
         }
 
-        // --- SISTEMA MODULAR ASÍNCRONO PARA GOOGLE SHEETS ---
         async function fetchGoogleSheetData(sheetUrl) {
             try {
-                // Función preparada para conectar con formato CSV de Google Sheets o API externa
-                // const response = await fetch(sheetUrl);
-                // const csvText = await response.text();
-                // Parsear CSV a JSON aquí si se conecta a un enlace público real de hoja de cálculo.
                 throw new Error("Usando datos simulados por defecto");
             } catch (error) {
                 return null; 
@@ -880,33 +870,32 @@
             const circuitTabs = document.getElementById('container-tabs-circuit');
             const sprintDragTabs = document.getElementById('container-tabs-sprintdrag');
 
-            // Control dinámico de visibilidad de pestañas según sea Circuito o Sprint/Drag
+            document.querySelectorAll('.circuit-section, .sprintdrag-section').forEach(sec => sec.classList.remove('active'));
+
             if (routeType === "Circuito") {
-                circuitTabs.style.display = "flex";
-                sprintDragTabs.style.display = "none";
+                circuitTabs.classList.add('active-group');
+                sprintDragTabs.classList.remove('active-group');
                 
-                // Activar por defecto la primera pestaña de circuito
                 switchCircuitTab('junkman-single', circuitTabs.querySelector('.tab-btn'));
 
-                // Cargar datos para circuitos (4 tablas)
                 const tables = ['tbody-junkman-single', 'tbody-junkman-fast', 'tbody-bmw-single', 'tbody-bmw-fast'];
                 tables.forEach(id => {
-                    document.getElementById(id).innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--nfs-orange); padding: 15px;">Sincronizando con Google Sheets...</td></tr>`;
+                    document.getElementById(id).innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--nfs-orange); padding: 15px;">Sincronizando con Google Sheets...</td></tr>`;
                 });
 
                 setTimeout(async () => {
-                    let d1 = await fetchGoogleSheetData("URL_1") || [
-                        { rank: 1, driver: "DJALIL", car: "BMW M3 GTR", time: "01:30.680", speed: "282 km/h", yt: "https://youtube.com" },
-                        { rank: 2, driver: "DRAGMILL", car: "Lamborghini Gallardo", time: "01:31.012", speed: "318 km/h", yt: "https://youtube.com" }
+                    let d1 = await fetchGoogleSheetData("https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=634347005&single=true&output=csv") || [
+                        { rank: "#1", driver: "Lea4Speed0 WR 🏆", time: "1:20.76", device: "Dual Sence", car: "Carrera GT", gearbox: "Manual", date: "8 sept 2024", yt: "https://youtube.com" },
+                        { rank: "#2", driver: "Xman", time: "1:20.78", device: "Dual Shock 4", car: "Carrera GT", gearbox: "Auto", date: "10 feb 2020", yt: "https://youtube.com" }
                     ];
-                    let d2 = await fetchGoogleSheetData("URL_2") || [
-                        { rank: 1, driver: "XTINGCRISTAKE", car: "Porsche Carrera GT", time: "00:29.410", speed: "294 km/h", yt: "https://youtube.com" }
+                    let d2 = await fetchGoogleSheetData("https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=1989010516&single=true&output=csv") || [
+                        { rank: "#1", driver: "Saitkb", time: "1:20.84", device: "Dual Shock 4", car: "Carrera GT", gearbox: "Manual", date: "19 jul 2016", yt: "https://youtube.com" }
                     ];
-                    let d3 = await fetchGoogleSheetData("URL_3") || [
-                        { rank: 1, driver: "GHOST_RIDER", car: "BMW M3 GTR", time: "01:32.100", speed: "278 km/h", yt: "https://youtube.com" }
+                    let d3 = await fetchGoogleSheetData("https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=509105205&single=true&output=csv") || [
+                        { rank: "#1", driver: "ZimanX", time: "1:20.87", device: "Dual Action", car: "Carrera GT", gearbox: "Auto", date: "19 may 2018", yt: "https://youtube.com" }
                     ];
-                    let d4 = await fetchGoogleSheetData("URL_4") || [
-                        { rank: 1, driver: "ROCKPORT_KING", car: "BMW M3 GTR", time: "00:30.120", speed: "280 km/h", yt: "https://youtube.com" }
+                    let d4 = await fetchGoogleSheetData("https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=1342310622&single=true&output=csv") || [
+                        { rank: "#1", driver: "SKYMASTER", time: "1:20.92", device: "Xbox 3606", car: "Carrera GT", gearbox: "Auto", date: "30 dic 2020", yt: "https://youtube.com" }
                     ];
 
                     renderTableRows('tbody-junkman-single', d1);
@@ -916,26 +905,24 @@
                 }, 400);
 
             } else {
-                // Es Sprint o Drag (Aplica estructura de 2 tablas)
-                circuitTabs.style.display = "none";
-                sprintDragTabs.style.display = "flex";
+                circuitTabs.classList.remove('active-group');
+                sprintDragTabs.classList.add('active-group');
 
-                // Activar por defecto la primera pestaña de Sprint/Drag
                 switchSprintDragTab('sprintdrag-junkman', sprintDragTabs.querySelector('.tab-btn'));
 
                 const tables = ['tbody-sprintdrag-junkman', 'tbody-sprintdrag-bmw'];
                 tables.forEach(id => {
-                    document.getElementById(id).innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--nfs-orange); padding: 15px;">Sincronizando con Google Sheets...</td></tr>`;
+                    document.getElementById(id).innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--nfs-orange); padding: 15px;">Sincronizando con Google Sheets...</td></tr>`;
                 });
 
                 setTimeout(async () => {
                     let dJunkman = await fetchGoogleSheetData("URL_SD_1") || [
-                        { rank: 1, driver: "SPEED_DEMON", car: "Chevrolet Corvette Z06", time: "02:10.150", speed: "315 km/h", yt: "https://youtube.com" },
-                        { rank: 2, driver: "VIPER_X", car: "Dodge Viper SRT10", time: "02:11.400", speed: "322 km/h", yt: "https://youtube.com" }
+                        { rank: "#1", driver: "SPEED_DEMON", time: "02:10.150", device: "Dual Shock 4", car: "Corvette Z06", gearbox: "Manual", date: "12 ene 2022", yt: "https://youtube.com" },
+                        { rank: "#2", driver: "VIPER_X", time: "02:11.400", device: "Keyboard", car: "Dodge Viper", gearbox: "Auto", date: "15 mar 2021", yt: "https://youtube.com" }
                     ];
                     let dBmw = await fetchGoogleSheetData("URL_SD_2") || [
-                        { rank: 1, driver: "DJALIL", car: "BMW M3 GTR", time: "02:12.800", speed: "290 km/h", yt: "https://youtube.com" },
-                        { rank: 2, driver: "MOST_WANTED", car: "BMW M3 GTR", time: "02:14.050", speed: "288 km/h", yt: "https://youtube.com" }
+                        { rank: "#1", driver: "DJALIL", time: "02:12.800", device: "Dual Sence", car: "BMW M3 GTR", gearbox: "Manual", date: "05 jun 2023", yt: "https://youtube.com" },
+                        { rank: "#2", driver: "MOST_WANTED", time: "02:14.050", device: "Dual Shock 4", car: "BMW M3 GTR", gearbox: "Auto", date: "18 nov 2022", yt: "https://youtube.com" }
                     ];
 
                     renderTableRows('tbody-sprintdrag-junkman', dJunkman);
@@ -950,20 +937,21 @@
             
             dataRows.forEach(row => {
                 const tr = document.createElement('tr');
-                let rankClass = row.rank === 1 ? "rank-1" : (row.rank === 2 ? "rank-2" : "rank-3");
+                let posClass = row.rank.includes("1") ? "rank-1" : (row.rank.includes("2") ? "rank-2" : "rank-3");
                 tr.innerHTML = `
-                    <td class="${rankClass}">#${row.rank}</td>
+                    <td class="${posClass}">${row.rank}</td>
                     <td><strong>${row.driver}</strong></td>
-                    <td>${row.car}</td>
                     <td style="color: var(--nfs-orange); font-weight: bold;">${row.time}</td>
-                    <td>${row.speed}</td>
-                    <td><a href="${row.yt}" target="_blank" class="btn-youtube">Ver Video</a></td>
+                    <td>${row.device}</td>
+                    <td>${row.car}</td>
+                    <td>${row.gearbox}</td>
+                    <td>${row.date}</td>
+                    <td><a href="${row.yt}" target="_blank" class="btn-youtube">Video</a></td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        // Inicializar
         renderRoutes(routesData);
     </script>
 </body>
