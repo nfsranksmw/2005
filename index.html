@@ -48,7 +48,7 @@
 
         .menu-toggle { display: none; font-size: 24px; cursor: pointer; color: var(--nfs-orange); }
 
-        @media(max-width: 600px) {
+        @media(max-width: 768px) {
             .menu-toggle { display: block; }
             nav { display: none; flex-direction: column; position: absolute; top: 60px; right: 0; background: var(--bg-dark); width: 100%; text-align: center; border-bottom: 2px solid var(--nfs-orange); padding: 20px 0; }
             nav.open { display: flex; }
@@ -70,7 +70,7 @@
         }
 
         @media(min-width: 768px) {
-            nav a { margin-left: 20px; font-size: 16px; }
+            nav a { margin-left: 20px; font-size: 15px; }
         }
 
         nav a:hover, nav a.active {
@@ -479,7 +479,9 @@
         <nav id="main-nav">
             <a href="#" onclick="switchView('home')" class="active" id="nav-home">Inicio</a>
             <a href="#" onclick="switchView('routes')" id="nav-routes">Rutas & Pistas</a>
-            <a href="#" onclick="switchView('leaderboard')" id="nav-leaderboard">Ejemplo Leaderboard</a>
+            <a href="#" onclick="switchView('guides')" id="nav-guides">Guías & Tuning</a>
+            <a href="#" onclick="switchView('halloffame')" id="nav-halloffame">Salón de la Fama</a>
+            <a href="#" onclick="switchView('rules')" id="nav-rules">Reglas & Normativa</a>
         </nav>
     </header>
 
@@ -532,6 +534,61 @@
         </div>
         
         <div class="routes-grid" id="routes-grid-container"></div>
+    </section>
+
+    <!-- VISTA: GUÍAS Y TUNING -->
+    <section id="view-guides" class="view-section">
+        <h2 class="section-title">Guías de Rendimiento & Tuning</h2>
+        <div class="news-grid">
+            <div class="news-card">
+                <h3 style="color: var(--nfs-orange); margin-top:0;">⚙️ Guía de Piezas Junkman</h3>
+                <p style="color: var(--text-muted); line-height: 1.6; font-size: 14px;">Descubre cómo desbloquear y aplicar correctamente las piezas de rendimiento ocultas para ganar valiosas décimas de segundo en las curvas rápidas de Rockport.</p>
+            </div>
+            <div class="news-card">
+                <h3 style="color: var(--nfs-orange); margin-top:0;">🏎️ Setups para el BMW M3 GTR</h3>
+                <p style="color: var(--text-muted); line-height: 1.6; font-size: 14px;">Configuración de aerodinámica, dirección y relación de transmisión ideal para dominar tanto circuitos técnicos como sprints de alta velocidad.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- VISTA: SALÓN DE LA FAMA -->
+    <section id="view-halloffame" class="view-section">
+        <h2 class="section-title">Salón de la Fama - Top Drivers</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Posición</th>
+                        <th>Piloto</th>
+                        <th>Récords Mundiales</th>
+                        <th>Plataforma Principal</th>
+                        <th>Insignia</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="rank-1">#1</td>
+                        <td><strong>DJALIL</strong></td>
+                        <td style="color: var(--nfs-orange); font-weight: bold;">42 Récords</td>
+                        <td>PC (Teclado / Volante)</td>
+                        <td>👑 Leyenda Absoluta</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- VISTA: REGLAS Y NORMATIVA -->
+    <section id="view-rules" class="view-section">
+        <h2 class="section-title">Normativa para Envío de Tiempos</h2>
+        <div class="news-card" style="max-width: 800px; margin: 0 auto;">
+            <h3 style="color: var(--nfs-orange); margin-top:0;">📋 Requisitos Obligatorios</h3>
+            <ul style="color: var(--text-muted); line-height: 1.8; font-size: 14px; padding-left: 20px;">
+                <li><strong>Prueba en Video:</strong> Todo tiempo enviado debe incluir un enlace de YouTube o video completo que muestre la vuelta/ruta desde el inicio hasta la línea de meta.</li>
+                <li><strong>Sin Hacks / Mods ilegales:</strong> Se permite el uso de herramientas oficiales de optimización de FPS o parches de resolución, pero queda estrictamente prohibido alterar las físicas del juego o usar speedhacks.</li>
+                <li><strong>Dispositivo:</strong> Especificar claramente si se utilizó Teclado, Mando (Gamepad) o Volante (Wheel).</li>
+            </ul>
+        </div>
     </section>
 
     <section id="view-leaderboard" class="view-section">
@@ -682,8 +739,8 @@
         <br>
         <button class="filter-btn" onclick="switchView('routes')">← Volver al Índice de Rutas</button>
     </section>
-// Script funcion rutas Google Sheet
-  <script>
+
+    <script>
         function toggleMenu() {
             document.getElementById('main-nav').classList.toggle('open');
         }
@@ -902,7 +959,6 @@
                 for (let i = 1; i < rows.length; i++) {
                     let r = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                     if (r && r.length >= 8 && r[0].trim() !== "") {
-                        // Limpieza profunda de los enlaces de video para eliminar comillas y retornos de carro oculta (\r)
                         let rawYt = r[7] ? r[7].replace(/"/g, '').replace(/\r/g, '').trim() : "#";
                         
                         data.push({
@@ -983,7 +1039,6 @@
                 const tr = document.createElement('tr');
                 let posClass = String(row.rank).includes("1") ? "rank-1" : (String(row.rank).includes("2") ? "rank-2" : (String(row.rank).includes("3") ? "rank-3" : ""));
                 
-                // Aseguramos que si no hay link válido, deshabilite o muestre un estado neutro en lugar de romper la etiqueta a
                 let videoBtnHTML = (row.yt && row.yt !== "#" && row.yt.startsWith("http")) 
                     ? `<a href="${row.yt}" target="_blank" class="btn-youtube">Video</a>` 
                     : `<span style="color: var(--text-muted); font-size: 12px;">Sin video</span>`;
