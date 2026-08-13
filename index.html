@@ -682,8 +682,8 @@
         <br>
         <button class="filter-btn" onclick="switchView('routes')">← Volver al Índice de Rutas</button>
     </section>
-
-    <script>
+// Script funcion rutas Google Sheet
+  <script>
         function toggleMenu() {
             document.getElementById('main-nav').classList.toggle('open');
         }
@@ -721,17 +721,16 @@
         }
 
         // --- BASE DE DATOS DE RUTAS Y SUS ENLACES CSV ESPECÍFICOS ---
-        // Aquí puedes asignar los 4 links CSV para Circuitos, y los 2 links CSV para Sprints y Drags de cada ruta.
         const routesData = [
             // --- CIRCUITOS (Requieren 4 URLs CSV) ---
             { 
                 name: "City Perimeter", 
                 type: "Circuito", 
                 sheets: {
-                    junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=634347005&single=true&output=tsv",
-                    junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=1989010516&single=true&output=tsv",
-                    bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=509105205&single=true&output=tsv",
-                    bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=1342310622&single=true&output=tsv"
+                    junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=634347005&single=true&output=csv",
+                    junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=1989010516&single=true&output=csv",
+                    bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=509105205&single=true&output=csv",
+                    bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=1342310622&single=true&output=csv"
                 }
             },
             { 
@@ -749,146 +748,35 @@
                 type: "Circuito", 
                 sheets: { junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vStZo0IeCdXXjHJfhth7FwjoHaKER81KduHg2OX-rkTfk27g8IMKo8UnrWfGfEhZ4_pz7bvsd7HWtqu/pub?gid=634347005&single=true&output=csv", junkmanFast: "https://docs.google.com/spreadsheets/d/e/2PACX-1vStZo0IeCdXXjHJfhth7FwjoHaKER81KduHg2OX-rkTfk27g8IMKo8UnrWfGfEhZ4_pz7bvsd7HWtqu/pub?gid=1989010516&single=true&output=csv", bmwSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vStZo0IeCdXXjHJfhth7FwjoHaKER81KduHg2OX-rkTfk27g8IMKo8UnrWfGfEhZ4_pz7bvsd7HWtqu/pub?gid=509105205&single=true&output=csv", bmwFast: "https://docs.google.com/spreadsheets/d/e/2PACX-1vStZo0IeCdXXjHJfhth7FwjoHaKER81KduHg2OX-rkTfk27g8IMKo8UnrWfGfEhZ4_pz7bvsd7HWtqu/pub?gid=1342310622&single=true&output=csv" }
             },
-            { 
-                name: "Highlands", 
-                type: "Circuito", 
-                sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" }
-            },
-            { 
-                name: "Petersburgs", 
-                type: "Circuito", 
-                sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" }
-            },
-            { 
-                name: "Heritage Height", 
-                type: "Circuito", 
-                sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" }
-            },
-            { 
-                name: "Omega", 
-                type: "Circuito", 
-                sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" }
-            },
-            { 
-                name: "Diamond", 
-                type: "Circuito", 
-                sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" }
-            },
-            { 
-                name: "Hillcrest Boundary", 
-                type: "Circuito", 
-                sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" }
-            },
-            { 
-                name: "Circle Rose", 
-                type: "Circuito", 
-                sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" }
-            },
-            { 
-                name: "Switchback", 
-                type: "Circuito", 
-                sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" }
-            },
-            { 
-                name: "Hospital Switchback", 
-                type: "Circuito", 
-                sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" }
-            },
-            { 
-                name: "Dunwich Bay", 
-                type: "Circuito", 
-                sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" }
-            },
-            { 
-                name: "Boundary", 
-                type: "Circuito", 
-                sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" }
-            },
-            { 
-                name: "Century Square", 
-                type: "Circuito", 
-                sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" }
-            },
-            { 
-                name: "Heritage & Omega", 
-                type: "Circuito", 
-                sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" }
-            },
-            { 
-                name: "Little Italy", 
-                type: "Circuito", 
-                sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" }
-            },
-            { 
-                name: "Ironhorse", 
-                type: "Circuito", 
-                sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" }
-            },
-            { 
-                name: "Waterfront", 
-                type: "Circuito", 
-                sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" }
-            },
-            { 
-                name: "Gray Point", 
-                type: "Circuito", 
-                sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" }
-            },
-            { 
-                name: "Omega & Industries", 
-                type: "Circuito", 
-                sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" }
-            },
-            { 
-                name: "Bay Bridge", 
-                type: "Circuito", 
-                sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" }
-            },
-            { 
-                name: "Camden Tunnel", 
-                type: "Circuito", 
-                sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" }
-            },
-            { 
-                name: "Campus Interchange", 
-                type: "Circuito", 
-                sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" }
-            },
-            { 
-                name: "Country Club", 
-                type: "Circuito", 
-                sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" }
-            },
-            { 
-                name: "East Park", 
-                type: "Circuito", 
-                sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" }
-            },
-            { 
-                name: "Oil Refinery", 
-                type: "Circuito", 
-                sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" }
-            },
-            { 
-                name: "Hastings", 
-                type: "Circuito", 
-                sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" }
-            },
-            { 
-                name: "ClubHouse", 
-                type: "Circuito", 
-                sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" }
-            },
+            { name: "Highlands", type: "Circuito", sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" } },
+            { name: "Petersburgs", type: "Circuito", sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" } },
+            { name: "Heritage Height", type: "Circuito", sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" } },
+            { name: "Omega", type: "Circuito", sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" } },
+            { name: "Diamond", type: "Circuito", sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" } },
+            { name: "Hillcrest Boundary", type: "Circuito", sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" } },
+            { name: "Circle Rose", type: "Circuito", sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" } },
+            { name: "Switchback", type: "Circuito", sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" } },
+            { name: "Hospital Switchback", type: "Circuito", sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" } },
+            { name: "Dunwich Bay", type: "Circuito", sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" } },
+            { name: "Boundary", type: "Circuito", sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" } },
+            { name: "Century Square", type: "Circuito", sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" } },
+            { name: "Heritage & Omega", type: "Circuito", sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" } },
+            { name: "Little Italy", type: "Circuito", sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" } },
+            { name: "Ironhorse", type: "Circuito", sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" } },
+            { name: "Waterfront", type: "Circuito", sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" } },
+            { name: "Gray Point", type: "Circuito", sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" } },
+            { name: "Omega & Industries", type: "Circuito", sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" } },
+            { name: "Bay Bridge", type: "Circuito", sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" } },
+            { name: "Camden Tunnel", type: "Circuito", sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" } },
+            { name: "Campus Interchange", type: "Circuito", sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" } },
+            { name: "Country Club", type: "Circuito", sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" } },
+            { name: "East Park", type: "Circuito", sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" } },
+            { name: "Oil Refinery", type: "Circuito", sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" } },
+            { name: "Hastings", type: "Circuito", sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" } },
+            { name: "ClubHouse", type: "Circuito", sheets: { junkmanSingle: "", junkmanFast: "", bmwSingle: "", bmwFast: "" } },
 
             // --- SPRINTS (Requieren 2 URLs CSV) ---
-            { 
-                name: "Seaside & Power Station", 
-                type: "Sprint", 
-                sheets: {
-                    junkman: "URL_CSV_SEASIDE_JUNKMAN",
-                    bmw:     "URL_CSV_SEASIDE_BMW"
-                }
-            },
+            { name: "Seaside & Power Station", type: "Sprint", sheets: { junkman: "URL_CSV_SEASIDE_JUNKMAN", bmw: "URL_CSV_SEASIDE_BMW" } },
             { name: "NFS World Loop", type: "Sprint", sheets: { junkman: "", bmw: "" } },
             { name: "Diamond & Unión", type: "Sprint", sheets: { junkman: "", bmw: "" } },
             { name: "Hwy 99 & States", type: "Sprint", sheets: { junkman: "", bmw: "" } },
@@ -936,14 +824,7 @@
             { name: "Clubhouse & Lennox", type: "Sprint", sheets: { junkman: "", bmw: "" } },
 
             // --- DRAGS (Requieren 2 URLs CSV) ---
-            { 
-                name: "Bayshore & Boardwalk", 
-                type: "Drag", 
-                sheets: {
-                    junkman: "URL_CSV_BAYSHORE_JUNKMAN",
-                    bmw:     "URL_CSV_BAYSHORE_BMW"
-                }
-            },
+            { name: "Bayshore & Boardwalk", type: "Drag", sheets: { junkman: "URL_CSV_BAYSHORE_JUNKMAN", bmw: "URL_CSV_BAYSHORE_BMW" } },
             { name: "Heritage & Rosewood", type: "Drag", sheets: { junkman: "", bmw: "" } },
             { name: "Harbor & Ocean", type: "Drag", sheets: { junkman: "", bmw: "" } },
             { name: "Seaside & Camden", type: "Drag", sheets: { junkman: "", bmw: "" } },
@@ -1021,15 +902,18 @@
                 for (let i = 1; i < rows.length; i++) {
                     let r = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                     if (r && r.length >= 8 && r[0].trim() !== "") {
+                        // Limpieza profunda de los enlaces de video para eliminar comillas y retornos de carro oculta (\r)
+                        let rawYt = r[7] ? r[7].replace(/"/g, '').replace(/\r/g, '').trim() : "#";
+                        
                         data.push({
-                            rank: r[0].replace(/"/g, ''),
-                            driver: r[1].replace(/"/g, ''),
-                            time: r[2].replace(/"/g, ''),
-                            device: r[3].replace(/"/g, ''),
-                            car: r[4].replace(/"/g, ''),
-                            gearbox: r[5].replace(/"/g, ''),
-                            date: r[6].replace(/"/g, ''),
-                            yt: r[7] ? r[7].replace(/"/g, '').trim() : "#"
+                            rank: r[0].replace(/"/g, '').replace(/\r/g, '').trim(),
+                            driver: r[1].replace(/"/g, '').replace(/\r/g, '').trim(),
+                            time: r[2].replace(/"/g, '').replace(/\r/g, '').trim(),
+                            device: r[3].replace(/"/g, '').replace(/\r/g, '').trim(),
+                            car: r[4].replace(/"/g, '').replace(/\r/g, '').trim(),
+                            gearbox: r[5].replace(/"/g, '').replace(/\r/g, '').trim(),
+                            date: r[6].replace(/"/g, '').replace(/\r/g, '').trim(),
+                            yt: rawYt !== "" ? rawYt : "#"
                         });
                     }
                 }
@@ -1068,7 +952,6 @@
                 renderTableRows('tbody-bmw-fast', d4);
 
             } else {
-                // Sprint o Drag (usan las 2 pestañas: Junkman y BMW)
                 circuitTabs.classList.remove('active-group');
                 sprintDragTabs.classList.add('active-group');
 
@@ -1099,6 +982,12 @@
             dataRows.forEach(row => {
                 const tr = document.createElement('tr');
                 let posClass = String(row.rank).includes("1") ? "rank-1" : (String(row.rank).includes("2") ? "rank-2" : (String(row.rank).includes("3") ? "rank-3" : ""));
+                
+                // Aseguramos que si no hay link válido, deshabilite o muestre un estado neutro en lugar de romper la etiqueta a
+                let videoBtnHTML = (row.yt && row.yt !== "#" && row.yt.startsWith("http")) 
+                    ? `<a href="${row.yt}" target="_blank" class="btn-youtube">Video</a>` 
+                    : `<span style="color: var(--text-muted); font-size: 12px;">Sin video</span>`;
+
                 tr.innerHTML = `
                     <td class="${posClass}">${row.rank}</td>
                     <td><strong>${row.driver}</strong></td>
@@ -1107,7 +996,7 @@
                     <td>${row.car}</td>
                     <td>${row.gearbox}</td>
                     <td>${row.date}</td>
-                    <td><a href="${row.yt}" target="_blank" class="btn-youtube">Video</a></td>
+                    <td>${videoBtnHTML}</td>
                 `;
                 tbody.appendChild(tr);
             });
