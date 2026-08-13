@@ -618,7 +618,7 @@
         <div id="tab-bmw-fast" class="table-section circuit-section">
             <h3 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">BMW M3 GTR — Vuelta rápida (Fast Lap)</h3>
             <div class="table-container">
-                <table> 
+                <table>
                     <thead>
                         <tr>
                             <th>Rank</th>
@@ -858,11 +858,51 @@
             filterRoutes();
         }
 
-        async function fetchGoogleSheetData(sheetUrl) {
+        // --- MAPEO DE URLS CSV DE CADA PESTAÑA ---
+        // Publica cada pestaña en Google Sheets ("Archivo > Compartir > Publicar en la web > Formato CSV")
+        // y pega la URL correspondiente en su respectiva clave:
+        const SHEET_URLS = {
+            "Junkman_Single": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=634347005&single=true&output=csv",
+            "Junkman_Fast":   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=1989010516&single=true&output=csv",
+            "BMW_Single":     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=509105205&single=true&output=csv",
+            "BMW_Fast":       "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=1342310622&single=true&output=csv"
+        };
+
+        async function fetchGoogleSheetData(sheetKey) {
             try {
-                throw new Error("Usando datos simulados por defecto");
+                const CSV_URL = SHEET_URLS[sheetKey];
+                if (!CSV_URL || CSV_URL.startsWith("PEGA_")) {
+                    console.warn(`Falta configurar la URL para la pestaña: ${sheetKey}`);
+                    return [];
+                }
+
+                const response = await fetch(CSV_URL);
+                const text = await response.text();
+                
+                // Procesar el texto CSV línea por línea respetando comillas
+                const rows = text.split("\n");
+                let data = [];
+
+                // Empezamos desde i = 1 para saltar la cabecera (títulos de columnas)
+                for (let i = 1; i < rows.length; i++) {
+                    let r = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                    if (r && r.length >= 8 && r[0].trim() !== "") {
+                        data.push({
+                            rank: r[0].replace(/"/g, ''),
+                            driver: r[1].replace(/"/g, ''),
+                            time: r[2].replace(/"/g, ''),
+                            device: r[3].replace(/"/g, ''),
+                            car: r[4].replace(/"/g, ''),
+                            gearbox: r[5].replace(/"/g, ''),
+                            date: r[6].replace(/"/g, ''),
+                            yt: r[7] ? r[7].replace(/"/g, '').trim() : "#"
+                        });
+                    }
+                }
+                return data;
             } catch (error) {
-                return null; 
+                console.error("Error al leer el CSV de Google Sheets:", error);
+                return [];
             }
         }
 
@@ -880,29 +920,18 @@
 
                 const tables = ['tbody-junkman-single', 'tbody-junkman-fast', 'tbody-bmw-single', 'tbody-bmw-fast'];
                 tables.forEach(id => {
-                    document.getElementById(id).innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--nfs-orange); padding: 15px;">Sincronizando con Google Sheets...</td></tr>`;
+                    document.getElementById(id).innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--nfs-orange); padding: 15px;">Cargando datos...</td></tr>`;
                 });
 
-                setTimeout(async () => {
-                    let d1 = await fetchGoogleSheetData("https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=634347005&single=true&output=csv") || [
-                        { rank: "#1", driver: "Lea4Speed0 WR 🏆", time: "1:20.76", device: "Dual Sence", car: "Carrera GT", gearbox: "Manual", date: "8 sept 2024", yt: "https://youtube.com" },
-                        { rank: "#2", driver: "Xman", time: "1:20.78", device: "Dual Shock 4", car: "Carrera GT", gearbox: "Auto", date: "10 feb 2020", yt: "https://youtube.com" }
-                    ];
-                    let d2 = await fetchGoogleSheetData("https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=1989010516&single=true&output=csv") || [
-                        { rank: "#1", driver: "Saitkb", time: "1:20.84", device: "Dual Shock 4", car: "Carrera GT", gearbox: "Manual", date: "19 jul 2016", yt: "https://youtube.com" }
-                    ];
-                    let d3 = await fetchGoogleSheetData("https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=509105205&single=true&output=csv") || [
-                        { rank: "#1", driver: "ZimanX", time: "1:20.87", device: "Dual Action", car: "Carrera GT", gearbox: "Auto", date: "19 may 2018", yt: "https://youtube.com" }
-                    ];
-                    let d4 = await fetchGoogleSheetData("https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=1342310622&single=true&output=csv") || [
-                        { rank: "#1", driver: "SKYMASTER", time: "1:20.92", device: "Xbox 3606", car: "Carrera GT", gearbox: "Auto", date: "30 dic 2020", yt: "https://youtube.com" }
-                    ];
+                let d1 = await fetchGoogleSheetData("Junkman_Single");
+                let d2 = await fetchGoogleSheetData("Junkman_Fast");
+                let d3 = await fetchGoogleSheetData("BMW_Single");
+                let d4 = await fetchGoogleSheetData("BMW_Fast");
 
-                    renderTableRows('tbody-junkman-single', d1);
-                    renderTableRows('tbody-junkman-fast', d2);
-                    renderTableRows('tbody-bmw-single', d3);
-                    renderTableRows('tbody-bmw-fast', d4);
-                }, 400);
+                renderTableRows('tbody-junkman-single', d1);
+                renderTableRows('tbody-junkman-fast', d2);
+                renderTableRows('tbody-bmw-single', d3);
+                renderTableRows('tbody-bmw-fast', d4);
 
             } else {
                 circuitTabs.classList.remove('active-group');
@@ -912,22 +941,14 @@
 
                 const tables = ['tbody-sprintdrag-junkman', 'tbody-sprintdrag-bmw'];
                 tables.forEach(id => {
-                    document.getElementById(id).innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--nfs-orange); padding: 15px;">Sincronizando con Google Sheets...</td></tr>`;
+                    document.getElementById(id).innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--nfs-orange); padding: 15px;">Cargando datos...</td></tr>`;
                 });
 
-                setTimeout(async () => {
-                    let dJunkman = await fetchGoogleSheetData("URL_SD_1") || [
-                        { rank: "#1", driver: "SPEED_DEMON", time: "02:10.150", device: "Dual Shock 4", car: "Corvette Z06", gearbox: "Manual", date: "12 ene 2022", yt: "https://youtube.com" },
-                        { rank: "#2", driver: "VIPER_X", time: "02:11.400", device: "Keyboard", car: "Dodge Viper", gearbox: "Auto", date: "15 mar 2021", yt: "https://youtube.com" }
-                    ];
-                    let dBmw = await fetchGoogleSheetData("URL_SD_2") || [
-                        { rank: "#1", driver: "DJALIL", time: "02:12.800", device: "Dual Sence", car: "BMW M3 GTR", gearbox: "Manual", date: "05 jun 2023", yt: "https://youtube.com" },
-                        { rank: "#2", driver: "MOST_WANTED", time: "02:14.050", device: "Dual Shock 4", car: "BMW M3 GTR", gearbox: "Auto", date: "18 nov 2022", yt: "https://youtube.com" }
-                    ];
+                let dJunkman = await fetchGoogleSheetData("Junkman_Single");
+                let dBmw = await fetchGoogleSheetData("BMW_Single");
 
-                    renderTableRows('tbody-sprintdrag-junkman', dJunkman);
-                    renderTableRows('tbody-sprintdrag-bmw', dBmw);
-                }, 400);
+                renderTableRows('tbody-sprintdrag-junkman', dJunkman);
+                renderTableRows('tbody-sprintdrag-bmw', dBmw);
             }
         }
 
@@ -935,9 +956,14 @@
             const tbody = document.getElementById(tbodyId);
             tbody.innerHTML = '';
             
+            if(!dataRows || dataRows.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 15px;">No hay registros en esta hoja.</td></tr>`;
+                return;
+            }
+
             dataRows.forEach(row => {
                 const tr = document.createElement('tr');
-                let posClass = row.rank.includes("1") ? "rank-1" : (row.rank.includes("2") ? "rank-2" : "rank-3");
+                let posClass = String(row.rank).includes("1") ? "rank-1" : (String(row.rank).includes("2") ? "rank-2" : (String(row.rank).includes("3") ? "rank-3" : ""));
                 tr.innerHTML = `
                     <td class="${posClass}">${row.rank}</td>
                     <td><strong>${row.driver}</strong></td>
