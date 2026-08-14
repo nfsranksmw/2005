@@ -490,20 +490,13 @@
 }
 
 /* Tarjeta de ruta con diseño idéntico a la referencia */
+/* Resplandor naranja permanente en la tarjeta */
 .route-card {
-    background: var(--bg-panel);
-    backdrop-filter: blur(8px);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 14px 16px;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    gap: 14px;
+    border-left: 4px solid var(--nfs-orange) !important;
+    box-shadow: -4px 0 15px rgba(249, 115, 22, 0.35) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
 
 /* Línea de resplandor naranja en el borde izquierdo */
 .route-card::before {
@@ -518,9 +511,8 @@
 }
 
 .route-card:hover {
-    border-color: var(--nfs-orange);
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(255, 136, 51, 0.2);
+    box-shadow: -6px 0 20px rgba(249, 115, 22, 0.5) !important;
 }
 
 .route-card:hover::before {
@@ -536,18 +528,28 @@
     flex-shrink: 0;
 }
 
+/* Caja contenedora del icono de ruta con borde oscuro estilizado */
 .route-icon-box {
-    background: rgba(15, 23, 42, 0.9);
-    border: 1px solid #00d2ff;
-    border-radius: 8px;
-    width: 100%;
-    height: 100%;
+    background-color: #12151c;
+    border: 2px solid #2a3241;
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.6);
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
-    color: #00d2ff;
-    box-shadow: inset 0 0 10px rgba(0, 210, 255, 0.2);
+    width: 48px;
+    height: 48px;
+}
+/* Estilos mejorados para la sección de récords internos de la tarjeta */
+.route-time-display {
+    font-size: 16px;
+    font-weight: 800;
+    color: #ffffff !important;
+}
+.route-car-display {
+    font-size: 14px;
+    font-weight: 700;
+    color: #94a3b8 !important; /* Gris elegante pero legible y en negrita */
 }
 
 /* Insignia de la letrita inferior derecha (ej. A, E, etc.) */
@@ -683,16 +685,16 @@
             
           <div class="filter-bar">
     <button class="filter-btn active" onclick="setCategory('all', this)">
-        <span style="font-size: 14px; margin-right: 6px;">▦</span> All
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: middle; margin-right: 6px;"><path d="M4 4h4v4H4V4zm6 0h4v4h-4V4zm6 0h4v4h-4V4zM4 10h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4zM4 16h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z"/></svg> All
     </button>
     <button class="filter-btn" onclick="setCategory('Circuito', this)">
-        <span style="font-size: 14px; margin-right: 6px;">🔄</span> Circuit
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px; color: var(--nfs-orange);"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.23-5.23"></path></svg> Circuit
     </button>
     <button class="filter-btn" onclick="setCategory('Sprint', this)">
-        <span style="font-size: 14px; margin-right: 6px;">⚡</span> Sprint
+        <span style="font-size: 16px; margin-right: 6px; color: var(--nfs-orange);">⚡</span> Sprint
     </button>
     <button class="filter-btn" onclick="setCategory('Drag', this)">
-        <span style="font-size: 14px; margin-right: 6px;">🏎️</span> Drag
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: middle; margin-right: 6px; color: var(--nfs-orange);"><path d="M9 2h6v2H9V2zm1 3h4v2h-4V5zm-2 3h8v2H8V8zm1 3h6v2H9v-2zm-2 3h10v2H7v-2zm2 3h6v2H9v-2zm-3 3h12v2H6v-2z"/></svg> Drag
     </button>
 </div>
         </div>
@@ -1259,12 +1261,25 @@ En condiciones de desempate o de tiempos muy cercanos a 10 centésimas de segund
     }
 
     for (const route of dataToRender) {
-        // Asignamos el icono circular de pista estilo NFS World y su letra distintiva
-        let iconSymbol = "🔄";
-        if(route.type === "Sprint") iconSymbol = "⚡";
-        if(route.type === "Drag") iconSymbol = "🏎️";
-        
+        let iconHtml = "";
         let letterBadge = route.type ? route.type.charAt(0).toUpperCase() : "A";
+
+        if(route.type === "Circuito") {
+            // Icono circular de circuito
+            iconHtml = `<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--nfs-orange);">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.23-5.23"></path>
+            </svg>`;
+        } else if(route.type === "Sprint") {
+            // Icono de Sprint (rayo)
+            iconHtml = `<span style="font-size: 22px; color: var(--nfs-orange);">⚡</span>`;
+        } else if(route.type === "Drag") {
+            // Icono de Drag: Semáforo de aceleración (Christmas Tree) con el color de acento
+            iconHtml = `<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="color: var(--nfs-orange);">
+                <path d="M9 2h6v2H9V2zm1 3h4v2h-4V5zm-2 3h8v2H8V8zm1 3h6v2H9v-2zm-2 3h10v2H7v-2zm2 3h6v2H9v-2zm-3 3h12v2H6v-2z"/>
+            </svg>`;
+        } else {
+            iconHtml = `<span style="font-size: 22px; color: var(--nfs-orange);">🔄</span>`;
+        }
 
         let bestRecordText = "";
         let bestDriver = "";
@@ -1304,7 +1319,7 @@ En condiciones de desempate o de tiempos muy cercanos a 10 centésimas de segund
 
         card.innerHTML = `
             <div class="route-icon-container">
-                <div class="route-icon-box">${iconSymbol}</div>
+                <div class="route-icon-box">${iconHtml}</div>
                 <div class="route-badge-letter">${letterBadge}</div>
             </div>
             <div class="route-info">
