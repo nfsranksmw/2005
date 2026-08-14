@@ -490,15 +490,14 @@
 }
 
 /* Tarjeta de ruta con diseño idéntico a la referencia */
-/* Resplandor naranja permanente en la tarjeta */
 .route-card {
+    position: relative; /* Necesario para posicionar elementos internos */
     border-left: 4px solid var(--nfs-orange) !important;
     box-shadow: -4px 0 15px rgba(249, 115, 22, 0.35) !important;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-
-/* Línea de resplandor naranja en el borde izquierdo */
+/* Línea de resplandor naranja permanente en el borde izquierdo (Fijo y Hover) */
 .route-card::before {
     content: '';
     position: absolute;
@@ -506,18 +505,14 @@
     left: 0;
     width: 4px;
     height: 100%;
-    background: var(--border-color);
+    background: var(--nfs-orange);
+    box-shadow: 0 0 10px var(--nfs-orange);
     transition: background 0.3s;
 }
 
 .route-card:hover {
     transform: translateY(-3px);
     box-shadow: -6px 0 20px rgba(249, 115, 22, 0.5) !important;
-}
-
-.route-card:hover::before {
-    background: var(--nfs-orange);
-    box-shadow: 0 0 10px var(--nfs-orange);
 }
 
 /* Contenedor del icono principal de la pista con la letra en la esquina */
@@ -540,12 +535,14 @@
     width: 48px;
     height: 48px;
 }
+
 /* Estilos mejorados para la sección de récords internos de la tarjeta */
 .route-time-display {
     font-size: 16px;
     font-weight: 800;
     color: #ffffff !important;
 }
+
 .route-car-display {
     font-size: 14px;
     font-weight: 700;
