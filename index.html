@@ -491,13 +491,21 @@
 
 /* Tarjeta de ruta con diseño idéntico a la referencia */
 .route-card {
-    position: relative; /* Necesario para posicionar elementos internos */
-    border-left: 4px solid var(--nfs-orange) !important;
-    box-shadow: -4px 0 15px rgba(249, 115, 22, 0.35) !important;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background: var(--bg-panel);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 14px 16px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 14px;
 }
 
-/* Línea de resplandor naranja permanente en el borde izquierdo (Fijo y Hover) */
+/* Línea de resplandor verde fija en el borde izquierdo */
 .route-card::before {
     content: '';
     position: absolute;
@@ -505,16 +513,21 @@
     left: 0;
     width: 4px;
     height: 100%;
-    background: var(--nfs-orange);
-    box-shadow: 0 0 10px var(--nfs-orange);
-    transition: background 0.3s;
+    background: #22c55e;
+    box-shadow: 0 0 10px #22c55e;
 }
 
 .route-card:hover {
+    border-color: var(--nfs-orange);
     transform: translateY(-3px);
-    box-shadow: -6px 0 20px rgba(249, 115, 22, 0.5) !important;
+    box-shadow: 0 6px 20px rgba(51, 255, 129, 0.2);
 }
 
+/* Eliminamos el cambio en hover para que la barra lateral permanezca fija siempre */
+.route-card:hover::before {
+    background: var(--nfs-orange);
+    box-shadow: 0 0 10px var(--nfs-orange);
+}
 /* Contenedor del icono principal de la pista con la letra en la esquina */
 .route-icon-container {
     position: relative;
@@ -523,30 +536,18 @@
     flex-shrink: 0;
 }
 
-/* Caja contenedora del icono de ruta con borde oscuro estilizado */
 .route-icon-box {
-    background-color: #12151c;
-    border: 2px solid #2a3241;
-    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.6);
-    border-radius: 12px;
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid #00d2ff;
+    border-radius: 8px;
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 48px;
-    height: 48px;
-}
-
-/* Estilos mejorados para la sección de récords internos de la tarjeta */
-.route-time-display {
-    font-size: 16px;
-    font-weight: 800;
-    color: #ffffff !important;
-}
-
-.route-car-display {
-    font-size: 14px;
-    font-weight: 700;
-    color: #94a3b8 !important; /* Gris elegante pero legible y en negrita */
+    font-size: 24px;
+    color: #00d2ff;
+    box-shadow: inset 0 0 10px rgba(0, 210, 255, 0.2);
 }
 
 /* Insignia de la letrita inferior derecha (ej. A, E, etc.) */
@@ -1596,7 +1597,17 @@ En condiciones de desempate o de tiempos muy cercanos a 10 centésimas de segund
             generateGlobalLeaderboards();
         });
 
+// --- FUNCIONES RENDER ROUTERS ---
         renderRoutes(routesData);
+        let detailsHtml = bestDriver ? `
+            <div class="route-record-preview" style="font-weight: bold; color: #ffffff;">
+                ⏱️ <span class="time" style="color: #ffffff; font-weight: 800;">${bestRecordText}</span> 
+                <span style="font-weight: 600; color: #cbd5e1; margin-left: 4px;">👤 ${bestDriver}</span>
+            </div>
+            <div class="route-record-preview" style="font-weight: bold; color: #ffffff;">
+                🚗 ${bestCar}
+            </div>
+        ` : `<div class="route-record-preview" style="font-style: italic;">Disponible para récord</div>`;
     </script>
 </body>
 <footer>
