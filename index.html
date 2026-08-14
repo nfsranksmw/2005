@@ -470,6 +470,155 @@
             border-radius: 8px;
             border: 1px solid var(--border-color);
         }
+    /* Ajustado a exactamente 4 columnas en pantallas grandes */
+.routes-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+}
+
+@media(min-width: 600px) {
+    .routes-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media(min-width: 992px) {
+    .routes-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media(min-width: 1250px) {
+    .routes-grid { grid-template-columns: repeat(4, 1fr); gap: 18px; } /* ¡Configurado a 4 columnas! */
+}
+
+/* Tarjeta de ruta con diseño idéntico a la referencia */
+.route-card {
+    background: var(--bg-panel);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 14px 16px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+/* Línea de resplandor naranja en el borde izquierdo */
+.route-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--border-color);
+    transition: background 0.3s;
+}
+
+.route-card:hover {
+    border-color: var(--nfs-orange);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 136, 51, 0.2);
+}
+
+.route-card:hover::before {
+    background: var(--nfs-orange);
+    box-shadow: 0 0 10px var(--nfs-orange);
+}
+
+/* Contenedor del icono principal de la pista con la letra en la esquina */
+.route-icon-container {
+    position: relative;
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+}
+
+.route-icon-box {
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid #00d2ff;
+    border-radius: 8px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #00d2ff;
+    box-shadow: inset 0 0 10px rgba(0, 210, 255, 0.2);
+}
+
+/* Insignia de la letrita inferior derecha (ej. A, E, etc.) */
+.route-badge-letter {
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    background: #0088cc;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 1px 5px;
+    border-radius: 4px;
+    border: 1px solid var(--bg-panel);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+/* Información central de la tarjeta */
+.route-info {
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.route-info h3 {
+    margin: 0 0 3px 0;
+    color: var(--text-main);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.route-record-preview {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin: 2px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.route-record-preview span.time {
+    color: var(--nfs-orange);
+    font-weight: bold;
+}
+
+/* Botón de mapa en la esquina superior derecha */
+.route-action-icon {
+    background: rgba(34, 34, 42, 0.8);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 14px;
+    flex-shrink: 0;
+    transition: all 0.2s;
+}
+
+.route-card:hover .route-action-icon {
+    color: var(--text-main);
+    border-color: var(--nfs-orange);
+}
     </style>
 </head>
 <body>
@@ -482,13 +631,13 @@
     <!-- Resto del menú de navegación... -->
         <div class="menu-toggle" onclick="toggleMenu()">☰</div>
         <nav id="main-nav">
-            <a href="#" onclick="switchView('home')" class="active" id="nav-home">Inicio</a>
-            <a href="#" onclick="switchView('routes')" id="nav-routes">Rutas & Pistas</a>
-            <a href="#" onclick="switchView('halloffame')" id="nav-halloffame">Salón de la Fama</a>
+            <a href="#" onclick="switchView('home')" class="active" id="nav-home">Home</a>
+            <a href="#" onclick="switchView('routes')" id="nav-routes">Leaderboards
+            <a href="#" onclick="switchView('halloffame')" id="nav-halloffame">Hall of Fame</a>
             <a href="#" onclick="switchView('globaldrivers')" id="nav-globaldrivers">Top Global Drivers</a>
             <a href="#" onclick="switchView('globalroutes')" id="nav-globalroutes">Top Rutas</a>
             <a href="#" onclick="switchView('guides')" id="nav-guides">Guías & Tuning</a>
-            <a href="#" onclick="switchView('rules')" id="nav-rules">Reglas & Normativa</a>
+            <a href="#" onclick="switchView('rules')" id="nav-rules">Rules & Norm</a>
         </nav>
     </header>
 
@@ -527,15 +676,15 @@
     </section>
 
     <section id="view-routes" class="view-section">
-        <h2 class="section-title">Índice de Rutas y Pruebas</h2>
+        <h2 class="section-title">Leaderboards</h2>
         
         <div class="controls-wrapper">
             <input type="text" id="route-search" class="search-input" placeholder="🔍 Buscar pista o ruta..." onkeyup="filterRoutes()">
             
             <div class="filter-bar">
-                <button class="filter-btn active" onclick="setCategory('all', this)">Todas</button>
+                <button class="filter-btn active" onclick="setCategory('all', this)">All</button>
+                <button class="filter-btn" onclick="setCategory('Circuito', this)">Circuit</button>
                 <button class="filter-btn" onclick="setCategory('Sprint', this)">Sprint</button>
-                <button class="filter-btn" onclick="setCategory('Circuito', this)">Circuito</button>
                 <button class="filter-btn" onclick="setCategory('Drag', this)">Drag</button>
             </div>
         </div>
@@ -1092,36 +1241,73 @@ En condiciones de desempate o de tiempos muy cercanos a 10 centésimas de segund
 
         let currentCategory = 'all';
 
-        function renderRoutes(dataToRender) {
-            const container = document.getElementById('routes-grid-container');
-            container.innerHTML = '';
+    async function renderRoutes(dataToRender) {
+    const container = document.getElementById('routes-grid-container');
+    container.innerHTML = '';
 
-            if(dataToRender.length === 0) {
-                container.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 20px;">No se encontraron rutas con ese nombre.</p>`;
-                return;
+    if(dataToRender.length === 0) {
+        container.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 20px;">No se encontraron rutas con ese nombre.</p>`;
+        return;
+    }
+
+    for (const route of dataToRender) {
+        // Asignamos el icono circular de pista estilo NFS World y su letra distintiva
+        let iconSymbol = "🔄";
+        if(route.type === "Sprint") iconSymbol = "⚡";
+        if(route.type === "Drag") iconSymbol = "🏎️";
+        
+        let letterBadge = route.type ? route.type.charAt(0).toUpperCase() : "A";
+
+        let bestRecordText = "";
+        let bestDriver = "";
+        let bestCar = "";
+
+        try {
+            let sampleSheet = "";
+            if (route.type === "Circuito") sampleSheet = route.sheets.junkmanSingle || route.sheets.bmwSingle;
+            else sampleSheet = route.sheets.junkman || route.sheets.bmw;
+
+            if (sampleSheet) {
+                let rows = await fetchGoogleSheetData(sampleSheet);
+                let topRow = rows.find(r => r.rank.includes("1") || r.rank === "1");
+                if (topRow) {
+                    bestRecordText = topRow.time;
+                    bestDriver = topRow.driver;
+                    bestCar = topRow.car;
+                }
             }
+        } catch(e) { }
 
-            dataToRender.forEach(route => {
-                let icon = "🔄";
-                if(route.type === "Sprint") icon = "⚡";
-                if(route.type === "Drag") icon = "🏎️";
+        const card = document.createElement('div');
+        card.className = 'route-card';
+        card.onclick = () => {
+            document.getElementById('leaderboard-title').innerText = `Leaderboard: ${route.name} (${route.type})`;
+            loadLeaderboardForRoute(route);
+            switchView('leaderboard');
+        };
 
-                const card = document.createElement('div');
-                card.className = 'route-card';
-                card.onclick = () => {
-                    document.getElementById('leaderboard-title').innerText = `Leaderboard: ${route.name} (${route.type})`;
-                    loadLeaderboardForRoute(route);
-                    switchView('leaderboard');
-                };
-                card.innerHTML = `
-                    <span>${icon} ${route.type}</span>
-                    <h3>${route.name}</h3>
-                    <p style="color: var(--text-muted); font-size: 13px; margin: 0;">Clic para ver tiempos récord</p>
-                `;
-                container.appendChild(card);
-            });
-        }
+        let detailsHtml = bestDriver ? `
+            <div class="route-record-preview">
+                <span>⏱️ <span class="time">${bestRecordText}</span></span>
+                <span>👤 ${bestDriver}</span>
+            </div>
+            <div class="route-record-preview">🚗 ${bestCar}</div>
+        ` : `<div class="route-record-preview" style="font-style: italic;">Disponible para récord</div>`;
 
+        card.innerHTML = `
+            <div class="route-icon-container">
+                <div class="route-icon-box">${iconSymbol}</div>
+                <div class="route-badge-letter">${letterBadge}</div>
+            </div>
+            <div class="route-info">
+                <h3>${route.name}</h3>
+                ${detailsHtml}
+            </div>
+            <div class="route-action-icon" title="Ver Leaderboard">🗺️</div>
+        `;
+        container.appendChild(card);
+    }
+}
         function filterRoutes() {
             const query = document.getElementById('route-search').value.toLowerCase();
             const filtered = routesData.filter(route => {
