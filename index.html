@@ -681,12 +681,20 @@
         <div class="controls-wrapper">
             <input type="text" id="route-search" class="search-input" placeholder="🔍 Buscar pista o ruta..." onkeyup="filterRoutes()">
             
-            <div class="filter-bar">
-                <button class="filter-btn active" onclick="setCategory('all', this)">All</button>
-                <button class="filter-btn" onclick="setCategory('Circuito', this)">Circuit</button>
-                <button class="filter-btn" onclick="setCategory('Sprint', this)">Sprint</button>
-                <button class="filter-btn" onclick="setCategory('Drag', this)">Drag</button>
-            </div>
+          <div class="filter-bar">
+    <button class="filter-btn active" onclick="setCategory('all', this)">
+        <span style="font-size: 14px; margin-right: 6px;">▦</span> All
+    </button>
+    <button class="filter-btn" onclick="setCategory('Circuito', this)">
+        <span style="font-size: 14px; margin-right: 6px;">🔄</span> Circuit
+    </button>
+    <button class="filter-btn" onclick="setCategory('Sprint', this)">
+        <span style="font-size: 14px; margin-right: 6px;">⚡</span> Sprint
+    </button>
+    <button class="filter-btn" onclick="setCategory('Drag', this)">
+        <span style="font-size: 14px; margin-right: 6px;">🏎️</span> Drag
+    </button>
+</div>
         </div>
         
         <div class="routes-grid" id="routes-grid-container"></div>
