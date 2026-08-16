@@ -1923,7 +1923,44 @@ const routesData = [
     async function renderRoutes(dataToRender) {
     const container = document.getElementById('routes-grid-container');
     if (!container) return;
+    container.innerHTML = '<p style="text-align:center;">Cargando rutas y récords...</p>';
+
+    // Creamos un array de promesas para cargar todo en paralelo
+    const renderPromises = dataToRender.map(async (route) => {
+        // ... (todo tu código de lógica de iconos y badges) ...
+
+        let bestRecordText = "---";
+        let bestDriver = "Sin datos";
+        let bestCar = "";
+
+        try {
+            let sampleSheet = (route.type === "Circuito") ? (route.sheets.junkmanSingle || route.sheets.bmwSingle) : (route.sheets.junkman || route.sheets.bmw);
+            if (sampleSheet) {
+                let rows = await fetchGoogleSheetData(sampleSheet);
+                let topRow = rows.find(r => r.rank.includes("1") || r.rank === "1");
+                if (topRow) {
+                    bestRecordText = topRow.time;
+                    bestDriver = topRow.driver;
+                    bestCar = topRow.car;
+                }
+            }
+        } catch(e) { console.error("Error en ruta", route.name); }
+
+        return { route, bestRecordText, bestDriver, bestCar, iconHtml, letterBadge };
+    });
+
+    // Esperamos a que todas las hojas carguen en paralelo
+    const results = await Promise.all(renderPromises);
+    
+    // Ahora pintamos todo de golpe
     container.innerHTML = '';
+    results.forEach(res => {
+        const card = document.createElement('div');
+        card.className = 'route-card';
+        // ... (tu código para crear el innerHTML de la tarjeta) ...
+        container.appendChild(card);
+    });
+}
 
     if (dataToRender.length === 0) {
         container.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 20px;">No se encontraron rutas con ese nombre.</p>`;
