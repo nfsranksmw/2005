@@ -1617,16 +1617,16 @@
         renderRoutes(routesData);
         // Dentro de tu bucle que crea las tarjetas:
 let detailsHtml = bestDriver ? `
-    <div class="route-record-preview" style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
-        <span class="route-time-display" style="color: #ffffff; font-weight: 800;">⏱️ ${bestRecordText}</span>
-        <span style="font-size: 13px; color: #cbd5e1; font-weight: 600;">👤 ${bestDriver}</span>
-    </div>
-    <div class="route-car-container" style="overflow: hidden; width: 100%; margin-top: 6px;">
-        <div class="marquee" style="white-space: nowrap; font-size: 13px; font-weight: 700; color: #94a3b8;">
-            🚗 ${bestCar}
+    <div class="route-record-preview">
+        <span class="time">⏱️ ${bestRecordText}</span>
+        <div style="overflow: hidden; width: 100%; position: relative; display: inline-block;">
+            <div class="route-record-marquee">
+                <span>👤 ${bestDriver}</span>
+                <span>🚗 ${bestCar}</span>
+            </div>
         </div>
     </div>
-` : `<div class="route-record-preview" style="font-style: italic; color: #64748b; font-size: 12px;">Disponible para récord</div>`;
+` : `<div class="route-record-preview"><span>Sin registros aún</span></div>`;
 
 <!-- LEADERBOARD STATAS ... -->
         function updateLeaderboardStats(showingNum, totalNum, currentClass = 'ALL') {
