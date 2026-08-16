@@ -1751,23 +1751,55 @@ En condiciones de desempate o de tiempos muy cercanos a 10 centésimas de segund
         });
 
 // --- FUNCIONES RENDER ROUTERS ---
-        renderRoutes(routesData);
-        // Dentro de tu bucle que crea las tarjetas:
-let detailsHtml = bestDriver ? `
-    <div class="route-record-preview">
-        <span style="color: #ffffff; font-weight: 800;">⏱️ ${bestRecordText}</span> 
-        <span style="color: #cbd5e1; font-weight: 600;">👤 ${bestDriver}</span>
-    </div>
-    <div class="route-car-container">
-        <div class="marquee-car">
-            🚗 ${bestCar}
-        </div>
-    </div>
-` : `
-    <div class="route-record-preview" style="font-style: italic; color: #64748b;">
-        Disponible para récord
-    </div>
-`;
+       function renderRoutes(routes) {
+    const container = document.getElementById('routes-container'); // O el ID de tu contenedor de tarjetas
+    if (!container) return;
+
+    container.innerHTML = ''; // Limpiar contenedor
+
+    routes.forEach(route => {
+        // Suponiendo que tus datos de Google Sheets traen estas propiedades:
+        let bestDriver = route.driver || route.piloto || ''; 
+        let bestRecordText = route.time || route.tiempo || '0:00.00';
+        let bestCar = route.car || route.auto || '';
+
+        // Definimos el HTML de los detalles según si hay récord o no
+        let detailsHtml = bestDriver ? `
+            <div class="route-record-preview">
+                <span style="color: #ffffff; font-weight: 800;">⏱️ ${bestRecordText}</span> 
+                <span style="color: #cbd5e1; font-weight: 600;">👤 ${bestDriver}</span>
+            </div>
+            <div class="route-car-container">
+                <div class="marquee-car">
+                    🚗 ${bestCar}
+                </div>
+            </div>
+        ` : `
+            <div class="route-record-preview" style="font-style: italic; color: #64748b;">
+                Disponible para récord
+            </div>
+        `;
+
+        // Construcción de la tarjeta completa
+        const card = document.createElement('div');
+        card.className = 'route-card';
+        card.innerHTML = `
+            <div class="route-icon-container">
+                <div class="route-icon-box">
+                    <span>${route.icon || '🔄'}</span>
+                </div>
+                <div class="route-badge-letter">${route.letter || 'A'}</div>
+            </div>
+            <div class="route-info">
+                <h3>${route.name || route.pista}</h3>
+                ${detailsHtml}
+            </div>
+            <div class="route-action-icon">🗺️</div>
+        `;
+
+        container.appendChild(card);
+    });
+}
 // --- LEADERBOARS STATS ACCIÓN DINÁMICA ---
         function updateLeaderboardStats(showingNum, totalNum, currentClass = 'ALL') {
     const showingEl = document.getElementById('showing-count');
@@ -1780,7 +1812,6 @@ let detailsHtml = bestDriver ? `
 }
     </script>
 // --- FÍN CÓDIGO JAVA SCRIPTS---
-
 
 </body>
 <footer>
