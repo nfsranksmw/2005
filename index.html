@@ -1920,147 +1920,15 @@ const routesData = [
 
         let currentCategory = 'all';
 
-    async function renderRoutes(dataToRender) {
-    const container = document.getElementById('routes-grid-container');
-    if (!container) return;
-    container.innerHTML = '<p style="text-align:center;">Cargando rutas y récords...</p>';
-
-    // Creamos un array de promesas para cargar todo en paralelo
-    const renderPromises = dataToRender.map(async (route) => {
-        // ... (todo tu código de lógica de iconos y badges) ...
-
-        let bestRecordText = "---";
-        let bestDriver = "Sin datos";
-        let bestCar = "";
-
-        try {
-            let sampleSheet = (route.type === "Circuito") ? (route.sheets.junkmanSingle || route.sheets.bmwSingle) : (route.sheets.junkman || route.sheets.bmw);
-            if (sampleSheet) {
-                let rows = await fetchGoogleSheetData(sampleSheet);
-                let topRow = rows.find(r => r.rank.includes("1") || r.rank === "1");
-                if (topRow) {
-                    bestRecordText = topRow.time;
-                    bestDriver = topRow.driver;
-                    bestCar = topRow.car;
-                }
-            }
-        } catch(e) { console.error("Error en ruta", route.name); }
-
-        return { route, bestRecordText, bestDriver, bestCar, iconHtml, letterBadge };
-    });
-
-    // Esperamos a que todas las hojas carguen en paralelo
-    const results = await Promise.all(renderPromises);
-    
-    // Ahora pintamos todo de golpe
-    container.innerHTML = '';
-    results.forEach(res => {
-        const card = document.createElement('div');
-        card.className = 'route-card';
-        // ... (tu código para crear el innerHTML de la tarjeta) ...
-        container.appendChild(card);
-    });
-}
-
-    if (dataToRender.length === 0) {
-        container.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 20px;">No se encontraron rutas con ese nombre.</p>`;
-        return;
-    }
-
-    for (const route of dataToRender) {
-        let iconHtml = "";
-        let letterBadge = route.type ? route.type.charAt(0).toUpperCase() : "A";
-
-        if (route.type === "Circuito") {
-            iconHtml = `<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--nfs-orange);">
-                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.23-5.23"></path>
-            </svg>`;
-        } else if (route.type === "Sprint") {
-            iconHtml = `<span style="font-size: 22px; color: var(--nfs-orange);">⚡</span>`;
-        } else if (route.type === "Drag") {
-            iconHtml = `<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="color: var(--nfs-orange);">
-                <path d="M9 2h6v2H9V2zm1 3h4v2h-4V5zm-2 3h8v2H8V8zm1 3h6v2H9v-2zm-2 3h10v2H7v-2zm2 3h6v2H9v-2zm-3 3h12v2H6v-2z"/>
-            </svg>`;
-        } else {
-            iconHtml = `<span style="font-size: 22px; color: var(--nfs-orange);">🔄</span>`;
-        }
-
-        let bestRecordText = "";
-        let bestDriver = "";
-        let bestCar = "";
-
-        try {
-            let sampleSheet = "";
-            if (route.type === "Circuito") sampleSheet = route.sheets.junkmanSingle || route.sheets.bmwSingle;
-            else sampleSheet = route.sheets.junkman || route.sheets.bmw;
-
-            if (sampleSheet) {
-                let rows = await fetchGoogleSheetData(sampleSheet);
-                let topRow = rows.find(r => r.rank.includes("1") || r.rank === "1");
-                if (topRow) {
-                    bestRecordText = topRow.time;
-                    bestDriver = topRow.driver;
-                    bestCar = topRow.car;
-                }
-            }
-        } catch (e) { }
-
-        const card = document.createElement('div');
-        card.className = 'route-card';
-        card.onclick = () => {
-            const titleEl = document.getElementById('leaderboard-title');
-            if (titleEl) titleEl.innerText = `Leaderboard: ${route.name} (${route.type})`;
-            if (typeof loadLeaderboardForRoute === 'function') loadLeaderboardForRoute(route);
-            if (typeof switchView === 'function') switchView('leaderboard');
-        };
-
-        // Estilos mejorados integrados correctamente
-        let detailsHtml = bestDriver ? `
-            <div class="route-record-preview" style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
-                <span class="route-time-display" style="color: #ffffff; font-weight: 800;">⏱️ ${bestRecordText}</span>
-                <span style="font-size: 13px; color: #cbd5e1; font-weight: 600;">👤 ${bestDriver}</span>
-            </div>
-            <div class="route-car-container" style="overflow: hidden; width: 100%; margin-top: 6px;">
-                <div class="marquee" style="white-space: nowrap; font-size: 13px; font-weight: 700; color: #94a3b8;">
-                    🚗 ${bestCar}
-                </div>
-            </div>
-        ` : `<div class="route-record-preview" style="font-style: italic; color: #64748b; font-size: 12px;">Disponible para récord</div>`;
-
-        card.innerHTML = `
-            <div class="route-icon-container">
-                <div class="route-icon-box">${iconHtml}</div>
-                <div class="route-badge-letter">${letterBadge}</div>
-            </div>
-            <div class="route-info">
-                <h3>${route.name}</h3>
-                ${detailsHtml}
-            </div>
-            <div class="route-action-icon" title="Ver Leaderboard">🗺️</div>
-        `;
-        container.appendChild(card);
-    }
-}
-
-function filterRoutes() {
-    const searchInput = document.getElementById('route-search');
-    const query = searchInput ? searchInput.value.toLowerCase() : "";
-    const filtered = routesData.filter(route => {
-        const matchesCategory = currentCategory === 'all' || route.type === currentCategory;
-        const matchesSearch = route.name.toLowerCase().includes(query);
-        return matchesCategory && matchesSearch;
-    });
-    renderRoutes(filtered);
-}
-
-function setCategory(category, btn) {
-    document.querySelectorAll('.filter-bar .filter-btn').forEach(b => b.classList.remove('active'));
-    if (btn) btn.classList.add('active');
-    currentCategory = category;
-    filterRoutes();
-}
+// Variable global de caché para evitar peticiones repetidas a Google Sheets
+const cacheSheets = {};
 
 async function fetchGoogleSheetData(csvUrl) {
+    // Si ya tenemos los datos en caché, los devolvemos instantáneamente
+    if (cacheSheets[csvUrl]) {
+        return cacheSheets[csvUrl];
+    }
+
     try {
         if (!csvUrl || csvUrl.trim() === "" || csvUrl.includes("PEGA_") || csvUrl.includes("URL_CSV_")) {
             return [];
@@ -2087,12 +1955,148 @@ async function fetchGoogleSheetData(csvUrl) {
                 });
             }
         }
+
+        // Guardamos en caché antes de retornar
+        cacheSheets[csvUrl] = data;
         return data;
     } catch (error) {
         return [];
     }
 }
 
+// Variables de control para la paginación de rutas
+let currentRoutesLimit = 10;
+let lastFilteredRoutes = [];
+
+async function renderRoutes(dataToRender, resetLimit = true) {
+    const container = document.getElementById('routes-grid-container');
+    if (!container) return;
+
+    if (resetLimit) {
+        currentRoutesLimit = 10;
+        lastFilteredRoutes = dataToRender;
+    }
+
+    if (dataToRender.length === 0) {
+        container.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 20px;">No se encontraron rutas con ese nombre.</p>`;
+        return;
+    }
+
+    container.innerHTML = '<p style="text-align:center; grid-column: 1/-1; color: var(--nfs-orange);">Cargando rutas y récords...</p>';
+
+    // Tomamos solo el bloque actual (ej. las primeras 10 rutas)
+    const routesSlice = dataToRender.slice(0, currentRoutesLimit);
+
+    // Procesamos el lote actual en paralelo con Promise.all
+    const renderPromises = routesSlice.map(async (route) => {
+        let iconHtml = "";
+        let letterBadge = route.type ? route.type.charAt(0).toUpperCase() : "A";
+
+        if (route.type === "Circuito") {
+            iconHtml = `<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--nfs-orange);"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.23-5.23"></path></svg>`;
+        } else if (route.type === "Sprint") {
+            iconHtml = `<span style="font-size: 22px; color: var(--nfs-orange);">⚡</span>`;
+        } else if (route.type === "Drag") {
+            iconHtml = `<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="color: var(--nfs-orange);"><path d="M9 2h6v2H9V2zm1 3h4v2h-4V5zm-2 3h8v2H8V8zm1 3h6v2H9v-2zm-2 3h10v2H7v-2zm2 3h6v2H9v-2zm-3 3h12v2H6v-2z"/></svg>`;
+        } else {
+            iconHtml = `<span style="font-size: 22px; color: var(--nfs-orange);">🔄</span>`;
+        }
+
+        let bestRecordText = "";
+        let bestDriver = "";
+        let bestCar = "";
+
+        try {
+            let sampleSheet = (route.type === "Circuito") ? (route.sheets.junkmanSingle || route.sheets.bmwSingle) : (route.sheets.junkman || route.sheets.bmw);
+            if (sampleSheet) {
+                let rows = await fetchGoogleSheetData(sampleSheet);
+                let topRow = rows.find(r => r.rank.includes("1") || r.rank === "1");
+                if (topRow) {
+                    bestRecordText = topRow.time;
+                    bestDriver = topRow.driver;
+                    bestCar = topRow.car;
+                }
+            }
+        } catch (e) { }
+
+        return { route, iconHtml, letterBadge, bestRecordText, bestDriver, bestCar };
+    });
+
+    const results = await Promise.all(renderPromises);
+
+    // Pintamos las tarjetas del lote
+    container.innerHTML = '';
+    results.forEach(({ route, iconHtml, letterBadge, bestRecordText, bestDriver, bestCar }) => {
+        const card = document.createElement('div');
+        card.className = 'route-card';
+        card.onclick = () => {
+            const titleEl = document.getElementById('leaderboard-title');
+            if (titleEl) titleEl.innerText = `Leaderboard: ${route.name} (${route.type})`;
+            if (typeof loadLeaderboardForRoute === 'function') loadLeaderboardForRoute(route);
+            if (typeof switchView === 'function') switchView('leaderboard');
+        };
+
+        let detailsHtml = bestDriver ? `
+            <div class="route-record-preview" style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+                <span class="route-time-display" style="color: #ffffff; font-weight: 800;">⏱️ ${bestRecordText}</span>
+                <span style="font-size: 13px; color: #cbd5e1; font-weight: 600;">👤 ${bestDriver}</span>
+            </div>
+            <div class="route-car-container" style="overflow: hidden; width: 100%; margin-top: 6px;">
+                <div class="marquee" style="white-space: nowrap; font-size: 13px; font-weight: 700; color: #94a3b8;">
+                    🚗 ${bestCar}
+                </div>
+            </div>
+        ` : `<div class="route-record-preview" style="font-style: italic; color: #64748b; font-size: 12px;">Disponible para récord</div>`;
+
+        card.innerHTML = `
+            <div class="route-icon-container">
+                <div class="route-icon-box">${iconHtml}</div>
+                <div class="route-badge-letter">${letterBadge}</div>
+            </div>
+            <div class="route-info">
+                <h3>${route.name}</h3>
+                ${detailsHtml}
+            </div>
+            <div class="route-action-icon" title="Ver Leaderboard">🗺️</div>
+        `;
+        container.appendChild(card);
+    });
+
+    // Si hay más rutas por mostrar, añadimos un botón de "Cargar más"
+    if (currentRoutesLimit < dataToRender.length) {
+        const loadMoreContainer = document.createElement('div');
+        loadMoreContainer.style.cssText = "grid-column: 1/-1; text-align: center; margin: 20px 0;";
+        
+        const loadMoreBtn = document.createElement('button');
+        loadMoreBtn.className = 'filter-btn active'; // Usa tus estilos de botón existentes
+        loadMoreBtn.innerText = `Cargar más rutas (${dataToRender.length - currentRoutesLimit} restantes)`;
+        loadMoreBtn.onclick = () => {
+            currentRoutesLimit += 10;
+            renderRoutes(lastFilteredRoutes, false);
+        };
+
+        loadMoreContainer.appendChild(loadMoreBtn);
+        container.appendChild(loadMoreContainer);
+    }
+}
+
+function filterRoutes() {
+    const searchInput = document.getElementById('route-search');
+    const query = searchInput ? searchInput.value.toLowerCase() : "";
+    const filtered = routesData.filter(route => {
+        const matchesCategory = currentCategory === 'all' || route.type === currentCategory;
+        const matchesSearch = route.name.toLowerCase().includes(query);
+        return matchesCategory && matchesSearch;
+    });
+    renderRoutes(filtered, true);
+}
+
+function setCategory(category, btn) {
+    document.querySelectorAll('.filter-bar .filter-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    currentCategory = category;
+    filterRoutes();
+}
 async function loadLeaderboardForRoute(route) {
     const circuitTabs = document.getElementById('container-tabs-circuit');
     const sprintDragTabs = document.getElementById('container-tabs-sprintdrag');
