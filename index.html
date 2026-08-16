@@ -393,15 +393,39 @@
             text-overflow: ellipsis;
         }
 
-        /* CORREGIDO: Contenedor de la línea del conductor y tiempo para que no oculte el texto */
+        /* Contenedor de la línea del conductor y tiempo con animación de desplazamiento */
         .route-record-preview {
             font-size: 12px;
             color: var(--text-muted);
             margin: 2px 0;
             display: flex;
             align-items: center;
-            gap: 6px;
-            overflow: visible;
+            gap: 10px;
+            overflow: hidden; /* Oculta el texto que sale del contenedor para dar el efecto de marquesina */
+            white-space: nowrap;
+            position: relative;
+        }
+
+        /* Contenedor interno animado para el texto del piloto y auto */
+        .route-record-marquee {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            animation: marqueeText 8s linear infinite;
+        }
+
+        /* Pausar la animación cuando el usuario pase el mouse por encima de la tarjeta para poder leerlo con calma */
+        .route-card:hover .route-record-marquee {
+            animation-play-state: paused;
+        }
+
+        @keyframes marqueeText {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
         }
 
         /* Permitir que el nombre del piloto ocupe el espacio flexible y muestre puntos suspensivos si es muy largo */
@@ -412,12 +436,17 @@
             max-width: 90px;
             display: inline-block;
         }
-
+        
         .route-record-preview span.time {
             color: var(--nfs-orange);
             font-weight: bold;
             flex-shrink: 0;
+            z-index: 2;
+            background: var(--bg-panel); /* Fondo sutil para que el tiempo no se mezcle al pasar por detrás si fuera necesario */
+            padding-left: 4px;
         }
+
+        
 
         /* Botón de mapa en la esquina superior derecha */
         .route-action-icon {
