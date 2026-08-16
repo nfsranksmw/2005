@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NFS Most Wanted (2005) - World Records</title>
     <link rel="icon" type="image/png" href="nfsranksmwlogo.png">
+    
+    /* CSS style */
     <style>
         :root {
             --bg-dark: #0b0b0d;
@@ -619,7 +621,104 @@
     color: var(--text-main);
     border-color: var(--nfs-orange);
 }
+/* Barra de estadísticas superior */
+.leaderboard-stats-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(8px);
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+}
+
+/* Línea separadora entre columnas */
+.stat-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 20%;
+    height: 60%;
+    width: 1px;
+    background: var(--border-color);
+}
+
+.stat-icon {
+    font-size: 18px;
+    color: var(--nfs-orange);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+}
+
+.stat-value {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text-main);
+    letter-spacing: 0.5px;
+}
+
+/* Línea separadora entre columnas */
+.stat-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 20%;
+    height: 60%;
+    width: 1px;
+    background: var(--border-color);
+}
+
+.stat-icon {
+    font-size: 18px;
+    color: var(--nfs-orange);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+}
+
+.stat-value {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text-main);
+    letter-spacing: 0.5px;
+}
     </style>
+
+
+/* CÓDIGO HTML */
 </head>
 <body>
 <!-- Menú de la página... -->
@@ -674,10 +773,37 @@
             </div>
         </div>
     </section>
-
+    
+<!-- ENCABEZADO HEAD LEADERBOARDS... -->
     <section id="view-routes" class="view-section">
         <h2 class="section-title">Leaderboards</h2>
-        
+    
+    <!-- STATS BARS DE RUTAS... -->
+    <div class="leaderboard-stats-bar">
+    <div class="stat-item">
+        <span class="stat-icon">🏁</span>
+        <div class="stat-content">
+            <span class="stat-label">SHOWING</span>
+            <span class="stat-value" id="showing-count">28</span>
+        </div>
+    </div>
+    <div class="stat-item">
+        <span class="stat-icon">▶</span>
+        <div class="stat-content">
+            <span class="stat-label">ACTIVE RACES</span>
+            <span class="stat-value" id="total-races-count">132</span>
+        </div>
+    </div>
+    <div class="stat-item">
+        <span class="stat-icon">⚙</span>
+        <div class="stat-content">
+            <span class="stat-label">CLASS</span>
+            <span class="stat-value" id="current-class-filter">ALL</span>
+        </div>
+    </div>
+</div>
+
+</div>
         <div class="controls-wrapper">
             <input type="text" id="route-search" class="search-input" placeholder="🔍 Buscar pista o ruta..." onkeyup="filterRoutes()">
             
@@ -1608,6 +1734,17 @@ En condiciones de desempate o de tiempos muy cercanos a 10 centésimas de segund
                 🚗 ${bestCar}
             </div>
         ` : `<div class="route-record-preview" style="font-style: italic;">Disponible para récord</div>`;
+
+// --- LEADERBOARS STATS ACCIÓN DINÁMICA ---
+        function updateLeaderboardStats(showingNum, totalNum, currentClass = 'ALL') {
+    const showingEl = document.getElementById('showing-count');
+    const totalEl = document.getElementById('total-races-count');
+    const classEl = document.getElementById('current-class-filter');
+
+    if (showingEl) showingEl.textContent = showingNum;
+    if (totalEl) totalEl.textContent = totalNum;
+    if (classEl) classEl.textContent = currentClass.toUpperCase();
+}
     </script>
 </body>
 <footer>
