@@ -725,17 +725,17 @@
 
 </head>
 <body>
-<!-- Menú de la página... -->
+<!-- Menú de la página -->
     <header>
-    <div class="logo">
-        <img src="nfsranksmwlogo.png" alt="Logo" style="height: 54px; vertical-align: middle; margin-right: 38px;">
-        NFS: MW 2005 - Récords
-    </div>
-    <!-- Resto del menú de navegación... -->
+        <div class="logo">
+            <img src="nfsranksmwlogo.png" alt="Logo" style="height: 54px; vertical-align: middle; margin-right: 38px;">
+            NFS: MW 2005 - Récords
+        </div>
+        <!-- Resto del menú de navegación -->
         <div class="menu-toggle" onclick="toggleMenu()">☰</div>
         <nav id="main-nav">
             <a href="#" onclick="switchView('home')" class="active" id="nav-home">Home</a>
-            <a href="#" onclick="switchView('routes')" id="nav-routes">Leaderboards
+            <a href="#" onclick="switchView('routes')" id="nav-routes">Leaderboards</a>
             <a href="#" onclick="switchView('halloffame')" id="nav-halloffame">Hall of Fame</a>
             <a href="#" onclick="switchView('globaldrivers')" id="nav-globaldrivers">Top Global Drivers</a>
             <a href="#" onclick="switchView('globalroutes')" id="nav-globalroutes">Top Rutas</a>
@@ -778,53 +778,52 @@
         </div>
     </section>
     
-<!-- ENCABEZADO HEAD LEADERBOARDS... -->
+    <!-- ENCABEZADO HEAD LEADERBOARDS -->
     <section id="view-routes" class="view-section">
         <h2 class="section-title">Leaderboards</h2>
     
-    <!-- STATS BARS DE RUTAS... -->
-    <div class="leaderboard-stats-bar">
-    <div class="stat-item">
-        <span class="stat-icon">🏁</span>
-        <div class="stat-content">
-            <span class="stat-label">SHOWING</span>
-            <span class="stat-value" id="showing-count">86</span>
+        <!-- STATS BARS DE RUTAS -->
+        <div class="leaderboard-stats-bar">
+            <div class="stat-item">
+                <span class="stat-icon">🏁</span>
+                <div class="stat-content">
+                    <span class="stat-label">SHOWING</span>
+                    <span class="stat-value" id="showing-count">86</span>
+                </div>
+            </div>
+            <div class="stat-item">
+                <span class="stat-icon">▶</span>
+                <div class="stat-content">
+                    <span class="stat-label">ACTIVE RACES</span>
+                    <span class="stat-value" id="total-races-count">86</span>
+                </div>
+            </div>
+            <div class="stat-item">
+                <span class="stat-icon">⚙</span>
+                <div class="stat-content">
+                    <span class="stat-label">CLASS</span>
+                    <span class="stat-value" id="current-class-filter">ALL</span>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="stat-item">
-        <span class="stat-icon">▶</span>
-        <div class="stat-content">
-            <span class="stat-label">ACTIVE RACES</span>
-            <span class="stat-value" id="total-races-count">86</span>
-        </div>
-    </div>
-    <div class="stat-item">
-        <span class="stat-icon">⚙</span>
-        <div class="stat-content">
-            <span class="stat-label">CLASS</span>
-            <span class="stat-value" id="current-class-filter">ALL</span>
-        </div>
-    </div>
-</div>
 
-</div>
         <div class="controls-wrapper">
             <input type="text" id="route-search" class="search-input" placeholder="🔍 Buscar pista o ruta..." onkeyup="filterRoutes()">
             
-          <div class="filter-bar">
-    <button class="filter-btn active" onclick="setCategory('all', this)">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: middle; margin-right: 6px;"><path d="M4 4h4v4H4V4zm6 0h4v4h-4V4zm6 0h4v4h-4V4zM4 10h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4zM4 16h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z"/></svg> All
-    </button>
-    <button class="filter-btn" onclick="setCategory('Circuito', this)">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px; color: var(--nfs-orange);"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.23-5.23"></path></svg> Circuit
-    </button>
-    <button class="filter-btn" onclick="setCategory('Sprint', this)">
-        <span style="font-size: 16px; margin-right: 6px; color: var(--nfs-orange);">⚡</span> Sprint
-    </button>
-    <button class="filter-btn" onclick="setCategory('Drag', this)">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: middle; margin-right: 6px; color: var(--nfs-orange);"><path d="M9 2h6v2H9V2zm1 3h4v2h-4V5zm-2 3h8v2H8V8zm1 3h6v2H9v-2zm-2 3h10v2H7v-2zm2 3h6v2H9v-2zm-3 3h12v2H6v-2z"/></svg> Drag
-    </button>
-</div>
+            <div class="filter-bar">
+                <button class="filter-btn active" onclick="setCategory('all', this)">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: middle; margin-right: 6px;"><path d="M4 4h4v4H4V4zm6 0h4v4h-4V4zm6 0h4v4h-4V4zM4 10h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4zM4 16h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z"/></svg> All
+                </button>
+                <button class="filter-btn" onclick="setCategory('Circuito', this)">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px; color: var(--nfs-orange);"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.23-5.23"></path></svg> Circuit
+                </button>
+                <button class="filter-btn" onclick="setCategory('Sprint', this)">
+                    <span style="font-size: 16px; margin-right: 6px; color: var(--nfs-orange);">⚡</span> Sprint
+                </button>
+                <button class="filter-btn" onclick="setCategory('Drag', this)">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: middle; margin-right: 6px; color: var(--nfs-orange);"><path d="M9 2h6v2H9V2zm1 3h4v2h-4V5zm-2 3h8v2H8V8zm1 3h6v2H9v-2zm-2 3h10v2H7v-2zm2 3h6v2H9v-2zm-3 3h12v2H6v-2z"/></svg> Drag
+                </button>
+            </div>
         </div>
         
         <div class="routes-grid" id="routes-grid-container"></div>
@@ -868,7 +867,7 @@
         </div>
     </section>
 
-    <!-- VISTA 1: TOP GLOBAL DE PILOTOS (TODAS LAS TABLAS RANKED) -->
+    <!-- VISTA 1: TOP GLOBAL DE PILOTOS -->
     <section id="view-globaldrivers" class="view-section">
         <h2 class="section-title">Top Global de Pilotos (Podios 1°, 2° y 3°)</h2>
         <div class="table-container">
@@ -892,18 +891,16 @@
         </div>
     </section>
 
-    <!-- VISTA 2 A 5: TOP GLOBAL DE CIRCUITOS / PESTAÑAS AUTOMATIZADAS -->
+    <!-- VISTA 2 A 5: TOP GLOBAL DE CIRCUITOS -->
     <section id="view-globalroutes" class="view-section">
         <h2 class="section-title">Top Global de Podios por Categorías de Rutas</h2>
         
-        <!-- Pestañas de Navegación Interna para Rutas -->
         <div class="tabs-group active-group" id="container-tabs-globalroutes">
             <button class="tab-btn" onclick="switchGlobalRouteTab('circuit', this)">Solo Circuitos</button>
             <button class="tab-btn" onclick="switchGlobalRouteTab('sprint', this)">Solo Sprints</button>
             <button class="tab-btn" onclick="switchGlobalRouteTab('drag', this)">Solo Drags</button>
         </div>
 
-        <!-- Pestaña: Todos los Circuitos / Rutas -->
         <div id="tab-global-allroutes" class="table-section globalroute-section active">
             <h3 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">Top Global — Todas las Rutas (1°, 2°, 3°)</h3>
             <div class="table-container">
@@ -925,7 +922,6 @@
             </div>
         </div>
 
-        <!-- Pestaña: Solo Circuitos -->
         <div id="tab-global-circuit" class="table-section globalroute-section">
             <h3 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">Top Global — Solo Circuitos (1°, 2°, 3°)</h3>
             <div class="table-container">
@@ -947,7 +943,6 @@
             </div>
         </div>
 
-        <!-- Pestaña: Solo Sprint -->
         <div id="tab-global-sprint" class="table-section globalroute-section">
             <h3 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">Top Global — Solo Sprints (1°, 2°, 3°)</h3>
             <div class="table-container">
@@ -969,7 +964,6 @@
             </div>
         </div>
 
-        <!-- Pestaña: Solo Drag -->
         <div id="tab-global-drag" class="table-section globalroute-section">
             <h3 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">Top Global — Solo Drags (1°, 2°, 3°)</h3>
             <div class="table-container">
@@ -992,79 +986,50 @@
         </div>
     </section>
 
-     <!-- VISTA: REGLAS Y NORMATIVA -->
+    <!-- VISTA: REGLAS Y NORMATIVA -->
     <section id="view-rules" class="view-section">
         <h2 class="section-title">Normativa para Envío de Tiempos</h2>
         <div class="news-card" style="max-width: 800px; margin: 0 auto;">
-            <h3 style="color: var(--nfs-orange); margin-top:0;">📋 Requisitos Obligatorios</h3>
-            <ul style="color: var(--text-muted); line-height: 1.8; font-size: 14px; padding-left: 20px;">
             
-<li></strong>Rules General , Reglamento para NFSRANKSMW:
+            <h3 style="color: var(--nfs-orange); margin-top:0;">📋 Rules General</h3>
+            <p style="color: var(--text-muted); line-height: 1.6; font-size: 14px;">Reglamento oficial para NFSRANKSMW.</p>
+            <p style="color: var(--text-muted); line-height: 1.6; font-size: 14px;"><strong>Moderadores:</strong> Zipper, ZimanX™️</p>
 
-<li><strong>Moderadores por: Zipper, ZimanX™️ 
-
-
-<h3 style="color: var(--nfs-orange); margin-top:0;">📋 Reglas Generales</h3>
+            <h3 style="color: var(--nfs-orange); margin-top:20px;">📋 Reglas Generales</h3>
             <ul style="color: var(--text-muted); line-height: 1.8; font-size: 14px; padding-left: 20px;"> 
+                <li>El juego debe ser con las propiedades originales.</li>
+                <li>Se permite Parche V1.2 y V1.3; los parches V1.4 serán aceptados siempre y cuando no haya ninguna modificación del sonido de los autos, ni se configure el rendimiento de cada auto original del juego.</li>
+                <li>De los perfiles se pueden editar el nombre y bonus de dinero.</li>
+                <li>No se permite el uso de Hex para modificar detalles de los autos del perfil del juego.</li>
+                <li>Se permiten Mods Visuales; los mods de autos no están permitidos en este reglamento.</li>
+                <li>Se permite usar «código de hamburguesa» para desbloquear todas las partes de Junkman.</li>
+                <li>Se permite el parche de pantalla ancha, D3D.HD.</li>
+                <li>Se permite deshabilitar el desenfoque de movimiento en el registro.</li>
+                <li>Se permite el uso de programas Optimizer y de traductor de idiomas.</li>
+                <li>Dispositivos de juegos compatibles como mandos, teclados y volantes son permitidos para validar sus tiempos.</li>
+            </ul>
 
-
-<li></strong>El juego debe ser con las propiedades originales.
-<li></strong>Se permite Parche V1.2 y V1.3, los parches V1.4 seran aceptado siempre y cuando no haya ninguna modificación del sonido de los autos, ni que se configure el rendimiento de cada auto original del juego.
-<li></strong>De los perfiles pueden editar el nombre y bonus de dinero.
-<li></strong>No se permite el uso de Hex para modificar detalles de los autos del perfil del juego.
-<li></strong>Se permiten Mods Visuales, los mods de autos no son permitidos en este reglamento.
-<li></strong>Se le permite usar «código de hamburguesa» para desbloquear todas las partes de Junkman
-<li></strong>Se permite el parche de pantalla ancha, D3D.HD
-<li></strong>Se permite deshabilitar el desenfoque de movimiento en el registro
-<li></strong>Se permite el uso de programas Optimizer y de traductor de idiomas.
-<li></strong>Dispositivos de juegos compatibles como Mandos, teclados, volantes son permitidos para validar sus tiempos. (editado)
-
-
-<h3 style="color: var(--nfs-orange); margin-top:0;">📋 Rules , Reglas de verificación de tiempos.</h3>
+            <h3 style="color: var(--nfs-orange); margin-top:20px;">📋 Reglas de Verificación de Tiempos</h3>
             <ul style="color: var(--text-muted); line-height: 1.8; font-size: 14px; padding-left: 20px;"> 
+                <li>El piloto usuario del juego debe respetar las normas establecidas para cumplimiento del mismo.</li>
+                <li>Todos los tiempos que se realicen para los circuitos y sprint deben ser grabados y publicados en YouTube. Estos tiempos pueden estar en modo oculto o público. El nombre del video debe contener: Nombre del juego + nombre de la pista + tiempo realizado + nick del jugador. En la descripción del video se debe al menos publicitar la página NFSRANKSMW.</li>
+                <li>Los tiempos pueden ser grabados por cualquier grabadora o capturadora de video existente.</li>
+                <li>En el video del juego de la carrera debe mostrarse el tiempo de forma visible y en formato HD.</li>
+                <li>El temporizador y el velocímetro deben estar claramente visibles en el video.</li>
+                <li>En el video debe mostrarse el inicio y final de la carrera para verificación del tiempo.</li>
+                <li>Se permite el uso de soundtrack en el video de la carrera, pero debe escucharse el sonido del auto y los efectos de sonido.</li>
+                <li>El enlace del video debe anunciarse a nuestros moderadores para que sea revisado y, una vez validado, será publicado en nuestra tabla LeaderBoard website.</li>
+                <li>Los tiempos tendrán aproximadamente un lapso no mayor a 7 días para su verificación y publicación, debido a que nuestros moderadores disponen de poco tiempo.</li>
+            </ul>
 
-
-<li></strong>El piloto usuario del juego debe respetar las normas establecidas para cumplimiento del mismo.
-<li></strong>Todos lo tiempos que se realicen para los circuitos y sprint debe ser grabado y publicado en Youtube. Estos tiempos pueden estar en modo oculto o público. El nombre del video debe contener Nombre del juego + nombre de la pista + tiempo realizado + nick del jugador.En la descripción del video debe al menos publicitar la página NFSRANKSMW.
-<li></strong>Los tiempos pueden ser grabados por cualquier grabadora o capturadora de video existente.
-<li></strong>En el video del juego de la carrera debe mostrar el tiempo, que sea visible y en un formato HD.
-<li></strong>El temporizador y el velocímetro deben estar claramente visibles en el video.
-<li></strong>En el video debe mostrarse el inicio y final de la carrera para verificación del tiempo.
-<li></strong>Se permite el uso de soundtrack en el video carrera , pero se debe escuchar el sonido del auto y los efectos de sonido.
-<li></strong>El enlace del video debe anunciarse a nuestro moderadores para que sea revisado y una vez validado será publicado en nuestra tabla LeaderBoard website NFSRANKSMW.WIXSITE,COM/LEADERBOARD.
-<li></strong>Los tiempos tendran aproximadamente un lapso no mayor de 7 días para su verificación y publicación , debido que nuestros moderadores disponen de poco tiempo
-
-
-<h3 style="color: var(--nfs-orange); margin-top:0;">📋  Reglas específicas de categoría:</h3>
+            <h3 style="color: var(--nfs-orange); margin-top:20px;">📋 Reglas Específicas de Categoría</h3>
             <ul style="color: var(--text-muted); line-height: 1.8; font-size: 14px; padding-left: 20px;">  
-
-
-                <li></strong>Categoría Junkman:
-
-
-<li></strong>Todos los autos con piezas ultimate y junkman entran en esta categoria sin excepción.
-Por los momentos la categoria junkman se establecera la tabla de clasificación para Nitro Nos, Circuito 1st Lap, Fast Lap y sprint. La categoria No nitro aun no se compite en este leaderboard.
-Las vueltas rápidas se toman despues de la primera vuelta.
-En caso de visualizar uso desmedido del uso del nos que influya sospecha de hack, el tiempo será analizado en caso de comprobación de hack se eliminará del leaderboard.
-Categoría BMW NO NOS:
-
-
-<li></strong>En esta categoría se exige el uso de un solo auto, Bonus BMW M3 GTR.
-Se permite el uso del auto BMW M3 GTR obtenido en el modo carrera como bonus car.
-Por los momentos la categoria BMW M3 GTR se establecerá la tabla de clasificación para No nitro , Circuito 1st Lap, Fast Lap y sprint. La carreras BMW M3 GTR NOS no entran en esta categoría.
-Las vueltas rápidas se toman después de la primera vuelta.
-En caso de visualizar uso desmedido del uso del nos que influya sospecha de hack, el tiempo será analizado en caso de comprobación de hack se eliminará del leaderboard. (editado)
-Modo de medición de tiempos:
-
-
-<li></strong>Los tiempos son tomados con un cronómetro externo software Avedimux.exe es su formato 00:00.000, desde el momento que inicia el cornómetro del juego hasta la meta.
-Rules, Reglas de timebug:
-
-
-<li></strong>Se considerará timebug aquellos tiempos donde el margen de error sea mayor a dos fotogramas por segundos «FPS» que equivale a 6 centésimas de segundos, en caso contrario no se considerará timebug.
-En condiciones de desempate o de tiempos muy cercanos a 10 centésimas de segundos , nuestro moderadores tendrán la obligación de verificar esos tiempos y colocar los tiempos reales tomados con el código del cronómetro externo Avedimux
+                <li><strong>Categoría Junkman:</strong> Todos los autos con piezas ultimate y junkman entran en esta categoría sin excepción. Por los momentos en la categoría junkman se establecerá la tabla de clasificación para Nitro Nos, Circuito 1st Lap, Fast Lap y Sprint. La categoría "No Nitro" aún no se compite en este leaderboard. Las vueltas rápidas se toman después de la primera vuelta. En caso de visualizar uso desmedido del nos que induzca a sospecha de hack, el tiempo será analizado y, de comprobarse, se eliminará del leaderboard.</li>
+                <li><strong>Categoría BMW NO NOS:</strong> Se exige el uso de un solo auto, Bonus BMW M3 GTR (se permite el obtenido en el modo carrera como bonus car). Por los momentos en la categoría BMW M3 GTR se establecerá la tabla de clasificación para No nitro, Circuito 1st Lap, Fast Lap y Sprint. Las carreras BMW M3 GTR NOS no entran en esta categoría. Las vueltas rápidas se toman después de la primera vuelta.</li>
+                <li><strong>Modo de medición de tiempos:</strong> Los tiempos son tomados con un cronómetro externo (software Avedimux.exe) en formato 00:00.000, desde el momento en que inicia el cronómetro del juego hasta la meta.</li>
+                <li><strong>Reglas de Timebug:</strong> Se considerará timebug aquellos tiempos donde el margen de error sea mayor a dos fotogramas por segundo (FPS), que equivale a 6 centésimas de segundo; en caso contrario no se considerará timebug. En condiciones de desempate o de tiempos muy cercanos a 10 centésimas de segundo, nuestros moderadores tendrán la obligación de verificar esos tiempos y colocar los tiempos reales tomados con el cronómetro externo Avidemux.</li>
                 <li><strong>Prueba en Video:</strong> Todo tiempo enviado debe incluir un enlace de YouTube o video completo que muestre la vuelta/ruta desde el inicio hasta la línea de meta.</li>
-                <li><strong>Sin Hacks / Mods ilegales:</strong> Se permite el uso de herramientas oficiales de optimización de FPS o parches de resolución, pero queda estrictamente prohibido alterar las físicas del juego o usar speedhacks.</li>
+                <li><strong>Sin Hacks / Mods Ilegales:</strong> Se permite el uso de herramientas oficiales de optimización de FPS o parches de resolución, pero queda estrictamente prohibido alterar las físicas del juego o usar speedhacks.</li>
                 <li><strong>Dispositivo:</strong> Especificar claramente si se utilizó Teclado, Mando (Gamepad) o Volante (Wheel).</li>
             </ul>
         </div>
@@ -1215,9 +1180,6 @@ En condiciones de desempate o de tiempos muy cercanos a 10 centésimas de segund
         <button class="filter-btn" onclick="switchView('routes')">← Volver al Índice de Rutas</button>
     </section>
 
-<!-- FÍN CÓDIGO HTML... -->
-    
-<!-- JAVA SCRIPT... -->
     <script>
         function toggleMenu() {
             document.getElementById('main-nav').classList.toggle('open');
@@ -1731,7 +1693,7 @@ En condiciones de desempate o de tiempos muy cercanos a 10 centésimas de segund
         });
 
 
-    <!-- RENDER ROUTER ... -->
+    
         renderRoutes(routesData);
         // Dentro de tu bucle que crea las tarjetas:
 let detailsHtml = bestDriver ? `
@@ -1758,9 +1720,6 @@ let detailsHtml = bestDriver ? `
 }
     </script>
 
-<!-- FÍN JAVA SCRIPT... -->
-
-
 </body>
 <footer>
     <div class="footer-content" style="text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 14px; border-top: 1px solid var(--border-color); margin-top: 50px; line-height: 1.6;">
@@ -1772,5 +1731,5 @@ let detailsHtml = bestDriver ? `
             <span style="font-size: 12px; opacity: 0.8;">Not affiliated with Electronic Arts or the Need for Speed™ brand. Need for Speed is a trademark of Electronic Arts.</span>
         </p>
     </div>
-</footer>
+    </footer>
 </html>
