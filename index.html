@@ -1086,6 +1086,47 @@
     </section>
 
     <script>
+        // Variable global para guardar los datos ya descargados
+const cacheSheets = {}; 
+
+async function fetchGoogleSheetData(csvUrl) {
+    // Si ya descargamos esta URL antes, devolvemos lo que tenemos guardado
+    if (cacheSheets[csvUrl]) {
+        return cacheSheets[csvUrl];
+    }
+
+    try {
+        if (!csvUrl || csvUrl.trim() === "" || csvUrl.includes("PEGA_")) return [];
+
+        const response = await fetch(csvUrl);
+        const text = await response.text();
+        const rows = text.split("\n");
+        let data = [];
+
+        // ... [resto de tu lógica actual de parseo CSV igual que la tenías] ...
+        for (let i = 1; i < rows.length; i++) {
+            let r = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+            if (r && r.length >= 8 && r[0].trim() !== "") {
+                data.push({
+                    rank: r[0].replace(/"/g, '').trim(),
+                    driver: r[1].replace(/"/g, '').trim(),
+                    time: r[2].replace(/"/g, '').trim(),
+                    device: r[3].replace(/"/g, '').trim(),
+                    car: r[4].replace(/"/g, '').trim(),
+                    gearbox: r[5].replace(/"/g, '').trim(),
+                    date: r[6].replace(/"/g, '').trim(),
+                    yt: r[7] ? r[7].replace(/"/g, '').trim() : "#"
+                });
+            }
+        }
+        
+        // Guardamos en el caché antes de retornar
+        cacheSheets[csvUrl] = data;
+        return data;
+    } catch (error) {
+        return [];
+    }
+}
         function toggleMenu() {
             document.getElementById('main-nav').classList.toggle('open');
         }
