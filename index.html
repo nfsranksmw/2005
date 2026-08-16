@@ -6,7 +6,7 @@
     <title>NFS Most Wanted (2005) - World Records</title>
     <link rel="icon" type="image/png" href="nfsranksmwlogo.png">
     
-    /* CSS style */
+    <!-- CSS STYLE ... -->
     <style>
         :root {
             --bg-dark: #0b0b0d;
@@ -604,28 +604,6 @@
     font-weight: bold;
 }
 
-/* Contenedor y efecto de movimiento horizontal para el coche */
-.route-car-container {
-    width: 100%;
-    overflow: hidden;
-    position: relative;
-    white-space: nowrap;
-    margin-top: 3px;
-}
-
-.marquee-car {
-    display: inline-block;
-    padding-left: 100%;
-    animation: scroll-car 12s linear infinite;
-    font-size: 12px;
-    font-weight: 700;
-    color: #94a3b8;
-}
-
-@keyframes scroll-car {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-100%); }
-}
 /* Botón de mapa en la esquina superior derecha */
 .route-action-icon {
     background: rgba(34, 34, 42, 0.8);
@@ -743,7 +721,7 @@
     </style>
 
 
-/* CÓDIGO HTML */
+<!-- CÓDIGO HTML... -->
 
 </head>
 <body>
@@ -1237,7 +1215,9 @@ En condiciones de desempate o de tiempos muy cercanos a 10 centésimas de segund
         <button class="filter-btn" onclick="switchView('routes')">← Volver al Índice de Rutas</button>
     </section>
 
-    // --- CÓDIGO JAVA SCRIPTS---
+<!-- FÍN CÓDIGO HTML... -->
+    
+<!-- JAVA SCRIPT... -->
     <script>
         function toggleMenu() {
             document.getElementById('main-nav').classList.toggle('open');
@@ -1750,57 +1730,23 @@ En condiciones de desempate o de tiempos muy cercanos a 10 centésimas de segund
             generateGlobalLeaderboards();
         });
 
-// --- FUNCIONES RENDER ROUTERS ---
-       function renderRoutes(routes) {
-    const container = document.getElementById('routes-container'); // O el ID de tu contenedor de tarjetas
-    if (!container) return;
 
-    container.innerHTML = ''; // Limpiar contenedor
+    <!-- RENDER ROUTER ... -->
+        renderRoutes(routesData);
+        // Dentro de tu bucle que crea las tarjetas:
+let detailsHtml = bestDriver ? `
+    <div class="route-record-preview" style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+        <span class="route-time-display" style="color: #ffffff; font-weight: 800;">⏱️ ${bestRecordText}</span>
+        <span style="font-size: 13px; color: #cbd5e1; font-weight: 600;">👤 ${bestDriver}</span>
+    </div>
+    <div class="route-car-container" style="overflow: hidden; width: 100%; margin-top: 6px;">
+        <div class="marquee" style="white-space: nowrap; font-size: 13px; font-weight: 700; color: #94a3b8;">
+            🚗 ${bestCar}
+        </div>
+    </div>
+` : `<div class="route-record-preview" style="font-style: italic; color: #64748b; font-size: 12px;">Disponible para récord</div>`;
 
-    routes.forEach(route => {
-        // Suponiendo que tus datos de Google Sheets traen estas propiedades:
-        let bestDriver = route.driver || route.piloto || ''; 
-        let bestRecordText = route.time || route.tiempo || '0:00.00';
-        let bestCar = route.car || route.auto || '';
-
-        // Definimos el HTML de los detalles según si hay récord o no
-        let detailsHtml = bestDriver ? `
-            <div class="route-record-preview">
-                <span style="color: #ffffff; font-weight: 800;">⏱️ ${bestRecordText}</span> 
-                <span style="color: #cbd5e1; font-weight: 600;">👤 ${bestDriver}</span>
-            </div>
-            <div class="route-car-container">
-                <div class="marquee-car">
-                    🚗 ${bestCar}
-                </div>
-            </div>
-        ` : `
-            <div class="route-record-preview" style="font-style: italic; color: #64748b;">
-                Disponible para récord
-            </div>
-        `;
-
-        // Construcción de la tarjeta completa
-        const card = document.createElement('div');
-        card.className = 'route-card';
-        card.innerHTML = `
-            <div class="route-icon-container">
-                <div class="route-icon-box">
-                    <span>${route.icon || '🔄'}</span>
-                </div>
-                <div class="route-badge-letter">${route.letter || 'A'}</div>
-            </div>
-            <div class="route-info">
-                <h3>${route.name || route.pista}</h3>
-                ${detailsHtml}
-            </div>
-            <div class="route-action-icon">🗺️</div>
-        `;
-
-        container.appendChild(card);
-    });
-}
-// --- LEADERBOARS STATS ACCIÓN DINÁMICA ---
+<!-- LEADERBOARD STATAS ... -->
         function updateLeaderboardStats(showingNum, totalNum, currentClass = 'ALL') {
     const showingEl = document.getElementById('showing-count');
     const totalEl = document.getElementById('total-races-count');
@@ -1811,7 +1757,9 @@ En condiciones de desempate o de tiempos muy cercanos a 10 centésimas de segund
     if (classEl) classEl.textContent = currentClass.toUpperCase();
 }
     </script>
-// --- FÍN CÓDIGO JAVA SCRIPTS---
+
+<!-- FÍN JAVA SCRIPT... -->
+
 
 </body>
 <footer>
