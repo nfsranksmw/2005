@@ -626,6 +626,22 @@
             color: var(--text-main);
             letter-spacing: 0.5px;
         }
+
+        /* Por defecto, todas las secciones de rutas están ocultas */
+.globalroute-section {
+    display: none;
+}
+
+/* Solo la sección que tenga la clase .active se muestra */
+.globalroute-section.active {
+    display: block;
+}
+
+/* Estilo visual opcional para el botón activo */
+.tab-btn.active {
+    background-color: var(--nfs-orange, #ff6600);
+    color: #fff;
+}
 </style>
 
 </head>
@@ -802,10 +818,11 @@
         <h2 class="section-title">Top Global de Podios por Categorías de Rutas</h2>
         
         <div class="tabs-group active-group" id="container-tabs-globalroutes">
-            <button class="tab-btn" onclick="switchGlobalRouteTab('circuit', this)">Solo Circuitos</button>
-            <button class="tab-btn" onclick="switchGlobalRouteTab('sprint', this)">Solo Sprints</button>
-            <button class="tab-btn" onclick="switchGlobalRouteTab('drag', this)">Solo Drags</button>
-        </div>
+          <button class="tab-btn active" onclick="switchGlobalRouteTab('allroutes', this)">Todas</button>
+          <button class="tab-btn" onclick="switchGlobalRouteTab('circuit', this)">Solo Circuitos</button>
+          <button class="tab-btn" onclick="switchGlobalRouteTab('sprint', this)">Solo Sprints</button>
+          <button class="tab-btn" onclick="switchGlobalRouteTab('drag', this)">Solo Drags</button>
+       </div>
 
         <div id="tab-global-allroutes" class="table-section globalroute-section active">
         <h3 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">Top Global — Todas las Rutas (1°, 2°, 3°)</h3>
