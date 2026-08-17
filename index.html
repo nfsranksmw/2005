@@ -640,12 +640,13 @@
         <div class="menu-toggle" onclick="toggleMenu()">☰</div>
         <nav id="main-nav">
             <a href="#" onclick="switchView('home')" class="active" id="nav-home">Home</a>
-            <a href="#" onclick="switchView('routes')" id="nav-routes">Leaderboards</a>
+            <a href="#" onclick="switchView('routes')" id="nav-routes">Leaderboards (Índice)</a>
             <a href="#" onclick="switchView('halloffame')" id="nav-halloffame">Hall of Fame</a>
             <a href="#" onclick="switchView('globaldrivers')" id="nav-globaldrivers">Top Global Drivers</a>
             <a href="#" onclick="switchView('globalroutes')" id="nav-globalroutes">Top Rutas</a>
             <a href="#" onclick="switchView('guides')" id="nav-guides">Guías & Tuning</a>
             <a href="#" onclick="switchView('rules')" id="nav-rules">Rules & Norm</a>
+            <a href="#" onclick="switchView('leaderboard')" id="nav-leaderboard">Leaderboard Detalle</a>
         </nav>
     </header>
 
@@ -817,15 +818,16 @@
                             <th>1° Puestos</th>
                             <th>2° Puestos</th>
                             <th>3° Puestos</th>
-                            <th>Total Podios</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbody-global-allroutes">
-                        <tr><td colspan="6" style="text-align: center; color: var(--nfs-orange);">Cargando...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                </tr>
+            </thead>
+            <tbody id="tbody-global-allroutes">
+                <tr>
+                    <td colspan="5" style="text-align: center; color: var(--nfs-orange);">Calculando top global...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
         <div id="tab-global-circuit" class="table-section globalroute-section">
             <h3 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">Top Global — Solo Circuitos (1°, 2°, 3°)</h3>
@@ -1086,67 +1088,94 @@
     </section>
 
     <script>
-        // Variable global para guardar los datos ya descargados
-const cacheSheets = {}; 
+        // Variable global para guardar los datos ya descargados (Caché)
+        const cacheSheets = {}; 
+        let currentCategory = 'all';
 
-async function fetchGoogleSheetData(csvUrl) {
-    // Si ya descargamos esta URL antes, devolvemos lo que tenemos guardado
-    if (cacheSheets[csvUrl]) {
-        return cacheSheets[csvUrl];
-    }
+        // Función unificada para descargar y cachear datos de Google Sheets
+        async function fetchGoogleSheetData(csvUrl) {
+            // Si ya descargamos esta URL antes, devolvemos lo que tenemos guardado
+            if (cacheSheets[csvUrl]) {
+                return cacheSheets[csvUrl];
+            }
 
-    try {
-        if (!csvUrl || csvUrl.trim() === "" || csvUrl.includes("PEGA_")) return [];
+            try {
+                if (!csvUrl || csvUrl.trim() === "" || csvUrl.includes("PEGA_") || csvUrl.includes("URL_CSV_")) {
+                    return [];
+                }
 
-        const response = await fetch(csvUrl);
-        const text = await response.text();
-        const rows = text.split("\n");
-        let data = [];
+                const response = await fetch(csvUrl);
+                const text = await response.text();
+                const rows = text.split("\n");
+                let data = [];
 
-        // ... [resto de tu lógica actual de parseo CSV igual que la tenías] ...
-        for (let i = 1; i < rows.length; i++) {
-            let r = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-            if (r && r.length >= 8 && r[0].trim() !== "") {
-                data.push({
-                    rank: r[0].replace(/"/g, '').trim(),
-                    driver: r[1].replace(/"/g, '').trim(),
-                    time: r[2].replace(/"/g, '').trim(),
-                    device: r[3].replace(/"/g, '').trim(),
-                    car: r[4].replace(/"/g, '').trim(),
-                    gearbox: r[5].replace(/"/g, '').trim(),
-                    date: r[6].replace(/"/g, '').trim(),
-                    yt: r[7] ? r[7].replace(/"/g, '').trim() : "#"
-                });
+                for (let i = 1; i < rows.length; i++) {
+                    let r = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                    if (r && r.length >= 8 && r[0].trim() !== "") {
+                        let rawYt = r[7] ? r[7].replace(/"/g, '').replace(/\r/g, '').trim() : "#";
+                        data.push({
+                            rank: r[0].replace(/"/g, '').replace(/\r/g, '').trim(),
+                            driver: r[1].replace(/"/g, '').replace(/\r/g, '').trim(),
+                            time: r[2].replace(/"/g, '').replace(/\r/g, '').trim(),
+                            device: r[3].replace(/"/g, '').replace(/\r/g, '').trim(),
+                            car: r[4].replace(/"/g, '').replace(/\r/g, '').trim(),
+                            gearbox: r[5].replace(/"/g, '').replace(/\r/g, '').trim(),
+                            date: r[6].replace(/"/g, '').replace(/\r/g, '').trim(),
+                            yt: rawYt !== "" ? rawYt : "#"
+                        });
+                    }
+                }
+                
+                // Guardamos en el caché antes de retornar
+                cacheSheets[csvUrl] = data;
+                return data;
+            } catch (error) {
+                return [];
             }
         }
-        
-        // Guardamos en el caché antes de retornar
-        cacheSheets[csvUrl] = data;
-        return data;
-    } catch (error) {
-        return [];
-    }
-}
+
         function toggleMenu() {
             document.getElementById('main-nav').classList.toggle('open');
         }
 
         function switchView(viewId) {
-            document.querySelectorAll('.view-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.querySelectorAll('nav a').forEach(link => {
-                link.classList.remove('active');
-            });
+    // 1. Ocultar todas las secciones
+    document.querySelectorAll('.view-section').forEach(section => {
+        section.classList.remove('active');
+    });
 
-            document.getElementById('view-' + viewId).classList.add('active');
-            if(document.getElementById('nav-' + viewId)) {
-                document.getElementById('nav-' + viewId).classList.add('active');
-            }
-            document.getElementById('main-nav').classList.remove('open');
-            window.scrollTo(0, 0);
-        }
+    // 2. Quitar la clase active de todos los enlaces del menú
+    document.querySelectorAll('nav a').forEach(link => {
+        link.classList.remove('active');
+    });
 
+    // 3. Mapeo para solucionar el desfase entre el menú y los IDs de tus secciones
+    let targetId = viewId;
+    if (viewId === 'routes') {
+        targetId = 'leaderboard'; // El menú llama a 'routes', pero tu sección se llama 'view-leaderboard'
+    }
+
+    // 4. Activar la sección correspondiente de forma segura
+    const targetSection = document.getElementById('view-' + targetId);
+    if (targetSection) {
+        targetSection.classList.add('active');
+    } else {
+        console.warn("No se encontró la sección: view-" + targetId);
+    }
+
+    // 5. Activar el enlace del menú correspondiente
+    const navLink = document.getElementById('nav-' + viewId);
+    if (navLink) {
+        navLink.classList.add('active');
+    }
+
+    // 6. Cerrar menú móvil y subir arriba
+    const mainNav = document.getElementById('main-nav');
+    if (mainNav) {
+        mainNav.classList.remove('open');
+    }
+    window.scrollTo(0, 0);
+}
         function switchCircuitTab(tabId, btn) {
             document.querySelectorAll('.circuit-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('#container-tabs-circuit .tab-btn').forEach(b => b.classList.remove('active'));
@@ -1170,7 +1199,6 @@ async function fetchGoogleSheetData(csvUrl) {
             document.getElementById('tab-global-' + tabId).classList.add('active');
             btn.classList.add('active');
         }
-
        // --- BASE DE DATOS DE RUTAS Y SUS ENLACES CSV ESPECÍFICOS ---
 const routesData = [
     // --- CIRCUITOS (Requieren 4 URLs CSV) ---
@@ -1920,407 +1948,346 @@ const routesData = [
 
         let currentCategory = 'all';
 
-    async function renderRoutes(dataToRender) {
-    const container = document.getElementById('routes-grid-container');
-    if (!container) return;
-    container.innerHTML = '<p style="text-align:center;">Cargando rutas y récords...</p>';
+// Renderizado de rutas con carga paralela optimizada
+        async function renderRoutes(dataToRender) {
+            const container = document.getElementById('routes-grid-container');
+            if (!container) return;
+            
+            if (dataToRender.length === 0) {
+                container.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 20px;">No se encontraron rutas con ese nombre.</p>`;
+                return;
+            }
 
-    // Creamos un array de promesas para cargar todo en paralelo
-    const renderPromises = dataToRender.map(async (route) => {
-        // ... (todo tu código de lógica de iconos y badges) ...
+            container.innerHTML = '<p style="text-align:center; grid-column: 1/-1;">Cargando rutas y récords...</p>';
 
-        let bestRecordText = "---";
-        let bestDriver = "Sin datos";
-        let bestCar = "";
+            const renderPromises = dataToRender.map(async (route) => {
+                let iconHtml = "";
+                let letterBadge = route.type ? route.type.charAt(0).toUpperCase() : "A";
 
-        try {
-            let sampleSheet = (route.type === "Circuito") ? (route.sheets.junkmanSingle || route.sheets.bmwSingle) : (route.sheets.junkman || route.sheets.bmw);
-            if (sampleSheet) {
-                let rows = await fetchGoogleSheetData(sampleSheet);
-                let topRow = rows.find(r => r.rank.includes("1") || r.rank === "1");
-                if (topRow) {
-                    bestRecordText = topRow.time;
-                    bestDriver = topRow.driver;
-                    bestCar = topRow.car;
+                if (route.type === "Circuito") {
+                    iconHtml = `<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--nfs-orange);">
+                        <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.23-5.23"></path>
+                    </svg>`;
+                } else if (route.type === "Sprint") {
+                    iconHtml = `<span style="font-size: 22px; color: var(--nfs-orange);">⚡</span>`;
+                } else if (route.type === "Drag") {
+                    iconHtml = `<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="color: var(--nfs-orange);">
+                        <path d="M9 2h6v2H9V2zm1 3h4v2h-4V5zm-2 3h8v2H8V8zm1 3h6v2H9v-2zm-2 3h10v2H7v-2zm2 3h6v2H9v-2zm-3 3h12v2H6v-2z"/>
+                    </svg>`;
+                } else {
+                    iconHtml = `<span style="font-size: 22px; color: var(--nfs-orange);">🔄</span>`;
                 }
-            }
-        } catch(e) { console.error("Error en ruta", route.name); }
 
-        return { route, bestRecordText, bestDriver, bestCar, iconHtml, letterBadge };
-    });
+                let bestRecordText = "";
+                let bestDriver = "";
+                let bestCar = "";
 
-    // Esperamos a que todas las hojas carguen en paralelo
-    const results = await Promise.all(renderPromises);
-    
-    // Ahora pintamos todo de golpe
-    container.innerHTML = '';
-    results.forEach(res => {
-        const card = document.createElement('div');
-        card.className = 'route-card';
-        // ... (tu código para crear el innerHTML de la tarjeta) ...
-        container.appendChild(card);
-    });
-}
-
-    if (dataToRender.length === 0) {
-        container.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 20px;">No se encontraron rutas con ese nombre.</p>`;
-        return;
-    }
-
-    for (const route of dataToRender) {
-        let iconHtml = "";
-        let letterBadge = route.type ? route.type.charAt(0).toUpperCase() : "A";
-
-        if (route.type === "Circuito") {
-            iconHtml = `<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--nfs-orange);">
-                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.23-5.23"></path>
-            </svg>`;
-        } else if (route.type === "Sprint") {
-            iconHtml = `<span style="font-size: 22px; color: var(--nfs-orange);">⚡</span>`;
-        } else if (route.type === "Drag") {
-            iconHtml = `<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="color: var(--nfs-orange);">
-                <path d="M9 2h6v2H9V2zm1 3h4v2h-4V5zm-2 3h8v2H8V8zm1 3h6v2H9v-2zm-2 3h10v2H7v-2zm2 3h6v2H9v-2zm-3 3h12v2H6v-2z"/>
-            </svg>`;
-        } else {
-            iconHtml = `<span style="font-size: 22px; color: var(--nfs-orange);">🔄</span>`;
-        }
-
-        let bestRecordText = "";
-        let bestDriver = "";
-        let bestCar = "";
-
-        try {
-            let sampleSheet = "";
-            if (route.type === "Circuito") sampleSheet = route.sheets.junkmanSingle || route.sheets.bmwSingle;
-            else sampleSheet = route.sheets.junkman || route.sheets.bmw;
-
-            if (sampleSheet) {
-                let rows = await fetchGoogleSheetData(sampleSheet);
-                let topRow = rows.find(r => r.rank.includes("1") || r.rank === "1");
-                if (topRow) {
-                    bestRecordText = topRow.time;
-                    bestDriver = topRow.driver;
-                    bestCar = topRow.car;
-                }
-            }
-        } catch (e) { }
-
-        const card = document.createElement('div');
-        card.className = 'route-card';
-        card.onclick = () => {
-            const titleEl = document.getElementById('leaderboard-title');
-            if (titleEl) titleEl.innerText = `Leaderboard: ${route.name} (${route.type})`;
-            if (typeof loadLeaderboardForRoute === 'function') loadLeaderboardForRoute(route);
-            if (typeof switchView === 'function') switchView('leaderboard');
-        };
-
-        // Estilos mejorados integrados correctamente
-        let detailsHtml = bestDriver ? `
-            <div class="route-record-preview" style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
-                <span class="route-time-display" style="color: #ffffff; font-weight: 800;">⏱️ ${bestRecordText}</span>
-                <span style="font-size: 13px; color: #cbd5e1; font-weight: 600;">👤 ${bestDriver}</span>
-            </div>
-            <div class="route-car-container" style="overflow: hidden; width: 100%; margin-top: 6px;">
-                <div class="marquee" style="white-space: nowrap; font-size: 13px; font-weight: 700; color: #94a3b8;">
-                    🚗 ${bestCar}
-                </div>
-            </div>
-        ` : `<div class="route-record-preview" style="font-style: italic; color: #64748b; font-size: 12px;">Disponible para récord</div>`;
-
-        card.innerHTML = `
-            <div class="route-icon-container">
-                <div class="route-icon-box">${iconHtml}</div>
-                <div class="route-badge-letter">${letterBadge}</div>
-            </div>
-            <div class="route-info">
-                <h3>${route.name}</h3>
-                ${detailsHtml}
-            </div>
-            <div class="route-action-icon" title="Ver Leaderboard">🗺️</div>
-        `;
-        container.appendChild(card);
-    }
-}
-
-function filterRoutes() {
-    const searchInput = document.getElementById('route-search');
-    const query = searchInput ? searchInput.value.toLowerCase() : "";
-    const filtered = routesData.filter(route => {
-        const matchesCategory = currentCategory === 'all' || route.type === currentCategory;
-        const matchesSearch = route.name.toLowerCase().includes(query);
-        return matchesCategory && matchesSearch;
-    });
-    renderRoutes(filtered);
-}
-
-function setCategory(category, btn) {
-    document.querySelectorAll('.filter-bar .filter-btn').forEach(b => b.classList.remove('active'));
-    if (btn) btn.classList.add('active');
-    currentCategory = category;
-    filterRoutes();
-}
-
-async function fetchGoogleSheetData(csvUrl) {
-    try {
-        if (!csvUrl || csvUrl.trim() === "" || csvUrl.includes("PEGA_") || csvUrl.includes("URL_CSV_")) {
-            return [];
-        }
-
-        const response = await fetch(csvUrl);
-        const text = await response.text();
-        const rows = text.split("\n");
-        let data = [];
-
-        for (let i = 1; i < rows.length; i++) {
-            let r = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-            if (r && r.length >= 8 && r[0].trim() !== "") {
-                let rawYt = r[7] ? r[7].replace(/"/g, '').replace(/\r/g, '').trim() : "#";
-                data.push({
-                    rank: r[0].replace(/"/g, '').replace(/\r/g, '').trim(),
-                    driver: r[1].replace(/"/g, '').replace(/\r/g, '').trim(),
-                    time: r[2].replace(/"/g, '').replace(/\r/g, '').trim(),
-                    device: r[3].replace(/"/g, '').replace(/\r/g, '').trim(),
-                    car: r[4].replace(/"/g, '').replace(/\r/g, '').trim(),
-                    gearbox: r[5].replace(/"/g, '').replace(/\r/g, '').trim(),
-                    date: r[6].replace(/"/g, '').replace(/\r/g, '').trim(),
-                    yt: rawYt !== "" ? rawYt : "#"
-                });
-            }
-        }
-        return data;
-    } catch (error) {
-        return [];
-    }
-}
-
-async function loadLeaderboardForRoute(route) {
-    const circuitTabs = document.getElementById('container-tabs-circuit');
-    const sprintDragTabs = document.getElementById('container-tabs-sprintdrag');
-
-    document.querySelectorAll('.circuit-section, .sprintdrag-section').forEach(sec => sec.classList.remove('active'));
-
-    if (route.type === "Circuito") {
-        if (circuitTabs) circuitTabs.classList.add('active-group');
-        if (sprintDragTabs) sprintDragTabs.classList.remove('active-group');
-        if (typeof switchCircuitTab === 'function') switchCircuitTab('junkman-single', circuitTabs.querySelector('.tab-btn'));
-
-        let d1 = await fetchGoogleSheetData(route.sheets.junkmanSingle);
-        let d2 = await fetchGoogleSheetData(route.sheets.junkmanFast);
-        let d3 = await fetchGoogleSheetData(route.sheets.bmwSingle);
-        let d4 = await fetchGoogleSheetData(route.sheets.bmwFast);
-
-        renderTableRows('tbody-junkman-single', d1);
-        renderTableRows('tbody-junkman-fast', d2);
-        renderTableRows('tbody-bmw-single', d3);
-        renderTableRows('tbody-bmw-fast', d4);
-    } else {
-        if (circuitTabs) circuitTabs.classList.remove('active-group');
-        if (sprintDragTabs) sprintDragTabs.classList.add('active-group');
-        if (typeof switchSprintDragTab === 'function') switchSprintDragTab('sprintdrag-junkman', sprintDragTabs.querySelector('.tab-btn'));
-
-        let dJunkman = await fetchGoogleSheetData(route.sheets.junkman);
-        let dBmw = await fetchGoogleSheetData(route.sheets.bmw);
-
-        renderTableRows('tbody-sprintdrag-junkman', dJunkman);
-        renderTableRows('tbody-sprintdrag-bmw', dBmw);
-    }
-}
-
-function renderTableRows(tbodyId, dataRows) {
-    const tbody = document.getElementById(tbodyId);
-    if (!tbody) return;
-    tbody.innerHTML = '';
-    
-    if (!dataRows || dataRows.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 15px;">No hay registros disponibles o falta configurar la URL CSV.</td></tr>`;
-        return;
-    }
-
-    dataRows.forEach(row => {
-        const tr = document.createElement('tr');
-        let posClass = String(row.rank).includes("1") ? "rank-1" : (String(row.rank).includes("2") ? "rank-2" : (String(row.rank).includes("3") ? "rank-3" : ""));
-        let videoBtnHTML = (row.yt && row.yt !== "#" && row.yt.startsWith("http")) 
-            ? `<a href="${row.yt}" target="_blank" class="btn-youtube">Video</a>` 
-            : `<span style="color: var(--text-muted); font-size: 12px;">Sin video</span>`;
-
-        tr.innerHTML = `
-            <td class="${posClass}">${row.rank}</td>
-            <td><strong>${row.driver}</strong></td>
-            <td style="color: var(--nfs-orange); font-weight: bold;">${row.time}</td>
-            <td>${row.device}</td>
-            <td>${row.car}</td>
-            <td>${row.gearbox}</td>
-            <td>${row.date}</td>
-            <td>${videoBtnHTML}</td>
-        `;
-        tbody.appendChild(tr);
-    });
-}
-
-async function generateHallOfFame() {
-    const hofTbody = document.getElementById('tbody-hall-of-fame');
-    if (!hofTbody) return;
-    let driverCounts = {};
-
-    for (const route of routesData) {
-        let sheetsToFetch = [];
-        if (route.type === "Circuito" && route.sheets) {
-            if (route.sheets.junkmanSingle) sheetsToFetch.push(route.sheets.junkmanSingle);
-            if (route.sheets.junkmanFast) sheetsToFetch.push(route.sheets.junkmanFast);
-            if (route.sheets.bmwSingle) sheetsToFetch.push(route.sheets.bmwSingle);
-            if (route.sheets.bmwFast) sheetsToFetch.push(route.sheets.bmwFast);
-        } else if (route.sheets) {
-            if (route.sheets.junkman) sheetsToFetch.push(route.sheets.junkman);
-            if (route.sheets.bmw) sheetsToFetch.push(route.sheets.bmw);
-        }
-
-        for (const sheetUrl of sheetsToFetch) {
-            const rows = await fetchGoogleSheetData(sheetUrl);
-            if (rows && rows.length > 0) {
-                const topDriverRow = rows.find(r => r.rank.includes("1") || r.rank === "1");
-                if (topDriverRow && topDriverRow.driver) {
-                    let driverName = topDriverRow.driver.trim().toUpperCase();
-                    driverCounts[driverName] = (driverCounts[driverName] || 0) + 1;
-                }
-            }
-        }
-    }
-
-    let sortedDrivers = Object.keys(driverCounts).map(driver => ({ driver: driver, records: driverCounts[driver] }));
-    sortedDrivers.sort((a, b) => b.records - a.records);
-
-    hofTbody.innerHTML = '';
-    if (sortedDrivers.length === 0) {
-        hofTbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">No hay récords registrados todavía.</td></tr>`;
-        return;
-    }
-
-    sortedDrivers.forEach((item, index) => {
-        let pos = index + 1;
-        let posClass = pos === 1 ? "rank-1" : (pos === 2 ? "rank-2" : (pos === 3 ? "rank-3" : ""));
-        let badge = pos === 1 ? "👑 Leyenda Absoluta" : (pos <= 3 ? "🔥 Elite Driver" : "⭐ Contendiente");
-
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td class="${posClass}">#${pos}</td>
-            <td><strong>${item.driver}</strong></td>
-            <td style="color: var(--nfs-orange); font-weight: bold;">${item.records} Récords</td>
-            <td>PC / Multiplataforma</td>
-            <td>${badge}</td>
-        `;
-        hofTbody.appendChild(tr);
-    });
-}
-
-async function processPodiumsForRoutes(filterType = null) {
-    let podiumStats = {};
-
-    for (const route of routesData) {
-        if (filterType && route.type.toLowerCase() !== filterType.toLowerCase()) continue;
-
-        let sheetsToFetch = [];
-        if (route.type === "Circuito" && route.sheets) {
-            if (route.sheets.junkmanSingle) sheetsToFetch.push(route.sheets.junkmanSingle);
-            if (route.sheets.junkmanFast) sheetsToFetch.push(route.sheets.junkmanFast);
-            if (route.sheets.bmwSingle) sheetsToFetch.push(route.sheets.bmwSingle);
-            if (route.sheets.bmwFast) sheetsToFetch.push(route.sheets.bmwFast);
-        } else if (route.sheets) {
-            if (route.sheets.junkman) sheetsToFetch.push(route.sheets.junkman);
-            if (route.sheets.bmw) sheetsToFetch.push(route.sheets.bmw);
-        }
-
-        for (const sheetUrl of sheetsToFetch) {
-            const rows = await fetchGoogleSheetData(sheetUrl);
-            rows.forEach(r => {
-                let rankNum = parseInt(r.rank.replace(/[^0-9]/g, ''));
-                if ([1, 2, 3].includes(rankNum) && r.driver) {
-                    let driverName = r.driver.trim().toUpperCase();
-                    if (!podiumStats[driverName]) {
-                        podiumStats[driverName] = { first: 0, second: 0, third: 0 };
+                try {
+                    let sampleSheet = (route.type === "Circuito") ? (route.sheets.junkmanSingle || route.sheets.bmwSingle) : (route.sheets.junkman || route.sheets.bmw);
+                    if (sampleSheet) {
+                        let rows = await fetchGoogleSheetData(sampleSheet);
+                        let topRow = rows.find(r => r.rank.includes("1") || r.rank === "1");
+                        if (topRow) {
+                            bestRecordText = topRow.time;
+                            bestDriver = topRow.driver;
+                            bestCar = topRow.car;
+                        }
                     }
-                    if (rankNum === 1) podiumStats[driverName].first++;
-                    if (rankNum === 2) podiumStats[driverName].second++;
-                    if (rankNum === 3) podiumStats[driverName].third++;
+                } catch(e) { 
+                    console.error("Error en ruta", route.name); 
                 }
+
+                return { route, bestRecordText, bestDriver, bestCar, iconHtml, letterBadge };
+            });
+
+            const results = await Promise.all(renderPromises);
+            
+            container.innerHTML = '';
+            results.forEach(res => {
+                const { route, bestRecordText, bestDriver, bestCar, iconHtml, letterBadge } = res;
+                const card = document.createElement('div');
+                card.className = 'route-card';
+                card.onclick = () => {
+                    const titleEl = document.getElementById('leaderboard-title');
+                    if (titleEl) titleEl.innerText = `Leaderboard: ${route.name} (${route.type})`;
+                    if (typeof loadLeaderboardForRoute === 'function') loadLeaderboardForRoute(route);
+                    if (typeof switchView === 'function') switchView('leaderboard');
+                };
+
+                let detailsHtml = bestDriver ? `
+                    <div class="route-record-preview" style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+                        <span class="route-time-display" style="color: #ffffff; font-weight: 800;">⏱️ ${bestRecordText}</span>
+                        <span style="font-size: 13px; color: #cbd5e1; font-weight: 600;">👤 ${bestDriver}</span>
+                    </div>
+                    <div class="route-car-container" style="overflow: hidden; width: 100%; margin-top: 6px;">
+                        <div class="marquee" style="white-space: nowrap; font-size: 13px; font-weight: 700; color: #94a3b8;">
+                            🚗 ${bestCar}
+                        </div>
+                    </div>
+                ` : `<div class="route-record-preview" style="font-style: italic; color: #64748b; font-size: 12px;">Disponible para récord</div>`;
+
+                card.innerHTML = `
+                    <div class="route-icon-container">
+                        <div class="route-icon-box">${iconHtml}</div>
+                        <div class="route-badge-letter">${letterBadge}</div>
+                    </div>
+                    <div class="route-info">
+                        <h3>${route.name}</h3>
+                        ${detailsHtml}
+                    </div>
+                    <div class="route-action-icon" title="Ver Leaderboard">🗺️</div>
+                `;
+                container.appendChild(card);
             });
         }
-    }
 
-    let results = Object.keys(podiumStats).map(driver => {
-        let stats = podiumStats[driver];
-        return {
-            driver: driver,
-            first: stats.first,
-            second: stats.second,
-            third: stats.third,
-            total: stats.first + stats.second + stats.third
-        };
-    });
+        function filterRoutes() {
+            const searchInput = document.getElementById('route-search');
+            const query = searchInput ? searchInput.value.toLowerCase() : "";
+            const filtered = routesData.filter(route => {
+                const matchesCategory = currentCategory === 'all' || route.type === currentCategory;
+                const matchesSearch = route.name.toLowerCase().includes(query);
+                return matchesCategory && matchesSearch;
+            });
+            renderRoutes(filtered);
+        }
 
-    results.sort((a, b) => {
-        if (b.first !== a.first) return b.first - a.first;
-        if (b.second !== a.second) return b.second - a.second;
-        return b.third - a.third;
-    });
+        function setCategory(category, btn) {
+            document.querySelectorAll('.filter-bar .filter-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            currentCategory = category;
+            filterRoutes();
+        }
 
-    return results;
-}
+        async function loadLeaderboardForRoute(route) {
+            const circuitTabs = document.getElementById('container-tabs-circuit');
+            const sprintDragTabs = document.getElementById('container-tabs-sprintdrag');
 
-async function renderGlobalPodiumTable(tbodyId, filterType = null) {
-    const tbody = document.getElementById(tbodyId);
-    if (!tbody) return;
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--nfs-orange);">Calculando datos globales...</td></tr>`;
-    
-    let data = await processPodiumsForRoutes(filterType);
+            document.querySelectorAll('.circuit-section, .sprintdrag-section').forEach(sec => sec.classList.remove('active'));
 
-    tbody.innerHTML = '';
-    if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No hay podios registrados en esta categoría.</td></tr>`;
-        return;
-    }
+            if (route.type === "Circuito") {
+                if (circuitTabs) circuitTabs.classList.add('active-group');
+                if (sprintDragTabs) sprintDragTabs.classList.remove('active-group');
+                if (typeof switchCircuitTab === 'function') switchCircuitTab('junkman-single', circuitTabs.querySelector('.tab-btn'));
 
-    data.forEach((item, index) => {
-        let pos = index + 1;
-        let posClass = pos === 1 ? "rank-1" : (pos === 2 ? "rank-2" : (pos === 3 ? "rank-3" : ""));
+                let d1 = await fetchGoogleSheetData(route.sheets.junkmanSingle);
+                let d2 = await fetchGoogleSheetData(route.sheets.junkmanFast);
+                let d3 = await fetchGoogleSheetData(route.sheets.bmwSingle);
+                let d4 = await fetchGoogleSheetData(route.sheets.bmwFast);
 
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td class="${posClass}">#${pos}</td>
-            <td><strong>${item.driver}</strong></td>
-            <td style="color: #ffd700; font-weight: bold;">${item.first}</td>
-            <td style="color: #c0c0c0; font-weight: bold;">${item.second}</td>
-            <td style="color: #cd7f32; font-weight: bold;">${item.third}</td>
-            <td style="color: var(--nfs-orange); font-weight: bold;">${item.total}</td>
-        `;
-        tbody.appendChild(tr);
-    });
-}
+                renderTableRows('tbody-junkman-single', d1);
+                renderTableRows('tbody-junkman-fast', d2);
+                renderTableRows('tbody-bmw-single', d3);
+                renderTableRows('tbody-bmw-fast', d4);
+            } else {
+                if (circuitTabs) circuitTabs.classList.remove('active-group');
+                if (sprintDragTabs) sprintDragTabs.classList.add('active-group');
+                if (typeof switchSprintDragTab === 'function') switchSprintDragTab('sprintdrag-junkman', sprintDragTabs.querySelector('.tab-btn'));
 
-async function generateGlobalLeaderboards() {
-    await renderGlobalPodiumTable('tbody-global-drivers', null);
-    await renderGlobalPodiumTable('tbody-global-allroutes', null);
-    await renderGlobalPodiumTable('tbody-global-circuit', 'Circuito');
-    await renderGlobalPodiumTable('tbody-global-sprint', 'Sprint');
-    await renderGlobalPodiumTable('tbody-global-drag', 'Drag');
-}
+                let dJunkman = await fetchGoogleSheetData(route.sheets.junkman);
+                let dBmw = await fetchGoogleSheetData(route.sheets.bmw);
 
-window.addEventListener('DOMContentLoaded', () => {
-    generateHallOfFame();
-    generateGlobalLeaderboards();
-    if (typeof routesData !== 'undefined') {
-        renderRoutes(routesData);
-    }
-});
-<!-- LEADERBOARD STATAS ... -->
+                renderTableRows('tbody-sprintdrag-junkman', dJunkman);
+                renderTableRows('tbody-sprintdrag-bmw', dBmw);
+            }
+        }
+
+        function renderTableRows(tbodyId, dataRows) {
+            const tbody = document.getElementById(tbodyId);
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            
+            if (!dataRows || dataRows.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 15px;">No hay registros disponibles o falta configurar la URL CSV.</td></tr>`;
+                return;
+            }
+
+            dataRows.forEach(row => {
+                const tr = document.createElement('tr');
+                let posClass = String(row.rank).includes("1") ? "rank-1" : (String(row.rank).includes("2") ? "rank-2" : (String(row.rank).includes("3") ? "rank-3" : ""));
+                let videoBtnHTML = (row.yt && row.yt !== "#" && row.yt.startsWith("http")) 
+                    ? `<a href="${row.yt}" target="_blank" class="btn-youtube">Video</a>` 
+                    : `<span style="color: var(--text-muted); font-size: 12px;">Sin video</span>`;
+
+                tr.innerHTML = `
+                    <td class="${posClass}">${row.rank}</td>
+                    <td><strong>${row.driver}</strong></td>
+                    <td style="color: var(--nfs-orange); font-weight: bold;">${row.time}</td>
+                    <td>${row.device}</td>
+                    <td>${row.car}</td>
+                    <td>${row.gearbox}</td>
+                    <td>${row.date}</td>
+                    <td>${videoBtnHTML}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function generateHallOfFame() {
+            const hofTbody = document.getElementById('tbody-hall-of-fame');
+            if (!hofTbody) return;
+            let driverCounts = {};
+
+            for (const route of routesData) {
+                let sheetsToFetch = [];
+                if (route.type === "Circuito" && route.sheets) {
+                    if (route.sheets.junkmanSingle) sheetsToFetch.push(route.sheets.junkmanSingle);
+                    if (route.sheets.junkmanFast) sheetsToFetch.push(route.sheets.junkmanFast);
+                    if (route.sheets.bmwSingle) sheetsToFetch.push(route.sheets.bmwSingle);
+                    if (route.sheets.bmwFast) sheetsToFetch.push(route.sheets.bmwFast);
+                } else if (route.sheets) {
+                    if (route.sheets.junkman) sheetsToFetch.push(route.sheets.junkman);
+                    if (route.sheets.bmw) sheetsToFetch.push(route.sheets.bmw);
+                }
+
+                for (const sheetUrl of sheetsToFetch) {
+                    const rows = await fetchGoogleSheetData(sheetUrl);
+                    if (rows && rows.length > 0) {
+                        const topDriverRow = rows.find(r => r.rank.includes("1") || r.rank === "1");
+                        if (topDriverRow && topDriverRow.driver) {
+                            let driverName = topDriverRow.driver.trim().toUpperCase();
+                            driverCounts[driverName] = (driverCounts[driverName] || 0) + 1;
+                        }
+                    }
+                }
+            }
+
+            let sortedDrivers = Object.keys(driverCounts).map(driver => ({ driver: driver, records: driverCounts[driver] }));
+            sortedDrivers.sort((a, b) => b.records - a.records);
+
+            hofTbody.innerHTML = '';
+            if (sortedDrivers.length === 0) {
+                hofTbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">No hay récords registrados todavía.</td></tr>`;
+                return;
+            }
+
+            sortedDrivers.forEach((item, index) => {
+                let pos = index + 1;
+                let posClass = pos === 1 ? "rank-1" : (pos === 2 ? "rank-2" : (pos === 3 ? "rank-3" : ""));
+                let badge = pos === 1 ? "👑 Leyenda Absoluta" : (pos <= 3 ? "🔥 Elite Driver" : "⭐ Contendiente");
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="${posClass}">#${pos}</td>
+                    <td><strong>${item.driver}</strong></td>
+                    <td style="color: var(--nfs-orange); font-weight: bold;">${item.records} Récords</td>
+                    <td>PC / Multiplataforma</td>
+                    <td>${badge}</td>
+                `;
+                hofTbody.appendChild(tr);
+            });
+        }
+
+        async function processPodiumsForRoutes(filterType = null) {
+            let podiumStats = {};
+
+            for (const route of routesData) {
+                if (filterType && route.type.toLowerCase() !== filterType.toLowerCase()) continue;
+
+                let sheetsToFetch = [];
+                if (route.type === "Circuito" && route.sheets) {
+                    if (route.sheets.junkmanSingle) sheetsToFetch.push(route.sheets.junkmanSingle);
+                    if (route.sheets.junkmanFast) sheetsToFetch.push(route.sheets.junkmanFast);
+                    if (route.sheets.bmwSingle) sheetsToFetch.push(route.sheets.bmwSingle);
+                    if (route.sheets.bmwFast) sheetsToFetch.push(route.sheets.bmwFast);
+                } else if (route.sheets) {
+                    if (route.sheets.junkman) sheetsToFetch.push(route.sheets.junkman);
+                    if (route.sheets.bmw) sheetsToFetch.push(route.sheets.bmw);
+                }
+
+                for (const sheetUrl of sheetsToFetch) {
+                    const rows = await fetchGoogleSheetData(sheetUrl);
+                    rows.forEach(r => {
+                        let rankNum = parseInt(r.rank.replace(/[^0-9]/g, ''));
+                        if ([1, 2, 3].includes(rankNum) && r.driver) {
+                            let driverName = r.driver.trim().toUpperCase();
+                            if (!podiumStats[driverName]) {
+                                podiumStats[driverName] = { first: 0, second: 0, third: 0 };
+                            }
+                            if (rankNum === 1) podiumStats[driverName].first++;
+                            if (rankNum === 2) podiumStats[driverName].second++;
+                            if (rankNum === 3) podiumStats[driverName].third++;
+                        }
+                    });
+                }
+            }
+
+            let results = Object.keys(podiumStats).map(driver => {
+                let stats = podiumStats[driver];
+                return {
+                    driver: driver,
+                    first: stats.first,
+                    second: stats.second,
+                    third: stats.third,
+                    total: stats.first + stats.second + stats.third
+                };
+            });
+
+            results.sort((a, b) => {
+                if (b.first !== a.first) return b.first - a.first;
+                if (b.second !== a.second) return b.second - a.second;
+                return b.third - a.third;
+            });
+
+            return results;
+        }
+
+        async function renderGlobalPodiumTable(tbodyId, filterType = null) {
+            const tbody = document.getElementById(tbodyId);
+            if (!tbody) return;
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--nfs-orange);">Calculando datos globales...</td></tr>`;
+            
+            let data = await processPodiumsForRoutes(filterType);
+
+            tbody.innerHTML = '';
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No hay podios registrados en esta categoría.</td></tr>`;
+                return;
+            }
+
+            data.forEach((item, index) => {
+                let pos = index + 1;
+                let posClass = pos === 1 ? "rank-1" : (pos === 2 ? "rank-2" : (pos === 3 ? "rank-3" : ""));
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="${posClass}">#${pos}</td>
+                    <td><strong>${item.driver}</strong></td>
+                    <td style="color: #ffd700; font-weight: bold;">${item.first}</td>
+                    <td style="color: #c0c0c0; font-weight: bold;">${item.second}</td>
+                    <td style="color: #cd7f32; font-weight: bold;">${item.third}</td>
+                    <td style="color: var(--nfs-orange); font-weight: bold;">${item.total}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function generateGlobalLeaderboards() {
+            await renderGlobalPodiumTable('tbody-global-drivers', null);
+            await renderGlobalPodiumTable('tbody-global-allroutes', null);
+            await renderGlobalPodiumTable('tbody-global-circuit', 'Circuito');
+            await renderGlobalPodiumTable('tbody-global-sprint', 'Sprint');
+            await renderGlobalPodiumTable('tbody-global-drag', 'Drag');
+        }
+
         function updateLeaderboardStats(showingNum, totalNum, currentClass = 'ALL') {
-    const showingEl = document.getElementById('showing-count');
-    const totalEl = document.getElementById('total-races-count');
-    const classEl = document.getElementById('current-class-filter');
+            const showingEl = document.getElementById('showing-count');
+            const totalEl = document.getElementById('total-races-count');
+            const classEl = document.getElementById('current-class-filter');
 
-    if (showingEl) showingEl.textContent = showingNum;
-    if (totalEl) totalEl.textContent = totalNum;
-    if (classEl) classEl.textContent = currentClass.toUpperCase();
-}
+            if (showingEl) showingEl.textContent = showingNum;
+            if (totalEl) totalEl.textContent = totalNum;
+            if (classEl) classEl.textContent = currentClass.toUpperCase();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            generateHallOfFame();
+            generateGlobalLeaderboards();
+            if (typeof routesData !== 'undefined') {
+                renderRoutes(routesData);
+            }
+        });
+
     </script>
 
 </body>
