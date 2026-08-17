@@ -1138,37 +1138,41 @@
         }
 
         function switchView(viewId) {
-    // 1. Ocultar todas las secciones con la clase .view-section
+    // 1. Ocultar todas las secciones
     document.querySelectorAll('.view-section').forEach(section => {
         section.classList.remove('active');
     });
 
-    // 2. Quitar la clase 'active' de todos los enlaces del menú
+    // 2. Quitar la clase active de todos los enlaces del menú
     document.querySelectorAll('nav a').forEach(link => {
         link.classList.remove('active');
     });
 
-    // 3. Buscar y activar la sección correspondiente de forma segura
-    const targetView = document.getElementById('view-' + viewId);
-    if (targetView) {
-        targetView.classList.add('active');
-    } else {
-        console.warn("No se encontró la vista con ID: view-" + viewId);
+    // 3. Mapeo para solucionar el desfase entre el menú y los IDs de tus secciones
+    let targetId = viewId;
+    if (viewId === 'routes') {
+        targetId = 'leaderboard'; // El menú llama a 'routes', pero tu sección se llama 'view-leaderboard'
     }
 
-    // 4. Activar el enlace del menú si existe
+    // 4. Activar la sección correspondiente de forma segura
+    const targetSection = document.getElementById('view-' + targetId);
+    if (targetSection) {
+        targetSection.classList.add('active');
+    } else {
+        console.warn("No se encontró la sección: view-" + targetId);
+    }
+
+    // 5. Activar el enlace del menú correspondiente
     const navLink = document.getElementById('nav-' + viewId);
     if (navLink) {
         navLink.classList.add('active');
     }
 
-    // 5. Cerrar el menú móvil si está abierto (si 'main-nav' tiene la clase 'open')
+    // 6. Cerrar menú móvil y subir arriba
     const mainNav = document.getElementById('main-nav');
     if (mainNav) {
         mainNav.classList.remove('open');
     }
-
-    // 6. Subir arriba del todo al cambiar de vista
     window.scrollTo(0, 0);
 }
         function switchCircuitTab(tabId, btn) {
