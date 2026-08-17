@@ -640,12 +640,13 @@
         <div class="menu-toggle" onclick="toggleMenu()">☰</div>
         <nav id="main-nav">
             <a href="#" onclick="switchView('home')" class="active" id="nav-home">Home</a>
-            <a href="#" onclick="switchView('routes')" id="nav-routes">Leaderboards</a>
+            <a href="#" onclick="switchView('routes')" id="nav-routes">Leaderboards (Índice)</a>
             <a href="#" onclick="switchView('halloffame')" id="nav-halloffame">Hall of Fame</a>
             <a href="#" onclick="switchView('globaldrivers')" id="nav-globaldrivers">Top Global Drivers</a>
             <a href="#" onclick="switchView('globalroutes')" id="nav-globalroutes">Top Rutas</a>
             <a href="#" onclick="switchView('guides')" id="nav-guides">Guías & Tuning</a>
             <a href="#" onclick="switchView('rules')" id="nav-rules">Rules & Norm</a>
+            <a href="#" onclick="switchView('leaderboard')" id="nav-leaderboard">Leaderboard Detalle</a>
         </nav>
     </header>
 
@@ -1137,21 +1138,39 @@
         }
 
         function switchView(viewId) {
-            document.querySelectorAll('.view-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.querySelectorAll('nav a').forEach(link => {
-                link.classList.remove('active');
-            });
+    // 1. Ocultar todas las secciones con la clase .view-section
+    document.querySelectorAll('.view-section').forEach(section => {
+        section.classList.remove('active');
+    });
 
-            document.getElementById('view-' + viewId).classList.add('active');
-            if(document.getElementById('nav-' + viewId)) {
-                document.getElementById('nav-' + viewId).classList.add('active');
-            }
-            document.getElementById('main-nav').classList.remove('open');
-            window.scrollTo(0, 0);
-        }
+    // 2. Quitar la clase 'active' de todos los enlaces del menú
+    document.querySelectorAll('nav a').forEach(link => {
+        link.classList.remove('active');
+    });
 
+    // 3. Buscar y activar la sección correspondiente de forma segura
+    const targetView = document.getElementById('view-' + viewId);
+    if (targetView) {
+        targetView.classList.add('active');
+    } else {
+        console.warn("No se encontró la vista con ID: view-" + viewId);
+    }
+
+    // 4. Activar el enlace del menú si existe
+    const navLink = document.getElementById('nav-' + viewId);
+    if (navLink) {
+        navLink.classList.add('active');
+    }
+
+    // 5. Cerrar el menú móvil si está abierto (si 'main-nav' tiene la clase 'open')
+    const mainNav = document.getElementById('main-nav');
+    if (mainNav) {
+        mainNav.classList.remove('open');
+    }
+
+    // 6. Subir arriba del todo al cambiar de vista
+    window.scrollTo(0, 0);
+}
         function switchCircuitTab(tabId, btn) {
             document.querySelectorAll('.circuit-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('#container-tabs-circuit .tab-btn').forEach(b => b.classList.remove('active'));
