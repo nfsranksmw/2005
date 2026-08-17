@@ -1983,167 +1983,67 @@ function setCategory(category, btn) {
     filterRoutes();
 }
 
-// ==========================================
-// 1. SISTEMA DE CACHÉ INTELIGENTE (CSV / SHEET DATA)
-// ==========================================
-const CACHE_KEY = 'nfs_sheet_data_cache';
-const CACHE_TTL_MINUTES = 10; // Tiempo de vida del caché en minutos
+// Variable de control para el caché
+const CACHE_KEY_PREFIX = 'nfs_sheet_cache_';
+const CACHE_TTL_MINUTES = 10; // Guardar datos por 10 minutos
 
-/**
- * Obtiene los datos del Google Sheet utilizando Caché Inteligente con expiración (TTL).
- */
-async function fetchGoogleSheetDataCached(sheetUrl) {
+// Variable de control para el caché
+const CACHE_KEY_PREFIX = 'nfs_sheet_cache_';
+const CACHE_TTL_MINUTES = 10; // Guardar datos por 10 minutos
+
+async function fetchGoogleSheetData(sheetUrl) {
+    if (!sheetUrl) return [];
+
     const now = Date.now();
     const ttlMs = CACHE_TTL_MINUTES * 60 * 1000;
+    
+    // Generar una clave única para CADA URL de Google Sheet
+    // (evita que una ruta sobrescriba la información de otra en el caché)
+    const cacheKey = CACHE_KEY_PREFIX + btoa(sheetUrl).substring(0, 32);
 
-    // 1. Intentar leer desde localStorage
+    // 1. Intentar leer desde el caché local
     try {
-        const cachedRaw = localStorage.getItem(CACHE_KEY);
+        const cachedRaw = localStorage.getItem(cacheKey);
         if (cachedRaw) {
             const cachedData = JSON.parse(cachedRaw);
-            // Validar si el caché aún es válido según el TTL
             if (now - cachedData.timestamp < ttlMs) {
-                console.log('⚡ [Caché Hit] Datos cargados desde caché local.');
-                return cachedData.data;
+                return cachedData.data; // Devuelve los datos guardados sin hacer petición a la red
             }
         }
     } catch (err) {
-        console.warn('No se pudo acceder al caché de localStorage:', err);
+        console.warn('Error al leer caché:', err);
     }
 
-    // 2. Si no hay caché o expiró, hacer petición de red (Fetch)
-    console.log('🌐 [Caché Miss] Realizando petición a Google Sheets...');
+    // 2. Si no hay caché válido, solicitar a Google Sheets
     try {
         const response = await fetch(sheetUrl);
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
         
         const csvText = await response.text();
-        const parsedData = parseCSV(csvText); // Tu función existente para parsear CSV
+        const parsedData = (typeof parseCSV === 'function') ? parseCSV(csvText) : [];
 
-        // 3. Guardar en localStorage con timestamp
+        // 3. Guardar el resultado en localStorage con su clave individual
         try {
-            localStorage.setItem(CACHE_KEY, JSON.stringify({
+            localStorage.setItem(cacheKey, JSON.stringify({
                 timestamp: now,
                 data: parsedData
             }));
         } catch (err) {
-            console.warn('Error al guardar en localStorage:', err);
+            console.warn('Error al guardar caché:', err);
         }
 
         return parsedData;
     } catch (error) {
-        console.error('Error fetching sheet data:', error);
+        console.error('Error al descargar Sheet:', error);
         
-        // Estrategia de Respaldo (Fallback): Si la red falla, usar caché antiguo si existe
-        const staleCache = localStorage.getItem(CACHE_KEY);
+        // Si la red falla, intentar entregar el caché aunque haya expirado
+        const staleCache = localStorage.getItem(cacheKey);
         if (staleCache) {
-            console.warn('⚠️ Petición fallida. Usando datos antiguos en caché como respaldo.');
             return JSON.parse(staleCache).data;
         }
         return [];
     }
 }
-
-// ==========================================
-// 2. LAZY LOADING DE IMÁGENES (IntersectionObserver)
-// ==========================================
-let imageObserver = null;
-
-/**
- * Inicializa el IntersectionObserver para imágenes con atributo data-src.
- */
-function initLazyLoading() {
-    if ('IntersectionObserver' in window) {
-        imageObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    const realSrc = img.getAttribute('data-src');
-                    if (realSrc) {
-                        img.src = realSrc;
-                        img.removeAttribute('data-src');
-                        img.classList.remove('lazy-placeholder');
-                        img.classList.add('loaded');
-                    }
-                    observer.unobserve(img);
-                }
-            });
-        }, {
-            rootMargin: '100px 0px', // Carga la imagen 100px antes de que entre en pantalla
-            threshold: 0.01
-        });
-    }
-}
-
-/**
- * Registra nuevas imágenes en el observador de Lazy Loading.
- */
-function observeLazyImages() {
-    const lazyImages = document.querySelectorAll('img.lazy-load[data-src]');
-    lazyImages.forEach(img => {
-        if (imageObserver) {
-            imageObserver.observe(img);
-        } else {
-            // Fallback si el navegador no soporta IntersectionObserver
-            img.src = img.getAttribute('data-src');
-        }
-    });
-}
-
-// ==========================================
-// 3. RENDERIZADO DE TARJETAS CON LAZY LOADING
-// ==========================================
-function createRouteCardHTML(route) {
-    // En lugar de src directo, usaremos data-src para diferir la carga de la imagen
-    return `
-        <div class="route-card" data-category="${route.type}">
-            <div class="card-image-wrapper">
-                <img 
-                    class="route-image lazy-load lazy-placeholder" 
-                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 9'%3E%3C/svg%3E" 
-                    data-src="${route.image}" 
-                    alt="${route.name}"
-                    loading="lazy"
-                />
-                <span class="badge badge-${route.type.toLowerCase()}">${route.type}</span>
-            </div>
-            <div class="card-content">
-                <h3>${route.name}</h3>
-                <div class="route-stats">
-                    <div class="best-record">
-                        <span class="label">Best Record:</span>
-                        <span class="value" id="record-${route.id}">Cargando...</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-/**
- * Renderiza las rutas en el contenedor y activa el Lazy Loading.
- */
-function renderRoutes(routes) {
-    const container = document.getElementById('routes-container');
-    if (!container) return;
-
-    container.innerHTML = routes.map(createRouteCardHTML).join('');
-
-    // Activar el observador de Lazy Loading en las imágenes recién insertadas
-    observeLazyImages();
-}
-
-// ==========================================
-// 4. INICIALIZACIÓN
-// ==========================================
-document.addEventListener('DOMContentLoaded', async () => {
-    initLazyLoading();
-
-    // Ejemplo de integración al cargar los datos
-    const sheetData = await fetchGoogleSheetDataCached(GOOGLE_SHEET_CSV_URL);
-    
-    // Continuar con el procesado del Hall of Fame, podios y rutas...
-});
 
 async function loadLeaderboardForRoute(route) {
     const circuitTabs = document.getElementById('container-tabs-circuit');
@@ -2373,6 +2273,20 @@ window.addEventListener('DOMContentLoaded', () => {
     if (totalEl) totalEl.textContent = totalNum;
     if (classEl) classEl.textContent = currentClass.toUpperCase();
 }
+// Activa la carga diferida nativa en las imágenes
+function applyLazyLoadingToImages() {
+    const images = document.querySelectorAll('img');
+    images.forEach(img => {
+        if (!img.hasAttribute('loading')) {
+            img.setAttribute('loading', 'lazy');
+        }
+    });
+}
+
+// Ejecutar al cargar la página sin interferir con otros eventos
+window.addEventListener('DOMContentLoaded', () => {
+    applyLazyLoadingToImages();
+});
     </script>
 
 </body>
