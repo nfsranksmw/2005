@@ -1880,130 +1880,17 @@ const routesData = [
 
         let currentCategory = 'all';
 
-    // ==========================================
-// ==========================================
-// 1. SISTEMA DE CACHÉ INTELIGENTE (POR URL)
-// ==========================================
-const CACHE_KEY_PREFIX = 'nfs_sheet_cache_';
-const CACHE_TTL_MINUTES = 10; // Tiempo de vida del caché en minutos
-
-/**
- * Obtiene datos de Google Sheets usando caché individual por URL con expiración.
- */
-async function fetchGoogleSheetDataCached(sheetUrl) {
-    if (!sheetUrl) return [];
-
-    const now = Date.now();
-    const ttlMs = CACHE_TTL_MINUTES * 60 * 1000;
-    // Clave única basada en la URL del Sheet para no sobrescribir entre rutas
-    const cacheKey = CACHE_KEY_PREFIX + btoa(sheetUrl).substring(0, 32);
-
-    // 1. Intentar leer desde localStorage
-    try {
-        const cachedRaw = localStorage.getItem(cacheKey);
-        if (cachedRaw) {
-            const cachedData = JSON.parse(cachedRaw);
-            if (now - cachedData.timestamp < ttlMs) {
-                return cachedData.data;
-            }
-        }
-    } catch (err) {
-        console.warn('Error al leer caché local:', err);
-    }
-
-    // 2. Si no hay caché o expiró, solicitar a la red
-    try {
-        const response = await fetch(sheetUrl);
-        if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
-        
-        const csvText = await response.text();
-        const parsedData = (typeof parseCSV === 'function') ? parseCSV(csvText) : [];
-
-        // 3. Guardar en localStorage
-        try {
-            localStorage.setItem(cacheKey, JSON.stringify({
-                timestamp: now,
-                data: parsedData
-            }));
-        } catch (err) {
-            console.warn('Error al guardar en caché local:', err);
-        }
-
-        return parsedData;
-    } catch (error) {
-        console.error('Error al solicitar datos:', error);
-        
-        // Fallback: usar caché caducado si falla la red
-        const staleCache = localStorage.getItem(cacheKey);
-        if (staleCache) {
-            console.warn('⚠️ Fallo de red. Usando caché anterior como respaldo.');
-            return JSON.parse(staleCache).data;
-        }
-        return [];
-    }
-}
-
-// Redireccionar llamadas antiguas a la versión con caché
-async function fetchGoogleSheetData(sheetUrl) {
-    return await fetchGoogleSheetDataCached(sheetUrl);
-}
-
-// ==========================================
-// 2. LAZY LOADING DE IMÁGENES
-// ==========================================
-let imageObserver = null;
-
-function initLazyLoading() {
-    if ('IntersectionObserver' in window) {
-        imageObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    const realSrc = img.getAttribute('data-src');
-                    if (realSrc) {
-                        img.src = realSrc;
-                        img.removeAttribute('data-src');
-                        img.classList.remove('lazy-placeholder');
-                        img.classList.add('loaded');
-                    }
-                    observer.unobserve(img);
-                }
-            });
-        }, {
-            rootMargin: '100px 0px',
-            threshold: 0.01
-        });
-    }
-}
-
-function observeLazyImages() {
-    const lazyImages = document.querySelectorAll('img.lazy-load[data-src]');
-    lazyImages.forEach(img => {
-        if (imageObserver) {
-            imageObserver.observe(img);
-        } else {
-            img.src = img.getAttribute('data-src');
-        }
-    });
-}
-
-// ==========================================
-// 3. RENDERIZADO DE RUTAS Y FILTROS
-// ==========================================
-let currentCategory = 'all';
-
-async function renderRoutes(dataToRender) {
-    const container = document.getElementById('routes-grid-container') || document.getElementById('routes-container');
+    async function renderRoutes(dataToRender) {
+    const container = document.getElementById('routes-grid-container');
     if (!container) return;
     container.innerHTML = '';
 
-    if (!dataToRender || dataToRender.length === 0) {
+    if (dataToRender.length === 0) {
         container.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 20px;">No se encontraron rutas con ese nombre.</p>`;
         return;
     }
 
-    // Obtener información de récords en paralelo usando el caché
-    const routeCards = await Promise.all(dataToRender.map(async (route) => {
+    for (const route of dataToRender) {
         let iconHtml = "";
         let letterBadge = route.type ? route.type.charAt(0).toUpperCase() : "A";
 
@@ -2027,26 +1914,22 @@ async function renderRoutes(dataToRender) {
 
         try {
             let sampleSheet = "";
-            if (route.type === "Circuito") sampleSheet = route.sheets?.junkmanSingle || route.sheets?.bmwSingle;
-            else sampleSheet = route.sheets?.junkman || route.sheets?.bmw;
+            if (route.type === "Circuito") sampleSheet = route.sheets.junkmanSingle || route.sheets.bmwSingle;
+            else sampleSheet = route.sheets.junkman || route.sheets.bmw;
 
             if (sampleSheet) {
-                let rows = await fetchGoogleSheetDataCached(sampleSheet);
-                let topRow = rows.find(r => String(r.rank).includes("1") || r.rank === "1");
+                let rows = await fetchGoogleSheetData(sampleSheet);
+                let topRow = rows.find(r => r.rank.includes("1") || r.rank === "1");
                 if (topRow) {
                     bestRecordText = topRow.time;
                     bestDriver = topRow.driver;
                     bestCar = topRow.car;
                 }
             }
-        } catch (e) {
-            console.warn(`No se pudo obtener el récord para la ruta ${route.name}:`, e);
-        }
+        } catch (e) { }
 
         const card = document.createElement('div');
         card.className = 'route-card';
-        card.setAttribute('data-category', route.type || '');
-        
         card.onclick = () => {
             const titleEl = document.getElementById('leaderboard-title');
             if (titleEl) titleEl.innerText = `Leaderboard: ${route.name} (${route.type})`;
@@ -2054,6 +1937,7 @@ async function renderRoutes(dataToRender) {
             if (typeof switchView === 'function') switchView('leaderboard');
         };
 
+        // Estilos mejorados integrados correctamente
         let detailsHtml = bestDriver ? `
             <div class="route-record-preview" style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
                 <span class="route-time-display" style="color: #ffffff; font-weight: 800;">⏱️ ${bestRecordText}</span>
@@ -2066,20 +1950,7 @@ async function renderRoutes(dataToRender) {
             </div>
         ` : `<div class="route-record-preview" style="font-style: italic; color: #64748b; font-size: 12px;">Disponible para récord</div>`;
 
-        let imageHtml = route.image ? `
-            <div class="card-image-wrapper">
-                <img 
-                    class="route-image lazy-load lazy-placeholder" 
-                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 9'%3E%3C/svg%3E" 
-                    data-src="${route.image}" 
-                    alt="${route.name}"
-                    loading="lazy"
-                />
-            </div>
-        ` : '';
-
         card.innerHTML = `
-            ${imageHtml}
             <div class="route-icon-container">
                 <div class="route-icon-box">${iconHtml}</div>
                 <div class="route-badge-letter">${letterBadge}</div>
@@ -2090,18 +1961,11 @@ async function renderRoutes(dataToRender) {
             </div>
             <div class="route-action-icon" title="Ver Leaderboard">🗺️</div>
         `;
-        return card;
-    }));
-
-    // Inserción masiva en el DOM
-    routeCards.forEach(card => container.appendChild(card));
-
-    // Activar Lazy Loading de las imágenes recién agregadas
-    observeLazyImages();
+        container.appendChild(card);
+    }
 }
 
 function filterRoutes() {
-    if (typeof routesData === 'undefined') return;
     const searchInput = document.getElementById('route-search');
     const query = searchInput ? searchInput.value.toLowerCase() : "";
     const filtered = routesData.filter(route => {
@@ -2119,9 +1983,39 @@ function setCategory(category, btn) {
     filterRoutes();
 }
 
-// ==========================================
-// 4. TABLAS Y LEADERBOARDS (CON CACHÉ)
-// ==========================================
+async function fetchGoogleSheetData(csvUrl) {
+    try {
+        if (!csvUrl || csvUrl.trim() === "" || csvUrl.includes("PEGA_") || csvUrl.includes("URL_CSV_")) {
+            return [];
+        }
+
+        const response = await fetch(csvUrl);
+        const text = await response.text();
+        const rows = text.split("\n");
+        let data = [];
+
+        for (let i = 1; i < rows.length; i++) {
+            let r = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+            if (r && r.length >= 8 && r[0].trim() !== "") {
+                let rawYt = r[7] ? r[7].replace(/"/g, '').replace(/\r/g, '').trim() : "#";
+                data.push({
+                    rank: r[0].replace(/"/g, '').replace(/\r/g, '').trim(),
+                    driver: r[1].replace(/"/g, '').replace(/\r/g, '').trim(),
+                    time: r[2].replace(/"/g, '').replace(/\r/g, '').trim(),
+                    device: r[3].replace(/"/g, '').replace(/\r/g, '').trim(),
+                    car: r[4].replace(/"/g, '').replace(/\r/g, '').trim(),
+                    gearbox: r[5].replace(/"/g, '').replace(/\r/g, '').trim(),
+                    date: r[6].replace(/"/g, '').replace(/\r/g, '').trim(),
+                    yt: rawYt !== "" ? rawYt : "#"
+                });
+            }
+        }
+        return data;
+    } catch (error) {
+        return [];
+    }
+}
+
 async function loadLeaderboardForRoute(route) {
     const circuitTabs = document.getElementById('container-tabs-circuit');
     const sprintDragTabs = document.getElementById('container-tabs-sprintdrag');
@@ -2133,10 +2027,10 @@ async function loadLeaderboardForRoute(route) {
         if (sprintDragTabs) sprintDragTabs.classList.remove('active-group');
         if (typeof switchCircuitTab === 'function') switchCircuitTab('junkman-single', circuitTabs.querySelector('.tab-btn'));
 
-        let d1 = await fetchGoogleSheetDataCached(route.sheets?.junkmanSingle);
-        let d2 = await fetchGoogleSheetDataCached(route.sheets?.junkmanFast);
-        let d3 = await fetchGoogleSheetDataCached(route.sheets?.bmwSingle);
-        let d4 = await fetchGoogleSheetDataCached(route.sheets?.bmwFast);
+        let d1 = await fetchGoogleSheetData(route.sheets.junkmanSingle);
+        let d2 = await fetchGoogleSheetData(route.sheets.junkmanFast);
+        let d3 = await fetchGoogleSheetData(route.sheets.bmwSingle);
+        let d4 = await fetchGoogleSheetData(route.sheets.bmwFast);
 
         renderTableRows('tbody-junkman-single', d1);
         renderTableRows('tbody-junkman-fast', d2);
@@ -2147,8 +2041,8 @@ async function loadLeaderboardForRoute(route) {
         if (sprintDragTabs) sprintDragTabs.classList.add('active-group');
         if (typeof switchSprintDragTab === 'function') switchSprintDragTab('sprintdrag-junkman', sprintDragTabs.querySelector('.tab-btn'));
 
-        let dJunkman = await fetchGoogleSheetDataCached(route.sheets?.junkman);
-        let dBmw = await fetchGoogleSheetDataCached(route.sheets?.bmw);
+        let dJunkman = await fetchGoogleSheetData(route.sheets.junkman);
+        let dBmw = await fetchGoogleSheetData(route.sheets.bmw);
 
         renderTableRows('tbody-sprintdrag-junkman', dJunkman);
         renderTableRows('tbody-sprintdrag-bmw', dBmw);
@@ -2161,7 +2055,7 @@ function renderTableRows(tbodyId, dataRows) {
     tbody.innerHTML = '';
     
     if (!dataRows || dataRows.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 15px;">No hay registros disponibles.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 15px;">No hay registros disponibles o falta configurar la URL CSV.</td></tr>`;
         return;
     }
 
@@ -2188,7 +2082,7 @@ function renderTableRows(tbodyId, dataRows) {
 
 async function generateHallOfFame() {
     const hofTbody = document.getElementById('tbody-hall-of-fame');
-    if (!hofTbody || typeof routesData === 'undefined') return;
+    if (!hofTbody) return;
     let driverCounts = {};
 
     for (const route of routesData) {
@@ -2204,9 +2098,9 @@ async function generateHallOfFame() {
         }
 
         for (const sheetUrl of sheetsToFetch) {
-            const rows = await fetchGoogleSheetDataCached(sheetUrl);
+            const rows = await fetchGoogleSheetData(sheetUrl);
             if (rows && rows.length > 0) {
-                const topDriverRow = rows.find(r => String(r.rank).includes("1") || r.rank === "1");
+                const topDriverRow = rows.find(r => r.rank.includes("1") || r.rank === "1");
                 if (topDriverRow && topDriverRow.driver) {
                     let driverName = topDriverRow.driver.trim().toUpperCase();
                     driverCounts[driverName] = (driverCounts[driverName] || 0) + 1;
@@ -2242,7 +2136,6 @@ async function generateHallOfFame() {
 }
 
 async function processPodiumsForRoutes(filterType = null) {
-    if (typeof routesData === 'undefined') return [];
     let podiumStats = {};
 
     for (const route of routesData) {
@@ -2260,9 +2153,9 @@ async function processPodiumsForRoutes(filterType = null) {
         }
 
         for (const sheetUrl of sheetsToFetch) {
-            const rows = await fetchGoogleSheetDataCached(sheetUrl);
+            const rows = await fetchGoogleSheetData(sheetUrl);
             rows.forEach(r => {
-                let rankNum = parseInt(String(r.rank).replace(/[^0-9]/g, ''));
+                let rankNum = parseInt(r.rank.replace(/[^0-9]/g, ''));
                 if ([1, 2, 3].includes(rankNum) && r.driver) {
                     let driverName = r.driver.trim().toUpperCase();
                     if (!podiumStats[driverName]) {
@@ -2334,7 +2227,15 @@ async function generateGlobalLeaderboards() {
     await renderGlobalPodiumTable('tbody-global-drag', 'Drag');
 }
 
-function updateLeaderboardStats(showingNum, totalNum, currentClass = 'ALL') {
+window.addEventListener('DOMContentLoaded', () => {
+    generateHallOfFame();
+    generateGlobalLeaderboards();
+    if (typeof routesData !== 'undefined') {
+        renderRoutes(routesData);
+    }
+});
+<!-- LEADERBOARD STATAS ... -->
+        function updateLeaderboardStats(showingNum, totalNum, currentClass = 'ALL') {
     const showingEl = document.getElementById('showing-count');
     const totalEl = document.getElementById('total-races-count');
     const classEl = document.getElementById('current-class-filter');
@@ -2343,20 +2244,6 @@ function updateLeaderboardStats(showingNum, totalNum, currentClass = 'ALL') {
     if (totalEl) totalEl.textContent = totalNum;
     if (classEl) classEl.textContent = currentClass.toUpperCase();
 }
-
-// ==========================================
-// 5. INICIALIZACIÓN
-// ==========================================
-document.addEventListener('DOMContentLoaded', () => {
-    initLazyLoading();
-    
-    if (typeof routesData !== 'undefined') {
-        renderRoutes(routesData);
-    }
-
-    generateHallOfFame();
-    generateGlobalLeaderboards();
-});
     </script>
 
 </body>
