@@ -1982,22 +1982,35 @@ async function renderRoutes(dataToRender) {
     }
 }
 
+// Variable global para almacenar la categoría seleccionada
+let currentCategory = 'all';
+
 function filterRoutes() {
     const searchInput = document.getElementById('route-search');
-    const query = searchInput ? searchInput.value.toLowerCase() : "";
+    const query = searchInput ? searchInput.value.toLowerCase().trim() : "";
     const sourceData = typeof routesData !== 'undefined' ? routesData : [];
     
     const filtered = sourceData.filter(route => {
-        const matchesCategory = typeof currentCategory === 'undefined' || currentCategory === 'all' || route.type === currentCategory;
-        const matchesSearch = route.name.toLowerCase().includes(query);
+        // Normalizamos el tipo de ruta y la categoría seleccionada
+        const routeType = route.type ? route.type.toString().trim().toLowerCase() : "";
+        const selectedCat = typeof currentCategory !== 'undefined' ? currentCategory.toString().trim().toLowerCase() : 'all';
+
+        // Comprobación flexible de categoría
+        const matchesCategory = selectedCat === 'all' || routeType === selectedCat;
+        
+        // Comprobación de búsqueda por nombre
+        const matchesSearch = route.name ? route.name.toLowerCase().includes(query) : true;
+
         return matchesCategory && matchesSearch;
     });
+
     renderRoutes(filtered);
 }
 
 function setCategory(category, btn) {
     document.querySelectorAll('.filter-bar .filter-btn').forEach(b => b.classList.remove('active'));
     if (btn) btn.classList.add('active');
+    
     currentCategory = category;
     filterRoutes();
 }
