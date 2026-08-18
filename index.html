@@ -2167,40 +2167,62 @@ async function renderRoutes(dataToRender) {
 /**
  * Función encargada de cargar los datos de previsualización sólo cuando la tarjeta es visible
  */
+/* =======================================================
+   SISTEMA DE LAZY LOADING ROBUSTO (COMPATIBLE CON DRAG)
+   ======================================================= */
+
+/**
+ * Carga diferida de previsualización de récord
+ */
 async function loadCardPreviewLazy(cardElement, route) {
     const previewContainer = cardElement.querySelector('.route-preview-placeholder');
     if (!previewContainer) return;
 
     try {
         let sampleSheet = "";
-        if (route.type === "Circuito") {
-            sampleSheet = route.sheets.junkmanSingle || route.sheets.bmwSingle;
-        } else {
-            sampleSheet = route.sheets.junkman || route.sheets.bmw;
-        }
 
-        if (sampleSheet) {
-            let rows = await fetchGoogleSheetData(sampleSheet);
-            let topRow = rows.find(r => r.rank.includes("1") || r.rank === "1");
-
-            if (topRow) {
-                previewContainer.outerHTML = `
-                    <div class="route-record-preview" style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
-                        <span class="route-time-display" style="color: #ffffff; font-weight: 800;">⏱️ ${topRow.time}</span>
-                        <span style="font-size: 13px; color: #cbd5e1; font-weight: 600;">👤 ${topRow.driver}</span>
-                    </div>
-                    <div class="route-car-container" style="overflow: hidden; width: 100%; margin-top: 6px;">
-                        <div class="marquee" style="white-space: nowrap; font-size: 13px; font-weight: 700; color: #94a3b8;">
-                            🚗 ${topRow.car}
-                        </div>
-                    </div>
-                `;
-                return;
+        // Verificación segura de sheets para evitar errores si route.sheets no existe o es nulo
+        if (route && route.sheets) {
+            if (route.type === "Circuito") {
+                sampleSheet = route.sheets.junkmanSingle || route.sheets.bmwSingle || route.sheets.junkman || route.sheets.bmw || "";
+            } else if (route.type === "Drag") {
+                // Para Drag busca cualquier hoja disponible en su objeto sheets
+                sampleSheet = route.sheets.junkman || route.sheets.bmw || route.sheets.drag || route.sheets.single || Object.values(route.sheets)[0] || "";
+            } else {
+                // Sprint o cualquier otro tipo
+                sampleSheet = route.sheets.junkman || route.sheets.bmw || Object.values(route.sheets)[0] || "";
             }
         }
+
+        // Si no hay URL de hoja válida configurada
+        if (!sampleSheet || sampleSheet.trim() === "") {
+            previewContainer.innerHTML = `<span style="font-style: italic; color: #64748b; font-size: 12px;">Disponible para récord</span>`;
+            return;
+        }
+
+        // Consultar datos desde la caché / red
+        let rows = await fetchGoogleSheetData(sampleSheet);
+        let topRow = Array.isArray(rows) ? rows.find(r => r.rank && (r.rank.includes("1") || r.rank === "1")) : null;
+
+        if (topRow) {
+            previewContainer.outerHTML = `
+                <div class="route-record-preview" style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+                    <span class="route-time-display" style="color: #ffffff; font-weight: 800;">⏱️ ${topRow.time}</span>
+                    <span style="font-size: 13px; color: #cbd5e1; font-weight: 600;">👤 ${topRow.driver}</span>
+                </div>
+                <div class="route-car-container" style="overflow: hidden; width: 100%; margin-top: 6px;">
+                    <div class="marquee" style="white-space: nowrap; font-size: 13px; font-weight: 700; color: #94a3b8;">
+                        🚗 ${topRow.car}
+                    </div>
+                </div>
+            `;
+            return;
+        }
+
         previewContainer.innerHTML = `<span style="font-style: italic; color: #64748b; font-size: 12px;">Disponible para récord</span>`;
     } catch (e) {
-        previewContainer.innerHTML = `<span style="font-style: italic; color: #64748b; font-size: 12px;">Sin datos</span>`;
+        console.warn("Error en la previsualización de:", route ? route.name : "Ruta", e);
+        previewContainer.innerHTML = `<span style="font-style: italic; color: #64748b; font-size: 12px;">Disponible para récord</span>`;
     }
 }
 
