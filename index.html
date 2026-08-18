@@ -1086,393 +1086,401 @@
     </section>
 
     <script>
-        function toggleMenu() {
-            document.getElementById('main-nav').classList.toggle('open');
+    function toggleMenu() {
+        document.getElementById('main-nav').classList.toggle('open');
+    }
+
+    function switchView(viewId) {
+        document.querySelectorAll('.view-section').forEach(section => {
+            section.classList.remove('active');
+        });
+        document.querySelectorAll('nav a').forEach(link => {
+            link.classList.remove('active');
+        });
+
+        document.getElementById('view-' + viewId).classList.add('active');
+        if (document.getElementById('nav-' + viewId)) {
+            document.getElementById('nav-' + viewId).classList.add('active');
         }
+        document.getElementById('main-nav').classList.remove('open');
+        window.scrollTo(0, 0);
+    }
 
-        function switchView(viewId) {
-            document.querySelectorAll('.view-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.querySelectorAll('nav a').forEach(link => {
-                link.classList.remove('active');
-            });
+    function switchCircuitTab(tabId, btn) {
+        document.querySelectorAll('.circuit-section').forEach(sec => sec.classList.remove('active'));
+        document.querySelectorAll('#container-tabs-circuit .tab-btn').forEach(b => b.classList.remove('active'));
 
-            document.getElementById('view-' + viewId).classList.add('active');
-            if(document.getElementById('nav-' + viewId)) {
-                document.getElementById('nav-' + viewId).classList.add('active');
+        document.getElementById('tab-' + tabId).classList.add('active');
+        btn.classList.add('active');
+    }
+
+    function switchSprintDragTab(tabId, btn) {
+        document.querySelectorAll('.sprintdrag-section').forEach(sec => sec.classList.remove('active'));
+        document.querySelectorAll('#container-tabs-sprintdrag .tab-btn').forEach(b => b.classList.remove('active'));
+
+        document.getElementById('tab-' + tabId).classList.add('active');
+        btn.classList.add('active');
+    }
+
+    function switchGlobalRouteTab(tabId, btn) {
+        document.querySelectorAll('.globalroute-section').forEach(sec => sec.classList.remove('active'));
+        document.querySelectorAll('#container-tabs-globalroutes .tab-btn').forEach(b => b.classList.remove('active'));
+
+        document.getElementById('tab-global-' + tabId).classList.add('active');
+        btn.classList.add('active');
+    }
+
+    // --- BASE DE DATOS DE RUTAS Y SUS ENLACES CSV ESPECÍFICOS ---
+    const routesData = [
+        // --- CIRCUITOS (Requieren 4 URLs CSV) ---
+        { 
+            name: "City Perimeter", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=1342310622&single=true&output=csv"
             }
-            document.getElementById('main-nav').classList.remove('open');
-            window.scrollTo(0, 0);
-        }
-
-        function switchCircuitTab(tabId, btn) {
-            document.querySelectorAll('.circuit-section').forEach(sec => sec.classList.remove('active'));
-            document.querySelectorAll('#container-tabs-circuit .tab-btn').forEach(b => b.classList.remove('active'));
-
-            document.getElementById('tab-' + tabId).classList.add('active');
-            btn.classList.add('active');
-        }
-
-        function switchSprintDragTab(tabId, btn) {
-            document.querySelectorAll('.sprintdrag-section').forEach(sec => sec.classList.remove('active'));
-            document.querySelectorAll('#container-tabs-sprintdrag .tab-btn').forEach(b => b.classList.remove('active'));
-
-            document.getElementById('tab-' + tabId).classList.add('active');
-            btn.classList.add('active');
-        }
-
-        function switchGlobalRouteTab(tabId, btn) {
-            document.querySelectorAll('.globalroute-section').forEach(sec => sec.classList.remove('active'));
-            document.querySelectorAll('#container-tabs-globalroutes .tab-btn').forEach(b => b.classList.remove('active'));
-
-            document.getElementById('tab-global-' + tabId).classList.add('active');
-            btn.classList.add('active');
-        }
-
-       // --- BASE DE DATOS DE RUTAS Y SUS ENLACES CSV ESPECÍFICOS ---
-const routesData = [
-    // --- CIRCUITOS (Requieren 4 URLs CSV) ---
-    { 
-        name: "City Perimeter", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=634347005&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrC0TBAODyviJ7i2vO-v9lDjbQSJwbrhYid4zM86YIoozEZC7knLtPOPjlYIkcgjHjamgSG7-Lu8Rm/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-    { 
-        name: "Ironwood States", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYMNQXaAzlB0eoNiiWX5RekaYWGZWXGgYbWsPSj57AhOjmkh9zGXetaIROVrYoys1Djg4j7aCkFyup/pub?gid=634347005&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYMNQXaAzlB0eoNiiWX5RekaYWGZWXGgYbWsPSj57AhOjmkh9zGXetaIROVrYoys1Djg4j7aCkFyup/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYMNQXaAzlB0eoNiiWX5RekaYWGZWXGgYbWsPSj57AhOjmkh9zGXetaIROVrYoys1Djg4j7aCkFyup/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYMNQXaAzlB0eoNiiWX5RekaYWGZWXGgYbWsPSj57AhOjmkh9zGXetaIROVrYoys1Djg4j7aCkFyup/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-    { 
-        name: "Campus Way", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vStZo0IeCdXXjHJfhth7FwjoHaKER81KduHg2OX-rkTfk27g8IMKo8UnrWfGfEhZ4_pz7bvsd7HWtqu/pub?gid=634347005&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vStZo0IeCdXXjHJfhth7FwjoHaKER81KduHg2OX-rkTfk27g8IMKo8UnrWfGfEhZ4_pz7bvsd7HWtqu/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vStZo0IeCdXXjHJfhth7FwjoHaKER81KduHg2OX-rkTfk27g8IMKo8UnrWfGfEhZ4_pz7bvsd7HWtqu/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vStZo0IeCdXXjHJfhth7FwjoHaKER81KduHg2OX-rkTfk27g8IMKo8UnrWfGfEhZ4_pz7bvsd7HWtqu/pub?gid=509105205&single=true&output=csv"
-        }
-    },
-    { 
-        name: "Highlands", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vThZe-ShdgBop3CgCotuQdozB19ZFXp607ufphufolUEReNz-eG1lZ_wh1HMpj7lG37iPdbMypHeojM/pub?gid=634347005&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vThZe-ShdgBop3CgCotuQdozB19ZFXp607ufphufolUEReNz-eG1lZ_wh1HMpj7lG37iPdbMypHeojM/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vThZe-ShdgBop3CgCotuQdozB19ZFXp607ufphufolUEReNz-eG1lZ_wh1HMpj7lG37iPdbMypHeojM/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vThZe-ShdgBop3CgCotuQdozB19ZFXp607ufphufolUEReNz-eG1lZ_wh1HMpj7lG37iPdbMypHeojM/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-    { 
-        name: "Petersburgs", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQcjeFik-iTKEyWvkJbjXWlt6ifYSwD2cRe956vT1qte57NAZhxBqdKu4DZaQLy_d8fWegIJsZfb-_T/pub?gid=634347005&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQcjeFik-iTKEyWvkJbjXWlt6ifYSwD2cRe956vT1qte57NAZhxBqdKu4DZaQLy_d8fWegIJsZfb-_T/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQcjeFik-iTKEyWvkJbjXWlt6ifYSwD2cRe956vT1qte57NAZhxBqdKu4DZaQLy_d8fWegIJsZfb-_T/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQcjeFik-iTKEyWvkJbjXWlt6ifYSwD2cRe956vT1qte57NAZhxBqdKu4DZaQLy_d8fWegIJsZfb-_T/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-    { 
-        name: "Heritage Height", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQFzuJMkWX14AhCwjGg9erH4ldCk-12LRLj1ynmSWsUaJ99q21K6MoNT0uJ7Iuf5IvCOc50ASgK8qTC/pub?gid=634347005&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQFzuJMkWX14AhCwjGg9erH4ldCk-12LRLj1ynmSWsUaJ99q21K6MoNT0uJ7Iuf5IvCOc50ASgK8qTC/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQFzuJMkWX14AhCwjGg9erH4ldCk-12LRLj1ynmSWsUaJ99q21K6MoNT0uJ7Iuf5IvCOc50ASgK8qTC/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQFzuJMkWX14AhCwjGg9erH4ldCk-12LRLj1ynmSWsUaJ99q21K6MoNT0uJ7Iuf5IvCOc50ASgK8qTC/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-    { 
-        name: "Omega", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTztSGMlyoEleRpj7iVjcIPw5YhrAR9q7kCsPKjyvrC-WVss9VjAc1Ol137788aMtHSoZ3x42Y2f2UQ/pub?gid=634347005&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vTztSGMlyoEleRpj7iVjcIPw5YhrAR9q7kCsPKjyvrC-WVss9VjAc1Ol137788aMtHSoZ3x42Y2f2UQ/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vTztSGMlyoEleRpj7iVjcIPw5YhrAR9q7kCsPKjyvrC-WVss9VjAc1Ol137788aMtHSoZ3x42Y2f2UQ/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vTztSGMlyoEleRpj7iVjcIPw5YhrAR9q7kCsPKjyvrC-WVss9VjAc1Ol137788aMtHSoZ3x42Y2f2UQ/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-    { 
-        name: "Diamond", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTztSGMlyoEleRpj7iVjcIPw5YhrAR9q7kCsPKjyvrC-WVss9VjAc1Ol137788aMtHSoZ3x42Y2f2UQ/pub?gid=1342310622&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vSbVXM92XBkk6rNs9WXmV20tvIE4Q6hTCqaSVla7mS8cxt0qcXFZADtJGtpdYBur29OmOEKoCWiluYI/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vSbVXM92XBkk6rNs9WXmV20tvIE4Q6hTCqaSVla7mS8cxt0qcXFZADtJGtpdYBur29OmOEKoCWiluYI/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vSbVXM92XBkk6rNs9WXmV20tvIE4Q6hTCqaSVla7mS8cxt0qcXFZADtJGtpdYBur29OmOEKoCWiluYI/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-    { 
-        name: "Hillcrest Boundary", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTTL_N-_AsDPxiluo17ftyPpkniueVgVOs7KUS6SqQpxUBtwSA4oCXpwdqDXE-dHpVe_ekB_-_y_E_L/pub?gid=634347005&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vTTL_N-_AsDPxiluo17ftyPpkniueVgVOs7KUS6SqQpxUBtwSA4oCXpwdqDXE-dHpVe_ekB_-_y_E_L/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vTTL_N-_AsDPxiluo17ftyPpkniueVgVOs7KUS6SqQpxUBtwSA4oCXpwdqDXE-dHpVe_ekB_-_y_E_L/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vTTL_N-_AsDPxiluo17ftyPpkniueVgVOs7KUS6SqQpxUBtwSA4oCXpwdqDXE-dHpVe_ekB_-_y_E_L/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-    { 
-        name: "Circle Rose", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vScO-5zpY2Amb9rF8VdaC5-W7t3it7PUpsOSFNHRm9sAY6oAvtuCnMEWI2xJjKOP8z1bOkB_jdNePC6/pub?gid=634347005&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vScO-5zpY2Amb9rF8VdaC5-W7t3it7PUpsOSFNHRm9sAY6oAvtuCnMEWI2xJjKOP8z1bOkB_jdNePC6/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vScO-5zpY2Amb9rF8VdaC5-W7t3it7PUpsOSFNHRm9sAY6oAvtuCnMEWI2xJjKOP8z1bOkB_jdNePC6/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vScO-5zpY2Amb9rF8VdaC5-W7t3it7PUpsOSFNHRm9sAY6oAvtuCnMEWI2xJjKOP8z1bOkB_jdNePC6/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-    { 
-        name: "Switchback", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSamV2dwugajyaHKTVIMkDMf1B9fw2L1Hsz-VFCnSb_mJRg1XPQFy7QC_kn4il96Oz54RakPM6klUao/pub?gid=634347005&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vSamV2dwugajyaHKTVIMkDMf1B9fw2L1Hsz-VFCnSb_mJRg1XPQFy7QC_kn4il96Oz54RakPM6klUao/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vSamV2dwugajyaHKTVIMkDMf1B9fw2L1Hsz-VFCnSb_mJRg1XPQFy7QC_kn4il96Oz54RakPM6klUao/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vSamV2dwugajyaHKTVIMkDMf1B9fw2L1Hsz-VFCnSb_mJRg1XPQFy7QC_kn4il96Oz54RakPM6klUao/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-    { 
-        name: "Hospital Switchback", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRdgOybCQcg9N6oKRPpHNEW4qMWtQEXWOtNEzaLmJ7hcU_r1UUdKRQTRdAJ87eVk9L5SZfVxwMojxrR/pub?gid=634347005&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRdgOybCQcg9N6oKRPpHNEW4qMWtQEXWOtNEzaLmJ7hcU_r1UUdKRQTRdAJ87eVk9L5SZfVxwMojxrR/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRdgOybCQcg9N6oKRPpHNEW4qMWtQEXWOtNEzaLmJ7hcU_r1UUdKRQTRdAJ87eVk9L5SZfVxwMojxrR/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vRdgOybCQcg9N6oKRPpHNEW4qMWtQEXWOtNEzaLmJ7hcU_r1UUdKRQTRdAJ87eVk9L5SZfVxwMojxrR/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-    { 
-        name: "Dunwich Bay", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUcIXZt1I-19XmXW86QHntG6tulbvynivFyMGTXxe6UIEGPr9mJtLDASeVdlM3QUd2HtlIrBIBb5tY/pub?gid=634347005&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUcIXZt1I-19XmXW86QHntG6tulbvynivFyMGTXxe6UIEGPr9mJtLDASeVdlM3QUd2HtlIrBIBb5tY/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUcIXZt1I-19XmXW86QHntG6tulbvynivFyMGTXxe6UIEGPr9mJtLDASeVdlM3QUd2HtlIrBIBb5tY/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUcIXZt1I-19XmXW86QHntG6tulbvynivFyMGTXxe6UIEGPr9mJtLDASeVdlM3QUd2HtlIrBIBb5tY/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-    { 
-        name: "Boundary", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR8ZOL1_Z7Lcv1_e5OVPn4u5yD_FwcGfYwwNEYNXtGM4jYgnEXwZh_K8nOx6DgAP6Iiy1F6vBxWjCe0/pub?gid=634347005&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vR8ZOL1_Z7Lcv1_e5OVPn4u5yD_FwcGfYwwNEYNXtGM4jYgnEXwZh_K8nOx6DgAP6Iiy1F6vBxWjCe0/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vR8ZOL1_Z7Lcv1_e5OVPn4u5yD_FwcGfYwwNEYNXtGM4jYgnEXwZh_K8nOx6DgAP6Iiy1F6vBxWjCe0/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vR8ZOL1_Z7Lcv1_e5OVPn4u5yD_FwcGfYwwNEYNXtGM4jYgnEXwZh_K8nOx6DgAP6Iiy1F6vBxWjCe0/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-    { 
-        name: "Century Square", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRiydOeMiVJy4qJsAxhLxByhOw_Lv4l9m1NP4guWZlBdFLcxAx1LKO8TJcZiAVuTDUoFvdCcY04J7MT/pub?gid=634347005&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRiydOeMiVJy4qJsAxhLxByhOw_Lv4l9m1NP4guWZlBdFLcxAx1LKO8TJcZiAVuTDUoFvdCcY04J7MT/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRiydOeMiVJy4qJsAxhLxByhOw_Lv4l9m1NP4guWZlBdFLcxAx1LKO8TJcZiAVuTDUoFvdCcY04J7MT/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vRiydOeMiVJy4qJsAxhLxByhOw_Lv4l9m1NP4guWZlBdFLcxAx1LKO8TJcZiAVuTDUoFvdCcY04J7MT/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-    { 
-        name: "Heritage & Omega", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRiydOeMiVJy4qJsAxhLxByhOw_Lv4l9m1NP4guWZlBdFLcxAx1LKO8TJcZiAVuTDUoFvdCcY04J7MT/pub?gid=1342310622&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRVmUFaxSFBn3amevTa22qFuci_c3I-YSiQQJiYsklS_2yAOUtu2VFIsOJ9X4P3qFxaMBlNxSKa5mDG/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRVmUFaxSFBn3amevTa22qFuci_c3I-YSiQQJiYsklS_2yAOUtu2VFIsOJ9X4P3qFxaMBlNxSKa5mDG/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vRVmUFaxSFBn3amevTa22qFuci_c3I-YSiQQJiYsklS_2yAOUtu2VFIsOJ9X4P3qFxaMBlNxSKa5mDG/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-    { 
-        name: "Little Italy", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRmiklWwG2quphT8kdlFw6rzjH7UK7K5oW-g5vFXiy8hL7wuJyw1C9IENrjL-tJQKOmrAc-43flzGI7/pub?gid=634347005&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRmiklWwG2quphT8kdlFw6rzjH7UK7K5oW-g5vFXiy8hL7wuJyw1C9IENrjL-tJQKOmrAc-43flzGI7/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRmiklWwG2quphT8kdlFw6rzjH7UK7K5oW-g5vFXiy8hL7wuJyw1C9IENrjL-tJQKOmrAc-43flzGI7/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vRmiklWwG2quphT8kdlFw6rzjH7UK7K5oW-g5vFXiy8hL7wuJyw1C9IENrjL-tJQKOmrAc-43flzGI7/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-    { 
-        name: "Ironhorse", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQOkizIL_AytLlQXAbJN07Pu7TASTmt9TtUmuwy7EPO7f2Z6WNeBv2sD1FlAI_4JtQTyI3G15rbuS23/pub?gid=634347005&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQOkizIL_AytLlQXAbJN07Pu7TASTmt9TtUmuwy7EPO7f2Z6WNeBv2sD1FlAI_4JtQTyI3G15rbuS23/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQOkizIL_AytLlQXAbJN07Pu7TASTmt9TtUmuwy7EPO7f2Z6WNeBv2sD1FlAI_4JtQTyI3G15rbuS23/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQOkizIL_AytLlQXAbJN07Pu7TASTmt9TtUmuwy7EPO7f2Z6WNeBv2sD1FlAI_4JtQTyI3G15rbuS23/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-    { 
-        name: "Waterfront", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vT6xZTZewVghW7HA_qpsvpLdis6RvKhSrIeZtnyWywZlgf8FOW-dxUWLNnXf04bOHQ0eNnQioOBkQcd/pub?gid=634347005&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vT6xZTZewVghW7HA_qpsvpLdis6RvKhSrIeZtnyWywZlgf8FOW-dxUWLNnXf04bOHQ0eNnQioOBkQcd/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vT6xZTZewVghW7HA_qpsvpLdis6RvKhSrIeZtnyWywZlgf8FOW-dxUWLNnXf04bOHQ0eNnQioOBkQcd/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vT6xZTZewVghW7HA_qpsvpLdis6RvKhSrIeZtnyWywZlgf8FOW-dxUWLNnXf04bOHQ0eNnQioOBkQcd/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-    { 
-        name: "Gray Point", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNVdFs7Q7Kej4n0dCozLLPq6d2uN7pXbppX22Z-8ddkq37RGQLsv2GfeGV7CmUAd6Tt7I-7B_OP5g7/pubhtml?gid=634347005&single=true",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNVdFs7Q7Kej4n0dCozLLPq6d2uN7pXbppX22Z-8ddkq37RGQLsv2GfeGV7CmUAd6Tt7I-7B_OP5g7/pubhtml?gid=1989010516&single=true",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNVdFs7Q7Kej4n0dCozLLPq6d2uN7pXbppX22Z-8ddkq37RGQLsv2GfeGV7CmUAd6Tt7I-7B_OP5g7/pubhtml?gid=509105205&single=true",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNVdFs7Q7Kej4n0dCozLLPq6d2uN7pXbppX22Z-8ddkq37RGQLsv2GfeGV7CmUAd6Tt7I-7B_OP5g7/pubhtml?gid=1342310622&single=true"
-        }
-    },
-    { 
-        name: "Omega & Industries", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTB7YV0MbbNBKl5wMiCGs8hR0grRsQC2T7K8M4WpE0kZoUUZDRdh8flxiP9KmGfH6ao7fw473xCkPM4/pub?gid=634347005&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vTB7YV0MbbNBKl5wMiCGs8hR0grRsQC2T7K8M4WpE0kZoUUZDRdh8flxiP9KmGfH6ao7fw473xCkPM4/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vTB7YV0MbbNBKl5wMiCGs8hR0grRsQC2T7K8M4WpE0kZoUUZDRdh8flxiP9KmGfH6ao7fw473xCkPM4/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vTB7YV0MbbNBKl5wMiCGs8hR0grRsQC2T7K8M4WpE0kZoUUZDRdh8flxiP9KmGfH6ao7fw473xCkPM4/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-    { 
-        name: "Bay Bridge", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQTb0_qgTgzWFCx2C2tMd5fgvISZfHL74PP1nHEC5OHu2TW_w_I5K2REGxN5CoqzmM9l6RPIhp5j43K/pub?gid=634347005&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQTb0_qgTgzWFCx2C2tMd5fgvISZfHL74PP1nHEC5OHu2TW_w_I5K2REGxN5CoqzmM9l6RPIhp5j43K/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQTb0_qgTgzWFCx2C2tMd5fgvISZfHL74PP1nHEC5OHu2TW_w_I5K2REGxN5CoqzmM9l6RPIhp5j43K/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQTb0_qgTgzWFCx2C2tMd5fgvISZfHL74PP1nHEC5OHu2TW_w_I5K2REGxN5CoqzmM9l6RPIhp5j43K/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-    { 
-        name: "Camden Tunnel", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQdxfkyIJVuqgARoOwHBbicYTqcFIIb6gjv4rPAIIgwgqh9-wgSj2RGCot4kRx9Si0CA1Uf8TZnX2lW/pub?gid=634347005&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQdxfkyIJVuqgARoOwHBbicYTqcFIIb6gjv4rPAIIgwgqh9-wgSj2RGCot4kRx9Si0CA1Uf8TZnX2lW/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQdxfkyIJVuqgARoOwHBbicYTqcFIIb6gjv4rPAIIgwgqh9-wgSj2RGCot4kRx9Si0CA1Uf8TZnX2lW/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQdxfkyIJVuqgARoOwHBbicYTqcFIIb6gjv4rPAIIgwgqh9-wgSj2RGCot4kRx9Si0CA1Uf8TZnX2lW/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-    { 
-        name: "Campus Interchange", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQvwf0a_1I8u7B5yL6kVEW3SmNl1FvN29NYEAsrkJl8uf2OHEqYsuFrsti_7b5_tHc8K23SNv-pJTnS/pub?gid=634347005&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQvwf0a_1I8u7B5yL6kVEW3SmNl1FvN29NYEAsrkJl8uf2OHEqYsuFrsti_7b5_tHc8K23SNv-pJTnS/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQvwf0a_1I8u7B5yL6kVEW3SmNl1FvN29NYEAsrkJl8uf2OHEqYsuFrsti_7b5_tHc8K23SNv-pJTnS/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQvwf0a_1I8u7B5yL6kVEW3SmNl1FvN29NYEAsrkJl8uf2OHEqYsuFrsti_7b5_tHc8K23SNv-pJTnS/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-    { 
-        name: "Country Club", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTn0CLEhwX3VYc9Z33GVgUCXnuPxBrn0mZSq8E9vQTEYyKXrc65kB84wrBQaj1K9lua8j0fhi9iFRmq/pub?gid=634347005&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vTn0CLEhwX3VYc9Z33GVgUCXnuPxBrn0mZSq8E9vQTEYyKXrc65kB84wrBQaj1K9lua8j0fhi9iFRmq/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vTn0CLEhwX3VYc9Z33GVgUCXnuPxBrn0mZSq8E9vQTEYyKXrc65kB84wrBQaj1K9lua8j0fhi9iFRmq/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vTn0CLEhwX3VYc9Z33GVgUCXnuPxBrn0mZSq8E9vQTEYyKXrc65kB84wrBQaj1K9lua8j0fhi9iFRmq/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-    { 
-        name: "East Park", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTHiO__KHIdb-K4WC4fIQOkN0BXJIOizzkw2DlebmR-Q2b25U0sAGpJVhrBrTMupNggITNvcR7Govor/pub?gid=634347005&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vTHiO__KHIdb-K4WC4fIQOkN0BXJIOizzkw2DlebmR-Q2b25U0sAGpJVhrBrTMupNggITNvcR7Govor/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vTHiO__KHIdb-K4WC4fIQOkN0BXJIOizzkw2DlebmR-Q2b25U0sAGpJVhrBrTMupNggITNvcR7Govor/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vTHiO__KHIdb-K4WC4fIQOkN0BXJIOizzkw2DlebmR-Q2b25U0sAGpJVhrBrTMupNggITNvcR7Govor/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-    { 
-        name: "Oil Refinery", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSH_deUce4RWs9XEDTCB79rGj_rxbKmvCOHhD6qWOKePy7OrrwVJHhEI8xsBrbYOrq83dlQVrHMRPUk/pub?gid=634347005&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vSH_deUce4RWs9XEDTCB79rGj_rxbKmvCOHhD6qWOKePy7OrrwVJHhEI8xsBrbYOrq83dlQVrHMRPUk/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vSH_deUce4RWs9XEDTCB79rGj_rxbKmvCOHhD6qWOKePy7OrrwVJHhEI8xsBrbYOrq83dlQVrHMRPUk/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vSH_deUce4RWs9XEDTCB79rGj_rxbKmvCOHhD6qWOKePy7OrrwVJHhEI8xsBrbYOrq83dlQVrHMRPUk/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-    { 
-        name: "Hastings", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQOx1L6ilq3tl3qti4r6ex0sbNmHXBPBu2xWYpYJcjQ2j5uuN5xCrR0RAyTobiKj-CWFV7Ae4vTMMRj/pub?gid=634347005&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQOx1L6ilq3tl3qti4r6ex0sbNmHXBPBu2xWYpYJcjQ2j5uuN5xCrR0RAyTobiKj-CWFV7Ae4vTMMRj/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQOx1L6ilq3tl3qti4r6ex0sbNmHXBPBu2xWYpYJcjQ2j5uuN5xCrR0RAyTobiKj-CWFV7Ae4vTMMRj/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQOx1L6ilq3tl3qti4r6ex0sbNmHXBPBu2xWYpYJcjQ2j5uuN5xCrR0RAyTobiKj-CWFV7Ae4vTMMRj/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-    { 
-        name: "ClubHouse", 
-        type: "Circuito", 
-        sheets: {
-            junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSFJ2UsnATNZpVPQh_ZzPVEpZuae9pedNy-XsDMnSzIWHmxcip9bsiABtztOefxxezrHn4xeE0wntdg/pub?gid=634347005&single=true&output=csv",
-            junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vSFJ2UsnATNZpVPQh_ZzPVEpZuae9pedNy-XsDMnSzIWHmxcip9bsiABtztOefxxezrHn4xeE0wntdg/pub?gid=1989010516&single=true&output=csv",
-            bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vSFJ2UsnATNZpVPQh_ZzPVEpZuae9pedNy-XsDMnSzIWHmxcip9bsiABtztOefxxezrHn4xeE0wntdg/pub?gid=509105205&single=true&output=csv",
-            bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vSFJ2UsnATNZpVPQh_ZzPVEpZuae9pedNy-XsDMnSzIWHmxcip9bsiABtztOefxxezrHn4xeE0wntdg/pub?gid=1342310622&single=true&output=csv"
-        }
-    },
-           // --- SPRINTS (Requieren 2 URLs CSV) ---
-    { name: "Seaside & Power Station", type: "Sprint", sheets: { junkman: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTopj2KbigWGa77McjiDle5LG7yBMxeu5ZCmzznXiYJNjQvSAMnl_UeyAzCjQhcO8k-FNi7PlxlabXq/pub?gid=634347005&single=true&output=csv", bmw: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTopj2KbigWGa77McjiDle5LG7yBMxeu5ZCmzznXiYJNjQvSAMnl_UeyAzCjQhcO8k-FNi7PlxlabXq/pub?gid=1989010516&single=true&output=csv" } },
-    { 
-        name: "NFS World Loop", 
-        type: "Sprint", 
-        sheets: {
-            junkman: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQfdxr5CKyrZZ6pwkFHh9vCXbhQ9vWCc8eWByfgF9LiQDVD6ODLrXPfBSkksHvb-93Hm45MJ0pflPsO/pub?gid=634347005&single=true&output=csv",
-            bmw:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQfdxr5CKyrZZ6pwkFHh9vCXbhQ9vWCc8eWByfgF9LiQDVD6ODLrXPfBSkksHvb-93Hm45MJ0pflPsO/pub?gid=1989010516&single=true&output=csv"
-        } 
-    },
-    { 
-        name: "Diamond & Unión", 
-        type: "Sprint", 
-        sheets: {
-            junkman: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-7w6t4lFAn40wwFvNahGe7-PLpQghz79smrie6KtNbBlBgCrnDjAPdKT8dPR9j78s0xpyF4bm2VBU/pub?gid=634347005&single=true&output=csv",
-            bmw:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-7w6t4lFAn40wwFvNahGe7-PLpQghz79smrie6KtNbBlBgCrnDjAPdKT8dPR9j78s0xpyF4bm2VBU/pub?gid=1989010516&single=true&output=csv"
-        } 
-    },
-    { 
-        name: "Hwy 99 & States", 
-        type: "Sprint", 
-        sheets: {
-            junkman: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSmab4U3Os10zmaJJl5OrFIiYfhT8dStE4AlUs5jvb8OQm8Md4MQHn10qVmmfchEOAI7vmOhwXMAHKN/pub?gid=634347005&single=true&output=csv",
-            bmw:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vSmab4U3Os10zmaJJl5OrFIiYfhT8dStE4AlUs5jvb8OQm8Md4MQHn10qVmmfchEOAI7vmOhwXMAHKN/pub?gid=1989010516&single=true&output=csv"
-        } 
-    },
-    { 
-        name: "Clubhouse & Hollis", 
-        type: "Sprint", 
-        sheets: {
-            junkman: "https://docs.google.com/spreadsheets/d/e/2PACX-1vS3vNPCuRcDkXOj5YeBS3RfA1iS709_FZeIk-DDM3NGfiElwzRXtYCOrqqdBdSEugVl1eCUSuRksU7t/pub?gid=634347005&single=true&output=csv",
-            bmw:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vS3vNPCuRcDkXOj5YeBS3RfA1iS709_FZeIk-DDM3NGfiElwzRXtYCOrqqdBdSEugVl1eCUSuRksU7t/pub?gid=1989010516&single=true&output=csv"
-        } 
-    },
-    { 
-        name: "Stadium & Hwy 99", 
-        type: "Sprint", 
-        sheets: {
-            junkman: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSKgB_F9woTeuJJImM3nI84FQ_xgsZn4yfllfGBBCKJWJGlNAxw9EYI9zpNHBeKh4sOs9GVxgBDn2OT/pub?gid=634347005&single=true&output=csv",
-            bmw:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vSKgB_F9woTeuJJImM3nI84FQ_xgsZn4yfllfGBBCKJWJGlNAxw9EYI9zpNHBeKh4sOs9GVxgBDn2OT/pub?gid=1989010516&single=true&output=csv"
-        } 
-    },
-    { 
-        name: "Rosewood & State", 
-        type: "Sprint", 
-        sheets: {
-            junkman: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSdMkRJXga4THlU5ZL2rZrB4W0lFej1MM6XpohRm4AYzbh5k3I4CfMVgZ1sE-zdXi6ZmlRSZu5P00kv/pub?gid=634347005&single=true&output=csv",
-            bmw:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vSdMkRJXga4THlU5ZL2rZrB4W0lFej1MM6XpohRm4AYzbh5k3I4CfMVgZ1sE-zdXi6ZmlRSZu5P00kv/pub?gid=1989010516&single=true&output=csv"
-        } 
-    },
+        },
+        { 
+            name: "Ironwood States", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYMNQXaAzlB0eoNiiWX5RekaYWGZWXGgYbWsPSj57AhOjmkh9zGXetaIROVrYoys1Djg4j7aCkFyup/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYMNQXaAzlB0eoNiiWX5RekaYWGZWXGgYbWsPSj57AhOjmkh9zGXetaIROVrYoys1Djg4j7aCkFyup/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYMNQXaAzlB0eoNiiWX5RekaYWGZWXGgYbWsPSj57AhOjmkh9zGXetaIROVrYoys1Djg4j7aCkFyup/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYMNQXaAzlB0eoNiiWX5RekaYWGZWXGgYbWsPSj57AhOjmkh9zGXetaIROVrYoys1Djg4j7aCkFyup/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "Campus Way", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vStZo0IeCdXXjHJfhth7FwjoHaKER81KduHg2OX-rkTfk27g8IMKo8UnrWfGfEhZ4_pz7bvsd7HWtqu/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vStZo0IeCdXXjHJfhth7FwjoHaKER81KduHg2OX-rkTfk27g8IMKo8UnrWfGfEhZ4_pz7bvsd7HWtqu/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vStZo0IeCdXXjHJfhth7FwjoHaKER81KduHg2OX-rkTfk27g8IMKo8UnrWfGfEhZ4_pz7bvsd7HWtqu/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vStZo0IeCdXXjHJfhth7FwjoHaKER81KduHg2OX-rkTfk27g8IMKo8UnrWfGfEhZ4_pz7bvsd7HWtqu/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "Highlands", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vThZe-ShdgBop3CgCotuQdozB19ZFXp607ufphufolUEReNz-eG1lZ_wh1HMpj7lG37iPdbMypHeojM/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vThZe-ShdgBop3CgCotuQdozB19ZFXp607ufphufolUEReNz-eG1lZ_wh1HMpj7lG37iPdbMypHeojM/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vThZe-ShdgBop3CgCotuQdozB19ZFXp607ufphufolUEReNz-eG1lZ_wh1HMpj7lG37iPdbMypHeojM/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vThZe-ShdgBop3CgCotuQdozB19ZFXp607ufphufolUEReNz-eG1lZ_wh1HMpj7lG37iPdbMypHeojM/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "Petersburgs", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQcjeFik-iTKEyWvkJbjXWlt6ifYSwD2cRe956vT1qte57NAZhxBqdKu4DZaQLy_d8fWegIJsZfb-_T/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQcjeFik-iTKEyWvkJbjXWlt6ifYSwD2cRe956vT1qte57NAZhxBqdKu4DZaQLy_d8fWegIJsZfb-_T/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQcjeFik-iTKEyWvkJbjXWlt6ifYSwD2cRe956vT1qte57NAZhxBqdKu4DZaQLy_d8fWegIJsZfb-_T/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQcjeFik-iTKEyWvkJbjXWlt6ifYSwD2cRe956vT1qte57NAZhxBqdKu4DZaQLy_d8fWegIJsZfb-_T/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "Heritage Height", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQFzuJMkWX14AhCwjGg9erH4ldCk-12LRLj1ynmSWsUaJ99q21K6MoNT0uJ7Iuf5IvCOc50ASgK8qTC/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQFzuJMkWX14AhCwjGg9erH4ldCk-12LRLj1ynmSWsUaJ99q21K6MoNT0uJ7Iuf5IvCOc50ASgK8qTC/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQFzuJMkWX14AhCwjGg9erH4ldCk-12LRLj1ynmSWsUaJ99q21K6MoNT0uJ7Iuf5IvCOc50ASgK8qTC/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQFzuJMkWX14AhCwjGg9erH4ldCk-12LRLj1ynmSWsUaJ99q21K6MoNT0uJ7Iuf5IvCOc50ASgK8qTC/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "Omega", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTztSGMlyoEleRpj7iVjcIPw5YhrAR9q7kCsPKjyvrC-WVss9VjAc1Ol137788aMtHSoZ3x42Y2f2UQ/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vTztSGMlyoEleRpj7iVjcIPw5YhrAR9q7kCsPKjyvrC-WVss9VjAc1Ol137788aMtHSoZ3x42Y2f2UQ/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vTztSGMlyoEleRpj7iVjcIPw5YhrAR9q7kCsPKjyvrC-WVss9VjAc1Ol137788aMtHSoZ3x42Y2f2UQ/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vTztSGMlyoEleRpj7iVjcIPw5YhrAR9q7kCsPKjyvrC-WVss9VjAc1Ol137788aMtHSoZ3x42Y2f2UQ/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "Diamond", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSbVXM92XBkk6rNs9WXmV20tvIE4Q6hTCqaSVla7mS8cxt0qcXFZADtJGtpdYBur29OmOEKoCWiluYI/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vSbVXM92XBkk6rNs9WXmV20tvIE4Q6hTCqaSVla7mS8cxt0qcXFZADtJGtpdYBur29OmOEKoCWiluYI/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vSbVXM92XBkk6rNs9WXmV20tvIE4Q6hTCqaSVla7mS8cxt0qcXFZADtJGtpdYBur29OmOEKoCWiluYI/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vSbVXM92XBkk6rNs9WXmV20tvIE4Q6hTCqaSVla7mS8cxt0qcXFZADtJGtpdYBur29OmOEKoCWiluYI/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "Hillcrest Boundary", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTTL_N-_AsDPxiluo17ftyPpkniueVgVOs7KUS6SqQpxUBtwSA4oCXpwdqDXE-dHpVe_ekB_-_y_E_L/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vTTL_N-_AsDPxiluo17ftyPpkniueVgVOs7KUS6SqQpxUBtwSA4oCXpwdqDXE-dHpVe_ekB_-_y_E_L/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vTTL_N-_AsDPxiluo17ftyPpkniueVgVOs7KUS6SqQpxUBtwSA4oCXpwdqDXE-dHpVe_ekB_-_y_E_L/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vTTL_N-_AsDPxiluo17ftyPpkniueVgVOs7KUS6SqQpxUBtwSA4oCXpwdqDXE-dHpVe_ekB_-_y_E_L/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "Circle Rose", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vScO-5zpY2Amb9rF8VdaC5-W7t3it7PUpsOSFNHRm9sAY6oAvtuCnMEWI2xJjKOP8z1bOkB_jdNePC6/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vScO-5zpY2Amb9rF8VdaC5-W7t3it7PUpsOSFNHRm9sAY6oAvtuCnMEWI2xJjKOP8z1bOkB_jdNePC6/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vScO-5zpY2Amb9rF8VdaC5-W7t3it7PUpsOSFNHRm9sAY6oAvtuCnMEWI2xJjKOP8z1bOkB_jdNePC6/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vScO-5zpY2Amb9rF8VdaC5-W7t3it7PUpsOSFNHRm9sAY6oAvtuCnMEWI2xJjKOP8z1bOkB_jdNePC6/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "Switchback", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSamV2dwugajyaHKTVIMkDMf1B9fw2L1Hsz-VFCnSb_mJRg1XPQFy7QC_kn4il96Oz54RakPM6klUao/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vSamV2dwugajyaHKTVIMkDMf1B9fw2L1Hsz-VFCnSb_mJRg1XPQFy7QC_kn4il96Oz54RakPM6klUao/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vSamV2dwugajyaHKTVIMkDMf1B9fw2L1Hsz-VFCnSb_mJRg1XPQFy7QC_kn4il96Oz54RakPM6klUao/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vSamV2dwugajyaHKTVIMkDMf1B9fw2L1Hsz-VFCnSb_mJRg1XPQFy7QC_kn4il96Oz54RakPM6klUao/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "Hospital Switchback", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRdgOybCQcg9N6oKRPpHNEW4qMWtQEXWOtNEzaLmJ7hcU_r1UUdKRQTRdAJ87eVk9L5SZfVxwMojxrR/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRdgOybCQcg9N6oKRPpHNEW4qMWtQEXWOtNEzaLmJ7hcU_r1UUdKRQTRdAJ87eVk9L5SZfVxwMojxrR/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRdgOybCQcg9N6oKRPpHNEW4qMWtQEXWOtNEzaLmJ7hcU_r1UUdKRQTRdAJ87eVk9L5SZfVxwMojxrR/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vRdgOybCQcg9N6oKRPpHNEW4qMWtQEXWOtNEzaLmJ7hcU_r1UUdKRQTRdAJ87eVk9L5SZfVxwMojxrR/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "Dunwich Bay", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUcIXZt1I-19XmXW86QHntG6tulbvynivFyMGTXxe6UIEGPr9mJtLDASeVdlM3QUd2HtlIrBIBb5tY/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUcIXZt1I-19XmXW86QHntG6tulbvynivFyMGTXxe6UIEGPr9mJtLDASeVdlM3QUd2HtlIrBIBb5tY/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUcIXZt1I-19XmXW86QHntG6tulbvynivFyMGTXxe6UIEGPr9mJtLDASeVdlM3QUd2HtlIrBIBb5tY/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUcIXZt1I-19XmXW86QHntG6tulbvynivFyMGTXxe6UIEGPr9mJtLDASeVdlM3QUd2HtlIrBIBb5tY/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "Boundary", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR8ZOL1_Z7Lcv1_e5OVPn4u5yD_FwcGfYwwNEYNXtGM4jYgnEXwZh_K8nOx6DgAP6Iiy1F6vBxWjCe0/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vR8ZOL1_Z7Lcv1_e5OVPn4u5yD_FwcGfYwwNEYNXtGM4jYgnEXwZh_K8nOx6DgAP6Iiy1F6vBxWjCe0/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vR8ZOL1_Z7Lcv1_e5OVPn4u5yD_FwcGfYwwNEYNXtGM4jYgnEXwZh_K8nOx6DgAP6Iiy1F6vBxWjCe0/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vR8ZOL1_Z7Lcv1_e5OVPn4u5yD_FwcGfYwwNEYNXtGM4jYgnEXwZh_K8nOx6DgAP6Iiy1F6vBxWjCe0/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "Century Square", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRiydOeMiVJy4qJsAxhLxByhOw_Lv4l9m1NP4guWZlBdFLcxAx1LKO8TJcZiAVuTDUoFvdCcY04J7MT/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRiydOeMiVJy4qJsAxhLxByhOw_Lv4l9m1NP4guWZlBdFLcxAx1LKO8TJcZiAVuTDUoFvdCcY04J7MT/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRiydOeMiVJy4qJsAxhLxByhOw_Lv4l9m1NP4guWZlBdFLcxAx1LKO8TJcZiAVuTDUoFvdCcY04J7MT/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vRiydOeMiVJy4qJsAxhLxByhOw_Lv4l9m1NP4guWZlBdFLcxAx1LKO8TJcZiAVuTDUoFvdCcY04J7MT/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "Heritage & Omega", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRVmUFaxSFBn3amevTa22qFuci_c3I-YSiQQJiYsklS_2yAOUtu2VFIsOJ9X4P3qFxaMBlNxSKa5mDG/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRVmUFaxSFBn3amevTa22qFuci_c3I-YSiQQJiYsklS_2yAOUtu2VFIsOJ9X4P3qFxaMBlNxSKa5mDG/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRVmUFaxSFBn3amevTa22qFuci_c3I-YSiQQJiYsklS_2yAOUtu2VFIsOJ9X4P3qFxaMBlNxSKa5mDG/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vRVmUFaxSFBn3amevTa22qFuci_c3I-YSiQQJiYsklS_2yAOUtu2VFIsOJ9X4P3qFxaMBlNxSKa5mDG/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "Little Italy", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRmiklWwG2quphT8kdlFw6rzjH7UK7K5oW-g5vFXiy8hL7wuJyw1C9IENrjL-tJQKOmrAc-43flzGI7/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRmiklWwG2quphT8kdlFw6rzjH7UK7K5oW-g5vFXiy8hL7wuJyw1C9IENrjL-tJQKOmrAc-43flzGI7/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRmiklWwG2quphT8kdlFw6rzjH7UK7K5oW-g5vFXiy8hL7wuJyw1C9IENrjL-tJQKOmrAc-43flzGI7/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vRmiklWwG2quphT8kdlFw6rzjH7UK7K5oW-g5vFXiy8hL7wuJyw1C9IENrjL-tJQKOmrAc-43flzGI7/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "Ironhorse", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQOkizIL_AytLlQXAbJN07Pu7TASTmt9TtUmuwy7EPO7f2Z6WNeBv2sD1FlAI_4JtQTyI3G15rbuS23/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQOkizIL_AytLlQXAbJN07Pu7TASTmt9TtUmuwy7EPO7f2Z6WNeBv2sD1FlAI_4JtQTyI3G15rbuS23/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQOkizIL_AytLlQXAbJN07Pu7TASTmt9TtUmuwy7EPO7f2Z6WNeBv2sD1FlAI_4JtQTyI3G15rbuS23/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQOkizIL_AytLlQXAbJN07Pu7TASTmt9TtUmuwy7EPO7f2Z6WNeBv2sD1FlAI_4JtQTyI3G15rbuS23/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "Waterfront", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vT6xZTZewVghW7HA_qpsvpLdis6RvKhSrIeZtnyWywZlgf8FOW-dxUWLNnXf04bOHQ0eNnQioOBkQcd/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vT6xZTZewVghW7HA_qpsvpLdis6RvKhSrIeZtnyWywZlgf8FOW-dxUWLNnXf04bOHQ0eNnQioOBkQcd/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vT6xZTZewVghW7HA_qpsvpLdis6RvKhSrIeZtnyWywZlgf8FOW-dxUWLNnXf04bOHQ0eNnQioOBkQcd/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vT6xZTZewVghW7HA_qpsvpLdis6RvKhSrIeZtnyWywZlgf8FOW-dxUWLNnXf04bOHQ0eNnQioOBkQcd/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "Gray Point", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNVdFs7Q7Kej4n0dCozLLPq6d2uN7pXbppX22Z-8ddkq37RGQLsv2GfeGV7CmUAd6Tt7I-7B_OP5g7/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNVdFs7Q7Kej4n0dCozLLPq6d2uN7pXbppX22Z-8ddkq37RGQLsv2GfeGV7CmUAd6Tt7I-7B_OP5g7/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNVdFs7Q7Kej4n0dCozLLPq6d2uN7pXbppX22Z-8ddkq37RGQLsv2GfeGV7CmUAd6Tt7I-7B_OP5g7/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNVdFs7Q7Kej4n0dCozLLPq6d2uN7pXbppX22Z-8ddkq37RGQLsv2GfeGV7CmUAd6Tt7I-7B_OP5g7/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "Omega & Industries", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTB7YV0MbbNBKl5wMiCGs8hR0grRsQC2T7K8M4WpE0kZoUUZDRdh8flxiP9KmGfH6ao7fw473xCkPM4/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vTB7YV0MbbNBKl5wMiCGs8hR0grRsQC2T7K8M4WpE0kZoUUZDRdh8flxiP9KmGfH6ao7fw473xCkPM4/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vTB7YV0MbbNBKl5wMiCGs8hR0grRsQC2T7K8M4WpE0kZoUUZDRdh8flxiP9KmGfH6ao7fw473xCkPM4/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vTB7YV0MbbNBKl5wMiCGs8hR0grRsQC2T7K8M4WpE0kZoUUZDRdh8flxiP9KmGfH6ao7fw473xCkPM4/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "Bay Bridge", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQTb0_qgTgzWFCx2C2tMd5fgvISZfHL74PP1nHEC5OHu2TW_w_I5K2REGxN5CoqzmM9l6RPIhp5j43K/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQTb0_qgTgzWFCx2C2tMd5fgvISZfHL74PP1nHEC5OHu2TW_w_I5K2REGxN5CoqzmM9l6RPIhp5j43K/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQTb0_qgTgzWFCx2C2tMd5fgvISZfHL74PP1nHEC5OHu2TW_w_I5K2REGxN5CoqzmM9l6RPIhp5j43K/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQTb0_qgTgzWFCx2C2tMd5fgvISZfHL74PP1nHEC5OHu2TW_w_I5K2REGxN5CoqzmM9l6RPIhp5j43K/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "Camden Tunnel", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQdxfkyIJVuqgARoOwHBbicYTqcFIIb6gjv4rPAIIgwgqh9-wgSj2RGCot4kRx9Si0CA1Uf8TZnX2lW/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQdxfkyIJVuqgARoOwHBbicYTqcFIIb6gjv4rPAIIgwgqh9-wgSj2RGCot4kRx9Si0CA1Uf8TZnX2lW/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQdxfkyIJVuqgARoOwHBbicYTqcFIIb6gjv4rPAIIgwgqh9-wgSj2RGCot4kRx9Si0CA1Uf8TZnX2lW/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQdxfkyIJVuqgARoOwHBbicYTqcFIIb6gjv4rPAIIgwgqh9-wgSj2RGCot4kRx9Si0CA1Uf8TZnX2lW/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "Campus Interchange", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQvwf0a_1I8u7B5yL6kVEW3SmNl1FvN29NYEAsrkJl8uf2OHEqYsuFrsti_7b5_tHc8K23SNv-pJTnS/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQvwf0a_1I8u7B5yL6kVEW3SmNl1FvN29NYEAsrkJl8uf2OHEqYsuFrsti_7b5_tHc8K23SNv-pJTnS/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQvwf0a_1I8u7B5yL6kVEW3SmNl1FvN29NYEAsrkJl8uf2OHEqYsuFrsti_7b5_tHc8K23SNv-pJTnS/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQvwf0a_1I8u7B5yL6kVEW3SmNl1FvN29NYEAsrkJl8uf2OHEqYsuFrsti_7b5_tHc8K23SNv-pJTnS/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "Country Club", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTn0CLEhwX3VYc9Z33GVgUCXnuPxBrn0mZSq8E9vQTEYyKXrc65kB84wrBQaj1K9lua8j0fhi9iFRmq/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vTn0CLEhwX3VYc9Z33GVgUCXnuPxBrn0mZSq8E9vQTEYyKXrc65kB84wrBQaj1K9lua8j0fhi9iFRmq/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vTn0CLEhwX3VYc9Z33GVgUCXnuPxBrn0mZSq8E9vQTEYyKXrc65kB84wrBQaj1K9lua8j0fhi9iFRmq/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vTn0CLEhwX3VYc9Z33GVgUCXnuPxBrn0mZSq8E9vQTEYyKXrc65kB84wrBQaj1K9lua8j0fhi9iFRmq/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "East Park", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTHiO__KHIdb-K4WC4fIQOkN0BXJIOizzkw2DlebmR-Q2b25U0sAGpJVhrBrTMupNggITNvcR7Govor/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vTHiO__KHIdb-K4WC4fIQOkN0BXJIOizzkw2DlebmR-Q2b25U0sAGpJVhrBrTMupNggITNvcR7Govor/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vTHiO__KHIdb-K4WC4fIQOkN0BXJIOizzkw2DlebmR-Q2b25U0sAGpJVhrBrTMupNggITNvcR7Govor/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vTHiO__KHIdb-K4WC4fIQOkN0BXJIOizzkw2DlebmR-Q2b25U0sAGpJVhrBrTMupNggITNvcR7Govor/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "Oil Refinery", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSH_deUce4RWs9XEDTCB79rGj_rxbKmvCOHhD6qWOKePy7OrrwVJHhEI8xsBrbYOrq83dlQVrHMRPUk/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vSH_deUce4RWs9XEDTCB79rGj_rxbKmvCOHhD6qWOKePy7OrrwVJHhEI8xsBrbYOrq83dlQVrHMRPUk/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vSH_deUce4RWs9XEDTCB79rGj_rxbKmvCOHhD6qWOKePy7OrrwVJHhEI8xsBrbYOrq83dlQVrHMRPUk/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vSH_deUce4RWs9XEDTCB79rGj_rxbKmvCOHhD6qWOKePy7OrrwVJHhEI8xsBrbYOrq83dlQVrHMRPUk/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "Hastings", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQOx1L6ilq3tl3qti4r6ex0sbNmHXBPBu2xWYpYJcjQ2j5uuN5xCrR0RAyTobiKj-CWFV7Ae4vTMMRj/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQOx1L6ilq3tl3qti4r6ex0sbNmHXBPBu2xWYpYJcjQ2j5uuN5xCrR0RAyTobiKj-CWFV7Ae4vTMMRj/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQOx1L6ilq3tl3qti4r6ex0sbNmHXBPBu2xWYpYJcjQ2j5uuN5xCrR0RAyTobiKj-CWFV7Ae4vTMMRj/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQOx1L6ilq3tl3qti4r6ex0sbNmHXBPBu2xWYpYJcjQ2j5uuN5xCrR0RAyTobiKj-CWFV7Ae4vTMMRj/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        { 
+            name: "ClubHouse", 
+            type: "Circuito", 
+            sheets: {
+                junkmanSingle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSFJ2UsnATNZpVPQh_ZzPVEpZuae9pedNy-XsDMnSzIWHmxcip9bsiABtztOefxxezrHn4xeE0wntdg/pub?gid=634347005&single=true&output=csv",
+                junkmanFast:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vSFJ2UsnATNZpVPQh_ZzPVEpZuae9pedNy-XsDMnSzIWHmxcip9bsiABtztOefxxezrHn4xeE0wntdg/pub?gid=1989010516&single=true&output=csv",
+                bmwSingle:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vSFJ2UsnATNZpVPQh_ZzPVEpZuae9pedNy-XsDMnSzIWHmxcip9bsiABtztOefxxezrHn4xeE0wntdg/pub?gid=509105205&single=true&output=csv",
+                bmwFast:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vSFJ2UsnATNZpVPQh_ZzPVEpZuae9pedNy-XsDMnSzIWHmxcip9bsiABtztOefxxezrHn4xeE0wntdg/pub?gid=1342310622&single=true&output=csv"
+            }
+        },
+        // --- SPRINTS (Requieren 2 URLs CSV) ---
+        { 
+            name: "Seaside & Power Station", 
+            type: "Sprint", 
+            sheets: { 
+                junkman: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTopj2KbigWGa77McjiDle5LG7yBMxeu5ZCmzznXiYJNjQvSAMnl_UeyAzCjQhcO8k-FNi7PlxlabXq/pub?gid=634347005&single=true&output=csv", 
+                bmw:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vTopj2KbigWGa77McjiDle5LG7yBMxeu5ZCmzznXiYJNjQvSAMnl_UeyAzCjQhcO8k-FNi7PlxlabXq/pub?gid=1989010516&single=true&output=csv" 
+            } 
+        },
+        { 
+            name: "NFS World Loop", 
+            type: "Sprint", 
+            sheets: {
+                junkman: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQfdxr5CKyrZZ6pwkFHh9vCXbhQ9vWCc8eWByfgF9LiQDVD6ODLrXPfBSkksHvb-93Hm45MJ0pflPsO/pub?gid=634347005&single=true&output=csv",
+                bmw:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQfdxr5CKyrZZ6pwkFHh9vCXbhQ9vWCc8eWByfgF9LiQDVD6ODLrXPfBSkksHvb-93Hm45MJ0pflPsO/pub?gid=1989010516&single=true&output=csv"
+            } 
+        },
+        { 
+            name: "Diamond & Unión", 
+            type: "Sprint", 
+            sheets: {
+                junkman: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-7w6t4lFAn40wwFvNahGe7-PLpQghz79smrie6KtNbBlBgCrnDjAPdKT8dPR9j78s0xpyF4bm2VBU/pub?gid=634347005&single=true&output=csv",
+                bmw:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-7w6t4lFAn40wwFvNahGe7-PLpQghz79smrie6KtNbBlBgCrnDjAPdKT8dPR9j78s0xpyF4bm2VBU/pub?gid=1989010516&single=true&output=csv"
+            } 
+        },
+        { 
+            name: "Hwy 99 & States", 
+            type: "Sprint", 
+            sheets: {
+                junkman: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSmab4U3Os10zmaJJl5OrFIiYfhT8dStE4AlUs5jvb8OQm8Md4MQHn10qVmmfchEOAI7vmOhwXMAHKN/pub?gid=634347005&single=true&output=csv",
+                bmw:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vSmab4U3Os10zmaJJl5OrFIiYfhT8dStE4AlUs5jvb8OQm8Md4MQHn10qVmmfchEOAI7vmOhwXMAHKN/pub?gid=1989010516&single=true&output=csv"
+            } 
+        },
+        { 
+            name: "Clubhouse & Hollis", 
+            type: "Sprint", 
+            sheets: {
+                junkman: "https://docs.google.com/spreadsheets/d/e/2PACX-1vS3vNPCuRcDkXOj5YeBS3RfA1iS709_FZeIk-DDM3NGfiElwzRXtYCOrqqdBdSEugVl1eCUSuRksU7t/pub?gid=634347005&single=true&output=csv",
+                bmw:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vS3vNPCuRcDkXOj5YeBS3RfA1iS709_FZeIk-DDM3NGfiElwzRXtYCOrqqdBdSEugVl1eCUSuRksU7t/pub?gid=1989010516&single=true&output=csv"
+            } 
+        },
+        { 
+            name: "Stadium & Hwy 99", 
+            type: "Sprint", 
+            sheets: {
+                junkman: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSKgB_F9woTeuJJImM3nI84FQ_xgsZn4yfllfGBBCKJWJGlNAxw9EYI9zpNHBeKh4sOs9GVxgBDn2OT/pub?gid=634347005&single=true&output=csv",
+                bmw:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vSKgB_F9woTeuJJImM3nI84FQ_xgsZn4yfllfGBBCKJWJGlNAxw9EYI9zpNHBeKh4sOs9GVxgBDn2OT/pub?gid=1989010516&single=true&output=csv"
+            } 
+        },
+        { 
+            name: "Rosewood & State", 
+            type: "Sprint", 
+            sheets: {
+                junkman: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSdMkRJXga4THlU5ZL2rZrB4W0lFej1MM6XpohRm4AYzbh5k3I4CfMVgZ1sE-zdXi6ZmlRSZu5P00kv/pub?gid=634347005&single=true&output=csv",
+                bmw:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vSdMkRJXga4THlU5ZL2rZrB4W0lFej1MM6XpohRm4AYzbh5k3I4CfMVgZ1sE-zdXi6ZmlRSZu5P00kv/pub?gid=1989010516&single=true&output=csv"
+            } 
+        },
+    
     { 
         name: "Rosewood & Lyon", 
         type: "Sprint", 
@@ -1614,7 +1622,7 @@ const routesData = [
         type: "Sprint", 
         sheets: {
             junkman: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqVOcKPzDKQ2Isw6qSgybRlEQBTMwicj85RWJKiX7LB2HJcf86uLf4yIwXAYONir2pM0xfpCHSICkX/pub?gid=1728776957&single=true&output=csv",
-            bmw:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqVOcKPzDKQ2Isw6qSgybRlEQBTMwicj85RWJKiX7LB2HJcf86uLf4yIwXAYONir2pM0xfpCHSICkX/pub?gid=379289957&single=true&output=csv"
+            bmw:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqVOcKPzDKQ2Isw6qSgybRlEQBTMwicj85RWJKiX7LB2HJcf86uLf4yIwXAYONir2pM0xfpCHSICkX/pub?gid=379289957&single=true"
         } 
     },
     { 
@@ -1729,6 +1737,9 @@ const routesData = [
             bmw:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vS5uhCOX_Yv3Gt1htuSF8eh7lYtusd6B4EZ94382zYix1Vo_rExWqt0JGqNgcT6aqkVY_9bTnY7f3b7/pub?gid=379289957&single=true&output=csv"
         } 
     },
+]   
+    // Declaración del array de pistas (Parte 3)
+const tracksPart3 = [
     { 
         name: "Seaside & Interchange", 
         type: "Sprint", 
@@ -1877,10 +1888,12 @@ const routesData = [
     }
 ];
 
+let currentCategory = 'all';
+    /* ==========================================
+   PARTE 4: RENDERIZADO, LOGICA DE TABLAS Y PODIOS
+   ========================================== */
 
-        let currentCategory = 'all';
-
-    async function renderRoutes(dataToRender) {
+async function renderRoutes(dataToRender) {
     const container = document.getElementById('routes-grid-container');
     if (!container) return;
     container.innerHTML = '';
@@ -1914,8 +1927,11 @@ const routesData = [
 
         try {
             let sampleSheet = "";
-            if (route.type === "Circuito") sampleSheet = route.sheets.junkmanSingle || route.sheets.bmwSingle;
-            else sampleSheet = route.sheets.junkman || route.sheets.bmw;
+            if (route.type === "Circuito") {
+                sampleSheet = route.sheets.junkmanSingle || route.sheets.bmwSingle;
+            } else {
+                sampleSheet = route.sheets.junkman || route.sheets.bmw;
+            }
 
             if (sampleSheet) {
                 let rows = await fetchGoogleSheetData(sampleSheet);
@@ -1926,7 +1942,9 @@ const routesData = [
                     bestCar = topRow.car;
                 }
             }
-        } catch (e) { }
+        } catch (e) {
+            console.warn("Error al cargar vista previa para la ruta:", route.name, e);
+        }
 
         const card = document.createElement('div');
         card.className = 'route-card';
@@ -1937,7 +1955,6 @@ const routesData = [
             if (typeof switchView === 'function') switchView('leaderboard');
         };
 
-        // Estilos mejorados integrados correctamente
         let detailsHtml = bestDriver ? `
             <div class="route-record-preview" style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
                 <span class="route-time-display" style="color: #ffffff; font-weight: 800;">⏱️ ${bestRecordText}</span>
@@ -1968,8 +1985,10 @@ const routesData = [
 function filterRoutes() {
     const searchInput = document.getElementById('route-search');
     const query = searchInput ? searchInput.value.toLowerCase() : "";
-    const filtered = routesData.filter(route => {
-        const matchesCategory = currentCategory === 'all' || route.type === currentCategory;
+    const sourceData = typeof routesData !== 'undefined' ? routesData : [];
+    
+    const filtered = sourceData.filter(route => {
+        const matchesCategory = typeof currentCategory === 'undefined' || currentCategory === 'all' || route.type === currentCategory;
         const matchesSearch = route.name.toLowerCase().includes(query);
         return matchesCategory && matchesSearch;
     });
@@ -2012,6 +2031,7 @@ async function fetchGoogleSheetData(csvUrl) {
         }
         return data;
     } catch (error) {
+        console.error("Error cargando Google Sheet:", error);
         return [];
     }
 }
@@ -2084,8 +2104,9 @@ async function generateHallOfFame() {
     const hofTbody = document.getElementById('tbody-hall-of-fame');
     if (!hofTbody) return;
     let driverCounts = {};
+    const sourceData = typeof routesData !== 'undefined' ? routesData : [];
 
-    for (const route of routesData) {
+    for (const route of sourceData) {
         let sheetsToFetch = [];
         if (route.type === "Circuito" && route.sheets) {
             if (route.sheets.junkmanSingle) sheetsToFetch.push(route.sheets.junkmanSingle);
@@ -2137,8 +2158,9 @@ async function generateHallOfFame() {
 
 async function processPodiumsForRoutes(filterType = null) {
     let podiumStats = {};
+    const sourceData = typeof routesData !== 'undefined' ? routesData : [];
 
-    for (const route of routesData) {
+    for (const route of sourceData) {
         if (filterType && route.type.toLowerCase() !== filterType.toLowerCase()) continue;
 
         let sheetsToFetch = [];
@@ -2234,8 +2256,9 @@ window.addEventListener('DOMContentLoaded', () => {
         renderRoutes(routesData);
     }
 });
-<!-- LEADERBOARD STATAS ... -->
-        function updateLeaderboardStats(showingNum, totalNum, currentClass = 'ALL') {
+
+// LEADERBOARD STATS
+function updateLeaderboardStats(showingNum, totalNum, currentClass = 'ALL') {
     const showingEl = document.getElementById('showing-count');
     const totalEl = document.getElementById('total-races-count');
     const classEl = document.getElementById('current-class-filter');
