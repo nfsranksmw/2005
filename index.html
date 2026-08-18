@@ -2002,12 +2002,46 @@ function setCategory(category, btn) {
     filterRoutes();
 }
 
-async function fetchGoogleSheetData(csvUrl) {
-    try {
-        if (!csvUrl || csvUrl.trim() === "" || csvUrl.includes("PEGA_") || csvUrl.includes("URL_CSV_")) {
-            return [];
-        }
+/* =======================================================
+   SISTEMA DE CACHÉ INTELIGENTE Y LAZY LOADING
+   ======================================================= */
 
+// Configuración de Caché (10 minutos de tiempo de vida / TTL)
+const CACHE_TTL_MS = 10 * 60 * 1000;
+const memoryCache = {}; // Caché rápida en memoria RAM
+
+/**
+ * Fetch a Google Sheets con Caché Inteligente (RAM + localStorage)
+ */
+async function fetchGoogleSheetData(csvUrl) {
+    if (!csvUrl || csvUrl.trim() === "" || csvUrl.includes("PEGA_") || csvUrl.includes("URL_CSV_")) {
+        return [];
+    }
+
+    const cacheKey = `nfs_cache_${csvUrl}`;
+    const now = Date.now();
+
+    // 1. Consultar en Memoria RAM
+    if (memoryCache[cacheKey] && (now - memoryCache[cacheKey].timestamp < CACHE_TTL_MS)) {
+        return memoryCache[cacheKey].data;
+    }
+
+    // 2. Consultar en LocalStorage
+    try {
+        const stored = localStorage.getItem(cacheKey);
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            if (now - parsed.timestamp < CACHE_TTL_MS) {
+                memoryCache[cacheKey] = parsed; // Almacenar en RAM para accesos futuros
+                return parsed.data;
+            }
+        }
+    } catch (e) {
+        console.warn("No se pudo leer del localStorage:", e);
+    }
+
+    // 3. Petición de Red si no está en caché o ya expiró
+    try {
         const response = await fetch(csvUrl);
         const text = await response.text();
         const rows = text.split("\n");
@@ -2029,10 +2063,144 @@ async function fetchGoogleSheetData(csvUrl) {
                 });
             }
         }
+
+        // Guardar resultado en caché (RAM y LocalStorage)
+        const cachePayload = { timestamp: now, data: data };
+        memoryCache[cacheKey] = cachePayload;
+        try {
+            localStorage.setItem(cacheKey, JSON.stringify(cachePayload));
+        } catch (e) {
+            console.warn("No se pudo guardar en localStorage (cuota excedida):", e);
+        }
+
         return data;
     } catch (error) {
         console.error("Error cargando Google Sheet:", error);
         return [];
+    }
+}
+
+/**
+ * Renderizado de tarjetas de ruta utilizando Lazy Loading (IntersectionObserver)
+ */
+let routeObserver = null;
+
+async function renderRoutes(dataToRender) {
+    const container = document.getElementById('routes-grid-container');
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (dataToRender.length === 0) {
+        container.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 20px;">No se encontraron rutas con ese nombre.</p>`;
+        return;
+    }
+
+    // Configurar el Observador Lazy Loading si está soportado por el navegador
+    if ('IntersectionObserver' in window) {
+        if (routeObserver) routeObserver.disconnect();
+        routeObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const card = entry.target;
+                    const routeData = card._routeData;
+                    if (routeData) {
+                        loadCardPreviewLazy(card, routeData);
+                    }
+                    observer.unobserve(card); // Dejar de observar una vez cargado
+                }
+            });
+        }, { rootMargin: '100px' });
+    }
+
+    for (const route of dataToRender) {
+        let iconHtml = "";
+        let letterBadge = route.type ? route.type.charAt(0).toUpperCase() : "A";
+
+        if (route.type === "Circuito") {
+            iconHtml = `<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--nfs-orange);">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.23-5.23"></path>
+            </svg>`;
+        } else if (route.type === "Sprint") {
+            iconHtml = `<span style="font-size: 22px; color: var(--nfs-orange);">⚡</span>`;
+        } else if (route.type === "Drag") {
+            iconHtml = `<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="color: var(--nfs-orange);">
+                <path d="M9 2h6v2H9V2zm1 3h4v2h-4V5zm-2 3h8v2H8V8zm1 3h6v2H9v-2zm-2 3h10v2H7v-2zm2 3h6v2H9v-2zm-3 3h12v2H6v-2z"/>
+            </svg>`;
+        } else {
+            iconHtml = `<span style="font-size: 22px; color: var(--nfs-orange);">🔄</span>`;
+        }
+
+        const card = document.createElement('div');
+        card.className = 'route-card';
+        card._routeData = route; // Guardar referencia para Lazy Loading
+
+        card.onclick = () => {
+            const titleEl = document.getElementById('leaderboard-title');
+            if (titleEl) titleEl.innerText = `Leaderboard: ${route.name} (${route.type})`;
+            if (typeof loadLeaderboardForRoute === 'function') loadLeaderboardForRoute(route);
+            if (typeof switchView === 'function') switchView('leaderboard');
+        };
+
+        card.innerHTML = `
+            <div class="route-icon-container">
+                <div class="route-icon-box">${iconHtml}</div>
+                <div class="route-badge-letter">${letterBadge}</div>
+            </div>
+            <div class="route-info">
+                <h3>${route.name}</h3>
+                <div class="route-preview-placeholder" style="font-size: 12px; color: #64748b;">Cargando récord...</div>
+            </div>
+            <div class="route-action-icon" title="Ver Leaderboard">🗺️</div>
+        `;
+
+        container.appendChild(card);
+
+        if (routeObserver) {
+            routeObserver.observe(card);
+        } else {
+            // Fallback en navegadores antiguos
+            loadCardPreviewLazy(card, route);
+        }
+    }
+}
+
+/**
+ * Función encargada de cargar los datos de previsualización sólo cuando la tarjeta es visible
+ */
+async function loadCardPreviewLazy(cardElement, route) {
+    const previewContainer = cardElement.querySelector('.route-preview-placeholder');
+    if (!previewContainer) return;
+
+    try {
+        let sampleSheet = "";
+        if (route.type === "Circuito") {
+            sampleSheet = route.sheets.junkmanSingle || route.sheets.bmwSingle;
+        } else {
+            sampleSheet = route.sheets.junkman || route.sheets.bmw;
+        }
+
+        if (sampleSheet) {
+            let rows = await fetchGoogleSheetData(sampleSheet);
+            let topRow = rows.find(r => r.rank.includes("1") || r.rank === "1");
+
+            if (topRow) {
+                previewContainer.outerHTML = `
+                    <div class="route-record-preview" style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+                        <span class="route-time-display" style="color: #ffffff; font-weight: 800;">⏱️ ${topRow.time}</span>
+                        <span style="font-size: 13px; color: #cbd5e1; font-weight: 600;">👤 ${topRow.driver}</span>
+                    </div>
+                    <div class="route-car-container" style="overflow: hidden; width: 100%; margin-top: 6px;">
+                        <div class="marquee" style="white-space: nowrap; font-size: 13px; font-weight: 700; color: #94a3b8;">
+                            🚗 ${topRow.car}
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+        }
+        previewContainer.innerHTML = `<span style="font-style: italic; color: #64748b; font-size: 12px;">Disponible para récord</span>`;
+    } catch (e) {
+        previewContainer.innerHTML = `<span style="font-style: italic; color: #64748b; font-size: 12px;">Sin datos</span>`;
     }
 }
 
