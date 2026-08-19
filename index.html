@@ -2321,34 +2321,28 @@ function renderTableRows(tbodyId, dataRows) {
 }
 
 /* =======================================================
-   GENERACIÓN OPTIMIZADA DE HALL OF FAME (MAX 5 FILAS POR HOJA)
+   HALL OF FAME (RÉCORDS MUNDIALES: CIRCUITO, SPRINT Y DRAG)
    ======================================================= */
 
 async function generateHallOfFame() {
     const hofTbody = document.getElementById('tbody-hall-of-fame');
     if (!hofTbody) return;
 
-    const sortedDrivers = await fetchWithMemoryAndStorageCache('compiled_hall_of_fame', async () => {
+    const sortedDrivers = await fetchWithMemoryAndStorageCache('compiled_hall_of_fame_v2', async () => {
         let driverCounts = {};
         const sourceData = typeof routesData !== 'undefined' ? routesData : [];
 
         for (const route of sourceData) {
-            let sheetsToFetch = [];
-            if (route.type === "Circuito" && route.sheets) {
-                if (route.sheets.junkmanSingle) sheetsToFetch.push(route.sheets.junkmanSingle);
-                if (route.sheets.junkmanFast) sheetsToFetch.push(route.sheets.junkmanFast);
-                if (route.sheets.bmwSingle) sheetsToFetch.push(route.sheets.bmwSingle);
-                if (route.sheets.bmwFast) sheetsToFetch.push(route.sheets.bmwFast);
-            } else if (route.sheets) {
-                if (route.sheets.junkman) sheetsToFetch.push(route.sheets.junkman);
-                if (route.sheets.bmw) sheetsToFetch.push(route.sheets.bmw);
-            }
+            if (!route.sheets) continue;
+
+            // Extraer DINÁMICAMENTE todas las URLs de Google Sheets de la ruta (Circuito, Sprint o Drag)
+            const sheetsToFetch = Object.values(route.sheets).filter(url => url && typeof url === 'string' && url.trim() !== "");
 
             for (const sheetUrl of sheetsToFetch) {
-                // SÓLO LEE LAS PRIMERAS 5 FILAS POR HOJA
+                // SÓLO LEE LAS PRIMERAS 5 FILAS (Suficiente para extraer el Top 1 / Récord)
                 const rows = await fetchGoogleSheetData(sheetUrl, 5);
                 if (rows && rows.length > 0) {
-                    const topDriverRow = rows.find(r => r.rank.includes("1") || r.rank === "1");
+                    const topDriverRow = rows.find(r => r.rank && (r.rank.includes("1") || r.rank === "1"));
                     if (topDriverRow && topDriverRow.driver) {
                         let driverName = topDriverRow.driver.trim().toUpperCase();
                         driverCounts[driverName] = (driverCounts[driverName] || 0) + 1;
@@ -2386,43 +2380,36 @@ async function generateHallOfFame() {
 }
 
 /* =======================================================
-   PROCESAMIENTO DE PODIOS Y LEADERBOARDS GLOBALES (MAX 7 FILAS)
+   PROCESAMIENTO DE PODIOS Y TOPS DE RUTAS (TODAS LAS CATEGORÍAS)
    ======================================================= */
 
-/**
- * Escanea SÓLO las primeras 7 filas por hoja para asegurar el Top 3
- * sin cargar la hoja completa.
- */
 async function processPodiumsForRoutes(filterType = null) {
-    const cacheKey = `compiled_podiums_${filterType ? filterType.toLowerCase() : 'all'}`;
+    const cacheKey = `compiled_podiums_v2_${filterType ? filterType.toLowerCase() : 'all'}`;
 
     return await fetchWithMemoryAndStorageCache(cacheKey, async () => {
         let podiumStats = {};
         const sourceData = typeof routesData !== 'undefined' ? routesData : [];
 
-        // Límite fijado estrictamente en las primeras 7 filas para máxima velocidad
-        const rowLimit = 7;
+        // Límite de filas según el tipo de consulta:
+        // - Podio Global: 7 filas (suficiente para registrar puestos 1, 2 y 3)
+        // - Top General de Rutas Específicas (Circuito/Sprint/Drag): 20 filas
+        const rowLimit = filterType ? 20 : 7;
 
         for (const route of sourceData) {
-            if (filterType && route.type.toLowerCase() !== filterType.toLowerCase()) continue;
+            // Filtrar por categoría si se especifica (Circuito, Sprint o Drag)
+            if (filterType && route.type && route.type.toLowerCase() !== filterType.toLowerCase()) continue;
+            if (!route.sheets) continue;
 
-            let sheetsToFetch = [];
-            if (route.type === "Circuito" && route.sheets) {
-                if (route.sheets.junkmanSingle) sheetsToFetch.push(route.sheets.junkmanSingle);
-                if (route.sheets.junkmanFast) sheetsToFetch.push(route.sheets.junkmanFast);
-                if (route.sheets.bmwSingle) sheetsToFetch.push(route.sheets.bmwSingle);
-                if (route.sheets.bmwFast) sheetsToFetch.push(route.sheets.bmwFast);
-            } else if (route.sheets) {
-                if (route.sheets.junkman) sheetsToFetch.push(route.sheets.junkman);
-                if (route.sheets.bmw) sheetsToFetch.push(route.sheets.bmw);
-            }
+            // Extraer DINÁMICAMENTE todas las URLs configuradas en el objeto sheets
+            const sheetsToFetch = Object.values(route.sheets).filter(url => url && typeof url === 'string' && url.trim() !== "");
 
             for (const sheetUrl of sheetsToFetch) {
-                // SÓLO LEE LAS PRIMERAS 7 FILAS POR HOJA
                 const rows = await fetchGoogleSheetData(sheetUrl, rowLimit);
                 rows.forEach(r => {
+                    if (!r.rank || !r.driver) return;
                     let rankNum = parseInt(r.rank.replace(/[^0-9]/g, ''));
-                    if ([1, 2, 3].includes(rankNum) && r.driver) {
+                    
+                    if ([1, 2, 3].includes(rankNum)) {
                         let driverName = r.driver.trim().toUpperCase();
                         if (!podiumStats[driverName]) {
                             podiumStats[driverName] = { first: 0, second: 0, third: 0 };
@@ -2455,6 +2442,7 @@ async function processPodiumsForRoutes(filterType = null) {
         return results;
     });
 }
+
 async function renderGlobalPodiumTable(tbodyId, filterType = null) {
     const tbody = document.getElementById(tbodyId);
     if (!tbody) return;
