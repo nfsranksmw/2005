@@ -2321,35 +2321,51 @@ function renderTableRows(tbodyId, dataRows) {
 }
 
 /* =======================================================
-   HALL OF FAME (RÉCORDS MUNDIALES: CIRCUITO, SPRINT Y DRAG)
+/* =======================================================
+   GENERACIÓN DE HALL OF FAME Y PODIOS (ULTRA RÁPIDOS CON PROMISE.ALL)
    ======================================================= */
+
+// Función auxiliar para forzar un límite de tiempo por petición y no colgar la web
+async function fetchWithTimeout(csvUrl, maxRows, timeoutMs = 3000) {
+    return Promise.race([
+        fetchGoogleSheetData(csvUrl, maxRows),
+        new Promise(resolve => setTimeout(() => resolve([]), timeoutMs))
+    ]);
+}
 
 async function generateHallOfFame() {
     const hofTbody = document.getElementById('tbody-hall-of-fame');
     if (!hofTbody) return;
 
-    const sortedDrivers = await fetchWithMemoryAndStorageCache('compiled_hall_of_fame_v2', async () => {
+    const sortedDrivers = await fetchWithMemoryAndStorageCache('compiled_hall_of_fame_v3', async () => {
         let driverCounts = {};
         const sourceData = typeof routesData !== 'undefined' ? routesData : [];
 
+        // 1. Recopilar todas las URLs a descargar en un solo listado
+        let tasks = [];
         for (const route of sourceData) {
             if (!route.sheets) continue;
-
-            // Extraer DINÁMICAMENTE todas las URLs de Google Sheets de la ruta (Circuito, Sprint o Drag)
-            const sheetsToFetch = Object.values(route.sheets).filter(url => url && typeof url === 'string' && url.trim() !== "");
-
-            for (const sheetUrl of sheetsToFetch) {
-                // SÓLO LEE LAS PRIMERAS 5 FILAS (Suficiente para extraer el Top 1 / Récord)
-                const rows = await fetchGoogleSheetData(sheetUrl, 5);
-                if (rows && rows.length > 0) {
-                    const topDriverRow = rows.find(r => r.rank && (r.rank.includes("1") || r.rank === "1"));
-                    if (topDriverRow && topDriverRow.driver) {
-                        let driverName = topDriverRow.driver.trim().toUpperCase();
-                        driverCounts[driverName] = (driverCounts[driverName] || 0) + 1;
-                    }
-                }
+            const sheetUrls = Object.values(route.sheets).filter(url => url && typeof url === 'string' && url.trim() !== "");
+            
+            for (const url of sheetUrls) {
+                // Solicitar SÓLO las primeras 5 filas con tiempo límite de 3s
+                tasks.push(fetchWithTimeout(url, 5));
             }
         }
+
+        // 2. Ejecutar TODAS las peticiones en PARALELO
+        const results = await Promise.all(tasks);
+
+        // 3. Procesar los resultados descargados simultáneamente
+        results.forEach(rows => {
+            if (rows && rows.length > 0) {
+                const topDriverRow = rows.find(r => r.rank && (r.rank.includes("1") || r.rank === "1"));
+                if (topDriverRow && topDriverRow.driver) {
+                    let driverName = topDriverRow.driver.trim().toUpperCase();
+                    driverCounts[driverName] = (driverCounts[driverName] || 0) + 1;
+                }
+            }
+        });
 
         let drivers = Object.keys(driverCounts).map(driver => ({ driver: driver, records: driverCounts[driver] }));
         drivers.sort((a, b) => b.records - a.records);
@@ -2376,6 +2392,68 @@ async function generateHallOfFame() {
             <td>${badge}</td>
         `;
         hofTbody.appendChild(tr);
+    });
+}
+
+async function processPodiumsForRoutes(filterType = null) {
+    const cacheKey = `compiled_podiums_v3_${filterType ? filterType.toLowerCase() : 'all'}`;
+
+    return await fetchWithMemoryAndStorageCache(cacheKey, async () => {
+        let podiumStats = {};
+        const sourceData = typeof routesData !== 'undefined' ? routesData : [];
+
+        const rowLimit = filterType ? 20 : 7;
+        let tasks = [];
+
+        for (const route of sourceData) {
+            if (filterType && route.type && route.type.toLowerCase() !== filterType.toLowerCase()) continue;
+            if (!route.sheets) continue;
+
+            const sheetUrls = Object.values(route.sheets).filter(url => url && typeof url === 'string' && url.trim() !== "");
+            for (const url of sheetUrls) {
+                tasks.push(fetchWithTimeout(url, rowLimit));
+            }
+        }
+
+        // Descarga PARALELA de los podios
+        const results = await Promise.all(tasks);
+
+        results.forEach(rows => {
+            if (!rows || rows.length === 0) return;
+            rows.forEach(r => {
+                if (!r.rank || !r.driver) return;
+                let rankNum = parseInt(r.rank.replace(/[^0-9]/g, ''));
+                
+                if ([1, 2, 3].includes(rankNum)) {
+                    let driverName = r.driver.trim().toUpperCase();
+                    if (!podiumStats[driverName]) {
+                        podiumStats[driverName] = { first: 0, second: 0, third: 0 };
+                    }
+                    if (rankNum === 1) podiumStats[driverName].first++;
+                    if (rankNum === 2) podiumStats[driverName].second++;
+                    if (rankNum === 3) podiumStats[driverName].third++;
+                }
+            });
+        });
+
+        let resultsArray = Object.keys(podiumStats).map(driver => {
+            let stats = podiumStats[driver];
+            return {
+                driver: driver,
+                first: stats.first,
+                second: stats.second,
+                third: stats.third,
+                total: stats.first + stats.second + stats.third
+            };
+        });
+
+        resultsArray.sort((a, b) => {
+            if (b.first !== a.first) return b.first - a.first;
+            if (b.second !== a.second) return b.second - a.second;
+            return b.third - a.third;
+        });
+
+        return resultsArray;
     });
 }
 
