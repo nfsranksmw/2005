@@ -2458,49 +2458,62 @@ async function processPodiumsForRoutes(filterType = null) {
 }
 
 /* =======================================================
-   PROCESAMIENTO DE PODIOS Y TOPS DE RUTAS (TODAS LAS CATEGORÍAS)
+   TOP DE PODIOS OPTIMIZADO + DOSIFICACIÓN (BOTÓN "CARGAR MÁS")
    ======================================================= */
 
+// Estado global para controlar la paginación de la UI
+const PODIUM_PAGE_SIZE = 10;
+const podiumDisplayLimits = {
+    'tbody-global-drivers': PODIUM_PAGE_SIZE,
+    'tbody-global-allroutes': PODIUM_PAGE_SIZE,
+    'tbody-global-circuit': PODIUM_PAGE_SIZE,
+    'tbody-global-sprint': PODIUM_PAGE_SIZE,
+    'tbody-global-drag': PODIUM_PAGE_SIZE
+};
+
 async function processPodiumsForRoutes(filterType = null) {
-    const cacheKey = `compiled_podiums_v2_${filterType ? filterType.toLowerCase() : 'all'}`;
+    const cacheKey = `compiled_podiums_v4_${filterType ? filterType.toLowerCase() : 'all'}`;
 
     return await fetchWithMemoryAndStorageCache(cacheKey, async () => {
         let podiumStats = {};
         const sourceData = typeof routesData !== 'undefined' ? routesData : [];
 
-        // Límite de filas según el tipo de consulta:
-        // - Podio Global: 7 filas (suficiente para registrar puestos 1, 2 y 3)
-        // - Top General de Rutas Específicas (Circuito/Sprint/Drag): 20 filas
-        const rowLimit = filterType ? 20 : 7;
+        // Límite fijado estrictamente en 7 filas por hoja para captura rápida del Top 3
+        const rowLimit = 7;
+        let tasks = [];
 
         for (const route of sourceData) {
-            // Filtrar por categoría si se especifica (Circuito, Sprint o Drag)
             if (filterType && route.type && route.type.toLowerCase() !== filterType.toLowerCase()) continue;
             if (!route.sheets) continue;
 
-            // Extraer DINÁMICAMENTE todas las URLs configuradas en el objeto sheets
-            const sheetsToFetch = Object.values(route.sheets).filter(url => url && typeof url === 'string' && url.trim() !== "");
-
-            for (const sheetUrl of sheetsToFetch) {
-                const rows = await fetchGoogleSheetData(sheetUrl, rowLimit);
-                rows.forEach(r => {
-                    if (!r.rank || !r.driver) return;
-                    let rankNum = parseInt(r.rank.replace(/[^0-9]/g, ''));
-                    
-                    if ([1, 2, 3].includes(rankNum)) {
-                        let driverName = r.driver.trim().toUpperCase();
-                        if (!podiumStats[driverName]) {
-                            podiumStats[driverName] = { first: 0, second: 0, third: 0 };
-                        }
-                        if (rankNum === 1) podiumStats[driverName].first++;
-                        if (rankNum === 2) podiumStats[driverName].second++;
-                        if (rankNum === 3) podiumStats[driverName].third++;
-                    }
-                });
+            const sheetUrls = Object.values(route.sheets).filter(url => url && typeof url === 'string' && url.trim() !== "");
+            for (const url of sheetUrls) {
+                tasks.push(fetchWithTimeout(url, rowLimit, 3000));
             }
         }
 
-        let results = Object.keys(podiumStats).map(driver => {
+        // Descarga simultánea en paralelo de todas las rutas requeridas
+        const results = await Promise.all(tasks);
+
+        results.forEach(rows => {
+            if (!rows || rows.length === 0) return;
+            rows.forEach(r => {
+                if (!r.rank || !r.driver) return;
+                let rankNum = parseInt(r.rank.replace(/[^0-9]/g, ''));
+                
+                if ([1, 2, 3].includes(rankNum)) {
+                    let driverName = r.driver.trim().toUpperCase();
+                    if (!podiumStats[driverName]) {
+                        podiumStats[driverName] = { first: 0, second: 0, third: 0 };
+                    }
+                    if (rankNum === 1) podiumStats[driverName].first++;
+                    if (rankNum === 2) podiumStats[driverName].second++;
+                    if (rankNum === 3) podiumStats[driverName].third++;
+                }
+            });
+        });
+
+        let resultsArray = Object.keys(podiumStats).map(driver => {
             let stats = podiumStats[driver];
             return {
                 driver: driver,
@@ -2511,29 +2524,36 @@ async function processPodiumsForRoutes(filterType = null) {
             };
         });
 
-        results.sort((a, b) => {
+        resultsArray.sort((a, b) => {
             if (b.first !== a.first) return b.first - a.first;
             if (b.second !== a.second) return b.second - a.second;
             return b.third - a.third;
         });
 
-        return results;
+        return resultsArray;
     });
 }
 
+/**
+ * Renderiza la tabla de podios limitando a los primeros 10 y agregando/actualizando el botón "Cargar más"
+ */
 async function renderGlobalPodiumTable(tbodyId, filterType = null) {
     const tbody = document.getElementById(tbodyId);
     if (!tbody) return;
     
-    let data = await processPodiumsForRoutes(filterType);
+    let fullData = await processPodiumsForRoutes(filterType);
 
-    tbody.innerHTML = '';
-    if (!data || data.length === 0) {
+    if (!fullData || fullData.length === 0) {
         tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No hay podios registrados en esta categoría.</td></tr>`;
+        removeLoadMoreButton(tbodyId);
         return;
     }
 
-    data.forEach((item, index) => {
+    const currentLimit = podiumDisplayLimits[tbodyId] || PODIUM_PAGE_SIZE;
+    const visibleData = fullData.slice(0, currentLimit);
+
+    tbody.innerHTML = '';
+    visibleData.forEach((item, index) => {
         let pos = index + 1;
         let posClass = pos === 1 ? "rank-1" : (pos === 2 ? "rank-2" : (pos === 3 ? "rank-3" : ""));
 
@@ -2548,6 +2568,51 @@ async function renderGlobalPodiumTable(tbodyId, filterType = null) {
         `;
         tbody.appendChild(tr);
     });
+
+    // Gestionar la presencia del botón "Cargar más" justo debajo del contenedor de la tabla
+    if (fullData.length > currentLimit) {
+        renderLoadMoreButton(tbodyId, () => {
+            podiumDisplayLimits[tbodyId] += PODIUM_PAGE_SIZE;
+            renderGlobalPodiumTable(tbodyId, filterType);
+        });
+    } else {
+        removeLoadMoreButton(tbodyId);
+    }
+}
+
+// Generadores del botón "Cargar Más" para la UI
+function renderLoadMoreButton(tbodyId, onClickHandler) {
+    const tbody = document.getElementById(tbodyId);
+    if (!tbody) return;
+    
+    const tableContainer = tbody.closest('.table-container') || tbody.parentElement;
+    let btnContainer = tableContainer.nextElementSibling;
+
+    if (!btnContainer || !btnContainer.classList.contains('load-more-wrapper')) {
+        btnContainer = document.createElement('div');
+        btnContainer.className = 'load-more-wrapper';
+        btnContainer.style.cssText = 'text-align: center; margin: 15px 0;';
+        tableContainer.parentNode.insertBefore(btnContainer, tableContainer.nextSibling);
+    }
+
+    btnContainer.innerHTML = `
+        <button class="btn-load-more" style="background: var(--nfs-orange, #ff6600); color: #fff; border: none; padding: 10px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.2s;">
+            ⬇️ Cargar más pilotos
+        </button>
+    `;
+
+    const btn = btnContainer.querySelector('.btn-load-more');
+    btn.onclick = onClickHandler;
+}
+
+function removeLoadMoreButton(tbodyId) {
+    const tbody = document.getElementById(tbodyId);
+    if (!tbody) return;
+    const tableContainer = tbody.closest('.table-container') || tbody.parentElement;
+    const btnContainer = tableContainer.nextElementSibling;
+    if (btnContainer && btnContainer.classList.contains('load-more-wrapper')) {
+        btnContainer.remove();
+    }
 }
 
 async function generateGlobalLeaderboards() {
