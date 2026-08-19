@@ -2386,13 +2386,12 @@ async function generateHallOfFame() {
 }
 
 /* =======================================================
-   PROCESAMIENTO DE PODIOS Y LEADERBOARDS GLOBALES
+   PROCESAMIENTO DE PODIOS Y LEADERBOARDS GLOBALES (MAX 7 FILAS)
    ======================================================= */
 
 /**
- * Escanea únicamente las filas requeridas por hoja según el tipo de solicitud:
- * - Podio / Top Global: maxRows = 5 (Filas 1 a 5)
- * - Tops de Rutas Específicas: maxRows = 20 (Filas 1 a 20)
+ * Escanea SÓLO las primeras 7 filas por hoja para asegurar el Top 3
+ * sin cargar la hoja completa.
  */
 async function processPodiumsForRoutes(filterType = null) {
     const cacheKey = `compiled_podiums_${filterType ? filterType.toLowerCase() : 'all'}`;
@@ -2401,8 +2400,8 @@ async function processPodiumsForRoutes(filterType = null) {
         let podiumStats = {};
         const sourceData = typeof routesData !== 'undefined' ? routesData : [];
 
-        // Si es un Top general del Podio Global se escanean 5 filas; si es por categoría (Circuito, Sprint, Drag) hasta 20 filas
-        const rowLimit = filterType ? 20 : 5;
+        // Límite fijado estrictamente en las primeras 7 filas para máxima velocidad
+        const rowLimit = 7;
 
         for (const route of sourceData) {
             if (filterType && route.type.toLowerCase() !== filterType.toLowerCase()) continue;
@@ -2419,6 +2418,7 @@ async function processPodiumsForRoutes(filterType = null) {
             }
 
             for (const sheetUrl of sheetsToFetch) {
+                // SÓLO LEE LAS PRIMERAS 7 FILAS POR HOJA
                 const rows = await fetchGoogleSheetData(sheetUrl, rowLimit);
                 rows.forEach(r => {
                     let rankNum = parseInt(r.rank.replace(/[^0-9]/g, ''));
@@ -2455,7 +2455,6 @@ async function processPodiumsForRoutes(filterType = null) {
         return results;
     });
 }
-
 async function renderGlobalPodiumTable(tbodyId, filterType = null) {
     const tbody = document.getElementById(tbodyId);
     if (!tbody) return;
