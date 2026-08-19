@@ -2003,7 +2003,7 @@ function setCategory(category, btn) {
 }
 
 /* =======================================================
-   SISTEMA DE CACHÉ INTELIGENTE Y LAZY LOADING
+   SISTEMA DE CACHÉ INTELIGENTE Y LAZY LOADING (EXPERTO)
    ======================================================= */
 
 // Configuración de Caché (10 minutos de tiempo de vida / TTL)
@@ -2011,14 +2011,16 @@ const CACHE_TTL_MS = 10 * 60 * 1000;
 const memoryCache = {}; // Caché rápida en memoria RAM
 
 /**
- * Fetch a Google Sheets con Caché Inteligente (RAM + localStorage)
+ * Fetch a Google Sheets con Caché Inteligente y Lectura Acotada por Filas
+ * @param {string} csvUrl - URL del CSV en Google Sheets
+ * @param {number|null} maxRows - Límite de filas a procesar (ej. 5 para HoF, 20 para Rutas)
  */
-async function fetchGoogleSheetData(csvUrl) {
+async function fetchGoogleSheetData(csvUrl, maxRows = null) {
     if (!csvUrl || csvUrl.trim() === "" || csvUrl.includes("PEGA_") || csvUrl.includes("URL_CSV_")) {
         return [];
     }
 
-    const cacheKey = `nfs_cache_${csvUrl}`;
+    const cacheKey = `nfs_cache_${csvUrl}${maxRows ? `_max${maxRows}` : ''}`;
     const now = Date.now();
 
     // 1. Consultar en Memoria RAM
@@ -2032,7 +2034,7 @@ async function fetchGoogleSheetData(csvUrl) {
         if (stored) {
             const parsed = JSON.parse(stored);
             if (now - parsed.timestamp < CACHE_TTL_MS) {
-                memoryCache[cacheKey] = parsed; // Almacenar en RAM para accesos futuros
+                memoryCache[cacheKey] = parsed; // Almacenar en RAM
                 return parsed.data;
             }
         }
@@ -2040,14 +2042,17 @@ async function fetchGoogleSheetData(csvUrl) {
         console.warn("No se pudo leer del localStorage:", e);
     }
 
-    // 3. Petición de Red si no está en caché o ya expiró
+    // 3. Petición de Red con parseo acotado
     try {
         const response = await fetch(csvUrl);
         const text = await response.text();
         const rows = text.split("\n");
         let data = [];
 
-        for (let i = 1; i < rows.length; i++) {
+        // Determinar el límite real de filas a escanear
+        const limit = maxRows ? Math.min(rows.length, maxRows + 1) : rows.length;
+
+        for (let i = 1; i < limit; i++) {
             let r = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
             if (r && r.length >= 8 && r[0].trim() !== "") {
                 let rawYt = r[7] ? r[7].replace(/"/g, '').replace(/\r/g, '').trim() : "#";
@@ -2064,7 +2069,7 @@ async function fetchGoogleSheetData(csvUrl) {
             }
         }
 
-        // Guardar resultado en caché (RAM y LocalStorage)
+        // Guardar resultado en caché
         const cachePayload = { timestamp: now, data: data };
         memoryCache[cacheKey] = cachePayload;
         try {
@@ -2081,8 +2086,45 @@ async function fetchGoogleSheetData(csvUrl) {
 }
 
 /**
- * Renderizado de tarjetas de ruta utilizando Lazy Loading (IntersectionObserver)
+ * Función auxiliar genérica para almacenar/recuperar objetos procesados de la Caché
  */
+async function fetchWithMemoryAndStorageCache(cacheKey, computationFn) {
+    const now = Date.now();
+
+    if (memoryCache[cacheKey] && (now - memoryCache[cacheKey].timestamp < CACHE_TTL_MS)) {
+        return memoryCache[cacheKey].data;
+    }
+
+    try {
+        const stored = localStorage.getItem(cacheKey);
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            if (now - parsed.timestamp < CACHE_TTL_MS) {
+                memoryCache[cacheKey] = parsed;
+                return parsed.data;
+            }
+        }
+    } catch (e) {
+        console.warn("Error leyendo de caché guardada:", e);
+    }
+
+    const computedData = await computationFn();
+    const cachePayload = { timestamp: now, data: computedData };
+
+    memoryCache[cacheKey] = cachePayload;
+    try {
+        localStorage.setItem(cacheKey, JSON.stringify(cachePayload));
+    } catch (e) {
+        console.warn("Error guardando en localStorage:", e);
+    }
+
+    return computedData;
+}
+
+/* =======================================================
+   SISTEMA DE LAZY LOADING Y RENDERIZADO DE RUTAS
+   ======================================================= */
+
 let routeObserver = null;
 
 async function renderRoutes(dataToRender) {
@@ -2095,7 +2137,6 @@ async function renderRoutes(dataToRender) {
         return;
     }
 
-    // Configurar el Observador Lazy Loading si está soportado por el navegador
     if ('IntersectionObserver' in window) {
         if (routeObserver) routeObserver.disconnect();
         routeObserver = new IntersectionObserver((entries, observer) => {
@@ -2106,7 +2147,7 @@ async function renderRoutes(dataToRender) {
                     if (routeData) {
                         loadCardPreviewLazy(card, routeData);
                     }
-                    observer.unobserve(card); // Dejar de observar una vez cargado
+                    observer.unobserve(card);
                 }
             });
         }, { rootMargin: '100px' });
@@ -2132,7 +2173,7 @@ async function renderRoutes(dataToRender) {
 
         const card = document.createElement('div');
         card.className = 'route-card';
-        card._routeData = route; // Guardar referencia para Lazy Loading
+        card._routeData = route;
 
         card.onclick = () => {
             const titleEl = document.getElementById('leaderboard-title');
@@ -2158,21 +2199,13 @@ async function renderRoutes(dataToRender) {
         if (routeObserver) {
             routeObserver.observe(card);
         } else {
-            // Fallback en navegadores antiguos
             loadCardPreviewLazy(card, route);
         }
     }
 }
 
 /**
- * Función encargada de cargar los datos de previsualización sólo cuando la tarjeta es visible
- */
-/* =======================================================
-   SISTEMA DE LAZY LOADING ROBUSTO (COMPATIBLE CON DRAG)
-   ======================================================= */
-
-/**
- * Carga diferida de previsualización de récord
+ * Previsualización utilizando lectura acotada de las primeras 5 filas (maxRows = 5)
  */
 async function loadCardPreviewLazy(cardElement, route) {
     const previewContainer = cardElement.querySelector('.route-preview-placeholder');
@@ -2181,27 +2214,23 @@ async function loadCardPreviewLazy(cardElement, route) {
     try {
         let sampleSheet = "";
 
-        // Verificación segura de sheets para evitar errores si route.sheets no existe o es nulo
         if (route && route.sheets) {
             if (route.type === "Circuito") {
                 sampleSheet = route.sheets.junkmanSingle || route.sheets.bmwSingle || route.sheets.junkman || route.sheets.bmw || "";
             } else if (route.type === "Drag") {
-                // Para Drag busca cualquier hoja disponible en su objeto sheets
                 sampleSheet = route.sheets.junkman || route.sheets.bmw || route.sheets.drag || route.sheets.single || Object.values(route.sheets)[0] || "";
             } else {
-                // Sprint o cualquier otro tipo
                 sampleSheet = route.sheets.junkman || route.sheets.bmw || Object.values(route.sheets)[0] || "";
             }
         }
 
-        // Si no hay URL de hoja válida configurada
         if (!sampleSheet || sampleSheet.trim() === "") {
             previewContainer.innerHTML = `<span style="font-style: italic; color: #64748b; font-size: 12px;">Disponible para récord</span>`;
             return;
         }
 
-        // Consultar datos desde la caché / red
-        let rows = await fetchGoogleSheetData(sampleSheet);
+        // Lectura optimizada: máximo las primeras 5 filas de la hoja para hallar el rank #1
+        let rows = await fetchGoogleSheetData(sampleSheet, 5);
         let topRow = Array.isArray(rows) ? rows.find(r => r.rank && (r.rank.includes("1") || r.rank === "1")) : null;
 
         if (topRow) {
@@ -2232,6 +2261,7 @@ async function loadLeaderboardForRoute(route) {
 
     document.querySelectorAll('.circuit-section, .sprintdrag-section').forEach(sec => sec.classList.remove('active'));
 
+    // Las tablas completas del leaderboard individual sí solicitan las filas necesarias
     if (route.type === "Circuito") {
         if (circuitTabs) circuitTabs.classList.add('active-group');
         if (sprintDragTabs) sprintDragTabs.classList.remove('active-group');
@@ -2290,41 +2320,50 @@ function renderTableRows(tbodyId, dataRows) {
     });
 }
 
+/* =======================================================
+   GENERACIÓN OPTIMIZADA DE HALL OF FAME (MAX 5 FILAS POR HOJA)
+   ======================================================= */
+
 async function generateHallOfFame() {
     const hofTbody = document.getElementById('tbody-hall-of-fame');
     if (!hofTbody) return;
-    let driverCounts = {};
-    const sourceData = typeof routesData !== 'undefined' ? routesData : [];
 
-    for (const route of sourceData) {
-        let sheetsToFetch = [];
-        if (route.type === "Circuito" && route.sheets) {
-            if (route.sheets.junkmanSingle) sheetsToFetch.push(route.sheets.junkmanSingle);
-            if (route.sheets.junkmanFast) sheetsToFetch.push(route.sheets.junkmanFast);
-            if (route.sheets.bmwSingle) sheetsToFetch.push(route.sheets.bmwSingle);
-            if (route.sheets.bmwFast) sheetsToFetch.push(route.sheets.bmwFast);
-        } else if (route.sheets) {
-            if (route.sheets.junkman) sheetsToFetch.push(route.sheets.junkman);
-            if (route.sheets.bmw) sheetsToFetch.push(route.sheets.bmw);
-        }
+    const sortedDrivers = await fetchWithMemoryAndStorageCache('compiled_hall_of_fame', async () => {
+        let driverCounts = {};
+        const sourceData = typeof routesData !== 'undefined' ? routesData : [];
 
-        for (const sheetUrl of sheetsToFetch) {
-            const rows = await fetchGoogleSheetData(sheetUrl);
-            if (rows && rows.length > 0) {
-                const topDriverRow = rows.find(r => r.rank.includes("1") || r.rank === "1");
-                if (topDriverRow && topDriverRow.driver) {
-                    let driverName = topDriverRow.driver.trim().toUpperCase();
-                    driverCounts[driverName] = (driverCounts[driverName] || 0) + 1;
+        for (const route of sourceData) {
+            let sheetsToFetch = [];
+            if (route.type === "Circuito" && route.sheets) {
+                if (route.sheets.junkmanSingle) sheetsToFetch.push(route.sheets.junkmanSingle);
+                if (route.sheets.junkmanFast) sheetsToFetch.push(route.sheets.junkmanFast);
+                if (route.sheets.bmwSingle) sheetsToFetch.push(route.sheets.bmwSingle);
+                if (route.sheets.bmwFast) sheetsToFetch.push(route.sheets.bmwFast);
+            } else if (route.sheets) {
+                if (route.sheets.junkman) sheetsToFetch.push(route.sheets.junkman);
+                if (route.sheets.bmw) sheetsToFetch.push(route.sheets.bmw);
+            }
+
+            for (const sheetUrl of sheetsToFetch) {
+                // SÓLO LEE LAS PRIMERAS 5 FILAS POR HOJA
+                const rows = await fetchGoogleSheetData(sheetUrl, 5);
+                if (rows && rows.length > 0) {
+                    const topDriverRow = rows.find(r => r.rank.includes("1") || r.rank === "1");
+                    if (topDriverRow && topDriverRow.driver) {
+                        let driverName = topDriverRow.driver.trim().toUpperCase();
+                        driverCounts[driverName] = (driverCounts[driverName] || 0) + 1;
+                    }
                 }
             }
         }
-    }
 
-    let sortedDrivers = Object.keys(driverCounts).map(driver => ({ driver: driver, records: driverCounts[driver] }));
-    sortedDrivers.sort((a, b) => b.records - a.records);
+        let drivers = Object.keys(driverCounts).map(driver => ({ driver: driver, records: driverCounts[driver] }));
+        drivers.sort((a, b) => b.records - a.records);
+        return drivers;
+    });
 
     hofTbody.innerHTML = '';
-    if (sortedDrivers.length === 0) {
+    if (!sortedDrivers || sortedDrivers.length === 0) {
         hofTbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">No hay récords registrados todavía.</td></tr>`;
         return;
     }
@@ -2346,70 +2385,85 @@ async function generateHallOfFame() {
     });
 }
 
+/* =======================================================
+   PROCESAMIENTO DE PODIOS Y LEADERBOARDS GLOBALES
+   ======================================================= */
+
+/**
+ * Escanea únicamente las filas requeridas por hoja según el tipo de solicitud:
+ * - Podio / Top Global: maxRows = 5 (Filas 1 a 5)
+ * - Tops de Rutas Específicas: maxRows = 20 (Filas 1 a 20)
+ */
 async function processPodiumsForRoutes(filterType = null) {
-    let podiumStats = {};
-    const sourceData = typeof routesData !== 'undefined' ? routesData : [];
+    const cacheKey = `compiled_podiums_${filterType ? filterType.toLowerCase() : 'all'}`;
 
-    for (const route of sourceData) {
-        if (filterType && route.type.toLowerCase() !== filterType.toLowerCase()) continue;
+    return await fetchWithMemoryAndStorageCache(cacheKey, async () => {
+        let podiumStats = {};
+        const sourceData = typeof routesData !== 'undefined' ? routesData : [];
 
-        let sheetsToFetch = [];
-        if (route.type === "Circuito" && route.sheets) {
-            if (route.sheets.junkmanSingle) sheetsToFetch.push(route.sheets.junkmanSingle);
-            if (route.sheets.junkmanFast) sheetsToFetch.push(route.sheets.junkmanFast);
-            if (route.sheets.bmwSingle) sheetsToFetch.push(route.sheets.bmwSingle);
-            if (route.sheets.bmwFast) sheetsToFetch.push(route.sheets.bmwFast);
-        } else if (route.sheets) {
-            if (route.sheets.junkman) sheetsToFetch.push(route.sheets.junkman);
-            if (route.sheets.bmw) sheetsToFetch.push(route.sheets.bmw);
-        }
+        // Si es un Top general del Podio Global se escanean 5 filas; si es por categoría (Circuito, Sprint, Drag) hasta 20 filas
+        const rowLimit = filterType ? 20 : 5;
 
-        for (const sheetUrl of sheetsToFetch) {
-            const rows = await fetchGoogleSheetData(sheetUrl);
-            rows.forEach(r => {
-                let rankNum = parseInt(r.rank.replace(/[^0-9]/g, ''));
-                if ([1, 2, 3].includes(rankNum) && r.driver) {
-                    let driverName = r.driver.trim().toUpperCase();
-                    if (!podiumStats[driverName]) {
-                        podiumStats[driverName] = { first: 0, second: 0, third: 0 };
+        for (const route of sourceData) {
+            if (filterType && route.type.toLowerCase() !== filterType.toLowerCase()) continue;
+
+            let sheetsToFetch = [];
+            if (route.type === "Circuito" && route.sheets) {
+                if (route.sheets.junkmanSingle) sheetsToFetch.push(route.sheets.junkmanSingle);
+                if (route.sheets.junkmanFast) sheetsToFetch.push(route.sheets.junkmanFast);
+                if (route.sheets.bmwSingle) sheetsToFetch.push(route.sheets.bmwSingle);
+                if (route.sheets.bmwFast) sheetsToFetch.push(route.sheets.bmwFast);
+            } else if (route.sheets) {
+                if (route.sheets.junkman) sheetsToFetch.push(route.sheets.junkman);
+                if (route.sheets.bmw) sheetsToFetch.push(route.sheets.bmw);
+            }
+
+            for (const sheetUrl of sheetsToFetch) {
+                const rows = await fetchGoogleSheetData(sheetUrl, rowLimit);
+                rows.forEach(r => {
+                    let rankNum = parseInt(r.rank.replace(/[^0-9]/g, ''));
+                    if ([1, 2, 3].includes(rankNum) && r.driver) {
+                        let driverName = r.driver.trim().toUpperCase();
+                        if (!podiumStats[driverName]) {
+                            podiumStats[driverName] = { first: 0, second: 0, third: 0 };
+                        }
+                        if (rankNum === 1) podiumStats[driverName].first++;
+                        if (rankNum === 2) podiumStats[driverName].second++;
+                        if (rankNum === 3) podiumStats[driverName].third++;
                     }
-                    if (rankNum === 1) podiumStats[driverName].first++;
-                    if (rankNum === 2) podiumStats[driverName].second++;
-                    if (rankNum === 3) podiumStats[driverName].third++;
-                }
-            });
+                });
+            }
         }
-    }
 
-    let results = Object.keys(podiumStats).map(driver => {
-        let stats = podiumStats[driver];
-        return {
-            driver: driver,
-            first: stats.first,
-            second: stats.second,
-            third: stats.third,
-            total: stats.first + stats.second + stats.third
-        };
+        let results = Object.keys(podiumStats).map(driver => {
+            let stats = podiumStats[driver];
+            return {
+                driver: driver,
+                first: stats.first,
+                second: stats.second,
+                third: stats.third,
+                total: stats.first + stats.second + stats.third
+            };
+        });
+
+        results.sort((a, b) => {
+            if (b.first !== a.first) return b.first - a.first;
+            if (b.second !== a.second) return b.second - a.second;
+            return b.third - a.third;
+        });
+
+        return results;
     });
-
-    results.sort((a, b) => {
-        if (b.first !== a.first) return b.first - a.first;
-        if (b.second !== a.second) return b.second - a.second;
-        return b.third - a.third;
-    });
-
-    return results;
 }
 
 async function renderGlobalPodiumTable(tbodyId, filterType = null) {
     const tbody = document.getElementById(tbodyId);
     if (!tbody) return;
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--nfs-orange);">Calculando datos globales...</td></tr>`;
     
     let data = await processPodiumsForRoutes(filterType);
 
     tbody.innerHTML = '';
-    if (data.length === 0) {
+    if (!data || data.length === 0) {
         tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No hay podios registrados en esta categoría.</td></tr>`;
         return;
     }
@@ -2439,15 +2493,24 @@ async function generateGlobalLeaderboards() {
     await renderGlobalPodiumTable('tbody-global-drag', 'Drag');
 }
 
+/* =======================================================
+   INICIALIZACIÓN OPTIMIZADA POR EVENTO DOM
+   ======================================================= */
+
 window.addEventListener('DOMContentLoaded', () => {
-    generateHallOfFame();
-    generateGlobalLeaderboards();
+    // 1. Carga inmediata de las Tarjetas de Rutas (Prioridad de interfaz)
     if (typeof routesData !== 'undefined') {
         renderRoutes(routesData);
     }
+
+    // 2. Ejecución diferida en segundo plano para no congelar la renderización inicial
+    setTimeout(() => {
+        generateHallOfFame();
+        generateGlobalLeaderboards();
+    }, 150);
 });
 
-// LEADERBOARD STATS
+// ESTADÍSTICAS DEL LEADERBOARD
 function updateLeaderboardStats(showingNum, totalNum, currentClass = 'ALL') {
     const showingEl = document.getElementById('showing-count');
     const totalEl = document.getElementById('total-races-count');
