@@ -636,30 +636,25 @@
             <img src="nfsranksmwlogo.png" alt="Logo" style="height: 54px; vertical-align: middle; margin-right: 38px;">
             NFS: MW 2005 - Récords
         </div>
-        <!-- Resto del menú de navegación -->
-        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-        <nav id="main-nav">
-            <a href="#" onclick="switchView('home')" class="active" id="nav-home">Home</a>
-            <a href="#" onclick="switchView('routes')" id="nav-routes">Leaderboards</a>
-            <a href="#" onclick="switchView('halloffame')" id="nav-halloffame">Hall of Fame</a>
-            <a href="#" onclick="switchView('globaldrivers')" id="nav-globaldrivers">Top Global Drivers</a>
-            <a href="#" onclick="switchView('globalroutes')" id="nav-globalroutes">Top Rutas</a>
-            <a href="#" onclick="switchView('guides')" id="nav-guides">Guías & Tuning</a>
-            <a href="#" onclick="switchView('rules')" id="nav-rules">Rules & Norm</a>
-            <!-- Contenedor del Buscador de Pilotos -->
-            <div id="search-driver-wrapper"></div>
-        </nav>
-    </header>
-    <main class="container">
-    <!-- 1. Buscador de Pilotos arriba de las tablas -->
-    <div id="search-driver-wrapper"></div>
+        Perfecto, teniendo la estructura exacta de tu menú, aquí tienes cómo integrar el nuevo ítem Expediente de Piloto tanto en el HTML como en la función de control de vistas en JavaScript.
 
-    <!-- 2. Sección Hall of Fame -->
-    <section id="hall-of-fame-section">
-        <h2>👑 Hall of Fame</h2>
-        ...
-    </section>
-</main>
+1. En tu menú HTML
+Agrega la nueva etiqueta <a> dentro del elemento <nav id="main-nav">:
+    
+<div class="menu-toggle" onclick="toggleMenu()">☰</div>
+<nav id="main-nav">
+    <a href="#" onclick="switchView('home')" class="active" id="nav-home">Home</a>
+    <a href="#" onclick="switchView('routes')" id="nav-routes">Leaderboards</a>
+    <a href="#" onclick="switchView('halloffame')" id="nav-halloffame">Hall of Fame</a>
+    <a href="#" onclick="switchView('globaldrivers')" id="nav-globaldrivers">Top Global Drivers</a>
+    <a href="#" onclick="switchView('globalroutes')" id="nav-globalroutes">Top Rutas</a>
+    <!-- NUEVA PESTAÑA AGREGADA -->
+    <a href="#" onclick="switchView('driverprofile')" id="nav-driverprofile">🔍 Expediente de Piloto</a>
+    <a href="#" onclick="switchView('guides')" id="nav-guides">Guías & Tuning</a>
+    <a href="#" onclick="switchView('rules')" id="nav-rules">Rules & Norm</a>
+</nav>
+    </header>
+    
     <section id="view-home" class="view-section active" style="padding: 0; max-width: 100%;">
         <div class="about-section">
             <h2>SOBRE ESTE PROYECTO</h2>
@@ -679,7 +674,8 @@
             <h2>DRIVERS</h2>
             <h3>100%<br>COMPETITIVE</h3>
         </div>
-        
+        <!-- Contenedor del Buscador de Pilotos -->
+            <div id="search-driver-wrapper"></div>
         <div style="max-width: 1100px; margin: 30px auto; padding: 0 15px;">
             <div class="news-grid">
                 <div class="news-card">
