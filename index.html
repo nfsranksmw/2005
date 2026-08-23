@@ -636,21 +636,19 @@
             <img src="nfsranksmwlogo.png" alt="Logo" style="height: 54px; vertical-align: middle; margin-right: 38px;">
             NFS: MW 2005 - Récords
         </div>
-
-
-       <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-       <nav id="main-nav">
-       <a href="#" onclick="switchView('home')" class="active" id="nav-home">Home</a>
-       <a href="#" onclick="switchView('routes')" id="nav-routes">Leaderboards</a>
-       <a href="#" onclick="switchView('halloffame')" id="nav-halloffame">Hall of Fame</a>
-       <a href="#" onclick="switchView('globaldrivers')" id="nav-globaldrivers">Top Global Drivers</a>
-       <a href="#" onclick="switchView('globalroutes')" id="nav-globalroutes">Top Rutas</a>
-       <!-- NUEVA PESTAÑA AGREGADA -->
-       <a href="#" onclick="switchView('guides')" id="nav-guides">Guías & Tuning</a>
-       <a href="#" onclick="switchView('rules')" id="nav-rules">Rules & Norm</a>
-       <a href="#" onclick="switchView('driverprofile')" id="nav-driverprofile">🔍Search Driver</a>
-</nav>
+        <!-- Resto del menú de navegación -->
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+        <nav id="main-nav">
+            <a href="#" onclick="switchView('home')" class="active" id="nav-home">Home</a>
+            <a href="#" onclick="switchView('routes')" id="nav-routes">Leaderboards</a>
+            <a href="#" onclick="switchView('halloffame')" id="nav-halloffame">Hall of Fame</a>
+            <a href="#" onclick="switchView('globaldrivers')" id="nav-globaldrivers">Top Global Drivers</a>
+            <a href="#" onclick="switchView('globalroutes')" id="nav-globalroutes">Top Rutas</a>
+            <a href="#" onclick="switchView('guides')" id="nav-guides">Guías & Tuning</a>
+            <a href="#" onclick="switchView('rules')" id="nav-rules">Rules & Norm</a>
+        </nav>
     </header>
+
     <section id="view-home" class="view-section active" style="padding: 0; max-width: 100%;">
         <div class="about-section">
             <h2>SOBRE ESTE PROYECTO</h2>
@@ -754,7 +752,8 @@
     <!-- VISTA: SALÓN DE LA FAMA -->
     <section id="view-halloffame" class="view-section">
         <h2 class="section-title">Salón de la Fama - Top Drivers</h2>
-        
+        <!-- Contenedor del Buscador de Pilotos -->
+        <div id="search-driver-wrapper"></div>
         <div class="table-container">
             <table>
                 <thead>
@@ -942,13 +941,7 @@
             </ul>
         </div>
     </section>
-        <!-- VISTA INDEPENDIENTE: EXPEDIENTE DE PILOTO -->
-        <div id="view-driverprofile" class="app-view" style="display: none;">
-        <div id="search-driver-wrapper"></div>
-        </div>
-        <!-- Contenedor del Buscador de Pilotos -->
-        <div id="search-driver-wrapper"></div>
-        
+
     <section id="view-leaderboard" class="view-section">
         <h2 class="section-title" id="leaderboard-title">Leaderboard: Ruta</h2>
         
@@ -2679,7 +2672,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }, 150);
 });
 /* =======================================================
-   BUSCADOR DE PILOTO EXPRESS (CORREGIDO Y MAPEADO DE RUTAS)
+   BUSCADOR DE PILOTO (ESCANEO COMPLETO Y FALLBACK DE CACHÉ)
    ======================================================= */
 
 async function searchDriverProfile(driverQuery) {
@@ -2692,7 +2685,7 @@ async function searchDriverProfile(driverQuery) {
 
     if (!driverStats) return null;
 
-    // 2. Mapear participaciones del piloto asociando la ruta correspondiente desde memoryCache
+    // 2. Escanear las rutas mapeadas
     const sourceData = typeof routesData !== 'undefined' ? routesData : [];
     let driverTracks = [];
 
@@ -2701,26 +2694,22 @@ async function searchDriverProfile(driverQuery) {
         const sheetEntries = Object.entries(route.sheets);
 
         for (const [sheetKey, sheetUrl] of sheetEntries) {
-            if (!sheetUrl || typeof sheetUrl !== 'string') continue;
+            if (!sheetUrl || typeof sheetUrl !== 'string' || sheetUrl.trim() === "") continue;
 
-            // Construir la clave de caché exactamente como la guarda el sistema inteligente
-            // Para el Top de podios la clave de caché usa el maxRows que se ejecutó
-            const possibleCacheKeys = [
-                `nfs_cache_${sheetUrl}_max7`,
-                `nfs_cache_${sheetUrl}_max5`,
-                `nfs_cache_${sheetUrl}_max20`,
-                `nfs_cache_${sheetUrl}`
-            ];
-
+            // Intentar recuperar primero de la memoria RAM (evaluando todas las variantes de claves)
             let cachedRows = null;
-            for (const key of possibleCacheKeys) {
-                if (memoryCache[key] && Array.isArray(memoryCache[key].data)) {
-                    cachedRows = memoryCache[key].data;
-                    break;
-                }
+            const memoryKeys = Object.keys(memoryCache).filter(k => k.includes(sheetUrl));
+            
+            if (memoryKeys.length > 0) {
+                cachedRows = memoryCache[memoryKeys[0]].data;
             }
 
-            if (cachedRows) {
+            // Si no está en RAM o la caché solo tenía 7 filas y no lo halló, hacer lectura acotada directa (20 filas)
+            if (!cachedRows || !cachedRows.some(r => r.driver && r.driver.trim().toUpperCase() === driverStats.driver)) {
+                cachedRows = await fetchGoogleSheetData(sheetUrl, 10);
+            }
+
+            if (Array.isArray(cachedRows)) {
                 const userRow = cachedRows.find(r => r.driver && r.driver.trim().toUpperCase() === driverStats.driver);
                 if (userRow) {
                     driverTracks.push({
