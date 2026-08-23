@@ -2672,7 +2672,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }, 150);
 });
 /* =======================================================
-   BUSCADOR DE PILOTO (ESCANEO COMPLETO Y FALLBACK DE CACHÉ)
+   BUSCADOR DE PILOTO (ESCANEO DE 10 FILAS MÁXIMO)
    ======================================================= */
 
 async function searchDriverProfile(driverQuery) {
@@ -2685,7 +2685,7 @@ async function searchDriverProfile(driverQuery) {
 
     if (!driverStats) return null;
 
-    // 2. Escanear las rutas mapeadas
+    // 2. Escanear las rutas mapeadas limitando la lectura a máximo 10 filas
     const sourceData = typeof routesData !== 'undefined' ? routesData : [];
     let driverTracks = [];
 
@@ -2696,7 +2696,7 @@ async function searchDriverProfile(driverQuery) {
         for (const [sheetKey, sheetUrl] of sheetEntries) {
             if (!sheetUrl || typeof sheetUrl !== 'string' || sheetUrl.trim() === "") continue;
 
-            // Intentar recuperar primero de la memoria RAM (evaluando todas las variantes de claves)
+            // Intentar recuperar de RAM primero
             let cachedRows = null;
             const memoryKeys = Object.keys(memoryCache).filter(k => k.includes(sheetUrl));
             
@@ -2704,9 +2704,9 @@ async function searchDriverProfile(driverQuery) {
                 cachedRows = memoryCache[memoryKeys[0]].data;
             }
 
-            // Si no está en RAM o la caché solo tenía 7 filas y no lo halló, hacer lectura acotada directa (20 filas)
+            // Si no está en RAM o la caché no lo encontró, solicitar únicamente las primeras 10 filas
             if (!cachedRows || !cachedRows.some(r => r.driver && r.driver.trim().toUpperCase() === driverStats.driver)) {
-                cachedRows = await fetchGoogleSheetData(sheetUrl, 20);
+                cachedRows = await fetchGoogleSheetData(sheetUrl, 10);
             }
 
             if (Array.isArray(cachedRows)) {
