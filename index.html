@@ -942,12 +942,6 @@
             </ul>
         </div>
     </section>
-        <!-- VISTA INDEPENDIENTE: EXPEDIENTE DE PILOTO -->
-        <div id="view-driverprofile" class="app-view" style="display: none;">
-        <div id="search-driver-wrapper"></div>
-        </div>
-        <!-- Contenedor del Buscador de Pilotos -->
-        <div id="search-driver-wrapper"></div>
         
     <section id="view-leaderboard" class="view-section">
         <h2 class="section-title" id="leaderboard-title">Leaderboard: Ruta</h2>
@@ -1093,7 +1087,12 @@
         <br>
         <button class="filter-btn" onclick="switchView('routes')">← Volver al Índice de Rutas</button>
     </section>
-
+    <!-- VISTA INDEPENDIENTE: EXPEDIENTE DE PILOTO -->
+    <section id="view-driverprofile" class="view-section">
+        <h2 class="section-title">👤 Official Pilot Record</h2>
+        <!-- Contenedor del Buscador de Pilotos -->
+        <div id="search-driver-wrapper"></div>
+    </section>
     <script>
     function toggleMenu() {
         document.getElementById('main-nav').classList.toggle('open');
