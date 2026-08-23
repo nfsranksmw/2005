@@ -2654,13 +2654,26 @@ function updateLeaderboardStats(showingNum, totalNum, currentClass = 'ALL') {
 }
 
 /* =======================================================
-   FASE 1: BUSCADOR DE PILOTO DOSIFICADO (PODIOS + CARGAR MÁS)
+   FASE 1: BUSCADOR Y PERFIL EXPEDIENTE DE PILOTO
    ======================================================= */
+window.addEventListener('DOMContentLoaded', () => {
+    // 1. Carga inmediata de las Tarjetas de Rutas
+    if (typeof routesData !== 'undefined') {
+        renderRoutes(routesData);
+    }
 
-// Límite inicial de rutas a mostrar por piloto
-const DRIVER_PAGE_SIZE = 5;
-let currentDriverTracks = [];
-let currentVisibleTracksCount = DRIVER_PAGE_SIZE;
+    // 2. Renderizar el Buscador de Pilotos
+    renderDriverSearchUI('search-driver-wrapper');
+
+    // 3. Ejecución diferida para las tablas pesadas
+    setTimeout(() => {
+        generateHallOfFame();
+        generateGlobalLeaderboards();
+    }, 150);
+});
+/* =======================================================
+   BUSCADOR DE PILOTO (ESCANEO COMPLETO Y FALLBACK DE CACHÉ)
+   ======================================================= */
 
 async function searchDriverProfile(driverQuery) {
     if (!driverQuery || driverQuery.trim() === "") return null;
@@ -2672,7 +2685,7 @@ async function searchDriverProfile(driverQuery) {
 
     if (!driverStats) return null;
 
-    // 2. Extraer sus participaciones en Podios (Top 1, 2 y 3) disponibles en RAM
+    // 2. Escanear las rutas mapeadas
     const sourceData = typeof routesData !== 'undefined' ? routesData : [];
     let driverTracks = [];
 
@@ -2683,10 +2696,17 @@ async function searchDriverProfile(driverQuery) {
         for (const [sheetKey, sheetUrl] of sheetEntries) {
             if (!sheetUrl || typeof sheetUrl !== 'string' || sheetUrl.trim() === "") continue;
 
+            // Intentar recuperar primero de la memoria RAM (evaluando todas las variantes de claves)
             let cachedRows = null;
             const memoryKeys = Object.keys(memoryCache).filter(k => k.includes(sheetUrl));
+            
             if (memoryKeys.length > 0) {
                 cachedRows = memoryCache[memoryKeys[0]].data;
+            }
+
+            // Si no está en RAM o la caché solo tenía 7 filas y no lo halló, hacer lectura acotada directa (20 filas)
+            if (!cachedRows || !cachedRows.some(r => r.driver && r.driver.trim().toUpperCase() === driverStats.driver)) {
+                cachedRows = await fetchGoogleSheetData(sheetUrl, 10);
             }
 
             if (Array.isArray(cachedRows)) {
@@ -2701,8 +2721,7 @@ async function searchDriverProfile(driverQuery) {
                         car: userRow.car || "Desconocido",
                         gearbox: userRow.gearbox || "M/A",
                         device: userRow.device || "PC",
-                        yt: userRow.yt || "#",
-                        sheetUrl: sheetUrl
+                        yt: userRow.yt || "#"
                     });
                 }
             }
@@ -2714,103 +2733,6 @@ async function searchDriverProfile(driverQuery) {
         stats: driverStats,
         tracks: driverTracks
     };
-}
-
-// Renderizado de la UI de Búsqueda con Botón "Cargar Más"
-function renderDriverSearchUI(containerId) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-
-    container.innerHTML = `
-        <div class="driver-search-box" style="margin: 20px 0; background: rgba(15, 23, 42, 0.8); padding: 20px; border-radius: 10px; border: 1px solid var(--nfs-orange, #ff6600);">
-            <h3 style="margin-top: 0; color: #fff;">🔍 Expediente de Piloto</h3>
-            <div style="display: flex; gap: 10px; margin-top: 10px;">
-                <input type="text" id="driver-search-input" placeholder="Escribe el nombre del piloto (ej: ZIMANX)..." style="flex: 1; padding: 10px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff;">
-                <button id="btn-search-driver" style="background: var(--nfs-orange, #ff6600); color: #fff; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer;">Buscar</button>
-            </div>
-            <div id="driver-results-container" style="margin-top: 20px;"></div>
-        </div>
-    `;
-
-    const btn = document.getElementById('btn-search-driver');
-    const input = document.getElementById('driver-search-input');
-
-    const executeSearch = async () => {
-        const resultsEl = document.getElementById('driver-results-container');
-        resultsEl.innerHTML = `<p style="color: var(--nfs-orange);">⏱️ Consultando expediente...</p>`;
-        
-        const profile = await searchDriverProfile(input.value);
-        if (!profile) {
-            resultsEl.innerHTML = `<p style="color: #94a3b8;">No se encontraron registros para ese piloto.</p>`;
-            return;
-        }
-
-        currentDriverTracks = profile.tracks;
-        currentVisibleTracksCount = DRIVER_PAGE_SIZE;
-
-        renderDriverProfileResults(profile, resultsEl);
-    };
-
-    btn.onclick = executeSearch;
-    input.onkeyup = (e) => { if (e.key === 'Enter') executeSearch(); };
-}
-
-function renderDriverProfileResults(profile, resultsEl) {
-    const visibleTracks = currentDriverTracks.slice(0, currentVisibleTracksCount);
-
-    let tracksHtml = visibleTracks.map(t => `
-        <tr>
-            <td><strong>${t.routeName}</strong> <small style="color: #94a3b8;">(${t.routeType})</small></td>
-            <td style="color: var(--nfs-orange); font-weight: bold;">#${t.rank}</td>
-            <td>⏱️ ${t.time}</td>
-            <td>🚗 ${t.car}</td>
-            <td>${t.gearbox}</td>
-        </tr>
-    `).join('');
-
-    const hasMore = currentDriverTracks.length > currentVisibleTracksCount;
-
-    resultsEl.innerHTML = `
-        <div style="background: #1e293b; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-            <h2 style="color: #fff; margin: 0 0 10px 0;">👤 ${profile.driver}</h2>
-            <div style="display: flex; gap: 15px; font-weight: bold; flex-wrap: wrap;">
-                <span style="color: #ffd700;">🥇 1ros: ${profile.stats.first}</span>
-                <span style="color: #c0c0c0;">🥈 2dos: ${profile.stats.second}</span>
-                <span style="color: #cd7f32;">🥉 3ros: ${profile.stats.third}</span>
-                <span style="color: var(--nfs-orange);">📊 Total Podios: ${profile.stats.total}</span>
-            </div>
-        </div>
-        <div class="table-container">
-            <table style="width: 100%; border-collapse: collapse; color: #fff;">
-                <thead>
-                    <tr style="text-align: left; border-bottom: 1px solid #334155;">
-                        <th>Ruta</th>
-                        <th>Posición</th>
-                        <th>Tiempo</th>
-                        <th>Auto</th>
-                        <th>Caja</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${tracksHtml.length > 0 ? tracksHtml : '<tr><td colspan="5" style="text-align:center; color:#94a3b8;">Carga más registros para escanear más rutas.</td></tr>'}
-                </tbody>
-            </table>
-        </div>
-        ${hasMore ? `
-            <div style="text-align: center; margin-top: 15px;">
-                <button id="btn-load-more-driver" style="background: #334155; color: #fff; border: 1px solid var(--nfs-orange); padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer;">
-                    ⬇️ Cargar más registros del piloto
-                </button>
-            </div>
-        ` : ''}
-    `;
-
-    if (hasMore) {
-        document.getElementById('btn-load-more-driver').onclick = () => {
-            currentVisibleTracksCount += DRIVER_PAGE_SIZE;
-            renderDriverProfileResults(profile, resultsEl);
-        };
-    }
 }
 // Renderizado de la UI de búsqueda
 function renderDriverSearchUI(containerId) {
