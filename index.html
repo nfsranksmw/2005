@@ -2657,6 +2657,7 @@ function updateLeaderboardStats(showingNum, totalNum, currentClass = 'ALL') {
    FASE 1: BUSCADOR DE PILOTO DOSIFICADO (PODIOS + CARGAR MÁS)
    ======================================================= */
 
+// Límite inicial de rutas a mostrar por piloto
 const DRIVER_PAGE_SIZE = 5;
 let currentDriverTracks = [];
 let currentVisibleTracksCount = DRIVER_PAGE_SIZE;
@@ -2671,7 +2672,7 @@ async function searchDriverProfile(driverQuery) {
 
     if (!driverStats) return null;
 
-    // 2. Extraer sus participaciones en Podios disponibles en RAM
+    // 2. Extraer sus participaciones en Podios (Top 1, 2 y 3) disponibles en RAM
     const sourceData = typeof routesData !== 'undefined' ? routesData : [];
     let driverTracks = [];
 
@@ -2715,7 +2716,7 @@ async function searchDriverProfile(driverQuery) {
     };
 }
 
-// Renderizado de la UI de Búsqueda
+// Renderizado de la UI de Búsqueda con Botón "Cargar Más"
 function renderDriverSearchUI(containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -2810,6 +2811,75 @@ function renderDriverProfileResults(profile, resultsEl) {
             renderDriverProfileResults(profile, resultsEl);
         };
     }
+}
+// Renderizado de la UI de búsqueda
+function renderDriverSearchUI(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    container.innerHTML = `
+        <div class="driver-search-box" style="margin: 20px 0; background: rgba(15, 23, 42, 0.8); padding: 20px; border-radius: 10px; border: 1px solid var(--nfs-orange, #ff6600);">
+            <h3 style="margin-top: 0; color: #fff;">🔍 Expediente de Piloto</h3>
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <input type="text" id="driver-search-input" placeholder="Escribe el nombre del piloto..." style="flex: 1; padding: 10px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff;">
+                <button id="btn-search-driver" style="background: var(--nfs-orange, #ff6600); color: #fff; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer;">Buscar</button>
+            </div>
+            <div id="driver-results-container" style="margin-top: 20px;"></div>
+        </div>
+    `;
+
+    const btn = document.getElementById('btn-search-driver');
+    const input = document.getElementById('driver-search-input');
+
+    const executeSearch = async () => {
+        const resultsEl = document.getElementById('driver-results-container');
+        resultsEl.innerHTML = `<p style="color: var(--nfs-orange);">⏱️ Consultando expediente...</p>`;
+        
+        const profile = await searchDriverProfile(input.value);
+        if (!profile) {
+            resultsEl.innerHTML = `<p style="color: #94a3b8;">No se encontraron registros para ese piloto.</p>`;
+            return;
+        }
+
+        let tracksHtml = profile.tracks.map(t => `
+            <tr>
+                <td><strong>${t.routeName}</strong> (${t.routeType})</td>
+                <td style="color: var(--nfs-orange); font-weight: bold;">#${t.rank}</td>
+                <td>⏱️ ${t.time}</td>
+                <td>🚗 ${t.car}</td>
+                <td>${t.gearbox}</td>
+            </tr>
+        `).join('');
+
+        resultsEl.innerHTML = `
+            <div style="background: #1e293b; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                <h2 style="color: #fff; margin: 0 0 10px 0;">👤 ${profile.driver}</h2>
+                <div style="display: flex; gap: 15px; font-weight: bold;">
+                    <span style="color: #ffd700;">🥇 1ros: ${profile.stats.first}</span>
+                    <span style="color: #c0c0c0;">🥈 2dos: ${profile.stats.second}</span>
+                    <span style="color: #cd7f32;">🥉 3ros: ${profile.stats.third}</span>
+                    <span style="color: var(--nfs-orange);">📊 Total Podios: ${profile.stats.total}</span>
+                </div>
+            </div>
+            <div class="table-container">
+                <table style="width: 100%; border-collapse: collapse; color: #fff;">
+                    <thead>
+                        <tr style="text-align: left; border-bottom: 1px solid #334155;">
+                            <th>Ruta</th>
+                            <th>Posición</th>
+                            <th>Tiempo</th>
+                            <th>Auto</th>
+                            <th>Caja</th>
+                        </tr>
+                    </thead>
+                    <tbody>${tracksHtml}</tbody>
+                </table>
+            </div>
+        `;
+    };
+
+    btn.onclick = executeSearch;
+    input.onkeyup = (e) => { if (e.key === 'Enter') executeSearch(); };
 }
     </script>
 
