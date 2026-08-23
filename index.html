@@ -711,7 +711,8 @@
                 </div>
             </div>
         </div>
-
+        <!-- Contenedor del Buscador de Pilotos -->
+        <div id="search-driver-wrapper"></div>
         <div class="controls-wrapper">
             <input type="text" id="route-search" class="search-input" placeholder="🔍 Buscar pista o ruta..." onkeyup="filterRoutes()">
             
@@ -2654,7 +2655,21 @@ function updateLeaderboardStats(showingNum, totalNum, currentClass = 'ALL') {
 /* =======================================================
    FASE 1: BUSCADOR Y PERFIL EXPEDIENTE DE PILOTO
    ======================================================= */
+window.addEventListener('DOMContentLoaded', () => {
+    // 1. Carga inmediata de las Tarjetas de Rutas
+    if (typeof routesData !== 'undefined') {
+        renderRoutes(routesData);
+    }
 
+    // 2. Renderizar el Buscador de Pilotos
+    renderDriverSearchUI('search-driver-wrapper');
+
+    // 3. Ejecución diferida para las tablas pesadas
+    setTimeout(() => {
+        generateHallOfFame();
+        generateGlobalLeaderboards();
+    }, 150);
+});
 async function searchDriverProfile(driverQuery) {
     if (!driverQuery || driverQuery.trim() === "") return null;
     const cleanQuery = driverQuery.trim().toUpperCase();
