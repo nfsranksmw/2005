@@ -2716,21 +2716,6 @@ async function searchDriverProfile(driverQuery) {
     };
 }
 
-// Renderizado de la UI de búsqueda
-function renderDriverSearchUI(containerId) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-
-    container.innerHTML = `
-        <div class="driver-search-box" style="margin: 20px 0; background: rgba(15, 23, 42, 0.8); padding: 20px; border-radius: 10px; border: 1px solid var(--nfs-orange, #ff6600);">
-            <h3 style="margin-top: 0; color: #fff;">🔍 Expediente de Piloto</h3>
-            <div style="display: flex; gap: 10px; margin-top: 10px;">
-                <input type="text" id="driver-search-input" placeholder="Escribe el nombre del piloto..." style="flex: 1; padding: 10px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff;">
-                <button id="btn-search-driver" style="background: var(--nfs-orange, #ff6600); color: #fff; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer;">Buscar</button>
-            </div>
-            <div id="driver-results-container" style="margin-top: 20px;"></div>
-        </div>
-
 // Renderizado de la UI de Búsqueda con Botón "Cargar Más"
 function renderDriverSearchUI(containerId) {
     const container = document.getElementById(containerId);
