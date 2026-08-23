@@ -2671,45 +2671,41 @@ window.addEventListener('DOMContentLoaded', () => {
         generateGlobalLeaderboards();
     }, 150);
 });
+/* =======================================================
+   BUSCADOR DE PILOTO EXPRESS (INDEXACIÓN DESDE CACHÉ RAM)
+   ======================================================= */
+
 async function searchDriverProfile(driverQuery) {
     if (!driverQuery || driverQuery.trim() === "") return null;
     const cleanQuery = driverQuery.trim().toUpperCase();
 
-    // Reutilizar la caché global compilada de podios
+    // 1. Obtener estadísticas del piloto desde la caché global de podios
     const allPodiums = await processPodiumsForRoutes(null);
     const driverStats = allPodiums.find(d => d.driver.toUpperCase() === cleanQuery || d.driver.toUpperCase().includes(cleanQuery));
 
     if (!driverStats) return null;
 
-    // Obtener desglose detallado de sus participaciones
-    const sourceData = typeof routesData !== 'undefined' ? routesData : [];
+    // 2. Extraer sus participaciones DIRECTAMENTE desde la memoria RAM (memoryCache)
     let driverTracks = [];
 
-    for (const route of sourceData) {
-        if (!route.sheets) continue;
-        const sheetEntries = Object.entries(route.sheets);
+    Object.keys(memoryCache).forEach(cacheKey => {
+        const cachedPayload = memoryCache[cacheKey];
+        if (!cachedPayload || !Array.isArray(cachedPayload.data)) return;
 
-        for (const [sheetKey, sheetUrl] of sheetEntries) {
-            if (!sheetUrl || typeof sheetUrl !== 'string') continue;
-            
-            // Consultar datos desde la caché en memoria RAM
-            const rows = await fetchGoogleSheetData(sheetUrl, 20);
-            const userRow = rows.find(r => r.driver && r.driver.trim().toUpperCase() === driverStats.driver);
-
-            if (userRow) {
+        // Buscar al piloto en los datos ya procesados en RAM
+        cachedPayload.data.forEach(row => {
+            if (row.driver && row.driver.trim().toUpperCase() === driverStats.driver) {
                 driverTracks.push({
-                    routeName: route.name,
-                    routeType: route.type,
-                    category: sheetKey,
-                    rank: userRow.rank,
-                    time: userRow.time,
-                    car: userRow.car,
-                    gearbox: userRow.gearbox,
-                    yt: userRow.yt
+                    rank: row.rank,
+                    time: row.time,
+                    car: row.car,
+                    gearbox: row.gearbox,
+                    device: row.device,
+                    yt: row.yt
                 });
             }
-        }
-    }
+        });
+    });
 
     return {
         driver: driverStats.driver,
