@@ -649,8 +649,74 @@
        <a href="#" onclick="switchView('guides')" id="nav-guides">Guías & Tuning</a>
        <a href="#" onclick="switchView('rules')" id="nav-rules">Rules & Norm</a>
        <a href="#" onclick="switchView('driverprofile')" id="nav-driverprofile">🔍Search Driver</a>
+       <a href="#" onclick="switchView('submit')" id="nav-submit">Enviar Tiempo</a>
 </nav>
     </header>
+    
+<!-- SECCIÓN INDEPENDIENTE: ENVIAR TIEMPO (FORMULARIO) -->
+<section id="view-submit" class="view-section" style="padding: 30px 15px; max-width: 1100px; margin: 0 auto;">
+    
+    <div class="about-section" style="text-align: center; margin-bottom: 30px;">
+        <h2>ENVIAR TIEMPO</h2>
+        <p>¿Tuviste una carrera épica o rompiste un récord mundial? Envía tu tiempo con la evidencia en video para que sea verificado e ingresado al Leaderboard Oficial de Most Wanted.</p>
+    </div>
+
+    <div style="max-width: 650px; margin: 0 auto; background: rgba(15, 23, 42, 0.95); border: 1px solid var(--nfs-orange, #ff6600); border-radius: 12px; padding: 30px; box-shadow: 0 8px 32px rgba(0,0,0,0.5);">
+        
+        <form id="form-submit-time" onsubmit="handleTimeSubmit(event)" style="display: flex; flex-direction: column; gap: 15px;">
+            <div>
+                <label style="color: #fff; font-size: 13px; font-weight: bold;">👤 PILOTO</label>
+                <input type="text" id="sub-driver" required placeholder="Ej: ZIMANX" style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff;">
+            </div>
+
+            <div>
+                <label style="color: #fff; font-size: 13px; font-weight: bold;">🏁 RUTA O CIRCUITO</label>
+                <input type="text" id="sub-route" required placeholder="Ej: City Perimeter" style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff;">
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <div style="flex: 1;">
+                    <label style="color: #fff; font-size: 13px; font-weight: bold;">⏱️ TIEMPO LOGRADO</label>
+                    <input type="text" id="sub-time" required placeholder="01:30.680" style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff;">
+                </div>
+                <div style="flex: 1;">
+                    <label style="color: #fff; font-size: 13px; font-weight: bold;">🚗 AUTO UTILIZADO</label>
+                    <input type="text" id="sub-car" required placeholder="Ej: BMW M3 GTR" style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff;">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <div style="flex: 1;">
+                    <label style="color: #fff; font-size: 13px; font-weight: bold;">⚙️ TRANSMISIÓN</label>
+                    <select id="sub-gearbox" style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff;">
+                        <option value="Manual">Manual</option>
+                        <option value="Automático">Automático</option>
+                    </select>
+                </div>
+                <div style="flex: 1;">
+                    <label style="color: #fff; font-size: 13px; font-weight: bold;">🎮 CONTROL</label>
+                    <select id="sub-device" style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff;">
+                        <option value="Teclado">Teclado</option>
+                        <option value="Mando">Mando / Pad</option>
+                        <option value="Volante">Volante</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <label style="color: #fff; font-size: 13px; font-weight: bold;">🎬 PRUEBA EN VIDEO (YouTube / Twitch)</label>
+                <input type="url" id="sub-video" required placeholder="https://www.youtube.com/watch?v=..." style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff;">
+            </div>
+
+            <button type="submit" id="btn-submit-time" style="background: var(--nfs-orange, #ff6600); color: #fff; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 15px; text-transform: uppercase;">
+                🚀 Enviar Registro a Revisión
+            </button>
+        </form>
+
+        <div id="submit-status" style="margin-top: 15px; text-align: center; font-weight: bold;"></div>
+    </div>
+</section>
+    
     <section id="view-home" class="view-section active" style="padding: 0; max-width: 100%;">
         <div class="about-section">
             <h2>SOBRE ESTE PROYECTO</h2>
