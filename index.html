@@ -1087,13 +1087,16 @@
         <br>
         <button class="filter-btn" onclick="switchView('routes')">← Volver al Índice de Rutas</button>
     </section>
+
     <!-- VISTA INDEPENDIENTE: EXPEDIENTE DE PILOTO -->
     <section id="view-driverprofile" class="view-section">
         <h2 class="section-title">👤 Official Pilot Record</h2>
         <!-- Contenedor del Buscador de Pilotos -->
         <div id="search-driver-wrapper"></div>
     </section>
+
     <script>
+
     function toggleMenu() {
         document.getElementById('main-nav').classList.toggle('open');
     }
@@ -2677,6 +2680,7 @@ window.addEventListener('DOMContentLoaded', () => {
         generateGlobalLeaderboards();
     }, 150);
 });
+
 /* =======================================================
    BUSCADOR DE PILOTO EXPRESS (CORREGIDO Y MAPEADO DE RUTAS)
    ======================================================= */
@@ -2812,6 +2816,88 @@ function renderDriverSearchUI(containerId) {
 
     btn.onclick = executeSearch;
     input.onkeyup = (e) => { if (e.key === 'Enter') executeSearch(); };
+}
+
+/* =======================================================
+   FASE 2: FILTROS DINÁMICOS (TRANSMISIÓN Y CONTROL)
+   ======================================================= */
+
+// Estado global para los filtros activos
+const activeFilters = {
+    gearbox: 'ALL', // 'ALL', 'MANUAL', 'AUTO'
+    device: 'ALL'   // 'ALL', 'KEYBOARD', 'PAD', 'WHEEL'
+};
+
+/**
+ * Aplica los filtros sobre un arreglo de filas devuelto desde la caché
+ */
+function applyRowFilters(rows) {
+    if (!Array.isArray(rows)) return [];
+
+    return rows.filter(row => {
+        // 1. Filtrar por Transmisión (Caja)
+        if (activeFilters.gearbox !== 'ALL') {
+            const rowGear = (row.gearbox || '').toUpperCase();
+            if (activeFilters.gearbox === 'MANUAL' && !rowGear.includes('M')) return false;
+            if (activeFilters.gearbox === 'AUTO' && !rowGear.includes('A')) return false;
+        }
+
+        // 2. Filtrar por Dispositivo (Control/Teclado/Volante)
+        if (activeFilters.device !== 'ALL') {
+            const rowDev = (row.device || '').toUpperCase();
+            if (activeFilters.device === 'KEYBOARD' && !rowDev.includes('KEY') && !rowDev.includes('TEC')) return false;
+            if (activeFilters.device === 'PAD' && !rowDev.includes('PAD') && !rowDev.includes('MAN') && !rowDev.includes('JOY')) return false;
+            if (activeFilters.device === 'WHEEL' && !rowDev.includes('WHEEL') && !rowDev.includes('VOL')) return false;
+        }
+
+        return true;
+    });
+}
+
+/**
+ * Renderiza la barra de botones de filtrado en el contenedor deseado
+ */
+function renderFilterControlsUI(containerId, onFilterChangeCallback) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    container.innerHTML = `
+        <div class="filters-wrapper" style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; background: rgba(30, 41, 59, 0.6); padding: 12px 18px; border-radius: 8px; border: 1px solid #334155; align-items: center;">
+            
+            <!-- Filtro Caja de Cambios -->
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="color: #94a3b8; font-size: 0.85rem; font-weight: bold;">⚙️ TRANSMISIÓN:</span>
+                <button class="btn-filter ${activeFilters.gearbox === 'ALL' ? 'active' : ''}" onclick="setFilter('gearbox', 'ALL', this)">Todos</button>
+                <button class="btn-filter ${activeFilters.gearbox === 'MANUAL' ? 'active' : ''}" onclick="setFilter('gearbox', 'MANUAL', this)">Manual (M)</button>
+                <button class="btn-filter ${activeFilters.gearbox === 'AUTO' ? 'active' : ''}" onclick="setFilter('gearbox', 'AUTO', this)">Auto (A)</button>
+            </div>
+
+            <div style="width: 1px; height: 20px; background: #334155;"></div>
+
+            <!-- Filtro Control / Dispositivo -->
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="color: #94a3b8; font-size: 0.85rem; font-weight: bold;">🎮 CONTROL:</span>
+                <button class="btn-filter ${activeFilters.device === 'ALL' ? 'active' : ''}" onclick="setFilter('device', 'ALL', this)">Todos</button>
+                <button class="btn-filter ${activeFilters.device === 'KEYBOARD' ? 'active' : ''}" onclick="setFilter('device', 'KEYBOARD', this)">⌨️ Teclado</button>
+                <button class="btn-filter ${activeFilters.device === 'PAD' ? 'active' : ''}" onclick="setFilter('device', 'PAD', this)">🎮 Mando</button>
+                <button class="btn-filter ${activeFilters.device === 'WHEEL' ? 'active' : ''}" onclick="setFilter('device', 'WHEEL', this)">🏎️ Volante</button>
+            </div>
+        </div>
+    `;
+
+    // Función global para actualizar filtro y refrescar las tablas
+    window.setFilter = (type, value, btnEl) => {
+        activeFilters[type] = value;
+        
+        // Actualizar estados de botones en el grupo
+        const parent = btnEl.parentElement;
+        parent.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+        btnEl.classList.add('active');
+
+        if (typeof onFilterChangeCallback === 'function') {
+            onFilterChangeCallback();
+        }
+    };
 }
     </script>
 
