@@ -942,10 +942,29 @@
             </ul>
         </div>
     </section>
-        <!-- VISTA INDEPENDIENTE: EXPEDIENTE DE PILOTO -->
-        <div id="view-driverprofile" class="app-view" style="display: none;">
-        <div id="search-driver-wrapper"></div>
+     <section id="view-driverprofile" class="app-view" style="display: none;">
+    <div class="main-container" style="max-width: 1200px; margin: 0 auto; padding: 20px;">
+        
+        <!-- Tarjeta / Sesión Contenedora Principal -->
+        <div class="content-card" style="background: rgba(15, 23, 42, 0.95); border: 1px solid var(--nfs-orange, #ff6600); border-radius: 12px; padding: 25px; box-shadow: 0 8px 32px rgba(0,0,0,0.5);">
+            
+            <!-- Encabezado de la Sección -->
+            <div class="section-header" style="text-align: center; border-bottom: 1px solid #334155; padding-bottom: 15px; margin-bottom: 20px;">
+                <h2 style="color: #fff; margin: 0; font-size: 1.8rem; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    👤 Official pilots' logbook
+                </h2>
+                <p style="color: #94a3b8; margin-top: 8px; font-size: 0.95rem;">
+                    Consulta las estadísticas, podios acumulados y tiempos por ruta de cualquier corredor de la comunidad.
+                </p>
+            </div>
+
+            <!-- CONTENEDOR INTERNO DONDE SE DIBUJA EL BUSCADOR Y SUS RESULTADOS -->
+            <div id="search-driver-wrapper"></div>
+
         </div>
+
+    </div>
+</section>
         
 
     <section id="view-leaderboard" class="view-section">
