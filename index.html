@@ -2672,7 +2672,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }, 150);
 });
 /* =======================================================
-   BUSCADOR DE PILOTO EXPRESS (CORREGIDO Y MAPEADO DE RUTAS)
+   BUSCADOR DE PILOTO (ESCANEO COMPLETO Y FALLBACK DE CACHÉ)
    ======================================================= */
 
 async function searchDriverProfile(driverQuery) {
@@ -2685,7 +2685,7 @@ async function searchDriverProfile(driverQuery) {
 
     if (!driverStats) return null;
 
-    // 2. Mapear participaciones del piloto asociando la ruta correspondiente desde memoryCache
+    // 2. Escanear las rutas mapeadas
     const sourceData = typeof routesData !== 'undefined' ? routesData : [];
     let driverTracks = [];
 
@@ -2694,26 +2694,22 @@ async function searchDriverProfile(driverQuery) {
         const sheetEntries = Object.entries(route.sheets);
 
         for (const [sheetKey, sheetUrl] of sheetEntries) {
-            if (!sheetUrl || typeof sheetUrl !== 'string') continue;
+            if (!sheetUrl || typeof sheetUrl !== 'string' || sheetUrl.trim() === "") continue;
 
-            // Construir la clave de caché exactamente como la guarda el sistema inteligente
-            // Para el Top de podios la clave de caché usa el maxRows que se ejecutó
-            const possibleCacheKeys = [
-                `nfs_cache_${sheetUrl}_max7`,
-                `nfs_cache_${sheetUrl}_max5`,
-                `nfs_cache_${sheetUrl}_max20`,
-                `nfs_cache_${sheetUrl}`
-            ];
-
+            // Intentar recuperar primero de la memoria RAM (evaluando todas las variantes de claves)
             let cachedRows = null;
-            for (const key of possibleCacheKeys) {
-                if (memoryCache[key] && Array.isArray(memoryCache[key].data)) {
-                    cachedRows = memoryCache[key].data;
-                    break;
-                }
+            const memoryKeys = Object.keys(memoryCache).filter(k => k.includes(sheetUrl));
+            
+            if (memoryKeys.length > 0) {
+                cachedRows = memoryCache[memoryKeys[0]].data;
             }
 
-            if (cachedRows) {
+            // Si no está en RAM o la caché solo tenía 7 filas y no lo halló, hacer lectura acotada directa (20 filas)
+            if (!cachedRows || !cachedRows.some(r => r.driver && r.driver.trim().toUpperCase() === driverStats.driver)) {
+                cachedRows = await fetchGoogleSheetData(sheetUrl, 20);
+            }
+
+            if (Array.isArray(cachedRows)) {
                 const userRow = cachedRows.find(r => r.driver && r.driver.trim().toUpperCase() === driverStats.driver);
                 if (userRow) {
                     driverTracks.push({
@@ -2738,7 +2734,6 @@ async function searchDriverProfile(driverQuery) {
         tracks: driverTracks
     };
 }
-
 // Renderizado de la UI de búsqueda
 function renderDriverSearchUI(containerId) {
     const container = document.getElementById(containerId);
