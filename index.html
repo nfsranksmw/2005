@@ -2672,7 +2672,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }, 150);
 });
 /* =======================================================
-   BUSCADOR DE PILOTO EXPRESS (INDEXACIÓN DESDE CACHÉ RAM)
+   BUSCADOR DE PILOTO EXPRESS (CORREGIDO Y MAPEADO DE RUTAS)
    ======================================================= */
 
 async function searchDriverProfile(driverQuery) {
@@ -2685,27 +2685,52 @@ async function searchDriverProfile(driverQuery) {
 
     if (!driverStats) return null;
 
-    // 2. Extraer sus participaciones DIRECTAMENTE desde la memoria RAM (memoryCache)
+    // 2. Mapear participaciones del piloto asociando la ruta correspondiente desde memoryCache
+    const sourceData = typeof routesData !== 'undefined' ? routesData : [];
     let driverTracks = [];
 
-    Object.keys(memoryCache).forEach(cacheKey => {
-        const cachedPayload = memoryCache[cacheKey];
-        if (!cachedPayload || !Array.isArray(cachedPayload.data)) return;
+    for (const route of sourceData) {
+        if (!route.sheets) continue;
+        const sheetEntries = Object.entries(route.sheets);
 
-        // Buscar al piloto en los datos ya procesados en RAM
-        cachedPayload.data.forEach(row => {
-            if (row.driver && row.driver.trim().toUpperCase() === driverStats.driver) {
-                driverTracks.push({
-                    rank: row.rank,
-                    time: row.time,
-                    car: row.car,
-                    gearbox: row.gearbox,
-                    device: row.device,
-                    yt: row.yt
-                });
+        for (const [sheetKey, sheetUrl] of sheetEntries) {
+            if (!sheetUrl || typeof sheetUrl !== 'string') continue;
+
+            // Construir la clave de caché exactamente como la guarda el sistema inteligente
+            // Para el Top de podios la clave de caché usa el maxRows que se ejecutó
+            const possibleCacheKeys = [
+                `nfs_cache_${sheetUrl}_max7`,
+                `nfs_cache_${sheetUrl}_max5`,
+                `nfs_cache_${sheetUrl}_max20`,
+                `nfs_cache_${sheetUrl}`
+            ];
+
+            let cachedRows = null;
+            for (const key of possibleCacheKeys) {
+                if (memoryCache[key] && Array.isArray(memoryCache[key].data)) {
+                    cachedRows = memoryCache[key].data;
+                    break;
+                }
             }
-        });
-    });
+
+            if (cachedRows) {
+                const userRow = cachedRows.find(r => r.driver && r.driver.trim().toUpperCase() === driverStats.driver);
+                if (userRow) {
+                    driverTracks.push({
+                        routeName: route.name || "Ruta General",
+                        routeType: route.type || "Carrera",
+                        category: sheetKey,
+                        rank: userRow.rank || "-",
+                        time: userRow.time || "--:--.--",
+                        car: userRow.car || "Desconocido",
+                        gearbox: userRow.gearbox || "M/A",
+                        device: userRow.device || "PC",
+                        yt: userRow.yt || "#"
+                    });
+                }
+            }
+        }
+    }
 
     return {
         driver: driverStats.driver,
