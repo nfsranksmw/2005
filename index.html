@@ -1087,6 +1087,13 @@
         <br>
         <button class="filter-btn" onclick="switchView('routes')">← Volver al Índice de Rutas</button>
     </section>
+    <section id="view-driverprofile" class="view-section">
+        <h2 class="section-title">👤 Official pilots' logbook</h2>
+        
+        <!-- CONTENEDOR INTERNO DONDE SE DIBUJA EL BUSCADOR Y SUS RESULTADOS -->
+        <div id="search-driver-wrapper"></div>
+
+    </section>
 
     <script>
     function toggleMenu() {
@@ -2807,40 +2814,6 @@ function renderDriverSearchUI(containerId) {
 
     btn.onclick = executeSearch;
     input.onkeyup = (e) => { if (e.key === 'Enter') executeSearch(); };
-}
-function switchView(viewName) {
-    // 1. Ocultar todas las vistas principales
-    const views = document.querySelectorAll('.app-view');
-    views.forEach(v => v.style.display = 'none');
-
-    // 2. Remover clase activa de todos los botones del menú
-    const navLinks = document.querySelectorAll('#main-nav a');
-    navLinks.forEach(link => link.classList.remove('active'));
-
-    // 3. Mostrar la vista seleccionada
-    const targetView = document.getElementById(`view-${viewName}`);
-    if (targetView) {
-        targetView.style.display = 'block';
-    }
-
-    // 4. Activar el botón correspondiente en el menú
-    const targetNav = document.getElementById(`nav-${viewName}`);
-    if (targetNav) {
-        targetNav.classList.add('active');
-    }
-
-    // 5. Inicializar la interfaz del buscador si se selecciona 'driverprofile'
-    if (viewName === 'driverprofile') {
-        renderDriverSearchUI('search-driver-wrapper');
-    }
-
-    // Cerrar el menú móvil si está abierto
-    if (typeof toggleMenu === 'function') {
-        const nav = document.getElementById('main-nav');
-        if (nav && nav.classList.contains('open')) {
-            nav.classList.remove('open');
-        }
-    }
 }
     </script>
 
