@@ -626,6 +626,28 @@
             color: var(--text-main);
             letter-spacing: 0.5px;
         }
+        .btn-filter {
+        background: #0f172a;
+        color: #94a3b8;
+        border: 1px solid #334155;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        }
+
+       .btn-filter:hover {
+       color: #fff;
+       border-color: var(--nfs-orange, #ff6600);
+       }
+
+      .btn-filter.active {
+       background: var(--nfs-orange, #ff6600);
+       color: #fff;
+       border-color: var(--nfs-orange, #ff6600);
+       }
 </style>
 
 </head>
@@ -1091,6 +1113,7 @@
     <!-- VISTA INDEPENDIENTE: EXPEDIENTE DE PILOTO -->
     <section id="view-driverprofile" class="view-section">
         <h2 class="section-title">👤 Official Pilot Record</h2>
+        <div id="table-filters-container"></div>
         <!-- Contenedor del Buscador de Pilotos -->
         <div id="search-driver-wrapper"></div>
     </section>
