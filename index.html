@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFS Most Wanted (2005) - World Records</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/img/nfsranksmwlogo.png">
+    
+    <!-- Google Fonts: Rajdhani (F1 Racing), Inter (UI), JetBrains Mono (Telemetry) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Rajdhani:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+
+    <!-- Hoja de estilos externa -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <!-- MENÚ SUPERIOR / HEADER ESTILO FÓRMULA 1 -->
+    <header>
+        <div class="logo">
+            <img src="assets/img/nfsranksmwlogo.png" onerror="this.onerror=null; this.src='assets/img/logo.svg';" alt="Logo NFSRANKSMW">
+            <span>NFS:<span class="highlight">MW</span> 2005</span>
+        </div>
+
+        <nav id="main-nav">
+            <a href="#" onclick="switchView('home')" class="active" id="nav-home">Home</a>
+            <a href="#" onclick="switchView('routes')" id="nav-routes">Leaderboards</a>
+            <a href="#" onclick="switchView('halloffame')" id="nav-halloffame">Hall of Fame</a>
+            <a href="#" onclick="switchView('globaldrivers')" id="nav-globaldrivers">Top Global Drivers</a>
+            <a href="#" onclick="switchView('globalroutes')" id="nav-globalroutes">Top Rutas</a>
+            <a href="#" onclick="switchView('guides')" id="nav-guides">Guías & Tuning</a>
+            <a href="#" onclick="switchView('rules')" id="nav-rules">Rules & Norm</a>
+            <a href="#" onclick="switchView('driverprofile')" id="nav-driverprofile">🔍 Search Driver</a>
+            <a href="#" onclick="switchView('submit')" id="nav-submit">Enviar Tiempo</a>
+        </nav>
+
+        <!-- Widget de Telemetría en Vivo F1 -->
+        <div class="header-telemetry">
+            <span class="pulse-dot"></span>
+            <span>ROCKPORT LIVE</span>
+            <span id="telemetry-clock" style="color: var(--nfs-orange);">--:--:--</span>
+        </div>
+
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+    </header>
+
+    <main>
+        <!-- SECCIÓN: INICIO (HOME) -->
+        <section id="view-home" class="view-section active" style="padding: 0; max-width: 100%;">
+            <div class="about-section">
+                <h2>ARCHIVO OFICIAL DE TIEMPOS</h2>
+                <p>Bienvenido al registro centralizado de récords mundiales de <strong>Need for Speed: Most Wanted (2005)</strong>. Competición pura en cada sector de Rockport City con telemetría de tiempos y verificación en video.</p>
+            </div>
+
+            <div class="hero-banner">
+                <div class="hero-banner-content">
+                    <div class="hero-tag">
+                        <span>⚡</span> OFFICIAL SPEED LEADERBOARDS
+                    </div>
+                    <h1>WORLD RANKING<br><span class="glow-text">NFS MOST WANTED</span><br>ROCKPORT RECORDS</h1>
+                    <div class="hero-btn-container">
+                        <a href="#" class="btn-explored" onclick="switchView('routes')">
+                            <span>🏁</span> Explorar Leaderboards
+                        </a>
+                        <a href="#" class="btn-explored" style="background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); box-shadow: none;" onclick="switchView('halloffame')">
+                            <span>👑</span> Salón de la Fama
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="drivers-banner">
+                <h2>DRIVERS CHAMPIONSHIP</h2>
+                <h3>100% PURE COMPETITIVE</h3>
+            </div>
+            
+            <div style="max-width: 1100px; margin: 35px auto; padding: 0 15px;">
+                <div class="news-grid">
+                    <div class="news-card">
+                        <h3>¿De qué trata este sitio?</h3>
+                        <p style="color: var(--text-muted); line-height: 1.6; font-size: 14px;">Recopilamos los tiempos más veloces y precisos registrados en las más de 80 rutas y circuitos de Rockport City. Filtra por categoría (Circuitos, Sprints, Drags) y accede a las grabaciones originales de cada récord.</p>
+                    </div>
+                    <div class="news-card">
+                        <h3>🚀 Récords Recientes (Live Telemetry)</h3>
+                        <p style="color: var(--text-muted); line-height: 1.6; font-size: 14px;"><strong style="color: #ffffff;">DJALIL</strong> sostiene la vuelta récord en <em>City Perimeter</em> con un crono de <strong style="color: var(--nfs-orange); font-family: var(--font-mono);">01:30.680</strong> a bordo de su BMW M3 GTR.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN: RUTAS & LEADERBOARDS -->
+        <section id="view-routes" class="view-section">
+            <h2 class="section-title">
+                <span>🏁</span> Leaderboards <span class="glow">// Sectores de Carrera</span>
+            </h2>
+        
+            <!-- Telemetría superior -->
+            <div class="leaderboard-stats-bar">
+                <div class="stat-item">
+                    <span class="stat-icon">🏁</span>
+                    <div class="stat-content">
+                        <span class="stat-label">MOSTRANDO</span>
+                        <span class="stat-value" id="showing-count">--</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">▶</span>
+                    <div class="stat-content">
+                        <span class="stat-label">RUTAS ACTIVAS</span>
+                        <span class="stat-value" id="total-races-count">--</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">⚙</span>
+                    <div class="stat-content">
+                        <span class="stat-label">CATEGORÍA</span>
+                        <span class="stat-value" id="current-class-filter" style="color: var(--nfs-orange);">ALL</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Barra de controles y filtros F1 -->
+            <div class="controls-wrapper">
+                <input type="text" id="route-search" class="search-input" placeholder="🔍 Buscar pista o circuito..." onkeyup="filterRoutes()">
+                
+                <div class="filter-bar">
+                    <button class="filter-btn active" onclick="setCategory('all', this)">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: middle; margin-right: 6px;"><path d="M4 4h4v4H4V4zm6 0h4v4h-4V4zm6 0h4v4h-4V4zM4 10h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4zM4 16h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z"/></svg> All Races
+                    </button>
+                    <button class="filter-btn" onclick="setCategory('Circuito', this)">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px; color: var(--nfs-orange);"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.23-5.23"></path></svg> Circuits
+                    </button>
+                    <button class="filter-btn" onclick="setCategory('Sprint', this)">
+                        <span style="font-size: 16px; margin-right: 6px; color: var(--nfs-orange);">⚡</span> Sprints
+                    </button>
+                    <button class="filter-btn" onclick="setCategory('Drag', this)">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: middle; margin-right: 6px; color: var(--nfs-orange);"><path d="M9 2h6v2H9V2zm1 3h4v2h-4V5zm-2 3h8v2H8V8zm1 3h6v2H9v-2zm-2 3h10v2H7v-2zm2 3h6v2H9v-2zm-3 3h12v2H6v-2z"/></svg> Drags
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Contenedor Grid de Rutas -->
+            <div class="routes-grid" id="routes-grid-container"></div>
+        </section>
+
+        <!-- SECCIÓN: DETALLE LEADERBOARD DE RUTA ESPECÍFICA -->
+        <section id="view-leaderboard" class="view-section">
+            <h2 class="section-title" id="leaderboard-title">Leaderboard: Ruta</h2>
+            
+            <!-- Pestañas para Circuitos -->
+            <div id="container-tabs-circuit" class="tabs-group">
+                <button class="tab-btn active" onclick="switchCircuitTab('junkman-single', this)">Junkman (Single Lap)</button>
+                <button class="tab-btn" onclick="switchCircuitTab('junkman-fast', this)">Junkman (Fast Lap)</button>
+                <button class="tab-btn" onclick="switchCircuitTab('bmw-single', this)">BMW M3 GTR (Single Lap)</button>
+                <button class="tab-btn" onclick="switchCircuitTab('bmw-fast', this)">BMW M3 GTR (Fast Lap)</button>
+            </div>
+
+            <!-- Pestañas para Sprints y Drags -->
+            <div id="container-tabs-sprintdrag" class="tabs-group">
+                <button class="tab-btn active" onclick="switchSprintDragTab('sprintdrag-junkman', this)">Junkman</button>
+                <button class="tab-btn" onclick="switchSprintDragTab('sprintdrag-bmw', this)">BMW M3 GTR</button>
+            </div>
+
+            <!-- Tablas de Circuitos -->
+            <div id="tab-junkman-single" class="table-section circuit-section">
+                <h3 style="color: var(--text-main); font-family: var(--font-racing); font-size: 18px; margin-bottom: 12px;">Junkman — Una sola vuelta (Single Lap)</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pos</th>
+                                <th>Piloto</th>
+                                <th>Crono</th>
+                                <th>Dispositivo</th>
+                                <th>Vehículo</th>
+                                <th>Caja</th>
+                                <th>Fecha</th>
+                                <th>Prueba</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-junkman-single"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="tab-junkman-fast" class="table-section circuit-section">
+                <h3 style="color: var(--text-main); font-family: var(--font-racing); font-size: 18px; margin-bottom: 12px;">Junkman — Vuelta rápida (Fast Lap)</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pos</th>
+                                <th>Piloto</th>
+                                <th>Crono</th>
+                                <th>Dispositivo</th>
+                                <th>Vehículo</th>
+                                <th>Caja</th>
+                                <th>Fecha</th>
+                                <th>Prueba</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-junkman-fast"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="tab-bmw-single" class="table-section circuit-section">
+                <h3 style="color: var(--text-main); font-family: var(--font-racing); font-size: 18px; margin-bottom: 12px;">BMW M3 GTR — Una sola vuelta (Single Lap)</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pos</th>
+                                <th>Piloto</th>
+                                <th>Crono</th>
+                                <th>Dispositivo</th>
+                                <th>Vehículo</th>
+                                <th>Caja</th>
+                                <th>Fecha</th>
+                                <th>Prueba</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-bmw-single"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="tab-bmw-fast" class="table-section circuit-section">
+                <h3 style="color: var(--text-main); font-family: var(--font-racing); font-size: 18px; margin-bottom: 12px;">BMW M3 GTR — Vuelta rápida (Fast Lap)</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pos</th>
+                                <th>Piloto</th>
+                                <th>Crono</th>
+                                <th>Dispositivo</th>
+                                <th>Vehículo</th>
+                                <th>Caja</th>
+                                <th>Fecha</th>
+                                <th>Prueba</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-bmw-fast"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tablas de Sprints / Drags -->
+            <div id="tab-sprintdrag-junkman" class="table-section sprintdrag-section">
+                <h3 style="color: var(--text-main); font-family: var(--font-racing); font-size: 18px; margin-bottom: 12px;">Categoría: Junkman</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pos</th>
+                                <th>Piloto</th>
+                                <th>Crono</th>
+                                <th>Dispositivo</th>
+                                <th>Vehículo</th>
+                                <th>Caja</th>
+                                <th>Fecha</th>
+                                <th>Prueba</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-sprintdrag-junkman"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="tab-sprintdrag-bmw" class="table-section sprintdrag-section">
+                <h3 style="color: var(--text-main); font-family: var(--font-racing); font-size: 18px; margin-bottom: 12px;">Categoría: BMW M3 GTR</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pos</th>
+                                <th>Piloto</th>
+                                <th>Crono</th>
+                                <th>Dispositivo</th>
+                                <th>Vehículo</th>
+                                <th>Caja</th>
+                                <th>Fecha</th>
+                                <th>Prueba</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-sprintdrag-bmw"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <br>
+            <button class="filter-btn" onclick="switchView('routes')">← Volver al Índice de Rutas</button>
+        </section>
+
+        <!-- SECCIÓN: SALÓN DE LA FAMA (PODIO TOP 3 + TABLA) -->
+        <section id="view-halloffame" class="view-section">
+            <h2 class="section-title">
+                <span>👑</span> Salón de la Fama <span class="glow">// Leyendas de Rockport</span>
+            </h2>
+
+            <!-- PODIO TOP 3 (Inspirado en lokal.gg Ref. 1) -->
+            <div id="podium-hall-of-fame" class="podium-grid"></div>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Posición</th>
+                            <th>Piloto</th>
+                            <th>Récords Mundiales</th>
+                            <th>Plataforma</th>
+                            <th>Insignia</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-hall-of-fame">
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: var(--nfs-orange);">Calculando récords de la comunidad...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECCIÓN: TOP GLOBAL DE PILOTOS (PODIO TOP 3 + TABLA) -->
+        <section id="view-globaldrivers" class="view-section">
+            <h2 class="section-title">
+                <span>🏆</span> Top Global de Pilotos <span class="glow">// Podios Totales</span>
+            </h2>
+
+            <!-- PODIO TOP 3 (Inspirado en lokal.gg Ref. 1) -->
+            <div id="podium-global-drivers" class="podium-grid"></div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Pos Global</th>
+                            <th>Piloto</th>
+                            <th>1° Lugares</th>
+                            <th>2° Lugares</th>
+                            <th>3° Lugares</th>
+                            <th>Total Podios</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-global-drivers">
+                        <tr>
+                            <td colspan="6" style="text-align: center; color: var(--nfs-orange);">Calculando podios globales...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECCIÓN: TOP RUTAS POR CATEGORÍAS -->
+        <section id="view-globalroutes" class="view-section">
+            <h2 class="section-title">
+                <span>📊</span> Clasificación por Categorías <span class="glow">// Circuitos, Sprints y Drags</span>
+            </h2>
+            
+            <div class="tabs-group active-group" id="container-tabs-globalroutes">
+                <button class="tab-btn active" onclick="switchGlobalRouteTab('allroutes', this)">Todas las Rutas</button>
+                <button class="tab-btn" onclick="switchGlobalRouteTab('circuit', this)">Solo Circuitos</button>
+                <button class="tab-btn" onclick="switchGlobalRouteTab('sprint', this)">Solo Sprints</button>
+                <button class="tab-btn" onclick="switchGlobalRouteTab('drag', this)">Solo Drags</button>
+            </div>
+
+            <div id="tab-global-allroutes" class="table-section globalroute-section active">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pos</th>
+                                <th>Piloto</th>
+                                <th>1° Puestos</th>
+                                <th>2° Puestos</th>
+                                <th>3° Puestos</th>
+                                <th>Total Podios</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-global-allroutes">
+                            <tr><td colspan="6" style="text-align: center; color: var(--nfs-orange);">Cargando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="tab-global-circuit" class="table-section globalroute-section">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pos</th>
+                                <th>Piloto</th>
+                                <th>1° Puestos</th>
+                                <th>2° Puestos</th>
+                                <th>3° Puestos</th>
+                                <th>Total Podios</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-global-circuit">
+                            <tr><td colspan="6" style="text-align: center; color: var(--nfs-orange);">Cargando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="tab-global-sprint" class="table-section globalroute-section">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pos</th>
+                                <th>Piloto</th>
+                                <th>1° Puestos</th>
+                                <th>2° Puestos</th>
+                                <th>3° Puestos</th>
+                                <th>Total Podios</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-global-sprint">
+                            <tr><td colspan="6" style="text-align: center; color: var(--nfs-orange);">Cargando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="tab-global-drag" class="table-section globalroute-section">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pos</th>
+                                <th>Piloto</th>
+                                <th>1° Puestos</th>
+                                <th>2° Puestos</th>
+                                <th>3° Puestos</th>
+                                <th>Total Podios</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-global-drag">
+                            <tr><td colspan="6" style="text-align: center; color: var(--nfs-orange);">Cargando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN: GUÍAS Y TUNING -->
+        <section id="view-guides" class="view-section">
+            <h2 class="section-title">
+                <span>⚙️</span> Guías de Rendimiento <span class="glow">& Tuning de Competición</span>
+            </h2>
+            <div class="news-grid">
+                <div class="news-card">
+                    <h3>⚙️ Guía de Piezas Junkman</h3>
+                    <p style="color: var(--text-muted); line-height: 1.6; font-size: 14px;">Descubre cómo desbloquear y aplicar correctamente las piezas de rendimiento ocultas para ganar valiosas décimas de segundo en las curvas rápidas de Rockport.</p>
+                </div>
+                <div class="news-card">
+                    <h3>🏎️ Setups para el BMW M3 GTR</h3>
+                    <p style="color: var(--text-muted); line-height: 1.6; font-size: 14px;">Configuración de aerodinámica, dirección y relación de transmisión ideal para dominar tanto circuitos técnicos como sprints de alta velocidad.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN: REGLAS Y NORMATIVA -->
+        <section id="view-rules" class="view-section">
+            <h2 class="section-title">
+                <span>📋</span> Normativa Oficial <span class="glow">// Verificación de Tiempos</span>
+            </h2>
+            <div class="news-card" style="max-width: 840px; margin: 0 auto;">
+                
+                <h3>📋 Rules General</h3>
+                <p style="color: var(--text-muted); line-height: 1.6; font-size: 14px;">Reglamento oficial para NFSRANKSMW.</p>
+                <p style="color: var(--text-muted); line-height: 1.6; font-size: 14px;"><strong style="color: #ffffff;">Moderadores:</strong> Zipper, ZimanX™️</p>
+
+                <h3 style="margin-top: 22px;">📋 Reglas Generales</h3>
+                <ul style="color: var(--text-muted); line-height: 1.8; font-size: 14px; padding-left: 20px;"> 
+                    <li>El juego debe ser con las propiedades originales.</li>
+                    <li>Se permite Parche V1.2 y V1.3; los parches V1.4 serán aceptados siempre y cuando no haya ninguna modificación del sonido de los autos, ni se configure el rendimiento de cada auto original del juego.</li>
+                    <li>De los perfiles se pueden editar el nombre y bonus de dinero.</li>
+                    <li>No se permite el uso de Hex para modificar detalles de los autos del perfil del juego.</li>
+                    <li>Se permiten Mods Visuales; los mods de autos no están permitidos en este reglamento.</li>
+                    <li>Se permite usar «código de hamburguesa» para desbloquear todas las partes de Junkman.</li>
+                    <li>Se permite el parche de pantalla ancha, D3D.HD.</li>
+                    <li>Se permite deshabilitar el desenfoque de movimiento en el registro.</li>
+                    <li>Se permite el uso de programas Optimizer y de traductor de idiomas.</li>
+                    <li>Dispositivos de juegos compatibles como mandos, teclados y volantes son permitidos para validar sus tiempos.</li>
+                </ul>
+
+                <h3 style="margin-top: 22px;">📋 Reglas de Verificación de Tiempos</h3>
+                <ul style="color: var(--text-muted); line-height: 1.8; font-size: 14px; padding-left: 20px;"> 
+                    <li>El piloto usuario del juego debe respetar las normas establecidas para cumplimiento del mismo.</li>
+                    <li>Todos los tiempos que se realicen para los circuitos y sprint deben ser grabados y publicados en YouTube. Estos tiempos pueden estar en modo oculto o público. El nombre del video debe contener: Nombre del juego + nombre de la pista + tiempo realizado + nick del jugador. En la descripción del video se debe al menos publicitar la página NFSRANKSMW.</li>
+                    <li>Los tiempos pueden ser grabados por cualquier grabadora o capturadora de video existente.</li>
+                    <li>En el video del juego de la carrera debe mostrarse el tiempo de forma visible y en formato HD.</li>
+                    <li>El temporizador y el velocímetro deben estar claramente visibles en el video.</li>
+                    <li>En el video debe mostrarse el inicio y final de la carrera para verificación del tiempo.</li>
+                    <li>Se permite el uso de soundtrack en el video de la carrera, pero debe escucharse el sonido del auto y los efectos de sonido.</li>
+                    <li>El enlace del video debe anunciarse a nuestros moderadores para que sea revisado y, una vez validado, será publicado en nuestra tabla LeaderBoard website.</li>
+                    <li>Los tiempos tendrán aproximadamente un lapso no mayor a 7 días para su verificación y publicación, debido a que nuestros moderadores disponen de poco tiempo.</li>
+                </ul>
+
+                <h3 style="margin-top: 22px;">📋 Reglas Específicas de Categoría</h3>
+                <ul style="color: var(--text-muted); line-height: 1.8; font-size: 14px; padding-left: 20px;">  
+                    <li><strong>Categoría Junkman:</strong> Todos los autos con piezas ultimate y junkman entran en esta categoría sin excepción. Por los momentos en la categoría junkman se establecerá la tabla de clasificación para Nitro Nos, Circuito 1st Lap, Fast Lap y Sprint. La categoría "No Nitro" aún no se compite en este leaderboard. Las vueltas rápidas se toman después de la primera vuelta. En caso de visualizar uso desmedido del nos que induzca a sospecha de hack, el tiempo será analizado y, de comprobarse, se eliminará del leaderboard.</li>
+                    <li><strong>Categoría BMW NO NOS:</strong> Se exige el uso de un solo auto, Bonus BMW M3 GTR (se permite el obtenido en el modo carrera como bonus car). Por los momentos en la categoría BMW M3 GTR se establecerá la tabla de clasificación para No nitro, Circuito 1st Lap, Fast Lap y Sprint. Las carreras BMW M3 GTR NOS no entran en esta categoría. Las vueltas rápidas se toman después de la primera vuelta.</li>
+                    <li><strong>Modo de medición de tiempos:</strong> Los tiempos son tomados con un cronómetro externo (software Avedimux.exe) en formato 00:00.000, desde el momento en que inicia el cronómetro del juego hasta la meta.</li>
+                    <li><strong>Reglas de Timebug:</strong> Se considerará timebug aquellos tiempos donde el margen de error sea mayor a dos fotogramas por segundo (FPS), que equivale a 6 centésimas de segundo; en caso contrario no se considerará timebug. En condiciones de desempate o de tiempos muy cercanos a 10 centésimas de segundo, nuestros moderadores tendrán la obligación de verificar esos tiempos y colocar los tiempos reales tomados con el cronómetro externo Avidemux.</li>
+                    <li><strong>Prueba en Video:</strong> Todo tiempo enviado debe incluir un enlace de YouTube o video completo que muestre la vuelta/ruta desde el inicio hasta la línea de meta.</li>
+                    <li><strong>Sin Hacks / Mods Ilegales:</strong> Se permite el uso de herramientas oficiales de optimización de FPS o parches de resolución, pero queda estrictamente prohibido alterar las físicas del juego o usar speedhacks.</li>
+                    <li><strong>Dispositivo:</strong> Especificar claramente si se utilizó Teclado, Mando (Gamepad) o Volante (Wheel).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- SECCIÓN: EXPEDIENTE OFICIAL DE PILOTO -->
+        <section id="view-driverprofile" class="view-section">
+            <h2 class="section-title">
+                <span>👤</span> Expediente de Piloto <span class="glow">// Telemetría Individual</span>
+            </h2>
+            <div id="search-driver-wrapper"></div>
+        </section>
+
+        <!-- SECCIÓN: ENVIAR TIEMPO (FORMULARIO) -->
+        <section id="view-submit" class="view-section">
+            <div class="about-section" style="text-align: center; margin-bottom: 30px;">
+                <h2>REGISTRO OFICIAL DE TIEMPO</h2>
+                <p>Envía tu tiempo con la evidencia en video para que sea revisado por los moderadores y validado en el Leaderboard Oficial de Rockport City.</p>
+            </div>
+
+            <div class="form-card">
+                <form id="form-submit-time" onsubmit="handleTimeSubmit(event)">
+                    <div class="form-group">
+                        <label class="form-label" for="sub-driver">👤 Piloto / Nick</label>
+                        <input type="text" id="sub-driver" class="form-control" required placeholder="Ej: ZIMANX">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="sub-route">🏁 Ruta o Circuito</label>
+                        <input type="text" id="sub-route" class="form-control" required placeholder="Ej: City Perimeter">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="sub-time">⏱️ Tiempo (00:00.000)</label>
+                            <input type="text" id="sub-time" class="form-control" required placeholder="01:30.680">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="sub-car">🚗 Auto Utilizado</label>
+                            <input type="text" id="sub-car" class="form-control" required placeholder="Ej: BMW M3 GTR">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="sub-gearbox">⚙️ Transmisión</label>
+                            <select id="sub-gearbox" class="form-control">
+                                <option value="Manual">Manual</option>
+                                <option value="Automático">Automático</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="sub-device">🎮 Dispositivo de Entrada</label>
+                            <select id="sub-device" class="form-control">
+                                <option value="Teclado">Teclado</option>
+                                <option value="Mando">Mando / Pad</option>
+                                <option value="Volante">Volante</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="sub-video">🎬 Prueba en Video (YouTube / Twitch)</label>
+                        <input type="url" id="sub-video" class="form-control" required placeholder="https://www.youtube.com/watch?v=...">
+                    </div>
+
+                    <button type="submit" id="btn-submit-time" class="btn-submit">
+                        🚀 Enviar Registro a Revisión
+                    </button>
+                </form>
+
+                <div id="submit-status" style="margin-top: 15px; text-align: center; font-weight: bold; font-family: var(--font-racing); font-size: 16px;"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER ESTILO FÓRMULA 1 -->
+    <footer>
+        <div class="footer-content">
+            <p style="margin: 0;">
+                <strong style="color: #ffffff;">Need for Speed: Most Wanted (2005)</strong> — Still racing after dark. 
+                <br>
+                <strong>©NFSRANKSMW 2026</strong> All rights reserved. 
+                <br>
+                <span style="font-size: 12px; opacity: 0.6; display: inline-block; margin-top: 6px;">Not affiliated with Electronic Arts or the Need for Speed™ brand. All trademarks belong to their respective owners.</span>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts externos -->
+    <script src="assets/js/routes-data.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
