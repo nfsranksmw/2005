@@ -155,8 +155,12 @@
                     <a href="#" onclick="switchView('rules'); closeAllDropdowns();" id="nav-rules">Rules & Norm</a>
                     <a href="#" onclick="switchView('driverprofile'); closeAllDropdowns();" id="nav-driverprofile">🔍 Search Driver</a>
                     <a href="#" onclick="switchView('submit'); closeAllDropdowns();" id="nav-submit">🚀 Enviar Tiempo</a>
+                    <a href="#" onclick="switchView('download'); closeAllDropdowns();" id="nav-dropdown-download">📥 Download ISO</a>
                 </div>
             </div>
+
+            <!-- Pestaña Directa: Download -->
+            <a href="#" onclick="switchView('download')" id="nav-download">Download</a>
         </nav>
 
         <!-- Widget de Telemetría en Vivo F1 -->
@@ -194,18 +198,13 @@
                 </div>
             </div>
 
-            <div class="about-section">
-                <h2>ARCHIVO OFICIAL DE TIEMPOS // NFS RANKS v.5</h2>
-                <p>Bienvenido al registro centralizado de récords mundiales de <strong>Need for Speed: Most Wanted (2005)</strong> — <strong>NFS Ranks v.5 (NFSRANKSMW)</strong>. Competición pura en cada sector de Rockport City con telemetría de tiempos, Torneo Oficial Blacklist 2026 y verificación en video.</p>
-            </div>
-
             <div class="hero-banner">
                 <div class="hero-banner-content">
                     <div class="hero-tag">
-                        <span>⚡</span> OFFICIAL SPEED LEADERBOARDS • NFS RANKS v.5
+                        <span>⚡</span> OFFICIAL SPEED LEADERBOARDS • NEED FOR SPEED RUNS 2005
                     </div>
                     <h1>
-                        <span style="display: block; font-size: 0.52em; color: var(--nfs-orange); letter-spacing: 2.5px; margin-bottom: 6px;">NFS RANKS v.5</span>
+                        <span style="display: block; font-size: 0.52em; color: var(--nfs-orange); letter-spacing: 2.5px; margin-bottom: 6px;">NEED FOR SPEED RUNS 2005</span>
                         WORLD RANKING<br>
                         <span class="glow-text">NFS MOST WANTED</span><br>
                         ROCKPORT RECORDS
@@ -222,23 +221,280 @@
                         </a>
                     </div>
                 </div>
+
+                <!-- PANEL NEED FOR SPEED RUNS 2005 (UBICADO A LA DERECHA EN EL ÁREA DEL BMW) -->
+                <div class="hero-about-panel">
+                    <div class="about-panel-badge">
+                        <span>📋</span> NEED FOR SPEED RUNS 2005
+                    </div>
+                    <h2>NEED FOR SPEED RUNS 2005</h2>
+                    <p>Bienvenido al registro centralizado de récords mundiales de <strong>Need for Speed: Most Wanted (2005)</strong> — <strong>Need for Speed Runs 2005</strong>. Competición pura en cada sector de Rockport City con telemetría de tiempos, Torneo Oficial Blacklist 2026 y verificación en video.</p>
+                </div>
             </div>
 
-            <div class="drivers-banner">
-                <h2>DRIVERS CHAMPIONSHIP</h2>
-                <h3>100% PURE COMPETITIVE</h3>
-            </div>
-            
-            <div style="max-width: 1100px; margin: 35px auto; padding: 0 15px;">
-                <div class="news-grid">
-                    <div class="news-card">
-                        <h3>¿De qué trata este sitio?</h3>
-                        <p style="color: var(--text-muted); line-height: 1.6; font-size: 14px;">Recopilamos los tiempos más veloces y precisos registrados en las más de 80 rutas y circuitos de Rockport City. Filtra por categoría (Circuitos, Sprints, Drags) y accede a las grabaciones originales de cada récord.</p>
+            <!-- PORTAL DASHBOARD CON MÓDULOS LATERALES (ESPORTS HUB) -->
+            <div class="home-portal-wrapper">
+                <div class="home-portal-grid">
+                    
+                    <!-- COLUMNA PRINCIPAL (CONTENIDO Y COMPETICIÓN) -->
+                    <div class="home-main-col">
+                        <!-- BANNER CAMPEONATO -->
+                        <div class="home-competition-card">
+                            <div class="home-card-glow"></div>
+                            <div class="home-comp-tag">
+                                <span>🏆</span> TORNEO OFICIAL • ROCKPORT CITY 2026
+                            </div>
+                            <h2>DRIVERS CHAMPIONSHIP // NFS MOST WANTED BLACKLIST 2026</h2>
+                            <p class="home-comp-desc">
+                                El campeonato definitivo de velocidad, regularidad y duelos 1v1 en Need for Speed Most Wanted. Cuatro semanas de clasificación oficial para coronar al rey de la Blacklist de Rockport.
+                            </p>
+                            <div class="home-comp-features">
+                                <div class="comp-feature-pill">
+                                    <span class="comp-feat-icon">🏎️</span>
+                                    <div>
+                                        <strong>15+ Pilotos</strong>
+                                        <small>Parrilla Dinámica</small>
+                                    </div>
+                                </div>
+                                <div class="comp-feature-pill">
+                                    <span class="comp-feat-icon">⚡</span>
+                                    <div>
+                                        <strong>4 Desafíos/Semana</strong>
+                                        <small>Bonos +100 PTS</small>
+                                    </div>
+                                </div>
+                                <div class="comp-feature-pill">
+                                    <span class="comp-feat-icon">💰</span>
+                                    <div>
+                                        <strong>$23.5M REP</strong>
+                                        <small>Bolsa de Premios</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="home-comp-actions">
+                                <button class="btn-explored" onclick="switchView('championship-register')">
+                                    <span>📝</span> Inscríbete al Torneo
+                                </button>
+                                <button class="btn-explored btn-outline-nfs" onclick="switchView('blacklist')">
+                                    <span>⚔️</span> Grupos & Retos
+                                </button>
+                                <button class="btn-explored btn-outline-nfs" onclick="switchView('championship-standings')">
+                                    <span>🏆</span> Clasificación
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- MODOS DE COMPETICIÓN (CIRCUITO, SPRINT, DRAG) -->
+                        <div class="home-categories-grid">
+                            <div class="home-category-card card-circuito" onclick="setCategoryAndGo('Circuito')">
+                                <div class="cat-card-header">
+                                    <span class="cat-icon">🏁</span>
+                                    <span class="cat-badge">CIRCUITOS</span>
+                                </div>
+                                <h3>Carreras de Circuito</h3>
+                                <p>Sectores cerrados de varias vueltas. Récords oficiales en Single Lap y Fast Lap.</p>
+                                <div class="cat-footer">
+                                    <span class="cat-stat">Junkman & BMW M3 GTR</span>
+                                    <span class="cat-arrow">→</span>
+                                </div>
+                            </div>
+
+                            <div class="home-category-card card-sprint" onclick="setCategoryAndGo('Sprint')">
+                                <div class="cat-card-header">
+                                    <span class="cat-icon">⚡</span>
+                                    <span class="cat-badge">SPRINTS</span>
+                                </div>
+                                <h3>Pruebas de Sprint</h3>
+                                <p>Trazados punto a punto a toda velocidad atravesando autopistas y distritos de Rockport.</p>
+                                <div class="cat-footer">
+                                    <span class="cat-stat">Junkman & BMW M3 GTR</span>
+                                    <span class="cat-arrow">→</span>
+                                </div>
+                            </div>
+
+                            <div class="home-category-card card-drag" onclick="setCategoryAndGo('Drag')">
+                                <div class="cat-card-header">
+                                    <span class="cat-icon">🎯</span>
+                                    <span class="cat-badge">DRAGS</span>
+                                </div>
+                                <h3>Aceleración Drag</h3>
+                                <p>Cambios de marcha manuales perfectos y máxima aceleración en rectas extremas.</p>
+                                <div class="cat-footer">
+                                    <span class="cat-stat">Precisión de Telemetría</span>
+                                    <span class="cat-arrow">→</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- GUÍA DE INTEGRIDAD Y REGLAS -->
+                        <div class="home-rules-box">
+                            <div class="rules-box-icon">⚖️</div>
+                            <div class="rules-box-content">
+                                <h4>INTEGRIDAD DE COMPETICIÓN // NFS RANKS v.5</h4>
+                                <p>Todos los récords y participaciones son verificados mediante grabaciones oficiales de YouTube. No se admiten mods de rendimiento ilegales ni ayudas no autorizadas. Consulta las normas para asegurar que tus tiempos sean homologados.</p>
+                                <div class="rules-box-links">
+                                    <a href="#" onclick="switchView('rules')">📜 Ver Reglamento Oficial</a>
+                                    <a href="#" onclick="switchView('submit')">🚀 Cómo Enviar tu Récord</a>
+                                    <a href="#" onclick="switchView('past-tournaments')">🏛️ Torneos Anteriores</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="news-card">
-                        <h3>🚀 Récords Recientes (Live Telemetry)</h3>
-                        <p style="color: var(--text-muted); line-height: 1.6; font-size: 14px;"><strong style="color: #ffffff;">DJALIL</strong> sostiene la vuelta récord en <em>City Perimeter</em> con un crono de <strong style="color: var(--nfs-orange); font-family: var(--font-mono);">01:30.680</strong> a bordo de su BMW M3 GTR.</p>
-                    </div>
+
+                    <!-- COLUMNA LATERAL (MÓDULOS EN EL LATERAL) -->
+                    <aside class="home-sidebar-col">
+                        
+                        <!-- MÓDULO 1: EVENTO NFS MOST WANTED BLACKLIST 2026 -->
+                        <div class="home-sidebar-module module-event">
+                            <div class="module-header">
+                                <div class="module-badge badge-event">
+                                    <span class="pulse-dot"></span> PRÓXIMO EVENTO
+                                </div>
+                                <span class="module-tag-year">2026</span>
+                            </div>
+                            <h3 class="module-title">NFS Most Wanted Blacklist 2026</h3>
+                            <div class="module-subtitle">Event Rank 2026 • Rockport City</div>
+                            
+                            <!-- Cuenta Regresiva Digital -->
+                            <div class="event-countdown-container">
+                                <div class="countdown-title">INICIO OFICIAL DEL TORNEO:</div>
+                                <div class="countdown-timer" id="home-event-countdown">
+                                    <div class="cd-item">
+                                        <span class="cd-number" id="cd-days">--</span>
+                                        <span class="cd-label">DÍAS</span>
+                                    </div>
+                                    <span class="cd-sep">:</span>
+                                    <div class="cd-item">
+                                        <span class="cd-number" id="cd-hours">--</span>
+                                        <span class="cd-label">HRS</span>
+                                    </div>
+                                    <span class="cd-sep">:</span>
+                                    <div class="cd-item">
+                                        <span class="cd-number" id="cd-mins">--</span>
+                                        <span class="cd-label">MIN</span>
+                                    </div>
+                                    <span class="cd-sep">:</span>
+                                    <div class="cd-item">
+                                        <span class="cd-number" id="cd-secs">--</span>
+                                        <span class="cd-label">SEG</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Telemetría del Evento -->
+                            <div class="module-event-details">
+                                <div class="event-detail-row">
+                                    <span class="detail-label">📅 Fechas:</span>
+                                    <span class="detail-val" style="color: var(--nfs-orange);">03 Oct - 31 Oct 2026</span>
+                                </div>
+                                <div class="event-detail-row">
+                                    <span class="detail-label">⚔️ Formato:</span>
+                                    <span class="detail-val">5 Grupos (Tríos) + Duelos 1v1</span>
+                                </div>
+                                <div class="event-detail-row">
+                                    <span class="detail-label">🚗 Categorías:</span>
+                                    <span class="detail-val">Yuggman BMW M3 GTR y Autos Stock</span>
+                                </div>
+                                <div class="event-detail-row">
+                                    <span class="detail-label">💰 Bolsa Total:</span>
+                                    <span class="detail-val" style="color: var(--green-neon); font-family: var(--font-mono);">$23,540,000 REP</span>
+                                </div>
+                                <div class="event-detail-row">
+                                    <span class="detail-label">📍 Estado:</span>
+                                    <span class="detail-val" style="color: var(--green-neon); font-weight: 700;">🟢 Inscripciones Abiertas</span>
+                                </div>
+                            </div>
+
+                            <div class="module-actions">
+                                <button class="btn-module-cta" onclick="switchView('championship-register')">
+                                    <span>📝</span> Inscribirme al Torneo
+                                </button>
+                                <button class="btn-module-sub" onclick="switchView('blacklist')">
+                                    <span>⚔️</span> Ver Grupos & Retos
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- MÓDULO 2: LEADERBOARD EN TIEMPO REAL NFS 2026 -->
+                        <div class="home-sidebar-module module-leaderboard">
+                            <div class="module-header">
+                                <div class="module-badge badge-leaderboard">
+                                    <span class="pulse-dot" style="background-color: var(--green-neon);"></span> LIVE LEADERBOARD
+                                </div>
+                                <span class="module-tag-refresh" title="Telemetría en tiempo real">TIEMPO REAL</span>
+                            </div>
+                            <h3 class="module-title">Leaderboard en Tiempo Real</h3>
+                            <div class="module-subtitle">Mejores Récords Mundiales • Temporada 2026</div>
+
+                            <!-- Mini-Lista de Telemetría en Vivo -->
+                            <div class="home-live-leaderboard-list" id="home-live-leaderboard-list">
+                                <!-- Filas de récords en tiempo real generadas dinámicamente -->
+                            </div>
+
+                            <div class="module-actions" style="margin-top: 14px;">
+                                <button class="btn-module-cta btn-cta-leaderboard" onclick="switchView('routes')">
+                                    <span>🏁</span> Explorar Leaderboards Completos
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- MÓDULO 3: DESAFÍOS SEMANALES -->
+                        <div class="home-sidebar-module module-challenges">
+                            <div class="module-header">
+                                <div class="module-badge badge-challenges">
+                                    <span>⚡</span> 4 SEMANAS
+                                </div>
+                                <span class="module-tag-dates">03 - 31 OCT</span>
+                            </div>
+                            <h3 class="module-title">Desafíos Semanales</h3>
+                            <div class="module-subtitle">Calendario de Pruebas • Blacklist 2026</div>
+
+                            <div class="home-challenges-timeline">
+                                <div class="timeline-week-item active-week" onclick="switchView('challenges')">
+                                    <div class="timeline-week-num">S1</div>
+                                    <div class="timeline-week-info">
+                                        <div class="timeline-week-title">Semana 1: Circuito Urbano</div>
+                                        <div class="timeline-week-meta">03 - 09 Oct • Junkman Nos • +100 PTS</div>
+                                    </div>
+                                    <span class="timeline-week-status status-next">Próxima</span>
+                                </div>
+
+                                <div class="timeline-week-item" onclick="switchView('challenges')">
+                                    <div class="timeline-week-num">S2</div>
+                                    <div class="timeline-week-info">
+                                        <div class="timeline-week-title">Semana 2: Sprint Costero</div>
+                                        <div class="timeline-week-meta">10 - 16 Oct • BMW M3 GTR • +100 PTS</div>
+                                    </div>
+                                    <span class="timeline-week-status status-locked">🔒</span>
+                                </div>
+
+                                <div class="timeline-week-item" onclick="switchView('challenges')">
+                                    <div class="timeline-week-num">S3</div>
+                                    <div class="timeline-week-info">
+                                        <div class="timeline-week-title">Semana 3: Drag Speed Trap</div>
+                                        <div class="timeline-week-meta">17 - 23 Oct • Aceleración • +100 PTS</div>
+                                    </div>
+                                    <span class="timeline-week-status status-locked">🔒</span>
+                                </div>
+
+                                <div class="timeline-week-item" onclick="switchView('challenges')">
+                                    <div class="timeline-week-num">S4</div>
+                                    <div class="timeline-week-info">
+                                        <div class="timeline-week-title">Semana 4: Gran Final 1v1</div>
+                                        <div class="timeline-week-meta">24 - 31 Oct • Duelo Blacklist #1</div>
+                                    </div>
+                                    <span class="timeline-week-status status-final">👑 Final</span>
+                                </div>
+                            </div>
+
+                            <div class="module-actions" style="margin-top: 14px;">
+                                <button class="btn-module-cta btn-cta-challenges" onclick="switchView('challenges')">
+                                    <span>⚡</span> Ver Todos los Desafíos
+                                </button>
+                            </div>
+                        </div>
+
+                    </aside>
                 </div>
             </div>
         </section>
@@ -1311,37 +1567,171 @@
             <div id="search-driver-wrapper"></div>
         </section>
 
-        <!-- SECCIÓN: ENVIAR TIEMPO (FORMULARIO) -->
+        <!-- SECCIÓN: ENVIAR TIEMPO (FORMULARIO OFICIAL DE HOMOLOGACIÓN) -->
         <section id="view-submit" class="view-section">
             <div class="about-section" style="text-align: center; margin-bottom: 30px;">
+                <div class="register-badge" style="margin-bottom: 12px; display: inline-flex;">HOMOLOGACIÓN OFICIAL • TELEMETRÍA DE VIDEO</div>
                 <h2>REGISTRO OFICIAL DE TIEMPO</h2>
-                <p>Envía tu tiempo con la evidencia en video para que sea revisado por los moderadores y validado en el Leaderboard Oficial de Rockport City.</p>
+                <p>Envía tu tiempo con la evidencia en video de YouTube para su homologación en el Leaderboard Oficial de Rockport City. El sistema valida automáticamente que el tiempo declarado coincida con la diferencia de las marcas de tiempo (inicio y fin).</p>
             </div>
 
-            <div class="form-card">
+            <div class="form-card form-telemetry-card">
                 <form id="form-submit-time" onsubmit="handleTimeSubmit(event)">
-                    <div class="form-group">
-                        <label class="form-label" for="sub-driver">👤 Piloto / Nick</label>
-                        <input type="text" id="sub-driver" class="form-control" required placeholder="Ej: ZIMANX">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" for="sub-route">🏁 Ruta o Circuito</label>
-                        <input type="text" id="sub-route" class="form-control" required placeholder="Ej: City Perimeter">
-                    </div>
-
+                    
+                    <!-- FILA 1: PILOTO Y MODALIDAD -->
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label" for="sub-time">⏱️ Tiempo (00:00.000)</label>
-                            <input type="text" id="sub-time" class="form-control" required placeholder="01:30.680">
+                            <label class="form-label" for="sub-driver">👤 Piloto / Nick</label>
+                            <input type="text" id="sub-driver" class="form-control" required placeholder="Ej: ZIMANX" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">🌐 Modalidad de Carrera</label>
+                            <div class="radio-mode-group">
+                                <label class="radio-mode-label">
+                                    <input type="radio" name="sub-mode" id="mode-online" value="Online" checked>
+                                    <span class="radio-mode-custom">
+                                        <span class="mode-icon">🌐</span> Online
+                                    </span>
+                                </label>
+                                <label class="radio-mode-label">
+                                    <input type="radio" name="sub-mode" id="mode-offline" value="Offline">
+                                    <span class="radio-mode-custom">
+                                        <span class="mode-icon">🕹️</span> Offline
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FILA 2: PISTA Y AUTO -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="sub-route">🏁 Pista / Trazado</label>
+                            <input type="text" id="sub-route" list="list-nfs-routes" class="form-control" required placeholder="Ej: City Perimeter">
+                            <datalist id="list-nfs-routes">
+                                <option value="City Perimeter">
+                                <option value="Camden & Dunwich">
+                                <option value="Seaside & Camden">
+                                <option value="Point Camden & Dunwich">
+                                <option value="Heritage Heights">
+                                <option value="Omega">
+                                <option value="Rockport Turnpike">
+                                <option value="Dunwich Bay">
+                                <option value="North Bay & Eden">
+                                <option value="Petersburg Dam">
+                                <option value="Bay Bridge & Seaside">
+                                <option value="Union & Camden">
+                                <option value="Century & Camden">
+                                <option value="Route 55 & Union">
+                                <option value="Bond & Camden">
+                            </datalist>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="sub-car">🚗 Auto Utilizado</label>
-                            <input type="text" id="sub-car" class="form-control" required placeholder="Ej: BMW M3 GTR">
+                            <input type="text" id="sub-car" list="list-nfs-cars" class="form-control" required placeholder="Ej: BMW M3 GTR">
+                            <datalist id="list-nfs-cars">
+                                <option value="BMW M3 GTR">
+                                <option value="Porsche Carrera GT">
+                                <option value="Chevrolet Corvette C6.R">
+                                <option value="Lamborghini Gallardo">
+                                <option value="Dodge Viper SRT-10">
+                                <option value="Ford GT">
+                                <option value="Porsche 911 Turbo S">
+                                <option value="Subaru Impreza WRX STI">
+                                <option value="Mitsubishi Lancer Evolution VIII">
+                                <option value="Mazda RX-7">
+                                <option value="Toyota Supra">
+                                <option value="Mercedes-Benz SLR McLaren">
+                            </datalist>
                         </div>
                     </div>
 
-                    <div class="form-row">
+                    <!-- FILA 3: ENLACE DE YOUTUBE -->
+                    <div class="form-group">
+                        <label class="form-label" for="sub-video">🎬 Enlace de YouTube (Prueba en Video)</label>
+                        <input type="url" id="sub-video" class="form-control" required placeholder="https://www.youtube.com/watch?v=... o https://youtu.be/..." oninput="handleVideoUrlChange()">
+                        <span class="field-hint">Pega el link oficial de YouTube donde se aprecie la carrera completa de principio a fin sin cortes.</span>
+                    </div>
+
+                    <!-- BLOQUE DE TELEMETRÍA DE MARCAS DE VIDEO & TIEMPO DECLARADO -->
+                    <div class="telemetry-box">
+                        <div class="telemetry-box-header">
+                            <div class="telemetry-badge">
+                                <span>⏱️</span> TELEMETRÍA DE VIDEO & HOMOLOGACIÓN
+                            </div>
+                            <span class="telemetry-helper">Verificación milimétrica cruzada</span>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="sub-start-mark">🚩 Marca de Inicio (Video)</label>
+                                <div class="input-with-icon">
+                                    <input type="text" id="sub-start-mark" class="form-control mono-input" required placeholder="00:15.200" oninput="validateTimeMarksLive()">
+                                    <span class="input-unit">MM:SS.mmm</span>
+                                </div>
+                                <span class="field-hint">Momento de salida / luz verde</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="sub-end-mark">🏁 Marca de Fin (Video)</label>
+                                <div class="input-with-icon">
+                                    <input type="text" id="sub-end-mark" class="form-control mono-input" required placeholder="01:35.950" oninput="validateTimeMarksLive()">
+                                    <span class="input-unit">MM:SS.mmm</span>
+                                </div>
+                                <span class="field-hint">Momento de cruce de meta</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="sub-time">⚡ Tiempo Declarado</label>
+                                <div class="input-with-icon">
+                                    <input type="text" id="sub-time" class="form-control mono-input highlight-field" required placeholder="01:20.750" oninput="validateTimeMarksLive()">
+                                    <span class="input-unit">MM:SS.mmm</span>
+                                </div>
+                                <span class="field-hint">Tiempo final en pantalla del juego</span>
+                            </div>
+                        </div>
+
+                        <!-- PANEL COMPARADOR EN VIVO -->
+                        <div class="telemetry-comparison-panel" id="telemetry-comparison-panel">
+                            <div class="comparison-grid">
+                                <div class="comp-col">
+                                    <span class="comp-label">Inicio</span>
+                                    <span class="comp-val" id="disp-start">--:--.---</span>
+                                </div>
+                                <div class="comp-operator">→</div>
+                                <div class="comp-col">
+                                    <span class="comp-label">Fin</span>
+                                    <span class="comp-val" id="disp-end">--:--.---</span>
+                                </div>
+                                <div class="comp-operator">=</div>
+                                <div class="comp-col comp-col-diff">
+                                    <span class="comp-label">Diferencia Video (Δ)</span>
+                                    <span class="comp-val val-diff" id="disp-diff">--:--.---</span>
+                                </div>
+                                <div class="comp-operator">vs</div>
+                                <div class="comp-col comp-col-declared">
+                                    <span class="comp-label">Declarado</span>
+                                    <span class="comp-val val-declared" id="disp-declared">--:--.---</span>
+                                </div>
+                            </div>
+
+                            <!-- BADGE DE ESTADO DE VALIDACIÓN -->
+                            <div class="validation-status-banner state-idle" id="validation-status-banner">
+                                <div class="val-status-icon" id="val-status-icon">ℹ️</div>
+                                <div class="val-status-info">
+                                    <strong id="val-status-title">Esperando marcas de video y tiempo</strong>
+                                    <p id="val-status-desc">Ingresa la marca de inicio, marca de fin y el tiempo declarado para verificar que coincidan exactamente.</p>
+                                </div>
+                            </div>
+
+                            <button type="button" class="btn-sync-diff" id="btn-sync-diff" onclick="syncDeclaredWithDiff()" style="display: none;">
+                                <span>⚡</span> Autocompletar Tiempo Declarado con Diferencia de Video (<span id="btn-sync-time-val">--:--.---</span>)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- FILA 4: DETALLES OPCIONALES DE HARDWARE -->
+                    <div class="form-row" style="margin-top: 20px;">
                         <div class="form-group">
                             <label class="form-label" for="sub-gearbox">⚙️ Transmisión</label>
                             <select id="sub-gearbox" class="form-control">
@@ -1359,17 +1749,247 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label" for="sub-video">🎬 Prueba en Video (YouTube / Twitch)</label>
-                        <input type="url" id="sub-video" class="form-control" required placeholder="https://www.youtube.com/watch?v=...">
-                    </div>
-
+                    <!-- BOTÓN DE ENVÍO -->
                     <button type="submit" id="btn-submit-time" class="btn-submit">
-                        🚀 Enviar Registro a Revisión
+                        <span>🚀</span> Enviar Registro a Homologación
                     </button>
                 </form>
 
                 <div id="submit-status" style="margin-top: 15px; text-align: center; font-weight: bold; font-family: var(--font-racing); font-size: 16px;"></div>
+            </div>
+        </section>
+
+        <!-- ======================================================= -->
+        <!-- SECCIÓN: DESCARGAS OFICIALES (DOWNLOAD)                 -->
+        <!-- ======================================================= -->
+        <section id="view-download" class="view-section">
+            <div class="download-container">
+                <!-- CABECERA HERO DE DESCARGAS -->
+                <div class="download-hero-banner">
+                    <div class="download-badge-tag">💾 ARCHIVO OFICIAL DE INSTALACIÓN // PC DVD EDITION</div>
+                    <h1 class="download-main-title">NEED FOR SPEED: MOST WANTED (2005)</h1>
+                    <p class="download-subtitle">
+                        Descarga directa oficial de la versión completa para PC en formato imagen ISO. Incluye el <strong>Patch Oficial v1.3</strong> y <strong>Crack No-CD</strong> preconfigurado por <strong>ZimanX</strong>. Listo para instalar y correr en Windows 10 y Windows 11.
+                    </p>
+                </div>
+
+                <!-- CUADRÍCULA PRINCIPAL: TARJETA DE DESCARGA + FICHA TÉCNICA -->
+                <div class="download-grid">
+                    <!-- TARJETA PRINCIPAL: CAJA DE DESCARGA ISO -->
+                    <div class="download-card-primary">
+                        <div class="download-card-header">
+                            <div class="download-icon-box">
+                                <span style="font-size: 40px;">💿</span>
+                            </div>
+                            <div class="download-card-title-group">
+                                <div class="download-file-tag">GOOGLE DRIVE DIRECT CLOUD • ALTA VELOCIDAD</div>
+                                <h2 class="download-file-name">ISO NFSMW 2005 ENG PC DVD ZimanX .rar</h2>
+                                <span class="download-file-meta">Versión 1.3 Oficial • Idioma: Inglés (ENG) • Formato: Imagen ISO comprimida en RAR</span>
+                            </div>
+                        </div>
+
+                        <div class="download-features-list">
+                            <div class="feat-item">
+                                <span class="feat-icon">✅</span>
+                                <div class="feat-text">
+                                    <strong>Instalación Limpia Original (PC DVD)</strong>
+                                    <p>Copia 1:1 fiel al disco original sin modificaciones invasivas ni archivos alterados, 100% legal y compatible para torneos oficiales.</p>
+                                </div>
+                            </div>
+                            <div class="feat-item">
+                                <span class="feat-icon">⚡</span>
+                                <div class="feat-text">
+                                    <strong>Patch Oficial v1.3 Integrado</strong>
+                                    <p>La actualización obligatoria de EA Sports requerida para homologación de tiempos, telemetría y partidas online.</p>
+                                </div>
+                            </div>
+                            <div class="feat-item">
+                                <span class="feat-icon">🔓</span>
+                                <div class="feat-text">
+                                    <strong>Crack No-CD Incluido y Preconfigurado</strong>
+                                    <p>Ejecutable optimizado para iniciar el juego sin necesidad de insertar el disco físico en la bandeja de tu PC.</p>
+                                </div>
+                            </div>
+                            <div class="feat-item">
+                                <span class="feat-icon">💻</span>
+                                <div class="feat-text">
+                                    <strong>Optimizado para Windows 10 y Windows 11</strong>
+                                    <p>Compatible con sistemas operativos de 64 bits modernos, DirectX 9.0c y monitores panorámicos de alta resolución.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- BOTÓN DE DESCARGA DE ALTO IMPACTO -->
+                        <div class="download-action-wrapper">
+                            <a href="https://drive.google.com/file/d/1FrgMIa0UMiE6-Nr_R6QkDlElJOlqSsID/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-download-glow">
+                                <div class="btn-download-content">
+                                    <span class="btn-download-icon">📥</span>
+                                    <div class="btn-download-texts">
+                                        <span class="btn-download-main">DESCARGAR IMAGEN ISO (GOOGLE DRIVE)</span>
+                                        <span class="btn-download-sub">ISO NFSMW 2005 ENG PC DVD ZimanX .rar • Enlace directo oficial</span>
+                                    </div>
+                                </div>
+                                <span class="btn-download-arrow">➜</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- BARRA LATERAL: FICHA TÉCNICA & SOPORTE -->
+                    <div class="download-card-sidebar">
+                        <div class="download-specs-box">
+                            <h3 class="specs-title">📊 Ficha Técnica del Archivo</h3>
+                            <div class="specs-table">
+                                <div class="specs-row">
+                                    <span class="specs-label">Nombre de archivo:</span>
+                                    <span class="specs-val code-val">ISO NFSMW 2005 ENG PC DVD ZimanX .rar</span>
+                                </div>
+                                <div class="specs-row">
+                                    <span class="specs-label">Servidor / Nube:</span>
+                                    <span class="specs-val" style="color: #4ade80; font-weight: 700;">Google Drive</span>
+                                </div>
+                                <div class="specs-row">
+                                    <span class="specs-label">Actualización:</span>
+                                    <span class="specs-val" style="color: #ffd700; font-weight: 700;">Patch v1.3 + Crack</span>
+                                </div>
+                                <div class="specs-row">
+                                    <span class="specs-label">Sistemas compatibles:</span>
+                                    <span class="specs-val">Windows 10 / 11 (64-bit)</span>
+                                </div>
+                                <div class="specs-row">
+                                    <span class="specs-label">Uploader / Fuente:</span>
+                                    <span class="specs-val" style="color: var(--nfs-orange); font-weight: 700;">ZimanX</span>
+                                </div>
+                                <div class="specs-row">
+                                    <span class="specs-label">Uso oficial:</span>
+                                    <span class="specs-val">Leaderboards & Torneos NFSRANKSMW</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="download-support-banner">
+                            <div class="support-icon">💬</div>
+                            <div class="support-text">
+                                <strong>¿Dudas o problemas con la instalación?</strong>
+                                <p>Únete a nuestro servidor de Discord. La comunidad te asistirá en tiempo real con el setup y la resolución de pantalla.</p>
+                                <a href="https://discord.gg/pgP45wSN8K" target="_blank" rel="noopener noreferrer" class="btn-discord-link">
+                                    <span>👾</span> Unirme al Discord Oficial
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN DE INSTRUCCIONES DE INSTALACIÓN (SELECTOR IDIOMA: ES / EN) -->
+                <div class="instructions-section">
+                    <div class="instructions-header">
+                        <div class="instructions-title-group">
+                            <span class="section-tag-pill">📖 GUÍA DE INSTALACIÓN // STEP-BY-STEP</span>
+                            <h2 class="instructions-main-title">Instrucciones de Instalación / Installation Instructions</h2>
+                        </div>
+                        <div class="lang-switch-pills">
+                            <button type="button" class="lang-btn active" id="btn-lang-es" onclick="switchInstallLang('es')">🇪🇸 Español</button>
+                            <button type="button" class="lang-btn" id="btn-lang-en" onclick="switchInstallLang('en')">🇺🇸 English</button>
+                        </div>
+                    </div>
+
+                    <!-- INSTRUCCIONES EN ESPAÑOL -->
+                    <div class="install-steps-wrapper lang-content active" id="lang-content-es">
+                        <div class="install-steps-grid">
+                            <div class="step-card">
+                                <div class="step-num">01</div>
+                                <div class="step-icon">💽</div>
+                                <h3 class="step-title">Montar la Imagen ISO</h3>
+                                <p class="step-desc">
+                                    Descomprime el archivo RAR descargado. En Windows 10 o Windows 11, haz <strong>clic derecho</strong> sobre el archivo ISO y selecciona <strong>"Montar"</strong>.
+                                </p>
+                            </div>
+                            <div class="step-card">
+                                <div class="step-num">02</div>
+                                <div class="step-icon">💻</div>
+                                <h3 class="step-title">Ir a Este Equipo</h3>
+                                <p class="step-desc">
+                                    Abre el Explorador de Archivos, dirígete a <strong>Este Equipo</strong> (Mi PC) y localiza la unidad virtual de disco donde se montó el juego.
+                                </p>
+                            </div>
+                            <div class="step-card">
+                                <div class="step-num">03</div>
+                                <div class="step-icon">⚙️</div>
+                                <h3 class="step-title">Instalar el Juego</h3>
+                                <p class="step-desc">
+                                    Ejecuta el instalador, selecciona la carpeta de ubicación en tu disco duro (ej: <code>C:\Games\Need for Speed Most Wanted</code>) y espera que se complete la instalación.
+                                </p>
+                            </div>
+                            <div class="step-card highlight-step">
+                                <div class="step-num">04</div>
+                                <div class="step-icon">🏁</div>
+                                <h3 class="step-title">¡Listo a Jugar!</h3>
+                                <p class="step-desc">
+                                    La instalación ya incluye el <strong>Patch v1.3 + crack</strong>. ¡Ejecuta el juego desde su acceso directo y comienza a registrar tus récords!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- INSTRUCCIONES EN INGLÉS -->
+                    <div class="install-steps-wrapper lang-content" id="lang-content-en">
+                        <div class="install-steps-grid">
+                            <div class="step-card">
+                                <div class="step-num">01</div>
+                                <div class="step-icon">💽</div>
+                                <h3 class="step-title">Mount the ISO Image</h3>
+                                <p class="step-desc">
+                                    Extract the downloaded RAR archive. In Windows 10 or Windows 11, <strong>right click</strong> the ISO file and select <strong>"Mount"</strong>.
+                                </p>
+                            </div>
+                            <div class="step-card">
+                                <div class="step-num">02</div>
+                                <div class="step-icon">💻</div>
+                                <h3 class="step-title">Go to Computer</h3>
+                                <p class="step-desc">
+                                    Open File Explorer, go to <strong>This PC (Computer)</strong> and select the virtual mounted disk drive.
+                                </p>
+                            </div>
+                            <div class="step-card">
+                                <div class="step-num">03</div>
+                                <div class="step-icon">⚙️</div>
+                                <h3 class="step-title">Install the Game</h3>
+                                <p class="step-desc">
+                                    Run the installer, select your preferred installation directory on your drive and wait for the game to finish installing.
+                                </p>
+                            </div>
+                            <div class="step-card highlight-step">
+                                <div class="step-num">04</div>
+                                <div class="step-icon">🏁</div>
+                                <h3 class="step-title">Ready to Play!</h3>
+                                <p class="step-desc">
+                                    The installation includes <strong>Patch v1.3 + crack</strong> pre-applied. Launch the game executable and start competing on the leaderboards!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TIPS ADICIONALES DE RENDIMIENTO & WIDESCREEN -->
+                <div class="download-tips-card">
+                    <div class="tips-header">
+                        <span style="font-size: 20px;">💡</span>
+                        <h4 style="margin: 0; color: #ffffff; font-family: var(--font-racing); font-size: 16px;">Recomendaciones de Optimización para PC Modernas</h4>
+                    </div>
+                    <div class="tips-grid">
+                        <div class="tip-col">
+                            <strong>🖥️ Resolución Panorámica (1080p / 2K / 4K):</strong>
+                            <p>Recomendamos instalar el mod <em>NFSMW Widescreen Fix</em> (de ThirteenAG) para habilitar soporte nativo de relación de aspecto 16:9 y 21:9 sin estiramiento de imagen.</p>
+                        </div>
+                        <div class="tip-col">
+                            <strong>🎮 Mandos / Gamepads Modernos:</strong>
+                            <p>Compatible de forma nativa con mandos de Xbox 360, Xbox One, Series X/S y mandos de PlayStation mediante emulador XInput.</p>
+                        </div>
+                        <div class="tip-col">
+                            <strong>🏎️ Telemetría en Vivo NFSRANKSMW:</strong>
+                            <p>Para torneos oficiales, puedes instalar el mod de telemetría en tiempo real <code>NFSMW_FirebaseBridge.asi</code> para sincronizar tus carreras automáticamente.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     </main>

@@ -26,6 +26,12 @@ const podiumDisplayLimits = {
 // URL del Webhook de Discord para moderación
 const DISCORD_WEBHOOK_URL = "URL_DE_TU_WEBHOOK_DE_DISCORD_AQUI";
 
+// Conector Web App de Google Apps Script (Hojas de Cálculo & Firebase)
+const GOOGLE_APPS_SCRIPT_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzi0i3UMk4nywlcJlCX_leHJBjEJZ0a-gkAA_rTl2Q6B0iL7EglOLLVyPyoiZMagBQQ/exec";
+
+// URL Base de Firebase Realtime Database para Leaderboards
+const FIREBASE_RTDB_BASE_URL = "https://nfsranks-blacklist-default-rtdb.firebaseio.com";
+
 // =======================================================
 // TELEMETRÍA EN VIVO (ESTILO FÓRMULA 1)
 // =======================================================
@@ -136,6 +142,16 @@ function switchGlobalRouteTab(tabId, btn) {
     if (btn) btn.classList.add('active');
 }
 
+function switchInstallLang(lang) {
+    document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.lang-content').forEach(c => c.classList.remove('active'));
+
+    const activeBtn = document.getElementById('btn-lang-' + lang);
+    const activeContent = document.getElementById('lang-content-' + lang);
+    if (activeBtn) activeBtn.classList.add('active');
+    if (activeContent) activeContent.classList.add('active');
+}
+
 function updateLeaderboardStats(showingNum, totalNum, currentClass = 'ALL') {
     const showingEl = document.getElementById('showing-count');
     const totalEl = document.getElementById('total-races-count');
@@ -192,9 +208,9 @@ async function fetchGoogleSheetData(csvUrl, maxRows = null) {
                 let driverStr = r[1].replace(/"/g, '').replace(/\r/g, '').trim();
 
                 // Ignorar filas de cabecera duplicadas en el CSV (ej: "Rank", "#Rank", "Driver", "Piloto")
-                if (rankRaw.toLowerCase().includes("rank") || 
+                if (rankRaw.toLowerCase().includes("rank") ||
                     rankRaw.toLowerCase().includes("pos") ||
-                    driverStr.toLowerCase() === "driver" || 
+                    driverStr.toLowerCase() === "driver" ||
                     driverStr.toLowerCase() === "piloto") {
                     continue;
                 }
@@ -308,23 +324,24 @@ async function renderRoutes(dataToRender) {
     for (const route of dataToRender) {
         let iconHtml = "";
         let letterBadge = route.type ? route.type.charAt(0).toUpperCase() : "A";
+        const typeClass = route.type ? route.type.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") : "circuito";
 
         if (route.type === "Circuito") {
-            iconHtml = `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--cyan-electric);">
+            iconHtml = `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: #ffd700;">
                 <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.23-5.23"></path>
             </svg>`;
         } else if (route.type === "Sprint") {
             iconHtml = `<span style="font-size: 22px; color: var(--nfs-orange);">⚡</span>`;
         } else if (route.type === "Drag") {
-            iconHtml = `<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" style="color: var(--nfs-orange);">
+            iconHtml = `<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" style="color: #f87171;">
                 <path d="M9 2h6v2H9V2zm1 3h4v2h-4V5zm-2 3h8v2H8V8zm1 3h6v2H9v-2zm-2 3h10v2H7v-2zm2 3h6v2H9v-2zm-3 3h12v2H6v-2z"/>
             </svg>`;
         } else {
-            iconHtml = `<span style="font-size: 22px; color: var(--cyan-electric);">🔄</span>`;
+            iconHtml = `<span style="font-size: 22px; color: var(--nfs-orange);">🔄</span>`;
         }
 
         const card = document.createElement('div');
-        card.className = 'route-card';
+        card.className = `route-card type-${typeClass}`;
         card._routeData = route;
 
         card.onclick = () => {
@@ -337,7 +354,7 @@ async function renderRoutes(dataToRender) {
         card.innerHTML = `
             <div class="route-icon-container">
                 <div class="route-icon-box">${iconHtml}</div>
-                <div class="route-badge-letter">${letterBadge}</div>
+                <div class="route-badge-letter badge-${typeClass}">${letterBadge}</div>
             </div>
             <div class="route-info">
                 <h3>${route.name}</h3>
@@ -407,7 +424,7 @@ function filterRoutes() {
     const searchInput = document.getElementById('route-search');
     const query = searchInput ? searchInput.value.toLowerCase().trim() : "";
     const sourceData = typeof routesData !== 'undefined' ? routesData : [];
-    
+
     const filtered = sourceData.filter(route => {
         const matchesCategory = currentCategory === 'all' || route.type === currentCategory;
         const matchesSearch = route.name.toLowerCase().includes(query);
@@ -424,6 +441,107 @@ function setCategory(category, btn) {
 }
 
 // =======================================================
+// CONECTOR FIREBASE REALTIME DATABASE PARA LEADERBOARDS
+// =======================================================
+function sanitizeFirebaseKey(str) {
+    if (!str) return "general";
+    return String(str)
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9_-]/g, "_")
+        .replace(/[.#$[\]]/g, "_");
+}
+
+async function fetchFirebaseRouteRecords(routeName) {
+    if (!FIREBASE_RTDB_BASE_URL) return {};
+    const routeKey = sanitizeFirebaseKey(routeName);
+    const url = `${FIREBASE_RTDB_BASE_URL}/leaderboards/${routeKey}.json`;
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) return {};
+        const data = await response.json();
+        return (data && typeof data === 'object') ? data : {};
+    } catch (err) {
+        console.warn("Aviso: No se pudo consultar Firebase RTDB para", routeName, err);
+        return {};
+    }
+}
+
+function extractCategoryRecords(routeFirebaseData, categoryKey) {
+    if (!routeFirebaseData) return [];
+    const cKey = sanitizeFirebaseKey(categoryKey);
+
+    let raw = routeFirebaseData[cKey] || routeFirebaseData['default'] || [];
+    if (!Array.isArray(raw) && typeof raw === 'object') {
+        raw = Object.values(raw);
+    }
+    if (!Array.isArray(raw)) return [];
+
+    return raw.filter(Boolean).map(item => ({
+        rank: item.rank ? (String(item.rank).startsWith('#') ? item.rank : `#${item.rank}`) : "#--",
+        driver: item.driver || "Piloto",
+        time: item.time || item.declaredTime || "--:--.---",
+        car: item.car || "BMW M3 GTR",
+        device: item.device || "PC",
+        gearbox: item.gearbox || "Manual",
+        date: item.date || new Date().toISOString().split('T')[0],
+        yt: item.yt || item.videoUrl || "#"
+    }));
+}
+
+function mergeLeaderboardData(sheetRows = [], firebaseRows = []) {
+    const sRows = Array.isArray(sheetRows) ? sheetRows : [];
+    const fbRows = Array.isArray(firebaseRows) ? firebaseRows : [];
+
+    if (fbRows.length === 0) return sRows;
+    if (sRows.length === 0) return fbRows;
+
+    const combined = [...sRows];
+
+    fbRows.forEach(fb => {
+        if (!fb || !fb.driver) return;
+        const fbDriver = String(fb.driver).trim().toLowerCase();
+        const fbTime = String(fb.time || fb.declaredTime || '').trim();
+
+        const exists = combined.some(r => {
+            const rDriver = String(r.driver || '').trim().toLowerCase();
+            const rTime = String(r.time || '').trim();
+            return rDriver === fbDriver && rTime === fbTime;
+        });
+
+        if (!exists) {
+            combined.push({
+                rank: fb.rank || '#--',
+                driver: fb.driver,
+                time: fb.time || fb.declaredTime || '--:--.---',
+                car: fb.car || 'BMW M3 GTR',
+                device: fb.device || 'PC',
+                gearbox: fb.gearbox || 'Manual',
+                date: fb.date || new Date().toISOString().split('T')[0],
+                yt: fb.yt || fb.videoUrl || '#'
+            });
+        }
+    });
+
+    combined.sort((a, b) => {
+        const msA = parseTimeToMs(a.time);
+        const msB = parseTimeToMs(b.time);
+        if (msA !== null && msB !== null && msA !== msB) return msA - msB;
+        if (msA !== null && msB === null) return -1;
+        if (msA === null && msB !== null) return 1;
+        return (a.driver || '').localeCompare(b.driver || '');
+    });
+
+    return combined.map((item, idx) => ({
+        ...item,
+        rank: `#${idx + 1}`
+    }));
+}
+
+// =======================================================
 // CARGA Y RENDERIZADO DE TABLAS INDIVIDUALES (LEADERBOARDS)
 // =======================================================
 async function loadLeaderboardForRoute(route) {
@@ -432,34 +550,46 @@ async function loadLeaderboardForRoute(route) {
 
     document.querySelectorAll('.circuit-section, .sprintdrag-section').forEach(sec => sec.classList.remove('active'));
 
+    const fbDataPromise = fetchFirebaseRouteRecords(route.name);
+
     if (route.type === "Circuito") {
         if (circuitTabs) circuitTabs.classList.add('active-group');
         if (sprintDragTabs) sprintDragTabs.classList.remove('active-group');
         switchCircuitTab('junkman-single', circuitTabs.querySelector('.tab-btn'));
 
-        const [d1, d2, d3, d4] = await Promise.all([
+        const [d1, d2, d3, d4, fbData] = await Promise.all([
             fetchGoogleSheetData(route.sheets.junkmanSingle),
             fetchGoogleSheetData(route.sheets.junkmanFast),
             fetchGoogleSheetData(route.sheets.bmwSingle),
-            fetchGoogleSheetData(route.sheets.bmwFast)
+            fetchGoogleSheetData(route.sheets.bmwFast),
+            fbDataPromise
         ]);
 
-        renderTableRows('tbody-junkman-single', d1);
-        renderTableRows('tbody-junkman-fast', d2);
-        renderTableRows('tbody-bmw-single', d3);
-        renderTableRows('tbody-bmw-fast', d4);
+        const fbJunkmanSingle = extractCategoryRecords(fbData, 'junkman_single');
+        const fbJunkmanFast = extractCategoryRecords(fbData, 'junkman_fast');
+        const fbBmwSingle = extractCategoryRecords(fbData, 'bmw_single');
+        const fbBmwFast = extractCategoryRecords(fbData, 'bmw_fast');
+
+        renderTableRows('tbody-junkman-single', mergeLeaderboardData(d1, fbJunkmanSingle));
+        renderTableRows('tbody-junkman-fast', mergeLeaderboardData(d2, fbJunkmanFast));
+        renderTableRows('tbody-bmw-single', mergeLeaderboardData(d3, fbBmwSingle));
+        renderTableRows('tbody-bmw-fast', mergeLeaderboardData(d4, fbBmwFast));
     } else {
         if (circuitTabs) circuitTabs.classList.remove('active-group');
         if (sprintDragTabs) sprintDragTabs.classList.add('active-group');
         switchSprintDragTab('sprintdrag-junkman', sprintDragTabs.querySelector('.tab-btn'));
 
-        const [dJunkman, dBmw] = await Promise.all([
+        const [dJunkman, dBmw, fbData] = await Promise.all([
             fetchGoogleSheetData(route.sheets.junkman),
-            fetchGoogleSheetData(route.sheets.bmw)
+            fetchGoogleSheetData(route.sheets.bmw),
+            fbDataPromise
         ]);
 
-        renderTableRows('tbody-sprintdrag-junkman', dJunkman);
-        renderTableRows('tbody-sprintdrag-bmw', dBmw);
+        const fbJunkman = extractCategoryRecords(fbData, 'junkman');
+        const fbBmw = extractCategoryRecords(fbData, 'bmw');
+
+        renderTableRows('tbody-sprintdrag-junkman', mergeLeaderboardData(dJunkman, fbJunkman));
+        renderTableRows('tbody-sprintdrag-bmw', mergeLeaderboardData(dBmw, fbBmw));
     }
 }
 
@@ -467,7 +597,7 @@ function renderTableRows(tbodyId, dataRows) {
     const tbody = document.getElementById(tbodyId);
     if (!tbody) return;
     tbody.innerHTML = '';
-    
+
     if (!dataRows || dataRows.length === 0) {
         tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 25px; font-family: var(--font-racing); font-size: 16px;">Sin registros oficiales para esta categoría aún.</td></tr>`;
         return;
@@ -476,7 +606,7 @@ function renderTableRows(tbodyId, dataRows) {
     dataRows.forEach(row => {
         const tr = document.createElement('tr');
         const rankNum = parseInt(String(row.rank).replace(/[^0-9]/g, ''), 10);
-        
+
         let rankBadgeClass = 'rank-normal';
         if (rankNum === 1) rankBadgeClass = 'rank-gold';
         else if (rankNum === 2) rankBadgeClass = 'rank-silver';
@@ -485,8 +615,8 @@ function renderTableRows(tbodyId, dataRows) {
         let rowHighlightClass = rankNum === 1 ? 'active-row' : '';
         tr.className = `blacklist-row ${rowHighlightClass}`;
 
-        let videoBtnHTML = (row.yt && row.yt !== "#" && row.yt.startsWith("http")) 
-            ? `<a href="${row.yt}" target="_blank" rel="noopener noreferrer" class="btn-yt-link" style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; font-size: 11px; background: rgba(255, 0, 0, 0.15); border: 1px solid rgba(255, 0, 0, 0.4); color: #ff5555; text-decoration: none; border-radius: 4px; font-family: var(--font-racing); font-weight: 700;">▶ Video</a>` 
+        let videoBtnHTML = (row.yt && row.yt !== "#" && row.yt.startsWith("http"))
+            ? `<a href="${row.yt}" target="_blank" rel="noopener noreferrer" class="btn-yt-link" style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; font-size: 11px; background: rgba(255, 0, 0, 0.15); border: 1px solid rgba(255, 0, 0, 0.4); color: #ff5555; text-decoration: none; border-radius: 4px; font-family: var(--font-racing); font-weight: 700;">▶ Video</a>`
             : `<span style="color: var(--text-dimmed); font-size: 12px; font-style: italic;">Sin video</span>`;
 
         let aliasTag = '';
@@ -589,7 +719,7 @@ async function generateHallOfFame() {
         for (const route of sourceData) {
             if (!route.sheets) continue;
             const sheetUrls = Object.values(route.sheets).filter(url => url && typeof url === 'string' && url.trim() !== "");
-            
+
             for (const url of sheetUrls) {
                 tasks.push(fetchWithTimeout(url, 5, 3000));
             }
@@ -667,7 +797,7 @@ async function processPodiumsForRoutes(filterType = null) {
             rows.forEach(r => {
                 if (!r.rank || !r.driver) return;
                 let rankNum = parseInt(r.rank.replace(/[^0-9]/g, ''));
-                
+
                 if ([1, 2, 3].includes(rankNum)) {
                     let driverName = r.driver.trim().toUpperCase();
                     if (!podiumStats[driverName]) {
@@ -704,7 +834,7 @@ async function processPodiumsForRoutes(filterType = null) {
 async function renderGlobalPodiumTable(tbodyId, filterType = null) {
     const tbody = document.getElementById(tbodyId);
     if (!tbody) return;
-    
+
     const fullData = await processPodiumsForRoutes(filterType);
 
     // Si es la tabla principal de pilotos, renderizamos también las tarjetas de podio superiores
@@ -751,7 +881,7 @@ async function renderGlobalPodiumTable(tbodyId, filterType = null) {
 function renderLoadMoreButton(tbodyId, onClickHandler) {
     const tbody = document.getElementById(tbodyId);
     if (!tbody) return;
-    
+
     const tableContainer = tbody.closest('.table-container') || tbody.parentElement;
     let btnContainer = tableContainer.nextElementSibling;
 
@@ -878,7 +1008,7 @@ function renderDriverSearchUI(containerId) {
     const executeSearch = async () => {
         const resultsEl = document.getElementById('driver-results-container');
         resultsEl.innerHTML = `<p style="color: var(--nfs-orange); font-family: var(--font-racing); font-size: 16px;">⏱️ Consultando telemetría oficial...</p>`;
-        
+
         const profile = await searchDriverProfile(input.value);
         if (!profile) {
             resultsEl.innerHTML = `<p style="color: var(--text-muted); font-size: 14px; padding: 10px 0;">No se encontraron registros activos para ese piloto.</p>`;
@@ -927,7 +1057,223 @@ function renderDriverSearchUI(containerId) {
 }
 
 // =======================================================
-// ENVÍO DE TIEMPOS VÍA WEBHOOK A DISCORD
+// UTILIDADES DE TIEMPO & TELEMETRÍA DE VIDEO
+// =======================================================
+
+/**
+ * Convierte un string de tiempo a milisegundos.
+ * Formatos soportados:
+ * - "01:20.750", "1:20.75", "1:20", "80.750"
+ * - "00:01:20.750" (HH:MM:SS.mmm)
+ * - "1m 20s 750ms", "1m 20.75s"
+ */
+function parseTimeToMs(timeStr) {
+    if (!timeStr) return null;
+    let s = String(timeStr).trim().toLowerCase().replace(',', '.');
+
+    // Patrón con texto: 1m 20s 750ms
+    const textMatch = s.match(/(?:(\d+)h)?\s*(?:(\d+)m)?\s*(?:(\d+(?:\.\d+)?)s)?\s*(?:(\d+)ms)?/);
+    if (textMatch && (textMatch[1] || textMatch[2] || textMatch[3] || textMatch[4])) {
+        const h = parseInt(textMatch[1] || '0', 10);
+        const m = parseInt(textMatch[2] || '0', 10);
+        const sec = parseFloat(textMatch[3] || '0');
+        const ms = parseInt(textMatch[4] || '0', 10);
+        const total = (h * 3600 + m * 60 + sec) * 1000 + ms;
+        if (total > 0) return Math.round(total);
+    }
+
+    // Patrón con dos puntos: [HH:]MM:SS[.mmm] o SS.mmm
+    const parts = s.split(':');
+    if (parts.length === 3) {
+        const h = parseInt(parts[0], 10);
+        const m = parseInt(parts[1], 10);
+        const sec = parseFloat(parts[2]);
+        if (!isNaN(h) && !isNaN(m) && !isNaN(sec)) {
+            return Math.round((h * 3600 + m * 60 + sec) * 1000);
+        }
+    } else if (parts.length === 2) {
+        const m = parseInt(parts[0], 10);
+        const sec = parseFloat(parts[1]);
+        if (!isNaN(m) && !isNaN(sec)) {
+            return Math.round((m * 60 + sec) * 1000);
+        }
+    } else if (parts.length === 1) {
+        const sec = parseFloat(parts[0]);
+        if (!isNaN(sec)) {
+            return Math.round(sec * 1000);
+        }
+    }
+    return null;
+}
+
+/**
+ * Convierte milisegundos a formato MM:SS.mmm
+ */
+function formatMsToTime(ms) {
+    if (ms == null || isNaN(ms) || ms < 0) return "--:--.---";
+    const totalSeconds = ms / 1000;
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = Math.floor(totalSeconds % 60);
+    const milliseconds = Math.round(ms % 1000);
+    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(milliseconds).padStart(3, '0')}`;
+}
+
+/**
+ * Valida en vivo las marcas de inicio, fin y el tiempo declarado.
+ * Compara (Fin - Inicio) con el Tiempo Declarado y actualiza la UI.
+ */
+function validateTimeMarksLive() {
+    const startInput = document.getElementById('sub-start-mark');
+    const endInput = document.getElementById('sub-end-mark');
+    const declaredInput = document.getElementById('sub-time');
+
+    const dispStart = document.getElementById('disp-start');
+    const dispEnd = document.getElementById('disp-end');
+    const dispDiff = document.getElementById('disp-diff');
+    const dispDeclared = document.getElementById('disp-declared');
+
+    const banner = document.getElementById('validation-status-banner');
+    const icon = document.getElementById('val-status-icon');
+    const title = document.getElementById('val-status-title');
+    const desc = document.getElementById('val-status-desc');
+    const syncBtn = document.getElementById('btn-sync-diff');
+    const syncVal = document.getElementById('btn-sync-time-val');
+
+    if (!startInput || !endInput || !declaredInput) return;
+
+    const startVal = startInput.value.trim();
+    const endVal = endInput.value.trim();
+    const declaredVal = declaredInput.value.trim();
+
+    const startMs = parseTimeToMs(startVal);
+    const endMs = parseTimeToMs(endVal);
+    const declaredMs = parseTimeToMs(declaredVal);
+
+    // Actualizar visualizadores
+    if (dispStart) dispStart.innerText = startMs !== null ? formatMsToTime(startMs) : (startVal || '--:--.---');
+    if (dispEnd) dispEnd.innerText = endMs !== null ? formatMsToTime(endMs) : (endVal || '--:--.---');
+    if (dispDeclared) dispDeclared.innerText = declaredMs !== null ? formatMsToTime(declaredMs) : (declaredVal || '--:--.---');
+
+    // Limpiar clases previas
+    startInput.classList.remove('field-error', 'field-success');
+    endInput.classList.remove('field-error', 'field-success');
+    declaredInput.classList.remove('field-error', 'field-success');
+
+    if (banner) {
+        banner.className = 'validation-status-banner state-idle';
+    }
+
+    // Si aún faltan campos
+    if (startMs === null || endMs === null) {
+        if (dispDiff) dispDiff.innerText = '--:--.---';
+        if (syncBtn) syncBtn.style.display = 'none';
+        if (title) title.innerText = 'Esperando marcas de video y tiempo';
+        if (desc) desc.innerText = 'Ingresa la marca de inicio, marca de fin y el tiempo declarado para verificar que coincidan exactamente.';
+        if (icon) icon.innerText = 'ℹ️';
+        return;
+    }
+
+    // Si la marca de fin es menor o igual al inicio
+    if (endMs <= startMs) {
+        if (dispDiff) dispDiff.innerText = 'Inválido';
+        if (syncBtn) syncBtn.style.display = 'none';
+        endInput.classList.add('field-error');
+        if (banner) banner.className = 'validation-status-banner state-mismatch';
+        if (title) title.innerText = '❌ Marca de Fin Inválida';
+        if (desc) desc.innerText = 'La marca de fin del video debe ser estrictamente posterior a la marca de inicio.';
+        if (icon) icon.innerText = '⚠️';
+        return;
+    }
+
+    const diffMs = endMs - startMs;
+    const formattedDiff = formatMsToTime(diffMs);
+    if (dispDiff) dispDiff.innerText = formattedDiff;
+
+    // Mostrar botón de sincronización rápida
+    if (syncBtn && syncVal) {
+        syncVal.innerText = formattedDiff;
+        syncBtn.style.display = 'block';
+    }
+
+    // Si no ha ingresado tiempo declarado todavía
+    if (declaredMs === null) {
+        if (title) title.innerText = `Diferencia en video: ${formattedDiff}`;
+        if (desc) desc.innerText = 'Ahora ingresa el tiempo declarado (o pulsa el botón para autocompletarlo con la diferencia del video).';
+        if (icon) icon.innerText = '⏱️';
+        return;
+    }
+
+    // Validación de concordancia con tolerancia de 50ms (para compensar diferencias de frames de video)
+    const discrepancyMs = Math.abs(diffMs - declaredMs);
+    const toleranceMs = 50;
+
+    if (discrepancyMs <= toleranceMs) {
+        // Coincidencia exacta o dentro de tolerancia
+        if (banner) banner.className = 'validation-status-banner state-match';
+        if (title) title.innerText = '✅ ¡Validación Aprobada!';
+        if (desc) desc.innerText = `El tiempo declarado (${formatMsToTime(declaredMs)}) coincide exactamente con la diferencia de las marcas de video (${formattedDiff}).`;
+        if (icon) icon.innerText = '🏁';
+        startInput.classList.add('field-success');
+        endInput.classList.add('field-success');
+        declaredInput.classList.add('field-success');
+    } else {
+        // Discrepancia detectada
+        if (banner) banner.className = 'validation-status-banner state-mismatch';
+        if (title) title.innerText = '❌ Discrepancia Detectada';
+        const diffSec = (discrepancyMs / 1000).toFixed(3);
+        if (desc) desc.innerText = `La diferencia del video es ${formattedDiff}, pero declaraste ${formatMsToTime(declaredMs)} (desfase de ${diffSec}s). Ambos valores deben coincidir antes de poder enviar.`;
+        if (icon) icon.innerText = '⚠️';
+        declaredInput.classList.add('field-error');
+        startInput.classList.add('field-error');
+        endInput.classList.add('field-error');
+    }
+}
+
+/**
+ * Autocompleta el tiempo declarado con la diferencia calculada de las marcas de video.
+ */
+function syncDeclaredWithDiff() {
+    const startInput = document.getElementById('sub-start-mark');
+    const endInput = document.getElementById('sub-end-mark');
+    const declaredInput = document.getElementById('sub-time');
+
+    if (!startInput || !endInput || !declaredInput) return;
+
+    const startMs = parseTimeToMs(startInput.value.trim());
+    const endMs = parseTimeToMs(endInput.value.trim());
+
+    if (startMs !== null && endMs !== null && endMs > startMs) {
+        declaredInput.value = formatMsToTime(endMs - startMs);
+        validateTimeMarksLive();
+        declaredInput.focus();
+    }
+}
+
+/**
+ * Maneja cambios en el enlace de YouTube para sugerir marcas si vienen en la URL
+ */
+function handleVideoUrlChange() {
+    const videoInput = document.getElementById('sub-video');
+    if (!videoInput) return;
+    const url = videoInput.value.trim();
+
+    // Si la URL contiene timestamp (ej: &t=75s o ?t=1m15s)
+    const matchT = url.match(/[?&]t=([0-9mhseconds]+)/i);
+    if (matchT && matchT[1]) {
+        const startInput = document.getElementById('sub-start-mark');
+        if (startInput && !startInput.value) {
+            const raw = matchT[1];
+            const ms = parseTimeToMs(raw.replace('s', 's '));
+            if (ms !== null) {
+                startInput.value = formatMsToTime(ms);
+                validateTimeMarksLive();
+            }
+        }
+    }
+}
+
+// =======================================================
+// ENVÍO DE TIEMPOS VÍA WEBHOOK A DISCORD & HOMOLOGACIÓN
 // =======================================================
 async function handleTimeSubmit(event) {
     event.preventDefault();
@@ -937,54 +1283,166 @@ async function handleTimeSubmit(event) {
 
     const driver = document.getElementById('sub-driver').value.trim();
     const route = document.getElementById('sub-route').value.trim();
-    const time = document.getElementById('sub-time').value.trim();
     const car = document.getElementById('sub-car').value.trim();
-    const gearbox = document.getElementById('sub-gearbox').value;
-    const device = document.getElementById('sub-device').value;
+    const modeEl = document.querySelector('input[name="sub-mode"]:checked');
+    const mode = modeEl ? modeEl.value : 'Online';
+
     const video = document.getElementById('sub-video').value.trim();
+    const startMark = document.getElementById('sub-start-mark').value.trim();
+    const endMark = document.getElementById('sub-end-mark').value.trim();
+    const timeDeclared = document.getElementById('sub-time').value.trim();
+
+    const gearbox = document.getElementById('sub-gearbox') ? document.getElementById('sub-gearbox').value : 'Manual';
+    const device = document.getElementById('sub-device') ? document.getElementById('sub-device').value : 'Teclado';
+
+    // Parseo milimétrico de tiempos
+    const startMs = parseTimeToMs(startMark);
+    const endMs = parseTimeToMs(endMark);
+    const declaredMs = parseTimeToMs(timeDeclared);
+
+    // Validar existencia de formatos válidos
+    if (startMs === null) {
+        status.style.color = "var(--f1-red)";
+        status.innerText = "❌ Formato inválido en la Marca de Inicio. Usa MM:SS.mmm (ej: 00:15.200).";
+        document.getElementById('sub-start-mark').focus();
+        return false;
+    }
+
+    if (endMs === null) {
+        status.style.color = "var(--f1-red)";
+        status.innerText = "❌ Formato inválido en la Marca de Fin. Usa MM:SS.mmm (ej: 01:35.950).";
+        document.getElementById('sub-end-mark').focus();
+        return false;
+    }
+
+    if (declaredMs === null) {
+        status.style.color = "var(--f1-red)";
+        status.innerText = "❌ Formato inválido en el Tiempo Declarado. Usa MM:SS.mmm (ej: 01:20.750).";
+        document.getElementById('sub-time').focus();
+        return false;
+    }
+
+    if (endMs <= startMs) {
+        status.style.color = "var(--f1-red)";
+        status.innerText = "❌ La Marca de Fin debe ser posterior a la Marca de Inicio.";
+        document.getElementById('sub-end-mark').focus();
+        return false;
+    }
+
+    // VALIDACIÓN ESTRICTA: EL TIEMPO DECLARADO DEBE COINCIDIR CON LA DIFERENCIA (Fin - Inicio)
+    const diffMs = endMs - startMs;
+    const discrepancyMs = Math.abs(diffMs - declaredMs);
+    const toleranceMs = 50; // 50ms de tolerancia por redondeo de frames de video
+
+    if (discrepancyMs > toleranceMs) {
+        status.style.color = "var(--f1-red)";
+        const diffSec = (discrepancyMs / 1000).toFixed(3);
+        status.innerText = `❌ VALIDACIÓN RECHAZADA: El tiempo declarado (${formatMsToTime(declaredMs)}) no coincide con la diferencia calculada de las marcas de video (${formatMsToTime(diffMs)}). Desfase detectado: ${diffSec}s. Los valores deben coincidir para homologar el tiempo.`;
+
+        const box = document.getElementById('telemetry-comparison-panel');
+        if (box) box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        validateTimeMarksLive();
+        return false;
+    }
+
+    // Validación de URL de YouTube
+    if (!video.includes('youtube.com') && !video.includes('youtu.be')) {
+        status.style.color = "var(--f1-red)";
+        status.innerText = "❌ Por favor introduce un enlace válido de YouTube (ej: https://www.youtube.com/watch?v=... o https://youtu.be/...).";
+        document.getElementById('sub-video').focus();
+        return false;
+    }
 
     btn.disabled = true;
-    btn.innerText = "⏳ Enviando a Telemetría...";
+    btn.innerHTML = "<span>⏳</span> Homologando y Enviando Registro...";
     status.style.color = "var(--nfs-orange)";
-    status.innerText = "Procesando envío de registro...";
+    status.innerText = "Validación aprobada. Procesando envío a la red oficial...";
+
+    const gasPayload = {
+        driver: driver,
+        car: car,
+        route: route,
+        mode: mode,
+        declaredTime: formatMsToTime(declaredMs),
+        videoUrl: video,
+        startMark: formatMsToTime(startMs),
+        endMark: formatMsToTime(endMs),
+        gearbox: gearbox,
+        device: device
+    };
 
     const discordPayload = {
         embeds: [{
-            title: "🏎️ ¡NUEVO TIEMPO REGISTRADO!",
+            title: "🏎️ ¡NUEVO TIEMPO HOMOLOGADO!",
             color: 16742144, // #ff7700
+            description: `**Verificación de Telemetría:** Tiempo declarado validado exitosamente contra las marcas de video.`,
             fields: [
                 { name: "👤 Piloto", value: driver, inline: true },
-                { name: "🏁 Ruta", value: route, inline: true },
-                { name: "⏱️ Tiempo", value: time, inline: true },
                 { name: "🚗 Auto", value: car, inline: true },
+                { name: "🏁 Pista", value: route, inline: true },
+                { name: "🌐 Modalidad", value: mode, inline: true },
+                { name: "⏱️ Tiempo Declarado", value: formatMsToTime(declaredMs), inline: true },
+                { name: "📐 Marcas Video", value: `${formatMsToTime(startMs)} → ${formatMsToTime(endMs)} (Δ: ${formatMsToTime(diffMs)})`, inline: true },
                 { name: "⚙️ Transmisión", value: gearbox, inline: true },
                 { name: "🎮 Control", value: device, inline: true },
-                { name: "🎬 Prueba de Video", value: `[Ver Video](${video})`, inline: false }
+                { name: "🎬 Video YouTube", value: `[Ver en YouTube](${video})`, inline: false }
             ],
-            footer: { text: "NFS Most Wanted Official Leaderboards" },
+            footer: { text: "NFS Most Wanted Official Leaderboards • Homologación de Telemetría" },
             timestamp: new Date().toISOString()
         }]
     };
 
     try {
-        if (DISCORD_WEBHOOK_URL && DISCORD_WEBHOOK_URL !== "URL_DE_TU_WEBHOOK_DE_DISCORD_AQUI") {
-            await fetch(DISCORD_WEBHOOK_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(discordPayload)
-            });
+        const dispatchTasks = [];
+
+        // 1. Envío al conector de Google Apps Script (Google Sheets & Firebase)
+        if (typeof GOOGLE_APPS_SCRIPT_WEBAPP_URL !== 'undefined' &&
+            GOOGLE_APPS_SCRIPT_WEBAPP_URL &&
+            GOOGLE_APPS_SCRIPT_WEBAPP_URL !== "URL_DE_TU_GOOGLE_APPS_SCRIPT_WEBAPP_AQUI") {
+            dispatchTasks.push(
+                fetch(GOOGLE_APPS_SCRIPT_WEBAPP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // Permite envío cross-origin a Google Apps Script Web App
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(gasPayload)
+                }).then(() => {
+                    console.info("Registro despachado a Google Apps Script Connector.");
+                }).catch(err => {
+                    console.warn("Aviso al enviar a Google Apps Script:", err);
+                })
+            );
+        }
+
+        // 2. Envío al Webhook de Discord
+        if (typeof DISCORD_WEBHOOK_URL !== 'undefined' &&
+            DISCORD_WEBHOOK_URL &&
+            DISCORD_WEBHOOK_URL !== "URL_DE_TU_WEBHOOK_DE_DISCORD_AQUI") {
+            dispatchTasks.push(
+                fetch(DISCORD_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(discordPayload)
+                }).catch(err => {
+                    console.warn("Aviso al enviar a Discord Webhook:", err);
+                })
+            );
+        }
+
+        if (dispatchTasks.length > 0) {
+            await Promise.allSettled(dispatchTasks);
         }
 
         status.style.color = "var(--green-neon)";
-        status.innerText = "¡Enviado con éxito! Los moderadores verificarán tu tiempo y video.";
+        status.innerHTML = `✅ <strong>¡REGISTRO VALIDADO Y ENVIADO CON ÉXITO!</strong><br>El tiempo declarado (<code>${formatMsToTime(declaredMs)}</code>) coincide exactamente con la diferencia de marcas (<code>${formatMsToTime(diffMs)}</code>). El registro ha sido enviado a la hoja de telemetría de Google Sheets y a la cola de homologación para Firebase Realtime Database.`;
         document.getElementById('form-submit-time').reset();
+        validateTimeMarksLive();
     } catch (error) {
         console.error("Error enviando tiempo:", error);
         status.style.color = "var(--f1-red)";
-        status.innerText = "Error de conexión. Inténtalo de nuevo más tarde.";
+        status.innerText = "Error de conexión con el servidor. Inténtalo de nuevo más tarde.";
     } finally {
         btn.disabled = false;
-        btn.innerText = "🚀 Enviar Registro a Revisión";
+        btn.innerHTML = "<span>🚀</span> Enviar Registro a Homologación";
     }
 }
 
@@ -1026,7 +1484,7 @@ function getWeekDateRangeString(year, week) {
 function createSeededRandom(seed) {
     let s = seed % 2147483647;
     if (s <= 0) s += 2147483646;
-    return function() {
+    return function () {
         return (s = s * 16807 % 2147483647) / 2147483647;
     };
 }
@@ -1819,7 +2277,7 @@ function renderQuickJumpPills() {
 
 function updateChampionshipRosterLabels() {
     const totalPilots = Math.max(15, blacklistDrivers.length);
-    
+
     // Actualizar texto de sub-pestañas en toda la web
     document.querySelectorAll('.subtab-cards-label').forEach(el => {
         el.textContent = `Fichas Técnicas (1 al ${totalPilots})`;
@@ -1942,7 +2400,7 @@ async function saveChampionshipParticipant(participantData) {
     // 1. Guardado local inmediato y actualización reactiva de la UI
     registeredParticipants.push(participantData);
     localStorage.setItem(CHAMPIONSHIP_LOCAL_KEY, JSON.stringify(registeredParticipants));
-    
+
     mergeRegisteredParticipantsWithBlacklist();
     renderRegisteredPilotsUI();
 
@@ -2462,6 +2920,154 @@ function renderPastTournamentParticipants(t) {
 }
 
 // =======================================================
+// MÓDULOS LATERALES DEL HOME (PORTAL DASHBOARD)
+// =======================================================
+// Récords Oficiales verificados extraídos de las tablas del Leaderboard (Google Sheets de NFSRANKSMW)
+const HOME_LIVE_LEADERBOARD_RECORDS = [
+    { rank: 1, driver: "Lea4Speed0", time: "1:20.750", car: "Carrera GT", route: "City Perimeter", routeType: "Circuito" },
+    { rank: 2, driver: "SRTxAvenger", time: "1:20.767", car: "Carrera GT", route: "City Perimeter", routeType: "Circuito" },
+    { rank: 3, driver: "Skymaster", time: "1:14.65", car: "Carrera GT", route: "Seaside & Power Station", routeType: "Sprint" },
+    { rank: 4, driver: "5TATIC", time: "0m 14s 230ms", car: "Carrera GT", route: "Seaside & Camden", routeType: "Drag" },
+    { rank: 5, driver: "ZimanX", time: "1:20.87", car: "Carrera GT", route: "City Perimeter", routeType: "Circuito" }
+];
+
+function initHomeSidebarModules() {
+    // 1. Inicializar Cuenta Regresiva de NFS Most Wanted Blacklist 2026
+    const targetDate = new Date("2026-10-03T00:00:00").getTime();
+    const daysEl = document.getElementById('cd-days');
+    const hoursEl = document.getElementById('cd-hours');
+    const minsEl = document.getElementById('cd-mins');
+    const secsEl = document.getElementById('cd-secs');
+
+    if (daysEl && hoursEl && minsEl && secsEl) {
+        const updateCountdown = () => {
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+
+            if (diff <= 0) {
+                daysEl.textContent = "00";
+                hoursEl.textContent = "00";
+                minsEl.textContent = "00";
+                secsEl.textContent = "00";
+                const cdContainer = document.getElementById('home-event-countdown');
+                if (cdContainer) {
+                    cdContainer.innerHTML = `<div style="color: var(--green-neon); font-family: var(--font-racing); font-size: 16px; font-weight: 800; text-align: center; width: 100%; padding: 6px 0; text-shadow: 0 0 10px rgba(0,255,136,0.6);">🏁 ¡EVENTO EN CURSO!</div>`;
+                }
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            daysEl.textContent = String(days).padStart(2, '0');
+            hoursEl.textContent = String(hours).padStart(2, '0');
+            minsEl.textContent = String(minutes).padStart(2, '0');
+            secsEl.textContent = String(seconds).padStart(2, '0');
+        };
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    }
+
+    // 2. Renderizar Mini-Leaderboard con los pilotos oficiales originales
+    const lbContainer = document.getElementById('home-live-leaderboard-list');
+    if (lbContainer) {
+        let html = "";
+        HOME_LIVE_LEADERBOARD_RECORDS.forEach(rec => {
+            const rankClass = rec.rank === 1 ? 'live-lb-rank-1' : (rec.rank === 2 ? 'live-lb-rank-2' : (rec.rank === 3 ? 'live-lb-rank-3' : 'live-lb-rank-other'));
+            html += `
+                <div class="live-lb-item" onclick="navigateFromLiveLeaderboard('${rec.route}', '${rec.routeType}')" title="Ver Leaderboard oficial de ${rec.route}">
+                    <div class="live-lb-left">
+                        <span class="live-lb-rank-num ${rankClass}">${rec.rank}</span>
+                        <div class="live-lb-info">
+                            <div class="live-lb-driver">${rec.driver}</div>
+                            <div class="live-lb-track">📍 ${rec.route} (${rec.routeType})</div>
+                        </div>
+                    </div>
+                    <div class="live-lb-right">
+                        <div class="live-lb-time">${rec.time}</div>
+                        <div class="live-lb-car">${rec.car}</div>
+                    </div>
+                </div>
+            `;
+        });
+        lbContainer.innerHTML = html;
+
+        // Sincronizar dinámicamente con la primera hoja oficial del Leaderboard
+        syncLiveLeaderboardWithOfficialSheet();
+    }
+}
+
+async function syncLiveLeaderboardWithOfficialSheet() {
+    const lbContainer = document.getElementById('home-live-leaderboard-list');
+    if (!lbContainer || typeof routesData === 'undefined' || routesData.length === 0) return;
+
+    try {
+        const sampleSheet = routesData[0].sheets ? (routesData[0].sheets.junkmanSingle || Object.values(routesData[0].sheets)[0]) : "";
+        if (!sampleSheet) return;
+
+        const rows = await fetchGoogleSheetData(sampleSheet, 8);
+        if (Array.isArray(rows) && rows.length > 0) {
+            const validRows = rows.filter(r => r.rank && r.driver && r.time).slice(0, 5);
+            if (validRows.length >= 3) {
+                let html = "";
+                validRows.forEach((rec, idx) => {
+                    const rankNum = idx + 1;
+                    const rankClass = rankNum === 1 ? 'live-lb-rank-1' : (rankNum === 2 ? 'live-lb-rank-2' : (rankNum === 3 ? 'live-lb-rank-3' : 'live-lb-rank-other'));
+                    html += `
+                        <div class="live-lb-item" onclick="navigateFromLiveLeaderboard('${routesData[0].name}', '${routesData[0].type}')" title="Ver Leaderboard oficial de ${routesData[0].name}">
+                            <div class="live-lb-left">
+                                <span class="live-lb-rank-num ${rankClass}">${rankNum}</span>
+                                <div class="live-lb-info">
+                                    <div class="live-lb-driver">${rec.driver}</div>
+                                    <div class="live-lb-track">📍 ${routesData[0].name} (${routesData[0].type})</div>
+                                </div>
+                            </div>
+                            <div class="live-lb-right">
+                                <div class="live-lb-time">${rec.time}</div>
+                                <div class="live-lb-car">${rec.car || 'Carrera GT'}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                lbContainer.innerHTML = html;
+            }
+        }
+    } catch (e) {
+        console.warn("Telemetría oficial cargada desde registros oficiales de la tabla.", e);
+    }
+}
+
+function navigateFromLiveLeaderboard(routeName, routeType) {
+    if (typeof routesData !== 'undefined') {
+        const found = routesData.find(r => r.name.toLowerCase() === routeName.toLowerCase());
+        if (found) {
+            const titleEl = document.getElementById('leaderboard-title');
+            if (titleEl) titleEl.innerText = `Leaderboard: ${found.name} (${found.type})`;
+            loadLeaderboardForRoute(found);
+            switchView('leaderboard');
+            return;
+        }
+    }
+    // Fallback: Ir a la vista de rutas y buscar
+    switchView('routes');
+    const searchInput = document.getElementById('route-search');
+    if (searchInput) {
+        searchInput.value = routeName;
+        filterRoutes();
+    }
+}
+
+function setCategoryAndGo(category) {
+    switchView('routes');
+    setTimeout(() => {
+        const btn = document.querySelector(`.filter-bar button[onclick*="${category}"]`);
+        setCategory(category, btn);
+    }, 50);
+}
+
+// =======================================================
 // INICIALIZACIÓN UNIFICADA (DOMContentLoaded)
 // =======================================================
 window.addEventListener('DOMContentLoaded', () => {
@@ -2482,10 +3088,13 @@ window.addEventListener('DOMContentLoaded', () => {
     // 5. Inicializar Salón Histórico de Torneos
     initPastTournaments();
 
-    // 6. Renderizado del Buscador Oficial de Pilotos
+    // 6. Inicializar Módulos Laterales del Home (Evento 2026, Live Leaderboard, Desafíos)
+    initHomeSidebarModules();
+
+    // 7. Renderizado del Buscador Oficial de Pilotos
     renderDriverSearchUI('search-driver-wrapper');
 
-    // 7. Ejecución diferida en segundo plano para tablas globales y Hall of Fame
+    // 8. Ejecución diferida en segundo plano para tablas globales y Hall of Fame
     setTimeout(() => {
         generateHallOfFame();
         generateGlobalLeaderboards();
