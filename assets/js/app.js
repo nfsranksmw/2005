@@ -1542,7 +1542,7 @@ async function handleTimeSubmit(event) {
 // SISTEMA DE DESAFÍOS SEMANALES (Inspirado en NightRiderz World)
 // =======================================================
 let currentChallengeYear = 2026;
-let currentChallengeWeek = 38;
+let currentChallengeWeek = 1;
 let challengeActiveFilter = 'all';
 
 function getISOWeek(date) {
@@ -1558,6 +1558,14 @@ function getISOWeek(date) {
 }
 
 function getWeekDateRangeString(year, week) {
+    if (typeof CHAMPIONSHIP_WEEKS_DATA !== 'undefined') {
+        if (CHAMPIONSHIP_WEEKS_DATA[week]) {
+            return `${CHAMPIONSHIP_WEEKS_DATA[week].title} · (${CHAMPIONSHIP_WEEKS_DATA[week].dates})`;
+        } else if (year === 2026 && week >= 40 && week <= 43) {
+            const wData = CHAMPIONSHIP_WEEKS_DATA[week - 39];
+            if (wData) return `${wData.title} · (${wData.dates})`;
+        }
+    }
     const simple = new Date(year, 0, 1 + (week - 1) * 7);
     const dayOfWeek = simple.getDay();
     const ISOweekStart = new Date(simple);
@@ -1622,11 +1630,8 @@ function startChallengeSubmission(routeName, carName) {
 }
 
 function generateWeeklyChallenges(year, week) {
-    const rng = createSeededRandom(year * 100 + week);
     const sourceRoutes = typeof routesData !== 'undefined' ? routesData : [];
     if (sourceRoutes.length === 0) return [];
-
-    const shuffledRoutes = [...sourceRoutes].sort(() => rng() - 0.5);
 
     const difficultyConfig = [
         { diff: 'Muy Fácil', class: 'diff-very-easy', multiplier: 1.15, reward: '500 SB', cash: '$100.000' },
@@ -1639,22 +1644,72 @@ function generateWeeklyChallenges(year, week) {
         { diff: 'Extremo', class: 'diff-extreme', multiplier: 0.93, reward: '3.500 SB', cash: '$1.000.000' }
     ];
 
-    const carRestrictions = [
-        "Solo BMW M3 GTR (Sin Nitro)",
-        "Porsche Carrera GT",
-        "Porsche Cayman S",
-        "Chevrolet Corvette C6.R",
-        "Ford GT",
-        "Cualquier Auto (Junkman)",
-        "Subaru Impreza WRX",
-        "Mitsubishi Lancer Evo VIII"
-    ];
-
     const modeLabels = {
         'Circuito': 'MODO CONTRARRELOJ // SINGLE LAP',
         'Sprint': 'SPRINT TELEMETRÍA // FULL ROUTE',
         'Drag': 'DRAG TIME ATTACK // PURA POTENCIA'
     };
+
+    // Sincronización oficial con el Campeonato Blacklist 2026 (Rotación de Grupos y Retos):
+    // Las 8 rutas de las sesiones semanales coinciden exactamente con las 8 pistas de la semana del torneo.
+    let champWeekNum = null;
+    if (typeof CHAMPIONSHIP_WEEKS_DATA !== 'undefined') {
+        if (CHAMPIONSHIP_WEEKS_DATA[week]) {
+            champWeekNum = week;
+        } else if (year === 2026 && week >= 40 && week <= 43) {
+            champWeekNum = week - 39;
+        }
+    }
+
+    if (champWeekNum && CHAMPIONSHIP_WEEKS_DATA[champWeekNum]) {
+        const champWeek = CHAMPIONSHIP_WEEKS_DATA[champWeekNum];
+        const challenges = [];
+
+        champWeek.challenges.forEach((ch, i) => {
+            const routeObj = sourceRoutes.find(r => r.name.toLowerCase() === ch.route.toLowerCase()) || {
+                name: ch.route,
+                type: ch.type,
+                sheets: {}
+            };
+            const diff = difficultyConfig[i] || difficultyConfig[0];
+            const topTime = ch.top3 && ch.top3[0] ? ch.top3[0].time : '01:25.000';
+            const topPilot = ch.top3 && ch.top3[0] ? ch.top3[0].pilot : 'Razor';
+            const topCar = ch.top3 && ch.top3[0] ? ch.top3[0].car : 'BMW M3 GTR';
+            const carRestr = ch.carRestriction || `${topCar} (${topPilot})`;
+            const repPrize = ch.top3 && ch.top3[0] && ch.top3[0].repBadge ? ch.top3[0].repBadge : diff.cash;
+            const completedCount = 55 + (i * 22);
+
+            challenges.push({
+                id: `${year}-w${week}-ch${i + 1}`,
+                index: i + 1,
+                route: routeObj,
+                difficulty: diff.diff,
+                diffClass: diff.class,
+                carRestriction: carRestr,
+                targetTime: topTime,
+                reward: diff.reward,
+                cashReward: repPrize,
+                communityCount: completedCount,
+                modeLabel: modeLabels[ch.type] || 'MODO CONTRARRELOJ'
+            });
+        });
+
+        return challenges;
+    }
+
+    const rng = createSeededRandom(year * 100 + week);
+    const shuffledRoutes = [...sourceRoutes].sort(() => rng() - 0.5);
+
+    const carRestrictions = [
+        "Solo BMW M3 GTR (Sin Nitro)",
+        "Porsche Carrera GT",
+        "Porsche Cayman S",
+        "Chevrolet Corvette C6.R",
+        "BMW M3 GTR",
+        "Cualquier Auto (Junkman)",
+        "Subaru Impreza WRX",
+        "Mitsubishi Lancer Evo VIII"
+    ];
 
     const challenges = [];
     const count = Math.min(8, shuffledRoutes.length);
@@ -1676,7 +1731,7 @@ function generateWeeklyChallenges(year, week) {
         const formattedTime = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}.${millis}`;
 
         challenges.push({
-            id: `${year}-w${week}-ch${i}`,
+            id: `${year}-w${week}-ch${i + 1}`,
             index: i + 1,
             route: route,
             difficulty: diff.diff,
@@ -1934,7 +1989,8 @@ function switchChampionshipWeek(weekNumber, btn) {
 
     const champWeekEl = document.getElementById('bl-summary-champ-week');
     if (champWeekEl) {
-        champWeekEl.textContent = `Semana ${weekNumber} de 4 (4 Desafíos)`;
+        const weekPrefix = (window.nfsI18n ? window.nfsI18n.t('champ_week_' + weekNumber) : `Semana ${weekNumber}`);
+        champWeekEl.textContent = `${weekPrefix} / 4 (8 ${window.nfsI18n ? window.nfsI18n.t('champ_challenges_title') : 'Desafíos'})`;
     }
 
     renderChampionshipGroups(weekNumber);
@@ -2001,10 +2057,11 @@ function renderChampionshipGroups(weekNumber) {
             `;
         });
 
+        const defaultTag = window.nfsI18n ? window.nfsI18n.t('badge_official_trio') : 'TRÍO OFICIAL';
         groupCard.innerHTML = `
             <div class="champ-group-header">
                 <span class="champ-group-name">${grp.name}</span>
-                <span class="champ-group-tag">${grp.tag || 'TRÍO OFICIAL'}</span>
+                <span class="champ-group-tag">${grp.tag || defaultTag}</span>
             </div>
             <div class="champ-group-pilots">
                 ${pilotsHtml}
@@ -2033,26 +2090,38 @@ function renderChampionshipChallenges(weekNumber) {
         ch.top3.forEach((t, tIdx) => {
             const rowClass = tIdx === 0 ? 'podium-row-1' : tIdx === 1 ? 'podium-row-2' : 'podium-row-3';
             const bonusClass = t.bonus === 100 ? 'badge-bonus-100' : t.bonus === 50 ? 'badge-bonus-50' : 'badge-bonus-20';
+            const repBadgeText = t.repBadge || (t.repMoney ? `💰 $${t.repMoney.toLocaleString()} REP` : '');
 
             top3Html += `
                 <div class="champ-ch-podium-row ${rowClass}">
-                    <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                         <span class="badge-bonus ${bonusClass}">${t.badge}</span>
+                        ${repBadgeText ? `<span class="badge-rep-money">${repBadgeText}</span>` : ''}
                         <div>
                             <span style="font-weight: 700; color: #ffffff;">${t.pilot}</span>
                             <span style="color: var(--text-muted); font-size: 11px; margin-left: 4px;">(${t.car})</span>
                         </div>
                     </div>
-                    <span style="font-family: var(--font-mono); font-weight: 700; color: var(--cyan-electric);">${t.time}</span>
+                    <span style="font-family: var(--font-mono); font-weight: 700; color: var(--cyan-electric); font-size: 13px;">${t.time}</span>
                 </div>
             `;
         });
+
+        const restrictionLabel = window.nfsI18n ? window.nfsI18n.t('champ_restriction_label') : 'AUTO RESTRICTIVO:';
+        const restrictionHtml = ch.carRestriction ? `
+            <div class="champ-ch-restriction">
+                <span style="color: var(--nfs-orange); font-size: 13px;">🚗</span>
+                <span class="restriction-label">${restrictionLabel}</span>
+                <span class="restriction-car">${ch.carRestriction}</span>
+            </div>
+        ` : '';
 
         card.innerHTML = `
             <div class="champ-ch-header">
                 <span class="champ-ch-title">#0${idx + 1} ${ch.route}</span>
                 <span class="champ-ch-type">${ch.type.toUpperCase()}</span>
             </div>
+            ${restrictionHtml}
             <div class="champ-ch-podiums">
                 ${top3Html}
             </div>
@@ -3191,5 +3260,31 @@ window.addEventListener('DOMContentLoaded', () => {
         generateHallOfFame();
         generateGlobalLeaderboards();
     }, 150);
+});
+
+// =======================================================
+// INTEGRACIÓN DEL SISTEMA MULTILINGÜE (i18n)
+// =======================================================
+window.addEventListener('nfs:languageChanged', (e) => {
+    // Re-renderizar módulos dinámicos cuando cambie el idioma
+    if (typeof currentChampionshipWeek !== 'undefined') {
+        renderChampionshipGroups(currentChampionshipWeek);
+        renderChampionshipChallenges(currentChampionshipWeek);
+    }
+    if (typeof renderBlacklistUI === 'function') {
+        renderBlacklistUI();
+    }
+    if (typeof renderAllTacticalCards === 'function') {
+        renderAllTacticalCards();
+    }
+    if (typeof updateChampionshipRosterLabels === 'function') {
+        updateChampionshipRosterLabels();
+    }
+    if (typeof renderChallengesUI === 'function') {
+        renderChallengesUI();
+    }
+    if (typeof currentPastTournamentKey !== 'undefined' && typeof renderPastTournament === 'function') {
+        renderPastTournament(currentPastTournamentKey);
+    }
 });
 

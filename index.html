@@ -113,62 +113,118 @@
         </div>
 
         <nav id="main-nav">
-            <a href="#" onclick="switchView('home')" class="active" id="nav-home">Home</a>
-            <a href="#" onclick="switchView('routes')" id="nav-routes">Leaderboards</a>
+            <a href="#" onclick="switchView('home')" class="active" id="nav-home" data-i18n="nav_home">Home</a>
+            <a href="#" onclick="switchView('routes')" id="nav-routes" data-i18n="nav_leaderboards">Leaderboards</a>
             <!-- Menú Desplegable: Desafíos & Campeonato -->
             <div class="nav-dropdown" id="dropdown-challenges">
                 <button class="nav-dropdown-btn" id="nav-btn-challenges" onclick="toggleNavDropdown('dropdown-challenges')">
-                    <span>🏆 Desafíos & Torneo</span>
+                    <span data-i18n="nav_challenges_menu">🏆 Desafíos & Torneo</span>
                     <span class="dropdown-arrow">▾</span>
                 </button>
                 <div class="nav-dropdown-content">
-                    <a href="#" onclick="switchView('challenges'); closeAllDropdowns();" id="nav-challenges">⚡ Desafíos Semanales</a>
-                    <a href="#" onclick="switchView('blacklist'); closeAllDropdowns();" id="nav-blacklist">⚔️ Grupos & Retos Blacklist</a>
-                    <a href="#" onclick="switchView('championship-standings'); closeAllDropdowns();" id="nav-championship-standings">🏆 Clasificación del Campeonato</a>
-                    <a href="#" onclick="switchView('blacklist-cards'); closeAllDropdowns();" id="nav-blacklist-cards">💀 <span class="subtab-cards-label">Fichas Técnicas (1 al 15)</span></a>
-                    <a href="#" onclick="switchView('championship-register'); closeAllDropdowns();" id="nav-championship-register">📝 Inscríbete al Torneo</a>
-                    <a href="#" onclick="switchView('past-tournaments'); closeAllDropdowns();" id="nav-past-tournaments">🏛️ Torneos Anteriores (Challonge)</a>
+                    <a href="#" onclick="switchView('challenges'); closeAllDropdowns();" id="nav-challenges" data-i18n="nav_challenges_weekly">⚡ Desafíos Semanales</a>
+                    <a href="#" onclick="switchView('blacklist'); closeAllDropdowns();" id="nav-blacklist" data-i18n="nav_blacklist_roster">⚔️ Grupos & Retos Blacklist</a>
+                    <a href="#" onclick="switchView('championship-standings'); closeAllDropdowns();" id="nav-championship-standings" data-i18n="nav_championship">🏆 Clasificación del Campeonato</a>
+                    <a href="#" onclick="switchView('blacklist-cards'); closeAllDropdowns();" id="nav-blacklist-cards">💀 <span class="subtab-cards-label" data-i18n="nav_blacklist_cards">Fichas Técnicas (1 al 15)</span></a>
+                    <a href="#" onclick="switchView('championship-register'); closeAllDropdowns();" id="nav-championship-register">📝 <span data-i18n="nav_championship_register">Inscríbete al Torneo</span></a>
+                    <a href="#" onclick="switchView('past-tournaments'); closeAllDropdowns();" id="nav-past-tournaments">🏛️ <span data-i18n="nav_past_tournaments">Torneos Anteriores (Challonge)</span></a>
                 </div>
             </div>
-            <a href="#" onclick="switchView('halloffame')" id="nav-halloffame">Hall of Fame</a>
+            <a href="#" onclick="switchView('halloffame')" id="nav-halloffame" data-i18n="nav_halloffame">Hall of Fame</a>
 
             <!-- Menú Desplegable: Top Rankings -->
             <div class="nav-dropdown" id="dropdown-rankings">
                 <button class="nav-dropdown-btn" id="nav-btn-rankings" onclick="toggleNavDropdown('dropdown-rankings')">
-                    <span>Top Rankings</span>
+                    <span data-i18n="nav_rankings_menu">Top Rankings</span>
                     <span class="dropdown-arrow">▾</span>
                 </button>
                 <div class="nav-dropdown-content">
-                    <a href="#" onclick="switchView('globaldrivers'); closeAllDropdowns();" id="nav-globaldrivers">Top Global Drivers</a>
-                    <a href="#" onclick="switchView('globalroutes'); closeAllDropdowns();" id="nav-globalroutes">Top Rutas</a>
+                    <a href="#" onclick="switchView('globaldrivers'); closeAllDropdowns();" id="nav-globaldrivers" data-i18n="nav_top_drivers">Top Global Drivers</a>
+                    <a href="#" onclick="switchView('globalroutes'); closeAllDropdowns();" id="nav-globalroutes" data-i18n="nav_top_routes">Top Rutas</a>
                 </div>
             </div>
 
             <!-- Menú Desplegable: Pilotos & Comunidad -->
             <div class="nav-dropdown" id="dropdown-community">
                 <button class="nav-dropdown-btn" id="nav-btn-community" onclick="toggleNavDropdown('dropdown-community')">
-                    <span>Comunidad & Más</span>
+                    <span data-i18n="nav_community_menu">Comunidad & Más</span>
                     <span class="dropdown-arrow">▾</span>
                 </button>
                 <div class="nav-dropdown-content">
-                    <a href="#" onclick="switchView('guides'); closeAllDropdowns();" id="nav-guides">Guías & Tuning</a>
-                    <a href="#" onclick="switchView('rules'); closeAllDropdowns();" id="nav-rules">Rules & Norm</a>
-                    <a href="#" onclick="switchView('driverprofile'); closeAllDropdowns();" id="nav-driverprofile">🔍 Search Driver</a>
-                    <a href="#" onclick="switchView('submit'); closeAllDropdowns();" id="nav-submit">🚀 Enviar Tiempo</a>
-                    <a href="#" onclick="switchView('download'); closeAllDropdowns();" id="nav-dropdown-download">📥 Download ISO</a>
-                    <a href="#" onclick="switchView('map'); closeAllDropdowns();" id="nav-dropdown-map">🗺️ Rockport Map Live</a>
+                    <a href="#" onclick="switchView('guides'); closeAllDropdowns();" id="nav-guides" data-i18n="nav_guides">Guías & Tuning</a>
+                    <a href="#" onclick="switchView('rules'); closeAllDropdowns();" id="nav-rules" data-i18n="nav_rules">Rules & Norm</a>
+                    <a href="#" onclick="switchView('driverprofile'); closeAllDropdowns();" id="nav-driverprofile" data-i18n="nav_search_driver">🔍 Search Driver</a>
+                    <a href="#" onclick="switchView('submit'); closeAllDropdowns();" id="nav-submit" data-i18n="nav_submit_time">🚀 Enviar Tiempo</a>
+                    <a href="#" onclick="switchView('download'); closeAllDropdowns();" id="nav-dropdown-download" data-i18n="nav_dropdown_download">📥 Download ISO</a>
+                    <a href="#" onclick="switchView('map'); closeAllDropdowns();" id="nav-dropdown-map" data-i18n="nav_dropdown_map">🗺️ Rockport Map Live</a>
                 </div>
             </div>
 
             <!-- Pestañas Directas -->
-            <a href="#" onclick="switchView('download')" id="nav-download">Download</a>
-            <a href="#" onclick="switchView('map')" id="nav-map">🗺️ Map Live</a>
+            <a href="#" onclick="switchView('download')" id="nav-download" data-i18n="nav_download">Download</a>
+            <a href="#" onclick="switchView('map')" id="nav-map" data-i18n="nav_map">🗺️ Map Live</a>
         </nav>
+
+        <!-- Selector de Idioma / Multilingual System (Top Right) -->
+        <div class="lang-selector-dropdown" id="lang-selector-dropdown">
+            <button type="button" class="lang-selector-btn" id="lang-btn" onclick="toggleLangDropdown(event)" title="Cambiar Idioma / Change Language">
+                <span id="current-lang-flag">🇪🇸</span>
+                <span id="current-lang-code">ES</span>
+                <span class="dropdown-arrow">▾</span>
+            </button>
+            <div class="lang-dropdown-content" id="lang-dropdown-menu">
+                <button type="button" class="lang-opt active" onclick="setLanguage('es', event)" data-lang="es">
+                    <span class="flag">🇪🇸</span>
+                    <span class="lang-name">Español</span>
+                    <span class="lang-native">Nativo</span>
+                </button>
+                <button type="button" class="lang-opt" onclick="setLanguage('en', event)" data-lang="en">
+                    <span class="flag">🇺🇸</span>
+                    <span class="lang-name">English</span>
+                    <span class="lang-native">US / UK</span>
+                </button>
+                <button type="button" class="lang-opt" onclick="setLanguage('pt', event)" data-lang="pt">
+                    <span class="flag">🇧🇷</span>
+                    <span class="lang-name">Português</span>
+                    <span class="lang-native">Brasil / PT</span>
+                </button>
+                <button type="button" class="lang-opt" onclick="setLanguage('zh', event)" data-lang="zh">
+                    <span class="flag">🇨🇳</span>
+                    <span class="lang-name">中文</span>
+                    <span class="lang-native">简体中文</span>
+                </button>
+                <button type="button" class="lang-opt" onclick="setLanguage('ja', event)" data-lang="ja">
+                    <span class="flag">🇯🇵</span>
+                    <span class="lang-name">日本語</span>
+                    <span class="lang-native">日本語</span>
+                </button>
+                <button type="button" class="lang-opt" onclick="setLanguage('ru', event)" data-lang="ru">
+                    <span class="flag">🇷🇺</span>
+                    <span class="lang-name">Русский</span>
+                    <span class="lang-native">Русский</span>
+                </button>
+                <button type="button" class="lang-opt" onclick="setLanguage('it', event)" data-lang="it">
+                    <span class="flag">🇮🇹</span>
+                    <span class="lang-name">Italiano</span>
+                    <span class="lang-native">Italiano</span>
+                </button>
+                <button type="button" class="lang-opt" onclick="setLanguage('fr', event)" data-lang="fr">
+                    <span class="flag">🇫🇷</span>
+                    <span class="lang-name">Français</span>
+                    <span class="lang-native">Français</span>
+                </button>
+                <button type="button" class="lang-opt" onclick="setLanguage('af', event)" data-lang="af">
+                    <span class="flag">🇿🇦</span>
+                    <span class="lang-name">Afrikaans</span>
+                    <span class="lang-native">Afrikaans</span>
+                </button>
+            </div>
+        </div>
 
         <!-- Widget de Telemetría en Vivo F1 (Acceso a Rockport Map Live) -->
         <div class="header-telemetry" onclick="switchView('map')" style="cursor: pointer;" title="Abrir Rockport Map Live">
             <span class="pulse-dot"></span>
-            <span>ROCKPORT LIVE</span>
+            <span data-i18n="telemetry_live">ROCKPORT LIVE</span>
             <span id="telemetry-clock" style="color: var(--nfs-orange);">--:--:--</span>
         </div>
 
@@ -188,49 +244,49 @@
                         </svg>
                     </div>
                     <div class="discord-banner-text">
-                        <div class="discord-tag">COMUNIDAD OFICIAL • NFSRANKSMW</div>
-                        <h3>¡ÚNETE AL SERVIDOR OFICIAL DE DISCORD!</h3>
-                        <p>Salas de competición en vivo, eventos semanales, soporte técnico de telemetría y coordinación directa de partidas con los pilotos de la comunidad.</p>
+                        <div class="discord-tag" data-i18n="discord_tag">COMUNIDAD OFICIAL • NFSRANKSMW</div>
+                        <h3 data-i18n="discord_title">¡ÚNETE AL SERVIDOR OFICIAL DE DISCORD!</h3>
+                        <p data-i18n="discord_desc">Salas de competición en vivo, eventos semanales, soporte técnico de telemetría y coordinación directa de partidas con los pilotos de la comunidad.</p>
                     </div>
                 </div>
                 <div class="discord-banner-right">
                     <a href="https://discord.gg/pgP45wSN8K" target="_blank" rel="noopener noreferrer" class="btn-discord-join">
-                        <span>💬</span> UNIRSE A DISCORD
+                        <span>💬</span> <span data-i18n="discord_btn">UNIRSE A DISCORD</span>
                     </a>
                 </div>
             </div>
 
             <div class="hero-banner">
                 <div class="hero-banner-content">
-                    <div class="hero-tag">
+                    <div class="hero-tag" data-i18n="hero_tag">
                         <span>⚡</span> OFFICIAL SPEED LEADERBOARDS • NEED FOR SPEED RUNS 2005
                     </div>
                     <h1>
-                        <span style="display: block; font-size: 0.52em; color: var(--nfs-orange); letter-spacing: 2.5px; margin-bottom: 6px;">NEED FOR SPEED RUNS 2005</span>
-                        WORLD RANKING<br>
-                        <span class="glow-text">NFS MOST WANTED</span><br>
-                        ROCKPORT RECORDS
+                        <span style="display: block; font-size: 0.52em; color: var(--nfs-orange); letter-spacing: 2.5px; margin-bottom: 6px;" data-i18n="hero_sub">NEED FOR SPEED RUNS 2005</span>
+                        <span data-i18n="hero_title_world">WORLD RANKING</span><br>
+                        <span class="glow-text" data-i18n="hero_title_nfs">NFS MOST WANTED</span><br>
+                        <span data-i18n="hero_title_records">ROCKPORT RECORDS</span>
                     </h1>
                     <div class="hero-btn-container">
                         <a href="#" class="btn-explored" onclick="switchView('routes')">
-                            <span>🏁</span> Explorar Leaderboards
+                            <span>🏁</span> <span data-i18n="hero_btn_explore">Explorar Leaderboards</span>
                         </a>
                         <a href="#" class="btn-explored" style="background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); box-shadow: none;" onclick="switchView('halloffame')">
-                            <span>👑</span> Salón de la Fama
+                            <span>👑</span> <span data-i18n="hero_btn_hall">Salón de la Fama</span>
                         </a>
                         <a href="https://discord.gg/pgP45wSN8K" target="_blank" rel="noopener noreferrer" class="btn-explored btn-discord-hero">
-                            <span style="display: inline-flex; align-items: center;">💬</span> Servidor Discord
+                            <span style="display: inline-flex; align-items: center;">💬</span> <span data-i18n="hero_btn_discord">Servidor Discord</span>
                         </a>
                     </div>
                 </div>
 
                 <!-- PANEL NEED FOR SPEED RUNS 2005 (UBICADO A LA DERECHA EN EL ÁREA DEL BMW) -->
                 <div class="hero-about-panel">
-                    <div class="about-panel-badge">
+                    <div class="about-panel-badge" data-i18n="hero_about_tag">
                         <span>📋</span> NEED FOR SPEED RUNS 2005
                     </div>
-                    <h2>NEED FOR SPEED RUNS 2005</h2>
-                    <p>Bienvenido al registro centralizado de récords mundiales de <strong>Need for Speed: Most Wanted (2005)</strong> — <strong>Need for Speed Runs 2005</strong>. Competición pura en cada sector de Rockport City con telemetría de tiempos, Torneo Oficial Blacklist 2026 y verificación en video.</p>
+                    <h2 data-i18n="hero_about_title">NEED FOR SPEED RUNS 2005</h2>
+                    <p data-i18n="hero_about_desc">Bienvenido al registro centralizado de récords mundiales de <strong>Need for Speed: Most Wanted (2005)</strong> — <strong>Need for Speed Runs 2005</strong>. Competición pura en cada sector de Rockport City con telemetría de tiempos, Torneo Oficial Blacklist 2026 y verificación en video.</p>
                 </div>
             </div>
 
@@ -243,45 +299,45 @@
                         <!-- BANNER CAMPEONATO -->
                         <div class="home-competition-card">
                             <div class="home-card-glow"></div>
-                            <div class="home-comp-tag">
+                            <div class="home-comp-tag" data-i18n="comp_tag">
                                 <span>🏆</span> TORNEO OFICIAL • ROCKPORT CITY 2026
                             </div>
-                            <h2>DRIVERS CHAMPIONSHIP // NFS MOST WANTED BLACKLIST 2026</h2>
-                            <p class="home-comp-desc">
+                            <h2 data-i18n="comp_title">DRIVERS CHAMPIONSHIP // NFS MOST WANTED BLACKLIST 2026</h2>
+                            <p class="home-comp-desc" data-i18n="comp_desc">
                                 El campeonato definitivo de velocidad, regularidad y duelos 1v1 en Need for Speed Most Wanted. Cuatro semanas de clasificación oficial para coronar al rey de la Blacklist de Rockport.
                             </p>
                             <div class="home-comp-features">
                                 <div class="comp-feature-pill">
                                     <span class="comp-feat-icon">🏎️</span>
                                     <div>
-                                        <strong>15+ Pilotos</strong>
-                                        <small>Parrilla Dinámica</small>
+                                        <strong data-i18n="comp_pilots">15+ Pilotos</strong>
+                                        <small data-i18n="comp_pilots_sub">Parrilla Dinámica</small>
                                     </div>
                                 </div>
                                 <div class="comp-feature-pill">
                                     <span class="comp-feat-icon">⚡</span>
                                     <div>
-                                        <strong>4 Desafíos/Semana</strong>
-                                        <small>Bonos +100 PTS</small>
+                                        <strong data-i18n="comp_weeks">4 Semanas</strong>
+                                        <small data-i18n="comp_weeks_sub">Desafíos Oficiales</small>
                                     </div>
                                 </div>
                                 <div class="comp-feature-pill">
                                     <span class="comp-feat-icon">💰</span>
                                     <div>
-                                        <strong>$23.5M REP</strong>
-                                        <small>Bolsa de Premios</small>
+                                        <strong data-i18n="comp_prize">$23.5M REP</strong>
+                                        <small data-i18n="comp_prize_sub">Bolsa Total</small>
                                     </div>
                                 </div>
                             </div>
                             <div class="home-comp-actions">
                                 <button class="btn-explored" onclick="switchView('championship-register')">
-                                    <span>📝</span> Inscríbete al Torneo
+                                    <span>📝</span> <span data-i18n="sidebar_bl_btn_register">Inscríbete al Torneo</span>
                                 </button>
                                 <button class="btn-explored btn-outline-nfs" onclick="switchView('blacklist')">
-                                    <span>⚔️</span> Grupos & Retos
+                                    <span>⚔️</span> <span data-i18n="sidebar_bl_btn_roster">Grupos & Retos</span>
                                 </button>
                                 <button class="btn-explored btn-outline-nfs" onclick="switchView('championship-standings')">
-                                    <span>🏆</span> Clasificación
+                                    <span>🏆</span> <span data-i18n="nav_championship">Clasificación</span>
                                 </button>
                             </div>
                         </div>
@@ -291,10 +347,10 @@
                             <div class="home-category-card card-circuito" onclick="setCategoryAndGo('Circuito')">
                                 <div class="cat-card-header">
                                     <span class="cat-icon">🏁</span>
-                                    <span class="cat-badge">CIRCUITOS</span>
+                                    <span class="cat-badge" data-i18n="filter_circuits">CIRCUITOS</span>
                                 </div>
-                                <h3>Carreras de Circuito</h3>
-                                <p>Sectores cerrados de varias vueltas. Récords oficiales en Single Lap y Fast Lap.</p>
+                                <h3 data-i18n="cat_circuits_title">Carreras de Circuito</h3>
+                                <p data-i18n="cat_circuits_desc">Sectores cerrados de varias vueltas. Récords oficiales en Single Lap y Fast Lap.</p>
                                 <div class="cat-footer">
                                     <span class="cat-stat">Junkman & BMW M3 GTR</span>
                                     <span class="cat-arrow">→</span>
@@ -304,10 +360,10 @@
                             <div class="home-category-card card-sprint" onclick="setCategoryAndGo('Sprint')">
                                 <div class="cat-card-header">
                                     <span class="cat-icon">⚡</span>
-                                    <span class="cat-badge">SPRINTS</span>
+                                    <span class="cat-badge" data-i18n="filter_sprints">SPRINTS</span>
                                 </div>
-                                <h3>Pruebas de Sprint</h3>
-                                <p>Trazados punto a punto a toda velocidad atravesando autopistas y distritos de Rockport.</p>
+                                <h3 data-i18n="cat_sprints_title">Pruebas de Sprint</h3>
+                                <p data-i18n="cat_sprints_desc">Trazados punto a punto a toda velocidad atravesando autopistas y distritos de Rockport.</p>
                                 <div class="cat-footer">
                                     <span class="cat-stat">Junkman & BMW M3 GTR</span>
                                     <span class="cat-arrow">→</span>
@@ -317,10 +373,10 @@
                             <div class="home-category-card card-drag" onclick="setCategoryAndGo('Drag')">
                                 <div class="cat-card-header">
                                     <span class="cat-icon">🎯</span>
-                                    <span class="cat-badge">DRAGS</span>
+                                    <span class="cat-badge" data-i18n="filter_drags">DRAGS</span>
                                 </div>
-                                <h3>Aceleración Drag</h3>
-                                <p>Cambios de marcha manuales perfectos y máxima aceleración en rectas extremas.</p>
+                                <h3 data-i18n="cat_drags_title">Aceleración Drag</h3>
+                                <p data-i18n="cat_drags_desc">Cambios de marcha manuales perfectos y máxima aceleración en rectas extremas.</p>
                                 <div class="cat-footer">
                                     <span class="cat-stat">Precisión de Telemetría</span>
                                     <span class="cat-arrow">→</span>
@@ -332,12 +388,12 @@
                         <div class="home-rules-box">
                             <div class="rules-box-icon">⚖️</div>
                             <div class="rules-box-content">
-                                <h4>INTEGRIDAD DE COMPETICIÓN // NFS RANKS v.5</h4>
-                                <p>Todos los récords y participaciones son verificados mediante grabaciones oficiales de YouTube. No se admiten mods de rendimiento ilegales ni ayudas no autorizadas. Consulta las normas para asegurar que tus tiempos sean homologados.</p>
+                                <h4 data-i18n="integrity_title">INTEGRIDAD DE COMPETICIÓN // NFS RANKS v.5</h4>
+                                <p data-i18n="integrity_desc">Todos los récords y participaciones son verificados mediante grabaciones oficiales de YouTube. No se admiten mods de rendimiento ilegales ni ayudas no autorizadas. Consulta las normas para asegurar que tus tiempos sean homologados.</p>
                                 <div class="rules-box-links">
-                                    <a href="#" onclick="switchView('rules')">📜 Ver Reglamento Oficial</a>
-                                    <a href="#" onclick="switchView('submit')">🚀 Cómo Enviar tu Récord</a>
-                                    <a href="#" onclick="switchView('past-tournaments')">🏛️ Torneos Anteriores</a>
+                                    <a href="#" onclick="switchView('rules')">📜 <span data-i18n="integrity_btn_rules">Ver Reglamento Oficial</span></a>
+                                    <a href="#" onclick="switchView('submit')">🚀 <span data-i18n="integrity_btn_submit">Cómo Enviar tu Récord</span></a>
+                                    <a href="#" onclick="switchView('past-tournaments')">🏛️ <span data-i18n="nav_past_tournaments">Torneos Anteriores</span></a>
                                 </div>
                             </div>
                         </div>
@@ -350,35 +406,35 @@
                         <div class="home-sidebar-module module-event">
                             <div class="module-header">
                                 <div class="module-badge badge-event">
-                                    <span class="pulse-dot"></span> PRÓXIMO EVENTO
+                                    <span class="pulse-dot"></span> <span data-i18n="sidebar_bl_tag">PRÓXIMO EVENTO</span>
                                 </div>
                                 <span class="module-tag-year">2026</span>
                             </div>
-                            <h3 class="module-title">NFS Most Wanted Blacklist 2026</h3>
+                            <h3 class="module-title" data-i18n="sidebar_bl_title">NFS Most Wanted Blacklist 2026</h3>
                             <div class="module-subtitle">Event Rank 2026 • Rockport City</div>
                             
                             <!-- Cuenta Regresiva Digital -->
                             <div class="event-countdown-container">
-                                <div class="countdown-title">INICIO OFICIAL DEL TORNEO:</div>
+                                <div class="countdown-title" data-i18n="sidebar_bl_countdown">INICIO OFICIAL DEL TORNEO:</div>
                                 <div class="countdown-timer" id="home-event-countdown">
                                     <div class="cd-item">
                                         <span class="cd-number" id="cd-days">--</span>
-                                        <span class="cd-label">DÍAS</span>
+                                        <span class="cd-label" data-i18n="sidebar_bl_days">DÍAS</span>
                                     </div>
                                     <span class="cd-sep">:</span>
                                     <div class="cd-item">
                                         <span class="cd-number" id="cd-hours">--</span>
-                                        <span class="cd-label">HRS</span>
+                                        <span class="cd-label" data-i18n="sidebar_bl_hours">HRS</span>
                                     </div>
                                     <span class="cd-sep">:</span>
                                     <div class="cd-item">
                                         <span class="cd-number" id="cd-mins">--</span>
-                                        <span class="cd-label">MIN</span>
+                                        <span class="cd-label" data-i18n="sidebar_bl_mins">MIN</span>
                                     </div>
                                     <span class="cd-sep">:</span>
                                     <div class="cd-item">
                                         <span class="cd-number" id="cd-secs">--</span>
-                                        <span class="cd-label">SEG</span>
+                                        <span class="cd-label" data-i18n="sidebar_bl_secs">SEG</span>
                                     </div>
                                 </div>
                             </div>
@@ -395,24 +451,24 @@
                                 </div>
                                 <div class="event-detail-row">
                                     <span class="detail-label">🚗 Categorías:</span>
-                                    <span class="detail-val">Yuggman BMW M3 GTR y Autos Stock</span>
+                                    <span class="detail-val">Junkman, BMW M3 GTR y Autos Stock</span>
                                 </div>
                                 <div class="event-detail-row">
-                                    <span class="detail-label">💰 Bolsa Total:</span>
-                                    <span class="detail-val" style="color: var(--green-neon); font-family: var(--font-mono);">$23,540,000 REP</span>
+                                    <span class="detail-label" data-i18n="sidebar_bl_prize_label">💰 Bolsa Total:</span>
+                                    <span class="detail-val" style="color: var(--green-neon); font-family: var(--font-mono);" data-i18n="sidebar_bl_prize_val">$23,540,000 REP</span>
                                 </div>
                                 <div class="event-detail-row">
-                                    <span class="detail-label">📍 Estado:</span>
-                                    <span class="detail-val" style="color: var(--green-neon); font-weight: 700;">🟢 Inscripciones Abiertas</span>
+                                    <span class="detail-label" data-i18n="sidebar_bl_status_label">📍 Estado:</span>
+                                    <span class="detail-val" style="color: var(--green-neon); font-weight: 700;" data-i18n="sidebar_bl_status_val">🟢 Inscripciones Abiertas</span>
                                 </div>
                             </div>
 
                             <div class="module-actions">
                                 <button class="btn-module-cta" onclick="switchView('championship-register')">
-                                    <span>📝</span> Inscribirme al Torneo
+                                    <span>📝</span> <span data-i18n="sidebar_bl_btn_register">Inscribirme al Torneo</span>
                                 </button>
                                 <button class="btn-module-sub" onclick="switchView('blacklist')">
-                                    <span>⚔️</span> Ver Grupos & Retos
+                                    <span>⚔️</span> <span data-i18n="sidebar_bl_btn_roster">Ver Grupos & Retos</span>
                                 </button>
                             </div>
                         </div>
@@ -421,11 +477,11 @@
                         <div class="home-sidebar-module module-leaderboard">
                             <div class="module-header">
                                 <div class="module-badge badge-leaderboard">
-                                    <span class="pulse-dot" style="background-color: var(--green-neon);"></span> LIVE LEADERBOARD
+                                    <span class="pulse-dot" style="background-color: var(--green-neon);"></span> <span data-i18n="sidebar_live_tag">LIVE LEADERBOARD</span>
                                 </div>
                                 <span class="module-tag-refresh" title="Telemetría en tiempo real">TIEMPO REAL</span>
                             </div>
-                            <h3 class="module-title">Leaderboard en Tiempo Real</h3>
+                            <h3 class="module-title" data-i18n="sidebar_live_title">Leaderboard en Tiempo Real</h3>
                             <div class="module-subtitle">Mejores Récords Mundiales • Temporada 2026</div>
 
                             <!-- Mini-Lista de Telemetría en Vivo -->
@@ -435,7 +491,7 @@
 
                             <div class="module-actions" style="margin-top: 14px;">
                                 <button class="btn-module-cta btn-cta-leaderboard" onclick="switchView('routes')">
-                                    <span>🏁</span> Explorar Leaderboards Completos
+                                    <span>🏁</span> <span data-i18n="hero_btn_explore">Explorar Leaderboards Completos</span>
                                 </button>
                             </div>
                         </div>
@@ -444,18 +500,18 @@
                         <div class="home-sidebar-module module-challenges">
                             <div class="module-header">
                                 <div class="module-badge badge-challenges">
-                                    <span>⚡</span> 4 SEMANAS
+                                    <span>⚡</span> <span data-i18n="comp_weeks">4 SEMANAS</span>
                                 </div>
                                 <span class="module-tag-dates">03 - 31 OCT</span>
                             </div>
-                            <h3 class="module-title">Desafíos Semanales</h3>
+                            <h3 class="module-title" data-i18n="sidebar_ch_title">Desafíos Semanales</h3>
                             <div class="module-subtitle">Calendario de Pruebas • Blacklist 2026</div>
 
                             <div class="home-challenges-timeline">
                                 <div class="timeline-week-item active-week" onclick="switchView('challenges')">
                                     <div class="timeline-week-num">S1</div>
                                     <div class="timeline-week-info">
-                                        <div class="timeline-week-title">Semana 1: Circuito Urbano</div>
+                                        <div class="timeline-week-title" data-i18n="sidebar_ch_w1">Semana 1: Circuito Urbano</div>
                                         <div class="timeline-week-meta">03 - 09 Oct • Junkman Nos • +100 PTS</div>
                                     </div>
                                     <span class="timeline-week-status status-next">Próxima</span>
@@ -464,7 +520,7 @@
                                 <div class="timeline-week-item" onclick="switchView('challenges')">
                                     <div class="timeline-week-num">S2</div>
                                     <div class="timeline-week-info">
-                                        <div class="timeline-week-title">Semana 2: Sprint Costero</div>
+                                        <div class="timeline-week-title" data-i18n="sidebar_ch_w2">Semana 2: Sprint Costero</div>
                                         <div class="timeline-week-meta">10 - 16 Oct • BMW M3 GTR • +100 PTS</div>
                                     </div>
                                     <span class="timeline-week-status status-locked">🔒</span>
@@ -473,7 +529,7 @@
                                 <div class="timeline-week-item" onclick="switchView('challenges')">
                                     <div class="timeline-week-num">S3</div>
                                     <div class="timeline-week-info">
-                                        <div class="timeline-week-title">Semana 3: Drag Speed Trap</div>
+                                        <div class="timeline-week-title" data-i18n="sidebar_ch_w3">Semana 3: Drag Speed Trap</div>
                                         <div class="timeline-week-meta">17 - 23 Oct • Aceleración • +100 PTS</div>
                                     </div>
                                     <span class="timeline-week-status status-locked">🔒</span>
@@ -482,7 +538,7 @@
                                 <div class="timeline-week-item" onclick="switchView('challenges')">
                                     <div class="timeline-week-num">S4</div>
                                     <div class="timeline-week-info">
-                                        <div class="timeline-week-title">Semana 4: Gran Final 1v1</div>
+                                        <div class="timeline-week-title" data-i18n="sidebar_ch_w4">Semana 4: Gran Final 1v1</div>
                                         <div class="timeline-week-meta">24 - 31 Oct • Duelo Blacklist #1</div>
                                     </div>
                                     <span class="timeline-week-status status-final">👑 Final</span>
@@ -491,7 +547,7 @@
 
                             <div class="module-actions" style="margin-top: 14px;">
                                 <button class="btn-module-cta btn-cta-challenges" onclick="switchView('challenges')">
-                                    <span>⚡</span> Ver Todos los Desafíos
+                                    <span>⚡</span> <span data-i18n="sidebar_ch_btn">Ver Todos los Desafíos</span>
                                 </button>
                             </div>
                         </div>
@@ -534,20 +590,20 @@
             
             <!-- Barra de controles y filtros F1 -->
             <div class="controls-wrapper">
-                <input type="text" id="route-search" class="search-input" placeholder="🔍 Buscar pista o circuito..." onkeyup="filterRoutes()">
+                <input type="text" id="route-search" class="search-input" placeholder="🔍 Buscar pista o circuito..." data-i18n-placeholder="search_track_placeholder" onkeyup="filterRoutes()">
                 
                 <div class="filter-bar">
                     <button class="filter-btn active" onclick="setCategory('all', this)">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: middle; margin-right: 6px;"><path d="M4 4h4v4H4V4zm6 0h4v4h-4V4zm6 0h4v4h-4V4zM4 10h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4zM4 16h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z"/></svg> All Races
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: middle; margin-right: 6px;"><path d="M4 4h4v4H4V4zm6 0h4v4h-4V4zm6 0h4v4h-4V4zM4 10h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4zM4 16h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z"/></svg> <span data-i18n="filter_all">All Races</span>
                     </button>
                     <button class="filter-btn" onclick="setCategory('Circuito', this)">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px; color: var(--nfs-orange);"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.23-5.23"></path></svg> Circuits
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px; color: var(--nfs-orange);"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.23-5.23"></path></svg> <span data-i18n="filter_circuits">Circuits</span>
                     </button>
                     <button class="filter-btn" onclick="setCategory('Sprint', this)">
-                        <span style="font-size: 16px; margin-right: 6px; color: var(--nfs-orange);">⚡</span> Sprints
+                        <span style="font-size: 16px; margin-right: 6px; color: var(--nfs-orange);">⚡</span> <span data-i18n="filter_sprints">Sprints</span>
                     </button>
                     <button class="filter-btn" onclick="setCategory('Drag', this)">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: middle; margin-right: 6px; color: var(--nfs-orange);"><path d="M9 2h6v2H9V2zm1 3h4v2h-4V5zm-2 3h8v2H8V8zm1 3h6v2H9v-2zm-2 3h10v2H7v-2zm2 3h6v2H9v-2zm-3 3h12v2H6v-2z"/></svg> Drags
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: middle; margin-right: 6px; color: var(--nfs-orange);"><path d="M9 2h6v2H9V2zm1 3h4v2h-4V5zm-2 3h8v2H8V8zm1 3h6v2H9v-2zm-2 3h10v2H7v-2zm2 3h6v2H9v-2zm-3 3h12v2H6v-2z"/></svg> <span data-i18n="filter_drags">Drags</span>
                     </button>
                 </div>
             </div>
@@ -796,7 +852,7 @@
             </h2>
             
             <p style="color: var(--text-muted); margin-top: -15px; margin-bottom: 25px; font-size: 14px;">
-                Campeonato Oficial de 4 Semanas de Rockport City: 15 Pilotos, 4 Desafíos por semana y rotación en 5 grupos de 3 corredores (03 al 31 de Octubre 2026). Los mejores tiempos otorgan bonos de +100, +50 y +20 PTS adicionales a las victorias y dinero de reputación ($ REP).
+                Campeonato Oficial de 4 Semanas de Rockport City: 15 Pilotos, 8 Desafíos por semana (8 Rutas a correr) y rotación en 5 grupos de 3 corredores (03 al 31 de Octubre 2026). Los mejores tiempos otorgan bonos de +100, +50 y +20 PTS adicionales a las victorias y dinero de reputación ($ REP).
             </p>
 
             <!-- Sub-Pestañas de Navegación del Torneo -->
@@ -838,7 +894,7 @@
                     <span class="challenge-summary-icon">📅</span>
                     <div class="challenge-summary-content">
                         <span class="challenge-summary-label">SEMANA DEL CAMPEONATO</span>
-                        <span class="challenge-summary-val" id="bl-summary-champ-week" style="color: var(--nfs-orange);">Semana 1 de 4 (4 Desafíos)</span>
+                        <span class="challenge-summary-val" id="bl-summary-champ-week" style="color: var(--nfs-orange);">Semana 1 de 4 (8 Desafíos)</span>
                     </div>
                 </div>
                 <div class="challenge-summary-item">
@@ -871,7 +927,7 @@
                             <span>👥</span> GRUPOS DE CARRERA (5 TRÍOS • ROTACIÓN SEMANAL)
                         </h3>
                         <span style="color: var(--text-muted); font-size: 13px;" id="champ-groups-subtitle">
-                            Enfrentamientos directos de 3 pilotos para disputar los 4 desafíos semanales
+                            Enfrentamientos directos de 3 pilotos para disputar las 8 rutas y desafíos semanales
                         </span>
                     </div>
                     <span class="champ-badge-highlight" id="champ-week-dates-badge">03 Oct - 09 Oct 2026</span>
@@ -881,12 +937,12 @@
                 </div>
             </div>
 
-            <!-- SECCIÓN: LOS 4 DESAFÍOS DE LA SEMANA CON BONOS DE MEJOR TIEMPO -->
+            <!-- SECCIÓN: LOS 8 DESAFÍOS DE LA SEMANA CON BONOS DE MEJOR TIEMPO -->
             <div class="championship-challenges-wrapper">
                 <div class="roster-header">
                     <div>
                         <h3 style="font-family: var(--font-racing); font-size: 20px; color: #ffffff; margin: 0;">
-                            <span>⚡</span> DESAFÍOS SEMANALES DEL CAMPEONATO // BONOS DE MEJOR TIEMPO
+                            <span>⚡</span> DESAFÍOS SEMANALES DEL CAMPEONATO (8 RUTAS POR GRUPO) // BONOS DE MEJOR TIEMPO
                         </h3>
                         <span style="color: var(--text-muted); font-size: 13px;">
                             🥇 1° Mejor Tiempo (+100 PTS) • 🥈 2° Mejor Tiempo (+50 PTS) • 🥉 3° Mejor Tiempo (+20 PTS)
@@ -1573,8 +1629,8 @@
         <section id="view-submit" class="view-section">
             <div class="about-section" style="text-align: center; margin-bottom: 30px;">
                 <div class="register-badge" style="margin-bottom: 12px; display: inline-flex;">HOMOLOGACIÓN OFICIAL • TELEMETRÍA DE VIDEO</div>
-                <h2>REGISTRO OFICIAL DE TIEMPO</h2>
-                <p>Envía tu tiempo con la evidencia en video de YouTube para su homologación en el Leaderboard Oficial de Rockport City. El sistema valida automáticamente que el tiempo declarado coincida con la diferencia de las marcas de tiempo (inicio y fin).</p>
+                <h2 data-i18n="submit_title">REGISTRO OFICIAL DE TIEMPO</h2>
+                <p data-i18n="submit_subtitle">Envía tu tiempo con la evidencia en video de YouTube para su homologación en el Leaderboard Oficial de Rockport City. El sistema valida automáticamente que el tiempo declarado coincida con la diferencia de las marcas de tiempo (inicio y fin).</p>
             </div>
 
             <div class="form-card form-telemetry-card">
@@ -1583,11 +1639,11 @@
                     <!-- FILA 1: PILOTO Y MODALIDAD -->
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label" for="sub-driver">👤 Piloto / Nick</label>
+                            <label class="form-label" for="sub-driver" data-i18n="submit_pilot">👤 Piloto / Nick</label>
                             <input type="text" id="sub-driver" class="form-control" required placeholder="Ej: ZIMANX" autocomplete="off">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">🌐 Modalidad de Carrera</label>
+                            <label class="form-label" data-i18n="submit_mode">🌐 Modalidad de Carrera</label>
                             <div class="radio-mode-group">
                                 <label class="radio-mode-label">
                                     <input type="radio" name="sub-mode" id="mode-online" value="Online" checked>
@@ -1608,7 +1664,7 @@
                     <!-- FILA 2: PISTA Y AUTO -->
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label" for="sub-route">🏁 Pista / Trazado</label>
+                            <label class="form-label" for="sub-route" data-i18n="submit_track">🏁 Pista / Trazado</label>
                             <input type="text" id="sub-route" list="list-nfs-routes" class="form-control" required placeholder="Ej: City Perimeter">
                             <datalist id="list-nfs-routes">
                                 <option value="City Perimeter">
@@ -1629,7 +1685,7 @@
                             </datalist>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="sub-car">🚗 Auto Utilizado</label>
+                            <label class="form-label" for="sub-car" data-i18n="submit_car">🚗 Auto Utilizado</label>
                             <input type="text" id="sub-car" list="list-nfs-cars" class="form-control" required placeholder="Ej: BMW M3 GTR">
                             <datalist id="list-nfs-cars">
                                 <option value="BMW M3 GTR">
@@ -1650,7 +1706,7 @@
 
                     <!-- FILA 3: ENLACE DE YOUTUBE -->
                     <div class="form-group">
-                        <label class="form-label" for="sub-video">🎬 Enlace de YouTube (Prueba en Video)</label>
+                        <label class="form-label" for="sub-video" data-i18n="submit_yt">🎬 Enlace de YouTube (Prueba en Video)</label>
                         <input type="url" id="sub-video" class="form-control" required placeholder="https://www.youtube.com/watch?v=... o https://youtu.be/..." oninput="handleVideoUrlChange()">
                         <span class="field-hint">Pega el link oficial de YouTube donde se aprecie la carrera completa de principio a fin sin cortes.</span>
                     </div>
@@ -1666,7 +1722,7 @@
 
                         <div class="form-row">
                             <div class="form-group">
-                                <label class="form-label" for="sub-start-mark">🚩 Marca de Inicio (Video)</label>
+                                <label class="form-label" for="sub-start-mark" data-i18n="submit_start">🚩 Marca de Inicio (Video)</label>
                                 <div class="input-with-icon">
                                     <input type="text" id="sub-start-mark" class="form-control mono-input" required placeholder="00:15.200" oninput="validateTimeMarksLive()">
                                     <span class="input-unit">MM:SS.mmm</span>
@@ -1675,7 +1731,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" for="sub-end-mark">🏁 Marca de Fin (Video)</label>
+                                <label class="form-label" for="sub-end-mark" data-i18n="submit_end">🏁 Marca de Fin (Video)</label>
                                 <div class="input-with-icon">
                                     <input type="text" id="sub-end-mark" class="form-control mono-input" required placeholder="01:35.950" oninput="validateTimeMarksLive()">
                                     <span class="input-unit">MM:SS.mmm</span>
@@ -1684,7 +1740,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" for="sub-time">⚡ Tiempo Declarado</label>
+                                <label class="form-label" for="sub-time" data-i18n="submit_time">⚡ Tiempo Declarado</label>
                                 <div class="input-with-icon">
                                     <input type="text" id="sub-time" class="form-control mono-input highlight-field" required placeholder="01:20.750" oninput="validateTimeMarksLive()">
                                     <span class="input-unit">MM:SS.mmm</span>
@@ -1707,7 +1763,7 @@
                                 </div>
                                 <div class="comp-operator">=</div>
                                 <div class="comp-col comp-col-diff">
-                                    <span class="comp-label">Diferencia Video (Δ)</span>
+                                    <span class="comp-label" data-i18n="submit_diff_label">Diferencia Video (Δ)</span>
                                     <span class="comp-val val-diff" id="disp-diff">--:--.---</span>
                                 </div>
                                 <div class="comp-operator">vs</div>
@@ -1727,7 +1783,7 @@
                             </div>
 
                             <button type="button" class="btn-sync-diff" id="btn-sync-diff" onclick="syncDeclaredWithDiff()" style="display: none;">
-                                <span>⚡</span> Autocompletar Tiempo Declarado con Diferencia de Video (<span id="btn-sync-time-val">--:--.---</span>)
+                                <span>⚡</span> <span data-i18n="submit_sync_btn">Autocompletar Tiempo Declarado con Diferencia de Video</span> (<span id="btn-sync-time-val">--:--.---</span>)
                             </button>
                         </div>
                     </div>
@@ -1735,14 +1791,14 @@
                     <!-- FILA 4: DETALLES OPCIONALES DE HARDWARE -->
                     <div class="form-row" style="margin-top: 20px;">
                         <div class="form-group">
-                            <label class="form-label" for="sub-gearbox">⚙️ Transmisión</label>
+                            <label class="form-label" for="sub-gearbox" data-i18n="submit_gearbox">⚙️ Transmisión</label>
                             <select id="sub-gearbox" class="form-control">
                                 <option value="Manual">Manual</option>
                                 <option value="Automático">Automático</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="sub-device">🎮 Dispositivo de Entrada</label>
+                            <label class="form-label" for="sub-device" data-i18n="submit_device">🎮 Dispositivo de Entrada</label>
                             <select id="sub-device" class="form-control">
                                 <option value="Teclado">Teclado</option>
                                 <option value="Mando">Mando / Pad</option>
@@ -1753,7 +1809,7 @@
 
                     <!-- BOTÓN DE ENVÍO -->
                     <button type="submit" id="btn-submit-time" class="btn-submit">
-                        <span>🚀</span> Enviar Registro a Homologación
+                        <span>🚀</span> <span data-i18n="submit_btn">Enviar Registro a Homologación</span>
                     </button>
                 </form>
 
@@ -1768,9 +1824,9 @@
             <div class="download-container">
                 <!-- CABECERA HERO DE DESCARGAS -->
                 <div class="download-hero-banner">
-                    <div class="download-badge-tag">💾 ARCHIVO OFICIAL DE INSTALACIÓN // PC DVD EDITION</div>
+                    <div class="download-badge-tag" data-i18n="dl_title">💾 ARCHIVO OFICIAL DE INSTALACIÓN // PC DVD EDITION</div>
                     <h1 class="download-main-title">NEED FOR SPEED: MOST WANTED (2005)</h1>
-                    <p class="download-subtitle">
+                    <p class="download-subtitle" data-i18n="dl_desc">
                         Descarga directa oficial de la versión completa para PC en formato imagen ISO. Incluye el <strong>Patch Oficial v1.3</strong> y <strong>Crack No-CD</strong> preconfigurado por <strong>ZimanX</strong>. Listo para instalar y correr en Windows 10 y Windows 11.
                     </p>
                 </div>
@@ -1827,7 +1883,7 @@
                                 <div class="btn-download-content">
                                     <span class="btn-download-icon">📥</span>
                                     <div class="btn-download-texts">
-                                        <span class="btn-download-main">DESCARGAR IMAGEN ISO (GOOGLE DRIVE)</span>
+                                        <span class="btn-download-main" data-i18n="dl_btn">DESCARGAR IMAGEN ISO (GOOGLE DRIVE)</span>
                                         <span class="btn-download-sub">ISO NFSMW 2005 ENG PC DVD ZimanX .rar • Enlace directo oficial</span>
                                     </div>
                                 </div>
@@ -1886,7 +1942,7 @@
                     <div class="instructions-header">
                         <div class="instructions-title-group">
                             <span class="section-tag-pill">📖 GUÍA DE INSTALACIÓN // STEP-BY-STEP</span>
-                            <h2 class="instructions-main-title">Instrucciones de Instalación / Installation Instructions</h2>
+                            <h2 class="instructions-main-title" data-i18n="dl_instructions_title">Instrucciones de Instalación / Installation Instructions</h2>
                         </div>
                         <div class="lang-switch-pills">
                             <button type="button" class="lang-btn active" id="btn-lang-es" onclick="switchInstallLang('es')">🇪🇸 Español</button>
@@ -1900,32 +1956,32 @@
                             <div class="step-card">
                                 <div class="step-num">01</div>
                                 <div class="step-icon">💽</div>
-                                <h3 class="step-title">Montar la Imagen ISO</h3>
-                                <p class="step-desc">
+                                <h3 class="step-title" data-i18n="dl_step1_title">Montar la Imagen ISO</h3>
+                                <p class="step-desc" data-i18n="dl_step1_desc">
                                     Descomprime el archivo RAR descargado. En Windows 10 o Windows 11, haz <strong>clic derecho</strong> sobre el archivo ISO y selecciona <strong>"Montar"</strong>.
                                 </p>
                             </div>
                             <div class="step-card">
                                 <div class="step-num">02</div>
                                 <div class="step-icon">💻</div>
-                                <h3 class="step-title">Ir a Este Equipo</h3>
-                                <p class="step-desc">
+                                <h3 class="step-title" data-i18n="dl_step2_title">Ir a Este Equipo</h3>
+                                <p class="step-desc" data-i18n="dl_step2_desc">
                                     Abre el Explorador de Archivos, dirígete a <strong>Este Equipo</strong> (Mi PC) y localiza la unidad virtual de disco donde se montó el juego.
                                 </p>
                             </div>
                             <div class="step-card">
                                 <div class="step-num">03</div>
                                 <div class="step-icon">⚙️</div>
-                                <h3 class="step-title">Instalar el Juego</h3>
-                                <p class="step-desc">
+                                <h3 class="step-title" data-i18n="dl_step3_title">Instalar el Juego</h3>
+                                <p class="step-desc" data-i18n="dl_step3_desc">
                                     Ejecuta el instalador, selecciona la carpeta de ubicación en tu disco duro (ej: <code>C:\Games\Need for Speed Most Wanted</code>) y espera que se complete la instalación.
                                 </p>
                             </div>
                             <div class="step-card highlight-step">
                                 <div class="step-num">04</div>
                                 <div class="step-icon">🏁</div>
-                                <h3 class="step-title">¡Listo a Jugar!</h3>
-                                <p class="step-desc">
+                                <h3 class="step-title" data-i18n="dl_step4_title">¡Listo a Jugar!</h3>
+                                <p class="step-desc" data-i18n="dl_step4_desc">
                                     La instalación ya incluye el <strong>Patch v1.3 + crack</strong>. ¡Ejecuta el juego desde su acceso directo y comienza a registrar tus récords!
                                 </p>
                             </div>
@@ -1975,20 +2031,20 @@
                 <div class="download-tips-card">
                     <div class="tips-header">
                         <span style="font-size: 20px;">💡</span>
-                        <h4 style="margin: 0; color: #ffffff; font-family: var(--font-racing); font-size: 16px;">Recomendaciones de Optimización para PC Modernas</h4>
+                        <h4 style="margin: 0; color: #ffffff; font-family: var(--font-racing); font-size: 16px;" data-i18n="dl_tips_title">Recomendaciones de Optimización para PC Modernas</h4>
                     </div>
                     <div class="tips-grid">
                         <div class="tip-col">
-                            <strong>🖥️ Resolución Panorámica (1080p / 2K / 4K):</strong>
-                            <p>Recomendamos instalar el mod <em>NFSMW Widescreen Fix</em> (de ThirteenAG) para habilitar soporte nativo de relación de aspecto 16:9 y 21:9 sin estiramiento de imagen.</p>
+                            <strong data-i18n="dl_tip_wide">🖥️ Resolución Panorámica (1080p / 2K / 4K):</strong>
+                            <p data-i18n="dl_tip_wide_desc">Recomendamos instalar el mod <em>NFSMW Widescreen Fix</em> (de ThirteenAG) para habilitar soporte nativo de relación de aspecto 16:9 y 21:9 sin estiramiento de imagen.</p>
                         </div>
                         <div class="tip-col">
-                            <strong>🎮 Mandos / Gamepads Modernos:</strong>
-                            <p>Compatible de forma nativa con mandos de Xbox 360, Xbox One, Series X/S y mandos de PlayStation mediante emulador XInput.</p>
+                            <strong data-i18n="dl_tip_pads">🎮 Mandos / Gamepads Modernos:</strong>
+                            <p data-i18n="dl_tip_pads_desc">Compatible de forma nativa con mandos de Xbox 360, Xbox One, Series X/S y mandos de PlayStation mediante emulador XInput.</p>
                         </div>
                         <div class="tip-col">
-                            <strong>🏎️ Telemetría en Vivo NFSRANKSMW:</strong>
-                            <p>Para torneos oficiales, puedes instalar el mod de telemetría en tiempo real <code>NFSMW_FirebaseBridge.asi</code> para sincronizar tus carreras automáticamente.</p>
+                            <strong data-i18n="dl_tip_telemetry">🏎️ Telemetría en Vivo NFSRANKSMW:</strong>
+                            <p data-i18n="dl_tip_telemetry_desc">Para torneos oficiales, puedes instalar el mod de telemetría en tiempo real <code>NFSMW_FirebaseBridge.asi</code> para sincronizar tus carreras automáticamente.</p>
                         </div>
                     </div>
                 </div>
@@ -2002,9 +2058,9 @@
             <div class="map-live-container">
                 <!-- CABECERA HERO MAPA EN VIVO -->
                 <div class="map-hero-banner">
-                    <div class="map-badge-tag">📡 TELEMETRÍA SATELITAL // ROCKPORT CITY GPS</div>
-                    <h1 class="map-main-title">ROCKPORT MAP LIVE</h1>
-                    <p class="map-subtitle">
+                    <div class="map-badge-tag" data-i18n="map_tag">📡 TELEMETRÍA SATELITAL // ROCKPORT CITY GPS</div>
+                    <h1 class="map-main-title" data-i18n="map_title">ROCKPORT MAP LIVE</h1>
+                    <p class="map-subtitle" data-i18n="map_subtitle">
                         Mapa geográfico oficial en alta resolución de <strong>Rockport City (2005)</strong>. Explora la topografía, los distritos de <strong>Rosewood</strong>, <strong>Downtown Rockport</strong>, <strong>Camden Beach</strong>, accesos bloqueados y trazados de persecución policial.
                     </p>
 
@@ -2012,20 +2068,20 @@
                     <div class="map-telemetry-bar">
                         <div class="map-telemetry-item">
                             <span class="map-pulse-live"></span>
-                            <span class="telemetry-label">ESTADO SATÉLITE:</span>
-                            <span class="telemetry-val" style="color: var(--green-neon);">ONLINE • COBERTURA 100%</span>
+                            <span class="telemetry-label" data-i18n="map_status_label">ESTADO SATÉLITE:</span>
+                            <span class="telemetry-val" style="color: var(--green-neon);" data-i18n="map_status_val">ONLINE • COBERTURA 100%</span>
                         </div>
                         <div class="map-telemetry-item">
-                            <span class="telemetry-label">COORDENADAS:</span>
-                            <span class="telemetry-val" style="color: #38bdf8;">ROCKPORT METRO (42° 21' N, 71° 04' W)</span>
+                            <span class="telemetry-label" data-i18n="map_coord_label">COORDENADAS:</span>
+                            <span class="telemetry-val" style="color: #38bdf8;" data-i18n="map_coord_val">ROCKPORT METRO (42° 21' N, 71° 04' W)</span>
                         </div>
                         <div class="map-telemetry-item">
-                            <span class="telemetry-label">CONDICIÓN POLICIAL:</span>
-                            <span class="telemetry-val" style="color: var(--nfs-orange);">HEAT LEVEL 1 A 5 (ACTIVO)</span>
+                            <span class="telemetry-label" data-i18n="map_heat_label">CONDICIÓN POLICIAL:</span>
+                            <span class="telemetry-val" style="color: var(--nfs-orange);" data-i18n="map_heat_val">HEAT LEVEL 1 A 5 (ACTIVO)</span>
                         </div>
                         <div class="map-telemetry-item">
-                            <span class="telemetry-label">ZONA ACTIVA:</span>
-                            <span class="telemetry-val" id="active-district-indicator" style="color: #ffd700;">TODO EL MAPA (GLOBAL)</span>
+                            <span class="telemetry-label" data-i18n="map_zone_label">ZONA ACTIVA:</span>
+                            <span class="telemetry-val" id="active-district-indicator" style="color: #ffd700;" data-i18n="map_zone_val">TODO EL MAPA (GLOBAL)</span>
                         </div>
                     </div>
                 </div>
@@ -2034,26 +2090,26 @@
                 <div class="map-controls-toolbar">
                     <div class="map-controls-group">
                         <button type="button" class="btn-map-control" onclick="zoomMap(0.25)" title="Acercar mapa">
-                            <span>➕</span> Zoom In
+                            <span>➕</span> <span data-i18n="map_btn_zoom_in">Zoom In</span>
                         </button>
                         <button type="button" class="btn-map-control" onclick="zoomMap(-0.25)" title="Alejar mapa">
-                            <span>➖</span> Zoom Out
+                            <span>➖</span> <span data-i18n="map_btn_zoom_out">Zoom Out</span>
                         </button>
                         <button type="button" class="btn-map-control" onclick="resetMapZoom()" title="Restablecer zoom al 100%">
-                            <span>🔄</span> Reset (100%)
+                            <span>🔄</span> <span data-i18n="map_btn_reset">Reset (100%)</span>
                         </button>
                         <button type="button" class="btn-map-control" onclick="toggleMapFullscreen()" title="Ver en pantalla completa">
-                            <span>⛶</span> Pantalla Completa
+                            <span>⛶</span> <span data-i18n="map_btn_fs">Pantalla Completa</span>
                         </button>
                     </div>
 
                     <!-- SELECTOR RÁPIDO DE DISTRITOS -->
                     <div class="map-districts-pills">
-                        <span class="pills-label">Sectores:</span>
-                        <button type="button" class="district-pill active" onclick="focusMapDistrict('all', this)">📍 Todo el Mapa</button>
-                        <button type="button" class="district-pill" onclick="focusMapDistrict('rosewood', this)">🌲 Rosewood</button>
-                        <button type="button" class="district-pill" onclick="focusMapDistrict('downtown', this)">🏙️ Downtown</button>
-                        <button type="button" class="district-pill" onclick="focusMapDistrict('camden', this)">🏖️ Camden Beach</button>
+                        <span class="pills-label" data-i18n="map_pills_label">Sectores:</span>
+                        <button type="button" class="district-pill active" onclick="focusMapDistrict('all', this)" data-i18n="map_pill_all">📍 Todo el Mapa</button>
+                        <button type="button" class="district-pill" onclick="focusMapDistrict('rosewood', this)" data-i18n="map_pill_rosewood">🌲 Rosewood</button>
+                        <button type="button" class="district-pill" onclick="focusMapDistrict('downtown', this)" data-i18n="map_pill_downtown">🏙️ Downtown</button>
+                        <button type="button" class="district-pill" onclick="focusMapDistrict('camden', this)" data-i18n="map_pill_camden">🏖️ Camden Beach</button>
                     </div>
                 </div>
 
@@ -2086,11 +2142,11 @@
                         <div class="district-header">
                             <div class="district-icon">🌲</div>
                             <div>
-                                <span class="district-tag">SECTOR NORTE // ELEVACIONES TÉCNICAS</span>
+                                <span class="district-tag" data-i18n="map_rosewood_tag">SECTOR NORTE // ELEVACIONES TÉCNICAS</span>
                                 <h3 class="district-name">Rosewood</h3>
                             </div>
                         </div>
-                        <p class="district-desc">
+                        <p class="district-desc" data-i18n="map_rosewood_desc">
                             Zona residencial y montañosa con curvas pronunciadas y gran altitud. Alberga el famoso parque eólico (<strong>Rosewood Wind Farm</strong>), el campus universitario (<strong>Campus Way</strong>), Heritage Heights e Ironwood Estates.
                         </p>
                         <div class="district-features">
@@ -2100,7 +2156,7 @@
                             <span class="district-feat-item">⛰️ High Hills</span>
                         </div>
                         <button type="button" class="btn-district-action" onclick="setCategoryAndGo('Circuito')">
-                            🏁 Ver Trazados de Circuito
+                            <span data-i18n="map_rosewood_btn">🏁 Ver Trazados de Circuito</span>
                         </button>
                     </div>
 
@@ -2109,11 +2165,11 @@
                         <div class="district-header">
                             <div class="district-icon">🏙️</div>
                             <div>
-                                <span class="district-tag">SECTOR CENTRAL // ALTA VELOCIDAD</span>
+                                <span class="district-tag" data-i18n="map_downtown_tag">SECTOR CENTRAL // ALTA VELOCIDAD</span>
                                 <h3 class="district-name">Downtown Rockport</h3>
                             </div>
                         </div>
-                        <p class="district-desc">
+                        <p class="district-desc" data-i18n="map_downtown_desc">
                             El núcleo financiero y metropolitano de la ciudad. Calles anchas rodeadas de rascacielos, túneles de metro, autopistas elevadas perimetrales y el legendario trazado de <strong>City Perimeter</strong>.
                         </p>
                         <div class="district-features">
@@ -2123,7 +2179,7 @@
                             <span class="district-feat-item">💎 Diamond Ltd.</span>
                         </div>
                         <button type="button" class="btn-district-action" onclick="setCategoryAndGo('Sprint')">
-                            ⚡ Ver Trazados de Sprint
+                            <span data-i18n="map_downtown_btn">⚡ Ver Trazados de Sprint</span>
                         </button>
                     </div>
 
@@ -2132,11 +2188,11 @@
                         <div class="district-header">
                             <div class="district-icon">🏖️</div>
                             <div>
-                                <span class="district-tag">SECTOR COSTA // MUELLES & PUENTES</span>
+                                <span class="district-tag" data-i18n="map_camden_tag">SECTOR COSTA // MUELLES & PUENTES</span>
                                 <h3 class="district-name">Camden Beach</h3>
                             </div>
                         </div>
-                        <p class="district-desc">
+                        <p class="district-desc" data-i18n="map_camden_desc">
                             Distrito costero e industrial de Rockport. Ofrece carreteras al nivel del mar, curvas cerradas de 90 grados, puentes levadizos móviles y los circuitos más técnicos de aceleración y drag.
                         </p>
                         <div class="district-features">
@@ -2146,7 +2202,7 @@
                             <span class="district-feat-item">🚀 Camden & Dunwich</span>
                         </div>
                         <button type="button" class="btn-district-action" onclick="setCategoryAndGo('Drag')">
-                            🚦 Ver Trazados de Drag
+                            <span data-i18n="map_camden_btn">🚦 Ver Trazados de Drag</span>
                         </button>
                     </div>
                 </div>
@@ -2155,7 +2211,7 @@
                 <div class="map-legend-card">
                     <div class="legend-header">
                         <span style="font-size: 20px;">🗺️</span>
-                        <h4 style="margin: 0; color: #ffffff; font-family: var(--font-racing); font-size: 16px;">Leyenda Topográfica Oficial (Geographical Key)</h4>
+                        <h4 style="margin: 0; color: #ffffff; font-family: var(--font-racing); font-size: 16px;" data-i18n="map_legend_title">Leyenda Topográfica Oficial (Geographical Key)</h4>
                     </div>
                     <div class="legend-items-grid">
                         <div class="legend-item">
@@ -2210,11 +2266,11 @@
     <footer>
         <div class="footer-content">
             <p style="margin: 0;">
-                <strong style="color: #ffffff;">Need for Speed: Most Wanted (2005)</strong> — Still racing after dark. 
+                <strong style="color: #ffffff;">Need for Speed: Most Wanted (2005)</strong> — <span data-i18n="footer_sub">Still racing after dark.</span>
                 <br>
-                <strong>©NFSRANKSMW 2026</strong> All rights reserved. 
+                <strong data-i18n="footer_rights">©NFSRANKSMW 2026 Todos los derechos reservados.</strong>
                 <br>
-                <span style="font-size: 12px; opacity: 0.6; display: inline-block; margin-top: 6px;">Not affiliated with Electronic Arts or the Need for Speed™ brand. All trademarks belong to their respective owners.</span>
+                <span style="font-size: 12px; opacity: 0.6; display: inline-block; margin-top: 6px;" data-i18n="footer_disclaimer">Not affiliated with Electronic Arts or the Need for Speed™ brand. All trademarks belong to their respective owners.</span>
             </p>
         </div>
     </footer>
@@ -2223,6 +2279,7 @@
     <script src="assets/js/routes-data.js"></script>
     <script src="assets/js/blacklist-data.js"></script>
     <script src="assets/js/tournaments-data.js"></script>
+    <script src="assets/js/i18n.js"></script>
     <script src="assets/js/app.js"></script>
 </body>
 </html>

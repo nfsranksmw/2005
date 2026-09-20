@@ -15,4 +15,6 @@ function Test-JsFile($path) {
 }
 
 Test-JsFile "assets/js/tournaments-data.js"
+Test-JsFile "assets/js/blacklist-data.js"
 Test-JsFile "assets/js/app.js"
+Test-JsFile "assets/js/i18n.js"
