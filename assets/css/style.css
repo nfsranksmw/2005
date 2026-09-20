@@ -6452,4 +6452,632 @@ footer strong {
     }
 }
 
+/* =======================================================
+   SECCIÓN DE MIEMBROS DE DISCORD (ROSTER OFICIAL)
+   ======================================================= */
+.members-stats-bar {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.discord-role-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-family: var(--font-racing);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+}
+
+.discord-role-pill.role-admin {
+    background: rgba(237, 66, 69, 0.15);
+    border: 1px solid #ed4245;
+    color: #ff6b6b;
+    box-shadow: 0 0 10px rgba(237, 66, 69, 0.35);
+    text-shadow: 0 0 8px rgba(237, 66, 69, 0.6);
+}
+
+.discord-role-pill.role-rank-sp {
+    background: rgba(235, 69, 158, 0.15);
+    border: 1px solid #eb459e;
+    color: #f472b6;
+    box-shadow: 0 0 10px rgba(235, 69, 158, 0.35);
+    text-shadow: 0 0 8px rgba(235, 69, 158, 0.6);
+}
+
+.discord-role-pill.role-rank-s {
+    background: rgba(155, 89, 182, 0.15);
+    border: 1px solid #9b59b6;
+    color: #c084fc;
+    box-shadow: 0 0 10px rgba(155, 89, 182, 0.35);
+    text-shadow: 0 0 8px rgba(155, 89, 182, 0.6);
+}
+
+.discord-role-pill.role-rank-a {
+    background: rgba(56, 189, 248, 0.15);
+    border: 1px solid #38bdf8;
+    color: #38bdf8;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
+    text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+}
+
+.discord-role-pill.role-rank-c {
+    background: rgba(132, 204, 22, 0.15);
+    border: 1px solid #84cc16;
+    color: #a3e635;
+    box-shadow: 0 0 10px rgba(132, 204, 22, 0.35);
+    text-shadow: 0 0 8px rgba(132, 204, 22, 0.6);
+}
+
+.member-cell-flex {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.member-avatar-badge {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-racing);
+    font-weight: 800;
+    font-size: 15px;
+    color: #ffffff;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.member-avatar-badge.role-admin {
+    background: linear-gradient(135deg, #ed4245 0%, #991b1b 100%);
+    border: 2px solid #ed4245;
+}
+
+.member-avatar-badge.role-rank-sp {
+    background: linear-gradient(135deg, #eb459e 0%, #9d174d 100%);
+    border: 2px solid #eb459e;
+}
+
+.member-avatar-badge.role-rank-s {
+    background: linear-gradient(135deg, #9b59b6 0%, #6b21a8 100%);
+    border: 2px solid #9b59b6;
+}
+
+.member-avatar-badge.role-rank-a {
+    background: linear-gradient(135deg, #38bdf8 0%, #0369a1 100%);
+    border: 2px solid #38bdf8;
+}
+
+.member-avatar-badge.role-rank-c {
+    background: linear-gradient(135deg, #84cc16 0%, #3f6212 100%);
+    border: 2px solid #84cc16;
+}
+
+.extra-roles-tag {
+    background: rgba(255, 255, 255, 0.15);
+    color: #e2e8f0;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 10px;
+    margin-left: 4px;
+    font-family: var(--font-mono);
+}
+
+.join-method-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #cbd5e1;
+}
+
+/* =======================================================
+   REGLAS Y NORMAS OFICIALES (PRO ESPORTS & F1 DESIGN)
+   ======================================================= */
+.rules-pro-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.rules-moderator-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(255, 119, 0, 0.12) 0%, rgba(20, 24, 33, 0.9) 100%);
+    border: 1px solid rgba(255, 119, 0, 0.35);
+    border-left: 4px solid var(--nfs-orange);
+    border-radius: 10px;
+    padding: 18px 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.rules-moderator-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.rules-moderator-icon {
+    font-size: 32px;
+}
+
+.rules-moderator-title {
+    font-family: var(--font-racing);
+    font-size: 19px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.rules-moderator-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.rules-mod-badges {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.mod-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.mod-badge-pill.verified {
+    border-color: rgba(0, 255, 136, 0.4);
+    background: rgba(0, 255, 136, 0.1);
+    color: var(--green-neon);
+}
+
+.rules-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 22px;
+}
+
+@media (max-width: 640px) {
+    .rules-cards-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.rule-card-pro {
+    background: var(--bg-surface-elevated, #151821);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.rule-card-pro:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 119, 0, 0.4);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6), 0 0 15px rgba(255, 119, 0, 0.15);
+}
+
+.rule-card-pro::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--card-accent, var(--nfs-orange));
+}
+
+.rule-card-pro.accent-cyan::before { background: var(--cyan-electric); }
+.rule-card-pro.accent-green::before { background: var(--green-neon); }
+.rule-card-pro.accent-gold::before { background: var(--gold); }
+.rule-card-pro.accent-red::before { background: var(--f1-red); }
+
+.rule-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.rule-header-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-racing);
+    font-size: 19px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 0.8px;
+}
+
+.rule-status-badge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.badge-official {
+    background: rgba(0, 240, 255, 0.15);
+    border: 1px solid var(--cyan-electric);
+    color: var(--cyan-electric);
+}
+
+.badge-critical {
+    background: rgba(225, 6, 0, 0.15);
+    border: 1px solid var(--f1-red);
+    color: #ff4d4d;
+}
+
+.badge-allowed {
+    background: rgba(0, 255, 136, 0.15);
+    border: 1px solid var(--green-neon);
+    color: var(--green-neon);
+}
+
+.badge-special {
+    background: rgba(255, 215, 0, 0.15);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+}
+
+.rule-items-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.rule-item-entry {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #cbd5e1;
+}
+
+.rule-bullet {
+    font-size: 15px;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.rule-item-entry strong {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.rule-callout-box {
+    margin-top: 18px;
+    padding: 14px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.6;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.callout-warning {
+    background: rgba(255, 119, 0, 0.1);
+    border: 1px solid rgba(255, 119, 0, 0.35);
+    color: #fed7aa;
+}
+
+.callout-danger {
+    background: rgba(225, 6, 0, 0.1);
+    border: 1px solid rgba(225, 6, 0, 0.35);
+    color: #fca5a5;
+}
+
+.callout-success {
+    background: rgba(0, 255, 136, 0.1);
+    border: 1px solid rgba(0, 255, 136, 0.35);
+    color: #86efac;
+}
+
+/* =======================================================
+   GUÍAS Y TUNING DE RENDIMIENTO (TUNING HUB)
+   ======================================================= */
+.tuning-hub-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.tuning-cars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(540px, 1fr));
+    gap: 28px;
+    margin-top: 25px;
+}
+
+@media (max-width: 640px) {
+    .tuning-cars-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.tuning-car-card {
+    background: var(--bg-surface-elevated, #151821);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.tuning-car-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 119, 0, 0.4);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 119, 0, 0.2);
+}
+
+.tuning-card-media {
+    position: relative;
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+    background: #000000;
+}
+
+.tuning-car-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.4s ease;
+}
+
+.tuning-car-card:hover .tuning-car-img {
+    transform: scale(1.04);
+}
+
+.tuning-media-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(15, 17, 22, 0.95) 0%, rgba(15, 17, 22, 0.4) 60%, transparent 100%);
+    padding: 16px 20px 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.tuning-car-badge {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 119, 0, 0.5);
+    color: var(--nfs-orange);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-family: var(--font-racing);
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+.tuning-drivetrain-tag {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: rgba(0, 240, 255, 0.2);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--cyan-electric);
+    color: var(--cyan-electric);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+}
+
+.tuning-car-name {
+    font-family: var(--font-racing);
+    font-size: 22px;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.tuning-car-engine {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #cbd5e1;
+    margin-top: 2px;
+}
+
+.tuning-card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex-grow: 1;
+}
+
+.tuning-specs-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 10px 14px;
+}
+
+.spec-strip-item {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.spec-strip-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.spec-strip-val {
+    font-family: var(--font-racing);
+    font-size: 16px;
+    font-weight: 800;
+    color: #ffffff;
+    margin-top: 2px;
+}
+
+.tuning-desc-text {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #94a3b8;
+    margin: 0;
+}
+
+.tuning-sliders-box {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 14px;
+}
+
+.tuning-box-title {
+    font-family: var(--font-racing);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--cyan-electric);
+    letter-spacing: 0.8px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.tuning-slider-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-size: 12px;
+}
+
+.tuning-slider-row:last-child {
+    margin-bottom: 0;
+}
+
+.tuning-slider-label {
+    width: 110px;
+    font-family: var(--font-racing);
+    font-size: 13px;
+    font-weight: 700;
+    color: #e2e8f0;
+    flex-shrink: 0;
+}
+
+.tuning-slider-track {
+    flex-grow: 1;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+}
+
+.tuning-slider-center-line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(255, 255, 255, 0.3);
+    z-index: 2;
+}
+
+.tuning-slider-fill {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, var(--cyan-electric), var(--nfs-orange));
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.tuning-slider-num {
+    width: 30px;
+    text-align: right;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: #ffffff;
+    flex-shrink: 0;
+}
+
+.tuning-protip-box {
+    background: rgba(255, 119, 0, 0.08);
+    border: 1px solid rgba(255, 119, 0, 0.3);
+    border-left: 3px solid var(--nfs-orange);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #cbd5e1;
+}
+
+.tuning-protip-box strong {
+    color: var(--nfs-orange);
+    font-family: var(--font-racing);
+    font-size: 13px;
+    letter-spacing: 0.5px;
+}
+
+
+
 

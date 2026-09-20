@@ -73,7 +73,7 @@ function switchView(viewId) {
         targetSection.classList.add('active');
     }
 
-    const targetNavLink = document.getElementById('nav-' + viewId);
+    const targetNavLink = document.getElementById('nav-' + viewId) || document.getElementById('nav-dropdown-' + viewId);
     if (targetNavLink) {
         targetNavLink.classList.add('active');
 
@@ -92,6 +92,18 @@ function switchView(viewId) {
 
     closeAllDropdowns();
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (viewId === 'members') {
+        if (typeof renderDiscordMembers === 'function') {
+            renderDiscordMembers(currentMembersRoleFilter || 'all', currentMembersSearchQuery || '');
+        }
+    }
+
+    if (viewId === 'guides') {
+        if (typeof renderTuningGuides === 'function') {
+            renderTuningGuides(currentTuningDrivetrainFilter || 'all', currentTuningSearchQuery || '');
+        }
+    }
 }
 
 function toggleNavDropdown(dropdownId) {
@@ -3353,6 +3365,326 @@ function setCategoryAndGo(category) {
 }
 
 // =======================================================
+// SECCIÓN DE MIEMBROS DE DISCORD (ROSTER OFICIAL)
+// =======================================================
+let currentMembersRoleFilter = 'all';
+let currentMembersSearchQuery = '';
+
+function initMembersSection() {
+    if (typeof DISCORD_MEMBERS_DATA === 'undefined') return;
+
+    // Calcular estadísticas
+    const totalCount = DISCORD_MEMBERS_DATA.length;
+    const adminCount = DISCORD_MEMBERS_DATA.filter(m => m.roleCategory === 'admin').length;
+    const spCount = DISCORD_MEMBERS_DATA.filter(m => m.roleCategory === 'rank-sp').length;
+    const sCount = DISCORD_MEMBERS_DATA.filter(m => m.roleCategory === 'rank-s').length;
+    const aCount = DISCORD_MEMBERS_DATA.filter(m => m.roleCategory === 'rank-a').length;
+    const cCount = DISCORD_MEMBERS_DATA.filter(m => m.roleCategory === 'rank-c').length;
+
+    // Actualizar barras superiores
+    const totalEl = document.getElementById('members-stat-total');
+    if (totalEl) totalEl.textContent = totalCount;
+    const adminEl = document.getElementById('members-stat-admin');
+    if (adminEl) adminEl.textContent = adminCount;
+    const spEl = document.getElementById('members-stat-sp');
+    if (spEl) spEl.textContent = spCount;
+    const sEl = document.getElementById('members-stat-s');
+    if (sEl) sEl.textContent = sCount;
+    const aEl = document.getElementById('members-stat-a');
+    if (aEl) aEl.textContent = aCount;
+    const cEl = document.getElementById('members-stat-c');
+    if (cEl) cEl.textContent = cCount;
+
+    // Actualizar números de píldoras de filtro
+    const pillAll = document.getElementById('count-members-all');
+    if (pillAll) pillAll.textContent = totalCount;
+    const pillAdmin = document.getElementById('count-members-admin');
+    if (pillAdmin) pillAdmin.textContent = adminCount;
+    const pillSp = document.getElementById('count-members-sp');
+    if (pillSp) pillSp.textContent = spCount;
+    const pillS = document.getElementById('count-members-s');
+    if (pillS) pillS.textContent = sCount;
+    const pillA = document.getElementById('count-members-a');
+    if (pillA) pillA.textContent = aCount;
+    const pillC = document.getElementById('count-members-c');
+    if (pillC) pillC.textContent = cCount;
+
+    renderDiscordMembers(currentMembersRoleFilter || 'all', currentMembersSearchQuery || '');
+}
+
+function renderDiscordMembers(filterRole = 'all', searchQuery = '') {
+    const tbody = document.getElementById('tbody-discord-members');
+    if (!tbody || typeof DISCORD_MEMBERS_DATA === 'undefined') return;
+
+    let filtered = DISCORD_MEMBERS_DATA.slice();
+
+    if (filterRole && filterRole !== 'all') {
+        filtered = filtered.filter(m => m.roleCategory === filterRole);
+    }
+
+    if (searchQuery && searchQuery.trim() !== '') {
+        const q = searchQuery.toLowerCase().trim();
+        filtered = filtered.filter(m =>
+            m.name.toLowerCase().includes(q) ||
+            m.username.toLowerCase().includes(q) ||
+            m.role.toLowerCase().includes(q) ||
+            (m.joinMethod && m.joinMethod.toLowerCase().includes(q))
+        );
+    }
+
+    tbody.innerHTML = '';
+
+    if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 30px; font-family: var(--font-racing); font-size: 16px;">No se encontraron miembros para el criterio de búsqueda.</td></tr>`;
+        return;
+    }
+
+    filtered.forEach((m, idx) => {
+        const tr = document.createElement('tr');
+        tr.className = 'blacklist-row';
+
+        let rankBadgeClass = 'rank-normal';
+        if (m.roleCategory === 'admin') rankBadgeClass = 'rank-gold';
+        else if (m.roleCategory === 'rank-sp') rankBadgeClass = 'rank-gold';
+        else if (m.roleCategory === 'rank-s') rankBadgeClass = 'rank-silver';
+        else if (m.roleCategory === 'rank-a') rankBadgeClass = 'rank-bronze';
+        else if (m.roleCategory === 'rank-c') rankBadgeClass = 'rank-normal';
+
+        const initialLetter = m.name ? m.name.replace(/[^a-zA-Z0-9]/g, '').charAt(0).toUpperCase() || 'M' : 'M';
+        const extraRolesHTML = m.extraRoles ? `<span class="extra-roles-tag">${m.extraRoles}</span>` : '';
+        const joinMethodHTML = (m.joinMethod && m.joinMethod !== 'Desconocido')
+            ? `<span class="join-method-tag">🔗 ${m.joinMethod}</span>`
+            : `<span style="color: var(--text-dimmed); font-size: 12px; font-style: italic;">Desconocido</span>`;
+
+        tr.innerHTML = `
+            <td>
+                <span class="bl-rank-badge ${rankBadgeClass}">${idx + 1}</span>
+            </td>
+            <td>
+                <div class="member-cell-flex">
+                    <div class="member-avatar-badge role-${m.roleCategory}">${initialLetter}</div>
+                    <div class="driver-cell-flex">
+                        <span class="driver-cell-name">${m.name}</span>
+                        <span style="font-family: var(--font-mono); font-size: 11px; color: var(--text-dimmed);">@${m.username}</span>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <span class="discord-role-pill role-${m.roleCategory}">● ${m.role} ${extraRolesHTML}</span>
+            </td>
+            <td>
+                <span style="font-family: var(--font-ui); font-size: 13px; color: #ffffff;">${m.memberSince}</span>
+            </td>
+            <td>
+                <span style="font-family: var(--font-ui); font-size: 13px; color: var(--text-muted);">${m.discordSince}</span>
+            </td>
+            <td>
+                ${joinMethodHTML}
+            </td>
+            <td>
+                <span class="champ-group-tag" style="color: var(--green-neon); background: rgba(0, 255, 136, 0.1); border-color: rgba(0, 255, 136, 0.3); font-weight: 700;">● Activo</span>
+            </td>
+        `;
+
+        tbody.appendChild(tr);
+    });
+}
+
+function setMemberRoleFilter(role, btn) {
+    currentMembersRoleFilter = role;
+    document.querySelectorAll('.controls-wrapper .filter-btn').forEach(b => {
+        if (b.id && b.id.startsWith('filter-members-')) {
+            b.classList.remove('active');
+        }
+    });
+    if (btn) btn.classList.add('active');
+    renderDiscordMembers(currentMembersRoleFilter, currentMembersSearchQuery);
+}
+
+function filterDiscordMembers() {
+    const input = document.getElementById('members-search-input');
+    currentMembersSearchQuery = input ? input.value : '';
+    renderDiscordMembers(currentMembersRoleFilter, currentMembersSearchQuery);
+}
+
+// =======================================================
+// SECCIÓN DE GUÍAS & TUNING DE RENDIMIENTO (10 AUTOS OFICIALES)
+// =======================================================
+let currentTuningDrivetrainFilter = 'all';
+let currentTuningSearchQuery = '';
+
+function initTuningSection() {
+    if (typeof TUNING_CARS_DATA === 'undefined') return;
+
+    // Actualizar contadores de tracción en la barra de filtros
+    const totalCount = TUNING_CARS_DATA.length;
+    const rwdCount = TUNING_CARS_DATA.filter(c => c.drivetrain === 'RWD').length;
+    const awdCount = TUNING_CARS_DATA.filter(c => c.drivetrain === 'AWD').length;
+    const fwdCount = TUNING_CARS_DATA.filter(c => c.drivetrain === 'FWD').length;
+
+    const elAll = document.getElementById('count-tuning-all');
+    if (elAll) elAll.textContent = totalCount;
+    const elRwd = document.getElementById('count-tuning-rwd');
+    if (elRwd) elRwd.textContent = rwdCount;
+    const elAwd = document.getElementById('count-tuning-awd');
+    if (elAwd) elAwd.textContent = awdCount;
+    const elFwd = document.getElementById('count-tuning-fwd');
+    if (elFwd) elFwd.textContent = fwdCount;
+
+    renderTuningGuides(currentTuningDrivetrainFilter, currentTuningSearchQuery);
+}
+
+function renderTuningGuides(drivetrainFilter = 'all', searchQuery = '') {
+    const container = document.getElementById('tuning-cars-container');
+    if (!container || typeof TUNING_CARS_DATA === 'undefined') return;
+
+    let filtered = TUNING_CARS_DATA.slice();
+
+    if (drivetrainFilter && drivetrainFilter !== 'all') {
+        filtered = filtered.filter(c => c.drivetrain === drivetrainFilter);
+    }
+
+    if (searchQuery && searchQuery.trim() !== '') {
+        const q = searchQuery.toLowerCase().trim();
+        filtered = filtered.filter(c =>
+            c.name.toLowerCase().includes(q) ||
+            (c.badge && c.badge.toLowerCase().includes(q)) ||
+            c.drivetrain.toLowerCase().includes(q) ||
+            (c.drivetrainLabel && c.drivetrainLabel.toLowerCase().includes(q)) ||
+            (c.engine && c.engine.toLowerCase().includes(q)) ||
+            (c.description && c.description.toLowerCase().includes(q)) ||
+            (c.trackSpecialty && c.trackSpecialty.toLowerCase().includes(q)) ||
+            (c.proTips && c.proTips.toLowerCase().includes(q))
+        );
+    }
+
+    container.innerHTML = '';
+
+    if (filtered.length === 0) {
+        container.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 50px 20px; font-family: var(--font-racing); font-size: 16px; background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); border-radius: 12px;">
+                🏎️ No se encontraron configuraciones de tuning para el criterio de búsqueda seleccionado.
+            </div>
+        `;
+        return;
+    }
+
+    filtered.forEach(car => {
+        const card = document.createElement('div');
+        card.className = 'tuning-car-card';
+
+        // Helper para renderizar filas de sliders con centro en 50%
+        const renderSliderRow = (key, labelKey, fallbackLabel, val, expl) => {
+            let leftPct = 50;
+            let widthPct = 0;
+            let valColor = '#ffffff';
+
+            if (val > 0) {
+                widthPct = (val / 5) * 50;
+                leftPct = 50;
+                valColor = 'var(--nfs-orange)';
+            } else if (val < 0) {
+                const absVal = Math.abs(val);
+                widthPct = (absVal / 5) * 50;
+                leftPct = 50 - widthPct;
+                valColor = 'var(--cyan-electric)';
+            } else {
+                widthPct = 0;
+                leftPct = 50;
+                valColor = '#cbd5e1';
+            }
+
+            const displayVal = val > 0 ? `+${val}` : `${val}`;
+
+            return `
+                <div class="tuning-slider-row" title="${expl || ''}">
+                    <span class="tuning-slider-label" data-i18n="${labelKey}">${fallbackLabel}</span>
+                    <div class="tuning-slider-track">
+                        <div class="tuning-slider-center-line"></div>
+                        <div class="tuning-slider-fill" style="left: ${leftPct}%; width: ${widthPct}%;"></div>
+                    </div>
+                    <span class="tuning-slider-num" style="color: ${valColor};">${displayVal}</span>
+                </div>
+            `;
+        };
+
+        const setup = car.tuningSetup || {};
+        const expl = car.sliderExplanations || {};
+
+        const slidersHTML = `
+            ${renderSliderRow('steering', 'tuning_slider_steering', 'Dirección', setup.steering || 0, expl.steering)}
+            ${renderSliderRow('handling', 'tuning_slider_handling', 'Manejo', setup.handling || 0, expl.handling)}
+            ${renderSliderRow('brakes', 'tuning_slider_brakes', 'Frenos', setup.brakes || 0, expl.brakes)}
+            ${renderSliderRow('rideHeight', 'tuning_slider_ride_height', 'Altura', setup.rideHeight || 0, expl.rideHeight)}
+            ${renderSliderRow('aerodynamics', 'tuning_slider_aerodynamics', 'Aerodinámica', setup.aerodynamics || 0, expl.aerodynamics)}
+            ${renderSliderRow('nitrous', 'tuning_slider_nitrous', 'Nitro (NOS)', setup.nitrous || 0, expl.nitrous)}
+            ${renderSliderRow('turboSupercharger', 'tuning_slider_turbo', 'Turbo / Superc.', setup.turboSupercharger || 0, expl.turboSupercharger)}
+        `;
+
+        card.innerHTML = `
+            <div class="tuning-card-media">
+                <img src="${car.image}" alt="${car.name}" loading="lazy" class="tuning-car-img" onerror="this.style.opacity='0.4'">
+                <div class="tuning-car-badge">${car.badge}</div>
+                <div class="tuning-drivetrain-tag">${car.drivetrain}</div>
+                <div class="tuning-media-overlay">
+                    <div>
+                        <h3 class="tuning-car-name">${car.name}</h3>
+                        <div class="tuning-car-engine">${car.engine}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="tuning-card-body">
+                <div class="tuning-specs-strip">
+                    <div class="spec-strip-item">
+                        <span class="spec-strip-label" data-i18n="tuning_spec_power">POTENCIA</span>
+                        <span class="spec-strip-val">${car.power}</span>
+                    </div>
+                    <div class="spec-strip-item">
+                        <span class="spec-strip-label" data-i18n="tuning_spec_top_speed">VEL. MÁXIMA</span>
+                        <span class="spec-strip-val">${car.topSpeed}</span>
+                    </div>
+                    <div class="spec-strip-item">
+                        <span class="spec-strip-label" data-i18n="tuning_spec_weight">PESO</span>
+                        <span class="spec-strip-val">${car.weight}</span>
+                    </div>
+                </div>
+
+                <p class="tuning-desc-text">${car.description}</p>
+
+                <div class="tuning-sliders-box">
+                    <div class="tuning-box-title">
+                        <span>⚙️</span> <span data-i18n="tuning_setup_title">SETUP DE PERFORMANCE (PAUSA > PERFORMANCE)</span>
+                    </div>
+                    ${slidersHTML}
+                </div>
+
+                <div class="tuning-protip-box">
+                    <strong data-i18n="tuning_protip_title">CONSEJO DE CONDUCCIÓN PROFESIONAL:</strong>
+                    <div>${car.proTips}</div>
+                </div>
+            </div>
+        `;
+
+        container.appendChild(card);
+    });
+}
+
+function setTuningDrivetrainFilter(drivetrain, btn) {
+    currentTuningDrivetrainFilter = drivetrain;
+    document.querySelectorAll('#view-guides .filter-btn').forEach(b => {
+        b.classList.remove('active');
+    });
+    if (btn) btn.classList.add('active');
+    renderTuningGuides(currentTuningDrivetrainFilter, currentTuningSearchQuery);
+}
+
+function filterTuningCars() {
+    const input = document.getElementById('tuning-search-input');
+    currentTuningSearchQuery = input ? input.value : '';
+    renderTuningGuides(currentTuningDrivetrainFilter, currentTuningSearchQuery);
+}
+
+// =======================================================
 // INICIALIZACIÓN UNIFICADA (DOMContentLoaded)
 // =======================================================
 window.addEventListener('DOMContentLoaded', () => {
@@ -3379,7 +3711,13 @@ window.addEventListener('DOMContentLoaded', () => {
     // 7. Renderizado del Buscador Oficial de Pilotos
     renderDriverSearchUI('search-driver-wrapper');
 
-    // 8. Ejecución diferida en segundo plano para tablas globales y Hall of Fame
+    // 8. Inicializar Sección Oficial de Miembros de Discord
+    initMembersSection();
+
+    // 9. Inicializar Sección Oficial de Guías & Tuning
+    initTuningSection();
+
+    // 10. Ejecución diferida en segundo plano para tablas globales y Hall of Fame
     setTimeout(() => {
         generateHallOfFame();
         generateGlobalLeaderboards();
@@ -3409,6 +3747,12 @@ window.addEventListener('nfs:languageChanged', (e) => {
     }
     if (typeof currentPastTournamentKey !== 'undefined' && typeof renderPastTournament === 'function') {
         renderPastTournament(currentPastTournamentKey);
+    }
+    if (typeof renderDiscordMembers === 'function') {
+        renderDiscordMembers(currentMembersRoleFilter, currentMembersSearchQuery);
+    }
+    if (typeof renderTuningGuides === 'function') {
+        renderTuningGuides(currentTuningDrivetrainFilter, currentTuningSearchQuery);
     }
 });
 

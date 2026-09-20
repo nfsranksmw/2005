@@ -151,18 +151,15 @@
                     <span class="dropdown-arrow">▾</span>
                 </button>
                 <div class="nav-dropdown-content">
-                    <a href="#" onclick="switchView('guides'); closeAllDropdowns();" id="nav-guides" data-i18n="nav_guides">Guías & Tuning</a>
-                    <a href="#" onclick="switchView('rules'); closeAllDropdowns();" id="nav-rules" data-i18n="nav_rules">Rules & Norm</a>
+                    <a href="#" onclick="switchView('guides'); closeAllDropdowns();" id="nav-guides" data-i18n="nav_guides">⚙️ Guías & Tuning</a>
+                    <a href="#" onclick="switchView('rules'); closeAllDropdowns();" id="nav-rules" data-i18n="nav_rules">📋 Reglas & Normas</a>
                     <a href="#" onclick="switchView('driverprofile'); closeAllDropdowns();" id="nav-driverprofile" data-i18n="nav_search_driver">🔍 Search Driver</a>
                     <a href="#" onclick="switchView('submit'); closeAllDropdowns();" id="nav-submit" data-i18n="nav_submit_time">🚀 Enviar Tiempo</a>
                     <a href="#" onclick="switchView('download'); closeAllDropdowns();" id="nav-dropdown-download" data-i18n="nav_dropdown_download">📥 Download ISO</a>
                     <a href="#" onclick="switchView('map'); closeAllDropdowns();" id="nav-dropdown-map" data-i18n="nav_dropdown_map">🗺️ Rockport Map Live</a>
+                    <a href="#" onclick="switchView('members'); closeAllDropdowns();" id="nav-dropdown-members" data-i18n="nav_dropdown_members">👥 Miembros Discord</a>
                 </div>
             </div>
-
-            <!-- Pestañas Directas -->
-            <a href="#" onclick="switchView('download')" id="nav-download" data-i18n="nav_download">Download</a>
-            <a href="#" onclick="switchView('map')" id="nav-map" data-i18n="nav_map">🗺️ Map Live</a>
         </nav>
 
         <!-- Selector de Idioma / Multilingual System (Top Right) -->
@@ -1552,16 +1549,36 @@
         <!-- SECCIÓN: GUÍAS Y TUNING -->
         <section id="view-guides" class="view-section">
             <h2 class="section-title">
-                <span>⚙️</span> Guías de Rendimiento <span class="glow">& Tuning de Competición</span>
+                <span>⚙️</span> <span data-i18n="guides_title">Guías de Rendimiento</span> <span class="glow" data-i18n="guides_glow">& Tuning de Competición</span>
             </h2>
-            <div class="news-grid">
-                <div class="news-card">
-                    <h3>⚙️ Guía de Piezas Junkman</h3>
-                    <p style="color: var(--text-muted); line-height: 1.6; font-size: 14px;">Descubre cómo desbloquear y aplicar correctamente las piezas de rendimiento ocultas para ganar valiosas décimas de segundo en las curvas rápidas de Rockport.</p>
+            <p style="color: var(--text-muted); margin-top: -15px; margin-bottom: 25px; font-size: 14px;" data-i18n="guides_subtitle">
+                Setups de telemetría, sliders de ajuste y consejos de conducción para los 10 modelos de autos oficiales de Rockport City.
+            </p>
+
+            <div class="tuning-hub-container">
+                <!-- BARRA DE CONTROLES Y FILTROS DE TUNING -->
+                <div class="controls-wrapper" style="margin-bottom: 25px;">
+                    <input type="text" id="tuning-search-input" class="search-input" placeholder="🔍 Buscar auto por nombre, tracción o categoría..." data-i18n-placeholder="tuning_search_placeholder" onkeyup="filterTuningCars()">
+                    
+                    <div class="filter-bar">
+                        <button class="filter-btn active" id="filter-tuning-all" onclick="setTuningDrivetrainFilter('all', this)">
+                            <span data-i18n="tuning_filter_all">Todos</span> (<span id="count-tuning-all">10</span>)
+                        </button>
+                        <button class="filter-btn" id="filter-tuning-rwd" onclick="setTuningDrivetrainFilter('RWD', this)" style="border-color: rgba(255, 119, 0, 0.4);">
+                            <span style="color: var(--nfs-orange);">🏎️ Tracción Trasera (RWD)</span> (<span id="count-tuning-rwd">6</span>)
+                        </button>
+                        <button class="filter-btn" id="filter-tuning-awd" onclick="setTuningDrivetrainFilter('AWD', this)" style="border-color: rgba(0, 240, 255, 0.4);">
+                            <span style="color: var(--cyan-electric);">⚡ Tracción Total (AWD)</span> (<span id="count-tuning-awd">2</span>)
+                        </button>
+                        <button class="filter-btn" id="filter-tuning-fwd" onclick="setTuningDrivetrainFilter('FWD', this)" style="border-color: rgba(0, 255, 136, 0.4);">
+                            <span style="color: var(--green-neon);">🚗 Tracción Delantera (FWD)</span> (<span id="count-tuning-fwd">2</span>)
+                        </button>
+                    </div>
                 </div>
-                <div class="news-card">
-                    <h3>🏎️ Setups para el BMW M3 GTR</h3>
-                    <p style="color: var(--text-muted); line-height: 1.6; font-size: 14px;">Configuración de aerodinámica, dirección y relación de transmisión ideal para dominar tanto circuitos técnicos como sprints de alta velocidad.</p>
+
+                <!-- CONTENEDOR DINÁMICO DE TARJETAS DE AUTOS -->
+                <div class="tuning-cars-grid" id="tuning-cars-container">
+                    <!-- Generado dinámicamente desde assets/js/app.js y tuning-data.js -->
                 </div>
             </div>
         </section>
@@ -1569,51 +1586,180 @@
         <!-- SECCIÓN: REGLAS Y NORMATIVA -->
         <section id="view-rules" class="view-section">
             <h2 class="section-title">
-                <span>📋</span> Normativa Oficial <span class="glow">// Verificación de Tiempos</span>
+                <span>📋</span> <span data-i18n="rules_title">Normativa Oficial</span> <span class="glow" data-i18n="rules_glow">// Código Deportivo & Verificación</span>
             </h2>
-            <div class="news-card" style="max-width: 840px; margin: 0 auto;">
-                
-                <h3>📋 Rules General</h3>
-                <p style="color: var(--text-muted); line-height: 1.6; font-size: 14px;">Reglamento oficial para NFSRANKSMW.</p>
-                <p style="color: var(--text-muted); line-height: 1.6; font-size: 14px;"><strong style="color: #ffffff;">Moderadores:</strong> Zipper, ZimanX™️</p>
+            <p style="color: var(--text-muted); margin-top: -15px; margin-bottom: 25px; font-size: 14px;" data-i18n="rules_subtitle">
+                Reglamento oficial y obligatorio para la homologación de récords mundiales y participación en torneos de NFSRANKSMW.
+            </p>
 
-                <h3 style="margin-top: 22px;">📋 Reglas Generales</h3>
-                <ul style="color: var(--text-muted); line-height: 1.8; font-size: 14px; padding-left: 20px;"> 
-                    <li>El juego debe ser con las propiedades originales.</li>
-                    <li>Se permite Parche V1.2 y V1.3; los parches V1.4 serán aceptados siempre y cuando no haya ninguna modificación del sonido de los autos, ni se configure el rendimiento de cada auto original del juego.</li>
-                    <li>De los perfiles se pueden editar el nombre y bonus de dinero.</li>
-                    <li>No se permite el uso de Hex para modificar detalles de los autos del perfil del juego.</li>
-                    <li>Se permiten Mods Visuales; los mods de autos no están permitidos en este reglamento.</li>
-                    <li>Se permite usar «código de hamburguesa» para desbloquear todas las partes de Junkman.</li>
-                    <li>Se permite el parche de pantalla ancha, D3D.HD.</li>
-                    <li>Se permite deshabilitar el desenfoque de movimiento en el registro.</li>
-                    <li>Se permite el uso de programas Optimizer y de traductor de idiomas.</li>
-                    <li>Dispositivos de juegos compatibles como mandos, teclados y volantes son permitidos para validar sus tiempos.</li>
-                </ul>
+            <div class="rules-pro-container">
+                <!-- BANNER DE MODERACIÓN OFICIAL -->
+                <div class="rules-moderator-banner">
+                    <div class="rules-moderator-info">
+                        <span class="rules-moderator-icon">🛡️</span>
+                        <div>
+                            <div class="rules-moderator-title" data-i18n="rules_mod_title">COMITÉ OFICIAL DE ARBITRAJE Y HOMOLOGACIÓN</div>
+                            <div class="rules-moderator-sub" data-i18n="rules_mod_sub">Supervisión, telemetría y validación de tiempos de Need for Speed Most Wanted (2005)</div>
+                        </div>
+                    </div>
+                    <div class="rules-mod-badges">
+                        <span class="mod-badge-pill verified">
+                            <span>👑</span> <span>Zipper</span>
+                        </span>
+                        <span class="mod-badge-pill verified">
+                            <span>👑</span> <span>ZimanX™️</span>
+                        </span>
+                    </div>
+                </div>
 
-                <h3 style="margin-top: 22px;">📋 Reglas de Verificación de Tiempos</h3>
-                <ul style="color: var(--text-muted); line-height: 1.8; font-size: 14px; padding-left: 20px;"> 
-                    <li>El piloto usuario del juego debe respetar las normas establecidas para cumplimiento del mismo.</li>
-                    <li>Todos los tiempos que se realicen para los circuitos y sprint deben ser grabados y publicados en YouTube. Estos tiempos pueden estar en modo oculto o público. El nombre del video debe contener: Nombre del juego + nombre de la pista + tiempo realizado + nick del jugador. En la descripción del video se debe al menos publicitar la página NFSRANKSMW.</li>
-                    <li>Los tiempos pueden ser grabados por cualquier grabadora o capturadora de video existente.</li>
-                    <li>En el video del juego de la carrera debe mostrarse el tiempo de forma visible y en formato HD.</li>
-                    <li>El temporizador y el velocímetro deben estar claramente visibles en el video.</li>
-                    <li>En el video debe mostrarse el inicio y final de la carrera para verificación del tiempo.</li>
-                    <li>Se permite el uso de soundtrack en el video de la carrera, pero debe escucharse el sonido del auto y los efectos de sonido.</li>
-                    <li>El enlace del video debe anunciarse a nuestros moderadores para que sea revisado y, una vez validado, será publicado en nuestra tabla LeaderBoard website.</li>
-                    <li>Los tiempos tendrán aproximadamente un lapso no mayor a 7 días para su verificación y publicación, debido a que nuestros moderadores disponen de poco tiempo.</li>
-                </ul>
+                <!-- CUADRÍCULA DE MÓDULOS DE REGLAS -->
+                <div class="rules-cards-grid">
+                    <!-- TARJETA 1: CÓDIGO GENERAL -->
+                    <div class="rule-card-pro accent-cyan">
+                        <div class="rule-card-header">
+                            <div class="rule-header-title">
+                                <span>🏛️</span> <span data-i18n="rules_cat1_title">Propiedades del Juego & Parches</span>
+                            </div>
+                            <span class="rule-status-badge badge-official" data-i18n="rules_badge_official">OFICIAL</span>
+                        </div>
+                        <ul class="rule-items-list">
+                            <li class="rule-item-entry">
+                                <span class="rule-bullet">✅</span>
+                                <div><strong>Integridad Original:</strong> El juego debe ejecutarse con las propiedades y físicas originales de EA Games.</div>
+                            </li>
+                            <li class="rule-item-entry">
+                                <span class="rule-bullet">✅</span>
+                                <div><strong>Parches Admitidos:</strong> Se permite Parche V1.2 y V1.3. Los parches V1.4 son aceptados siempre y cuando no alteren el sonido original ni el rendimiento de los vehículos.</div>
+                            </li>
+                            <li class="rule-item-entry">
+                                <span class="rule-bullet">✅</span>
+                                <div><strong>Perfiles de Usuario:</strong> Se permite editar el nombre de piloto y el dinero/banco inicial para comprar y mejorar piezas.</div>
+                            </li>
+                            <li class="rule-item-entry">
+                                <span class="rule-bullet">❌</span>
+                                <div><strong>Prohibición Hex:</strong> Estrictamente prohibido el uso de editores hexadecimales (Hex Editor) para alterar estadísticas de rendimiento o parámetros de memoria.</div>
+                            </li>
+                            <li class="rule-item-entry">
+                                <span class="rule-bullet">✅</span>
+                                <div><strong>Modificaciones Visuales:</strong> Se permiten mods visuales, Widescreen Fix (D3D.HD) y desactivar el desenfoque de movimiento (Motion Blur) en el registro. No se permiten mods que sustituyan modelos de autos.</div>
+                            </li>
+                            <li class="rule-item-entry">
+                                <span class="rule-bullet">✅</span>
+                                <div><strong>Código Junkman:</strong> Se permite el uso del «código de hamburguesa» (Castrol / Burger King) para desbloquear las piezas de rendimiento Junkman.</div>
+                            </li>
+                            <li class="rule-item-entry">
+                                <span class="rule-bullet">🎮</span>
+                                <div><strong>Periféricos Válidos:</strong> Compatibilidad con Teclado, Mando (Gamepad / Xbox / DualShock) y Volante (Force Feedback).</div>
+                            </li>
+                        </ul>
+                    </div>
 
-                <h3 style="margin-top: 22px;">📋 Reglas Específicas de Categoría</h3>
-                <ul style="color: var(--text-muted); line-height: 1.8; font-size: 14px; padding-left: 20px;">  
-                    <li><strong>Categoría Junkman:</strong> Todos los autos con piezas ultimate y junkman entran en esta categoría sin excepción. Por los momentos en la categoría junkman se establecerá la tabla de clasificación para Nitro Nos, Circuito 1st Lap, Fast Lap y Sprint. La categoría "No Nitro" aún no se compite en este leaderboard. Las vueltas rápidas se toman después de la primera vuelta. En caso de visualizar uso desmedido del nos que induzca a sospecha de hack, el tiempo será analizado y, de comprobarse, se eliminará del leaderboard.</li>
-                    <li><strong>Categoría BMW NO NOS:</strong> Se exige el uso de un solo auto, Bonus BMW M3 GTR (se permite el obtenido en el modo carrera como bonus car). Por los momentos en la categoría BMW M3 GTR se establecerá la tabla de clasificación para No nitro, Circuito 1st Lap, Fast Lap y Sprint. Las carreras BMW M3 GTR NOS no entran en esta categoría. Las vueltas rápidas se toman después de la primera vuelta.</li>
-                    <li><strong>Modo de medición de tiempos:</strong> Los tiempos son tomados con un cronómetro externo (software Avedimux.exe) en formato 00:00.000, desde el momento en que inicia el cronómetro del juego hasta la meta.</li>
-                    <li><strong>Reglas de Timebug:</strong> Se considerará timebug aquellos tiempos donde el margen de error sea mayor a dos fotogramas por segundo (FPS), que equivale a 6 centésimas de segundo; en caso contrario no se considerará timebug. En condiciones de desempate o de tiempos muy cercanos a 10 centésimas de segundo, nuestros moderadores tendrán la obligación de verificar esos tiempos y colocar los tiempos reales tomados con el cronómetro externo Avidemux.</li>
-                    <li><strong>Prueba en Video:</strong> Todo tiempo enviado debe incluir un enlace de YouTube o video completo que muestre la vuelta/ruta desde el inicio hasta la línea de meta.</li>
-                    <li><strong>Sin Hacks / Mods Ilegales:</strong> Se permite el uso de herramientas oficiales de optimización de FPS o parches de resolución, pero queda estrictamente prohibido alterar las físicas del juego o usar speedhacks.</li>
-                    <li><strong>Dispositivo:</strong> Especificar claramente si se utilizó Teclado, Mando (Gamepad) o Volante (Wheel).</li>
-                </ul>
+                    <!-- TARJETA 2: VERIFICACIÓN EN VIDEO -->
+                    <div class="rule-card-pro accent-red">
+                        <div class="rule-card-header">
+                            <div class="rule-header-title">
+                                <span>📹</span> <span data-i18n="rules_cat2_title">Requisitos de Video & YouTube</span>
+                            </div>
+                            <span class="rule-status-badge badge-critical" data-i18n="rules_badge_mandatory">OBLIGATORIO</span>
+                        </div>
+                        <ul class="rule-items-list">
+                            <li class="rule-item-entry">
+                                <span class="rule-bullet">🔴</span>
+                                <div><strong>Subida a YouTube:</strong> Todos los tiempos para Circuitos, Sprints y Drag deben estar grabados y subidos a YouTube (público o no listado / oculto).</div>
+                            </li>
+                            <li class="rule-item-entry">
+                                <span class="rule-bullet">📝</span>
+                                <div><strong>Formato del Título:</strong> El video debe titularse: <code>NFS MW + [Nombre de Pista] + [Tiempo Exacto] + [Nick del Piloto]</code>.</div>
+                            </li>
+                            <li class="rule-item-entry">
+                                <span class="rule-bullet">🌐</span>
+                                <div><strong>Créditos en Descripción:</strong> En la descripción del video se debe incluir el enlace oficial a la comunidad: <code>https://nfsranksmw.github.io/2005/</code>.</div>
+                            </li>
+                            <li class="rule-item-entry">
+                                <span class="rule-bullet">📺</span>
+                                <div><strong>Calidad HD & HUD Completo:</strong> Grabación en formato HD nítido (mínimo 720p / 1080p). El temporizador del juego y el velocímetro deben estar 100% visibles en todo momento.</div>
+                            </li>
+                            <li class="rule-item-entry">
+                                <span class="rule-bullet">🏁</span>
+                                <div><strong>Vuelta Completa:</strong> La grabación debe mostrar el inicio (semáforo / countdown) y el cruce de meta sin cortes ni pausas en medio de la carrera.</div>
+                            </li>
+                            <li class="rule-item-entry">
+                                <span class="rule-bullet">🔊</span>
+                                <div><strong>Audio del Motor Obligatorio:</strong> Se permite música de fondo, pero los efectos de sonido del motor, cambio de marchas y nitro deben ser claramente audibles.</div>
+                            </li>
+                            <li class="rule-item-entry">
+                                <span class="rule-bullet">⏳</span>
+                                <div><strong>Plazo de Homologación:</strong> Plazo estimado de hasta 7 días para revisión y validación oficial en el Leaderboard por parte de los moderadores.</div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- TARJETA 3: CATEGORÍAS DE COMPETICIÓN -->
+                    <div class="rule-card-pro accent-green">
+                        <div class="rule-card-header">
+                            <div class="rule-header-title">
+                                <span>🚗</span> <span data-i18n="rules_cat3_title">Reglamento por Categorías</span>
+                            </div>
+                            <span class="rule-status-badge badge-allowed" data-i18n="rules_badge_categories">CATEGORÍAS</span>
+                        </div>
+                        <ul class="rule-items-list">
+                            <li class="rule-item-entry">
+                                <span class="rule-bullet">⚙️</span>
+                                <div><strong>Categoría Junkman:</strong> Admite todos los vehículos con piezas Ultimate y piezas especiales Junkman sin excepción. Tablas habilitadas para: Nitro NOS, Circuito 1st Lap, Fast Lap y Sprint.</div>
+                            </li>
+                            <li class="rule-item-entry">
+                                <span class="rule-bullet">🏎️</span>
+                                <div><strong>Categoría BMW NO NOS:</strong> Exclusiva para el <em>Bonus BMW M3 GTR</em> (incluyendo el desbloqueado en el Modo Carrera). Prohibido terminantemente el uso de Nitro NOS en esta categoría.</div>
+                            </li>
+                            <li class="rule-item-entry">
+                                <span class="rule-bullet">⏱️</span>
+                                <div><strong>Vueltas Rápidas (Fast Lap):</strong> Las marcas de Fast Lap se computan únicamente a partir de la segunda vuelta en circuitos cerrados (vuelta lanzada).</div>
+                            </li>
+                            <li class="rule-item-entry">
+                                <span class="rule-bullet">🚫</span>
+                                <div><strong>Uso Indebido de Nitro:</strong> El uso desmedido o infinito de NOS será motivo de peritaje técnico de telemetría y expulsión inmediata del récord.</div>
+                            </li>
+                        </ul>
+
+                        <div class="rule-callout-box callout-success">
+                            <span>💡</span>
+                            <div><strong>Rotación de Eventos:</strong> En eventos semanales con autos restrictivos (Porsche Carrera GT, Lotus Elise, Mitsubishi Lancer Evo, etc.) aplican las normativas específicas de Stock / Junkman anunciadas en el calendario.</div>
+                        </div>
+                    </div>
+
+                    <!-- TARJETA 4: PROTOCOLO DE TIEMPOS Y TIMEBUG -->
+                    <div class="rule-card-pro accent-gold">
+                        <div class="rule-card-header">
+                            <div class="rule-header-title">
+                                <span>⏱️</span> <span data-i18n="rules_cat4_title">Medición Oficial & Detección de Timebug</span>
+                            </div>
+                            <span class="rule-status-badge badge-special" data-i18n="rules_badge_telemetry">TELEMETRÍA</span>
+                        </div>
+                        <ul class="rule-items-list">
+                            <li class="rule-item-entry">
+                                <span class="rule-bullet">🔬</span>
+                                <div><strong>Cronómetro Externo (Avidemux):</strong> La verificación de precisión se realiza fotograma a fotograma con el software <code>Avidemux.exe</code> en formato milimétrico <code>00:00.000</code>.</div>
+                            </li>
+                            <li class="rule-item-entry">
+                                <span class="rule-bullet">⚠️</span>
+                                <div><strong>Umbral de Timebug:</strong> Se declara oficialmente <em>Timebug</em> cuando el margen de discrepancia entre el cronómetro del juego y el conteo de frames sea superior a <strong>2 FPS (6 centésimas de segundo)</strong>.</div>
+                            </li>
+                            <li class="rule-item-entry">
+                                <span class="rule-bullet">⚖️</span>
+                                <div><strong>Resolución de Desempates:</strong> En cronos con diferencias menores a 10 centésimas (0.10s), los árbitros calcularán el tiempo real por frames y publicarán el tiempo corregido.</div>
+                            </li>
+                            <li class="rule-item-entry">
+                                <span class="rule-bullet">🛡️</span>
+                                <div><strong>Política Anti-Cheat:</strong> El uso de Speedhacks, trainers, scripts de ralentización o macros de dirección acarreará baneo permanente del servidor y anulación de todos los récords históricos.</div>
+                            </li>
+                        </ul>
+
+                        <div class="rule-callout-box callout-warning">
+                            <span>⚠️</span>
+                            <div><strong>Regla de Oro del Piloto:</strong> Al enviar tu tiempo, especifica con exactitud el periférico empleado (Teclado, Mando o Volante) y el tipo de transmisión (Manual o Automática).</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -2260,6 +2406,127 @@
                 </div>
             </div>
         </section>
+
+        <!-- SECCIÓN: MIEMBROS DE LA COMUNIDAD (DISCORD) -->
+        <section id="view-members" class="view-section">
+            <h2 class="section-title">
+                <span>👥</span> <span data-i18n="members_title">Miembros Oficiales</span> <span class="glow" data-i18n="members_glow">// Comunidad Discord</span>
+            </h2>
+            
+            <p style="color: var(--text-muted); margin-top: -15px; margin-bottom: 25px; font-size: 14px;" data-i18n="members_desc">
+                Directorio oficial de los miembros y pilotos de la comunidad de Discord de NFSRANKSMW, organizados por sus roles y rangos competitivos en Rockport City.
+            </p>
+
+            <!-- Barra Superior de Estadísticas de Miembros -->
+            <div class="challenges-summary-bar members-stats-bar">
+                <div class="challenge-summary-item">
+                    <span class="challenge-summary-icon">👥</span>
+                    <div class="challenge-summary-content">
+                        <span class="challenge-summary-label" data-i18n="members_stat_total">TOTAL MIEMBROS</span>
+                        <span class="challenge-summary-val" id="members-stat-total" style="color: #ffffff; font-family: var(--font-mono);">108</span>
+                    </div>
+                </div>
+                <div class="challenge-summary-item">
+                    <span class="challenge-summary-icon">👑</span>
+                    <div class="challenge-summary-content">
+                        <span class="challenge-summary-label" data-i18n="members_stat_admin">ADMIN / STAFF</span>
+                        <span class="challenge-summary-val" id="members-stat-admin" style="color: #ed4245; font-family: var(--font-mono);">1</span>
+                    </div>
+                </div>
+                <div class="challenge-summary-item">
+                    <span class="challenge-summary-icon">💎</span>
+                    <div class="challenge-summary-content">
+                        <span class="challenge-summary-label" data-i18n="members_stat_rank_sp">RANK SP</span>
+                        <span class="challenge-summary-val" id="members-stat-sp" style="color: #eb459e; font-family: var(--font-mono);">11</span>
+                    </div>
+                </div>
+                <div class="challenge-summary-item">
+                    <span class="challenge-summary-icon">🔥</span>
+                    <div class="challenge-summary-content">
+                        <span class="challenge-summary-label" data-i18n="members_stat_rank_s">RANK S</span>
+                        <span class="challenge-summary-val" id="members-stat-s" style="color: #9b59b6; font-family: var(--font-mono);">8</span>
+                    </div>
+                </div>
+                <div class="challenge-summary-item">
+                    <span class="challenge-summary-icon">⚡</span>
+                    <div class="challenge-summary-content">
+                        <span class="challenge-summary-label" data-i18n="members_stat_rank_a">RANK A</span>
+                        <span class="challenge-summary-val" id="members-stat-a" style="color: #38bdf8; font-family: var(--font-mono);">28</span>
+                    </div>
+                </div>
+                <div class="challenge-summary-item">
+                    <span class="challenge-summary-icon">🟢</span>
+                    <div class="challenge-summary-content">
+                        <span class="challenge-summary-label" data-i18n="members_stat_rank_c">RANK C</span>
+                        <span class="challenge-summary-val" id="members-stat-c" style="color: #a3e635; font-family: var(--font-mono);">60</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Barra de Controles y Filtros de Miembros -->
+            <div class="controls-wrapper" style="margin-bottom: 25px;">
+                <input type="text" id="members-search-input" class="search-input" placeholder="🔍 Buscar miembro por nombre, @usuario o rango..." data-i18n-placeholder="members_search_placeholder" onkeyup="filterDiscordMembers()">
+                
+                <div class="filter-bar">
+                    <button class="filter-btn active" id="filter-members-all" onclick="setMemberRoleFilter('all', this)">
+                        <span data-i18n="members_filter_all">Todos</span> (<span id="count-members-all">108</span>)
+                    </button>
+                    <button class="filter-btn" id="filter-members-admin" onclick="setMemberRoleFilter('admin', this)" style="border-color: rgba(237, 66, 69, 0.4);">
+                        <span style="color: #ed4245;">👑 Admin</span> (<span id="count-members-admin">1</span>)
+                    </button>
+                    <button class="filter-btn" id="filter-members-sp" onclick="setMemberRoleFilter('rank-sp', this)" style="border-color: rgba(235, 69, 158, 0.4);">
+                        <span style="color: #eb459e;">💎 Rank SP</span> (<span id="count-members-sp">11</span>)
+                    </button>
+                    <button class="filter-btn" id="filter-members-s" onclick="setMemberRoleFilter('rank-s', this)" style="border-color: rgba(155, 89, 182, 0.4);">
+                        <span style="color: #9b59b6;">🔥 Rank S</span> (<span id="count-members-s">8</span>)
+                    </button>
+                    <button class="filter-btn" id="filter-members-a" onclick="setMemberRoleFilter('rank-a', this)" style="border-color: rgba(56, 189, 248, 0.4);">
+                        <span style="color: #38bdf8;">⚡ Rank A</span> (<span id="count-members-a">28</span>)
+                    </button>
+                    <button class="filter-btn" id="filter-members-c" onclick="setMemberRoleFilter('rank-c', this)" style="border-color: rgba(163, 230, 53, 0.4);">
+                        <span style="color: #a3e635;">🟢 Rank C</span> (<span id="count-members-c">60</span>)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Contenedor Roster de Miembros -->
+            <div class="blacklist-roster-container standings-full-width">
+                <div class="roster-header">
+                    <div>
+                        <h3 style="font-family: var(--font-racing); font-size: 20px; color: #ffffff; margin: 0;">
+                            <span>👥</span> <span data-i18n="members_roster_title">ROSTER OFICIAL DE MIEMBROS DE DISCORD</span>
+                        </h3>
+                        <span style="color: var(--text-muted); font-size: 13px;" data-i18n="members_roster_sub">
+                            Base de datos sincronizada con los roles oficiales de la comunidad NFSRANKSMW
+                        </span>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <a href="https://discord.gg/pgP45wSN8K" target="_blank" rel="noopener noreferrer" class="btn-discord-join" style="padding: 6px 14px; font-size: 12px;">
+                            <span>💬</span> <span data-i18n="discord_btn">UNIRSE A DISCORD</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="table-container blacklist-table-wrapper">
+                    <table class="blacklist-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th data-i18n="members_th_member">Miembro</th>
+                                <th data-i18n="members_th_role">Rango / Rol</th>
+                                <th data-i18n="members_th_since">Miembro Desde</th>
+                                <th data-i18n="members_th_discord_since">Se Unió a Discord</th>
+                                <th data-i18n="members_th_method">Método de Unión</th>
+                                <th data-i18n="members_th_status">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-discord-members">
+                            <!-- Generado dinámicamente desde JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- FOOTER ESTILO FÓRMULA 1 -->
@@ -2279,6 +2546,8 @@
     <script src="assets/js/routes-data.js"></script>
     <script src="assets/js/blacklist-data.js"></script>
     <script src="assets/js/tournaments-data.js"></script>
+    <script src="assets/js/members-data.js"></script>
+    <script src="assets/js/tuning-data.js"></script>
     <script src="assets/js/i18n.js"></script>
     <script src="assets/js/app.js"></script>
 </body>
