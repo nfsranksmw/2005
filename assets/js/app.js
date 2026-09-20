@@ -698,48 +698,56 @@ function renderTableRows(tbodyId, dataRows) {
     dataRows.forEach(row => {
         const tr = document.createElement('tr');
         const rankNum = parseInt(String(row.rank).replace(/[^0-9]/g, ''), 10);
+        const displayRank = !isNaN(rankNum) && rankNum > 0 ? rankNum : (row.rank || '1');
 
         let rankBadgeClass = 'rank-normal';
-        if (rankNum === 1) rankBadgeClass = 'rank-gold';
-        else if (rankNum === 2) rankBadgeClass = 'rank-silver';
-        else if (rankNum === 3) rankBadgeClass = 'rank-bronze';
+        if (displayRank === 1) rankBadgeClass = 'rank-gold';
+        else if (displayRank === 2) rankBadgeClass = 'rank-silver';
+        else if (displayRank === 3) rankBadgeClass = 'rank-bronze';
 
-        let rowHighlightClass = rankNum === 1 ? 'active-row' : '';
+        let rowHighlightClass = displayRank === 1 ? 'active-row' : '';
         tr.className = `blacklist-row ${rowHighlightClass}`;
 
         let videoBtnHTML = (row.yt && row.yt !== "#" && row.yt.startsWith("http"))
-            ? `<a href="${row.yt}" target="_blank" rel="noopener noreferrer" class="btn-yt-link" style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; font-size: 11px; background: rgba(255, 0, 0, 0.15); border: 1px solid rgba(255, 0, 0, 0.4); color: #ff5555; text-decoration: none; border-radius: 4px; font-family: var(--font-racing); font-weight: 700;">▶ Video</a>`
+            ? `<a href="${row.yt}" target="_blank" rel="noopener noreferrer" class="btn-yt-link" style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; font-size: 11px; background: rgba(255, 0, 0, 0.15); border: 1px solid rgba(255, 0, 0, 0.4); color: #ff5555; text-decoration: none; border-radius: 4px; font-family: var(--font-racing); font-weight: 700; transition: all 0.2s ease;">▶ Video</a>`
             : `<span style="color: var(--text-dimmed); font-size: 12px; font-style: italic;">Sin video</span>`;
 
         let aliasTag = '';
-        if (rankNum === 1) aliasTag = '<span class="driver-cell-alias">👑 RECORD MUNDIAL</span>';
-        else if (rankNum === 2) aliasTag = '<span class="driver-cell-alias" style="color: #cbd5e1;">🥈 TOP 2 MUNDIAL</span>';
-        else if (rankNum === 3) aliasTag = '<span class="driver-cell-alias" style="color: #cd7f32;">🥉 TOP 3 MUNDIAL</span>';
+        if (displayRank === 1) aliasTag = '<span class="driver-cell-alias">👑 RECORD MUNDIAL</span>';
+        else if (displayRank === 2) aliasTag = '<span class="driver-cell-alias" style="color: #cbd5e1;">🥈 TOP 2 MUNDIAL</span>';
+        else if (displayRank === 3) aliasTag = '<span class="driver-cell-alias" style="color: #cd7f32;">🥉 TOP 3 MUNDIAL</span>';
         else aliasTag = '<span class="driver-cell-alias" style="color: var(--text-muted); font-size: 10px;">PILOTO OFICIAL</span>';
+
+        const blBadgeClass = displayRank === 1 ? 'bl-badge-gold' : displayRank === 2 ? 'bl-badge-silver' : displayRank === 3 ? 'bl-badge-bronze' : '';
 
         tr.innerHTML = `
             <td>
-                <span class="bl-rank-badge ${rankBadgeClass}">${rankNum || row.rank}</span>
+                <span class="bl-rank-badge ${rankBadgeClass}">${displayRank}</span>
             </td>
             <td>
                 <div class="driver-cell-flex">
-                    <span class="driver-cell-name">${row.driver}</span>
-                    ${aliasTag}
+                    <div class="driver-names-row">
+                        <span class="driver-cell-name">${row.driver}</span>
+                        ${aliasTag}
+                    </div>
+                    <div class="driver-bl-sublabel ${blBadgeClass}">
+                        <span class="bl-word-white">Blacklist</span> <span class="bl-num-accent">${displayRank}</span>
+                    </div>
                 </div>
             </td>
             <td>
-                <span class="rep-money-cell" style="font-size: 15px; text-shadow: 0 0 10px rgba(34, 197, 94, 0.35);">${row.time}</span>
+                <span class="rep-money-cell" style="font-size: 15px; text-shadow: 0 0 10px rgba(0, 255, 136, 0.45); font-family: var(--font-mono); font-weight: 800;">${row.time}</span>
             </td>
             <td>
-                <span style="color: #ffffff; font-weight: 700; font-size: 13px;">${row.car}</span>
+                <span style="color: #ffffff; font-weight: 700; font-size: 13px; letter-spacing: 0.3px;">${row.car}</span>
             </td>
             <td>
-                <span class="champ-group-tag" style="color: #38bdf8; background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3);">🎮 ${row.device}</span>
+                <span class="champ-group-tag" style="color: #38bdf8; background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3); font-family: var(--font-racing); font-weight: 700; letter-spacing: 0.5px;">🎮 ${row.device || 'PC'}</span>
             </td>
             <td>
-                <span class="champ-group-tag" style="color: #ffd700; background: rgba(255, 215, 0, 0.1); border-color: rgba(255, 215, 0, 0.3);">⚙️ ${row.gearbox}</span>
+                <span class="champ-group-tag" style="color: #ffd700; background: rgba(255, 215, 0, 0.1); border-color: rgba(255, 215, 0, 0.3); font-family: var(--font-racing); font-weight: 700; letter-spacing: 0.5px;">⚙️ ${row.gearbox || 'Manual'}</span>
             </td>
-            <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 12px;">${row.date}</td>
+            <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 12px;">${row.date || '--'}</td>
             <td>${videoBtnHTML}</td>
         `;
         tbody.appendChild(tr);
@@ -1701,14 +1709,14 @@ function generateWeeklyChallenges(year, week) {
     const shuffledRoutes = [...sourceRoutes].sort(() => rng() - 0.5);
 
     const carRestrictions = [
-        "Solo BMW M3 GTR (Sin Nitro)",
-        "Porsche Carrera GT",
-        "Porsche Cayman S",
-        "Chevrolet Corvette C6.R",
-        "BMW M3 GTR",
-        "Cualquier Auto (Junkman)",
-        "Subaru Impreza WRX",
-        "Mitsubishi Lancer Evo VIII"
+        "BMW M3 GTR (Auto Bonus)",
+        "Porsche Carrera GT (Junkman)",
+        "Porsche Cayman S (No Junkman)",
+        "Chevrolet Corvette C6.R (Stock)",
+        "Fiat Punto (Stock)",
+        "Mazda RX-8 (No Junkman)",
+        "Subaru Impreza WRX (Stock)",
+        "Mitsubishi Lancer Evo VIII (No Junkman)"
     ];
 
     const challenges = [];
@@ -2099,7 +2107,7 @@ function renderChampionshipChallenges(weekNumber) {
                         ${repBadgeText ? `<span class="badge-rep-money">${repBadgeText}</span>` : ''}
                         <div>
                             <span style="font-weight: 700; color: #ffffff;">${t.pilot}</span>
-                            <span style="color: var(--text-muted); font-size: 11px; margin-left: 4px;">(${t.car})</span>
+                            <span style="color: var(--text-muted); font-size: 11px; margin-left: 4px;">• ${t.car}</span>
                         </div>
                     </div>
                     <span style="font-family: var(--font-mono); font-weight: 700; color: var(--cyan-electric); font-size: 13px;">${t.time}</span>
@@ -2131,15 +2139,119 @@ function renderChampionshipChallenges(weekNumber) {
     });
 }
 
+/**
+ * Retorna los pilotos de la Blacklist ordenados dinámicamente según la Clasificación General del Campeonato.
+ * Criterio: Puntos Totales Descendente -> Victorias P1 -> Mejores Tiempos 1° -> Dinero de Reputación -> Rango Base.
+ */
+function getSortedBlacklistDrivers() {
+    return [...blacklistDrivers].sort((a, b) => {
+        const ptsA = calculateDriverPoints(a);
+        const ptsB = calculateDriverPoints(b);
+        if (ptsB !== ptsA) return ptsB - ptsA;
+
+        // Desempate 1: Victorias P1
+        const p1A = a.victories?.p1 || 0;
+        const p1B = b.victories?.p1 || 0;
+        if (p1B !== p1A) return p1B - p1A;
+
+        // Desempate 2: Bonos de 1° mejor tiempo (+100 PTS)
+        const bt1A = a.bestTimes?.first || 0;
+        const bt1B = b.bestTimes?.first || 0;
+        if (bt1B !== bt1A) return bt1B - bt1A;
+
+        // Desempate 3: Dinero de Reputación ($ REP)
+        const repA = a.rep || 0;
+        const repB = b.rep || 0;
+        if (repB !== repA) return repB - repA;
+
+        // Desempate 4: Rango inicial
+        return (a.rank || 99) - (b.rank || 99);
+    });
+}
+
+/**
+ * Sincroniza e indexa las Fichas Técnicas y la Clasificación General con los ganadores de los desafíos
+ * de las rotaciones semanales (CHAMPIONSHIP_WEEKS_DATA) o datos en vivo de competición.
+ */
+function syncBlacklistWithRotationsAndStandings() {
+    if (typeof CHAMPIONSHIP_WEEKS_DATA === 'undefined') return;
+
+    Object.keys(CHAMPIONSHIP_WEEKS_DATA).forEach(weekKey => {
+        const weekData = CHAMPIONSHIP_WEEKS_DATA[weekKey];
+        if (!weekData || !weekData.challenges) return;
+
+        weekData.challenges.forEach(ch => {
+            if (!ch.top3 || !Array.isArray(ch.top3)) return;
+            ch.top3.forEach(t => {
+                const driver = blacklistDrivers.find(d => d.rank === t.rank || (d.alias && t.pilot && d.alias.toLowerCase() === t.pilot.toLowerCase()));
+                if (driver) {
+                    driver.lastChallengeId = ch.id;
+                }
+            });
+        });
+    });
+
+    renderBlacklistUI();
+    renderAllTacticalCards();
+    updateBlacklistTacticalCard();
+    renderPilotQuickJumpPills();
+    saveBlacklistData();
+}
+
+/**
+ * Permite registrar o actualizar en tiempo real el resultado de un piloto en un desafío,
+ * recalculando automáticamente la Clasificación General y re-indexando las Fichas Técnicas.
+ */
+function updatePilotScoreFromChallenge(pilotIdentifier, placement, bonusPts = 0, repMoney = 0) {
+    const driver = blacklistDrivers.find(d => 
+        d.rank === pilotIdentifier || 
+        (d.alias && typeof pilotIdentifier === 'string' && d.alias.toLowerCase() === pilotIdentifier.toLowerCase()) ||
+        (d.name && typeof pilotIdentifier === 'string' && d.name.toLowerCase() === pilotIdentifier.toLowerCase())
+    );
+
+    if (!driver) {
+        console.warn(`[NFSRANKSMW] Piloto no encontrado para actualizar puntaje: ${pilotIdentifier}`);
+        return false;
+    }
+
+    if (!driver.victories) driver.victories = { p1: 0, p2: 0, p3: 0, p4: 0 };
+    if (!driver.bestTimes) driver.bestTimes = { first: 0, second: 0, third: 0 };
+
+    if (placement === 1) {
+        driver.victories.p1 = (driver.victories.p1 || 0) + 1;
+        if (bonusPts >= 100) driver.bestTimes.first = (driver.bestTimes.first || 0) + 1;
+    } else if (placement === 2) {
+        driver.victories.p2 = (driver.victories.p2 || 0) + 1;
+        if (bonusPts >= 50) driver.bestTimes.second = (driver.bestTimes.second || 0) + 1;
+    } else if (placement === 3) {
+        driver.victories.p3 = (driver.victories.p3 || 0) + 1;
+        if (bonusPts >= 20) driver.bestTimes.third = (driver.bestTimes.third || 0) + 1;
+    } else if (placement === 4) {
+        driver.victories.p4 = (driver.victories.p4 || 0) + 1;
+    }
+
+    if (repMoney > 0) {
+        driver.rep = (driver.rep || 0) + repMoney;
+    }
+
+    saveBlacklistData();
+    renderBlacklistUI();
+    renderAllTacticalCards();
+    updateBlacklistTacticalCard();
+    renderPilotQuickJumpPills();
+
+    return true;
+}
+
 function renderBlacklistUI() {
     const tbody = document.getElementById('tbody-blacklist-roster');
     if (!tbody) return;
 
-    // Ordenar de arriba a abajo por rango (1 al 15)
-    blacklistDrivers.sort((a, b) => a.rank - b.rank);
+    // Ordenar dinámicamente según la Clasificación General del Campeonato (Puntos y Desempates)
+    const sortedDrivers = getSortedBlacklistDrivers();
 
-    // Actualizar barra de resumen
-    const leader = blacklistDrivers[0] || { name: 'Razor', alias: 'Razor', ride: 'BMW M3 GTR' };
+    // Actualizar barra de resumen con el líder real actual
+    const leader = sortedDrivers[0] || { name: 'Razor', alias: 'Razor', ride: 'BMW M3 GTR' };
     const leaderEl = document.getElementById('bl-summary-leader');
     if (leaderEl) {
         leaderEl.textContent = `${leader.alias || leader.name} (${leader.ride})`;
@@ -2161,32 +2273,39 @@ function renderBlacklistUI() {
 
     tbody.innerHTML = '';
 
-    blacklistDrivers.forEach(driver => {
+    sortedDrivers.forEach((driver, idx) => {
+        const standingRank = idx + 1;
         const tr = document.createElement('tr');
         tr.className = `blacklist-row ${driver.rank === currentSelectedBlacklistRank ? 'active-row' : ''}`;
         tr.onclick = () => selectBlacklistPilot(driver.rank);
 
         let rankBadgeClass = 'rank-normal';
-        if (driver.rank === 1) rankBadgeClass = 'rank-gold';
-        else if (driver.rank === 2) rankBadgeClass = 'rank-silver';
-        else if (driver.rank === 3) rankBadgeClass = 'rank-bronze';
+        if (standingRank === 1) rankBadgeClass = 'rank-gold';
+        else if (standingRank === 2) rankBadgeClass = 'rank-silver';
+        else if (standingRank === 3) rankBadgeClass = 'rank-bronze';
 
         let statusClass = 'status-active';
-        if (driver.rank === 1) statusClass = 'status-leader';
-        else if (driver.rank <= 3) statusClass = 'status-contender';
+        if (standingRank === 1) statusClass = 'status-leader';
+        else if (standingRank <= 3) statusClass = 'status-contender';
 
         const totalPts = calculateDriverPoints(driver);
         const groupName = getDriverGroupForWeek(driver.rank, currentChampionshipWeek);
         const bt = driver.bestTimes || { first: 0, second: 0, third: 0 };
+        const blBadgeClass = standingRank === 1 ? 'bl-badge-gold' : standingRank === 2 ? 'bl-badge-silver' : standingRank === 3 ? 'bl-badge-bronze' : '';
 
         tr.innerHTML = `
             <td>
-                <span class="bl-rank-badge ${rankBadgeClass}">${driver.rank}</span>
+                <span class="bl-rank-badge ${rankBadgeClass}">${standingRank}</span>
             </td>
             <td>
                 <div class="driver-cell-flex">
-                    <span class="driver-cell-name">${driver.name}</span>
-                    <span class="driver-cell-alias">"${driver.alias}"</span>
+                    <div class="driver-names-row">
+                        <span class="driver-cell-name">${driver.name}</span>
+                        <span class="driver-cell-alias">"${driver.alias}"</span>
+                    </div>
+                    <div class="driver-bl-sublabel ${blBadgeClass}">
+                        <span class="bl-word-white">Blacklist</span> <span class="bl-num-accent">${standingRank}</span>
+                    </div>
                 </div>
             </td>
             <td>
@@ -2213,7 +2332,7 @@ function renderBlacklistUI() {
                 <span class="champ-group-tag">${groupName}</span>
             </td>
             <td>
-                <span class="status-badge ${statusClass}">${driver.status || 'ACTIVO'}</span>
+                <span class="status-badge ${statusClass}">${standingRank === 1 ? '👑 LÍDER #1' : driver.status || 'ACTIVO'}</span>
             </td>
         `;
 
@@ -2250,8 +2369,11 @@ function selectBlacklistPilot(rank) {
 }
 
 function updateBlacklistTacticalCard() {
-    const driver = blacklistDrivers.find(d => d.rank === currentSelectedBlacklistRank) || blacklistDrivers[0];
+    const sorted = getSortedBlacklistDrivers();
+    const driver = blacklistDrivers.find(d => d.rank === currentSelectedBlacklistRank) || sorted[0];
     if (!driver) return;
+
+    const currentStandingRank = sorted.findIndex(d => d.rank === driver.rank) + 1;
 
     const numEl = document.getElementById('bl-detail-number');
     const nameEl = document.getElementById('bl-detail-name');
@@ -2273,8 +2395,8 @@ function updateBlacklistTacticalCard() {
     const groupName = getDriverGroupForWeek(driver.rank, currentChampionshipWeek);
     const bt = driver.bestTimes || { first: 0, second: 0, third: 0 };
 
-    if (numEl) numEl.textContent = `blacklist ${driver.rank}`;
-    if (nameEl) nameEl.textContent = `${driver.name} ${driver.alias}`;
+    if (numEl) numEl.textContent = `Blacklist ${currentStandingRank}`;
+    if (nameEl) nameEl.textContent = `${driver.name} "${driver.alias}"`;
     if (rideEl) rideEl.textContent = driver.ride;
     if (strEl) strEl.textContent = driver.strength;
     if (groupEl) groupEl.textContent = `${groupName} (Semana ${currentChampionshipWeek})`;
@@ -2297,12 +2419,13 @@ function renderAllTacticalCards() {
     const container = document.getElementById('blacklist-cards-grid');
     if (!container) return;
 
-    // Ordenar explícitamente en orden del 1 al 15
-    const sorted = [...blacklistDrivers].sort((a, b) => a.rank - b.rank);
+    // Ordenar explícitamente según la Clasificación General del Campeonato (1 al 15+)
+    const sorted = getSortedBlacklistDrivers();
 
     container.innerHTML = '';
 
-    sorted.forEach(driver => {
+    sorted.forEach((driver, idx) => {
+        const currentStandingRank = idx + 1;
         const totalPts = calculateDriverPoints(driver);
         const groupName = getDriverGroupForWeek(driver.rank, currentChampionshipWeek);
         const bt = driver.bestTimes || { first: 0, second: 0, third: 0 };
@@ -2315,7 +2438,7 @@ function renderAllTacticalCards() {
         card.innerHTML = `
             <div class="tactical-card-overlay"></div>
             <div class="tactical-card-header">
-                <div class="blacklist-number-title">blacklist ${driver.rank}</div>
+                <div class="blacklist-number-title">Blacklist ${currentStandingRank}</div>
                 <div class="blacklist-driver-fullname">${driver.name} "${driver.alias}"</div>
             </div>
 
@@ -2420,18 +2543,19 @@ function renderQuickJumpPills() {
     }
 
     container.innerHTML = '';
-    const sorted = [...blacklistDrivers].sort((a, b) => a.rank - b.rank);
-    sorted.forEach(d => {
+    const sorted = getSortedBlacklistDrivers();
+    sorted.forEach((d, idx) => {
+        const standingRank = idx + 1;
         const btn = document.createElement('button');
         btn.className = 'jump-pill';
         btn.onclick = () => scrollToPilotCard(d.rank);
 
         let icon = '';
-        if (d.rank === 1) icon = '👑 ';
-        else if (d.rank === 2) icon = '🥈 ';
-        else if (d.rank === 3) icon = '🥉 ';
+        if (standingRank === 1) icon = '👑 ';
+        else if (standingRank === 2) icon = '🥈 ';
+        else if (standingRank === 3) icon = '🥉 ';
 
-        btn.textContent = `${icon}#${d.rank} ${d.alias || d.name}`;
+        btn.textContent = `${icon}#${standingRank} ${d.alias || d.name}`;
         container.appendChild(btn);
     });
 }

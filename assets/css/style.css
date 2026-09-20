@@ -2545,7 +2545,7 @@ footer strong {
     color: #ffffff;
     text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.9), 0 0 25px rgba(60, 180, 90, 0.5);
     letter-spacing: -1.5px;
-    text-transform: lowercase;
+    text-transform: none;
     line-height: 1;
 }
 
@@ -2854,6 +2854,13 @@ footer strong {
     gap: 2px;
 }
 
+.driver-names-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
 .driver-cell-name {
     font-family: var(--font-racing);
     font-size: 15px;
@@ -2866,6 +2873,65 @@ footer strong {
     color: var(--nfs-orange);
     font-weight: 600;
     letter-spacing: 0.5px;
+}
+
+.driver-bl-sublabel {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--font-racing, 'Rajdhani', sans-serif);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.45));
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    padding: 2px 7px;
+    margin-top: 3px;
+    width: fit-content;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+    transition: all 0.2s ease;
+}
+
+.driver-bl-sublabel .bl-word-white {
+    color: #ffffff !important;
+    font-weight: 900;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.driver-bl-sublabel .bl-num-accent {
+    font-weight: 900;
+    font-family: var(--font-mono, monospace);
+    color: var(--nfs-orange, #ff6600);
+}
+
+.driver-bl-sublabel.bl-badge-gold {
+    border-color: rgba(255, 215, 0, 0.65);
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(0, 0, 0, 0.6));
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.35);
+}
+.driver-bl-sublabel.bl-badge-gold .bl-num-accent {
+    color: #ffd700;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+}
+
+.driver-bl-sublabel.bl-badge-silver {
+    border-color: rgba(226, 232, 240, 0.65);
+    background: linear-gradient(135deg, rgba(226, 232, 240, 0.18), rgba(0, 0, 0, 0.6));
+    box-shadow: 0 0 10px rgba(226, 232, 240, 0.25);
+}
+.driver-bl-sublabel.bl-badge-silver .bl-num-accent {
+    color: #e2e8f0;
+}
+
+.driver-bl-sublabel.bl-badge-bronze {
+    border-color: rgba(205, 127, 50, 0.65);
+    background: linear-gradient(135deg, rgba(205, 127, 50, 0.18), rgba(0, 0, 0, 0.6));
+    box-shadow: 0 0 10px rgba(205, 127, 50, 0.25);
+}
+.driver-bl-sublabel.bl-badge-bronze .bl-num-accent {
+    color: #cd7f32;
 }
 
 .rep-money-cell {
@@ -4608,6 +4674,8 @@ footer strong {
     border: 1px solid var(--border-subtle);
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
     overflow-x: auto;
+    max-height: 680px;
+    overflow-y: auto;
 }
 
 .table-section .blacklist-table {
@@ -4616,14 +4684,18 @@ footer strong {
 }
 
 .table-section .blacklist-table th {
-    background: rgba(15, 23, 34, 0.95);
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: rgba(12, 17, 26, 0.98);
+    backdrop-filter: blur(10px);
     font-family: var(--font-racing);
     font-size: 11px;
-    letter-spacing: 1px;
+    letter-spacing: 1.2px;
     color: var(--text-muted);
     padding: 14px 16px;
     text-transform: uppercase;
-    border-bottom: 2px solid rgba(255, 119, 0, 0.35);
+    border-bottom: 2px solid rgba(255, 119, 0, 0.45);
     text-align: left;
 }
 
@@ -4631,6 +4703,30 @@ footer strong {
     padding: 12px 16px;
     vertical-align: middle;
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.table-section .blacklist-table tr.blacklist-row {
+    transition: all 0.2s ease;
+}
+
+.table-section .blacklist-table tr.blacklist-row:hover {
+    background: rgba(255, 119, 0, 0.08) !important;
+}
+
+.table-section .blacklist-table tr.blacklist-row.active-row {
+    background: rgba(255, 119, 0, 0.12) !important;
+    border-left: 4px solid var(--nfs-orange);
+}
+
+.btn-yt-link {
+    transition: all 0.2s ease;
+}
+
+.btn-yt-link:hover {
+    background: rgba(255, 0, 0, 0.3) !important;
+    border-color: #ff3333 !important;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+    transform: translateY(-1px);
 }
 
 /* ==========================================================================
