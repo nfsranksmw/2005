@@ -156,15 +156,17 @@
                     <a href="#" onclick="switchView('driverprofile'); closeAllDropdowns();" id="nav-driverprofile">🔍 Search Driver</a>
                     <a href="#" onclick="switchView('submit'); closeAllDropdowns();" id="nav-submit">🚀 Enviar Tiempo</a>
                     <a href="#" onclick="switchView('download'); closeAllDropdowns();" id="nav-dropdown-download">📥 Download ISO</a>
+                    <a href="#" onclick="switchView('map'); closeAllDropdowns();" id="nav-dropdown-map">🗺️ Rockport Map Live</a>
                 </div>
             </div>
 
-            <!-- Pestaña Directa: Download -->
+            <!-- Pestañas Directas -->
             <a href="#" onclick="switchView('download')" id="nav-download">Download</a>
+            <a href="#" onclick="switchView('map')" id="nav-map">🗺️ Map Live</a>
         </nav>
 
-        <!-- Widget de Telemetría en Vivo F1 -->
-        <div class="header-telemetry">
+        <!-- Widget de Telemetría en Vivo F1 (Acceso a Rockport Map Live) -->
+        <div class="header-telemetry" onclick="switchView('map')" style="cursor: pointer;" title="Abrir Rockport Map Live">
             <span class="pulse-dot"></span>
             <span>ROCKPORT LIVE</span>
             <span id="telemetry-clock" style="color: var(--nfs-orange);">--:--:--</span>
@@ -1987,6 +1989,216 @@
                         <div class="tip-col">
                             <strong>🏎️ Telemetría en Vivo NFSRANKSMW:</strong>
                             <p>Para torneos oficiales, puedes instalar el mod de telemetría en tiempo real <code>NFSMW_FirebaseBridge.asi</code> para sincronizar tus carreras automáticamente.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================= -->
+        <!-- SECCIÓN: MAPA EN VIVO DE ROCKPORT (ROCKPORT MAP LIVE)   -->
+        <!-- ======================================================= -->
+        <section id="view-map" class="view-section">
+            <div class="map-live-container">
+                <!-- CABECERA HERO MAPA EN VIVO -->
+                <div class="map-hero-banner">
+                    <div class="map-badge-tag">📡 TELEMETRÍA SATELITAL // ROCKPORT CITY GPS</div>
+                    <h1 class="map-main-title">ROCKPORT MAP LIVE</h1>
+                    <p class="map-subtitle">
+                        Mapa geográfico oficial en alta resolución de <strong>Rockport City (2005)</strong>. Explora la topografía, los distritos de <strong>Rosewood</strong>, <strong>Downtown Rockport</strong>, <strong>Camden Beach</strong>, accesos bloqueados y trazados de persecución policial.
+                    </p>
+
+                    <!-- BARRA DE TELEMETRÍA DEL MAPA -->
+                    <div class="map-telemetry-bar">
+                        <div class="map-telemetry-item">
+                            <span class="map-pulse-live"></span>
+                            <span class="telemetry-label">ESTADO SATÉLITE:</span>
+                            <span class="telemetry-val" style="color: var(--green-neon);">ONLINE • COBERTURA 100%</span>
+                        </div>
+                        <div class="map-telemetry-item">
+                            <span class="telemetry-label">COORDENADAS:</span>
+                            <span class="telemetry-val" style="color: #38bdf8;">ROCKPORT METRO (42° 21' N, 71° 04' W)</span>
+                        </div>
+                        <div class="map-telemetry-item">
+                            <span class="telemetry-label">CONDICIÓN POLICIAL:</span>
+                            <span class="telemetry-val" style="color: var(--nfs-orange);">HEAT LEVEL 1 A 5 (ACTIVO)</span>
+                        </div>
+                        <div class="map-telemetry-item">
+                            <span class="telemetry-label">ZONA ACTIVA:</span>
+                            <span class="telemetry-val" id="active-district-indicator" style="color: #ffd700;">TODO EL MAPA (GLOBAL)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONTROLES INTERACTIVOS DEL MAPA -->
+                <div class="map-controls-toolbar">
+                    <div class="map-controls-group">
+                        <button type="button" class="btn-map-control" onclick="zoomMap(0.25)" title="Acercar mapa">
+                            <span>➕</span> Zoom In
+                        </button>
+                        <button type="button" class="btn-map-control" onclick="zoomMap(-0.25)" title="Alejar mapa">
+                            <span>➖</span> Zoom Out
+                        </button>
+                        <button type="button" class="btn-map-control" onclick="resetMapZoom()" title="Restablecer zoom al 100%">
+                            <span>🔄</span> Reset (100%)
+                        </button>
+                        <button type="button" class="btn-map-control" onclick="toggleMapFullscreen()" title="Ver en pantalla completa">
+                            <span>⛶</span> Pantalla Completa
+                        </button>
+                    </div>
+
+                    <!-- SELECTOR RÁPIDO DE DISTRITOS -->
+                    <div class="map-districts-pills">
+                        <span class="pills-label">Sectores:</span>
+                        <button type="button" class="district-pill active" onclick="focusMapDistrict('all', this)">📍 Todo el Mapa</button>
+                        <button type="button" class="district-pill" onclick="focusMapDistrict('rosewood', this)">🌲 Rosewood</button>
+                        <button type="button" class="district-pill" onclick="focusMapDistrict('downtown', this)">🏙️ Downtown</button>
+                        <button type="button" class="district-pill" onclick="focusMapDistrict('camden', this)">🏖️ Camden Beach</button>
+                    </div>
+                </div>
+
+                <!-- CONTENEDOR VISOR DEL MAPA (HUD SATELITAL) -->
+                <div class="map-viewport-wrapper" id="map-viewport-wrapper">
+                    <div class="hud-corner hud-top-left"></div>
+                    <div class="hud-corner hud-top-right"></div>
+                    <div class="hud-corner hud-bottom-left"></div>
+                    <div class="hud-corner hud-bottom-right"></div>
+
+                    <!-- Brújula / Indicador Norte -->
+                    <div class="map-compass-badge">
+                        <span>⬆ NORTH</span>
+                        <small>ROCKPORT SECTOR</small>
+                    </div>
+
+                    <!-- Indicador de Nivel de Zoom -->
+                    <div class="map-zoom-badge" id="map-zoom-level">ZOOM: 100%</div>
+
+                    <!-- Área con Scroll y Zoom -->
+                    <div class="map-pan-container" id="map-pan-container">
+                        <img src="assets/img/rockport-map-live.jpg" id="rockport-map-img" alt="Need for Speed: Most Wanted (2005) - Rockport City Geographical Map" class="rockport-map-image">
+                    </div>
+                </div>
+
+                <!-- DISTRITOS Y PUNTOS CLAVE DE ROCKPORT CITY -->
+                <div class="map-districts-grid">
+                    <!-- DISTRITO 1: ROSEWOOD -->
+                    <div class="district-card" id="card-district-rosewood">
+                        <div class="district-header">
+                            <div class="district-icon">🌲</div>
+                            <div>
+                                <span class="district-tag">SECTOR NORTE // ELEVACIONES TÉCNICAS</span>
+                                <h3 class="district-name">Rosewood</h3>
+                            </div>
+                        </div>
+                        <p class="district-desc">
+                            Zona residencial y montañosa con curvas pronunciadas y gran altitud. Alberga el famoso parque eólico (<strong>Rosewood Wind Farm</strong>), el campus universitario (<strong>Campus Way</strong>), Heritage Heights e Ironwood Estates.
+                        </p>
+                        <div class="district-features">
+                            <span class="district-feat-item">🌪️ Rosewood Wind Farm</span>
+                            <span class="district-feat-item">🎓 Campus Way</span>
+                            <span class="district-feat-item">🏡 Ironwood Estates</span>
+                            <span class="district-feat-item">⛰️ High Hills</span>
+                        </div>
+                        <button type="button" class="btn-district-action" onclick="setCategoryAndGo('Circuito')">
+                            🏁 Ver Trazados de Circuito
+                        </button>
+                    </div>
+
+                    <!-- DISTRITO 2: DOWNTOWN ROCKPORT -->
+                    <div class="district-card" id="card-district-downtown">
+                        <div class="district-header">
+                            <div class="district-icon">🏙️</div>
+                            <div>
+                                <span class="district-tag">SECTOR CENTRAL // ALTA VELOCIDAD</span>
+                                <h3 class="district-name">Downtown Rockport</h3>
+                            </div>
+                        </div>
+                        <p class="district-desc">
+                            El núcleo financiero y metropolitano de la ciudad. Calles anchas rodeadas de rascacielos, túneles de metro, autopistas elevadas perimetrales y el legendario trazado de <strong>City Perimeter</strong>.
+                        </p>
+                        <div class="district-features">
+                            <span class="district-feat-item">🏢 City Perimeter</span>
+                            <span class="district-feat-item">🚇 Túneles Urbanos</span>
+                            <span class="district-feat-item">🌉 Autopistas Elevadas</span>
+                            <span class="district-feat-item">💎 Diamond Ltd.</span>
+                        </div>
+                        <button type="button" class="btn-district-action" onclick="setCategoryAndGo('Sprint')">
+                            ⚡ Ver Trazados de Sprint
+                        </button>
+                    </div>
+
+                    <!-- DISTRITO 3: CAMDEN BEACH -->
+                    <div class="district-card" id="card-district-camden">
+                        <div class="district-header">
+                            <div class="district-icon">🏖️</div>
+                            <div>
+                                <span class="district-tag">SECTOR COSTA // MUELLES & PUENTES</span>
+                                <h3 class="district-name">Camden Beach</h3>
+                            </div>
+                        </div>
+                        <p class="district-desc">
+                            Distrito costero e industrial de Rockport. Ofrece carreteras al nivel del mar, curvas cerradas de 90 grados, puentes levadizos móviles y los circuitos más técnicos de aceleración y drag.
+                        </p>
+                        <div class="district-features">
+                            <span class="district-feat-item">🌊 Seaside & Camden</span>
+                            <span class="district-feat-item">⚓ Muelles de Carga</span>
+                            <span class="district-feat-item">🌉 Puentes Levadizos</span>
+                            <span class="district-feat-item">🚀 Camden & Dunwich</span>
+                        </div>
+                        <button type="button" class="btn-district-action" onclick="setCategoryAndGo('Drag')">
+                            🚦 Ver Trazados de Drag
+                        </button>
+                    </div>
+                </div>
+
+                <!-- LEYENDA TÁCTICA DEL MAPA -->
+                <div class="map-legend-card">
+                    <div class="legend-header">
+                        <span style="font-size: 20px;">🗺️</span>
+                        <h4 style="margin: 0; color: #ffffff; font-family: var(--font-racing); font-size: 16px;">Leyenda Topográfica Oficial (Geographical Key)</h4>
+                    </div>
+                    <div class="legend-items-grid">
+                        <div class="legend-item">
+                            <span class="legend-color-box" style="background: #94a3b8;"></span>
+                            <div>
+                                <strong>Hills / Islands:</strong>
+                                <span>Colinas bajas, elevaciones intermedias e islas marítimas exteriores.</span>
+                            </div>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color-box" style="background: #f8fafc; border: 1px solid #cbd5e1;"></span>
+                            <div>
+                                <strong>High Hills:</strong>
+                                <span>Altas cumbres montañosas que delimitan las fronteras naturales de Rockport.</span>
+                            </div>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color-box" style="background: #0284c7;"></span>
+                            <div>
+                                <strong>Water / Rivers / Lakes:</strong>
+                                <span>Océano Atlántico, bahía de Camden, lagos de montaña y canales portuarios.</span>
+                            </div>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color-box" style="background: #ef4444;"></span>
+                            <div>
+                                <strong>Inaccessible Roads:</strong>
+                                <span>Carreteras bloqueadas por obras, barreras policiales o caminos en construcción.</span>
+                            </div>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color-box" style="background: #78350f;"></span>
+                            <div>
+                                <strong>Unknown Train Tracks:</strong>
+                                <span>Vías férreas y túneles de transporte ferroviario que atraviesan la ciudad.</span>
+                            </div>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color-box" style="background: #ffffff; color: #000000; text-align: center; font-size: 10px; font-weight: bold; line-height: 16px;">✈</span>
+                            <div>
+                                <strong>Rosewood Wind Farm:</strong>
+                                <span>Parque eólico generador con turbinas gigantes en las colinas de Rosewood.</span>
+                            </div>
                         </div>
                     </div>
                 </div>

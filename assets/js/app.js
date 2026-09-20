@@ -152,6 +152,98 @@ function switchInstallLang(lang) {
     if (activeContent) activeContent.classList.add('active');
 }
 
+// =======================================================
+// INTERACTIVIDAD ROCKPORT MAP LIVE
+// =======================================================
+let currentMapZoom = 1.0;
+
+function zoomMap(delta) {
+    const img = document.getElementById('rockport-map-img');
+    const zoomBadge = document.getElementById('map-zoom-level');
+    if (!img) return;
+
+    currentMapZoom = Math.min(Math.max(currentMapZoom + delta, 0.75), 3.0);
+    img.style.transform = `scale(${currentMapZoom})`;
+    if (zoomBadge) zoomBadge.textContent = `ZOOM: ${Math.round(currentMapZoom * 100)}%`;
+}
+
+function resetMapZoom() {
+    const img = document.getElementById('rockport-map-img');
+    const zoomBadge = document.getElementById('map-zoom-level');
+    const panContainer = document.getElementById('map-pan-container');
+    if (!img) return;
+
+    currentMapZoom = 1.0;
+    img.style.transform = 'scale(1)';
+    if (zoomBadge) zoomBadge.textContent = 'ZOOM: 100%';
+    if (panContainer) {
+        panContainer.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    }
+}
+
+function toggleMapFullscreen() {
+    const wrapper = document.getElementById('map-viewport-wrapper');
+    if (!wrapper) return;
+
+    if (!document.fullscreenElement) {
+        if (wrapper.requestFullscreen) {
+            wrapper.requestFullscreen();
+        } else if (wrapper.webkitRequestFullscreen) {
+            wrapper.webkitRequestFullscreen();
+        }
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+    }
+}
+
+function focusMapDistrict(districtKey, btn) {
+    document.querySelectorAll('.district-pill').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.district-card').forEach(c => c.classList.remove('focused-district'));
+    if (btn) btn.classList.add('active');
+
+    const img = document.getElementById('rockport-map-img');
+    const panContainer = document.getElementById('map-pan-container');
+    const indicator = document.getElementById('active-district-indicator');
+    const zoomBadge = document.getElementById('map-zoom-level');
+
+    if (!img || !panContainer) return;
+
+    if (districtKey === 'all') {
+        currentMapZoom = 1.0;
+        img.style.transform = 'scale(1)';
+        panContainer.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        if (indicator) indicator.textContent = 'TODO EL MAPA (GLOBAL)';
+        if (zoomBadge) zoomBadge.textContent = 'ZOOM: 100%';
+        return;
+    }
+
+    currentMapZoom = 1.6;
+    img.style.transform = `scale(${currentMapZoom})`;
+    if (zoomBadge) zoomBadge.textContent = `ZOOM: ${Math.round(currentMapZoom * 100)}%`;
+
+    const scrollW = panContainer.scrollWidth;
+    const scrollH = panContainer.scrollHeight;
+
+    if (districtKey === 'rosewood') {
+        panContainer.scrollTo({ top: scrollH * 0.15, left: scrollW * 0.25, behavior: 'smooth' });
+        if (indicator) indicator.textContent = 'ROSEWOOD (SECTOR NORTE)';
+        const card = document.getElementById('card-district-rosewood');
+        if (card) card.classList.add('focused-district');
+    } else if (districtKey === 'downtown') {
+        panContainer.scrollTo({ top: scrollH * 0.65, left: scrollW * 0.2, behavior: 'smooth' });
+        if (indicator) indicator.textContent = 'DOWNTOWN ROCKPORT (SECTOR SUR-OESTE)';
+        const card = document.getElementById('card-district-downtown');
+        if (card) card.classList.add('focused-district');
+    } else if (districtKey === 'camden') {
+        panContainer.scrollTo({ top: scrollH * 0.6, left: scrollW * 0.55, behavior: 'smooth' });
+        if (indicator) indicator.textContent = 'CAMDEN BEACH (SECTOR SUR-ESTE)';
+        const card = document.getElementById('card-district-camden');
+        if (card) card.classList.add('focused-district');
+    }
+}
+
 function updateLeaderboardStats(showingNum, totalNum, currentClass = 'ALL') {
     const showingEl = document.getElementById('showing-count');
     const totalEl = document.getElementById('total-races-count');
