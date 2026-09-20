@@ -2784,8 +2784,9 @@ footer strong {
 }
 
 .blacklist-table-wrapper {
-    max-height: 640px;
-    overflow-y: auto;
+    max-height: none !important;
+    overflow-y: visible !important;
+    overflow-x: auto;
 }
 
 .blacklist-table {
@@ -4669,7 +4670,9 @@ footer strong {
    ======================================================= */
 .table-section .blacklist-table-wrapper,
 #view-leaderboard .table-container,
-#view-leaderboard .blacklist-table-wrapper {
+#view-leaderboard .blacklist-table-wrapper,
+#view-championship-standings .blacklist-table-wrapper,
+#view-members .blacklist-table-wrapper {
     margin-top: 15px;
     border-radius: 10px;
     background: rgba(10, 14, 20, 0.85);
