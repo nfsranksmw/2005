@@ -1,0 +1,826 @@
+﻿[
+    {
+        "participants":  [
+                             {
+                                 "name":  "Lea4Speed0!!",
+                                 "seed":  "1"
+                             },
+                             {
+                                 "name":  "xLeMondx",
+                                 "seed":  "2"
+                             },
+                             {
+                                 "name":  "ZimanX",
+                                 "seed":  "3"
+                             },
+                             {
+                                 "name":  "oskargtr",
+                                 "seed":  "4"
+                             },
+                             {
+                                 "name":  "xSKYMASTERx",
+                                 "seed":  "5"
+                             },
+                             {
+                                 "name":  "xRAP98x",
+                                 "seed":  "6"
+                             },
+                             {
+                                 "name":  "Joako",
+                                 "seed":  "7"
+                             },
+                             {
+                                 "name":  "Nebula",
+                                 "seed":  "8"
+                             }
+                         ],
+        "title":  "",
+        "key":  "6as1doj5",
+        "matches":  [
+                        {
+                            "player1":  {
+                                            "isWinner":  true,
+                                            "name":  "Lea4Speed0!!",
+                                            "id":  "161700319",
+                                            "seed":  "1",
+                                            "score":  "3"
+                                        },
+                            "matchId":  "262213075",
+                            "identifier":  1,
+                            "player2":  {
+                                            "isWinner":  false,
+                                            "name":  "Nebula",
+                                            "id":  "161700338",
+                                            "seed":  "8",
+                                            "score":  "0"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  false,
+                                            "name":  "oskargtr",
+                                            "id":  "161700324",
+                                            "seed":  "4",
+                                            "score":  "0"
+                                        },
+                            "matchId":  "262213076",
+                            "identifier":  2,
+                            "player2":  {
+                                            "isWinner":  true,
+                                            "name":  "xSKYMASTERx",
+                                            "id":  "161700311",
+                                            "seed":  "5",
+                                            "score":  "3"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  false,
+                                            "name":  "xLeMondx",
+                                            "id":  "161700332",
+                                            "seed":  "2",
+                                            "score":  "0"
+                                        },
+                            "matchId":  "262213077",
+                            "identifier":  3,
+                            "player2":  {
+                                            "isWinner":  true,
+                                            "name":  "Joako",
+                                            "id":  "161700315",
+                                            "seed":  "7",
+                                            "score":  "3"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  true,
+                                            "name":  "ZimanX",
+                                            "id":  "161700308",
+                                            "seed":  "3",
+                                            "score":  "3"
+                                        },
+                            "matchId":  "262213078",
+                            "identifier":  4,
+                            "player2":  {
+                                            "isWinner":  false,
+                                            "name":  "xRAP98x",
+                                            "id":  "161700327",
+                                            "seed":  "6",
+                                            "score":  "0"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  false,
+                                            "name":  "Nebula",
+                                            "id":  "161700338",
+                                            "seed":  "8",
+                                            "score":  "1"
+                                        },
+                            "matchId":  "262213082",
+                            "identifier":  5,
+                            "player2":  {
+                                            "isWinner":  true,
+                                            "name":  "oskargtr",
+                                            "id":  "161700324",
+                                            "seed":  "4",
+                                            "score":  "3"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  false,
+                                            "name":  "xLeMondx",
+                                            "id":  "161700332",
+                                            "seed":  "2",
+                                            "score":  "0"
+                                        },
+                            "matchId":  "262213083",
+                            "identifier":  6,
+                            "player2":  {
+                                            "isWinner":  true,
+                                            "name":  "xRAP98x",
+                                            "id":  "161700327",
+                                            "seed":  "6",
+                                            "score":  "3"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  false,
+                                            "name":  "Lea4Speed0!!",
+                                            "id":  "161700319",
+                                            "seed":  "1",
+                                            "score":  "1"
+                                        },
+                            "matchId":  "262213079",
+                            "identifier":  7,
+                            "player2":  {
+                                            "isWinner":  true,
+                                            "name":  "xSKYMASTERx",
+                                            "id":  "161700311",
+                                            "seed":  "5",
+                                            "score":  "3"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  false,
+                                            "name":  "Joako",
+                                            "id":  "161700315",
+                                            "seed":  "7",
+                                            "score":  "1"
+                                        },
+                            "matchId":  "262213080",
+                            "identifier":  8,
+                            "player2":  {
+                                            "isWinner":  true,
+                                            "name":  "ZimanX",
+                                            "id":  "161700308",
+                                            "seed":  "3",
+                                            "score":  "3"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  true,
+                                            "name":  "Lea4Speed0!!",
+                                            "id":  "161700319",
+                                            "seed":  "1",
+                                            "score":  "3"
+                                        },
+                            "matchId":  "262213085",
+                            "identifier":  9,
+                            "player2":  {
+                                            "isWinner":  false,
+                                            "name":  "xRAP98x",
+                                            "id":  "161700327",
+                                            "seed":  "6",
+                                            "score":  "0"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  false,
+                                            "name":  "Joako",
+                                            "id":  "161700315",
+                                            "seed":  "7",
+                                            "score":  "2"
+                                        },
+                            "matchId":  "262213084",
+                            "identifier":  10,
+                            "player2":  {
+                                            "isWinner":  true,
+                                            "name":  "oskargtr",
+                                            "id":  "161700324",
+                                            "seed":  "4",
+                                            "score":  "3"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  false,
+                                            "name":  "oskargtr",
+                                            "id":  "161700324",
+                                            "seed":  "4",
+                                            "score":  "0"
+                                        },
+                            "matchId":  "262213086",
+                            "identifier":  11,
+                            "player2":  {
+                                            "isWinner":  true,
+                                            "name":  "Lea4Speed0!!",
+                                            "id":  "161700319",
+                                            "seed":  "1",
+                                            "score":  "3"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  false,
+                                            "name":  "xSKYMASTERx",
+                                            "id":  "161700311",
+                                            "seed":  "5",
+                                            "score":  "2"
+                                        },
+                            "matchId":  "262213081",
+                            "identifier":  12,
+                            "player2":  {
+                                            "isWinner":  true,
+                                            "name":  "ZimanX",
+                                            "id":  "161700308",
+                                            "seed":  "3",
+                                            "score":  "3"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  false,
+                                            "name":  "xSKYMASTERx",
+                                            "id":  "161700311",
+                                            "seed":  "5",
+                                            "score":  "0"
+                                        },
+                            "matchId":  "262213087",
+                            "identifier":  13,
+                            "player2":  {
+                                            "isWinner":  true,
+                                            "name":  "Lea4Speed0!!",
+                                            "id":  "161700319",
+                                            "seed":  "1",
+                                            "score":  "3"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  false,
+                                            "name":  "ZimanX",
+                                            "id":  "161700308",
+                                            "seed":  "3",
+                                            "score":  "1"
+                                        },
+                            "matchId":  "262213088",
+                            "identifier":  14,
+                            "player2":  {
+                                            "isWinner":  true,
+                                            "name":  "Lea4Speed0!!",
+                                            "id":  "161700319",
+                                            "seed":  "1",
+                                            "score":  "3"
+                                        }
+                        }
+                    ]
+    },
+    {
+        "participants":  [
+                             {
+                                 "name":  "Zimanx",
+                                 "seed":  "1"
+                             },
+                             {
+                                 "name":  "DarkShido",
+                                 "seed":  "2"
+                             },
+                             {
+                                 "name":  "Avenger",
+                                 "seed":  "3"
+                             },
+                             {
+                                 "name":  "xLemondx",
+                                 "seed":  "4"
+                             },
+                             {
+                                 "name":  "Lea4Speed",
+                                 "seed":  "5"
+                             },
+                             {
+                                 "name":  "AvusRD",
+                                 "seed":  "6"
+                             },
+                             {
+                                 "name":  "xRAP98x",
+                                 "seed":  "7"
+                             },
+                             {
+                                 "name":  "SIgy",
+                                 "seed":  "8"
+                             },
+                             {
+                                 "name":  "[H2H]*Sentimex",
+                                 "seed":  "9"
+                             },
+                             {
+                                 "name":  "NighT",
+                                 "seed":  "10"
+                             },
+                             {
+                                 "name":  "SRTxDiego",
+                                 "seed":  "11"
+                             },
+                             {
+                                 "name":  "Arkon7e",
+                                 "seed":  "12"
+                             },
+                             {
+                                 "name":  "drink toothpaste",
+                                 "seed":  "13"
+                             },
+                             {
+                                 "name":  "XR",
+                                 "seed":  "14"
+                             }
+                         ],
+        "title":  "",
+        "key":  "ev1n0yug",
+        "matches":  [
+                        {
+                            "player1":  {
+                                            "isWinner":  false,
+                                            "name":  "SIgy",
+                                            "id":  "239845258",
+                                            "seed":  "8",
+                                            "score":  "1"
+                                        },
+                            "matchId":  "382385677",
+                            "identifier":  1,
+                            "player2":  {
+                                            "isWinner":  true,
+                                            "name":  "[H2H]*Sentimex",
+                                            "id":  "239845263",
+                                            "seed":  "9",
+                                            "score":  "3"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  true,
+                                            "name":  "xLemondx",
+                                            "id":  "239844832",
+                                            "seed":  "4",
+                                            "score":  "3"
+                                        },
+                            "matchId":  "382385678",
+                            "identifier":  2,
+                            "player2":  {
+                                            "isWinner":  false,
+                                            "name":  "drink toothpaste",
+                                            "id":  "240508061",
+                                            "seed":  "13",
+                                            "score":  "0"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  true,
+                                            "name":  "Lea4Speed",
+                                            "id":  "239844839",
+                                            "seed":  "5",
+                                            "score":  "3"
+                                        },
+                            "matchId":  "382385679",
+                            "identifier":  3,
+                            "player2":  {
+                                            "isWinner":  false,
+                                            "name":  "Arkon7e",
+                                            "id":  "239845335",
+                                            "seed":  "12",
+                                            "score":  "1"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  false,
+                                            "name":  "xRAP98x",
+                                            "id":  "239845248",
+                                            "seed":  "7",
+                                            "score":  "0"
+                                        },
+                            "matchId":  "382385680",
+                            "identifier":  4,
+                            "player2":  {
+                                            "isWinner":  true,
+                                            "name":  "NighT",
+                                            "id":  "239845285",
+                                            "seed":  "10",
+                                            "score":  "3"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  true,
+                                            "name":  "Avenger",
+                                            "id":  "239844816",
+                                            "seed":  "3",
+                                            "score":  "3"
+                                        },
+                            "matchId":  "382385681",
+                            "identifier":  5,
+                            "player2":  {
+                                            "isWinner":  false,
+                                            "name":  "XR",
+                                            "id":  "240508063",
+                                            "seed":  "14",
+                                            "score":  "0"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  true,
+                                            "name":  "AvusRD",
+                                            "id":  "239845231",
+                                            "seed":  "6",
+                                            "score":  "3"
+                                        },
+                            "matchId":  "382385682",
+                            "identifier":  6,
+                            "player2":  {
+                                            "isWinner":  false,
+                                            "name":  "SRTxDiego",
+                                            "id":  "239845324",
+                                            "seed":  "11",
+                                            "score":  "0"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  false,
+                                            "name":  "drink toothpaste",
+                                            "id":  "240508061",
+                                            "seed":  "13",
+                                            "score":  "0"
+                                        },
+                            "matchId":  "382385690",
+                            "identifier":  7,
+                            "player2":  {
+                                            "isWinner":  true,
+                                            "name":  "Arkon7e",
+                                            "id":  "239845335",
+                                            "seed":  "12",
+                                            "score":  "3"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  false,
+                                            "name":  "XR",
+                                            "id":  "240508063",
+                                            "seed":  "14",
+                                            "score":  "0"
+                                        },
+                            "matchId":  "382385691",
+                            "identifier":  8,
+                            "player2":  {
+                                            "isWinner":  true,
+                                            "name":  "SRTxDiego",
+                                            "id":  "239845324",
+                                            "seed":  "11",
+                                            "score":  "3"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  true,
+                                            "name":  "Zimanx",
+                                            "id":  "239844746",
+                                            "seed":  "1",
+                                            "score":  "3"
+                                        },
+                            "matchId":  "382385683",
+                            "identifier":  9,
+                            "player2":  {
+                                            "isWinner":  false,
+                                            "name":  "[H2H]*Sentimex",
+                                            "id":  "239845263",
+                                            "seed":  "9",
+                                            "score":  "0"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  false,
+                                            "name":  "xLemondx",
+                                            "id":  "239844832",
+                                            "seed":  "4",
+                                            "score":  "0"
+                                        },
+                            "matchId":  "382385684",
+                            "identifier":  10,
+                            "player2":  {
+                                            "isWinner":  true,
+                                            "name":  "Lea4Speed",
+                                            "id":  "239844839",
+                                            "seed":  "5",
+                                            "score":  "3"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  true,
+                                            "name":  "DarkShido",
+                                            "id":  "239844806",
+                                            "seed":  "2",
+                                            "score":  "3"
+                                        },
+                            "matchId":  "382385685",
+                            "identifier":  11,
+                            "player2":  {
+                                            "isWinner":  false,
+                                            "name":  "NighT",
+                                            "id":  "239845285",
+                                            "seed":  "10",
+                                            "score":  "0"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  true,
+                                            "name":  "Avenger",
+                                            "id":  "239844816",
+                                            "seed":  "3",
+                                            "score":  "3"
+                                        },
+                            "matchId":  "382385686",
+                            "identifier":  12,
+                            "player2":  {
+                                            "isWinner":  false,
+                                            "name":  "AvusRD",
+                                            "id":  "239845231",
+                                            "seed":  "6",
+                                            "score":  "0"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  false,
+                                            "name":  "[H2H]*Sentimex",
+                                            "id":  "239845263",
+                                            "seed":  "9",
+                                            "score":  "0"
+                                        },
+                            "matchId":  "382385695",
+                            "identifier":  13,
+                            "player2":  {
+                                            "isWinner":  true,
+                                            "name":  "SRTxDiego",
+                                            "id":  "239845324",
+                                            "seed":  "11",
+                                            "score":  "3"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  true,
+                                            "name":  "xLemondx",
+                                            "id":  "239844832",
+                                            "seed":  "4",
+                                            "score":  "3"
+                                        },
+                            "matchId":  "382385694",
+                            "identifier":  14,
+                            "player2":  {
+                                            "isWinner":  false,
+                                            "name":  "xRAP98x",
+                                            "id":  "239845248",
+                                            "seed":  "7",
+                                            "score":  "0"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  false,
+                                            "name":  "NighT",
+                                            "id":  "239845285",
+                                            "seed":  "10",
+                                            "score":  "0"
+                                        },
+                            "matchId":  "382385693",
+                            "identifier":  15,
+                            "player2":  {
+                                            "isWinner":  true,
+                                            "name":  "Arkon7e",
+                                            "id":  "239845335",
+                                            "seed":  "12",
+                                            "score":  "3"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  true,
+                                            "name":  "AvusRD",
+                                            "id":  "239845231",
+                                            "seed":  "6",
+                                            "score":  "3"
+                                        },
+                            "matchId":  "382385692",
+                            "identifier":  16,
+                            "player2":  {
+                                            "isWinner":  false,
+                                            "name":  "SIgy",
+                                            "id":  "239845258",
+                                            "seed":  "8",
+                                            "score":  "1"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  true,
+                                            "name":  "xLemondx",
+                                            "id":  "239844832",
+                                            "seed":  "4",
+                                            "score":  "3"
+                                        },
+                            "matchId":  "382385697",
+                            "identifier":  17,
+                            "player2":  {
+                                            "isWinner":  false,
+                                            "name":  "SRTxDiego",
+                                            "id":  "239845324",
+                                            "seed":  "11",
+                                            "score":  "1"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  true,
+                                            "name":  "AvusRD",
+                                            "id":  "239845231",
+                                            "seed":  "6",
+                                            "score":  "3"
+                                        },
+                            "matchId":  "382385696",
+                            "identifier":  18,
+                            "player2":  {
+                                            "isWinner":  false,
+                                            "name":  "Arkon7e",
+                                            "id":  "239845335",
+                                            "seed":  "12",
+                                            "score":  "1"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  false,
+                                            "name":  "Zimanx",
+                                            "id":  "239844746",
+                                            "seed":  "1",
+                                            "score":  "0"
+                                        },
+                            "matchId":  "382385687",
+                            "identifier":  19,
+                            "player2":  {
+                                            "isWinner":  true,
+                                            "name":  "Lea4Speed",
+                                            "id":  "239844839",
+                                            "seed":  "5",
+                                            "score":  "3"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  false,
+                                            "name":  "DarkShido",
+                                            "id":  "239844806",
+                                            "seed":  "2",
+                                            "score":  "0"
+                                        },
+                            "matchId":  "382385688",
+                            "identifier":  20,
+                            "player2":  {
+                                            "isWinner":  true,
+                                            "name":  "Avenger",
+                                            "id":  "239844816",
+                                            "seed":  "3",
+                                            "score":  "3"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  false,
+                                            "name":  "Zimanx",
+                                            "id":  "239844746",
+                                            "seed":  "1",
+                                            "score":  "2"
+                                        },
+                            "matchId":  "382385698",
+                            "identifier":  21,
+                            "player2":  {
+                                            "isWinner":  true,
+                                            "name":  "AvusRD",
+                                            "id":  "239845231",
+                                            "seed":  "6",
+                                            "score":  "3"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  false,
+                                            "name":  "DarkShido",
+                                            "id":  "239844806",
+                                            "seed":  "2",
+                                            "score":  "1"
+                                        },
+                            "matchId":  "382385699",
+                            "identifier":  22,
+                            "player2":  {
+                                            "isWinner":  true,
+                                            "name":  "xLemondx",
+                                            "id":  "239844832",
+                                            "seed":  "4",
+                                            "score":  "3"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  false,
+                                            "name":  "AvusRD",
+                                            "id":  "239845231",
+                                            "seed":  "6",
+                                            "score":  "0"
+                                        },
+                            "matchId":  "382385700",
+                            "identifier":  23,
+                            "player2":  {
+                                            "isWinner":  true,
+                                            "name":  "xLemondx",
+                                            "id":  "239844832",
+                                            "seed":  "4",
+                                            "score":  "3"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  true,
+                                            "name":  "Lea4Speed",
+                                            "id":  "239844839",
+                                            "seed":  "5",
+                                            "score":  "3"
+                                        },
+                            "matchId":  "382385689",
+                            "identifier":  24,
+                            "player2":  {
+                                            "isWinner":  false,
+                                            "name":  "Avenger",
+                                            "id":  "239844816",
+                                            "seed":  "3",
+                                            "score":  "0"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  false,
+                                            "name":  "Avenger",
+                                            "id":  "239844816",
+                                            "seed":  "3",
+                                            "score":  "2"
+                                        },
+                            "matchId":  "382385701",
+                            "identifier":  25,
+                            "player2":  {
+                                            "isWinner":  true,
+                                            "name":  "xLemondx",
+                                            "id":  "239844832",
+                                            "seed":  "4",
+                                            "score":  "3"
+                                        }
+                        },
+                        {
+                            "player1":  {
+                                            "isWinner":  true,
+                                            "name":  "Lea4Speed",
+                                            "id":  "239844839",
+                                            "seed":  "5",
+                                            "score":  "3"
+                                        },
+                            "matchId":  "382385702",
+                            "identifier":  26,
+                            "player2":  {
+                                            "isWinner":  false,
+                                            "name":  "xLemondx",
+                                            "id":  "239844832",
+                                            "seed":  "4",
+                                            "score":  "2"
+                                        }
+                        }
+                    ]
+    }
+]

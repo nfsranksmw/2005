@@ -205,6 +205,126 @@ nav a.active::after {
     border-radius: 3px 3px 0 0;
 }
 
+/* Menús Desplegables en Navegación */
+.nav-dropdown {
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.nav-dropdown-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-family: var(--font-racing);
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 1px;
+    padding: 0 14px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.25s ease;
+}
+
+.nav-dropdown-btn:hover {
+    color: #ffffff;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.nav-dropdown-btn.active {
+    color: #ffffff;
+    font-weight: 800;
+}
+
+.nav-dropdown-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    width: 80%;
+    height: 3px;
+    background: var(--nfs-orange);
+    box-shadow: 0 0 12px var(--nfs-orange), 0 0 20px var(--nfs-orange);
+    border-radius: 3px 3px 0 0;
+}
+
+.dropdown-arrow {
+    font-size: 11px;
+    transition: transform 0.25s ease;
+    color: var(--text-muted);
+}
+
+.nav-dropdown:hover .dropdown-arrow,
+.nav-dropdown.open .dropdown-arrow {
+    transform: rotate(180deg);
+    color: var(--nfs-orange);
+}
+
+.nav-dropdown-content {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 210px;
+    background: rgba(12, 14, 20, 0.98);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border-subtle);
+    border-top: 2px solid var(--nfs-orange);
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 119, 0, 0.2);
+    display: none;
+    flex-direction: column;
+    padding: 8px 0;
+    z-index: 1200;
+}
+
+.nav-dropdown:hover .nav-dropdown-content,
+.nav-dropdown.open .nav-dropdown-content {
+    display: flex;
+    animation: dropdownFade 0.2s ease-out;
+}
+
+@keyframes dropdownFade {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.nav-dropdown-content a {
+    padding: 11px 20px;
+    color: var(--text-muted);
+    font-family: var(--font-racing);
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: left;
+    height: auto;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    white-space: nowrap;
+    transition: all 0.2s;
+    border-left: 3px solid transparent;
+}
+
+.nav-dropdown-content a:hover,
+.nav-dropdown-content a.active {
+    background: rgba(255, 119, 0, 0.12);
+    color: var(--nfs-orange);
+    border-left-color: var(--nfs-orange);
+    padding-left: 24px;
+    text-shadow: var(--nfs-subtle-glow);
+}
+
+.nav-dropdown-content a.active::after {
+    display: none;
+}
+
 @media (max-width: 992px) {
     .menu-toggle { display: block; }
     nav { 
@@ -223,17 +343,47 @@ nav a.active::after {
         backdrop-filter: blur(20px);
     }
     nav.open { display: flex; }
-    nav a { 
+    nav a, .nav-dropdown-btn { 
         margin: 6px 0; 
         padding: 12px 0;
         width: 100%;
         justify-content: center;
         font-size: 16px;
+        height: auto;
     }
-    nav a.active::after {
+    nav a.active::after, .nav-dropdown-btn.active::after {
         bottom: 0;
         left: 30%;
         width: 40%;
+    }
+    .nav-dropdown {
+        width: 100%;
+        height: auto;
+        flex-direction: column;
+    }
+    .nav-dropdown:hover .nav-dropdown-content {
+        display: none;
+    }
+    .nav-dropdown.open .nav-dropdown-content {
+        display: flex;
+        position: static;
+        width: 100%;
+        background: rgba(6, 8, 12, 0.95);
+        border: none;
+        box-shadow: none;
+        border-radius: 0;
+        padding: 6px 0;
+    }
+    .nav-dropdown-content a {
+        justify-content: center;
+        padding: 10px 0;
+        font-size: 14px;
+        border-left: none;
+    }
+    .nav-dropdown-content a:hover,
+    .nav-dropdown-content a.active {
+        padding-left: 0;
+        background: rgba(255, 119, 0, 0.15);
     }
 }
 
@@ -1259,6 +1409,444 @@ td {
 }
 
 /* ==========================================================================
+   DESAFÍOS SEMANALES (Inspirado en NightRiderz World)
+   ========================================================================== */
+.challenges-summary-bar {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+@media (min-width: 900px) {
+    .challenges-summary-bar {
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+    }
+}
+
+.challenge-summary-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.challenge-summary-icon {
+    font-size: 22px;
+    color: var(--nfs-orange);
+    filter: drop-shadow(0 0 6px rgba(255, 119, 0, 0.5));
+}
+
+.challenge-summary-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.challenge-summary-label {
+    font-family: var(--font-racing);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.challenge-summary-val {
+    font-family: var(--font-racing);
+    font-size: 16px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+/* Barra de Navegación de Semanas & Filtros */
+.challenges-controls-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 25px;
+}
+
+@media (min-width: 900px) {
+    .challenges-controls-bar {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.week-navigation {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn-week-nav {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    color: #ffffff;
+    width: 38px;
+    height: 38px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.btn-week-nav:hover {
+    background: var(--bg-surface-elevated);
+    border-color: var(--nfs-orange);
+    color: var(--nfs-orange);
+}
+
+.week-current-pill {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-family: var(--font-racing);
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-jump-current {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-family: var(--font-racing);
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+}
+
+.btn-jump-current:hover {
+    color: #ffffff;
+    border-color: var(--nfs-orange);
+    background: rgba(255, 119, 0, 0.1);
+}
+
+.challenge-filter-pills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+/* Grid de Desafíos */
+.challenges-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+@media (min-width: 680px) {
+    .challenges-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1050px) {
+    .challenges-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 1300px) {
+    .challenges-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Tarjeta individual de Desafío */
+.challenge-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.challenge-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 119, 0, 0.4);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.6), 0 0 15px rgba(255, 119, 0, 0.15);
+}
+
+.challenge-card.is-completed {
+    border-color: rgba(0, 255, 136, 0.4);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 255, 136, 0.15);
+}
+
+/* Imagen superior con badges flotantes */
+.challenge-thumb {
+    height: 150px;
+    width: 100%;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 12px;
+}
+
+.challenge-thumb::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(10, 12, 16, 0.4) 0%, rgba(10, 12, 16, 0.85) 100%);
+    z-index: 1;
+}
+
+.challenge-thumb-header {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Badges de dificultad */
+.difficulty-badge {
+    font-family: var(--font-racing);
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border-radius: 4px;
+}
+
+.diff-very-easy {
+    background: #00e5ff;
+    color: #07080a;
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.6);
+}
+
+.diff-easy {
+    background: #22c55e;
+    color: #07080a;
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.6);
+}
+
+.diff-medium {
+    background: #eab308;
+    color: #07080a;
+    box-shadow: 0 0 10px rgba(234, 179, 8, 0.6);
+}
+
+.diff-hard {
+    background: #f97316;
+    color: #07080a;
+    box-shadow: 0 0 10px rgba(249, 115, 22, 0.6);
+}
+
+.diff-extreme {
+    background: #ef4444;
+    color: #ffffff;
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.7);
+}
+
+.challenge-tier-pill {
+    position: relative;
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid var(--border-subtle);
+    color: #ffffff;
+    font-family: var(--font-racing);
+    font-size: 10px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+}
+
+/* Estadísticas de comunidad */
+.challenge-community-row {
+    background: rgba(8, 10, 15, 0.95);
+    padding: 6px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Cuerpo de la tarjeta */
+.challenge-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex-grow: 1;
+}
+
+.challenge-mode-label {
+    font-family: var(--font-racing);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--nfs-orange);
+    text-transform: uppercase;
+}
+
+.challenge-route-name {
+    font-family: var(--font-racing);
+    font-size: 18px;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.challenge-time-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-subtle);
+    padding: 8px 12px;
+    border-radius: 6px;
+}
+
+.challenge-time-val {
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+.challenge-restriction {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+/* Recompensa */
+.challenge-reward-bar {
+    background: linear-gradient(90deg, #eab308 0%, #f59e0b 100%);
+    color: #07080a;
+    font-family: var(--font-racing);
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-align: center;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-shadow: 0 4px 12px rgba(234, 179, 8, 0.25);
+}
+
+/* Botones de acción inferior */
+.challenge-actions-row {
+    padding: 14px 16px;
+    background: rgba(8, 10, 15, 0.7);
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.btn-toggle-complete {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    font-family: var(--font-racing);
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    cursor: pointer;
+    text-transform: uppercase;
+    border: none;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.btn-toggle-complete.incomplete {
+    background: linear-gradient(135deg, #b91c1c 0%, #ef4444 100%);
+    color: #ffffff;
+    box-shadow: 0 2px 10px rgba(239, 68, 68, 0.35);
+}
+
+.btn-toggle-complete.incomplete:hover {
+    background: #dc2626;
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
+}
+
+.btn-toggle-complete.completed {
+    background: linear-gradient(135deg, #15803d 0%, #22c55e 100%);
+    color: #ffffff;
+    box-shadow: 0 2px 10px rgba(34, 197, 94, 0.35);
+}
+
+.btn-toggle-complete.completed:hover {
+    background: #16a34a;
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.6);
+}
+
+.btn-challenge-submit {
+    background: transparent;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-family: var(--font-racing);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-decoration: none;
+}
+
+.btn-challenge-submit:hover {
+    color: var(--nfs-orange);
+    border-color: var(--nfs-orange);
+    background: rgba(255, 119, 0, 0.08);
+}
+
+/* ==========================================================================
    FOOTER
    ========================================================================== */
 footer {
@@ -1275,3 +1863,2106 @@ footer {
 footer strong {
     color: var(--text-muted);
 }
+
+/* ==========================================================================
+   BLACKLIST EVENT // RANKS 2026 (ESTILO MOST WANTED + F1 CYBERPUNK)
+   ========================================================================== */
+
+/* Sub-pestañas de alternancia rápida */
+.blacklist-subtabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.blacklist-layout {
+    display: grid;
+    grid-template-columns: 480px 1fr;
+    gap: 25px;
+    margin-top: 25px;
+    align-items: start;
+}
+
+/* --- FICHA TÁCTICA DE PILOTO (INSPIRADA EN RAZOR NFSMW) --- */
+.blacklist-tactical-card {
+    position: relative;
+    background: radial-gradient(circle at 80% 20%, rgba(35, 68, 48, 0.45) 0%, rgba(10, 14, 18, 0.95) 75%), #090d10;
+    border: 1px solid rgba(80, 140, 95, 0.35);
+    border-radius: 10px;
+    padding: 26px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.85), inset 0 0 50px rgba(0, 45, 20, 0.25);
+    overflow: hidden;
+    backdrop-filter: blur(8px);
+}
+
+.blacklist-tactical-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #ffd700 0%, #39ff14 50%, transparent 100%);
+}
+
+.tactical-card-header {
+    margin-bottom: 18px;
+}
+
+.blacklist-number-title {
+    font-family: 'Times New Roman', 'Cloister Black', 'Georgia', serif;
+    font-weight: 900;
+    font-size: 42px;
+    color: #ffffff;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.9), 0 0 25px rgba(60, 180, 90, 0.5);
+    letter-spacing: -1.5px;
+    text-transform: lowercase;
+    line-height: 1;
+}
+
+.blacklist-driver-fullname {
+    font-family: var(--font-racing);
+    font-size: 22px;
+    font-weight: 800;
+    color: #f1f5f9;
+    letter-spacing: 0.5px;
+    margin-top: 6px;
+}
+
+/* Especificaciones del Auto & Habilidad */
+.tactical-specs {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 18px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 12px 14px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.spec-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-size: 15px;
+}
+
+.spec-label {
+    font-family: 'Times New Roman', 'Georgia', serif;
+    font-style: italic;
+    font-weight: 900;
+    color: #e2e8f0;
+    font-size: 16px;
+}
+
+.spec-value {
+    font-family: var(--font-racing);
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+/* Caja de Biografía Táctica con marco angular */
+.tactical-bio-box {
+    position: relative;
+    background: rgba(5, 8, 10, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    padding: 20px 20px 30px 20px;
+    margin-bottom: 20px;
+}
+
+/* Marcas de esquinas tipo visor HUD */
+.tactical-bio-box::before {
+    content: '⌜';
+    position: absolute;
+    top: 4px;
+    left: 8px;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 22px;
+    font-family: monospace;
+    line-height: 1;
+}
+
+.tactical-bio-box::after {
+    content: '⌟';
+    position: absolute;
+    bottom: 4px;
+    right: 8px;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 22px;
+    font-family: monospace;
+    line-height: 1;
+}
+
+.bio-title {
+    font-family: 'Times New Roman', 'Georgia', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: #ffffff;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+    letter-spacing: -0.5px;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+.bio-text {
+    font-family: var(--font-main);
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: #cbd5e1;
+    margin: 0;
+}
+
+.tactical-signature {
+    position: absolute;
+    right: 25px;
+    bottom: 8px;
+    font-family: 'Impact', 'Arial Black', sans-serif;
+    font-size: 26px;
+    color: #39ff14;
+    text-shadow: 0 0 12px rgba(57, 255, 20, 0.8), 2px 2px 4px #000;
+    transform: rotate(-6deg);
+    letter-spacing: 2px;
+    opacity: 0.9;
+}
+
+/* Métricas de Reputación y Puntos */
+.tactical-metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.metric-box {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--border-subtle);
+    padding: 12px 14px;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.metric-label {
+    font-family: var(--font-racing);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+}
+
+.metric-value {
+    font-family: var(--font-mono);
+    font-size: 20px;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.rep-box {
+    border-color: rgba(34, 197, 94, 0.3);
+    background: rgba(34, 197, 94, 0.05);
+}
+
+.rep-val {
+    color: var(--green-neon);
+    text-shadow: 0 0 10px rgba(34, 197, 94, 0.4);
+}
+
+.pts-box {
+    border-color: rgba(255, 215, 0, 0.3);
+    background: rgba(255, 215, 0, 0.05);
+}
+
+.pts-box .metric-value {
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+
+/* Desglose de Podios P1, P2, P3, P4 */
+.tactical-podiums-breakdown {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.podium-chip {
+    padding: 8px 6px;
+    border-radius: 6px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    border: 1px solid transparent;
+}
+
+.chip-pos {
+    font-family: var(--font-racing);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.chip-val {
+    font-family: var(--font-mono);
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.chip-p1 {
+    background: rgba(255, 215, 0, 0.1);
+    border-color: rgba(255, 215, 0, 0.4);
+    color: #ffd700;
+}
+
+.chip-p2 {
+    background: rgba(192, 192, 192, 0.1);
+    border-color: rgba(192, 192, 192, 0.4);
+    color: #e2e8f0;
+}
+
+.chip-p3 {
+    background: rgba(205, 127, 50, 0.1);
+    border-color: rgba(205, 127, 50, 0.4);
+    color: #cd7f32;
+}
+
+.chip-p4 {
+    background: rgba(56, 189, 248, 0.1);
+    border-color: rgba(56, 189, 248, 0.4);
+    color: #38bdf8;
+}
+
+/* --- TABLA DE LOS 15 PILOTOS --- */
+.blacklist-roster-container {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 22px;
+    box-shadow: var(--shadow-card);
+}
+
+.roster-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.blacklist-table-wrapper {
+    max-height: 640px;
+    overflow-y: auto;
+}
+
+.blacklist-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.blacklist-table th {
+    position: sticky;
+    top: 0;
+    background: #080a0e;
+    z-index: 2;
+}
+
+.blacklist-row {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.blacklist-row:hover {
+    background: rgba(255, 119, 0, 0.08) !important;
+}
+
+.blacklist-row.active-row {
+    background: rgba(255, 119, 0, 0.15) !important;
+    border-left: 4px solid var(--nfs-orange);
+}
+
+.bl-rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    font-family: var(--font-racing);
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.rank-gold {
+    background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%);
+    color: #000;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.rank-silver {
+    background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%);
+    color: #000;
+}
+
+.rank-bronze {
+    background: linear-gradient(135deg, #cd7f32 0%, #8b4513 100%);
+    color: #fff;
+}
+
+.rank-normal {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+}
+
+.driver-cell-flex {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.driver-cell-name {
+    font-family: var(--font-racing);
+    font-size: 15px;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.driver-cell-alias {
+    font-size: 11px;
+    color: var(--nfs-orange);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.rep-money-cell {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--green-neon);
+    font-size: 14px;
+}
+
+.pts-cell {
+    font-family: var(--font-mono);
+    font-weight: 800;
+    color: #ffd700;
+    font-size: 14px;
+}
+
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-family: var(--font-racing);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    display: inline-block;
+}
+
+.status-leader {
+    background: rgba(255, 215, 0, 0.15);
+    color: #ffd700;
+    border: 1px solid rgba(255, 215, 0, 0.4);
+}
+
+.status-active {
+    background: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.status-contender {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+    border: 1px solid rgba(56, 189, 248, 0.4);
+}
+
+/* ==========================================================================
+   CAMPEONATO BLACKLIST 2026: 4 SEMANAS, 5 GRUPOS DE 3 Y BONOS DE TIEMPO
+   ========================================================================== */
+
+/* Selector de Semanas del Campeonato */
+.championship-week-selector {
+    background: rgba(10, 14, 20, 0.9);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 25px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.championship-week-label {
+    font-family: var(--font-racing);
+    font-size: 14px;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.championship-week-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.champ-pill {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-family: var(--font-racing);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.champ-pill:hover {
+    color: #ffffff;
+    border-color: var(--nfs-orange);
+    background: rgba(255, 119, 0, 0.08);
+}
+
+.champ-pill.active {
+    background: var(--nfs-orange);
+    color: #000000;
+    border-color: var(--nfs-orange);
+    font-weight: 800;
+    box-shadow: 0 0 15px rgba(255, 119, 0, 0.4);
+}
+
+.champ-badge-highlight {
+    background: rgba(255, 119, 0, 0.12);
+    border: 1px solid var(--nfs-orange);
+    color: var(--nfs-orange);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 4px;
+}
+
+/* --- SECCIÓN: 5 GRUPOS DE 3 PILOTOS --- */
+.championship-groups-wrapper {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 22px;
+    margin-bottom: 25px;
+    box-shadow: var(--shadow-card);
+}
+
+.championship-groups-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 15px;
+}
+
+.champ-group-card {
+    background: rgba(6, 9, 13, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 16px;
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.champ-group-card:hover {
+    border-color: var(--nfs-orange);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(255, 119, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.champ-group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding-bottom: 8px;
+}
+
+.champ-group-name {
+    font-family: var(--font-racing);
+    font-size: 15px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+.champ-group-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--green-neon);
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+.champ-group-pilots {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.champ-group-pilot-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 8px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.champ-group-pilot-item:hover {
+    background: rgba(255, 119, 0, 0.1);
+}
+
+.champ-group-pilot-item.selected {
+    background: rgba(255, 119, 0, 0.18);
+    border: 1px solid var(--nfs-orange);
+    box-shadow: 0 0 12px rgba(255, 119, 0, 0.35);
+}
+
+.pilot-item-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pilot-item-name {
+    font-family: var(--font-racing);
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.pilot-item-car {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.pilot-item-pts {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 800;
+    color: #ffd700;
+}
+
+/* --- SECCIÓN: LOS 4 DESAFÍOS DE LA SEMANA CON BONOS DE TIEMPO --- */
+.championship-challenges-wrapper {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 22px;
+    margin-bottom: 25px;
+    box-shadow: var(--shadow-card);
+}
+
+.championship-challenges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 16px;
+    margin-top: 15px;
+}
+
+.champ-challenge-card {
+    background: rgba(6, 9, 13, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: all 0.2s ease;
+}
+
+.champ-challenge-card:hover {
+    border-color: rgba(255, 215, 0, 0.4);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+}
+
+.champ-ch-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding-bottom: 8px;
+}
+
+.champ-ch-title {
+    font-family: var(--font-racing);
+    font-size: 16px;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.champ-ch-type {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--nfs-orange);
+    font-family: var(--font-racing);
+    letter-spacing: 0.5px;
+}
+
+.champ-ch-podiums {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.champ-ch-podium-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.podium-row-1 {
+    background: rgba(255, 215, 0, 0.08);
+    border-left: 3px solid #ffd700;
+}
+
+.podium-row-2 {
+    background: rgba(192, 192, 192, 0.08);
+    border-left: 3px solid #c0c0c0;
+}
+
+.podium-row-3 {
+    background: rgba(205, 127, 50, 0.08);
+    border-left: 3px solid #cd7f32;
+}
+
+.badge-bonus {
+    font-family: var(--font-mono);
+    font-weight: 800;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+}
+
+.badge-bonus-100 {
+    background: rgba(255, 215, 0, 0.2);
+    color: #ffd700;
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.2);
+}
+
+.badge-bonus-50 {
+    background: rgba(192, 192, 192, 0.2);
+    color: #e2e8f0;
+    border: 1px solid rgba(192, 192, 192, 0.4);
+}
+
+.badge-bonus-20 {
+    background: rgba(205, 127, 50, 0.2);
+    color: #cd7f32;
+    border: 1px solid rgba(205, 127, 50, 0.4);
+}
+
+/* --- BONOS EN FICHA TÁCTICA RAZOR --- */
+.tactical-bonuses-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.bonus-chip {
+    padding: 8px 6px;
+    border-radius: 6px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.bonus-tag {
+    font-family: var(--font-racing);
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.bonus-val {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.chip-b1 {
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    color: #ffd700;
+}
+
+.chip-b2 {
+    background: rgba(192, 192, 192, 0.1);
+    border: 1px solid rgba(192, 192, 192, 0.4);
+    color: #e2e8f0;
+}
+
+.chip-b3 {
+    background: rgba(205, 127, 50, 0.1);
+    border: 1px solid rgba(205, 127, 50, 0.4);
+    color: #cd7f32;
+}
+
+/* Columna de Bonos de Tiempo en Tabla */
+.bonus-summary-cell {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.mini-bonus-pill {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 800;
+    padding: 1px 4px;
+    border-radius: 3px;
+}
+
+/* Sub-Pestañas de Navegación del Torneo (Grupos vs Clasificación) */
+.champ-subtabs-nav {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+    background: rgba(10, 14, 20, 0.85);
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-subtle);
+    width: fit-content;
+}
+
+.champ-subtab-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-muted);
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-family: var(--font-racing);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.champ-subtab-btn:hover {
+    color: #ffffff;
+    background: rgba(255, 119, 0, 0.08);
+    border-color: rgba(255, 119, 0, 0.3);
+}
+
+.champ-subtab-btn.active {
+    background: var(--nfs-orange);
+    color: #000000;
+    border-color: var(--nfs-orange);
+    font-weight: 800;
+    box-shadow: 0 0 15px rgba(255, 119, 0, 0.4);
+}
+
+/* Envoltorio de Ficha Táctica Centrada */
+.championship-tactical-wrapper {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 22px;
+    margin-bottom: 25px;
+    box-shadow: var(--shadow-card);
+}
+
+.tactical-card-centered-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.tactical-card-centered-container .blacklist-tactical-card {
+    max-width: 580px;
+    width: 100%;
+}
+
+/* Tabla de Clasificación en Pantalla Completa */
+.standings-full-width {
+    width: 100%;
+}
+
+/* Acciones de Pie en Vista de Grupos */
+.championship-actions-footer {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   GRID Y FICHAS TÉCNICAS DE LOS 15 PILOTOS (ORDEN BLACKLIST 1 AL 15)
+   ========================================================================== */
+.pilot-quick-jump-container {
+    background: rgba(10, 14, 20, 0.9);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.quick-jump-title {
+    font-family: var(--font-racing);
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--nfs-orange);
+    letter-spacing: 1px;
+}
+
+.pilot-quick-jump-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.jump-pill {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-subtle);
+    color: #ffffff;
+    font-family: var(--font-racing);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.jump-pill:hover {
+    background: var(--nfs-orange);
+    color: #000000;
+    border-color: var(--nfs-orange);
+    box-shadow: 0 0 12px rgba(255, 119, 0, 0.4);
+    transform: translateY(-1px);
+}
+
+/* Grid de las 15 Fichas Técnicas */
+.blacklist-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 25px;
+    margin-top: 15px;
+}
+
+.standalone-card {
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.standalone-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--nfs-orange);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.9), 0 0 20px rgba(255, 119, 0, 0.25);
+}
+
+.card-highlight-pulse {
+    animation: cardPulse 1.5s ease-out;
+    border-color: var(--nfs-orange) !important;
+}
+
+@keyframes cardPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 119, 0, 0.8);
+        transform: scale(1.02);
+    }
+    50% {
+        box-shadow: 0 0 35px 12px rgba(255, 119, 0, 0.7);
+        transform: scale(1.02);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 119, 0, 0);
+        transform: scale(1);
+    }
+}
+
+/* Responsive para Blacklist */
+@media (max-width: 1080px) {
+    .blacklist-layout {
+        grid-template-columns: 1fr;
+    }
+    .blacklist-cards-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =======================================================
+   ESTILOS: INSCRIPCIÓN AL CAMPEONATO BLACKLIST 2026
+   ======================================================= */
+.championship-register-layout {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 28px;
+    margin-top: 25px;
+    align-items: start;
+}
+
+.register-form-card {
+    background: var(--bg-surface, #15151a);
+    border: 1px solid rgba(255, 119, 0, 0.25);
+    border-radius: 12px;
+    padding: 28px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.register-form-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--nfs-orange), #ff2200, var(--nfs-orange));
+}
+
+.register-card-header {
+    margin-bottom: 22px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 16px;
+}
+
+.register-badge {
+    display: inline-block;
+    background: rgba(255, 119, 0, 0.15);
+    border: 1px solid var(--nfs-orange);
+    color: var(--nfs-orange);
+    font-family: var(--font-racing);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.register-card-header h3 {
+    font-family: var(--font-racing);
+    font-size: 22px;
+    color: #ffffff;
+    margin: 0 0 6px 0;
+    letter-spacing: 0.5px;
+}
+
+.register-card-header p {
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-main, #e0e0e0);
+    letter-spacing: 0.3px;
+}
+
+.required-star {
+    color: var(--nfs-orange);
+    font-weight: 800;
+}
+
+.optional-tag {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: normal;
+}
+
+.form-input {
+    background: rgba(8, 8, 12, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    padding: 10px 14px;
+    color: #ffffff;
+    font-family: var(--font-ui, 'Inter', sans-serif);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.form-input:focus {
+    border-color: var(--nfs-orange);
+    background: rgba(12, 12, 18, 0.95);
+    box-shadow: 0 0 12px rgba(255, 119, 0, 0.3);
+}
+
+.terms-checkbox-group {
+    margin: 20px 0 22px 0;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    padding: 12px 14px;
+    border-radius: 6px;
+}
+
+.terms-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    cursor: pointer;
+}
+
+.terms-label input[type="checkbox"] {
+    margin-top: 3px;
+    accent-color: var(--nfs-orange);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.terms-label strong {
+    color: #ffffff;
+}
+
+.form-actions {
+    margin-top: 10px;
+}
+
+.btn-register-submit {
+    width: 100%;
+    background: linear-gradient(135deg, #ff7700 0%, #ff3b00 100%);
+    border: none;
+    border-radius: 6px;
+    padding: 14px 20px;
+    color: #ffffff;
+    font-family: var(--font-racing);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 4px 18px rgba(255, 119, 0, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-register-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 26px rgba(255, 119, 0, 0.6);
+    filter: brightness(1.1);
+}
+
+.btn-register-submit:active {
+    transform: translateY(0);
+}
+
+.btn-register-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.register-feedback-msg {
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    line-height: 1.5;
+    animation: fadeIn 0.3s ease;
+}
+
+.feedback-success {
+    background: rgba(34, 197, 94, 0.15);
+    border: 1px solid var(--green-neon, #22c55e);
+    color: #4ade80;
+}
+
+.feedback-error {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid #ef4444;
+    color: #f87171;
+}
+
+/* Panel de Participantes Inscritos */
+.registered-participants-panel {
+    background: var(--bg-surface, #15151a);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+}
+
+.registered-participants-panel .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 14px;
+}
+
+.panel-header-left h3 {
+    font-family: var(--font-racing);
+    font-size: 18px;
+    color: #ffffff;
+    margin: 0 0 4px 0;
+}
+
+.panel-header-left p {
+    color: var(--text-muted);
+    font-size: 12px;
+    margin: 0;
+}
+
+.slots-pill {
+    background: rgba(255, 119, 0, 0.15);
+    border: 1px solid var(--nfs-orange);
+    color: var(--nfs-orange);
+    font-family: var(--font-racing);
+    font-size: 14px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+.registered-pilots-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 520px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.registered-pilot-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 12px 14px;
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.registered-pilot-item:hover {
+    border-color: rgba(255, 119, 0, 0.4);
+    background: rgba(255, 119, 0, 0.05);
+    transform: translateX(4px);
+}
+
+.registered-pilot-item.is-user {
+    border-left: 3px solid var(--nfs-orange);
+}
+
+.registered-pilot-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.reg-slot-badge {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-racing);
+    font-size: 14px;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.slot-gold {
+    background: linear-gradient(135deg, #ffd700, #b8860b);
+    color: #000;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.slot-silver {
+    background: linear-gradient(135deg, #e0e0e0, #8a8a8a);
+    color: #000;
+}
+
+.slot-bronze {
+    background: linear-gradient(135deg, #cd7f32, #8b4513);
+    color: #fff;
+}
+
+.slot-normal {
+    background: rgba(255, 255, 255, 0.1);
+    color: #e0e0e0;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.reg-pilot-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.reg-pilot-name {
+    font-family: var(--font-racing);
+    font-size: 15px;
+    font-weight: 700;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.reg-pilot-car {
+    font-size: 12px;
+    color: var(--nfs-orange);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.reg-pilot-schedule {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.registered-pilot-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+}
+
+.btn-yt-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255, 0, 0, 0.15);
+    border: 1px solid rgba(255, 0, 0, 0.4);
+    color: #ff4d4d;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.btn-yt-link:hover {
+    background: rgba(255, 0, 0, 0.3);
+    border-color: #ff2222;
+    transform: scale(1.05);
+}
+
+.reg-status-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+}
+
+.status-official {
+    background: rgba(34, 197, 94, 0.15);
+    border: 1px solid rgba(34, 197, 94, 0.4);
+    color: var(--green-neon);
+}
+
+.status-empty {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    color: var(--text-muted);
+}
+
+.empty-participants-msg {
+    text-align: center;
+    padding: 30px 15px;
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+/* Enlace a YouTube en Fichas Técnicas */
+.tactical-yt-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 0, 0, 0.15);
+    border: 1px solid rgba(255, 0, 0, 0.4);
+    color: #ff5555;
+    font-family: var(--font-racing);
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    margin-top: 10px;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.tactical-yt-btn:hover {
+    background: rgba(255, 0, 0, 0.3);
+    border-color: #ff2222;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 900px) {
+    .championship-register-layout {
+        grid-template-columns: 1fr;
+    }
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =======================================================
+   SALÓN HISTÓRICO DE TORNEOS (CHALLONGE HISTORIAL)
+   ======================================================= */
+.past-tournaments-selector-bar {
+    margin-bottom: 25px;
+}
+
+.past-tournament-hero-card {
+    background: linear-gradient(135deg, rgba(13, 19, 28, 0.95), rgba(20, 29, 44, 0.9));
+    border: 1px solid rgba(255, 119, 0, 0.35);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 119, 0, 0.1);
+}
+
+.past-hero-content {
+    flex: 1;
+}
+
+.past-hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.past-badge-edition {
+    background: rgba(255, 215, 0, 0.15);
+    border: 1px solid rgba(255, 215, 0, 0.5);
+    color: #ffd700;
+    font-family: var(--font-racing);
+    font-size: 12px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+}
+
+.past-badge-date, .past-badge-category, .past-badge-format {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--text-muted);
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.past-hero-title {
+    font-family: var(--font-racing);
+    font-size: 26px;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0 0 8px 0;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 15px rgba(255, 119, 0, 0.3);
+}
+
+.past-hero-desc {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.btn-challonge-link-hero {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, rgba(255, 119, 0, 0.2), rgba(255, 119, 0, 0.35));
+    border: 1px solid var(--nfs-orange);
+    color: #ffffff;
+    font-family: var(--font-racing);
+    font-size: 14px;
+    font-weight: 700;
+    padding: 12px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 15px rgba(255, 119, 0, 0.25);
+}
+
+.btn-challonge-link-hero:hover {
+    background: var(--nfs-orange);
+    color: #000000;
+    box-shadow: 0 0 25px rgba(255, 119, 0, 0.6);
+    transform: translateY(-2px);
+}
+
+.btn-challonge-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.btn-challonge-link:hover {
+    background: rgba(255, 119, 0, 0.2);
+    border-color: var(--nfs-orange);
+    color: var(--nfs-orange);
+}
+
+/* Selector interno de vista (Brackets / Podio / Roster) */
+.past-view-mode-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 15px;
+}
+
+/* Secciones de Brackets */
+.bracket-section-block {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: var(--shadow-card);
+}
+
+.bracket-section-finals {
+    border-color: rgba(255, 215, 0, 0.4);
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.15);
+}
+
+.bracket-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.bracket-section-header h3 {
+    font-family: var(--font-racing);
+    font-size: 18px;
+    color: #ffffff;
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+
+.bracket-rounds-count {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--nfs-orange);
+    background: rgba(255, 119, 0, 0.1);
+    border: 1px solid rgba(255, 119, 0, 0.3);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.bracket-tree-scrollable {
+    overflow-x: auto;
+    padding-bottom: 12px;
+}
+
+.bracket-tree-scrollable::-webkit-scrollbar {
+    height: 8px;
+}
+
+.bracket-tree-scrollable::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+}
+
+.bracket-tree-scrollable::-webkit-scrollbar-thumb {
+    background: rgba(255, 119, 0, 0.4);
+    border-radius: 4px;
+}
+
+.bracket-tree-scrollable::-webkit-scrollbar-thumb:hover {
+    background: var(--nfs-orange);
+}
+
+.bracket-tree {
+    display: flex;
+    gap: 24px;
+    min-width: max-content;
+}
+
+.bracket-round {
+    min-width: 270px;
+    max-width: 290px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.bracket-round-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 6px;
+    border-left: 3px solid var(--nfs-orange);
+}
+
+.round-number {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--nfs-orange);
+}
+
+.bracket-round-header h4 {
+    font-family: var(--font-racing);
+    font-size: 13px;
+    color: #ffffff;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.bracket-matches-col {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* Tarjeta individual de Match */
+.bracket-match-card {
+    background: rgba(10, 15, 22, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 10px 12px;
+    transition: all 0.2s ease;
+}
+
+.bracket-match-card:hover {
+    border-color: rgba(255, 119, 0, 0.5);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.7), 0 0 12px rgba(255, 119, 0, 0.2);
+}
+
+.match-grand-final {
+    border-color: rgba(255, 215, 0, 0.5);
+    background: linear-gradient(135deg, rgba(16, 22, 33, 0.95), rgba(30, 25, 10, 0.95));
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
+}
+
+.match-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 11px;
+}
+
+.match-id-badge {
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    font-weight: 700;
+}
+
+.grand-final-badge {
+    font-family: var(--font-racing);
+    font-size: 11px;
+    font-weight: 800;
+    color: #ffd700;
+    background: rgba(255, 215, 0, 0.15);
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    padding: 1px 6px;
+    border-radius: 3px;
+}
+
+.match-competitors {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.match-player-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.02);
+    transition: background 0.15s;
+}
+
+.match-player-row.is-winner {
+    background: rgba(34, 197, 94, 0.12);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.match-player-row.is-loser {
+    opacity: 0.65;
+}
+
+.player-seed {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--nfs-orange);
+    min-width: 24px;
+}
+
+.player-name {
+    font-family: var(--font-racing);
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffffff;
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.winner-crown-icon {
+    font-size: 12px;
+    margin: 0 4px;
+}
+
+.player-score {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--text-muted);
+    min-width: 22px;
+    text-align: center;
+    padding: 1px 5px;
+    border-radius: 3px;
+}
+
+.score-winner {
+    background: rgba(34, 197, 94, 0.25);
+    color: var(--green-neon);
+    border: 1px solid rgba(34, 197, 94, 0.5);
+}
+
+.match-row-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.05);
+    margin: 2px 0;
+}
+
+.match-status-footer {
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.06);
+    font-size: 11px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.match-verdict {
+    color: var(--text-muted);
+}
+
+/* PODIO DEL TORNEO HISTÓRICO */
+.past-podium-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.past-podium-card {
+    position: relative;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.past-podium-card:hover {
+    transform: translateY(-4px);
+}
+
+.podium-gold {
+    border-color: rgba(255, 215, 0, 0.6);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.2);
+    background: linear-gradient(135deg, rgba(16, 22, 33, 0.95), rgba(35, 28, 10, 0.95));
+}
+
+.podium-silver {
+    border-color: rgba(203, 213, 225, 0.6);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 25px rgba(203, 213, 225, 0.15);
+}
+
+.podium-bronze {
+    border-color: rgba(205, 127, 50, 0.6);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 25px rgba(205, 127, 50, 0.15);
+}
+
+.podium-honor {
+    border-color: rgba(56, 189, 248, 0.4);
+}
+
+.podium-place-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.podium-medal {
+    font-size: 28px;
+}
+
+.podium-rank-text {
+    font-family: var(--font-racing);
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.podium-gold .podium-rank-text { color: #ffd700; }
+.podium-silver .podium-rank-text { color: #e2e8f0; }
+.podium-bronze .podium-rank-text { color: #cd7f32; }
+.podium-honor .podium-rank-text { color: #38bdf8; }
+
+.podium-seed {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--nfs-orange);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.podium-driver-name {
+    font-family: var(--font-racing);
+    font-size: 24px;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+
+.podium-driver-note p {
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.podium-card-footer {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.podium-event-tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+/* ROSTER DE PARTICIPANTES EN TORNEO */
+.past-final-pos {
+    font-family: var(--font-racing);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+}
+
+.pos-champion {
+    background: rgba(255, 215, 0, 0.15);
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    color: #ffd700;
+}
+
+.pos-silver {
+    background: rgba(203, 213, 225, 0.15);
+    border: 1px solid rgba(203, 213, 225, 0.4);
+    color: #e2e8f0;
+}
+
+.pos-bronze {
+    background: rgba(205, 127, 50, 0.15);
+    border: 1px solid rgba(205, 127, 50, 0.4);
+    color: #cd7f32;
+}
+
+.crown-badge {
+    font-size: 11px;
+    background: rgba(255, 215, 0, 0.2);
+    border: 1px solid #ffd700;
+    color: #ffd700;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-weight: 800;
+}
+
+.badge-verified-challonge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+    .past-tournament-hero-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .past-view-mode-tabs {
+        flex-wrap: wrap;
+    }
+    .bracket-round {
+        min-width: 240px;
+    }
+}
+
+/* =======================================================
+   BANNER OFICIAL DE LA COMUNIDAD DE DISCORD (HOME)
+   ======================================================= */
+.home-discord-banner {
+    position: relative;
+    max-width: 1100px;
+    margin: 25px auto 10px auto;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, rgba(88, 101, 242, 0.16) 0%, rgba(13, 19, 28, 0.95) 70%);
+    border: 1px solid rgba(88, 101, 242, 0.45);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 30px rgba(88, 101, 242, 0.2);
+    overflow: hidden;
+}
+
+.discord-banner-glow {
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(88, 101, 242, 0.3) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.discord-banner-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex: 1;
+    z-index: 1;
+}
+
+.discord-icon-badge {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    border-radius: 12px;
+    background: rgba(88, 101, 242, 0.2);
+    border: 1px solid rgba(88, 101, 242, 0.6);
+    color: #5865F2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 15px rgba(88, 101, 242, 0.35);
+}
+
+.discord-banner-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.discord-tag {
+    font-family: var(--font-racing);
+    font-size: 11px;
+    font-weight: 800;
+    color: #5865F2;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.discord-banner-text h3 {
+    font-family: var(--font-racing);
+    font-size: 20px;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 10px rgba(88, 101, 242, 0.4);
+}
+
+.discord-banner-text p {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.discord-banner-right {
+    z-index: 1;
+}
+
+.btn-discord-join {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #5865F2 0%, #4752C4 100%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    font-family: var(--font-racing);
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 20px rgba(88, 101, 242, 0.4);
+}
+
+.btn-discord-join:hover {
+    background: linear-gradient(135deg, #6875f5 0%, #5865F2 100%);
+    box-shadow: 0 0 30px rgba(88, 101, 242, 0.7);
+    transform: translateY(-2px);
+    color: #ffffff;
+}
+
+.btn-discord-hero {
+    background: rgba(88, 101, 242, 0.15) !important;
+    border: 1px solid rgba(88, 101, 242, 0.6) !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 15px rgba(88, 101, 242, 0.25) !important;
+}
+
+.btn-discord-hero:hover {
+    background: #5865F2 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 25px rgba(88, 101, 242, 0.6) !important;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .home-discord-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        margin: 15px 12px;
+    }
+    .discord-banner-right {
+        width: 100%;
+    }
+    .btn-discord-join {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* =======================================================
+   TABLAS DE LEADERBOARD ADAPTADAS AL ESTILO BLACKLIST
+   ======================================================= */
+.table-section .blacklist-table-wrapper {
+    margin-top: 15px;
+    border-radius: 10px;
+    background: rgba(10, 14, 20, 0.85);
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+    overflow-x: auto;
+}
+
+.table-section .blacklist-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-section .blacklist-table th {
+    background: rgba(15, 23, 34, 0.95);
+    font-family: var(--font-racing);
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    padding: 14px 16px;
+    text-transform: uppercase;
+    border-bottom: 2px solid rgba(255, 119, 0, 0.35);
+    text-align: left;
+}
+
+.table-section .blacklist-table td {
+    padding: 12px 16px;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+

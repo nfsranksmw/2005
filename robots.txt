@@ -1,0 +1,11 @@
+# robots.txt for NFS Ranks v.5 (NFSRANKSMW)
+User-agent: *
+Allow: /
+Disallow: /scratch/
+Disallow: /.vscode/
+Disallow: /*.cpp$
+Disallow: /*.ini$
+
+# Sitemaps oficiales
+Sitemap: https://nfsranksmw.github.io/2005/sitemap.xml
+Sitemap: https://nfsranksmw.pages.dev/sitemap.xml

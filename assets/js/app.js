@@ -58,7 +58,7 @@ function switchView(viewId) {
     document.querySelectorAll('.view-section').forEach(section => {
         section.classList.remove('active');
     });
-    document.querySelectorAll('nav a').forEach(link => {
+    document.querySelectorAll('nav a, .nav-dropdown-btn').forEach(link => {
         link.classList.remove('active');
     });
 
@@ -70,6 +70,13 @@ function switchView(viewId) {
     const targetNavLink = document.getElementById('nav-' + viewId);
     if (targetNavLink) {
         targetNavLink.classList.add('active');
+
+        // Si el enlace pertenece a un menú desplegable, también iluminamos el botón padre
+        const parentDropdown = targetNavLink.closest('.nav-dropdown');
+        if (parentDropdown) {
+            const dropdownBtn = parentDropdown.querySelector('.nav-dropdown-btn');
+            if (dropdownBtn) dropdownBtn.classList.add('active');
+        }
     }
 
     const mainNav = document.getElementById('main-nav');
@@ -77,8 +84,30 @@ function switchView(viewId) {
         mainNav.classList.remove('open');
     }
 
+    closeAllDropdowns();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+function toggleNavDropdown(dropdownId) {
+    const target = document.getElementById(dropdownId);
+    if (!target) return;
+    const isCurrentlyOpen = target.classList.contains('open');
+    closeAllDropdowns();
+    if (!isCurrentlyOpen) {
+        target.classList.add('open');
+    }
+}
+
+function closeAllDropdowns() {
+    document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
+}
+
+// Cerrar menús desplegables al hacer clic fuera
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.nav-dropdown')) {
+        closeAllDropdowns();
+    }
+});
 
 function switchCircuitTab(tabId, btn) {
     document.querySelectorAll('.circuit-section').forEach(sec => sec.classList.remove('active'));
@@ -440,27 +469,55 @@ function renderTableRows(tbodyId, dataRows) {
     tbody.innerHTML = '';
     
     if (!dataRows || dataRows.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 20px; font-family: var(--font-racing); font-size: 16px;">Sin registros oficiales para esta categoría aún.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 25px; font-family: var(--font-racing); font-size: 16px;">Sin registros oficiales para esta categoría aún.</td></tr>`;
         return;
     }
 
     dataRows.forEach(row => {
         const tr = document.createElement('tr');
         const rankNum = parseInt(String(row.rank).replace(/[^0-9]/g, ''), 10);
-        let posClass = rankNum === 1 ? "rank-1" : (rankNum === 2 ? "rank-2" : (rankNum === 3 ? "rank-3" : ""));
         
+        let rankBadgeClass = 'rank-normal';
+        if (rankNum === 1) rankBadgeClass = 'rank-gold';
+        else if (rankNum === 2) rankBadgeClass = 'rank-silver';
+        else if (rankNum === 3) rankBadgeClass = 'rank-bronze';
+
+        let rowHighlightClass = rankNum === 1 ? 'active-row' : '';
+        tr.className = `blacklist-row ${rowHighlightClass}`;
+
         let videoBtnHTML = (row.yt && row.yt !== "#" && row.yt.startsWith("http")) 
-            ? `<a href="${row.yt}" target="_blank" rel="noopener noreferrer" class="btn-youtube">▶ Video</a>` 
-            : `<span style="color: var(--text-dimmed); font-size: 12px;">Sin video</span>`;
+            ? `<a href="${row.yt}" target="_blank" rel="noopener noreferrer" class="btn-yt-link" style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; font-size: 11px; background: rgba(255, 0, 0, 0.15); border: 1px solid rgba(255, 0, 0, 0.4); color: #ff5555; text-decoration: none; border-radius: 4px; font-family: var(--font-racing); font-weight: 700;">▶ Video</a>` 
+            : `<span style="color: var(--text-dimmed); font-size: 12px; font-style: italic;">Sin video</span>`;
+
+        let aliasTag = '';
+        if (rankNum === 1) aliasTag = '<span class="driver-cell-alias">👑 RECORD MUNDIAL</span>';
+        else if (rankNum === 2) aliasTag = '<span class="driver-cell-alias" style="color: #cbd5e1;">🥈 TOP 2 MUNDIAL</span>';
+        else if (rankNum === 3) aliasTag = '<span class="driver-cell-alias" style="color: #cd7f32;">🥉 TOP 3 MUNDIAL</span>';
+        else aliasTag = '<span class="driver-cell-alias" style="color: var(--text-muted); font-size: 10px;">PILOTO OFICIAL</span>';
 
         tr.innerHTML = `
-            <td class="${posClass}">${row.rank}</td>
-            <td><strong style="color: #ffffff; font-size: 15px;">${row.driver}</strong></td>
-            <td style="color: var(--nfs-orange); font-family: var(--font-mono); font-weight: 800; font-size: 15px; text-shadow: var(--nfs-subtle-glow);">${row.time}</td>
-            <td><span class="telemetry-pill">🎮 ${row.device}</span></td>
-            <td><span class="telemetry-pill" style="color: #ffffff; font-weight: 600;">🚗 ${row.car}</span></td>
-            <td><span class="telemetry-pill">⚙️ ${row.gearbox}</span></td>
-            <td style="color: var(--text-muted); font-size: 13px;">${row.date}</td>
+            <td>
+                <span class="bl-rank-badge ${rankBadgeClass}">${rankNum || row.rank}</span>
+            </td>
+            <td>
+                <div class="driver-cell-flex">
+                    <span class="driver-cell-name">${row.driver}</span>
+                    ${aliasTag}
+                </div>
+            </td>
+            <td>
+                <span class="rep-money-cell" style="font-size: 15px; text-shadow: 0 0 10px rgba(34, 197, 94, 0.35);">${row.time}</span>
+            </td>
+            <td>
+                <span style="color: #ffffff; font-weight: 700; font-size: 13px;">${row.car}</span>
+            </td>
+            <td>
+                <span class="champ-group-tag" style="color: #38bdf8; background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3);">🎮 ${row.device}</span>
+            </td>
+            <td>
+                <span class="champ-group-tag" style="color: #ffd700; background: rgba(255, 215, 0, 0.1); border-color: rgba(255, 215, 0, 0.3);">⚙️ ${row.gearbox}</span>
+            </td>
+            <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 12px;">${row.date}</td>
             <td>${videoBtnHTML}</td>
         `;
         tbody.appendChild(tr);
@@ -932,6 +989,1479 @@ async function handleTimeSubmit(event) {
 }
 
 // =======================================================
+// SISTEMA DE DESAFÍOS SEMANALES (Inspirado en NightRiderz World)
+// =======================================================
+let currentChallengeYear = 2026;
+let currentChallengeWeek = 38;
+let challengeActiveFilter = 'all';
+
+function getISOWeek(date) {
+    const target = new Date(date.valueOf());
+    const dayNr = (date.getDay() + 6) % 7;
+    target.setDate(target.getDate() - dayNr + 3);
+    const firstThursday = target.valueOf();
+    target.setMonth(0, 1);
+    if (target.getDay() !== 4) {
+        target.setMonth(0, 1 + ((4 - target.getDay()) + 7) % 7);
+    }
+    return 1 + Math.ceil((firstThursday - target) / 604800000);
+}
+
+function getWeekDateRangeString(year, week) {
+    const simple = new Date(year, 0, 1 + (week - 1) * 7);
+    const dayOfWeek = simple.getDay();
+    const ISOweekStart = new Date(simple);
+    if (dayOfWeek <= 4)
+        ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
+    else
+        ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
+
+    const ISOweekEnd = new Date(ISOweekStart);
+    ISOweekEnd.setDate(ISOweekStart.getDate() + 6);
+
+    const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+    return `Semana ${week} · del ${ISOweekStart.getDate()} de ${months[ISOweekStart.getMonth()]} al ${ISOweekEnd.getDate()} de ${months[ISOweekEnd.getMonth()]} de ${year}`;
+}
+
+function createSeededRandom(seed) {
+    let s = seed % 2147483647;
+    if (s <= 0) s += 2147483646;
+    return function() {
+        return (s = s * 16807 % 2147483647) / 2147483647;
+    };
+}
+
+function getCompletedChallenges() {
+    try {
+        const stored = localStorage.getItem('nfs_challenges_completed_v1');
+        return stored ? JSON.parse(stored) : [];
+    } catch (e) {
+        return [];
+    }
+}
+
+function toggleChallengeComplete(challengeId) {
+    let completed = getCompletedChallenges();
+    const isNowCompleted = !completed.includes(challengeId);
+    if (!isNowCompleted) {
+        completed = completed.filter(id => id !== challengeId);
+    } else {
+        completed.push(challengeId);
+    }
+    try {
+        localStorage.setItem('nfs_challenges_completed_v1', JSON.stringify(completed));
+    } catch (e) {
+        console.warn("No se pudo guardar estado de desafío:", e);
+    }
+    renderChallengesUI();
+}
+
+function startChallengeSubmission(routeName, carName) {
+    switchView('submit');
+    const routeInput = document.getElementById('sub-route');
+    const carInput = document.getElementById('sub-car');
+    if (routeInput) routeInput.value = routeName;
+    if (carInput) {
+        const cleanCar = carName.replace('Solo ', '').replace(' (Sin Nitro)', '').trim();
+        carInput.value = cleanCar !== 'Cualquier Auto' ? cleanCar : 'BMW M3 GTR';
+    }
+    const form = document.getElementById('form-submit-time');
+    if (form) {
+        form.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+function generateWeeklyChallenges(year, week) {
+    const rng = createSeededRandom(year * 100 + week);
+    const sourceRoutes = typeof routesData !== 'undefined' ? routesData : [];
+    if (sourceRoutes.length === 0) return [];
+
+    const shuffledRoutes = [...sourceRoutes].sort(() => rng() - 0.5);
+
+    const difficultyConfig = [
+        { diff: 'Muy Fácil', class: 'diff-very-easy', multiplier: 1.15, reward: '500 SB', cash: '$100.000' },
+        { diff: 'Muy Fácil', class: 'diff-very-easy', multiplier: 1.12, reward: '500 SB', cash: '$150.000' },
+        { diff: 'Fácil', class: 'diff-easy', multiplier: 1.08, reward: '1.000 SB', cash: '$250.000' },
+        { diff: 'Fácil', class: 'diff-easy', multiplier: 1.05, reward: '1.000 SB', cash: '$300.000' },
+        { diff: 'Medio', class: 'diff-medium', multiplier: 1.02, reward: '2.000 SB', cash: '$500.000' },
+        { diff: 'Medio', class: 'diff-medium', multiplier: 0.99, reward: '2.000 SB', cash: '$600.000' },
+        { diff: 'Duro', class: 'diff-hard', multiplier: 0.96, reward: '2.500 SB', cash: '$750.000' },
+        { diff: 'Extremo', class: 'diff-extreme', multiplier: 0.93, reward: '3.500 SB', cash: '$1.000.000' }
+    ];
+
+    const carRestrictions = [
+        "Solo BMW M3 GTR (Sin Nitro)",
+        "Porsche Carrera GT",
+        "Porsche Cayman S",
+        "Chevrolet Corvette C6.R",
+        "Ford GT",
+        "Cualquier Auto (Junkman)",
+        "Subaru Impreza WRX",
+        "Mitsubishi Lancer Evo VIII"
+    ];
+
+    const modeLabels = {
+        'Circuito': 'MODO CONTRARRELOJ // SINGLE LAP',
+        'Sprint': 'SPRINT TELEMETRÍA // FULL ROUTE',
+        'Drag': 'DRAG TIME ATTACK // PURA POTENCIA'
+    };
+
+    const challenges = [];
+    const count = Math.min(8, shuffledRoutes.length);
+
+    for (let i = 0; i < count; i++) {
+        const route = shuffledRoutes[i];
+        const diff = difficultyConfig[i] || difficultyConfig[0];
+        const car = carRestrictions[Math.floor(rng() * carRestrictions.length)];
+        const completedCount = Math.floor(rng() * 250) + 45;
+
+        let baseSeconds = 90;
+        if (route.type === 'Sprint') baseSeconds = 125;
+        if (route.type === 'Drag') baseSeconds = 30;
+
+        baseSeconds = Math.round((baseSeconds + (route.name.length * 2) % 30) * diff.multiplier);
+        const mins = Math.floor(baseSeconds / 60);
+        const secs = baseSeconds % 60;
+        const millis = Math.floor(rng() * 900) + 100;
+        const formattedTime = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}.${millis}`;
+
+        challenges.push({
+            id: `${year}-w${week}-ch${i}`,
+            index: i + 1,
+            route: route,
+            difficulty: diff.diff,
+            diffClass: diff.class,
+            carRestriction: car,
+            targetTime: formattedTime,
+            reward: diff.reward,
+            cashReward: diff.cash,
+            communityCount: completedCount,
+            modeLabel: modeLabels[route.type] || 'MODO CONTRARRELOJ'
+        });
+    }
+
+    return challenges;
+}
+
+function renderChallengesUI() {
+    const gridContainer = document.getElementById('challenges-grid');
+    if (!gridContainer) return;
+
+    const challenges = generateWeeklyChallenges(currentChallengeYear, currentChallengeWeek);
+    const completedList = getCompletedChallenges();
+
+    const dateRangeEl = document.getElementById('challenge-week-daterange');
+    const weekLabelEl = document.getElementById('challenge-week-label');
+    const totalCountEl = document.getElementById('challenge-total-count');
+    const pendingCountEl = document.getElementById('challenge-pending-count');
+    const completedCountEl = document.getElementById('challenge-completed-count');
+
+    const total = challenges.length;
+    const completedCount = challenges.filter(c => completedList.includes(c.id)).length;
+    const pendingCount = total - completedCount;
+
+    if (dateRangeEl) dateRangeEl.textContent = getWeekDateRangeString(currentChallengeYear, currentChallengeWeek);
+    if (weekLabelEl) weekLabelEl.textContent = `Semana ${currentChallengeWeek}, ${currentChallengeYear}`;
+    if (totalCountEl) totalCountEl.textContent = total;
+    if (pendingCountEl) pendingCountEl.textContent = pendingCount;
+    if (completedCountEl) completedCountEl.textContent = completedCount;
+
+    const pillAll = document.getElementById('count-pill-all');
+    const pillTodo = document.getElementById('count-pill-todo');
+    const pillComp = document.getElementById('count-pill-completed');
+    if (pillAll) pillAll.textContent = total;
+    if (pillTodo) pillTodo.textContent = pendingCount;
+    if (pillComp) pillComp.textContent = completedCount;
+
+    const filtered = challenges.filter(c => {
+        const isDone = completedList.includes(c.id);
+        if (challengeActiveFilter === 'todo') return !isDone;
+        if (challengeActiveFilter === 'completed') return isDone;
+        return true;
+    });
+
+    if (filtered.length === 0) {
+        gridContainer.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 40px; font-family: var(--font-racing); font-size: 18px;">No hay desafíos en esta categoría para la semana seleccionada.</p>`;
+        return;
+    }
+
+    const thumbImages = [
+        'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=600&q=80'
+    ];
+
+    let html = '';
+    filtered.forEach((ch, idx) => {
+        const isDone = completedList.includes(ch.id);
+        const thumbUrl = thumbImages[idx % thumbImages.length];
+
+        html += `
+            <div class="challenge-card ${isDone ? 'is-completed' : ''}">
+                <div>
+                    <!-- Miniatura con badges -->
+                    <div class="challenge-thumb" style="background-image: url('${thumbUrl}');">
+                        <div class="challenge-thumb-header">
+                            <span class="difficulty-badge ${ch.diffClass}">${ch.difficulty}</span>
+                            <span class="challenge-tier-pill">🏁 ${ch.route.type}</span>
+                        </div>
+                    </div>
+
+                    <!-- Estadísticas de corredores -->
+                    <div class="challenge-community-row">
+                        <span>👥</span>
+                        <span>${ch.communityCount} corredores completaron</span>
+                    </div>
+
+                    <!-- Datos del desafío -->
+                    <div class="challenge-body">
+                        <div>
+                            <span class="challenge-mode-label">${ch.modeLabel}</span>
+                            <h3 class="challenge-route-name" title="${ch.route.name}">${ch.route.name}</h3>
+                        </div>
+
+                        <!-- Tiempo objetivo -->
+                        <div class="challenge-time-box">
+                            <span style="font-size: 18px;">⏱️</span>
+                            <div>
+                                <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">TIEMPO OBJETIVO</div>
+                                <div class="challenge-time-val" style="color: var(--nfs-orange); text-shadow: var(--nfs-subtle-glow);">
+                                    - ${ch.targetTime}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Restricciones -->
+                        <div class="challenge-restriction">
+                            <span style="color: var(--nfs-orange);">🚗</span>
+                            <span>${ch.carRestriction}</span>
+                        </div>
+
+                        <!-- Recompensa -->
+                        <div class="challenge-reward-bar">
+                            <span>⭐</span>
+                            <span>RECOMPENSA: ${ch.reward} // ${ch.cashReward}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Acciones -->
+                <div class="challenge-actions-row">
+                    <button class="btn-toggle-complete ${isDone ? 'completed' : 'incomplete'}" onclick="toggleChallengeComplete('${ch.id}')">
+                        ${isDone ? '✅ COMPLETADO' : '❌ NO COMPLETADO'}
+                    </button>
+                    
+                    <button class="btn-challenge-submit" onclick="startChallengeSubmission('${ch.route.name}', '${ch.carRestriction}')">
+                        🚀 Enviar Registro a Moderación
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+
+    gridContainer.innerHTML = html;
+}
+
+function changeChallengeWeek(delta) {
+    currentChallengeWeek += delta;
+    if (currentChallengeWeek > 52) {
+        currentChallengeWeek = 1;
+        currentChallengeYear++;
+    } else if (currentChallengeWeek < 1) {
+        currentChallengeWeek = 52;
+        currentChallengeYear--;
+    }
+    renderChallengesUI();
+}
+
+function resetToCurrentWeek() {
+    const today = new Date();
+    currentChallengeYear = today.getFullYear();
+    currentChallengeWeek = getISOWeek(today);
+    renderChallengesUI();
+}
+
+function setChallengeFilter(filter, btn) {
+    document.querySelectorAll('.challenge-filter-pills .filter-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    challengeActiveFilter = filter;
+    renderChallengesUI();
+}
+
+function initChallengesSystem() {
+    const today = new Date();
+    currentChallengeYear = today.getFullYear();
+    currentChallengeWeek = getISOWeek(today);
+    renderChallengesUI();
+}
+
+// =======================================================
+// BLACKLIST EVENT // CAMPEONATO 2026 (4 SEMANAS • 5 GRUPOS • 8 DESAFÍOS)
+// =======================================================
+
+const BLACKLIST_STORAGE_KEY = 'nfs_blacklist_championship_2026_v2';
+let blacklistDrivers = [];
+let currentSelectedBlacklistRank = 1;
+let currentChampionshipWeek = 1;
+
+function loadBlacklistData() {
+    try {
+        const saved = localStorage.getItem(BLACKLIST_STORAGE_KEY);
+        if (saved) {
+            blacklistDrivers = JSON.parse(saved);
+        } else if (typeof DEFAULT_BLACKLIST_DRIVERS !== 'undefined') {
+            blacklistDrivers = JSON.parse(JSON.stringify(DEFAULT_BLACKLIST_DRIVERS));
+            saveBlacklistData();
+        }
+    } catch (e) {
+        console.error("Error al cargar datos del Campeonato Blacklist:", e);
+        if (typeof DEFAULT_BLACKLIST_DRIVERS !== 'undefined') {
+            blacklistDrivers = JSON.parse(JSON.stringify(DEFAULT_BLACKLIST_DRIVERS));
+        }
+    }
+}
+
+function saveBlacklistData() {
+    try {
+        localStorage.setItem(BLACKLIST_STORAGE_KEY, JSON.stringify(blacklistDrivers));
+    } catch (e) {
+        console.error("Error al guardar datos del Campeonato Blacklist:", e);
+    }
+}
+
+/**
+ * Fórmula de Puntuación del Campeonato 2026:
+ * Puntos = (P1 * 25) + (P2 * 18) + (P3 * 15) + (P4 * 12) +
+ *          (1° Mejores Tiempos * 100) + (2° Mejores Tiempos * 50) + (3° Mejores Tiempos * 20) +
+ *          Math.floor(REP / 10000)
+ */
+function calculateDriverPoints(driver) {
+    const v = driver.victories || { p1: 0, p2: 0, p3: 0, p4: 0 };
+    const bt = driver.bestTimes || { first: 0, second: 0, third: 0 };
+    const p1Pts = (v.p1 || 0) * 25;
+    const p2Pts = (v.p2 || 0) * 18;
+    const p3Pts = (v.p3 || 0) * 15;
+    const p4Pts = (v.p4 || 0) * 12;
+    const bonusPts = ((bt.first || 0) * 100) + ((bt.second || 0) * 50) + ((bt.third || 0) * 20);
+    const repPts = Math.floor((driver.rep || 0) / 10000);
+    return p1Pts + p2Pts + p3Pts + p4Pts + bonusPts + repPts;
+}
+
+function getDriverGroupForWeek(rank, weekNum) {
+    if (typeof CHAMPIONSHIP_WEEKS_DATA === 'undefined') return 'Grupo Alpha';
+    const weekData = CHAMPIONSHIP_WEEKS_DATA[weekNum] || CHAMPIONSHIP_WEEKS_DATA[1];
+    if (!weekData || !weekData.groups) return 'Grupo Alpha';
+    for (const grp of weekData.groups) {
+        if (grp.pilots && grp.pilots.includes(rank)) {
+            return grp.name;
+        }
+    }
+    // Asignar en rotación a los grupos para pilotos de parrilla extendida (> 15)
+    const groupNames = [
+        'Grupo Alpha (Líderes)',
+        'Grupo Beta (Aspirantes)',
+        'Grupo Gamma (Fuerza)',
+        'Grupo Delta (Técnica)',
+        'Grupo Épsilon (Defensa)'
+    ];
+    const groupIdx = (rank - 1) % 5;
+    return `${groupNames[groupIdx]} [Ext]`;
+}
+
+function switchChampionshipWeek(weekNumber, btn) {
+    currentChampionshipWeek = weekNumber;
+
+    // Actualizar botones de selector de semana
+    const pills = document.querySelectorAll('.champ-pill');
+    pills.forEach((p, idx) => {
+        if (btn) {
+            p.classList.toggle('active', p === btn);
+        } else {
+            p.classList.toggle('active', idx === (weekNumber - 1));
+        }
+    });
+
+    const champWeekEl = document.getElementById('bl-summary-champ-week');
+    if (champWeekEl) {
+        champWeekEl.textContent = `Semana ${weekNumber} de 4 (4 Desafíos)`;
+    }
+
+    renderChampionshipGroups(weekNumber);
+    renderChampionshipChallenges(weekNumber);
+    renderBlacklistUI();
+    updateBlacklistTacticalCard();
+    renderAllTacticalCards();
+}
+
+function renderChampionshipGroups(weekNumber) {
+    const container = document.getElementById('champ-groups-grid');
+    const datesBadge = document.getElementById('champ-week-dates-badge');
+    if (!container) return;
+
+    if (typeof CHAMPIONSHIP_WEEKS_DATA === 'undefined') return;
+    const weekData = CHAMPIONSHIP_WEEKS_DATA[weekNumber] || CHAMPIONSHIP_WEEKS_DATA[1];
+    if (!weekData) return;
+
+    if (datesBadge) {
+        datesBadge.textContent = weekData.dates || `Semana ${weekNumber}`;
+    }
+
+    container.innerHTML = '';
+
+    weekData.groups.forEach((grp, grpIdx) => {
+        const groupCard = document.createElement('div');
+        groupCard.className = 'champ-group-card';
+
+        // Incluir pilotos base del grupo y cualquier piloto extendido (> 15) asignado por rotación
+        const groupPilots = [...grp.pilots];
+        blacklistDrivers.forEach(d => {
+            if (d.rank > 15 && (d.rank - 1) % 5 === grpIdx && !groupPilots.includes(d.rank)) {
+                groupPilots.push(d.rank);
+            }
+        });
+
+        let pilotsHtml = '';
+        groupPilots.forEach(pilotRank => {
+            const driver = blacklistDrivers.find(d => d.rank === pilotRank) || {
+                rank: pilotRank,
+                name: `Piloto #${pilotRank}`,
+                alias: `P${pilotRank}`,
+                ride: 'Vehículo Stock',
+                rep: 0
+            };
+
+            const isSelected = driver.rank === currentSelectedBlacklistRank;
+            const pts = calculateDriverPoints(driver);
+
+            pilotsHtml += `
+                <div class="champ-group-pilot-item ${isSelected ? 'selected' : ''}" onclick="selectBlacklistPilot(${driver.rank})">
+                    <div class="pilot-item-left">
+                        <span class="bl-rank-badge ${driver.rank === 1 ? 'rank-gold' : driver.rank === 2 ? 'rank-silver' : driver.rank === 3 ? 'rank-bronze' : 'rank-normal'}" style="min-width: 28px; height: 28px; font-size: 13px;">${driver.rank}</span>
+                        <div>
+                            <div class="pilot-item-name">${driver.name} <span style="color: var(--nfs-orange);">"${driver.alias}"</span></div>
+                            <div class="pilot-item-car">${driver.ride}</div>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="pilot-item-pts">${pts.toLocaleString()} PTS</div>
+                        <div style="font-family: var(--font-mono); font-size: 11px; color: var(--green-neon);">$${(driver.rep || 0).toLocaleString()}</div>
+                    </div>
+                </div>
+            `;
+        });
+
+        groupCard.innerHTML = `
+            <div class="champ-group-header">
+                <span class="champ-group-name">${grp.name}</span>
+                <span class="champ-group-tag">${grp.tag || 'TRÍO OFICIAL'}</span>
+            </div>
+            <div class="champ-group-pilots">
+                ${pilotsHtml}
+            </div>
+        `;
+
+        container.appendChild(groupCard);
+    });
+}
+
+function renderChampionshipChallenges(weekNumber) {
+    const container = document.getElementById('champ-challenges-grid');
+    if (!container) return;
+
+    if (typeof CHAMPIONSHIP_WEEKS_DATA === 'undefined') return;
+    const weekData = CHAMPIONSHIP_WEEKS_DATA[weekNumber] || CHAMPIONSHIP_WEEKS_DATA[1];
+    if (!weekData || !weekData.challenges) return;
+
+    container.innerHTML = '';
+
+    weekData.challenges.forEach((ch, idx) => {
+        const card = document.createElement('div');
+        card.className = 'champ-challenge-card';
+
+        let top3Html = '';
+        ch.top3.forEach((t, tIdx) => {
+            const rowClass = tIdx === 0 ? 'podium-row-1' : tIdx === 1 ? 'podium-row-2' : 'podium-row-3';
+            const bonusClass = t.bonus === 100 ? 'badge-bonus-100' : t.bonus === 50 ? 'badge-bonus-50' : 'badge-bonus-20';
+
+            top3Html += `
+                <div class="champ-ch-podium-row ${rowClass}">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span class="badge-bonus ${bonusClass}">${t.badge}</span>
+                        <div>
+                            <span style="font-weight: 700; color: #ffffff;">${t.pilot}</span>
+                            <span style="color: var(--text-muted); font-size: 11px; margin-left: 4px;">(${t.car})</span>
+                        </div>
+                    </div>
+                    <span style="font-family: var(--font-mono); font-weight: 700; color: var(--cyan-electric);">${t.time}</span>
+                </div>
+            `;
+        });
+
+        card.innerHTML = `
+            <div class="champ-ch-header">
+                <span class="champ-ch-title">#0${idx + 1} ${ch.route}</span>
+                <span class="champ-ch-type">${ch.type.toUpperCase()}</span>
+            </div>
+            <div class="champ-ch-podiums">
+                ${top3Html}
+            </div>
+        `;
+
+        container.appendChild(card);
+    });
+}
+
+function renderBlacklistUI() {
+    const tbody = document.getElementById('tbody-blacklist-roster');
+    if (!tbody) return;
+
+    // Ordenar de arriba a abajo por rango (1 al 15)
+    blacklistDrivers.sort((a, b) => a.rank - b.rank);
+
+    // Actualizar barra de resumen
+    const leader = blacklistDrivers[0] || { name: 'Razor', alias: 'Razor', ride: 'BMW M3 GTR' };
+    const leaderEl = document.getElementById('bl-summary-leader');
+    if (leaderEl) {
+        leaderEl.textContent = `${leader.alias || leader.name} (${leader.ride})`;
+    }
+    const leaderStandingsEl = document.getElementById('bl-standings-leader');
+    if (leaderStandingsEl) {
+        leaderStandingsEl.textContent = `${leader.alias || leader.name} (${leader.ride})`;
+    }
+
+    const totalRep = blacklistDrivers.reduce((sum, d) => sum + (d.rep || 0), 0);
+    const totalRepEl = document.getElementById('bl-summary-rep');
+    if (totalRepEl) {
+        totalRepEl.textContent = `$${totalRep.toLocaleString()}`;
+    }
+    const repStandingsEl = document.getElementById('bl-standings-rep');
+    if (repStandingsEl) {
+        repStandingsEl.textContent = `$${totalRep.toLocaleString()}`;
+    }
+
+    tbody.innerHTML = '';
+
+    blacklistDrivers.forEach(driver => {
+        const tr = document.createElement('tr');
+        tr.className = `blacklist-row ${driver.rank === currentSelectedBlacklistRank ? 'active-row' : ''}`;
+        tr.onclick = () => selectBlacklistPilot(driver.rank);
+
+        let rankBadgeClass = 'rank-normal';
+        if (driver.rank === 1) rankBadgeClass = 'rank-gold';
+        else if (driver.rank === 2) rankBadgeClass = 'rank-silver';
+        else if (driver.rank === 3) rankBadgeClass = 'rank-bronze';
+
+        let statusClass = 'status-active';
+        if (driver.rank === 1) statusClass = 'status-leader';
+        else if (driver.rank <= 3) statusClass = 'status-contender';
+
+        const totalPts = calculateDriverPoints(driver);
+        const groupName = getDriverGroupForWeek(driver.rank, currentChampionshipWeek);
+        const bt = driver.bestTimes || { first: 0, second: 0, third: 0 };
+
+        tr.innerHTML = `
+            <td>
+                <span class="bl-rank-badge ${rankBadgeClass}">${driver.rank}</span>
+            </td>
+            <td>
+                <div class="driver-cell-flex">
+                    <span class="driver-cell-name">${driver.name}</span>
+                    <span class="driver-cell-alias">"${driver.alias}"</span>
+                </div>
+            </td>
+            <td>
+                <span style="color: #ffffff; font-weight: 600;">${driver.ride}</span>
+            </td>
+            <td>
+                <span class="rep-money-cell">$${(driver.rep || 0).toLocaleString()}</span>
+            </td>
+            <td style="color: #ffd700; font-weight: 800; font-family: var(--font-mono);">${driver.victories?.p1 || 0}</td>
+            <td style="color: #e2e8f0; font-weight: 800; font-family: var(--font-mono);">${driver.victories?.p2 || 0}</td>
+            <td style="color: #cd7f32; font-weight: 800; font-family: var(--font-mono);">${driver.victories?.p3 || 0}</td>
+            <td style="color: #38bdf8; font-weight: 800; font-family: var(--font-mono);">${driver.victories?.p4 || 0}</td>
+            <td>
+                <div class="bonus-summary-cell">
+                    <span class="mini-bonus-pill badge-bonus-100" title="1° Mejor Tiempo (+100 PTS)">🥇 ${bt.first || 0}</span>
+                    <span class="mini-bonus-pill badge-bonus-50" title="2° Mejor Tiempo (+50 PTS)">🥈 ${bt.second || 0}</span>
+                    <span class="mini-bonus-pill badge-bonus-20" title="3° Mejor Tiempo (+20 PTS)">🥉 ${bt.third || 0}</span>
+                </div>
+            </td>
+            <td>
+                <span class="pts-cell">${totalPts.toLocaleString()} PTS</span>
+            </td>
+            <td>
+                <span class="champ-group-tag">${groupName}</span>
+            </td>
+            <td>
+                <span class="status-badge ${statusClass}">${driver.status || 'ACTIVO'}</span>
+            </td>
+        `;
+
+        tbody.appendChild(tr);
+    });
+
+    // Actualizar la Ficha Táctica seleccionada
+    updateBlacklistTacticalCard();
+}
+
+function selectBlacklistPilot(rank) {
+    currentSelectedBlacklistRank = rank;
+    updateBlacklistTacticalCard();
+
+    // Actualizar fila activa en la tabla
+    const rows = document.querySelectorAll('.blacklist-row');
+    rows.forEach((r, idx) => {
+        if (blacklistDrivers[idx] && blacklistDrivers[idx].rank === rank) {
+            r.classList.add('active-row');
+        } else {
+            r.classList.remove('active-row');
+        }
+    });
+
+    // Actualizar selección en grupos de carrera
+    document.querySelectorAll('.champ-group-pilot-item').forEach(el => {
+        const rankSpan = el.querySelector('.bl-rank-badge');
+        if (rankSpan && rankSpan.textContent.trim() === `${rank}`) {
+            el.classList.add('selected');
+        } else {
+            el.classList.remove('selected');
+        }
+    });
+}
+
+function updateBlacklistTacticalCard() {
+    const driver = blacklistDrivers.find(d => d.rank === currentSelectedBlacklistRank) || blacklistDrivers[0];
+    if (!driver) return;
+
+    const numEl = document.getElementById('bl-detail-number');
+    const nameEl = document.getElementById('bl-detail-name');
+    const rideEl = document.getElementById('bl-detail-ride');
+    const strEl = document.getElementById('bl-detail-strength');
+    const groupEl = document.getElementById('bl-detail-group');
+    const bioEl = document.getElementById('bl-detail-bio');
+    const sigEl = document.getElementById('bl-detail-signature');
+    const repEl = document.getElementById('bl-detail-rep');
+    const ptsEl = document.getElementById('bl-detail-pts');
+    const b1El = document.getElementById('bl-detail-b1');
+    const b2El = document.getElementById('bl-detail-b2');
+    const b3El = document.getElementById('bl-detail-b3');
+    const p1El = document.getElementById('bl-detail-p1');
+    const p2El = document.getElementById('bl-detail-p2');
+    const p3El = document.getElementById('bl-detail-p3');
+    const p4El = document.getElementById('bl-detail-p4');
+
+    const groupName = getDriverGroupForWeek(driver.rank, currentChampionshipWeek);
+    const bt = driver.bestTimes || { first: 0, second: 0, third: 0 };
+
+    if (numEl) numEl.textContent = `blacklist ${driver.rank}`;
+    if (nameEl) nameEl.textContent = `${driver.name} ${driver.alias}`;
+    if (rideEl) rideEl.textContent = driver.ride;
+    if (strEl) strEl.textContent = driver.strength;
+    if (groupEl) groupEl.textContent = `${groupName} (Semana ${currentChampionshipWeek})`;
+    if (bioEl) bioEl.textContent = driver.bio;
+    if (sigEl) sigEl.textContent = driver.signature || driver.alias.toUpperCase();
+    if (repEl) repEl.textContent = `$${(driver.rep || 0).toLocaleString()}`;
+    if (ptsEl) ptsEl.textContent = `${calculateDriverPoints(driver).toLocaleString()} PTS`;
+
+    if (b1El) b1El.textContent = `${bt.first || 0} ${bt.first === 1 ? 'vez' : 'veces'}`;
+    if (b2El) b2El.textContent = `${bt.second || 0} ${bt.second === 1 ? 'vez' : 'veces'}`;
+    if (b3El) b3El.textContent = `${bt.third || 0} ${bt.third === 1 ? 'vez' : 'veces'}`;
+
+    if (p1El) p1El.textContent = driver.victories?.p1 || 0;
+    if (p2El) p2El.textContent = driver.victories?.p2 || 0;
+    if (p3El) p3El.textContent = driver.victories?.p3 || 0;
+    if (p4El) p4El.textContent = driver.victories?.p4 || 0;
+}
+
+function renderAllTacticalCards() {
+    const container = document.getElementById('blacklist-cards-grid');
+    if (!container) return;
+
+    // Ordenar explícitamente en orden del 1 al 15
+    const sorted = [...blacklistDrivers].sort((a, b) => a.rank - b.rank);
+
+    container.innerHTML = '';
+
+    sorted.forEach(driver => {
+        const totalPts = calculateDriverPoints(driver);
+        const groupName = getDriverGroupForWeek(driver.rank, currentChampionshipWeek);
+        const bt = driver.bestTimes || { first: 0, second: 0, third: 0 };
+        const v = driver.victories || { p1: 0, p2: 0, p3: 0, p4: 0 };
+
+        const card = document.createElement('div');
+        card.className = 'blacklist-tactical-card standalone-card';
+        card.id = `pilot-card-${driver.rank}`;
+
+        card.innerHTML = `
+            <div class="tactical-card-overlay"></div>
+            <div class="tactical-card-header">
+                <div class="blacklist-number-title">blacklist ${driver.rank}</div>
+                <div class="blacklist-driver-fullname">${driver.name} "${driver.alias}"</div>
+            </div>
+
+            <div class="tactical-specs">
+                <div class="spec-row">
+                    <span class="spec-label">Ride:</span>
+                    <span class="spec-value">${driver.ride}</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-label">Strength:</span>
+                    <span class="spec-value">${driver.strength}</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-label">Grupo Semanal:</span>
+                    <span class="spec-value" style="color: var(--nfs-orange);">${groupName} (Semana ${currentChampionshipWeek})</span>
+                </div>
+            </div>
+
+            <div class="tactical-bio-box">
+                <div class="bio-bracket-top">
+                    <span class="bio-title">bio:</span>
+                </div>
+                <p class="bio-text">${driver.bio}</p>
+                <div class="bio-bracket-bottom"></div>
+                <div class="tactical-signature">${driver.signature || driver.alias.toUpperCase()}</div>
+                ${driver.youtube ? `
+                <div style="margin-top: 10px;">
+                    <a href="${driver.youtube}" target="_blank" rel="noopener noreferrer" class="tactical-yt-btn">
+                        <span>▶</span> Ver Canal / Video YouTube
+                    </a>
+                </div>
+                ` : ''}
+            </div>
+
+            <div class="tactical-metrics-grid">
+                <div class="metric-box rep-box">
+                    <span class="metric-label">DINERO DE REPUTACIÓN ($ REP)</span>
+                    <span class="metric-value rep-val">$${(driver.rep || 0).toLocaleString()}</span>
+                </div>
+                <div class="metric-box pts-box">
+                    <span class="metric-label">PUNTOS TOTALES (SCORE)</span>
+                    <span class="metric-value">${totalPts.toLocaleString()} PTS</span>
+                </div>
+            </div>
+
+            <div class="tactical-bonuses-row">
+                <div class="bonus-chip chip-b1">
+                    <span class="bonus-tag">🥇 1° MEJOR (+100)</span>
+                    <span class="bonus-val">${bt.first || 0} ${bt.first === 1 ? 'vez' : 'veces'}</span>
+                </div>
+                <div class="bonus-chip chip-b2">
+                    <span class="bonus-tag">🥈 2° MEJOR (+50)</span>
+                    <span class="bonus-val">${bt.second || 0} ${bt.second === 1 ? 'vez' : 'veces'}</span>
+                </div>
+                <div class="bonus-chip chip-b3">
+                    <span class="bonus-tag">🥉 3° MEJOR (+20)</span>
+                    <span class="bonus-val">${bt.third || 0} ${bt.third === 1 ? 'vez' : 'veces'}</span>
+                </div>
+            </div>
+
+            <div class="tactical-podiums-breakdown">
+                <div class="podium-chip chip-p1">
+                    <span class="chip-pos">P1 (1°)</span>
+                    <span class="chip-val">${v.p1 || 0}</span>
+                </div>
+                <div class="podium-chip chip-p2">
+                    <span class="chip-pos">P2 (2°)</span>
+                    <span class="chip-val">${v.p2 || 0}</span>
+                </div>
+                <div class="podium-chip chip-p3">
+                    <span class="chip-pos">P3 (3°)</span>
+                    <span class="chip-val">${v.p3 || 0}</span>
+                </div>
+                <div class="podium-chip chip-p4">
+                    <span class="chip-pos">P4 (4°)</span>
+                    <span class="chip-val">${v.p4 || 0}</span>
+                </div>
+            </div>
+
+            <div class="tactical-action-bar">
+                <button class="btn-explored" style="width: 100%; justify-content: center; font-size: 13px;" onclick="switchView('championship-standings')">
+                    <span>🏆</span> Ver en Clasificación General
+                </button>
+            </div>
+        `;
+
+        container.appendChild(card);
+    });
+
+    renderQuickJumpPills();
+    updateChampionshipRosterLabels();
+}
+
+function renderQuickJumpPills() {
+    const container = document.getElementById('pilot-quick-jump-pills');
+    const titleEl = document.getElementById('quick-jump-title');
+    if (!container) return;
+
+    const totalPilots = Math.max(15, blacklistDrivers.length);
+    if (titleEl) {
+        titleEl.textContent = `⚡ SALTO RÁPIDO A PILOTO (ORDEN BLACKLIST 1 AL ${totalPilots}):`;
+    }
+
+    container.innerHTML = '';
+    const sorted = [...blacklistDrivers].sort((a, b) => a.rank - b.rank);
+    sorted.forEach(d => {
+        const btn = document.createElement('button');
+        btn.className = 'jump-pill';
+        btn.onclick = () => scrollToPilotCard(d.rank);
+
+        let icon = '';
+        if (d.rank === 1) icon = '👑 ';
+        else if (d.rank === 2) icon = '🥈 ';
+        else if (d.rank === 3) icon = '🥉 ';
+
+        btn.textContent = `${icon}#${d.rank} ${d.alias || d.name}`;
+        container.appendChild(btn);
+    });
+}
+
+function updateChampionshipRosterLabels() {
+    const totalPilots = Math.max(15, blacklistDrivers.length);
+    
+    // Actualizar texto de sub-pestañas en toda la web
+    document.querySelectorAll('.subtab-cards-label').forEach(el => {
+        el.textContent = `Fichas Técnicas (1 al ${totalPilots})`;
+    });
+
+    // Actualizar título de la sección de fichas técnicas
+    const titleGlow = document.getElementById('bl-cards-title-glow');
+    if (titleGlow) {
+        titleGlow.textContent = `// Blacklist 1 al ${totalPilots}`;
+    }
+
+    // Actualizar título de tabla de clasificación general
+    const standingsTitle = document.getElementById('bl-standings-title');
+    if (standingsTitle) {
+        standingsTitle.innerHTML = `<span>🏆</span> CLASIFICACIÓN GENERAL OFICIAL DEL CAMPEONATO (TOP ${totalPilots})`;
+    }
+
+    // Actualizar telemetría de pilotos en competición
+    const pilotsCountEl = document.getElementById('bl-standings-pilots-count');
+    if (pilotsCountEl) {
+        pilotsCountEl.textContent = `${totalPilots} Corredores`;
+    }
+
+    // Actualizar resumen en formulario de inscripción
+    const regSummarySlots = document.getElementById('reg-summary-slots');
+    const regCountPill = document.getElementById('registered-count-pill');
+    const totalReg = registeredParticipants.length;
+
+    if (regSummarySlots) {
+        if (totalReg <= 15) {
+            regSummarySlots.textContent = `${totalReg} / 15 Ocupadas`;
+        } else {
+            regSummarySlots.textContent = `${totalReg} / ${totalReg} Plazas (Parrilla Extendida)`;
+        }
+    }
+
+    if (regCountPill) {
+        if (totalReg <= 15) {
+            regCountPill.innerHTML = `<span id="reg-count-num">${totalReg}</span> / 15 Plazas`;
+        } else {
+            regCountPill.innerHTML = `<span id="reg-count-num">${totalReg}</span> Plazas (Ampliadas)`;
+        }
+    }
+}
+
+function scrollToPilotCard(rank) {
+    const card = document.getElementById(`pilot-card-${rank}`);
+    if (card) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        card.classList.add('card-highlight-pulse');
+        setTimeout(() => card.classList.remove('card-highlight-pulse'), 1600);
+    }
+}
+
+// =======================================================
+// SISTEMA DE INSCRIPCIÓN AL TORNEO // FIREBASE REALTIME DB
+// =======================================================
+
+const CHAMPIONSHIP_FIREBASE_URL = 'https://nfsranks-blacklist-default-rtdb.firebaseio.com/championship_participants.json';
+const CHAMPIONSHIP_LOCAL_KEY = 'nfs_championship_participants_v1';
+let registeredParticipants = [];
+
+/**
+ * Carga los participantes registrados en el torneo.
+ * Estrategia Híbrida: Lee inmediatamente de localStorage para 0 latencia
+ * y sincroniza concurrentemente con Firebase Realtime Database.
+ */
+function loadChampionshipParticipants() {
+    // 1. Carga local inmediata
+    try {
+        const localData = localStorage.getItem(CHAMPIONSHIP_LOCAL_KEY);
+        if (localData) {
+            registeredParticipants = JSON.parse(localData);
+            mergeRegisteredParticipantsWithBlacklist();
+            renderRegisteredPilotsUI();
+        }
+    } catch (e) {
+        console.warn("Aviso al cargar participantes locales:", e);
+    }
+
+    // 2. Sincronización con Firebase RTDB (REST API nativa)
+    fetch(CHAMPIONSHIP_FIREBASE_URL)
+        .then(res => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return res.json();
+        })
+        .then(data => {
+            if (data) {
+                const list = [];
+                if (Array.isArray(data)) {
+                    list.push(...data.filter(Boolean));
+                } else if (typeof data === 'object') {
+                    Object.keys(data).forEach(key => {
+                        if (data[key]) {
+                            list.push({ ...data[key], _firebaseKey: key });
+                        }
+                    });
+                }
+
+                // Ordenar rigurosamente por fecha de registro
+                list.sort((a, b) => new Date(a.registeredAt || 0) - new Date(b.registeredAt || 0));
+
+                if (list.length > 0) {
+                    registeredParticipants = list;
+                    localStorage.setItem(CHAMPIONSHIP_LOCAL_KEY, JSON.stringify(registeredParticipants));
+                    mergeRegisteredParticipantsWithBlacklist();
+                    renderRegisteredPilotsUI();
+                }
+            }
+        })
+        .catch(err => {
+            console.info("Sincronización Firebase en modo local/offline:", err.message);
+        });
+}
+
+/**
+ * Guarda un nuevo participante en localStorage y Firebase Realtime Database
+ */
+async function saveChampionshipParticipant(participantData) {
+    // 1. Guardado local inmediato y actualización reactiva de la UI
+    registeredParticipants.push(participantData);
+    localStorage.setItem(CHAMPIONSHIP_LOCAL_KEY, JSON.stringify(registeredParticipants));
+    
+    mergeRegisteredParticipantsWithBlacklist();
+    renderRegisteredPilotsUI();
+
+    // 2. Enviar a Firebase Realtime Database
+    try {
+        const response = await fetch(CHAMPIONSHIP_FIREBASE_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(participantData)
+        });
+        if (!response.ok) {
+            console.warn("Respuesta no satisfactoria de Firebase:", response.status);
+        }
+    } catch (e) {
+        console.warn("No se pudo conectar con Firebase en la nube (guardado localmente):", e);
+    }
+}
+
+/**
+ * Procesa el formulario de inscripción al torneo
+ */
+async function handleChampionshipSubmit(event) {
+    event.preventDefault();
+
+    const nameInput = document.getElementById('reg-driver-name');
+    const aliasInput = document.getElementById('reg-driver-alias');
+    const carInput = document.getElementById('reg-driver-car');
+    const scheduleInput = document.getElementById('reg-driver-schedule');
+    const ytInput = document.getElementById('reg-driver-youtube');
+    const contactInput = document.getElementById('reg-driver-contact');
+    const termsCheck = document.getElementById('reg-terms');
+    const submitBtn = document.getElementById('btn-submit-registration');
+
+    if (!nameInput || !carInput || !scheduleInput || !termsCheck) return;
+
+    const name = nameInput.value.trim();
+    const alias = aliasInput ? aliasInput.value.trim() : '';
+    const ride = carInput.value.trim();
+    const schedule = scheduleInput.value.trim();
+    const youtube = ytInput ? ytInput.value.trim() : '';
+    const contact = contactInput ? contactInput.value.trim() : '';
+
+    if (!name || !ride || !schedule) {
+        showRegisterFeedback("Por favor, completa todos los campos obligatorios (*).", "error");
+        return;
+    }
+
+    if (!termsCheck.checked) {
+        showRegisterFeedback("Debes aceptar el reglamento del Torneo para poder inscribirte.", "error");
+        return;
+    }
+
+    // Verificar si el piloto ya está registrado
+    const alreadyExists = registeredParticipants.some(p => p.name.toLowerCase() === name.toLowerCase());
+    if (alreadyExists) {
+        showRegisterFeedback(`El piloto "${name}" ya se encuentra registrado en el campeonato.`, "error");
+        return;
+    }
+
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span>⏳</span> REGISTRANDO PILOTO EN LA RED...`;
+    }
+
+    const newParticipant = {
+        id: "reg_" + Date.now() + "_" + Math.random().toString(36).substr(2, 5),
+        name: name,
+        alias: alias || name,
+        ride: ride,
+        schedule: schedule,
+        youtube: youtube,
+        contact: contact,
+        registeredAt: new Date().toISOString(),
+        isRealUser: true
+    };
+
+    await saveChampionshipParticipant(newParticipant);
+
+    // Resetear formulario
+    nameInput.value = '';
+    if (aliasInput) aliasInput.value = '';
+    carInput.value = '';
+    scheduleInput.value = '';
+    if (ytInput) ytInput.value = '';
+    if (contactInput) contactInput.value = '';
+    termsCheck.checked = false;
+
+    if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<span>🚀</span> REGISTRARME EN EL CAMPEONATO 2026`;
+    }
+
+    const assignedRank = registeredParticipants.length;
+    const totalParrilla = Math.max(15, registeredParticipants.length);
+    showRegisterFeedback(`¡Inscripción confirmada con éxito! Has sido asignado a la Plaza Oficial #${assignedRank} del Campeonato Blacklist 2026. La parrilla y las fichas técnicas se han actualizado automáticamente a ${totalParrilla} pilotos en tiempo real.`, "success");
+}
+
+function showRegisterFeedback(message, type) {
+    const el = document.getElementById('register-feedback-msg');
+    if (!el) return;
+    el.className = `register-feedback-msg feedback-${type}`;
+    el.innerHTML = type === 'success' ? `<strong>✓ ÉXITO:</strong> ${message}` : `<strong>✕ ERROR:</strong> ${message}`;
+    el.style.display = 'block';
+    if (type === 'success') {
+        setTimeout(() => {
+            if (el) el.style.display = 'none';
+        }, 6500);
+    }
+}
+
+/**
+ * Cruza los participantes reales registrados con las plazas de la Blacklist.
+ * Si supera los 15 participantes, la Blacklist y las fichas técnicas se expanden automáticamente
+ * hasta 18, 20 o más pilotos en tiempo real.
+ */
+function mergeRegisteredParticipantsWithBlacklist() {
+    if (typeof DEFAULT_BLACKLIST_DRIVERS !== 'undefined') {
+        blacklistDrivers = JSON.parse(JSON.stringify(DEFAULT_BLACKLIST_DRIVERS));
+    }
+
+    registeredParticipants.forEach((p, idx) => {
+        if (idx < 15 && blacklistDrivers[idx]) {
+            const slot = blacklistDrivers[idx];
+            slot.name = p.name;
+            slot.alias = p.alias || p.name;
+            slot.ride = p.ride;
+            slot.strength = `${p.ride} • ${p.schedule || 'Competición en Vivo'}`;
+            slot.bio = `Piloto Oficial Inscrito en el Campeonato 2026. Disponibilidad: ${p.schedule || 'Horario Flexible'}.${p.contact ? ` Contacto: ${p.contact}.` : ''} Compite en Rockport City bajo verificación de juego limpio.`;
+            slot.signature = (p.alias || p.name).toUpperCase();
+            slot.status = idx === 0 ? "👑 LÍDER BLACKLIST #1 (OFICIAL)" : `PILOTO OFICIAL #${idx + 1}`;
+            slot.youtube = p.youtube || '';
+            slot.isRealUser = true;
+            slot.schedule = p.schedule || '';
+            slot.contact = p.contact || '';
+        } else if (idx >= 15) {
+            // Expansión dinámica para pilotos inscritos adicionales (16, 18, 20 o más)
+            const rankNum = idx + 1;
+            const baseRep = Math.max(850000 - ((idx - 14) * 35000), 200000);
+            const newPilot = {
+                rank: rankNum,
+                name: p.name,
+                alias: p.alias || p.name,
+                ride: p.ride,
+                strength: `${p.ride} • ${p.schedule || 'Parrilla Extendida'}`,
+                rep: baseRep,
+                victories: { p1: 0, p2: 0, p3: 0, p4: 0 },
+                bestTimes: { first: 0, second: 0, third: 0 },
+                bio: `Piloto Oficial Inscrito en el Campeonato 2026 (Parrilla Extendida). Disponibilidad: ${p.schedule || 'Horario Flexible'}.${p.contact ? ` Contacto: ${p.contact}.` : ''} Compite en Rockport City bajo verificación de juego limpio.`,
+                signature: (p.alias || p.name).toUpperCase(),
+                status: `PILOTO OFICIAL #${rankNum}`,
+                avatar: "assets/img/nfsranksmwlogo.png",
+                color: "#ff7700",
+                badge: `PLAZA #${rankNum}`,
+                youtube: p.youtube || '',
+                isRealUser: true,
+                schedule: p.schedule || '',
+                contact: p.contact || ''
+            };
+            blacklistDrivers.push(newPilot);
+        }
+    });
+
+    saveBlacklistData();
+
+    // Actualizar todas las vistas dependientes del torneo
+    renderBlacklistUI();
+    renderChampionshipGroups(currentChampionshipWeek);
+    renderAllTacticalCards();
+    updateBlacklistTacticalCard();
+    updateChampionshipRosterLabels();
+}
+
+/**
+ * Renderiza la lista de pilotos inscritos en tiempo real y el contador de plazas
+ */
+function renderRegisteredPilotsUI() {
+    const listContainer = document.getElementById('registered-pilots-list');
+
+    updateChampionshipRosterLabels();
+
+    if (!listContainer) return;
+
+    const total = registeredParticipants.length;
+
+    if (total === 0) {
+        listContainer.innerHTML = `
+            <div class="empty-participants-msg">
+                <span style="font-size: 32px; display: block; margin-bottom: 8px;">🏁</span>
+                <strong>Aún no hay pilotos inscritos.</strong><br>
+                Completa el formulario oficial para reclamar la plaza #1 del Campeonato Blacklist 2026.
+            </div>
+        `;
+        return;
+    }
+
+    listContainer.innerHTML = '';
+    registeredParticipants.forEach((pilot, idx) => {
+        const slotNum = idx + 1;
+        let badgeClass = 'slot-normal';
+        if (slotNum === 1) badgeClass = 'slot-gold';
+        else if (slotNum === 2) badgeClass = 'slot-silver';
+        else if (slotNum === 3) badgeClass = 'slot-bronze';
+
+        const item = document.createElement('div');
+        item.className = 'registered-pilot-item is-user';
+
+        const statusLabel = `PLAZA #${slotNum}`;
+
+        item.innerHTML = `
+            <div class="registered-pilot-left">
+                <div class="reg-slot-badge ${badgeClass}">${slotNum}</div>
+                <div class="reg-pilot-info">
+                    <div class="reg-pilot-name">
+                        ${pilot.name} ${pilot.alias ? `<span style="color: var(--nfs-orange);">"${pilot.alias}"</span>` : ''}
+                    </div>
+                    <div class="reg-pilot-car">
+                        <span>🏎️</span> ${pilot.ride}
+                    </div>
+                    <div class="reg-pilot-schedule">
+                        <span>⏰</span> ${pilot.schedule}
+                    </div>
+                </div>
+            </div>
+            <div class="registered-pilot-right">
+                <span class="reg-status-badge status-official">${statusLabel}</span>
+                ${pilot.youtube ? `
+                    <a href="${pilot.youtube}" target="_blank" rel="noopener noreferrer" class="btn-yt-link">
+                        ▶ Canal / Video
+                    </a>
+                ` : ''}
+            </div>
+        `;
+
+        listContainer.appendChild(item);
+    });
+}
+
+function initBlacklistSystem() {
+    loadBlacklistData();
+    loadChampionshipParticipants();
+    switchChampionshipWeek(1);
+    renderAllTacticalCards();
+}
+
+// =======================================================
+// SALÓN HISTÓRICO DE TORNEOS (CHALLONGE HISTORIAL)
+// =======================================================
+let currentPastTournamentKey = 'ev1n0yug';
+let currentPastViewMode = 'brackets';
+
+function initPastTournaments() {
+    if (typeof PAST_TOURNAMENTS_DATA === 'undefined') return;
+    renderPastTournament(currentPastTournamentKey);
+}
+
+function switchPastTournament(key) {
+    if (!PAST_TOURNAMENTS_DATA || !PAST_TOURNAMENTS_DATA[key]) return;
+    currentPastTournamentKey = key;
+
+    // Actualizar píldoras selectoras de torneo
+    document.querySelectorAll('#past-tournaments-pills .champ-pill').forEach(btn => btn.classList.remove('active'));
+    const activePill = document.getElementById(`pill-tournament-${key}`);
+    if (activePill) activePill.classList.add('active');
+
+    renderPastTournament(key);
+}
+
+function switchPastViewMode(mode, btn) {
+    currentPastViewMode = mode;
+    document.querySelectorAll('.past-view-mode-tabs .filter-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+
+    // Ocultar todas las sub-vistas
+    document.querySelectorAll('.past-subview').forEach(v => {
+        v.classList.remove('active');
+        v.style.display = 'none';
+    });
+
+    const targetView = document.getElementById(`past-tournament-view-${mode}`);
+    if (targetView) {
+        targetView.classList.add('active');
+        targetView.style.display = 'block';
+    }
+}
+
+function renderPastTournament(key) {
+    const t = PAST_TOURNAMENTS_DATA[key];
+    if (!t) return;
+
+    renderPastTournamentHero(t);
+    renderPastTournamentStats(t);
+    renderPastTournamentBrackets(t);
+    renderPastTournamentPodium(t);
+    renderPastTournamentParticipants(t);
+
+    const rosterCountEl = document.getElementById('past-roster-count');
+    if (rosterCountEl) rosterCountEl.textContent = t.stats.totalPilots;
+
+    const externalRosterBtn = document.getElementById('btn-challonge-external-roster');
+    if (externalRosterBtn) externalRosterBtn.href = t.challongeUrl;
+}
+
+function renderPastTournamentHero(t) {
+    const heroEl = document.getElementById('past-tournament-hero');
+    if (!heroEl) return;
+
+    heroEl.innerHTML = `
+        <div class="past-hero-content">
+            <div class="past-hero-badges">
+                <span class="past-badge-edition">${t.edition}</span>
+                <span class="past-badge-date">📅 ${t.date}</span>
+                <span class="past-badge-category">⚙️ ${t.category}</span>
+                <span class="past-badge-format">⚔️ ${t.format}</span>
+            </div>
+            <h2 class="past-hero-title">${t.title}</h2>
+            <p class="past-hero-desc">
+                Organizado y disputado bajo las normas oficiales de <strong>${t.platform}</strong>. 
+                ${t.hosts ? `Coordinación y arbitraje: <span style="color: var(--nfs-orange);">${t.hosts}</span>.` : ''}
+            </p>
+        </div>
+        <div class="past-hero-actions">
+            <a href="${t.challongeUrl}" target="_blank" rel="noopener noreferrer" class="btn-challonge-link-hero">
+                <span>🔗</span> Ver Bracket Oficial en Challonge
+            </a>
+        </div>
+    `;
+}
+
+function renderPastTournamentStats(t) {
+    const statsEl = document.getElementById('past-tournament-stats-bar');
+    if (!statsEl) return;
+
+    statsEl.innerHTML = `
+        <div class="challenge-summary-item">
+            <span class="challenge-summary-icon">👑</span>
+            <div class="challenge-summary-content">
+                <span class="challenge-summary-label">CAMPEÓN HISTÓRICO</span>
+                <span class="challenge-summary-val" style="color: #ffd700; font-weight: 800;">${t.stats.champion} 🥇</span>
+            </div>
+        </div>
+        <div class="challenge-summary-item">
+            <span class="challenge-summary-icon">🥈</span>
+            <div class="challenge-summary-content">
+                <span class="challenge-summary-label">SUBCAMPEÓN</span>
+                <span class="challenge-summary-val" style="color: #e2e8f0;">${t.stats.runnerUp}</span>
+            </div>
+        </div>
+        <div class="challenge-summary-item">
+            <span class="challenge-summary-icon">🏎️</span>
+            <div class="challenge-summary-content">
+                <span class="challenge-summary-label">PILOTOS EN EL CUADRO</span>
+                <span class="challenge-summary-val" style="color: #38bdf8; font-family: var(--font-mono);">${t.stats.totalPilots} Corredores</span>
+            </div>
+        </div>
+        <div class="challenge-summary-item">
+            <span class="challenge-summary-icon">⚔️</span>
+            <div class="challenge-summary-content">
+                <span class="challenge-summary-label">PARTIDAS DISPUTADAS</span>
+                <span class="challenge-summary-val" style="color: var(--green-neon); font-family: var(--font-mono);">${t.stats.totalMatches} Enfrentamientos</span>
+            </div>
+        </div>
+    `;
+}
+
+function renderPastTournamentBrackets(t) {
+    const container = document.getElementById('past-brackets-container');
+    if (!container) return;
+
+    let html = '';
+
+    t.bracketSections.forEach(sec => {
+        html += `
+            <div class="bracket-section-block bracket-section-${sec.sectionId}">
+                <div class="bracket-section-header">
+                    <h3>${sec.sectionTitle}</h3>
+                    <span class="bracket-rounds-count">${sec.rounds.length} ${sec.rounds.length === 1 ? 'Ronda' : 'Rondas'}</span>
+                </div>
+                <div class="bracket-tree-scrollable">
+                    <div class="bracket-tree">
+        `;
+
+        sec.rounds.forEach((round, rIdx) => {
+            html += `
+                <div class="bracket-round">
+                    <div class="bracket-round-header">
+                        <span class="round-number">R${rIdx + 1}</span>
+                        <h4>${round.roundName}</h4>
+                    </div>
+                    <div class="bracket-matches-col">
+            `;
+
+            round.matches.forEach(m => {
+                const p1Winner = m.p1.winner;
+                const p2Winner = m.p2.winner;
+                const isGrandFinal = sec.sectionId === 'finals' || m.id === 26 || m.id === 14;
+
+                html += `
+                    <div class="bracket-match-card ${isGrandFinal ? 'match-grand-final' : ''}">
+                        <div class="match-meta">
+                            <span class="match-id-badge">MATCH #${m.id}</span>
+                            ${isGrandFinal ? '<span class="grand-final-badge">👑 GRAN FINAL</span>' : ''}
+                        </div>
+                        <div class="match-competitors">
+                            <!-- Jugador 1 -->
+                            <div class="match-player-row ${p1Winner ? 'is-winner' : 'is-loser'}">
+                                <span class="player-seed">#${m.p1.seed}</span>
+                                <span class="player-name">${m.p1.name}</span>
+                                ${p1Winner ? '<span class="winner-crown-icon">👑</span>' : ''}
+                                <span class="player-score ${p1Winner ? 'score-winner' : ''}">${m.p1.score}</span>
+                            </div>
+                            <div class="match-row-divider"></div>
+                            <!-- Jugador 2 -->
+                            <div class="match-player-row ${p2Winner ? 'is-winner' : 'is-loser'}">
+                                <span class="player-seed">#${m.p2.seed}</span>
+                                <span class="player-name">${m.p2.name}</span>
+                                ${p2Winner ? '<span class="winner-crown-icon">👑</span>' : ''}
+                                <span class="player-score ${p2Winner ? 'score-winner' : ''}">${m.p2.score}</span>
+                            </div>
+                        </div>
+                        <div class="match-status-footer">
+                            <span class="match-verdict">
+                                Vencedor: <strong style="color: ${p1Winner || p2Winner ? 'var(--green-neon)' : 'var(--text-muted)'};">${p1Winner ? m.p1.name : (p2Winner ? m.p2.name : 'Por disputar')}</strong>
+                            </span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `
+                    </div>
+                </div>
+            `;
+        });
+
+        html += `
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+}
+
+function renderPastTournamentPodium(t) {
+    const container = document.getElementById('past-podium-container');
+    if (!container) return;
+
+    let html = `
+        <div class="past-podium-grid">
+    `;
+
+    t.podium.forEach(item => {
+        const medalClass = item.place === 1 ? 'podium-gold' : (item.place === 2 ? 'podium-silver' : (item.place === 3 ? 'podium-bronze' : 'podium-honor'));
+        html += `
+            <div class="past-podium-card ${medalClass}">
+                <div class="podium-card-glow"></div>
+                <div class="podium-place-badge">
+                    <span class="podium-medal">${item.medal}</span>
+                    <span class="podium-rank-text">${item.rankName}</span>
+                </div>
+                <div class="podium-driver-info">
+                    <span class="podium-seed">CABEZA DE SERIE #${item.seed}</span>
+                    <h3 class="podium-driver-name">${item.name}</h3>
+                </div>
+                <div class="podium-driver-note">
+                    <p>${item.note}</p>
+                </div>
+                <div class="podium-card-footer">
+                    <span class="podium-event-tag">${t.shortTitle}</span>
+                </div>
+            </div>
+        `;
+    });
+
+    html += `
+        </div>
+    `;
+
+    container.innerHTML = html;
+}
+
+function renderPastTournamentParticipants(t) {
+    const tbody = document.getElementById('tbody-past-participants');
+    if (!tbody) return;
+
+    let html = '';
+    t.participants.forEach(p => {
+        const isPodium = p.finalPos.includes('Campeón') || p.finalPos.includes('Lugar');
+        const posClass = p.finalPos.includes('Campeón') ? 'pos-champion' : (p.finalPos.includes('2do') ? 'pos-silver' : (p.finalPos.includes('3er') ? 'pos-bronze' : ''));
+
+        html += `
+            <tr class="${isPodium ? 'row-podium' : ''}">
+                <td style="font-family: var(--font-mono); font-weight: 700; color: var(--nfs-orange);">#${p.seed}</td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <strong style="color: #ffffff; font-size: 15px;">${p.name}</strong>
+                        ${p.finalPos.includes('Campeón') ? '<span class="crown-badge">👑 1°</span>' : ''}
+                    </div>
+                </td>
+                <td>
+                    <span class="past-final-pos ${posClass}">${p.finalPos}</span>
+                </td>
+                <td style="color: var(--text-muted); font-size: 13px;">
+                    ${p.finalPos.includes('Campeón') ? '🏆 Gran Finalista Vencedor' : (p.finalPos.includes('2do') ? '⚔️ Gran Finalista' : 'Completó cuadro de llaves')}
+                </td>
+                <td>
+                    <span class="badge-verified-challonge">✓ Verificado Challonge</span>
+                </td>
+            </tr>
+        `;
+    });
+
+    tbody.innerHTML = html;
+}
+
+// =======================================================
 // INICIALIZACIÓN UNIFICADA (DOMContentLoaded)
 // =======================================================
 window.addEventListener('DOMContentLoaded', () => {
@@ -943,12 +2473,22 @@ window.addEventListener('DOMContentLoaded', () => {
         renderRoutes(routesData);
     }
 
-    // 3. Renderizado del Buscador Oficial de Pilotos
+    // 3. Inicializar Sistema de Desafíos Semanales
+    initChallengesSystem();
+
+    // 4. Inicializar Sistema Blacklist Event 2026
+    initBlacklistSystem();
+
+    // 5. Inicializar Salón Histórico de Torneos
+    initPastTournaments();
+
+    // 6. Renderizado del Buscador Oficial de Pilotos
     renderDriverSearchUI('search-driver-wrapper');
 
-    // 4. Ejecución diferida en segundo plano para tablas globales y Hall of Fame
+    // 7. Ejecución diferida en segundo plano para tablas globales y Hall of Fame
     setTimeout(() => {
         generateHallOfFame();
         generateGlobalLeaderboards();
     }, 150);
 });
+
