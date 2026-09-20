@@ -611,7 +611,10 @@
 
         <!-- SECCIÓN: DETALLE LEADERBOARD DE RUTA ESPECÍFICA -->
         <section id="view-leaderboard" class="view-section">
-            <h2 class="section-title" id="leaderboard-title">Leaderboard: Ruta</h2>
+            <div class="leaderboard-top-nav" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 24px;">
+                <h2 class="section-title" id="leaderboard-title" style="margin-bottom: 0;">Leaderboard: Ruta</h2>
+                <button class="filter-btn" onclick="switchView('routes')" data-i18n="btn_back_to_routes">← Volver al Índice de Rutas</button>
+            </div>
             
             <!-- Pestañas para Circuitos -->
             <div id="container-tabs-circuit" class="tabs-group">
@@ -756,7 +759,7 @@
             </div>
 
             <br>
-            <button class="filter-btn" onclick="switchView('routes')">← Volver al Índice de Rutas</button>
+            <button class="filter-btn" onclick="switchView('routes')" data-i18n="btn_back_to_routes">← Volver al Índice de Rutas</button>
         </section>
 
         <!-- SECCIÓN: DESAFÍOS SEMANALES (Inspirado en NightRiderz World) -->

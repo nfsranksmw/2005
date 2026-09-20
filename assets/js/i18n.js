@@ -168,6 +168,7 @@ const I18N_TRANSLATIONS = {
         col_date: "FECHA",
         card_best_time: "MEJOR TIEMPO:",
         card_btn_view: "Ver Leaderboard",
+        btn_back_to_routes: "← Volver al Índice de Rutas",
 
         champ_title: "CAMPEONATO OFICIAL BLACKLIST 2026",
         champ_subtitle: "Rotación semanal de 8 desafíos con vehículos restrictivos y bonos de reputación",
@@ -469,6 +470,7 @@ const I18N_TRANSLATIONS = {
         col_date: "DATE",
         card_best_time: "BEST TIME:",
         card_btn_view: "View Leaderboard",
+        btn_back_to_routes: "← Back to Routes Index",
 
         champ_title: "OFFICIAL BLACKLIST CHAMPIONSHIP 2026",
         champ_subtitle: "Weekly rotation of 8 challenges with restricted cars and reputation bonuses",
@@ -770,6 +772,7 @@ const I18N_TRANSLATIONS = {
         col_date: "DATA",
         card_best_time: "MELHOR TEMPO:",
         card_btn_view: "Ver Classificação",
+        btn_back_to_routes: "← Voltar ao Índice de Rotas",
 
         champ_title: "CAMPEONATO OFICIAL BLACKLIST 2026",
         champ_subtitle: "Rotação semanal de 8 desafios com veículos restritos e bônus de reputação",
@@ -1071,6 +1074,7 @@ const I18N_TRANSLATIONS = {
         col_date: "日期",
         card_best_time: "最佳成绩：",
         card_btn_view: "查看榜单",
+        btn_back_to_routes: "← 返回赛道列表",
 
         champ_title: "官方黑名单 2026 锦标赛",
         champ_subtitle: "每周8条赛道轮换挑战，限定车型与声望奖金",
@@ -1372,6 +1376,7 @@ const I18N_TRANSLATIONS = {
         col_date: "日付",
         card_best_time: "ベストタイム：",
         card_btn_view: "ランキングを見る",
+        btn_back_to_routes: "← コース一覧に戻る",
 
         champ_title: "公式ブラックリスト 2026 チャンピオンシップ",
         champ_subtitle: "8コースのウィークリーローテーション、限定車両と名声ボーナス",
@@ -1673,6 +1678,7 @@ const I18N_TRANSLATIONS = {
         col_date: "ДАТА",
         card_best_time: "ЛУЧШЕЕ ВРЕМЯ:",
         card_btn_view: "Смотреть таблицу",
+        btn_back_to_routes: "← Вернуться к списку трасс",
 
         champ_title: "ЧЕМПИОНАТ ЧЕРНОГО СПИСКА 2026",
         champ_subtitle: "Еженедельная ротация 8 испытаний с ограниченными машинами и бонусами репутации",
@@ -1974,6 +1980,7 @@ const I18N_TRANSLATIONS = {
         col_date: "DATA",
         card_best_time: "MIGLIOR TEMPO:",
         card_btn_view: "Vedi Classifica",
+        btn_back_to_routes: "← Torna all'Indice dei Tracciati",
 
         champ_title: "CAMPIONATO UFFICIALE BLACKLIST 2026",
         champ_subtitle: "Rotazione settimanale di 8 sfide con veicoli limitati e bonus reputazione",
@@ -2275,6 +2282,7 @@ const I18N_TRANSLATIONS = {
         col_date: "DATE",
         card_best_time: "MEILLEUR TEMPS :",
         card_btn_view: "Voir le Classement",
+        btn_back_to_routes: "← Retour à la Liste des Circuits",
 
         champ_title: "CHAMPIONNAT OFFICIEL BLACKLIST 2026",
         champ_subtitle: "Rotation hebdomadaire de 8 défis avec voitures imposées et bonus de réputation",
@@ -2576,6 +2584,7 @@ const I18N_TRANSLATIONS = {
         col_date: "DATUM",
         card_best_time: "BESTE TYD:",
         card_btn_view: "Sien Ranglys",
+        btn_back_to_routes: "← Terug na Roetes Indeks",
 
         champ_title: "AMPTELIKE SWARTLYS KAMPIOENSKAP 2026",
         champ_subtitle: "Weeklikse rotasie van 8 uitdagings met beperkte voertuie en reputasie bonusse",
