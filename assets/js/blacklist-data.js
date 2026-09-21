@@ -1,4 +1,4 @@
-/**
+﻿/**
  * NFS: Most Wanted (2005) - World Records (NFSRANKSMW)
  * Base de Datos Oficial: Campeonato Blacklist 2026
  * 4 Semanas de Competición • 8 Desafíos por Semana (8 Rutas) • 5 Grupos de 3 Pilotos (15 Participantes)
@@ -20,9 +20,9 @@ const DEFAULT_BLACKLIST_DRIVERS = [
         alias: "Razor",
         ride: "BMW M3 GTR",
         strength: "Everything (Dominio Total)",
-        rep: 3450000,
-        victories: { p1: 20, p2: 5, p3: 2, p4: 1 },
-        bestTimes: { first: 6, second: 3, third: 1 }, // 6x100 + 3x50 + 1x20 = 770 pts bono
+        rep: 0,
+        victories: { p1: 0, p2: 0, p3: 0, p4: 0 },
+        bestTimes: { first: 0, second: 0, third: 0 }, // 6x100 + 3x50 + 1x20 = 770 pts bono
         bio: "Razor se catapultó a la cima de la Blacklist usando tu propia máquina. Ahora controla cada palmo de Rockport City como si fuera de su propiedad. Hará absolutamente cualquier cosa por mantener su ventaja, incluyendo jugar con tu mente. Recuerda: no confíes en nada de lo que diga.",
         signature: "RAZOR",
         status: "LÍDER BLACKLIST #1",
@@ -36,9 +36,9 @@ const DEFAULT_BLACKLIST_DRIVERS = [
         alias: "Bull",
         ride: "Mercedes-Benz SLR McLaren",
         strength: "Sprints de Alta Velocidad",
-        rep: 2890000,
-        victories: { p1: 16, p2: 7, p3: 4, p4: 2 },
-        bestTimes: { first: 4, second: 4, third: 2 }, // 4x100 + 4x50 + 2x20 = 640 pts bono
+        rep: 0,
+        victories: { p1: 0, p2: 0, p3: 0, p4: 0 },
+        bestTimes: { first: 0, second: 0, third: 0 }, // 4x100 + 4x50 + 2x20 = 640 pts bono
         bio: "La mano derecha de Razor. Jamás corre sin apostar fuerte y su SLR McLaren tiene modificaciones de aceleración bruta. Si crees que te dará espacio en la curva de salida, estás muy equivocado.",
         signature: "BULL",
         status: "DEFENSOR TOP 2",
@@ -52,9 +52,9 @@ const DEFAULT_BLACKLIST_DRIVERS = [
         alias: "Ronnie",
         ride: "Aston Martin DB9",
         strength: "Circuitos & Trazado Técnico",
-        rep: 2420000,
-        victories: { p1: 14, p2: 6, p3: 5, p4: 2 },
-        bestTimes: { first: 3, second: 5, third: 3 }, // 3x100 + 5x50 + 3x20 = 610 pts bono
+        rep: 0,
+        victories: { p1: 0, p2: 0, p3: 0, p4: 0 },
+        bestTimes: { first: 0, second: 0, third: 0 }, // 3x100 + 5x50 + 3x20 = 610 pts bono
         bio: "Hijo de familia rica con recursos ilimitados para piezas de competición. Ronnie perfecciona cada sector hasta milésimas de segundo. No lo subestimes en carreras con curvas encadenadas.",
         signature: "RONNIE",
         status: "DEFENSOR TOP 3",
@@ -68,9 +68,9 @@ const DEFAULT_BLACKLIST_DRIVERS = [
         alias: "JV",
         ride: "Dodge Viper SRT-10",
         strength: "Speedtraps & Drags",
-        rep: 2050000,
-        victories: { p1: 11, p2: 8, p3: 5, p4: 3 },
-        bestTimes: { first: 3, second: 3, third: 4 }, // 300 + 150 + 80 = 530 pts
+        rep: 0,
+        victories: { p1: 0, p2: 0, p3: 0, p4: 0 },
+        bestTimes: { first: 0, second: 0, third: 0 }, // 300 + 150 + 80 = 530 pts
         bio: "Pasa las noches en los clubes nocturnos y los días pulverizando los radares de velocidad. Su Viper tiene una potencia de salida descomunal y su tiempo de reacción en el cambio de marcha es letal.",
         signature: "JV",
         status: "RETADOR TOP 4",
@@ -84,9 +84,9 @@ const DEFAULT_BLACKLIST_DRIVERS = [
         alias: "Webster",
         ride: "Chevrolet Corvette C6",
         strength: "Circuitos Cerrados",
-        rep: 1830000,
-        victories: { p1: 10, p2: 7, p3: 4, p4: 4 },
-        bestTimes: { first: 2, second: 4, third: 3 }, // 200 + 200 + 60 = 460 pts
+        rep: 0,
+        victories: { p1: 0, p2: 0, p3: 0, p4: 0 },
+        bestTimes: { first: 0, second: 0, third: 0 }, // 200 + 200 + 60 = 460 pts
         bio: "Webster habla constantemente de rendimiento automotriz y telemetría avanzada. Cree que el resto de corredores son amateurs comparados con su disciplina de pista profesional.",
         signature: "WEBSTER",
         status: "RETADOR TOP 5",
@@ -100,9 +100,9 @@ const DEFAULT_BLACKLIST_DRIVERS = [
         alias: "Ming",
         ride: "Lamborghini Gallardo",
         strength: "Radares de Velocidad",
-        rep: 1640000,
-        victories: { p1: 9, p2: 8, p3: 5, p4: 3 },
-        bestTimes: { first: 2, second: 3, third: 4 }, // 200 + 150 + 80 = 430 pts
+        rep: 0,
+        victories: { p1: 0, p2: 0, p3: 0, p4: 0 },
+        bestTimes: { first: 0, second: 0, third: 0 }, // 200 + 150 + 80 = 430 pts
         bio: "Orgullo absoluto sobre ruedas. Su Gallardo es prácticamente intocable en rectas largas de autopista. Ha dejado atrás a la policía del condado más veces de las que puede contar.",
         signature: "MING",
         status: "ACTIVO",
@@ -116,9 +116,9 @@ const DEFAULT_BLACKLIST_DRIVERS = [
         alias: "Kaze",
         ride: "Mercedes-Benz CLK 500",
         strength: "Daño & Evasión de Bloqueos",
-        rep: 1420000,
-        victories: { p1: 8, p2: 6, p3: 6, p4: 5 },
-        bestTimes: { first: 2, second: 2, third: 4 }, // 200 + 100 + 80 = 380 pts
+        rep: 0,
+        victories: { p1: 0, p2: 0, p3: 0, p4: 0 },
+        bestTimes: { first: 0, second: 0, third: 0 }, // 200 + 100 + 80 = 380 pts
         bio: "Kaze es impredecible y no le teme a la destrucción de carrocería. Si intentas adelantarla por el interior de una horquilla, prepárate para sentir el impacto de su parachoques.",
         signature: "KAZE",
         status: "ACTIVO",
@@ -132,9 +132,9 @@ const DEFAULT_BLACKLIST_DRIVERS = [
         alias: "Jewels",
         ride: "Ford Mustang GT",
         strength: "Drags & Aceleración Nitro",
-        rep: 1250000,
-        victories: { p1: 7, p2: 8, p3: 4, p4: 4 },
-        bestTimes: { first: 2, second: 2, third: 2 }, // 200 + 100 + 40 = 340 pts
+        rep: 0,
+        victories: { p1: 0, p2: 0, p3: 0, p4: 0 },
+        bestTimes: { first: 0, second: 0, third: 0 }, // 200 + 100 + 40 = 340 pts
         bio: "Apasionada del músculo americano y del rugido de los motores V8 modificados. Domina la salida en parada completa y el uso milimétrico de la inyección de óxido nitroso.",
         signature: "JEWELS",
         status: "ACTIVO",
@@ -148,9 +148,9 @@ const DEFAULT_BLACKLIST_DRIVERS = [
         alias: "Earl",
         ride: "Mitsubishi Lancer Evolution VIII",
         strength: "Sprint en Pavimento Mojado & Curvas",
-        rep: 1120000,
-        victories: { p1: 6, p2: 7, p3: 7, p4: 5 },
-        bestTimes: { first: 1, second: 3, third: 3 }, // 100 + 150 + 60 = 310 pts
+        rep: 0,
+        victories: { p1: 0, p2: 0, p3: 0, p4: 0 },
+        bestTimes: { first: 0, second: 0, third: 0 }, // 100 + 150 + 60 = 310 pts
         bio: "Nacido en la costa este industrial. Conoce cada bache y trampa de la bahía de Camden. La tracción total de su Evo le da una estabilidad insuperable en curvas rápidas.",
         signature: "EARL",
         status: "ACTIVO",
@@ -164,9 +164,9 @@ const DEFAULT_BLACKLIST_DRIVERS = [
         alias: "Baron",
         ride: "Porsche Cayman S",
         strength: "Persecuciones & Maniobras Policiales",
-        rep: 980000,
-        victories: { p1: 5, p2: 6, p3: 7, p4: 6 },
-        bestTimes: { first: 1, second: 2, third: 3 }, // 100 + 100 + 60 = 260 pts
+        rep: 0,
+        victories: { p1: 0, p2: 0, p3: 0, p4: 0 },
+        bestTimes: { first: 0, second: 0, third: 0 }, // 100 + 100 + 60 = 260 pts
         bio: "Se hace llamar 'Baron' por su colección de deportivos europeos de lujo. Su estilo de conducción es limpio y calculador, evitando a toda costa cualquier roce con el rival.",
         signature: "BARON",
         status: "ACTIVO",
@@ -180,9 +180,9 @@ const DEFAULT_BLACKLIST_DRIVERS = [
         alias: "Vic",
         ride: "Toyota Supra",
         strength: "Resistencia en Vueltas Largas",
-        rep: 870000,
-        victories: { p1: 5, p2: 6, p3: 5, p4: 7 },
-        bestTimes: { first: 1, second: 1, third: 3 }, // 100 + 50 + 60 = 210 pts
+        rep: 0,
+        victories: { p1: 0, p2: 0, p3: 0, p4: 0 },
+        bestTimes: { first: 0, second: 0, third: 0 }, // 100 + 50 + 60 = 210 pts
         bio: "Veterano de las carreras ilegales de Rockport. Su Supra 2JZ tiene una puesta a punto impecable que no pierde compresión ni en las carreras más extensas del mapa.",
         signature: "VIC",
         status: "ACTIVO",
@@ -196,9 +196,9 @@ const DEFAULT_BLACKLIST_DRIVERS = [
         alias: "Izzy",
         ride: "Mazda RX-8",
         strength: "Derrapes & Curvas Cerradas",
-        rep: 760000,
-        victories: { p1: 4, p2: 7, p3: 6, p4: 5 },
-        bestTimes: { first: 0, second: 2, third: 3 }, // 0 + 100 + 60 = 160 pts
+        rep: 0,
+        victories: { p1: 0, p2: 0, p3: 0, p4: 0 },
+        bestTimes: { first: 0, second: 0, third: 0 }, // 0 + 100 + 60 = 160 pts
         bio: "Proviene de una familia entera de mecánicos. Conoce las especificaciones de cada motor rotativo de memoria. Difícil de batir en circuitos estrechos con giros técnicos.",
         signature: "IZZY",
         status: "ACTIVO",
@@ -212,9 +212,9 @@ const DEFAULT_BLACKLIST_DRIVERS = [
         alias: "Big Lou",
         ride: "Mitsubishi Eclipse GT",
         strength: "Tolls & Cuellos de Botella",
-        rep: 660000,
-        victories: { p1: 3, p2: 6, p3: 6, p4: 8 },
-        bestTimes: { first: 0, second: 1, third: 2 }, // 0 + 50 + 40 = 90 pts
+        rep: 0,
+        victories: { p1: 0, p2: 0, p3: 0, p4: 0 },
+        bestTimes: { first: 0, second: 0, third: 0 }, // 0 + 50 + 40 = 90 pts
         bio: "Famoso por su estilo arrogante y por intimidar a sus oponentes antes de que el semáforo se ponga en verde. Sin embargo, su Eclipse tiene un paso por curva muy respetable.",
         signature: "BIG LOU",
         status: "ACTIVO",
@@ -228,9 +228,9 @@ const DEFAULT_BLACKLIST_DRIVERS = [
         alias: "Taz",
         ride: "Lexus IS 300",
         strength: "Trazado Urbano",
-        rep: 550000,
-        victories: { p1: 3, p2: 5, p3: 7, p4: 9 },
-        bestTimes: { first: 0, second: 1, third: 1 }, // 0 + 50 + 20 = 70 pts
+        rep: 0,
+        victories: { p1: 0, p2: 0, p3: 0, p4: 0 },
+        bestTimes: { first: 0, second: 0, third: 0 }, // 0 + 50 + 20 = 70 pts
         bio: "Odia a la policía con toda su alma y suele usar los clavos y patrullas para deshacerse de los retadores que intentan seguir su estela por el centro comercial de Rockport.",
         signature: "TAZ",
         status: "ACTIVO",
@@ -244,9 +244,9 @@ const DEFAULT_BLACKLIST_DRIVERS = [
         alias: "Sonny",
         ride: "Volkswagen Golf GTI",
         strength: "Circuitos Cortos",
-        rep: 450000,
-        victories: { p1: 2, p2: 5, p3: 6, p4: 10 },
-        bestTimes: { first: 0, second: 0, third: 2 }, // 0 + 0 + 40 = 40 pts
+        rep: 0,
+        victories: { p1: 0, p2: 0, p3: 0, p4: 0 },
+        bestTimes: { first: 0, second: 0, third: 0 }, // 0 + 0 + 40 = 40 pts
         bio: "La puerta de entrada a la Blacklist. Sonny ha invertido todo su dinero en equipar su Golf GTI con piezas de calle de primer nivel. Vencerlo es el primer paso para llegar hasta Razor.",
         signature: "SONNY",
         status: "GUARDIÁN #15",
@@ -280,9 +280,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Circuito",
                 carRestriction: "BMW M3 GTR (Auto Bonus)",
                 top3: [
-                    { rank: 1, pilot: "Razor", car: "BMW M3 GTR (Auto Bonus)", time: "01:18.450", bonus: 100, badge: "🥇 +100 PTS", repMoney: 400000, repBadge: "💰 $400.000 REP" },
-                    { rank: 2, pilot: "Bull", car: "BMW M3 GTR (Auto Bonus)", time: "01:19.120", bonus: 50, badge: "🥈 +50 PTS", repMoney: 250000, repBadge: "💰 $250.000 REP" },
-                    { rank: 3, pilot: "Ronnie", car: "BMW M3 GTR (Auto Bonus)", time: "01:19.890", bonus: 20, badge: "🥉 +20 PTS", repMoney: 120000, repBadge: "💰 $120.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 400000, repBadge: "💰 $400.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 250000, repBadge: "💰 $250.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 120000, repBadge: "💰 $120.000 REP" }
                 ]
             },
             {
@@ -291,9 +291,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Sprint",
                 carRestriction: "Fiat Punto (Stock)",
                 top3: [
-                    { rank: 15, pilot: "Sonny", car: "Fiat Punto (Stock)", time: "02:04.310", bonus: 100, badge: "🥇 +100 PTS", repMoney: 450000, repBadge: "💰 $450.000 REP" },
-                    { rank: 14, pilot: "Taz", car: "Fiat Punto (Stock)", time: "02:04.880", bonus: 50, badge: "🥈 +50 PTS", repMoney: 280000, repBadge: "💰 $280.000 REP" },
-                    { rank: 12, pilot: "Izzy", car: "Fiat Punto (Stock)", time: "02:05.420", bonus: 20, badge: "🥉 +20 PTS", repMoney: 140000, repBadge: "💰 $140.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 450000, repBadge: "💰 $450.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 280000, repBadge: "💰 $280.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 140000, repBadge: "💰 $140.000 REP" }
                 ]
             },
             {
@@ -302,9 +302,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Drag",
                 carRestriction: "Mazda RX-8 (No Junkman)",
                 top3: [
-                    { rank: 12, pilot: "Izzy", car: "Mazda RX-8 (No Junkman)", time: "00:23.110", bonus: 100, badge: "🥇 +100 PTS", repMoney: 350000, repBadge: "💰 $350.000 REP" },
-                    { rank: 14, pilot: "Taz", car: "Mazda RX-8 (No Junkman)", time: "00:23.450", bonus: 50, badge: "🥈 +50 PTS", repMoney: 200000, repBadge: "💰 $200.000 REP" },
-                    { rank: 13, pilot: "Vic", car: "Mazda RX-8 (No Junkman)", time: "00:23.680", bonus: 20, badge: "🥉 +20 PTS", repMoney: 100000, repBadge: "💰 $100.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 350000, repBadge: "💰 $350.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 200000, repBadge: "💰 $200.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 100000, repBadge: "💰 $100.000 REP" }
                 ]
             },
             {
@@ -313,9 +313,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Circuito",
                 carRestriction: "Cobalt SS (Stock)",
                 top3: [
-                    { rank: 3, pilot: "Ronnie", car: "Cobalt SS (Stock)", time: "01:42.200", bonus: 100, badge: "🥇 +100 PTS", repMoney: 400000, repBadge: "💰 $400.000 REP" },
-                    { rank: 7, pilot: "Kaze", car: "Cobalt SS (Stock)", time: "01:42.750", bonus: 50, badge: "🥈 +50 PTS", repMoney: 250000, repBadge: "💰 $250.000 REP" },
-                    { rank: 13, pilot: "Vic", car: "Cobalt SS (Stock)", time: "01:43.150", bonus: 20, badge: "🥉 +20 PTS", repMoney: 120000, repBadge: "💰 $120.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 400000, repBadge: "💰 $400.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 250000, repBadge: "💰 $250.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 120000, repBadge: "💰 $120.000 REP" }
                 ]
             },
             {
@@ -324,9 +324,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Sprint",
                 carRestriction: "Subaru WRX (No Junkman)",
                 top3: [
-                    { rank: 9, pilot: "Earl", car: "Subaru WRX (No Junkman)", time: "01:58.210", bonus: 100, badge: "🥇 +100 PTS", repMoney: 500000, repBadge: "💰 $500.000 REP" },
-                    { rank: 6, pilot: "Ming", car: "Subaru WRX (No Junkman)", time: "01:58.740", bonus: 50, badge: "🥈 +50 PTS", repMoney: 300000, repBadge: "💰 $300.000 REP" },
-                    { rank: 4, pilot: "JV", car: "Subaru WRX (No Junkman)", time: "01:59.100", bonus: 20, badge: "🥉 +20 PTS", repMoney: 150000, repBadge: "💰 $150.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 500000, repBadge: "💰 $500.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 300000, repBadge: "💰 $300.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 150000, repBadge: "💰 $150.000 REP" }
                 ]
             },
             {
@@ -335,9 +335,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Circuito",
                 carRestriction: "Ford Mustang GT (Stock)",
                 top3: [
-                    { rank: 8, pilot: "Jewels", car: "Ford Mustang GT (Stock)", time: "01:31.420", bonus: 100, badge: "🥇 +100 PTS", repMoney: 450000, repBadge: "💰 $450.000 REP" },
-                    { rank: 2, pilot: "Bull", car: "Ford Mustang GT (Stock)", time: "01:31.950", bonus: 50, badge: "🥈 +50 PTS", repMoney: 270000, repBadge: "💰 $270.000 REP" },
-                    { rank: 16, pilot: "Rog", car: "Ford Mustang GT (Stock)", time: "01:32.400", bonus: 20, badge: "🥉 +20 PTS", repMoney: 130000, repBadge: "💰 $130.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 450000, repBadge: "💰 $450.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 270000, repBadge: "💰 $270.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 130000, repBadge: "💰 $130.000 REP" }
                 ]
             },
             {
@@ -346,9 +346,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Drag",
                 carRestriction: "Lotus Elise (No Junkman)",
                 top3: [
-                    { rank: 10, pilot: "Baron", car: "Lotus Elise (No Junkman)", time: "00:22.890", bonus: 100, badge: "🥇 +100 PTS", repMoney: 380000, repBadge: "💰 $380.000 REP" },
-                    { rank: 6, pilot: "Ming", car: "Lotus Elise (No Junkman)", time: "00:23.050", bonus: 50, badge: "🥈 +50 PTS", repMoney: 220000, repBadge: "💰 $220.000 REP" },
-                    { rank: 7, pilot: "Kaze", car: "Lotus Elise (No Junkman)", time: "00:23.410", bonus: 20, badge: "🥉 +20 PTS", repMoney: 110000, repBadge: "💰 $110.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 380000, repBadge: "💰 $380.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 220000, repBadge: "💰 $220.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 110000, repBadge: "💰 $110.000 REP" }
                 ]
             },
             {
@@ -357,9 +357,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Circuito",
                 carRestriction: "Porsche Carrera GT (Junkman)",
                 top3: [
-                    { rank: 5, pilot: "Webster", car: "Porsche Carrera GT (Junkman)", time: "01:52.330", bonus: 100, badge: "🥇 +100 PTS", repMoney: 480000, repBadge: "💰 $480.000 REP" },
-                    { rank: 4, pilot: "JV", car: "Porsche Carrera GT (Junkman)", time: "01:52.880", bonus: 50, badge: "🥈 +50 PTS", repMoney: 290000, repBadge: "💰 $290.000 REP" },
-                    { rank: 10, pilot: "Baron", car: "Porsche Carrera GT (Junkman)", time: "01:53.300", bonus: 20, badge: "🥉 +20 PTS", repMoney: 140000, repBadge: "💰 $140.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 480000, repBadge: "💰 $480.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 290000, repBadge: "💰 $290.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 140000, repBadge: "💰 $140.000 REP" }
                 ]
             }
         ]
@@ -382,9 +382,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Sprint",
                 carRestriction: "Porsche Carrera GT (Junkman)",
                 top3: [
-                    { rank: 5, pilot: "Webster", car: "Porsche Carrera GT (Junkman)", time: "01:45.300", bonus: 100, badge: "🥇 +100 PTS", repMoney: 500000, repBadge: "💰 $500.000 REP" },
-                    { rank: 4, pilot: "JV", car: "Porsche Carrera GT (Junkman)", time: "01:45.900", bonus: 50, badge: "🥈 +50 PTS", repMoney: 300000, repBadge: "💰 $300.000 REP" },
-                    { rank: 10, pilot: "Baron", car: "Porsche Carrera GT (Junkman)", time: "01:46.400", bonus: 20, badge: "🥉 +20 PTS", repMoney: 150000, repBadge: "💰 $150.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 500000, repBadge: "💰 $500.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 300000, repBadge: "💰 $300.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 150000, repBadge: "💰 $150.000 REP" }
                 ]
             },
             {
@@ -393,9 +393,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Circuito",
                 carRestriction: "Mitsubishi Lancer Evolution (Stock)",
                 top3: [
-                    { rank: 9, pilot: "Earl", car: "Mitsubishi Lancer Evolution (Stock)", time: "01:29.800", bonus: 100, badge: "🥇 +100 PTS", repMoney: 460000, repBadge: "💰 $460.000 REP" },
-                    { rank: 2, pilot: "Bull", car: "Mitsubishi Lancer Evolution (Stock)", time: "01:30.150", bonus: 50, badge: "🥈 +50 PTS", repMoney: 280000, repBadge: "💰 $280.000 REP" },
-                    { rank: 6, pilot: "Ming", car: "Mitsubishi Lancer Evolution (Stock)", time: "01:30.700", bonus: 20, badge: "🥉 +20 PTS", repMoney: 140000, repBadge: "💰 $140.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 460000, repBadge: "💰 $460.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 280000, repBadge: "💰 $280.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 140000, repBadge: "💰 $140.000 REP" }
                 ]
             },
             {
@@ -404,9 +404,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Drag",
                 carRestriction: "Dodge Viper SRT-10 (No Junkman)",
                 top3: [
-                    { rank: 4, pilot: "JV", car: "Dodge Viper SRT-10 (No Junkman)", time: "00:20.950", bonus: 100, badge: "🥇 +100 PTS", repMoney: 400000, repBadge: "💰 $400.000 REP" },
-                    { rank: 5, pilot: "Webster", car: "Dodge Viper SRT-10 (No Junkman)", time: "00:21.200", bonus: 50, badge: "🥈 +50 PTS", repMoney: 240000, repBadge: "💰 $240.000 REP" },
-                    { rank: 10, pilot: "Baron", car: "Dodge Viper SRT-10 (No Junkman)", time: "00:21.500", bonus: 20, badge: "🥉 +20 PTS", repMoney: 120000, repBadge: "💰 $120.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 400000, repBadge: "💰 $400.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 240000, repBadge: "💰 $240.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 120000, repBadge: "💰 $120.000 REP" }
                 ]
             },
             {
@@ -415,9 +415,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Sprint",
                 carRestriction: "Mazda RX-8 (Stock)",
                 top3: [
-                    { rank: 12, pilot: "Izzy", car: "Mazda RX-8 (Stock)", time: "02:15.100", bonus: 100, badge: "🥇 +100 PTS", repMoney: 520000, repBadge: "💰 $520.000 REP" },
-                    { rank: 15, pilot: "Sonny", car: "Mazda RX-8 (Stock)", time: "02:15.650", bonus: 50, badge: "🥈 +50 PTS", repMoney: 310000, repBadge: "💰 $310.000 REP" },
-                    { rank: 14, pilot: "Taz", car: "Mazda RX-8 (Stock)", time: "02:16.100", bonus: 20, badge: "🥉 +20 PTS", repMoney: 155000, repBadge: "💰 $155.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 520000, repBadge: "💰 $520.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 310000, repBadge: "💰 $310.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 155000, repBadge: "💰 $155.000 REP" }
                 ]
             },
             {
@@ -426,9 +426,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Circuito",
                 carRestriction: "Lamborghini Gallardo (No Junkman)",
                 top3: [
-                    { rank: 6, pilot: "Ming", car: "Lamborghini Gallardo (No Junkman)", time: "01:35.620", bonus: 100, badge: "🥇 +100 PTS", repMoney: 480000, repBadge: "💰 $480.000 REP" },
-                    { rank: 5, pilot: "Webster", car: "Lamborghini Gallardo (No Junkman)", time: "01:36.110", bonus: 50, badge: "🥈 +50 PTS", repMoney: 290000, repBadge: "💰 $290.000 REP" },
-                    { rank: 2, pilot: "Bull", car: "Lamborghini Gallardo (No Junkman)", time: "01:36.700", bonus: 20, badge: "🥉 +20 PTS", repMoney: 145000, repBadge: "💰 $145.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 480000, repBadge: "💰 $480.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 290000, repBadge: "💰 $290.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 145000, repBadge: "💰 $145.000 REP" }
                 ]
             },
             {
@@ -437,9 +437,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Sprint",
                 carRestriction: "Subaru WRX (Stock)",
                 top3: [
-                    { rank: 9, pilot: "Earl", car: "Subaru WRX (Stock)", time: "01:48.820", bonus: 100, badge: "🥇 +100 PTS", repMoney: 510000, repBadge: "💰 $510.000 REP" },
-                    { rank: 16, pilot: "Rog", car: "Subaru WRX (Stock)", time: "01:49.230", bonus: 50, badge: "🥈 +50 PTS", repMoney: 310000, repBadge: "💰 $310.000 REP" },
-                    { rank: 7, pilot: "Kaze", car: "Subaru WRX (Stock)", time: "01:49.800", bonus: 20, badge: "🥉 +20 PTS", repMoney: 150000, repBadge: "💰 $150.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 510000, repBadge: "💰 $510.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 310000, repBadge: "💰 $310.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 150000, repBadge: "💰 $150.000 REP" }
                 ]
             },
             {
@@ -448,9 +448,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Drag",
                 carRestriction: "Mercedes-Benz SLR McLaren (No Junkman)",
                 top3: [
-                    { rank: 2, pilot: "Bull", car: "Mercedes-Benz SLR McLaren (No Junkman)", time: "00:21.420", bonus: 100, badge: "🥇 +100 PTS", repMoney: 420000, repBadge: "💰 $420.000 REP" },
-                    { rank: 1, pilot: "Razor", car: "Mercedes-Benz SLR McLaren (No Junkman)", time: "00:21.680", bonus: 50, badge: "🥈 +50 PTS", repMoney: 250000, repBadge: "💰 $250.000 REP" },
-                    { rank: 3, pilot: "Ronnie", car: "Mercedes-Benz SLR McLaren (No Junkman)", time: "00:21.990", bonus: 20, badge: "🥉 +20 PTS", repMoney: 125000, repBadge: "💰 $125.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 420000, repBadge: "💰 $420.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 250000, repBadge: "💰 $250.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 125000, repBadge: "💰 $125.000 REP" }
                 ]
             },
             {
@@ -459,9 +459,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Circuito",
                 carRestriction: "Ford Mustang GT (Stock)",
                 top3: [
-                    { rank: 8, pilot: "Jewels", car: "Ford Mustang GT (Stock)", time: "01:25.400", bonus: 100, badge: "🥇 +100 PTS", repMoney: 550000, repBadge: "💰 $550.000 REP" },
-                    { rank: 16, pilot: "Rog", car: "Ford Mustang GT (Stock)", time: "01:25.850", bonus: 50, badge: "🥈 +50 PTS", repMoney: 330000, repBadge: "💰 $330.000 REP" },
-                    { rank: 5, pilot: "Webster", car: "Ford Mustang GT (Stock)", time: "01:26.310", bonus: 20, badge: "🥉 +20 PTS", repMoney: 165000, repBadge: "💰 $165.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 550000, repBadge: "💰 $550.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 330000, repBadge: "💰 $330.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 165000, repBadge: "💰 $165.000 REP" }
                 ]
             }
         ]
@@ -484,9 +484,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Circuito",
                 carRestriction: "Aston Martin DB9 (No Junkman)",
                 top3: [
-                    { rank: 3, pilot: "Ronnie", car: "Aston Martin DB9 (No Junkman)", time: "01:34.200", bonus: 100, badge: "🥇 +100 PTS", repMoney: 550000, repBadge: "💰 $550.000 REP" },
-                    { rank: 2, pilot: "Bull", car: "Aston Martin DB9 (No Junkman)", time: "01:34.700", bonus: 50, badge: "🥈 +50 PTS", repMoney: 330000, repBadge: "💰 $330.000 REP" },
-                    { rank: 5, pilot: "Webster", car: "Aston Martin DB9 (No Junkman)", time: "01:35.200", bonus: 20, badge: "🥉 +20 PTS", repMoney: 165000, repBadge: "💰 $165.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 550000, repBadge: "💰 $550.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 330000, repBadge: "💰 $330.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 165000, repBadge: "💰 $165.000 REP" }
                 ]
             },
             {
@@ -495,9 +495,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Sprint",
                 carRestriction: "Cobalt SS (Stock)",
                 top3: [
-                    { rank: 3, pilot: "Ronnie", car: "Cobalt SS (Stock)", time: "01:52.400", bonus: 100, badge: "🥇 +100 PTS", repMoney: 540000, repBadge: "💰 $540.000 REP" },
-                    { rank: 13, pilot: "Vic", car: "Cobalt SS (Stock)", time: "01:52.900", bonus: 50, badge: "🥈 +50 PTS", repMoney: 320000, repBadge: "💰 $320.000 REP" },
-                    { rank: 15, pilot: "Sonny", car: "Cobalt SS (Stock)", time: "01:53.400", bonus: 20, badge: "🥉 +20 PTS", repMoney: 160000, repBadge: "💰 $160.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 540000, repBadge: "💰 $540.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 320000, repBadge: "💰 $320.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 160000, repBadge: "💰 $160.000 REP" }
                 ]
             },
             {
@@ -506,9 +506,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Drag",
                 carRestriction: "Subaru WRX (No Junkman)",
                 top3: [
-                    { rank: 9, pilot: "Earl", car: "Subaru WRX (No Junkman)", time: "00:21.600", bonus: 100, badge: "🥇 +100 PTS", repMoney: 440000, repBadge: "💰 $440.000 REP" },
-                    { rank: 6, pilot: "Ming", car: "Subaru WRX (No Junkman)", time: "00:21.850", bonus: 50, badge: "🥈 +50 PTS", repMoney: 260000, repBadge: "💰 $260.000 REP" },
-                    { rank: 4, pilot: "JV", car: "Subaru WRX (No Junkman)", time: "00:22.100", bonus: 20, badge: "🥉 +20 PTS", repMoney: 130000, repBadge: "💰 $130.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 440000, repBadge: "💰 $440.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 260000, repBadge: "💰 $260.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 130000, repBadge: "💰 $130.000 REP" }
                 ]
             },
             {
@@ -517,9 +517,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Circuito",
                 carRestriction: "Lotus Elise (Stock)",
                 top3: [
-                    { rank: 10, pilot: "Baron", car: "Lotus Elise (Stock)", time: "01:28.900", bonus: 100, badge: "🥇 +100 PTS", repMoney: 520000, repBadge: "💰 $520.000 REP" },
-                    { rank: 6, pilot: "Ming", car: "Lotus Elise (Stock)", time: "01:29.350", bonus: 50, badge: "🥈 +50 PTS", repMoney: 310000, repBadge: "💰 $310.000 REP" },
-                    { rank: 7, pilot: "Kaze", car: "Lotus Elise (Stock)", time: "01:29.900", bonus: 20, badge: "🥉 +20 PTS", repMoney: 155000, repBadge: "💰 $155.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 520000, repBadge: "💰 $520.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 310000, repBadge: "💰 $310.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 155000, repBadge: "💰 $155.000 REP" }
                 ]
             },
             {
@@ -528,9 +528,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Sprint",
                 carRestriction: "Fiat Punto (No Junkman)",
                 top3: [
-                    { rank: 15, pilot: "Sonny", car: "Fiat Punto (No Junkman)", time: "02:01.150", bonus: 100, badge: "🥇 +100 PTS", repMoney: 510000, repBadge: "💰 $510.000 REP" },
-                    { rank: 14, pilot: "Taz", car: "Fiat Punto (No Junkman)", time: "02:01.600", bonus: 50, badge: "🥈 +50 PTS", repMoney: 300000, repBadge: "💰 $300.000 REP" },
-                    { rank: 12, pilot: "Izzy", car: "Fiat Punto (No Junkman)", time: "02:02.100", bonus: 20, badge: "🥉 +20 PTS", repMoney: 150000, repBadge: "💰 $150.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 510000, repBadge: "💰 $510.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 300000, repBadge: "💰 $300.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 150000, repBadge: "💰 $150.000 REP" }
                 ]
             },
             {
@@ -539,9 +539,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Circuito",
                 carRestriction: "Mitsubishi Lancer Evolution (Stock)",
                 top3: [
-                    { rank: 9, pilot: "Earl", car: "Mitsubishi Lancer Evolution (Stock)", time: "01:22.750", bonus: 100, badge: "🥇 +100 PTS", repMoney: 530000, repBadge: "💰 $530.000 REP" },
-                    { rank: 2, pilot: "Bull", car: "Mitsubishi Lancer Evolution (Stock)", time: "01:23.180", bonus: 50, badge: "🥈 +50 PTS", repMoney: 320000, repBadge: "💰 $320.000 REP" },
-                    { rank: 6, pilot: "Ming", car: "Mitsubishi Lancer Evolution (Stock)", time: "01:23.650", bonus: 20, badge: "🥉 +20 PTS", repMoney: 160000, repBadge: "💰 $160.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 530000, repBadge: "💰 $530.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 320000, repBadge: "💰 $320.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 160000, repBadge: "💰 $160.000 REP" }
                 ]
             },
             {
@@ -550,9 +550,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Drag",
                 carRestriction: "Porsche Cayman S (No Junkman)",
                 top3: [
-                    { rank: 10, pilot: "Baron", car: "Porsche Cayman S (No Junkman)", time: "00:20.880", bonus: 100, badge: "🥇 +100 PTS", repMoney: 460000, repBadge: "💰 $460.000 REP" },
-                    { rank: 5, pilot: "Webster", car: "Porsche Cayman S (No Junkman)", time: "00:21.120", bonus: 50, badge: "🥈 +50 PTS", repMoney: 280000, repBadge: "💰 $280.000 REP" },
-                    { rank: 3, pilot: "Ronnie", car: "Porsche Cayman S (No Junkman)", time: "00:21.390", bonus: 20, badge: "🥉 +20 PTS", repMoney: 140000, repBadge: "💰 $140.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 460000, repBadge: "💰 $460.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 280000, repBadge: "💰 $280.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 140000, repBadge: "💰 $140.000 REP" }
                 ]
             },
             {
@@ -561,9 +561,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Circuito",
                 carRestriction: "Porsche Carrera GT (Junkman)",
                 top3: [
-                    { rank: 5, pilot: "Webster", car: "Porsche Carrera GT (Junkman)", time: "01:40.350", bonus: 100, badge: "🥇 +100 PTS", repMoney: 560000, repBadge: "💰 $560.000 REP" },
-                    { rank: 4, pilot: "JV", car: "Porsche Carrera GT (Junkman)", time: "01:40.800", bonus: 50, badge: "🥈 +50 PTS", repMoney: 340000, repBadge: "💰 $340.000 REP" },
-                    { rank: 1, pilot: "Razor", car: "Porsche Carrera GT (Junkman)", time: "01:41.250", bonus: 20, badge: "🥉 +20 PTS", repMoney: 170000, repBadge: "💰 $170.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 560000, repBadge: "💰 $560.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 340000, repBadge: "💰 $340.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 170000, repBadge: "💰 $170.000 REP" }
                 ]
             }
         ]
@@ -586,9 +586,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Circuito",
                 carRestriction: "Porsche Carrera GT (Junkman)",
                 top3: [
-                    { rank: 1, pilot: "Razor", car: "Porsche Carrera GT (Junkman)", time: "01:17.900", bonus: 100, badge: "🥇 +100 PTS", repMoney: 1000000, repBadge: "💰 $1.000.000 REP" },
-                    { rank: 2, pilot: "Bull", car: "Porsche Carrera GT (Junkman)", time: "01:18.250", bonus: 50, badge: "🥈 +50 PTS", repMoney: 600000, repBadge: "💰 $600.000 REP" },
-                    { rank: 3, pilot: "Ronnie", car: "Porsche Carrera GT (Junkman)", time: "01:18.800", bonus: 20, badge: "🥉 +20 PTS", repMoney: 300000, repBadge: "💰 $300.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 1000000, repBadge: "💰 $1.000.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 600000, repBadge: "💰 $600.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 300000, repBadge: "💰 $300.000 REP" }
                 ]
             },
             {
@@ -597,9 +597,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Sprint",
                 carRestriction: "Chevrolet Corvette C6 (Stock)",
                 top3: [
-                    { rank: 5, pilot: "Webster", car: "Chevrolet Corvette C6 (Stock)", time: "02:01.800", bonus: 100, badge: "🥇 +100 PTS", repMoney: 850000, repBadge: "💰 $850.000 REP" },
-                    { rank: 2, pilot: "Bull", car: "Chevrolet Corvette C6 (Stock)", time: "02:02.200", bonus: 50, badge: "🥈 +50 PTS", repMoney: 500000, repBadge: "💰 $500.000 REP" },
-                    { rank: 6, pilot: "Ming", car: "Chevrolet Corvette C6 (Stock)", time: "02:02.750", bonus: 20, badge: "🥉 +20 PTS", repMoney: 250000, repBadge: "💰 $250.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 850000, repBadge: "💰 $850.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 500000, repBadge: "💰 $500.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 250000, repBadge: "💰 $250.000 REP" }
                 ]
             },
             {
@@ -608,9 +608,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Drag",
                 carRestriction: "Mazda RX-8 (No Junkman)",
                 top3: [
-                    { rank: 12, pilot: "Izzy", car: "Mazda RX-8 (No Junkman)", time: "00:19.850", bonus: 100, badge: "🥇 +100 PTS", repMoney: 750000, repBadge: "💰 $750.000 REP" },
-                    { rank: 14, pilot: "Taz", car: "Mazda RX-8 (No Junkman)", time: "00:20.100", bonus: 50, badge: "🥈 +50 PTS", repMoney: 450000, repBadge: "💰 $450.000 REP" },
-                    { rank: 13, pilot: "Vic", car: "Mazda RX-8 (No Junkman)", time: "00:20.350", bonus: 20, badge: "🥉 +20 PTS", repMoney: 220000, repBadge: "💰 $220.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 750000, repBadge: "💰 $750.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 450000, repBadge: "💰 $450.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 220000, repBadge: "💰 $220.000 REP" }
                 ]
             },
             {
@@ -619,9 +619,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Circuito",
                 carRestriction: "BMW M3 GTR (Auto Bonus)",
                 top3: [
-                    { rank: 4, pilot: "JV", car: "BMW M3 GTR (Auto Bonus)", time: "01:33.400", bonus: 100, badge: "🥇 +100 PTS", repMoney: 900000, repBadge: "💰 $900.000 REP" },
-                    { rank: 5, pilot: "Webster", car: "BMW M3 GTR (Auto Bonus)", time: "01:33.900", bonus: 50, badge: "🥈 +50 PTS", repMoney: 550000, repBadge: "💰 $550.000 REP" },
-                    { rank: 10, pilot: "Baron", car: "BMW M3 GTR (Auto Bonus)", time: "01:34.350", bonus: 20, badge: "🥉 +20 PTS", repMoney: 280000, repBadge: "💰 $280.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 900000, repBadge: "💰 $900.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 550000, repBadge: "💰 $550.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 280000, repBadge: "💰 $280.000 REP" }
                 ]
             },
             {
@@ -630,9 +630,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Sprint",
                 carRestriction: "Ford Mustang GT (Stock)",
                 top3: [
-                    { rank: 8, pilot: "Jewels", car: "Ford Mustang GT (Stock)", time: "01:54.120", bonus: 100, badge: "🥇 +100 PTS", repMoney: 800000, repBadge: "💰 $800.000 REP" },
-                    { rank: 16, pilot: "Rog", car: "Ford Mustang GT (Stock)", time: "01:54.680", bonus: 50, badge: "🥈 +50 PTS", repMoney: 480000, repBadge: "💰 $480.000 REP" },
-                    { rank: 5, pilot: "Webster", car: "Ford Mustang GT (Stock)", time: "01:55.100", bonus: 20, badge: "🥉 +20 PTS", repMoney: 240000, repBadge: "💰 $240.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 800000, repBadge: "💰 $800.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 480000, repBadge: "💰 $480.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 240000, repBadge: "💰 $240.000 REP" }
                 ]
             },
             {
@@ -641,9 +641,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Circuito",
                 carRestriction: "Subaru WRX (No Junkman)",
                 top3: [
-                    { rank: 9, pilot: "Earl", car: "Subaru WRX (No Junkman)", time: "01:29.650", bonus: 100, badge: "🥇 +100 PTS", repMoney: 850000, repBadge: "💰 $850.000 REP" },
-                    { rank: 2, pilot: "Bull", car: "Subaru WRX (No Junkman)", time: "01:30.050", bonus: 50, badge: "🥈 +50 PTS", repMoney: 520000, repBadge: "💰 $520.000 REP" },
-                    { rank: 6, pilot: "Ming", car: "Subaru WRX (No Junkman)", time: "01:30.550", bonus: 20, badge: "🥉 +20 PTS", repMoney: 260000, repBadge: "💰 $260.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 850000, repBadge: "💰 $850.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 520000, repBadge: "💰 $520.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 260000, repBadge: "💰 $260.000 REP" }
                 ]
             },
             {
@@ -652,9 +652,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Drag",
                 carRestriction: "Fiat Punto (Stock)",
                 top3: [
-                    { rank: 15, pilot: "Sonny", car: "Fiat Punto (Stock)", time: "00:19.450", bonus: 100, badge: "🥇 +100 PTS", repMoney: 780000, repBadge: "💰 $780.000 REP" },
-                    { rank: 14, pilot: "Taz", car: "Fiat Punto (Stock)", time: "00:19.700", bonus: 50, badge: "🥈 +50 PTS", repMoney: 460000, repBadge: "💰 $460.000 REP" },
-                    { rank: 12, pilot: "Izzy", car: "Fiat Punto (Stock)", time: "00:20.010", bonus: 20, badge: "🥉 +20 PTS", repMoney: 230000, repBadge: "💰 $230.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 780000, repBadge: "💰 $780.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 460000, repBadge: "💰 $460.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 230000, repBadge: "💰 $230.000 REP" }
                 ]
             },
             {
@@ -663,9 +663,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Circuito",
                 carRestriction: "BMW M3 GTR (Auto Bonus)",
                 top3: [
-                    { rank: 1, pilot: "Razor", car: "BMW M3 GTR (Auto Bonus)", time: "01:37.200", bonus: 100, badge: "🥇 +100 PTS", repMoney: 950000, repBadge: "💰 $950.000 REP" },
-                    { rank: 2, pilot: "Bull", car: "BMW M3 GTR (Auto Bonus)", time: "01:37.650", bonus: 50, badge: "🥈 +50 PTS", repMoney: 580000, repBadge: "💰 $580.000 REP" },
-                    { rank: 3, pilot: "Ronnie", car: "BMW M3 GTR (Auto Bonus)", time: "01:38.150", bonus: 20, badge: "🥉 +20 PTS", repMoney: 290000, repBadge: "💰 $290.000 REP" }
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 950000, repBadge: "💰 $950.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 580000, repBadge: "💰 $580.000 REP" },
+                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 290000, repBadge: "💰 $290.000 REP" }
                 ]
             }
         ]

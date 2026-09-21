@@ -104,6 +104,12 @@ function switchView(viewId) {
             renderTuningGuides(currentTuningDrivetrainFilter || 'all', currentTuningSearchQuery || '');
         }
     }
+
+    if (viewId === 'map') {
+        if (typeof initLiveMapSimulation === 'function') {
+            initLiveMapSimulation();
+        }
+    }
 }
 
 function toggleNavDropdown(dropdownId) {
@@ -165,28 +171,214 @@ function switchInstallLang(lang) {
 }
 
 // =======================================================
-// INTERACTIVIDAD ROCKPORT MAP LIVE
+// INTERACTIVIDAD ROCKPORT MAP LIVE & SIMULACIÓN EN VIVO
 // =======================================================
 let currentMapZoom = 1.0;
+let mapSimulationRunning = true;
+let mapSimulationSpeedMultiplier = 1.0;
+let mapSimulationAnimFrame = null;
+let lastSimTimestamp = null;
+let mapSimulationInitialized = false;
+
+const SIMULATED_PILOTS = [
+    {
+        id: 'pilot-razor',
+        name: 'Razor (Callahan)',
+        role: '#1 Blacklist',
+        car: 'BMW M3 GTR (E46)',
+        color: '#ff7700',
+        badgeClass: 'badge-razor',
+        isPolice: false,
+        baseKmh: 318,
+        speed: 0.045,
+        heat: 5,
+        status: 'Líder en Fuga // Downtown Express',
+        district: 'Downtown Rockport',
+        waypoints: [
+            { x: 30.5, y: 62.0 },
+            { x: 34.0, y: 58.5 },
+            { x: 38.2, y: 52.0 },
+            { x: 42.5, y: 56.0 },
+            { x: 45.0, y: 65.0 },
+            { x: 41.5, y: 74.0 },
+            { x: 35.0, y: 79.5 },
+            { x: 26.5, y: 76.0 },
+            { x: 24.0, y: 68.5 }
+        ],
+        currentWaypointIndex: 0,
+        progress: 0.0,
+        curX: 30.5,
+        curY: 62.0,
+        currentKmh: 318,
+        headingDeg: 0
+    },
+    {
+        id: 'pilot-lea4speed',
+        name: 'Lea4Speed',
+        role: '#1 World Record',
+        car: 'Porsche Carrera GT',
+        color: '#00ff88',
+        badgeClass: 'badge-wr',
+        isPolice: false,
+        baseKmh: 345,
+        speed: 0.052,
+        heat: 4,
+        status: 'WR Pace // Ocean Boardwalk Sprint',
+        district: 'Camden Beach',
+        waypoints: [
+            { x: 58.0, y: 56.0 },
+            { x: 63.5, y: 62.0 },
+            { x: 68.0, y: 68.5 },
+            { x: 74.0, y: 75.0 },
+            { x: 80.5, y: 79.0 },
+            { x: 84.0, y: 72.0 },
+            { x: 79.5, y: 64.0 },
+            { x: 72.0, y: 58.5 },
+            { x: 64.0, y: 53.0 }
+        ],
+        currentWaypointIndex: 2,
+        progress: 0.3,
+        curX: 68.0,
+        curY: 68.5,
+        currentKmh: 345,
+        headingDeg: 0
+    },
+    {
+        id: 'pilot-xlemondx',
+        name: 'xLemondx',
+        role: 'Elite Speedrunner',
+        car: 'Chevrolet Corvette C6.R',
+        color: '#38bdf8',
+        badgeClass: 'badge-elite',
+        isPolice: false,
+        baseKmh: 295,
+        speed: 0.048,
+        heat: 3,
+        status: 'Hot Lap // Rosewood Wind Farm',
+        district: 'Rosewood',
+        waypoints: [
+            { x: 25.0, y: 20.0 },
+            { x: 29.5, y: 16.5 },
+            { x: 36.0, y: 18.0 },
+            { x: 42.0, y: 23.5 },
+            { x: 44.5, y: 31.0 },
+            { x: 39.0, y: 36.0 },
+            { x: 32.5, y: 33.0 },
+            { x: 27.0, y: 28.5 }
+        ],
+        currentWaypointIndex: 5,
+        progress: 0.1,
+        curX: 39.0,
+        curY: 36.0,
+        currentKmh: 295,
+        headingDeg: 0
+    },
+    {
+        id: 'pilot-bull',
+        name: 'Bull (#2 BL)',
+        role: '#2 Blacklist',
+        car: 'Mercedes-Benz SLR McLaren',
+        color: '#e11d48',
+        badgeClass: 'badge-bull',
+        isPolice: false,
+        baseKmh: 310,
+        speed: 0.042,
+        heat: 5,
+        status: 'Persecución Extrema // City Perimeter',
+        district: 'Downtown Rockport',
+        waypoints: [
+            { x: 48.0, y: 52.0 },
+            { x: 52.5, y: 58.0 },
+            { x: 49.0, y: 68.0 },
+            { x: 44.0, y: 72.5 },
+            { x: 39.5, y: 66.0 },
+            { x: 42.0, y: 57.0 }
+        ],
+        currentWaypointIndex: 1,
+        progress: 0.6,
+        curX: 52.5,
+        curY: 58.0,
+        currentKmh: 310,
+        headingDeg: 0
+    },
+    {
+        id: 'pilot-earl',
+        name: 'Earl (#9 BL)',
+        role: '#9 Blacklist',
+        car: 'Mitsubishi Lancer Evo VIII',
+        color: '#a855f7',
+        badgeClass: 'badge-earl',
+        isPolice: false,
+        baseKmh: 285,
+        speed: 0.046,
+        heat: 3,
+        status: 'Coastal Turnpike // Gray Point Bridge',
+        district: 'Gray Point',
+        waypoints: [
+            { x: 62.0, y: 38.0 },
+            { x: 67.5, y: 30.0 },
+            { x: 75.0, y: 26.5 },
+            { x: 82.0, y: 31.0 },
+            { x: 79.0, y: 39.5 },
+            { x: 71.0, y: 44.0 }
+        ],
+        currentWaypointIndex: 3,
+        progress: 0.4,
+        curX: 82.0,
+        curY: 31.0,
+        currentKmh: 285,
+        headingDeg: 0
+    },
+    {
+        id: 'pilot-cross',
+        name: 'Sgt. Cross (RPD)',
+        role: 'Rockport PD Chief',
+        car: 'Corvette C6 Police Interceptor',
+        color: '#ffffff',
+        badgeClass: 'badge-police',
+        isPolice: true,
+        baseKmh: 330,
+        speed: 0.054,
+        heat: 5,
+        status: '🚨 CÓDIGO 3: Patrulla Autopista 99',
+        district: 'Highway 99 / Downtown',
+        waypoints: [
+            { x: 42.0, y: 45.0 },
+            { x: 45.0, y: 38.0 },
+            { x: 44.0, y: 30.0 },
+            { x: 47.0, y: 36.0 },
+            { x: 52.0, y: 48.0 },
+            { x: 57.0, y: 55.0 },
+            { x: 50.0, y: 54.0 },
+            { x: 44.0, y: 50.0 }
+        ],
+        currentWaypointIndex: 0,
+        progress: 0.8,
+        curX: 42.0,
+        curY: 45.0,
+        currentKmh: 330,
+        headingDeg: 0
+    }
+];
 
 function zoomMap(delta) {
-    const img = document.getElementById('rockport-map-img');
+    const stage = document.getElementById('map-stage') || document.getElementById('rockport-map-img');
     const zoomBadge = document.getElementById('map-zoom-level');
-    if (!img) return;
+    if (!stage) return;
 
     currentMapZoom = Math.min(Math.max(currentMapZoom + delta, 0.75), 3.0);
-    img.style.transform = `scale(${currentMapZoom})`;
+    stage.style.transform = `scale(${currentMapZoom})`;
     if (zoomBadge) zoomBadge.textContent = `ZOOM: ${Math.round(currentMapZoom * 100)}%`;
 }
 
 function resetMapZoom() {
-    const img = document.getElementById('rockport-map-img');
+    const stage = document.getElementById('map-stage') || document.getElementById('rockport-map-img');
     const zoomBadge = document.getElementById('map-zoom-level');
     const panContainer = document.getElementById('map-pan-container');
-    if (!img) return;
+    if (!stage) return;
 
     currentMapZoom = 1.0;
-    img.style.transform = 'scale(1)';
+    stage.style.transform = 'scale(1)';
     if (zoomBadge) zoomBadge.textContent = 'ZOOM: 100%';
     if (panContainer) {
         panContainer.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -215,16 +407,16 @@ function focusMapDistrict(districtKey, btn) {
     document.querySelectorAll('.district-card').forEach(c => c.classList.remove('focused-district'));
     if (btn) btn.classList.add('active');
 
-    const img = document.getElementById('rockport-map-img');
+    const stage = document.getElementById('map-stage') || document.getElementById('rockport-map-img');
     const panContainer = document.getElementById('map-pan-container');
     const indicator = document.getElementById('active-district-indicator');
     const zoomBadge = document.getElementById('map-zoom-level');
 
-    if (!img || !panContainer) return;
+    if (!stage || !panContainer) return;
 
     if (districtKey === 'all') {
         currentMapZoom = 1.0;
-        img.style.transform = 'scale(1)';
+        stage.style.transform = 'scale(1)';
         panContainer.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
         if (indicator) indicator.textContent = 'TODO EL MAPA (GLOBAL)';
         if (zoomBadge) zoomBadge.textContent = 'ZOOM: 100%';
@@ -232,7 +424,7 @@ function focusMapDistrict(districtKey, btn) {
     }
 
     currentMapZoom = 1.6;
-    img.style.transform = `scale(${currentMapZoom})`;
+    stage.style.transform = `scale(${currentMapZoom})`;
     if (zoomBadge) zoomBadge.textContent = `ZOOM: ${Math.round(currentMapZoom * 100)}%`;
 
     const scrollW = panContainer.scrollWidth;
@@ -253,6 +445,260 @@ function focusMapDistrict(districtKey, btn) {
         if (indicator) indicator.textContent = 'CAMDEN BEACH (SECTOR SUR-ESTE)';
         const card = document.getElementById('card-district-camden');
         if (card) card.classList.add('focused-district');
+    }
+}
+
+function initLiveMapSimulation() {
+    const layer = document.getElementById('map-live-players-layer');
+    const strip = document.getElementById('radar-pilots-strip');
+    if (!layer || !strip) return;
+
+    if (!mapSimulationInitialized) {
+        layer.innerHTML = '';
+        strip.innerHTML = '';
+
+        SIMULATED_PILOTS.forEach(pilot => {
+            const blip = document.createElement('div');
+            blip.className = `map-player-blip ${pilot.isPolice ? 'blip-police' : ''}`;
+            blip.id = `blip-${pilot.id}`;
+            blip.style.left = `${pilot.curX}%`;
+            blip.style.top = `${pilot.curY}%`;
+            blip.style.setProperty('--blip-color', pilot.color);
+
+            blip.innerHTML = `
+                <div class="blip-pulse" style="border-color: ${pilot.color};"></div>
+                <div class="blip-icon-wrapper" id="blip-icon-${pilot.id}">
+                    <span class="blip-car-icon">${pilot.isPolice ? '🚔' : '🏎️'}</span>
+                </div>
+                <div class="blip-tag">
+                    <span class="blip-name">${pilot.name}</span>
+                    <span class="blip-speed" id="blip-speed-${pilot.id}">${pilot.baseKmh} KM/H</span>
+                </div>
+                <div class="blip-tooltip" id="tooltip-${pilot.id}">
+                    <div class="tooltip-header">
+                        <span class="tooltip-role ${pilot.badgeClass}">${pilot.role}</span>
+                        <strong class="tooltip-name">${pilot.name}</strong>
+                    </div>
+                    <div class="tooltip-car">${pilot.car}</div>
+                    <div class="tooltip-status">${pilot.status}</div>
+                    <div class="tooltip-metrics-grid">
+                        <div class="metric-box">
+                            <span class="metric-lbl">VELOCIDAD</span>
+                            <span class="metric-val" id="tip-speed-${pilot.id}" style="color: ${pilot.color};">${pilot.baseKmh} KM/H</span>
+                        </div>
+                        <div class="metric-box">
+                            <span class="metric-lbl">DISTRITO</span>
+                            <span class="metric-val">${pilot.district}</span>
+                        </div>
+                        <div class="metric-box">
+                            <span class="metric-lbl">HEAT LEVEL</span>
+                            <span class="metric-val" style="color: #ff3b30;">🔥 x${pilot.heat}</span>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-tooltip-center" onclick="event.stopPropagation(); focusMapOnPlayer('${pilot.id}');">
+                        🎯 <span data-i18n="map_focus_pilot">Centrar en este piloto</span>
+                    </button>
+                </div>
+            `;
+
+            blip.addEventListener('click', (e) => {
+                e.stopPropagation();
+                togglePilotTooltip(pilot.id);
+            });
+
+            layer.appendChild(blip);
+
+            const chip = document.createElement('div');
+            chip.className = `radar-pilot-chip ${pilot.isPolice ? 'chip-police' : ''}`;
+            chip.id = `chip-${pilot.id}`;
+            chip.onclick = () => {
+                focusMapOnPlayer(pilot.id);
+            };
+
+            chip.innerHTML = `
+                <div class="chip-avatar" style="border-color: ${pilot.color};">
+                    ${pilot.isPolice ? '🚔' : '🏎️'}
+                </div>
+                <div class="chip-info">
+                    <div class="chip-row-top">
+                        <span class="chip-name">${pilot.name}</span>
+                        <span class="chip-role ${pilot.badgeClass}">${pilot.role}</span>
+                    </div>
+                    <div class="chip-row-bottom">
+                        <span class="chip-car">${pilot.car}</span>
+                        <span class="chip-speed" id="chip-speed-${pilot.id}" style="color: ${pilot.color};">${pilot.baseKmh} KM/H</span>
+                    </div>
+                </div>
+            `;
+            strip.appendChild(chip);
+        });
+
+        const panContainer = document.getElementById('map-pan-container');
+        if (panContainer) {
+            panContainer.addEventListener('click', () => {
+                closeAllPilotTooltips();
+            });
+        }
+
+        mapSimulationInitialized = true;
+    }
+
+    if (!mapSimulationAnimFrame) {
+        lastSimTimestamp = performance.now();
+        mapSimulationAnimFrame = requestAnimationFrame(updateMapSimulationStep);
+    }
+}
+
+function updateMapSimulationStep(timestamp) {
+    if (!mapSimulationRunning) {
+        lastSimTimestamp = timestamp;
+        mapSimulationAnimFrame = requestAnimationFrame(updateMapSimulationStep);
+        return;
+    }
+
+    if (!lastSimTimestamp) lastSimTimestamp = timestamp;
+    const deltaSec = Math.min((timestamp - lastSimTimestamp) / 1000, 0.1);
+    lastSimTimestamp = timestamp;
+
+    SIMULATED_PILOTS.forEach(pilot => {
+        const wps = pilot.waypoints;
+        const p1 = wps[pilot.currentWaypointIndex];
+        const p2 = wps[(pilot.currentWaypointIndex + 1) % wps.length];
+
+        const dx = p2.x - p1.x;
+        const dy = p2.y - p1.y;
+        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+
+        const step = (pilot.speed * mapSimulationSpeedMultiplier * deltaSec * 15) / dist;
+        pilot.progress += step;
+
+        if (pilot.progress >= 1.0) {
+            pilot.progress = 0.0;
+            pilot.currentWaypointIndex = (pilot.currentWaypointIndex + 1) % wps.length;
+        }
+
+        const currentP1 = wps[pilot.currentWaypointIndex];
+        const currentP2 = wps[(pilot.currentWaypointIndex + 1) % wps.length];
+        pilot.curX = currentP1.x + (currentP2.x - currentP1.x) * pilot.progress;
+        pilot.curY = currentP1.y + (currentP2.y - currentP1.y) * pilot.progress;
+
+        const moveDx = (currentP2.x - currentP1.x) * 1.79;
+        const moveDy = (currentP2.y - currentP1.y);
+        const headingDeg = Math.atan2(moveDy, moveDx) * 180 / Math.PI;
+        pilot.headingDeg = headingDeg;
+
+        const speedNoise = Math.sin(timestamp * 0.003 + pilot.waypoints.length) * 14 + (Math.sin(timestamp * 0.001) * 8);
+        pilot.currentKmh = Math.round(pilot.baseKmh + speedNoise);
+
+        const blipEl = document.getElementById(`blip-${pilot.id}`);
+        if (blipEl) {
+            blipEl.style.left = `${pilot.curX.toFixed(2)}%`;
+            blipEl.style.top = `${pilot.curY.toFixed(2)}%`;
+
+            const iconEl = document.getElementById(`blip-icon-${pilot.id}`);
+            if (iconEl) {
+                iconEl.style.transform = `rotate(${headingDeg.toFixed(1)}deg)`;
+            }
+
+            const speedEl = document.getElementById(`blip-speed-${pilot.id}`);
+            if (speedEl) {
+                speedEl.textContent = `${pilot.currentKmh} KM/H`;
+            }
+
+            const tipSpeed = document.getElementById(`tip-speed-${pilot.id}`);
+            if (tipSpeed) {
+                tipSpeed.textContent = `${pilot.currentKmh} KM/H`;
+            }
+        }
+
+        const chipSpeed = document.getElementById(`chip-speed-${pilot.id}`);
+        if (chipSpeed) {
+            chipSpeed.textContent = `${pilot.currentKmh} KM/H`;
+        }
+    });
+
+    mapSimulationAnimFrame = requestAnimationFrame(updateMapSimulationStep);
+}
+
+function togglePilotTooltip(pilotId) {
+    const targetBlip = document.getElementById(`blip-${pilotId}`);
+    if (!targetBlip) return;
+    const isAlreadyOpen = targetBlip.classList.contains('active-tooltip');
+    closeAllPilotTooltips();
+    if (!isAlreadyOpen) {
+        targetBlip.classList.add('active-tooltip');
+    }
+}
+
+function closeAllPilotTooltips() {
+    document.querySelectorAll('.map-player-blip').forEach(b => b.classList.remove('active-tooltip'));
+}
+
+function focusMapOnPlayer(pilotId) {
+    const pilot = SIMULATED_PILOTS.find(p => p.id === pilotId);
+    const panContainer = document.getElementById('map-pan-container');
+    const stage = document.getElementById('map-stage') || document.getElementById('rockport-map-img');
+    const zoomBadge = document.getElementById('map-zoom-level');
+    const indicator = document.getElementById('active-district-indicator');
+
+    if (!pilot || !panContainer || !stage) return;
+
+    currentMapZoom = 1.8;
+    stage.style.transform = `scale(${currentMapZoom})`;
+    if (zoomBadge) zoomBadge.textContent = `ZOOM: ${Math.round(currentMapZoom * 100)}%`;
+    if (indicator) indicator.textContent = `PILOTO EN MIRA: ${pilot.name.toUpperCase()} (${pilot.district.toUpperCase()})`;
+
+    const scrollW = panContainer.scrollWidth;
+    const scrollH = panContainer.scrollHeight;
+    const targetLeft = (scrollW * (pilot.curX / 100)) - (panContainer.clientWidth / 2);
+    const targetTop = (scrollH * (pilot.curY / 100)) - (panContainer.clientHeight / 2);
+
+    panContainer.scrollTo({
+        left: Math.max(0, targetLeft),
+        top: Math.max(0, targetTop),
+        behavior: 'smooth'
+    });
+
+    togglePilotTooltip(pilotId);
+
+    document.querySelectorAll('.radar-pilot-chip').forEach(c => c.classList.remove('active'));
+    const chip = document.getElementById(`chip-${pilot.id}`);
+    if (chip) {
+        chip.classList.add('active');
+        chip.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
+}
+
+function togglePlayerSimulation() {
+    mapSimulationRunning = !mapSimulationRunning;
+    const btnText = document.getElementById('sim-toggle-text');
+    const btnIcon = document.getElementById('sim-toggle-icon');
+
+    if (mapSimulationRunning) {
+        if (btnText) btnText.setAttribute('data-i18n', 'map_btn_pause_sim');
+        if (btnText) btnText.textContent = (typeof t === 'function' ? t('map_btn_pause_sim') : 'Pausar Simulación');
+        if (btnIcon) btnIcon.textContent = '⏸️';
+    } else {
+        if (btnText) btnText.setAttribute('data-i18n', 'map_btn_resume_sim');
+        if (btnText) btnText.textContent = (typeof t === 'function' ? t('map_btn_resume_sim') : 'Reanudar Simulación');
+        if (btnIcon) btnIcon.textContent = '▶️';
+    }
+}
+
+function toggleSimulationSpeed() {
+    if (mapSimulationSpeedMultiplier === 1.0) {
+        mapSimulationSpeedMultiplier = 2.0;
+    } else if (mapSimulationSpeedMultiplier === 2.0) {
+        mapSimulationSpeedMultiplier = 3.0;
+    } else {
+        mapSimulationSpeedMultiplier = 1.0;
+    }
+
+    const speedText = document.getElementById('sim-speed-text');
+    if (speedText) {
+        const key = `map_btn_speed_${mapSimulationSpeedMultiplier}x`;
+        speedText.setAttribute('data-i18n', key);
+        speedText.textContent = (typeof t === 'function' ? t(key) : `Velocidad: ${mapSimulationSpeedMultiplier}x`);
     }
 }
 
@@ -405,7 +851,7 @@ async function renderRoutes(dataToRender) {
     updateLeaderboardStats(dataToRender.length, sourceData.length, currentCategory);
 
     if (dataToRender.length === 0) {
-        container.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 30px; font-family: var(--font-racing); font-size: 18px;">No se encontraron circuitos ni rutas con ese nombre.</p>`;
+        container.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 30px; font-family: var(--font-racing); font-size: 14.6px;">No se encontraron circuitos ni rutas con ese nombre.</p>`;
         return;
     }
 
@@ -435,13 +881,13 @@ async function renderRoutes(dataToRender) {
                 <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.23-5.23"></path>
             </svg>`;
         } else if (route.type === "Sprint") {
-            iconHtml = `<span style="font-size: 22px; color: var(--nfs-orange);">⚡</span>`;
+            iconHtml = `<span style="font-size: 17.8px; color: var(--nfs-orange);">⚡</span>`;
         } else if (route.type === "Drag") {
             iconHtml = `<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" style="color: #f87171;">
                 <path d="M9 2h6v2H9V2zm1 3h4v2h-4V5zm-2 3h8v2H8V8zm1 3h6v2H9v-2zm-2 3h10v2H7v-2zm2 3h6v2H9v-2zm-3 3h12v2H6v-2z"/>
             </svg>`;
         } else {
-            iconHtml = `<span style="font-size: 22px; color: var(--nfs-orange);">🔄</span>`;
+            iconHtml = `<span style="font-size: 17.8px; color: var(--nfs-orange);">🔄</span>`;
         }
 
         const card = document.createElement('div');
@@ -462,7 +908,7 @@ async function renderRoutes(dataToRender) {
             </div>
             <div class="route-info">
                 <h3>${route.name}</h3>
-                <div class="route-preview-placeholder" style="font-size: 12px; color: #64748b;">Cargando récord...</div>
+                <div class="route-preview-placeholder" style="font-size: 9.7px; color: #64748b;">Cargando récord...</div>
             </div>
             <div class="route-action-icon" title="Ver Telemetría">🏁</div>
         `;
@@ -495,7 +941,7 @@ async function loadCardPreviewLazy(cardElement, route) {
         }
 
         if (!sampleSheet || sampleSheet.trim() === "") {
-            previewContainer.innerHTML = `<span style="font-style: italic; color: #64748b; font-size: 12px;">Disponible para récord</span>`;
+            previewContainer.innerHTML = `<span style="font-style: italic; color: #64748b; font-size: 9.7px;">Disponible para récord</span>`;
             return;
         }
 
@@ -509,7 +955,7 @@ async function loadCardPreviewLazy(cardElement, route) {
                     <span class="driver-name">👤 ${topRow.driver}</span>
                 </div>
                 <div style="overflow: hidden; width: 100%; margin-top: 3px;">
-                    <div style="white-space: nowrap; font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis;">
+                    <div style="white-space: nowrap; font-size: 8.9px; font-weight: 700; color: #94a3b8; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis;">
                         🏎️ ${topRow.car}
                     </div>
                 </div>
@@ -517,10 +963,10 @@ async function loadCardPreviewLazy(cardElement, route) {
             return;
         }
 
-        previewContainer.innerHTML = `<span style="font-style: italic; color: #64748b; font-size: 12px;">Disponible para récord</span>`;
+        previewContainer.innerHTML = `<span style="font-style: italic; color: #64748b; font-size: 9.7px;">Disponible para récord</span>`;
     } catch (e) {
         console.warn("Error en la previsualización de:", route ? route.name : "Ruta", e);
-        previewContainer.innerHTML = `<span style="font-style: italic; color: #64748b; font-size: 12px;">Disponible para récord</span>`;
+        previewContainer.innerHTML = `<span style="font-style: italic; color: #64748b; font-size: 9.7px;">Disponible para récord</span>`;
     }
 }
 
@@ -703,7 +1149,7 @@ function renderTableRows(tbodyId, dataRows) {
     tbody.innerHTML = '';
 
     if (!dataRows || dataRows.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 25px; font-family: var(--font-racing); font-size: 16px;">Sin registros oficiales para esta categoría aún.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 25px; font-family: var(--font-racing); font-size: 13px;">Sin registros oficiales para esta categoría aún.</td></tr>`;
         return;
     }
 
@@ -721,14 +1167,14 @@ function renderTableRows(tbodyId, dataRows) {
         tr.className = `blacklist-row ${rowHighlightClass}`;
 
         let videoBtnHTML = (row.yt && row.yt !== "#" && row.yt.startsWith("http"))
-            ? `<a href="${row.yt}" target="_blank" rel="noopener noreferrer" class="btn-yt-link" style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; font-size: 11px; background: rgba(255, 0, 0, 0.15); border: 1px solid rgba(255, 0, 0, 0.4); color: #ff5555; text-decoration: none; border-radius: 4px; font-family: var(--font-racing); font-weight: 700; transition: all 0.2s ease;">▶ Video</a>`
-            : `<span style="color: var(--text-dimmed); font-size: 12px; font-style: italic;">Sin video</span>`;
+            ? `<a href="${row.yt}" target="_blank" rel="noopener noreferrer" class="btn-yt-link" style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; font-size: 8.9px; background: rgba(255, 0, 0, 0.15); border: 1px solid rgba(255, 0, 0, 0.4); color: #ff5555; text-decoration: none; border-radius: 4px; font-family: var(--font-racing); font-weight: 700; transition: all 0.2s ease;">▶ Video</a>`
+            : `<span style="color: var(--text-dimmed); font-size: 9.7px; font-style: italic;">Sin video</span>`;
 
         let aliasTag = '';
         if (displayRank === 1) aliasTag = '<span class="driver-cell-alias">👑 RECORD MUNDIAL</span>';
         else if (displayRank === 2) aliasTag = '<span class="driver-cell-alias" style="color: #cbd5e1;">🥈 TOP 2 MUNDIAL</span>';
         else if (displayRank === 3) aliasTag = '<span class="driver-cell-alias" style="color: #cd7f32;">🥉 TOP 3 MUNDIAL</span>';
-        else aliasTag = '<span class="driver-cell-alias" style="color: var(--text-muted); font-size: 10px;">PILOTO OFICIAL</span>';
+        else aliasTag = '<span class="driver-cell-alias" style="color: var(--text-muted); font-size: 8.1px;">PILOTO OFICIAL</span>';
 
         const blBadgeClass = displayRank === 1 ? 'bl-badge-gold' : displayRank === 2 ? 'bl-badge-silver' : displayRank === 3 ? 'bl-badge-bronze' : '';
 
@@ -748,10 +1194,10 @@ function renderTableRows(tbodyId, dataRows) {
                 </div>
             </td>
             <td>
-                <span class="rep-money-cell" style="font-size: 15px; text-shadow: 0 0 10px rgba(0, 255, 136, 0.45); font-family: var(--font-mono); font-weight: 800;">${row.time}</span>
+                <span class="rep-money-cell" style="font-size: 12.2px; text-shadow: 0 0 10px rgba(0, 255, 136, 0.45); font-family: var(--font-mono); font-weight: 800;">${row.time}</span>
             </td>
             <td>
-                <span style="color: #ffffff; font-weight: 700; font-size: 13px; letter-spacing: 0.3px;">${row.car}</span>
+                <span style="color: #ffffff; font-weight: 700; font-size: 10.5px; letter-spacing: 0.3px;">${row.car}</span>
             </td>
             <td>
                 <span class="champ-group-tag" style="color: #38bdf8; background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3); font-family: var(--font-racing); font-weight: 700; letter-spacing: 0.5px;">🎮 ${row.device || 'PC'}</span>
@@ -759,7 +1205,7 @@ function renderTableRows(tbodyId, dataRows) {
             <td>
                 <span class="champ-group-tag" style="color: #ffd700; background: rgba(255, 215, 0, 0.1); border-color: rgba(255, 215, 0, 0.3); font-family: var(--font-racing); font-weight: 700; letter-spacing: 0.5px;">⚙️ ${row.gearbox || 'Manual'}</span>
             </td>
-            <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 12px;">${row.date || '--'}</td>
+            <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 9.7px;">${row.date || '--'}</td>
             <td>${videoBtnHTML}</td>
         `;
         tbody.appendChild(tr);
@@ -874,8 +1320,8 @@ async function generateHallOfFame() {
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td class="${posClass}">#${pos}</td>
-            <td><strong style="color: #ffffff; font-size: 15px;">${item.driver}</strong></td>
-            <td style="color: var(--nfs-orange); font-family: var(--font-mono); font-weight: 800; font-size: 16px; text-shadow: var(--nfs-subtle-glow);">${item.records} Récords</td>
+            <td><strong style="color: #ffffff; font-size: 12.2px;">${item.driver}</strong></td>
+            <td style="color: var(--nfs-orange); font-family: var(--font-mono); font-weight: 800; font-size: 13px; text-shadow: var(--nfs-subtle-glow);">${item.records} Récords</td>
             <td><span class="telemetry-pill">PC / Multi</span></td>
             <td><span class="telemetry-pill" style="color: var(--nfs-orange); font-weight: bold;">${badge}</span></td>
         `;
@@ -971,11 +1417,11 @@ async function renderGlobalPodiumTable(tbodyId, filterType = null) {
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td class="${posClass}">#${pos}</td>
-            <td><strong style="color: #ffffff; font-size: 15px;">${item.driver}</strong></td>
-            <td style="color: #ffd700; font-family: var(--font-mono); font-weight: 800; font-size: 15px; text-shadow: var(--gold-glow);">${item.first}</td>
-            <td style="color: #e2e8f0; font-family: var(--font-mono); font-weight: 800; font-size: 15px; text-shadow: var(--silver-glow);">${item.second}</td>
-            <td style="color: #ff9f43; font-family: var(--font-mono); font-weight: 800; font-size: 15px; text-shadow: var(--bronze-glow);">${item.third}</td>
-            <td style="color: var(--nfs-orange); font-family: var(--font-mono); font-weight: 800; font-size: 16px; text-shadow: var(--nfs-subtle-glow);">${item.total}</td>
+            <td><strong style="color: #ffffff; font-size: 12.2px;">${item.driver}</strong></td>
+            <td style="color: #ffd700; font-family: var(--font-mono); font-weight: 800; font-size: 12.2px; text-shadow: var(--gold-glow);">${item.first}</td>
+            <td style="color: #e2e8f0; font-family: var(--font-mono); font-weight: 800; font-size: 12.2px; text-shadow: var(--silver-glow);">${item.second}</td>
+            <td style="color: #ff9f43; font-family: var(--font-mono); font-weight: 800; font-size: 12.2px; text-shadow: var(--bronze-glow);">${item.third}</td>
+            <td style="color: var(--nfs-orange); font-family: var(--font-mono); font-weight: 800; font-size: 13px; text-shadow: var(--nfs-subtle-glow);">${item.total}</td>
         `;
         tbody.appendChild(tr);
     });
@@ -1105,10 +1551,10 @@ function renderDriverSearchUI(containerId) {
 
     container.innerHTML = `
         <div class="driver-search-box" style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-top: 3px solid var(--nfs-orange); border-radius: 12px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-            <h3 style="margin-top: 0; color: #ffffff; font-family: var(--font-racing); font-size: 20px; text-transform: uppercase; letter-spacing: 1px;">🔍 Consultar Expediente de Piloto</h3>
+            <h3 style="margin-top: 0; color: #ffffff; font-family: var(--font-racing); font-size: 16.2px; text-transform: uppercase; letter-spacing: 1px;">🔍 Consultar Expediente de Piloto</h3>
             <div style="display: flex; gap: 10px; margin-top: 14px;">
                 <input type="text" id="driver-search-input" placeholder="Nombre del piloto (ej: DJALIL, ZIMANX)..." class="form-control" style="flex: 1;">
-                <button id="btn-search-driver" class="btn-explored" style="padding: 10px 24px; font-size: 14px;">Buscar</button>
+                <button id="btn-search-driver" class="btn-explored" style="padding: 10px 24px; font-size: 11.3px;">Buscar</button>
             </div>
             <div id="driver-results-container" style="margin-top: 20px;"></div>
         </div>
@@ -1119,18 +1565,18 @@ function renderDriverSearchUI(containerId) {
 
     const executeSearch = async () => {
         const resultsEl = document.getElementById('driver-results-container');
-        resultsEl.innerHTML = `<p style="color: var(--nfs-orange); font-family: var(--font-racing); font-size: 16px;">⏱️ Consultando telemetría oficial...</p>`;
+        resultsEl.innerHTML = `<p style="color: var(--nfs-orange); font-family: var(--font-racing); font-size: 13px;">⏱️ Consultando telemetría oficial...</p>`;
 
         const profile = await searchDriverProfile(input.value);
         if (!profile) {
-            resultsEl.innerHTML = `<p style="color: var(--text-muted); font-size: 14px; padding: 10px 0;">No se encontraron registros activos para ese piloto.</p>`;
+            resultsEl.innerHTML = `<p style="color: var(--text-muted); font-size: 11.3px; padding: 10px 0;">No se encontraron registros activos para ese piloto.</p>`;
             return;
         }
 
         let tracksHtml = profile.tracks.length > 0 ? profile.tracks.map(t => `
             <tr>
                 <td><strong style="color: #ffffff;">${t.routeName}</strong> (${t.routeType})</td>
-                <td style="color: var(--nfs-orange); font-family: var(--font-racing); font-size: 16px; font-weight: bold;">#${t.rank}</td>
+                <td style="color: var(--nfs-orange); font-family: var(--font-racing); font-size: 13px; font-weight: bold;">#${t.rank}</td>
                 <td style="font-family: var(--font-mono); font-weight: 800; color: var(--nfs-orange);">⏱️ ${t.time}</td>
                 <td><span class="telemetry-pill">🚗 ${t.car}</span></td>
                 <td><span class="telemetry-pill">⚙️ ${t.gearbox}</span></td>
@@ -1139,8 +1585,8 @@ function renderDriverSearchUI(containerId) {
 
         resultsEl.innerHTML = `
             <div style="background: var(--bg-surface-elevated); padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid var(--nfs-orange); box-shadow: 0 4px 20px rgba(0,0,0,0.4);">
-                <h2 style="color: #ffffff; font-family: var(--font-racing); font-size: 26px; margin: 0 0 12px 0;">👤 ${profile.driver}</h2>
-                <div style="display: flex; gap: 15px; font-weight: bold; flex-wrap: wrap; font-family: var(--font-racing); font-size: 16px;">
+                <h2 style="color: #ffffff; font-family: var(--font-racing); font-size: 21.1px; margin: 0 0 12px 0;">👤 ${profile.driver}</h2>
+                <div style="display: flex; gap: 15px; font-weight: bold; flex-wrap: wrap; font-family: var(--font-racing); font-size: 13px;">
                     <span style="color: #ffd700; text-shadow: var(--gold-glow);">🥇 1ros: ${profile.stats.first}</span>
                     <span style="color: #e2e8f0; text-shadow: var(--silver-glow);">🥈 2dos: ${profile.stats.second}</span>
                     <span style="color: #ff9f43; text-shadow: var(--bronze-glow);">🥉 3ros: ${profile.stats.third}</span>
@@ -1806,7 +2252,7 @@ function renderChallengesUI() {
     });
 
     if (filtered.length === 0) {
-        gridContainer.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 40px; font-family: var(--font-racing); font-size: 18px;">No hay desafíos en esta categoría para la semana seleccionada.</p>`;
+        gridContainer.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 40px; font-family: var(--font-racing); font-size: 14.6px;">No hay desafíos en esta categoría para la semana seleccionada.</p>`;
         return;
     }
 
@@ -1848,9 +2294,9 @@ function renderChallengesUI() {
 
                         <!-- Tiempo objetivo -->
                         <div class="challenge-time-box">
-                            <span style="font-size: 18px;">⏱️</span>
+                            <span style="font-size: 14.6px;">⏱️</span>
                             <div>
-                                <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">TIEMPO OBJETIVO</div>
+                                <div style="font-size: 8.1px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">TIEMPO OBJETIVO</div>
                                 <div class="challenge-time-val" style="color: var(--nfs-orange); text-shadow: var(--nfs-subtle-glow);">
                                     - ${ch.targetTime}
                                 </div>
@@ -1925,13 +2371,16 @@ function initChallengesSystem() {
 // BLACKLIST EVENT // CAMPEONATO 2026 (4 SEMANAS • 5 GRUPOS • 8 DESAFÍOS)
 // =======================================================
 
-const BLACKLIST_STORAGE_KEY = 'nfs_blacklist_championship_2026_v2';
+const BLACKLIST_STORAGE_KEY = 'nfs_blacklist_championship_2026_v4';
 let blacklistDrivers = [];
 let currentSelectedBlacklistRank = 1;
 let currentChampionshipWeek = 1;
 
 function loadBlacklistData() {
     try {
+        localStorage.removeItem('nfs_blacklist_championship_2026_v1');
+        localStorage.removeItem('nfs_blacklist_championship_2026_v2');
+        localStorage.removeItem('nfs_blacklist_championship_2026_v3');
         const saved = localStorage.getItem(BLACKLIST_STORAGE_KEY);
         if (saved) {
             blacklistDrivers = JSON.parse(saved);
@@ -2063,7 +2512,7 @@ function renderChampionshipGroups(weekNumber) {
             pilotsHtml += `
                 <div class="champ-group-pilot-item ${isSelected ? 'selected' : ''}" onclick="selectBlacklistPilot(${driver.rank})">
                     <div class="pilot-item-left">
-                        <span class="bl-rank-badge ${driver.rank === 1 ? 'rank-gold' : driver.rank === 2 ? 'rank-silver' : driver.rank === 3 ? 'rank-bronze' : 'rank-normal'}" style="min-width: 28px; height: 28px; font-size: 13px;">${driver.rank}</span>
+                        <span class="bl-rank-badge ${driver.rank === 1 ? 'rank-gold' : driver.rank === 2 ? 'rank-silver' : driver.rank === 3 ? 'rank-bronze' : 'rank-normal'}" style="min-width: 28px; height: 28px; font-size: 10.5px;">${driver.rank}</span>
                         <div>
                             <div class="pilot-item-name">${driver.name} <span style="color: var(--nfs-orange);">"${driver.alias}"</span></div>
                             <div class="pilot-item-car">${driver.ride}</div>
@@ -2071,7 +2520,7 @@ function renderChampionshipGroups(weekNumber) {
                     </div>
                     <div style="text-align: right;">
                         <div class="pilot-item-pts">${pts.toLocaleString()} PTS</div>
-                        <div style="font-family: var(--font-mono); font-size: 11px; color: var(--green-neon);">$${(driver.rep || 0).toLocaleString()}</div>
+                        <div style="font-family: var(--font-mono); font-size: 8.9px; color: var(--green-neon);">$${(driver.rep || 0).toLocaleString()}</div>
                     </div>
                 </div>
             `;
@@ -2111,6 +2560,8 @@ function renderChampionshipChallenges(weekNumber) {
             const rowClass = tIdx === 0 ? 'podium-row-1' : tIdx === 1 ? 'podium-row-2' : 'podium-row-3';
             const bonusClass = t.bonus === 100 ? 'badge-bonus-100' : t.bonus === 50 ? 'badge-bonus-50' : 'badge-bonus-20';
             const repBadgeText = t.repBadge || (t.repMoney ? `💰 $${t.repMoney.toLocaleString()} REP` : '');
+            const defaultPending = window.nfsI18n ? window.nfsI18n.t('champ_pending_driver') : 'Por disputar';
+            const pilotDisplay = (t.pilot === 'Por disputar' || !t.pilot) ? defaultPending : t.pilot;
 
             top3Html += `
                 <div class="champ-ch-podium-row ${rowClass}">
@@ -2118,11 +2569,11 @@ function renderChampionshipChallenges(weekNumber) {
                         <span class="badge-bonus ${bonusClass}">${t.badge}</span>
                         ${repBadgeText ? `<span class="badge-rep-money">${repBadgeText}</span>` : ''}
                         <div>
-                            <span style="font-weight: 700; color: #ffffff;">${t.pilot}</span>
-                            <span style="color: var(--text-muted); font-size: 11px; margin-left: 4px;">• ${t.car}</span>
+                            <span style="font-weight: 700; color: #ffffff;">${pilotDisplay}</span>
+                            ${t.car ? `<span style="color: var(--text-muted); font-size: 8.9px; margin-left: 4px;">• ${t.car}</span>` : ''}
                         </div>
                     </div>
-                    <span style="font-family: var(--font-mono); font-weight: 700; color: var(--cyan-electric); font-size: 13px;">${t.time}</span>
+                    <span style="font-family: var(--font-mono); font-weight: 700; color: var(--cyan-electric); font-size: 10.5px;">${t.time || '--:--.---'}</span>
                 </div>
             `;
         });
@@ -2130,7 +2581,7 @@ function renderChampionshipChallenges(weekNumber) {
         const restrictionLabel = window.nfsI18n ? window.nfsI18n.t('champ_restriction_label') : 'AUTO RESTRICTIVO:';
         const restrictionHtml = ch.carRestriction ? `
             <div class="champ-ch-restriction">
-                <span style="color: var(--nfs-orange); font-size: 13px;">🚗</span>
+                <span style="color: var(--nfs-orange); font-size: 10.5px;">🚗</span>
                 <span class="restriction-label">${restrictionLabel}</span>
                 <span class="restriction-car">${ch.carRestriction}</span>
             </div>
@@ -2195,6 +2646,7 @@ function syncBlacklistWithRotationsAndStandings() {
         weekData.challenges.forEach(ch => {
             if (!ch.top3 || !Array.isArray(ch.top3)) return;
             ch.top3.forEach(t => {
+                if (!t.pilot || t.pilot === 'Por disputar' || t.pilot === 'En espera') return;
                 const driver = blacklistDrivers.find(d => d.rank === t.rank || (d.alias && t.pilot && d.alias.toLowerCase() === t.pilot.toLowerCase()));
                 if (driver) {
                     driver.lastChallengeId = ch.id;
@@ -2531,7 +2983,7 @@ function renderAllTacticalCards() {
             </div>
 
             <div class="tactical-action-bar">
-                <button class="btn-explored" style="width: 100%; justify-content: center; font-size: 13px;" onclick="switchView('championship-standings')">
+                <button class="btn-explored" style="width: 100%; justify-content: center; font-size: 10.5px;" onclick="switchView('championship-standings')">
                     <span>🏆</span> Ver en Clasificación General
                 </button>
             </div>
@@ -2834,17 +3286,19 @@ function mergeRegisteredParticipantsWithBlacklist() {
             slot.isRealUser = true;
             slot.schedule = p.schedule || '';
             slot.contact = p.contact || '';
+            slot.rep = 0;
+            slot.victories = { p1: 0, p2: 0, p3: 0, p4: 0 };
+            slot.bestTimes = { first: 0, second: 0, third: 0 };
         } else if (idx >= 15) {
             // Expansión dinámica para pilotos inscritos adicionales (16, 18, 20 o más)
             const rankNum = idx + 1;
-            const baseRep = Math.max(850000 - ((idx - 14) * 35000), 200000);
             const newPilot = {
                 rank: rankNum,
                 name: p.name,
                 alias: p.alias || p.name,
                 ride: p.ride,
                 strength: `${p.ride} • ${p.schedule || 'Parrilla Extendida'}`,
-                rep: baseRep,
+                rep: 0,
                 victories: { p1: 0, p2: 0, p3: 0, p4: 0 },
                 bestTimes: { first: 0, second: 0, third: 0 },
                 bio: `Piloto Oficial Inscrito en el Campeonato 2026 (Parrilla Extendida). Disponibilidad: ${p.schedule || 'Horario Flexible'}.${p.contact ? ` Contacto: ${p.contact}.` : ''} Compite en Rockport City bajo verificación de juego limpio.`,
@@ -2887,7 +3341,7 @@ function renderRegisteredPilotsUI() {
     if (total === 0) {
         listContainer.innerHTML = `
             <div class="empty-participants-msg">
-                <span style="font-size: 32px; display: block; margin-bottom: 8px;">🏁</span>
+                <span style="font-size: 25.9px; display: block; margin-bottom: 8px;">🏁</span>
                 <strong>Aún no hay pilotos inscritos.</strong><br>
                 Completa el formulario oficial para reclamar la plaza #1 del Campeonato Blacklist 2026.
             </div>
@@ -3196,14 +3650,14 @@ function renderPastTournamentParticipants(t) {
                 <td style="font-family: var(--font-mono); font-weight: 700; color: var(--nfs-orange);">#${p.seed}</td>
                 <td>
                     <div style="display: flex; align-items: center; gap: 8px;">
-                        <strong style="color: #ffffff; font-size: 15px;">${p.name}</strong>
+                        <strong style="color: #ffffff; font-size: 12.2px;">${p.name}</strong>
                         ${p.finalPos.includes('Campeón') ? '<span class="crown-badge">👑 1°</span>' : ''}
                     </div>
                 </td>
                 <td>
                     <span class="past-final-pos ${posClass}">${p.finalPos}</span>
                 </td>
-                <td style="color: var(--text-muted); font-size: 13px;">
+                <td style="color: var(--text-muted); font-size: 10.5px;">
                     ${p.finalPos.includes('Campeón') ? '🏆 Gran Finalista Vencedor' : (p.finalPos.includes('2do') ? '⚔️ Gran Finalista' : 'Completó cuadro de llaves')}
                 </td>
                 <td>
@@ -3248,7 +3702,7 @@ function initHomeSidebarModules() {
                 secsEl.textContent = "00";
                 const cdContainer = document.getElementById('home-event-countdown');
                 if (cdContainer) {
-                    cdContainer.innerHTML = `<div style="color: var(--green-neon); font-family: var(--font-racing); font-size: 16px; font-weight: 800; text-align: center; width: 100%; padding: 6px 0; text-shadow: 0 0 10px rgba(0,255,136,0.6);">🏁 ¡EVENTO EN CURSO!</div>`;
+                    cdContainer.innerHTML = `<div style="color: var(--green-neon); font-family: var(--font-racing); font-size: 13px; font-weight: 800; text-align: center; width: 100%; padding: 6px 0; text-shadow: 0 0 10px rgba(0,255,136,0.6);">🏁 ¡EVENTO EN CURSO!</div>`;
                 }
                 return;
             }
@@ -3435,7 +3889,7 @@ function renderDiscordMembers(filterRole = 'all', searchQuery = '') {
     tbody.innerHTML = '';
 
     if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 30px; font-family: var(--font-racing); font-size: 16px;">No se encontraron miembros para el criterio de búsqueda.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 30px; font-family: var(--font-racing); font-size: 13px;">No se encontraron miembros para el criterio de búsqueda.</td></tr>`;
         return;
     }
 
@@ -3454,7 +3908,7 @@ function renderDiscordMembers(filterRole = 'all', searchQuery = '') {
         const extraRolesHTML = m.extraRoles ? `<span class="extra-roles-tag">${m.extraRoles}</span>` : '';
         const joinMethodHTML = (m.joinMethod && m.joinMethod !== 'Desconocido')
             ? `<span class="join-method-tag">🔗 ${m.joinMethod}</span>`
-            : `<span style="color: var(--text-dimmed); font-size: 12px; font-style: italic;">Desconocido</span>`;
+            : `<span style="color: var(--text-dimmed); font-size: 9.7px; font-style: italic;">Desconocido</span>`;
 
         tr.innerHTML = `
             <td>
@@ -3465,7 +3919,7 @@ function renderDiscordMembers(filterRole = 'all', searchQuery = '') {
                     <div class="member-avatar-badge role-${m.roleCategory}">${initialLetter}</div>
                     <div class="driver-cell-flex">
                         <span class="driver-cell-name">${m.name}</span>
-                        <span style="font-family: var(--font-mono); font-size: 11px; color: var(--text-dimmed);">@${m.username}</span>
+                        <span style="font-family: var(--font-mono); font-size: 8.9px; color: var(--text-dimmed);">@${m.username}</span>
                     </div>
                 </div>
             </td>
@@ -3473,10 +3927,10 @@ function renderDiscordMembers(filterRole = 'all', searchQuery = '') {
                 <span class="discord-role-pill role-${m.roleCategory}">● ${m.role} ${extraRolesHTML}</span>
             </td>
             <td>
-                <span style="font-family: var(--font-ui); font-size: 13px; color: #ffffff;">${m.memberSince}</span>
+                <span style="font-family: var(--font-ui); font-size: 10.5px; color: #ffffff;">${m.memberSince}</span>
             </td>
             <td>
-                <span style="font-family: var(--font-ui); font-size: 13px; color: var(--text-muted);">${m.discordSince}</span>
+                <span style="font-family: var(--font-ui); font-size: 10.5px; color: var(--text-muted);">${m.discordSince}</span>
             </td>
             <td>
                 ${joinMethodHTML}
@@ -3562,7 +4016,7 @@ function renderTuningGuides(drivetrainFilter = 'all', searchQuery = '') {
 
     if (filtered.length === 0) {
         container.innerHTML = `
-            <div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 50px 20px; font-family: var(--font-racing); font-size: 16px; background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); border-radius: 12px;">
+            <div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 50px 20px; font-family: var(--font-racing); font-size: 13px; background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); border-radius: 12px;">
                 🏎️ No se encontraron configuraciones de tuning para el criterio de búsqueda seleccionado.
             </div>
         `;
