@@ -162,70 +162,73 @@
             </div>
         </nav>
 
-        <!-- Selector de Idioma / Multilingual System (Top Right) -->
-        <div class="lang-selector-dropdown" id="lang-selector-dropdown">
-            <button type="button" class="lang-selector-btn" id="lang-btn" onclick="toggleLangDropdown(event)" title="Cambiar Idioma / Change Language">
-                <span id="current-lang-flag">🇪🇸</span>
-                <span id="current-lang-code">ES</span>
-                <span class="dropdown-arrow">▾</span>
-            </button>
-            <div class="lang-dropdown-content" id="lang-dropdown-menu">
-                <button type="button" class="lang-opt active" onclick="setLanguage('es', event)" data-lang="es">
-                    <span class="flag">🇪🇸</span>
-                    <span class="lang-name">Español</span>
-                    <span class="lang-native">Nativo</span>
+        <!-- Acciones del Header / Idioma, Telemetría y Menú Móvil -->
+        <div class="header-actions">
+            <!-- Selector de Idioma / Multilingual System (Top Right) -->
+            <div class="lang-selector-dropdown" id="lang-selector-dropdown">
+                <button type="button" class="lang-selector-btn" id="lang-btn" onclick="toggleLangDropdown(event)" title="Cambiar Idioma / Change Language">
+                    <span id="current-lang-flag">🇪🇸</span>
+                    <span id="current-lang-code">ES</span>
+                    <span class="dropdown-arrow">▾</span>
                 </button>
-                <button type="button" class="lang-opt" onclick="setLanguage('en', event)" data-lang="en">
-                    <span class="flag">🇺🇸</span>
-                    <span class="lang-name">English</span>
-                    <span class="lang-native">US / UK</span>
-                </button>
-                <button type="button" class="lang-opt" onclick="setLanguage('pt', event)" data-lang="pt">
-                    <span class="flag">🇧🇷</span>
-                    <span class="lang-name">Português</span>
-                    <span class="lang-native">Brasil / PT</span>
-                </button>
-                <button type="button" class="lang-opt" onclick="setLanguage('zh', event)" data-lang="zh">
-                    <span class="flag">🇨🇳</span>
-                    <span class="lang-name">中文</span>
-                    <span class="lang-native">简体中文</span>
-                </button>
-                <button type="button" class="lang-opt" onclick="setLanguage('ja', event)" data-lang="ja">
-                    <span class="flag">🇯🇵</span>
-                    <span class="lang-name">日本語</span>
-                    <span class="lang-native">日本語</span>
-                </button>
-                <button type="button" class="lang-opt" onclick="setLanguage('ru', event)" data-lang="ru">
-                    <span class="flag">🇷🇺</span>
-                    <span class="lang-name">Русский</span>
-                    <span class="lang-native">Русский</span>
-                </button>
-                <button type="button" class="lang-opt" onclick="setLanguage('it', event)" data-lang="it">
-                    <span class="flag">🇮🇹</span>
-                    <span class="lang-name">Italiano</span>
-                    <span class="lang-native">Italiano</span>
-                </button>
-                <button type="button" class="lang-opt" onclick="setLanguage('fr', event)" data-lang="fr">
-                    <span class="flag">🇫🇷</span>
-                    <span class="lang-name">Français</span>
-                    <span class="lang-native">Français</span>
-                </button>
-                <button type="button" class="lang-opt" onclick="setLanguage('af', event)" data-lang="af">
-                    <span class="flag">🇿🇦</span>
-                    <span class="lang-name">Afrikaans</span>
-                    <span class="lang-native">Afrikaans</span>
-                </button>
+                <div class="lang-dropdown-content" id="lang-dropdown-menu">
+                    <button type="button" class="lang-opt active" onclick="setLanguage('es', event)" data-lang="es">
+                        <span class="flag">🇪🇸</span>
+                        <span class="lang-name">Español</span>
+                        <span class="lang-native">Nativo</span>
+                    </button>
+                    <button type="button" class="lang-opt" onclick="setLanguage('en', event)" data-lang="en">
+                        <span class="flag">🇺🇸</span>
+                        <span class="lang-name">English</span>
+                        <span class="lang-native">US / UK</span>
+                    </button>
+                    <button type="button" class="lang-opt" onclick="setLanguage('pt', event)" data-lang="pt">
+                        <span class="flag">🇧🇷</span>
+                        <span class="lang-name">Português</span>
+                        <span class="lang-native">Brasil / PT</span>
+                    </button>
+                    <button type="button" class="lang-opt" onclick="setLanguage('zh', event)" data-lang="zh">
+                        <span class="flag">🇨🇳</span>
+                        <span class="lang-name">中文</span>
+                        <span class="lang-native">简体中文</span>
+                    </button>
+                    <button type="button" class="lang-opt" onclick="setLanguage('ja', event)" data-lang="ja">
+                        <span class="flag">🇯🇵</span>
+                        <span class="lang-name">日本語</span>
+                        <span class="lang-native">日本語</span>
+                    </button>
+                    <button type="button" class="lang-opt" onclick="setLanguage('ru', event)" data-lang="ru">
+                        <span class="flag">🇷🇺</span>
+                        <span class="lang-name">Русский</span>
+                        <span class="lang-native">Русский</span>
+                    </button>
+                    <button type="button" class="lang-opt" onclick="setLanguage('it', event)" data-lang="it">
+                        <span class="flag">🇮🇹</span>
+                        <span class="lang-name">Italiano</span>
+                        <span class="lang-native">Italiano</span>
+                    </button>
+                    <button type="button" class="lang-opt" onclick="setLanguage('fr', event)" data-lang="fr">
+                        <span class="flag">🇫🇷</span>
+                        <span class="lang-name">Français</span>
+                        <span class="lang-native">Français</span>
+                    </button>
+                    <button type="button" class="lang-opt" onclick="setLanguage('af', event)" data-lang="af">
+                        <span class="flag">🇿🇦</span>
+                        <span class="lang-name">Afrikaans</span>
+                        <span class="lang-native">Afrikaans</span>
+                    </button>
+                </div>
             </div>
-        </div>
 
-        <!-- Widget de Telemetría en Vivo F1 (Acceso a Rockport Map Live) -->
-        <div class="header-telemetry" onclick="switchView('map')" style="cursor: pointer;" title="Abrir Rockport Map Live">
-            <span class="pulse-dot"></span>
-            <span data-i18n="telemetry_live">ROCKPORT LIVE</span>
-            <span id="telemetry-clock" style="color: var(--nfs-orange);">--:--:--</span>
-        </div>
+            <!-- Widget de Telemetría en Vivo F1 (Acceso a Rockport Map Live) -->
+            <div class="header-telemetry" onclick="switchView('map')" style="cursor: pointer;" title="Abrir Rockport Map Live">
+                <span class="pulse-dot"></span>
+                <span data-i18n="telemetry_live">ROCKPORT LIVE</span>
+                <span id="telemetry-clock" style="color: var(--nfs-orange);">--:--:--</span>
+            </div>
 
-        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+        </div>
     </header>
 
     <main>

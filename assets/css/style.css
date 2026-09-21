@@ -94,8 +94,10 @@ header {
 }
 
 .logo {
+    flex: 1 1 0;
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     font-family: var(--font-racing);
     font-size: 17.8px;
     font-weight: 800;
@@ -103,6 +105,7 @@ header {
     text-transform: uppercase;
     letter-spacing: 2px;
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    min-width: max-content;
 }
 
 .logo span.highlight {
@@ -116,6 +119,16 @@ header {
     vertical-align: middle;
     margin-right: 14px;
     filter: drop-shadow(0 0 8px rgba(255, 119, 0, 0.5));
+}
+
+/* Contenedor de acciones del header (lado derecho simétrico para centrar nav) */
+.header-actions {
+    flex: 1 1 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 14px;
+    min-width: max-content;
 }
 
 /* Telemetría F1 en tiempo real */
@@ -167,9 +180,12 @@ header {
 }
 
 nav {
+    flex: 0 0 auto;
     display: flex;
     align-items: center;
+    justify-content: center;
     height: 100%;
+    margin: 0 auto;
 }
 
 nav a {
