@@ -8063,15 +8063,15 @@ footer strong {
     width: 32px;
 }
 
-/* --- TIEMPO EN FUENTE MONOESPACIADA TABULAR VERDE LIMA --- */
+/* --- TIEMPO EN TIPOGRAFÍA INTER TABULAR ESTILO TRACKER.GG --- */
 .time-stat-val {
-    font-family: 'JetBrains Mono', monospace;
-    font-variant-numeric: tabular-nums;
-    font-weight: 800;
-    font-size: 12.8px;
-    color: #22c55e !important;
-    text-shadow: 0 0 10px rgba(34, 197, 94, 0.45);
-    letter-spacing: 0.5px;
+    font-family: var(--font-ui), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-variant-numeric: tabular-nums !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+    color: #ffffff !important;
+    text-shadow: none !important;
+    letter-spacing: 0 !important;
     display: inline-block;
 }
 
@@ -8090,10 +8090,13 @@ footer strong {
 }
 
 .driver-cell-name {
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    font-size: 13px;
-    color: #ffffff;
+    font-family: var(--font-ui), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+    color: #ffffff !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    line-height: 1.25 !important;
 }
 
 .driver-car-sub {
@@ -8347,14 +8350,15 @@ footer strong {
     height: 38px;
 }
 
-/* Tipografía del Nombre del Piloto al lado de la silueta */
+/* Tipografía del Nombre del Piloto al lado de la silueta (Estilo Tracker.gg R6 Operator) */
 .driver-name-text {
-    font-family: var(--font-racing, 'Barlow Semi Condensed', sans-serif);
-    font-size: 14.5px;
-    font-weight: 800;
-    color: #ffffff;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
+    font-family: var(--font-ui), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    line-height: 1.25 !important;
     white-space: nowrap;
     display: block;
 }
@@ -8408,3 +8412,193 @@ footer strong {
     }
 }
 
+/* ==========================================================================
+   TIPOGRAFÍA UNIFICADA DE TABLAS Y LEADERBOARDS (ESTILO TRACKER.GG / R6 TABLE)
+   Aplica la tipografía de nombres y números mostrada en media_1790043569050.png
+   ========================================================================== */
+
+/* 1. NOMBRES DE OPERADOR/PILOTO EN TODAS LAS TABLAS */
+.table-container table .driver-cell-name,
+.table-container table .driver-name-text,
+.blacklist-table .driver-cell-name,
+.blacklist-table .driver-name-text,
+table td .driver-cell-name,
+table td .driver-name-text,
+#tbody-hall-of-fame td strong,
+#tbody-global-drivers td strong,
+#tbody-global-allroutes td strong,
+#tbody-global-circuit td strong,
+#tbody-global-sprint td strong,
+#tbody-global-drag td strong,
+#driver-results-container table td strong {
+    font-family: var(--font-ui), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    line-height: 1.25 !important;
+}
+
+/* 2. TIPOGRAFÍA DE NÚMEROS Y ESTADÍSTICAS EN TODAS LAS TABLAS */
+.table-container table td,
+.blacklist-table td,
+.table-section .blacklist-table td,
+#view-leaderboard table td,
+#view-halloffame table td,
+#view-globaldrivers table td,
+#view-globalroutes table td,
+#view-blacklist table td,
+#view-driverprofile table td,
+#view-members table td,
+#view-past-tournaments table td {
+    font-family: var(--font-ui), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-variant-numeric: tabular-nums !important;
+    font-size: 13.5px !important;
+}
+
+/* 3. NÚMEROS ESPECÍFICOS DE RANKING, CONTADORES, DINERO Y TIEMPOS */
+table td.col-place,
+table td.col-time,
+table td.col-desktop,
+.col-place,
+.rank-plain,
+.bl-rank-badge,
+.rep-money-cell,
+.hex-text,
+table td[class*="rank-"],
+#tbody-hall-of-fame td:nth-child(1),
+#tbody-hall-of-fame td:nth-child(3),
+#tbody-global-drivers td:nth-child(1),
+#tbody-global-drivers td:nth-child(3),
+#tbody-global-drivers td:nth-child(4),
+#tbody-global-drivers td:nth-child(5),
+#tbody-global-drivers td:nth-child(6),
+#tbody-blacklist-roster td:nth-child(1),
+#tbody-blacklist-roster td:nth-child(4),
+#tbody-blacklist-roster td:nth-child(5),
+#tbody-blacklist-roster td:nth-child(6),
+#tbody-blacklist-roster td:nth-child(7),
+#tbody-blacklist-roster td:nth-child(8) {
+    font-family: var(--font-ui), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-variant-numeric: tabular-nums !important;
+    font-weight: 700 !important;
+    letter-spacing: 0 !important;
+}
+
+/* ==========================================================================
+   TIPOGRAFÍA EXTENDIDA: TARJETAS DE SECTORES (CIRCUITOS, SPRINTS, DRAGS),
+   GRUPOS Y RETOS BLACKLIST, BOLSA DE DINERO, PUNTOS Y AUTO RESTRICTIVO
+   (ESTILO TRACKER.GG / R6)
+   ========================================================================== */
+
+/* 4. TARJETAS DE MÓDULO DE SECTORES DE CARRERA (CIRCUITOS, SPRINTS Y DRAGS) */
+.route-card .route-info h3,
+.route-card .route-title,
+.route-record-preview .driver-name {
+    font-family: var(--font-ui), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-weight: 700 !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    color: #ffffff !important;
+}
+
+.route-card .route-time-display {
+    font-family: var(--font-ui), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-variant-numeric: tabular-nums !important;
+    font-weight: 700 !important;
+    letter-spacing: 0 !important;
+    text-shadow: none !important;
+}
+
+.route-card .route-badge-letter {
+    font-family: var(--font-ui), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-weight: 700 !important;
+}
+
+.route-card .route-record-preview + div div {
+    font-family: var(--font-ui), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-weight: 600 !important;
+    letter-spacing: 0 !important;
+}
+
+/* 5. NOMBRES DE LA SECCIÓN DE GRUPOS Y RETOS BLACKLIST */
+.champ-group-name,
+.champ-group-card .pilot-item-name,
+.champ-group-card .pilot-item-name span,
+.champ-group-tag,
+.champ-ch-title,
+.champ-ch-type,
+.champ-ch-podium-row div span[style*="color: #ffffff"],
+.champ-ch-podium-row .pilot-name,
+.tactical-driver-name,
+.blacklist-driver-fullname,
+.challenge-route-name,
+.challenge-mode-label {
+    font-family: var(--font-ui), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-weight: 700 !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    color: #ffffff !important;
+}
+
+/* 6. BOLSA DE DINERO Y PUNTOS */
+.pilot-item-pts,
+.pts-cell,
+.points-val,
+.total-points,
+.badge-rep-money,
+.rep-money-cell,
+.challenge-summary-val,
+#bl-summary-rep,
+#bl-standings-rep,
+#bl-detail-rep,
+#bl-detail-pts,
+.metric-box.rep-box .metric-value,
+.metric-box.pts-box .metric-value,
+.rep-val,
+.bonus-val,
+.chip-val,
+.badge-bonus,
+.badge-bonus-100,
+.badge-bonus-50,
+.badge-bonus-20,
+[data-i18n="comp_prize"],
+[data-i18n="sidebar_bl_prize_val"],
+.champ-group-pilot-item div[style*="color: var(--green-neon)"],
+.champ-ch-podium-row span[style*="color: var(--cyan-electric)"] {
+    font-family: var(--font-ui), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-variant-numeric: tabular-nums !important;
+    font-weight: 700 !important;
+    letter-spacing: 0 !important;
+}
+
+/* 7. AUTO RESTRICTIVO Y ESPECIFICACIONES */
+.champ-ch-restriction,
+.champ-ch-restriction .restriction-label,
+.champ-ch-restriction .restriction-car,
+.challenge-restriction,
+.challenge-restriction span,
+.pilot-item-car,
+.champ-ch-podium-row span[style*="color: var(--text-muted)"],
+.tactical-specs,
+.tactical-specs .spec-row,
+.tactical-specs .spec-label,
+.tactical-specs .spec-value,
+#bl-detail-ride,
+.spec-pill {
+    font-family: var(--font-ui), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    letter-spacing: 0 !important;
+}
+
+.champ-ch-restriction .restriction-label,
+.tactical-specs .spec-label {
+    font-weight: 600 !important;
+}
+
+.champ-ch-restriction .restriction-car,
+.challenge-restriction span,
+.tactical-specs .spec-value,
+#bl-detail-ride {
+    font-weight: 700 !important;
+}
