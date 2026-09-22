@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Operator Uniqueness Test</title>
+    <script src="../assets/js/operator-icons.js"></script>
+    <script src="../assets/js/blacklist-data.js"></script>
+</head>
+<body>
+    <div id="results"></div>
+    <script>
+        const res = [];
+        const ops = window.NFSOperators;
+        res.push(`Catalog size: ${ops.catalog.length}`);
+
+        // Test 1: Leo Speed vs Leonardo
+        ops.linkPlayerAliases('Leonardo', 'Leo Speed');
+        const opLeo1 = ops.getPlayerOperator('Leonardo');
+        const opLeo2 = ops.getPlayerOperator('Leo Speed');
+        const test1 = (opLeo1.id === opLeo2.id && opLeo1.id === 'speed_demon');
+        res.push(`Test 1 (Leo Speed == Leonardo == speed_demon): ${test1 ? 'PASSED ✓' : 'FAILED ✕'} (${opLeo1.id})`);
+
+        // Test 2: Blacklist 15 unique drivers
+        const blDrivers = [
+            { name: 'Clarence Callahan', alias: 'Razor' },
+            { name: 'Toru Sato', alias: 'Bull' },
+            { name: 'Ronald McCrea', alias: 'Ronnie' },
+            { name: 'Joe Vega', alias: 'JV' },
+            { name: 'Wes Allen', alias: 'Webster' },
+            { name: 'Hector Domingo', alias: 'Ming' },
+            { name: 'Kira Nakazato', alias: 'Kamikaze' },
+            { name: 'Jade Barrett', alias: 'Jewels' },
+            { name: 'Eugene James', alias: 'Earl' },
+            { name: 'Karl Smit', alias: 'Baron' },
+            { name: 'Lou Park', alias: 'Big Lou' },
+            { name: 'Isabel Diaz', alias: 'Izzy' },
+            { name: 'Victor Vasquez', alias: 'Vic' },
+            { name: 'Vince Kilic', alias: 'Taz' },
+            { name: 'Ho Seun', alias: 'Sonny' }
+        ];
+
+        const blOperatorIds = new Set();
+        let blCollision = false;
+        blDrivers.forEach(d => {
+            ops.linkPlayerAliases(d.name, d.alias);
+            const byName = ops.getPlayerOperator(d.name).id;
+            const byAlias = ops.getPlayerOperator(d.alias).id;
+            if (byName !== byAlias) {
+                res.push(`Alias mismatch for ${d.name} / ${d.alias}`);
+                blCollision = true;
+            }
+            if (blOperatorIds.has(byAlias)) {
+                res.push(`Duplicate ID: ${byAlias}`);
+                blCollision = true;
+            }
+            blOperatorIds.add(byAlias);
+        });
+        res.push(`Test 2 (15 Blacklist drivers unique): ${(!blCollision && blOperatorIds.size === 15) ? 'PASSED ✓' : 'FAILED ✕'}`);
+
+        // Test 3: Badge consistency (Blacklist vs Open Registrations vs Leaderboard)
+        const blHtml = ops.getOperatorBadgeHTML('Leo Speed');
+        const regHtml = ops.getOperatorBadgeHTML('Leonardo');
+        const lbHtml = ops.getOperatorBadgeHTML('Leo Speed');
+        const test3 = (blHtml === regHtml && regHtml === lbHtml);
+        res.push(`Test 3 (Badge HTML 100% Identical): ${test3 ? 'PASSED ✓' : 'FAILED ✕'}`);
+
+        // Test 4: 50 community drivers have 50 unique operators
+        const allAssigned = new Set();
+        let commCollision = false;
+        for (let i = 1; i <= 50; i++) {
+            const op = ops.getPlayerOperator('CommunityDriver_' + i);
+            if (allAssigned.has(op.id)) {
+                commCollision = true;
+                res.push(`Community collision: ${op.id}`);
+            }
+            allAssigned.add(op.id);
+        }
+        res.push(`Test 4 (50 community drivers 0 collisions): ${(!commCollision && allAssigned.size === 50) ? 'PASSED ✓' : 'FAILED ✕'}`);
+
+        document.getElementById('results').innerHTML = '<pre>' + res.join('\n') + '</pre>';
+        console.log(res.join('\n'));
+    </script>
+</body>
+</html>

@@ -69,6 +69,27 @@ body {
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
+    position: relative;
+}
+
+/* Fondo cinemático global con BMW M3 GTR Dark Studio (Need for Speed Most Wanted) */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: 
+        radial-gradient(ellipse at 65% 35%, rgba(15, 15, 18, 0.3) 0%, rgba(15, 15, 18, 0.75) 55%, #0f0f12 100%),
+        linear-gradient(180deg, rgba(15, 15, 18, 0.35) 0%, rgba(15, 15, 18, 0.85) 100%),
+        url('../img/bmw-m3-hero-dark.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 0;
 }
 
 /* ==========================================================================
@@ -406,7 +427,7 @@ header {
     transform: scale(1.1);
 }
 
-nav {
+#main-nav {
     flex: 0 0 auto;
     display: flex;
     align-items: center;
@@ -415,7 +436,7 @@ nav {
     margin: 0 auto;
 }
 
-nav a {
+#main-nav a {
     color: var(--text-muted);
     text-decoration: none;
     font-family: var(--font-racing);
@@ -433,12 +454,12 @@ nav a {
     border-bottom: 2px solid transparent;
 }
 
-nav a:hover {
+#main-nav a:hover {
     color: #ffffff;
 }
 
 /* Pestaña activa Tracker.gg (subrayado directo naranja, sin ::after flotante) */
-nav a.active {
+#main-nav a.active {
     color: #ffffff;
     font-weight: 800;
     border-bottom: 2px solid var(--nfs-orange);
@@ -674,64 +695,194 @@ nav a.active {
 }
 
 @media (max-width: 992px) {
-    .menu-toggle { display: block; }
-    nav { 
+    .menu-toggle { 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--nfs-orange);
+        font-size: 20px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        line-height: 1;
+        user-select: none;
+    }
+
+    .menu-toggle:hover,
+    .menu-toggle.active {
+        background: rgba(244, 81, 30, 0.2);
+        border-color: var(--nfs-orange);
+        color: #ffffff;
+    }
+
+    #main-nav { 
         display: none; 
         flex-direction: column; 
         position: absolute; 
-        top: 70px; 
+        top: 100%; 
+        left: 0;
         right: 0; 
-        background: rgba(10, 12, 16, 0.98); 
         width: 100%; 
-        height: auto;
-        text-align: center; 
-        border-bottom: 2px solid var(--nfs-orange); 
-        padding: 15px 0; 
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9);
-        backdrop-filter: blur(20px);
+        height: calc(100vh - 60px);
+        height: calc(100dvh - 60px);
+        max-height: calc(100vh - 60px);
+        max-height: calc(100dvh - 60px);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        background: rgba(12, 14, 18, 0.98); 
+        border-bottom: 3px solid var(--nfs-orange); 
+        padding: 16px 16px 80px 16px; 
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        z-index: 99999;
+        gap: 8px;
     }
-    nav.open { display: flex; }
-    nav a, .nav-dropdown-btn { 
-        margin: 6px 0; 
-        padding: 12px 0;
+
+    #main-nav.open { 
+        display: flex; 
+        animation: mobileNavFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes mobileNavFade {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    #main-nav a, 
+    #main-nav .nav-dropdown-btn { 
+        margin: 0; 
+        padding: 14px 16px;
         width: 100%;
-        justify-content: center;
-        font-size: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 12px;
+        font-family: var(--font-racing);
+        font-size: 14.5px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        color: #e2e8f0;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 8px;
         height: auto;
+        min-height: 48px;
+        text-align: left;
+        transition: all 0.2s ease;
+        text-decoration: none;
     }
-    nav a.active::after, .nav-dropdown-btn.active::after {
-        bottom: 0;
-        left: 30%;
-        width: 40%;
+
+    #main-nav a .nav-icon-svg,
+    #main-nav .nav-dropdown-btn .nav-icon-svg {
+        width: 20px;
+        height: 20px;
+        fill: var(--nfs-orange);
+        flex-shrink: 0;
+        margin: 0;
     }
-    .nav-dropdown {
-        width: 100%;
-        height: auto;
-        flex-direction: column;
+
+    #main-nav .nav-dropdown-btn .dropdown-arrow {
+        margin-left: auto;
+        font-size: 12px;
+        transition: transform 0.2s ease;
+        color: #94a3b8;
     }
-    .nav-dropdown:hover .nav-dropdown-content {
+
+    #main-nav a:hover,
+    #main-nav .nav-dropdown-btn:hover {
+        background: rgba(255, 255, 255, 0.07);
+        color: #ffffff;
+        border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    #main-nav a.active, 
+    #main-nav .nav-dropdown-btn.active {
+        background: rgba(244, 81, 30, 0.14);
+        color: #ffffff;
+        border-color: var(--nfs-orange);
+        border-bottom: 2px solid var(--nfs-orange);
+    }
+
+    #main-nav a.active::after, 
+    #main-nav .nav-dropdown-btn.active::after {
         display: none;
     }
-    .nav-dropdown.open .nav-dropdown-content {
+
+    #main-nav .nav-dropdown {
+        width: 100%;
+        height: auto;
         display: flex;
+        flex-direction: column;
+    }
+
+    #main-nav .nav-dropdown:hover .nav-dropdown-content {
+        display: none;
+    }
+
+    #main-nav .nav-dropdown.open .dropdown-arrow {
+        transform: rotate(180deg);
+        color: var(--nfs-orange);
+    }
+
+    #main-nav .nav-dropdown.open .nav-dropdown-content {
+        display: flex;
+        flex-direction: column;
         position: static;
         width: 100%;
-        background: rgba(6, 8, 12, 0.95);
-        border: none;
-        box-shadow: none;
-        border-radius: 0;
-        padding: 6px 0;
+        background: rgba(18, 20, 28, 0.98);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 8px;
+        padding: 6px;
+        margin: 6px 0 10px 0;
+        box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
+        gap: 3px;
     }
-    .nav-dropdown-content a {
-        justify-content: center;
-        padding: 10px 0;
-        font-size: 11.3px;
-        border-left: none;
+
+    #main-nav .nav-dropdown-content a {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 12px;
+        padding: 12px 14px;
+        font-family: var(--font-ui), 'Inter', sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        color: #cbd5e1;
+        border: 1px solid transparent;
+        border-radius: 6px;
+        background: transparent;
+        text-align: left;
+        min-height: 44px;
     }
-    .nav-dropdown-content a:hover,
-    .nav-dropdown-content a.active {
-        padding-left: 0;
-        background: rgba(255, 119, 0, 0.15);
+
+    #main-nav .nav-dropdown-content a .nav-icon-svg {
+        width: 16px;
+        height: 16px;
+        fill: #94a3b8;
+        flex-shrink: 0;
+    }
+
+    #main-nav .nav-dropdown-content a:hover,
+    #main-nav .nav-dropdown-content a.active {
+        background: rgba(244, 81, 30, 0.12);
+        color: #ffffff;
+        border-color: rgba(244, 81, 30, 0.3);
+    }
+
+    #main-nav .nav-dropdown-content a:hover .nav-icon-svg,
+    #main-nav .nav-dropdown-content a.active .nav-icon-svg {
+        fill: var(--nfs-orange);
     }
 }
 
@@ -1155,6 +1306,172 @@ h2.section-title span.glow {
 }
 
 /* ==========================================================================
+   SISTEMA DE CABECERAS Y TÍTULOS DE SECCIÓN ESTILO TRACKER.GG (R6 SIEGE STATS)
+   ========================================================================== */
+.tracker-section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    margin-bottom: 26px;
+    position: relative;
+    padding-bottom: 4px;
+}
+
+.tracker-header-badge {
+    width: 58px;
+    height: 58px;
+    min-width: 58px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(255, 102, 0, 0.28) 0%, rgba(20, 22, 28, 0.95) 100%);
+    border: 1.5px solid rgba(255, 119, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), inset 0 0 14px rgba(255, 119, 0, 0.2);
+    flex-shrink: 0;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.tracker-section-header:hover .tracker-header-badge {
+    transform: translateY(-2px) scale(1.03);
+    border-color: var(--nfs-orange);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.7), 0 0 16px rgba(255, 119, 0, 0.35), inset 0 0 16px rgba(255, 119, 0, 0.25);
+}
+
+.tracker-header-badge svg {
+    width: 30px;
+    height: 30px;
+    fill: var(--nfs-orange);
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.85));
+    transition: transform 0.2s ease;
+}
+
+.tracker-header-badge .badge-emoji {
+    font-size: 26px;
+    line-height: 1;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.8));
+}
+
+.tracker-header-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.tracker-header-sup {
+    font-family: var(--font-racing);
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--nfs-orange);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 2px;
+}
+
+.tracker-header-sup::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--nfs-orange);
+    box-shadow: 0 0 8px var(--nfs-orange);
+}
+
+.tracker-header-title {
+    font-family: var(--font-racing) !important;
+    font-size: 28px !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    line-height: 1.15 !important;
+    margin: 0 !important;
+    color: #ffffff !important;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.tracker-header-title .title-main {
+    color: #ffffff;
+}
+
+.tracker-header-title .title-accent {
+    color: var(--nfs-orange);
+    text-shadow: 0 0 16px rgba(255, 119, 0, 0.45);
+}
+
+.tracker-header-desc {
+    font-family: var(--font-ui);
+    font-size: 13px;
+    color: #94a3b8;
+    line-height: 1.45;
+    margin: 3px 0 0 0;
+    font-weight: 500;
+    max-width: 850px;
+}
+
+.tracker-header-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+/* Adaptación Responsiva para Móvil (< 768px) */
+@media (max-width: 767px) {
+    .tracker-section-header {
+        gap: 12px;
+        margin-bottom: 18px;
+        flex-wrap: wrap;
+    }
+
+    .tracker-header-badge {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        border-radius: 9px;
+    }
+
+    .tracker-header-badge svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    .tracker-header-badge .badge-emoji {
+        font-size: 20px;
+    }
+
+    .tracker-header-sup {
+        font-size: 10px;
+        letter-spacing: 1px;
+    }
+
+    .tracker-header-title {
+        font-size: 20px !important;
+        gap: 6px;
+    }
+
+    .tracker-header-desc {
+        font-size: 11.5px;
+        line-height: 1.4;
+    }
+
+    .tracker-header-actions {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 6px;
+    }
+}
+
+/* ==========================================================================
    COMPONENTE: TOP 3 PODIUM CARDS (Inspirado en lokal.gg Ref. 1)
    ========================================================================== */
 .podium-grid {
@@ -1539,7 +1856,8 @@ h2.section-title span.glow {
 
 /* Acentos de categoría coherentes con Leaderboards */
 .route-card.type-circuito::before {
-    background: #eab308;
+    background: #cbd5e1;
+    box-shadow: 0 0 8px rgba(226, 232, 240, 0.4);
 }
 
 .route-card.type-sprint::before {
@@ -1557,7 +1875,8 @@ h2.section-title span.glow {
 }
 
 .route-card.type-circuito:hover {
-    border-color: #eab308;
+    border-color: #cbd5e1;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 12px rgba(226, 232, 240, 0.2);
 }
 
 .route-card.type-drag:hover {
@@ -1590,7 +1909,9 @@ h2.section-title span.glow {
 }
 
 .type-circuito .route-icon-box {
-    color: #eab308;
+    color: #f8fafc;
+    border-color: rgba(226, 232, 240, 0.18);
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .type-drag .route-icon-box {
@@ -1603,8 +1924,9 @@ h2.section-title span.glow {
 }
 
 .route-card.type-circuito:hover .route-icon-box {
-    border-color: #eab308;
-    background: rgba(234, 179, 8, 0.1);
+    border-color: #cbd5e1;
+    background: rgba(226, 232, 240, 0.14);
+    box-shadow: 0 0 10px rgba(226, 232, 240, 0.3);
 }
 
 .route-card.type-drag:hover .route-icon-box {
@@ -1627,9 +1949,10 @@ h2.section-title span.glow {
 }
 
 .route-badge-letter.badge-circuito {
-    background: rgba(234, 179, 8, 0.15);
-    color: #eab308;
-    border-color: rgba(234, 179, 8, 0.3);
+    background: rgba(226, 232, 240, 0.18);
+    color: #f8fafc;
+    border-color: rgba(226, 232, 240, 0.45);
+    box-shadow: 0 0 6px rgba(226, 232, 240, 0.25);
 }
 
 .route-badge-letter.badge-sprint {
@@ -1670,7 +1993,8 @@ h2.section-title span.glow {
 }
 
 .route-card.type-circuito:hover .route-info h3 {
-    color: #fde047;
+    color: #ffffff;
+    text-shadow: 0 0 8px rgba(226, 232, 240, 0.5);
 }
 
 .route-record-preview {
@@ -1717,9 +2041,9 @@ h2.section-title span.glow {
 }
 
 .type-circuito .route-action-icon {
-    background: rgba(255, 215, 0, 0.08);
-    border-color: rgba(255, 215, 0, 0.25);
-    color: #ffd700;
+    background: rgba(226, 232, 240, 0.1);
+    border-color: rgba(226, 232, 240, 0.3);
+    color: #f8fafc;
 }
 
 .type-drag .route-action-icon {
@@ -1737,10 +2061,10 @@ h2.section-title span.glow {
 }
 
 .route-card.type-circuito:hover .route-action-icon {
-    background: #ffd700;
+    background: #e2e8f0;
     color: #000000;
-    border-color: #ffd700;
-    box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+    border-color: #ffffff;
+    box-shadow: 0 0 14px rgba(226, 232, 240, 0.6);
 }
 
 .route-card.type-drag:hover .route-action-icon {
@@ -2948,14 +3272,39 @@ footer strong {
 
 .tactical-signature {
     position: absolute;
-    right: 25px;
-    bottom: 8px;
-    font-family: 'Impact', 'Arial Black', sans-serif;
-    font-size: 20px;
-    color: var(--nfs-orange);
-    transform: rotate(-4deg);
-    letter-spacing: 2px;
-    opacity: 0.8;
+    right: 20px;
+    bottom: 6px;
+    font-family: var(--font-racing), 'Impact', 'Arial Black', sans-serif;
+    font-size: 38px;
+    font-weight: 900;
+    font-style: italic;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    line-height: 1;
+    transform: rotate(-3.5deg) skewX(-6deg);
+    background: linear-gradient(180deg, #ffffff 15%, #ffb347 50%, #ff6600 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 12px rgba(255, 150, 20, 0.8)) drop-shadow(0 0 25px rgba(255, 102, 0, 0.45));
+    opacity: 1;
+    pointer-events: none;
+    user-select: none;
+    z-index: 1;
+    transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.tactical-card:hover .tactical-signature {
+    transform: rotate(-3.5deg) skewX(-6deg) scale(1.05);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 18px rgba(255, 170, 30, 0.95)) drop-shadow(0 0 35px rgba(255, 102, 0, 0.6));
+}
+
+@media (max-width: 767px) {
+    .tactical-signature {
+        font-size: clamp(24px, 6vw, 32px);
+        right: 14px;
+        bottom: 6px;
+        letter-spacing: 1.5px;
+    }
 }
 
 /* Métricas de Reputación y Puntos */
@@ -4281,6 +4630,8 @@ footer strong {
     border-radius: 4px;
     text-decoration: none;
     margin-top: 10px;
+    position: relative;
+    z-index: 2;
     transition: background 0.2s, transform 0.2s;
 }
 
@@ -5040,7 +5391,7 @@ footer strong {
 }
 
 /* ==========================================================================
-   FONDO CINEMÁTICO PERSONALIZADO PARA LA SECCIÓN HOME (BMW M3 GTR PURSUIT)
+   FONDO CINEMÁTICO PERSONALIZADO PARA LA SECCIÓN HOME (BMW M3 GTR DARK HERO)
    ========================================================================== */
 #view-home {
     position: relative;
@@ -5055,13 +5406,13 @@ footer strong {
     right: 0;
     bottom: 0;
     background-image: 
-        radial-gradient(ellipse at 50% 25%, rgba(15, 15, 18, 0.35) 0%, rgba(15, 15, 18, 0.82) 60%, rgba(15, 15, 18, 0.98) 100%),
-        linear-gradient(to bottom, rgba(15, 15, 18, 0.4) 0%, rgba(15, 15, 18, 0.78) 40%, rgba(15, 15, 18, 0.98) 100%),
-        url('../img/home-chase-bg.jpg');
+        radial-gradient(ellipse at 50% 20%, rgba(15, 15, 18, 0.15) 0%, rgba(15, 15, 18, 0.7) 55%, rgba(15, 15, 18, 0.98) 100%),
+        linear-gradient(to bottom, rgba(15, 15, 18, 0.2) 0%, rgba(15, 15, 18, 0.7) 40%, rgba(15, 15, 18, 0.98) 100%),
+        url('../img/bmw-m3-hero-dark.jpg');
     background-repeat: no-repeat;
-    background-position: center 10%;
+    background-position: center 15%;
     background-size: cover;
-    opacity: 0.12;
+    opacity: 0.22;
     pointer-events: none;
     z-index: 0;
 }
@@ -7872,12 +8223,12 @@ footer strong {
     display: flex;
     align-items: center;
     gap: 8px;
-    overflow-x: auto;
+    flex-wrap: wrap;
+    overflow: visible;
     padding: 6px 2px 14px 2px;
     margin-bottom: 16px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 119, 0, 0.4) transparent;
+    position: relative;
+    z-index: 50;
 }
 
 .tracker-pills-bar::-webkit-scrollbar {
@@ -7968,17 +8319,17 @@ footer strong {
     top: calc(100% + 6px);
     left: 0;
     min-width: 220px;
-    background: rgba(26, 28, 35, 0.96);
+    background: rgba(26, 28, 35, 0.98);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.16);
     border-radius: 8px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.75), 0 0 15px rgba(255, 119, 0, 0.15);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.9), 0 0 15px rgba(255, 119, 0, 0.2);
     padding: 6px;
     display: none;
     flex-direction: column;
     gap: 3px;
-    z-index: 120;
+    z-index: 1500;
 }
 
 .tracker-popover-menu.open {
@@ -8184,38 +8535,113 @@ footer strong {
         display: none !important;
     }
 
-    /* Ocultar botones de pestañas apilados para usar las píldoras */
-    #view-leaderboard .tabs-group {
-        display: none !important;
+    /* Ajustes para píldoras y menús emergentes en móvil */
+    .tracker-pills-bar {
+        overflow: visible !important;
+        flex-wrap: wrap !important;
+        gap: 6px !important;
     }
 
-    /* Tabla con ancho fijo ajustado a pantalla móvil */
-    .blacklist-table {
+    .tracker-pill-btn {
+        padding: 8px 11px !important;
+        font-size: 11px !important;
+    }
+
+    .tracker-popover-menu {
+        max-width: calc(100vw - 32px);
+    }
+
+    .tracker-pill-wrapper:last-child .tracker-popover-menu,
+    #pill-btn-car + .tracker-popover-menu {
+        left: auto !important;
+        right: 0 !important;
+    }
+
+    /* Mostrar y adaptar botones de pestañas en versión móvil (Junkman, BMW, Single Lap, Fast Lap) */
+    .tabs-group.active-group {
+        display: flex !important;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 16px;
+    }
+
+    .tabs-group .tab-btn {
+        flex: 1 1 calc(50% - 6px);
+        padding: 9px 8px;
+        font-size: 11px;
+        text-align: center;
+        justify-content: center;
+        display: inline-flex;
+        align-items: center;
+        letter-spacing: 0.4px;
+        border-radius: 6px;
+    }
+
+    /* Tabla de Leaderboard con ancho fijo ajustado a pantalla móvil (3 columnas) */
+    #view-leaderboard .blacklist-table {
         table-layout: fixed;
         width: 100%;
     }
 
-    .blacklist-table th.col-place,
-    .blacklist-table td.col-place {
+    #view-leaderboard .blacklist-table th.col-place,
+    #view-leaderboard .blacklist-table td.col-place {
         width: 42px;
         max-width: 42px;
         text-align: center;
         padding: 9px 2px !important;
     }
 
-    .blacklist-table th.col-player,
-    .blacklist-table td.col-player {
+    #view-leaderboard .blacklist-table th.col-player,
+    #view-leaderboard .blacklist-table td.col-player {
         width: auto;
         padding: 9px 8px !important;
         overflow: hidden;
     }
 
-    .blacklist-table th.col-time,
-    .blacklist-table td.col-time {
+    #view-leaderboard .blacklist-table th.col-time,
+    #view-leaderboard .blacklist-table td.col-time {
         width: 98px;
         max-width: 98px;
         text-align: right;
         padding: 9px 8px 9px 2px !important;
+    }
+
+    /* Tablas extensas multicolumna (Clasificación de Campeonato, Miembros, etc.) */
+    #view-championship-standings .blacklist-table-wrapper,
+    #view-members .blacklist-table-wrapper {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+        max-width: 100%;
+        display: block;
+    }
+
+    #view-championship-standings .blacklist-table {
+        table-layout: auto !important;
+        width: max-content !important;
+        min-width: 960px !important;
+    }
+
+    #view-championship-standings .blacklist-table th,
+    #view-championship-standings .blacklist-table td {
+        white-space: nowrap !important;
+        padding: 10px 14px !important;
+    }
+
+    #view-championship-standings .blacklist-table td:nth-child(2) {
+        min-width: 220px !important;
+        width: 240px !important;
+    }
+
+    #view-championship-standings .blacklist-table td:nth-child(3) {
+        min-width: 150px !important;
+        width: 160px !important;
+    }
+
+    #view-members .blacklist-table {
+        table-layout: auto !important;
+        width: max-content !important;
+        min-width: 650px !important;
     }
 
     .driver-names-row {
@@ -8251,72 +8677,6 @@ footer strong {
     }
 }
 
-/* --- BARRA DE NAVEGACIÓN INFERIOR FIJA PARA MÓVIL ESTILO TRACKER.GG --- */
-.tracker-bottom-nav {
-    display: none;
-}
-
-@media (max-width: 767px) {
-    .tracker-bottom-nav {
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 58px;
-        background: rgba(14, 17, 23, 0.96);
-        backdrop-filter: blur(14px);
-        -webkit-backdrop-filter: blur(14px);
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        z-index: 1000;
-        padding: 0 4px;
-        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.65);
-    }
-
-    body {
-        padding-bottom: 66px;
-    }
-
-    .bottom-nav-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 2px;
-        color: #94a3b8;
-        text-decoration: none;
-        flex: 1;
-        height: 100%;
-        transition: all 0.2s ease;
-        padding: 4px 0;
-    }
-
-    .bnav-icon-svg {
-        width: 19px;
-        height: 19px;
-        fill: currentColor;
-        transition: transform 0.15s ease;
-    }
-
-    .bnav-text {
-        font-family: var(--font-racing), sans-serif;
-        font-size: 9.5px;
-        font-weight: 700;
-        letter-spacing: 0.3px;
-    }
-
-    .bottom-nav-item:hover,
-    .bottom-nav-item.active {
-        color: var(--nfs-orange);
-    }
-
-    .bottom-nav-item.active .bnav-icon-svg {
-        transform: scale(1.1);
-        filter: drop-shadow(0 0 6px rgba(255, 119, 0, 0.6));
-    }
-}
 
 /* =======================================================
    SISTEMA DE SILUETAS SVG DE ALTO CONTRASTE (OPERADORES)

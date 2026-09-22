@@ -55,8 +55,16 @@ function startTelemetryClock() {
 // =======================================================
 function toggleMenu() {
     const mainNav = document.getElementById('main-nav');
+    const menuToggle = document.querySelector('.menu-toggle');
     if (mainNav) {
-        mainNav.classList.toggle('open');
+        const isOpen = mainNav.classList.toggle('open');
+        if (menuToggle) {
+            menuToggle.textContent = isOpen ? '✕' : '☰';
+            menuToggle.classList.toggle('active', isOpen);
+        }
+        if (!isOpen) {
+            closeAllDropdowns();
+        }
     }
 }
 
@@ -85,22 +93,14 @@ function switchView(viewId) {
         }
     }
 
-    // Sincronizar barra de navegación móvil Tracker.gg (< 768px)
-    document.querySelectorAll('.bottom-nav-item').forEach(b => b.classList.remove('active'));
-    const bottomNavLink = document.getElementById('bnav-' + viewId);
-    if (bottomNavLink) {
-        bottomNavLink.classList.add('active');
-    } else if (viewId === 'blacklist' || viewId === 'championship-standings' || viewId === 'past-tournaments' || viewId === 'blacklist-cards' || viewId === 'championship-register') {
-        const bChall = document.getElementById('bnav-challenges');
-        if (bChall) bChall.classList.add('active');
-    } else if (viewId === 'guides' || viewId === 'rules' || viewId === 'download' || viewId === 'map' || viewId === 'members') {
-        const bMore = document.getElementById('bnav-more');
-        if (bMore) bMore.classList.add('active');
-    }
-
     const mainNav = document.getElementById('main-nav');
+    const menuToggle = document.querySelector('.menu-toggle');
     if (mainNav) {
         mainNav.classList.remove('open');
+    }
+    if (menuToggle) {
+        menuToggle.textContent = '☰';
+        menuToggle.classList.remove('active');
     }
 
     closeAllDropdowns();
@@ -176,6 +176,12 @@ document.addEventListener('click', (e) => {
         closeAllTrackerPopovers();
     }
 });
+
+document.addEventListener('touchstart', (e) => {
+    if (!e.target.closest('.tracker-pill-wrapper')) {
+        closeAllTrackerPopovers();
+    }
+}, { passive: true });
 
 function selectLeaderboardModality(mod, el) {
     currentModality = mod;
@@ -1029,7 +1035,7 @@ async function renderRoutes(dataToRender) {
         const typeClass = route.type ? route.type.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") : "circuito";
 
         if (route.type === "Circuito") {
-            iconHtml = `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: #ffd700;">
+            iconHtml = `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: #f8fafc; filter: drop-shadow(0 0 4px rgba(226, 232, 240, 0.5));">
                 <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.23-5.23"></path>
             </svg>`;
         } else if (route.type === "Sprint") {
@@ -1342,7 +1348,7 @@ async function loadLeaderboardForRoute(route) {
         renderTableRows('tbody-bmw-fast', mergeLeaderboardData(d4, fbBmwFast));
     } else {
         if (circuitTabs) circuitTabs.classList.remove('active-group');
-        if (sprintDragTabs) sprintDragTabs.classList.remove('active-group');
+        if (sprintDragTabs) sprintDragTabs.classList.add('active-group');
         switchSprintDragTab('sprintdrag-junkman', sprintDragTabs.querySelector('.tab-btn'));
 
         const [dJunkman, dBmw, fbData] = await Promise.all([
@@ -2693,6 +2699,14 @@ function loadBlacklistData() {
             blacklistDrivers = JSON.parse(JSON.stringify(DEFAULT_BLACKLIST_DRIVERS));
         }
     }
+
+    if (window.NFSOperators && Array.isArray(blacklistDrivers)) {
+        blacklistDrivers.forEach(d => {
+            if (d && (d.name || d.alias)) {
+                window.NFSOperators.linkPlayerAliases(d.name, d.alias);
+            }
+        });
+    }
 }
 
 function saveBlacklistData() {
@@ -2808,10 +2822,15 @@ function renderChampionshipGroups(weekNumber) {
             const isSelected = driver.rank === currentSelectedBlacklistRank;
             const pts = calculateDriverPoints(driver);
 
+            if (window.NFSOperators) {
+                window.NFSOperators.linkPlayerAliases(driver.name, driver.alias);
+            }
+
             pilotsHtml += `
                 <div class="champ-group-pilot-item ${isSelected ? 'selected' : ''}" onclick="selectBlacklistPilot(${driver.rank})">
                     <div class="pilot-item-left">
                         <span class="bl-rank-badge ${driver.rank === 1 ? 'rank-gold' : driver.rank === 2 ? 'rank-silver' : driver.rank === 3 ? 'rank-bronze' : 'rank-normal'}" style="min-width: 28px; height: 28px; font-size: 10.5px;">${driver.rank}</span>
+                        ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(driver.alias || driver.name) : ''}
                         <div>
                             <div class="pilot-item-name">${driver.name} <span style="color: var(--nfs-orange);">"${driver.alias}"</span></div>
                             <div class="pilot-item-car">${driver.ride}</div>
@@ -3037,6 +3056,9 @@ function renderBlacklistUI() {
     tbody.innerHTML = '';
 
     sortedDrivers.forEach((driver, idx) => {
+        if (window.NFSOperators) {
+            window.NFSOperators.linkPlayerAliases(driver.name, driver.alias);
+        }
         const standingRank = idx + 1;
         const tr = document.createElement('tr');
         tr.className = `blacklist-row ${driver.rank === currentSelectedBlacklistRank ? 'active-row' : ''}`;
@@ -3191,6 +3213,9 @@ function renderAllTacticalCards() {
     container.innerHTML = '';
 
     sorted.forEach((driver, idx) => {
+        if (window.NFSOperators) {
+            window.NFSOperators.linkPlayerAliases(driver.name, driver.alias);
+        }
         const currentStandingRank = idx + 1;
         const totalPts = calculateDriverPoints(driver);
         const groupName = getDriverGroupForWeek(driver.rank, currentChampionshipWeek);
@@ -3204,8 +3229,13 @@ function renderAllTacticalCards() {
         card.innerHTML = `
             <div class="tactical-card-overlay"></div>
             <div class="tactical-card-header">
-                <div class="blacklist-number-title">Blacklist ${currentStandingRank}</div>
-                <div class="blacklist-driver-fullname">${driver.name} "${driver.alias}"</div>
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%;">
+                    <div>
+                        <div class="blacklist-number-title">Blacklist ${currentStandingRank}</div>
+                        <div class="blacklist-driver-fullname">${driver.name} "${driver.alias}"</div>
+                    </div>
+                    ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(driver.alias || driver.name, 'xlarge') : ''}
+                </div>
             </div>
 
             <div class="tactical-specs">
@@ -3530,6 +3560,10 @@ async function handleChampionshipSubmit(event) {
         isRealUser: true
     };
 
+    if (window.NFSOperators) {
+        window.NFSOperators.linkPlayerAliases(name, alias);
+    }
+
     await saveChampionshipParticipant(newParticipant);
 
     // Resetear formulario
@@ -3575,6 +3609,9 @@ function mergeRegisteredParticipantsWithBlacklist() {
     }
 
     registeredParticipants.forEach((p, idx) => {
+        if (window.NFSOperators) {
+            window.NFSOperators.linkPlayerAliases(p.name, p.alias);
+        }
         if (idx < 15 && blacklistDrivers[idx]) {
             const slot = blacklistDrivers[idx];
             slot.name = p.name;
@@ -3653,6 +3690,9 @@ function renderRegisteredPilotsUI() {
 
     listContainer.innerHTML = '';
     registeredParticipants.forEach((pilot, idx) => {
+        if (window.NFSOperators) {
+            window.NFSOperators.linkPlayerAliases(pilot.name, pilot.alias);
+        }
         const slotNum = idx + 1;
         let badgeClass = 'slot-normal';
         if (slotNum === 1) badgeClass = 'slot-gold';
@@ -3667,7 +3707,7 @@ function renderRegisteredPilotsUI() {
         item.innerHTML = `
             <div class="registered-pilot-left">
                 <div class="reg-slot-badge ${badgeClass}">${slotNum}</div>
-                ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(pilot.name) : ''}
+                ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(pilot.alias || pilot.name) : ''}
                 <div class="reg-pilot-info">
                     <div class="reg-pilot-name">
                         ${pilot.name} ${pilot.alias ? `<span style="color: var(--nfs-orange);">"${pilot.alias}"</span>` : ''}
