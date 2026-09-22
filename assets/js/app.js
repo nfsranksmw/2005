@@ -85,12 +85,26 @@ function switchView(viewId) {
         }
     }
 
+    // Sincronizar barra de navegación móvil Tracker.gg (< 768px)
+    document.querySelectorAll('.bottom-nav-item').forEach(b => b.classList.remove('active'));
+    const bottomNavLink = document.getElementById('bnav-' + viewId);
+    if (bottomNavLink) {
+        bottomNavLink.classList.add('active');
+    } else if (viewId === 'blacklist' || viewId === 'championship-standings' || viewId === 'past-tournaments' || viewId === 'blacklist-cards' || viewId === 'championship-register') {
+        const bChall = document.getElementById('bnav-challenges');
+        if (bChall) bChall.classList.add('active');
+    } else if (viewId === 'guides' || viewId === 'rules' || viewId === 'download' || viewId === 'map' || viewId === 'members') {
+        const bMore = document.getElementById('bnav-more');
+        if (bMore) bMore.classList.add('active');
+    }
+
     const mainNav = document.getElementById('main-nav');
     if (mainNav) {
         mainNav.classList.remove('open');
     }
 
     closeAllDropdowns();
+    closeAllTrackerPopovers();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     if (viewId === 'members') {
@@ -133,6 +147,112 @@ document.addEventListener('click', (e) => {
     }
 });
 
+// =======================================================
+// TRACKER.GG COMPACT PILLS & FLOATING POPOVERS CONTROLLERS
+// =======================================================
+let currentActiveRoute = null;
+let currentModality = 'junkman';
+let currentLap = 'single';
+let currentCarFilter = 'all';
+
+function toggleTrackerPopover(popoverId, btn) {
+    const popover = document.getElementById(popoverId);
+    if (!popover) return;
+    const isOpen = popover.classList.contains('open');
+    closeAllTrackerPopovers();
+    if (!isOpen) {
+        popover.classList.add('open');
+        if (btn) btn.classList.add('open');
+    }
+}
+
+function closeAllTrackerPopovers() {
+    document.querySelectorAll('.tracker-popover-menu').forEach(menu => menu.classList.remove('open'));
+    document.querySelectorAll('.tracker-pill-btn').forEach(btn => btn.classList.remove('open'));
+}
+
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.tracker-pill-wrapper')) {
+        closeAllTrackerPopovers();
+    }
+});
+
+function selectLeaderboardModality(mod, el) {
+    currentModality = mod;
+    const pillVal = document.getElementById('pill-val-modality');
+    if (pillVal) pillVal.textContent = mod === 'junkman' ? 'Junkman' : 'BMW M3 GTR';
+
+    if (el && el.parentElement) {
+        el.parentElement.querySelectorAll('.popover-item').forEach(i => i.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    if (currentActiveRoute && currentActiveRoute.type === 'Circuito') {
+        const targetTabId = `${currentModality}-${currentLap}`;
+        const tabBtn = document.querySelector(`#container-tabs-circuit button[onclick*="${targetTabId}"]`);
+        switchCircuitTab(targetTabId, tabBtn);
+    } else {
+        const targetTabId = `sprintdrag-${currentModality}`;
+        const tabBtn = document.querySelector(`#container-tabs-sprintdrag button[onclick*="${targetTabId}"]`);
+        switchSprintDragTab(targetTabId, tabBtn);
+    }
+
+    applyCurrentCarFilter();
+    closeAllTrackerPopovers();
+}
+
+function selectLeaderboardLap(lap, el) {
+    currentLap = lap;
+    const pillVal = document.getElementById('pill-val-lap');
+    if (pillVal) pillVal.textContent = lap === 'single' ? 'Single Lap' : 'Fast Lap';
+
+    if (el && el.parentElement) {
+        el.parentElement.querySelectorAll('.popover-item').forEach(i => i.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    if (currentActiveRoute && currentActiveRoute.type === 'Circuito') {
+        const targetTabId = `${currentModality}-${currentLap}`;
+        const tabBtn = document.querySelector(`#container-tabs-circuit button[onclick*="${targetTabId}"]`);
+        switchCircuitTab(targetTabId, tabBtn);
+    }
+
+    applyCurrentCarFilter();
+    closeAllTrackerPopovers();
+}
+
+function selectLeaderboardCarFilter(car, el) {
+    currentCarFilter = car;
+    const pillVal = document.getElementById('pill-val-car');
+    if (pillVal) pillVal.textContent = car === 'all' ? 'Todos' : car;
+
+    if (el && el.parentElement) {
+        el.parentElement.querySelectorAll('.popover-item').forEach(i => i.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    applyCurrentCarFilter();
+    closeAllTrackerPopovers();
+}
+
+function applyCurrentCarFilter() {
+    const activeSection = document.querySelector('.circuit-section.active, .sprintdrag-section.active');
+    if (!activeSection) return;
+    const rows = activeSection.querySelectorAll('tbody tr.blacklist-row');
+    rows.forEach(tr => {
+        if (currentCarFilter === 'all') {
+            tr.style.display = '';
+        } else {
+            const carAttr = tr.getAttribute('data-car') || '';
+            if (carAttr.toLowerCase().includes(currentCarFilter.toLowerCase())) {
+                tr.style.display = '';
+            } else {
+                tr.style.display = 'none';
+            }
+        }
+    });
+}
+
 function switchCircuitTab(tabId, btn) {
     document.querySelectorAll('.circuit-section').forEach(sec => sec.classList.remove('active'));
     document.querySelectorAll('#container-tabs-circuit .tab-btn').forEach(b => b.classList.remove('active'));
@@ -140,6 +260,27 @@ function switchCircuitTab(tabId, btn) {
     const targetTab = document.getElementById('tab-' + tabId);
     if (targetTab) targetTab.classList.add('active');
     if (btn) btn.classList.add('active');
+
+    // Sincronizar píldoras
+    if (tabId.includes('junkman')) {
+        currentModality = 'junkman';
+        const pMod = document.getElementById('pill-val-modality');
+        if (pMod) pMod.textContent = 'Junkman';
+    } else if (tabId.includes('bmw')) {
+        currentModality = 'bmw';
+        const pMod = document.getElementById('pill-val-modality');
+        if (pMod) pMod.textContent = 'BMW M3 GTR';
+    }
+    if (tabId.includes('single')) {
+        currentLap = 'single';
+        const pLap = document.getElementById('pill-val-lap');
+        if (pLap) pLap.textContent = 'Single Lap';
+    } else if (tabId.includes('fast')) {
+        currentLap = 'fast';
+        const pLap = document.getElementById('pill-val-lap');
+        if (pLap) pLap.textContent = 'Fast Lap';
+    }
+    applyCurrentCarFilter();
 }
 
 function switchSprintDragTab(tabId, btn) {
@@ -149,6 +290,17 @@ function switchSprintDragTab(tabId, btn) {
     const targetTab = document.getElementById('tab-' + tabId);
     if (targetTab) targetTab.classList.add('active');
     if (btn) btn.classList.add('active');
+
+    if (tabId.includes('junkman')) {
+        currentModality = 'junkman';
+        const pMod = document.getElementById('pill-val-modality');
+        if (pMod) pMod.textContent = 'Junkman';
+    } else if (tabId.includes('bmw')) {
+        currentModality = 'bmw';
+        const pMod = document.getElementById('pill-val-modality');
+        if (pMod) pMod.textContent = 'BMW M3 GTR';
+    }
+    applyCurrentCarFilter();
 }
 
 function switchGlobalRouteTab(tabId, btn) {
@@ -1091,10 +1243,74 @@ function mergeLeaderboardData(sheetRows = [], firebaseRows = []) {
     }));
 }
 
+/// =======================================================
+// FORMATEO DE TIEMPO TELEMÉTRICO F1 / STOPWATCH (mm:ss.sss)
+// =======================================================
+function formatRaceTime(timeStr) {
+    if (!timeStr || typeof timeStr !== 'string') return timeStr || '--:--.---';
+    const clean = timeStr.trim();
+    if (!clean || clean === '--' || clean === '-') return clean;
+
+    const colonParts = clean.split(':');
+    if (colonParts.length === 2) {
+        const mins = parseInt(colonParts[0], 10);
+        const secParts = colonParts[1].split('.');
+        const secs = parseInt(secParts[0], 10);
+        let ms = secParts[1] || '000';
+        if (ms.length === 1) ms = ms + '00';
+        else if (ms.length === 2) ms = ms + '0';
+        else if (ms.length > 3) ms = ms.slice(0, 3);
+        const padMins = isNaN(mins) ? '00' : String(mins).padStart(2, '0');
+        const padSecs = isNaN(secs) ? '00' : String(secs).padStart(2, '0');
+        return `${padMins}:${padSecs}.${ms}`;
+    } else if (colonParts.length === 1) {
+        const dotParts = colonParts[0].split('.');
+        if (dotParts.length === 2) {
+            const totalSecs = parseInt(dotParts[0], 10);
+            let ms = dotParts[1] || '000';
+            if (ms.length === 1) ms = ms + '00';
+            else if (ms.length === 2) ms = ms + '0';
+            else if (ms.length > 3) ms = ms.slice(0, 3);
+            if (!isNaN(totalSecs)) {
+                const mins = Math.floor(totalSecs / 60);
+                const secs = totalSecs % 60;
+                return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}.${ms}`;
+            }
+        }
+    }
+    return clean;
+}
+
 // =======================================================
 // CARGA Y RENDERIZADO DE TABLAS INDIVIDUALES (LEADERBOARDS)
 // =======================================================
 async function loadLeaderboardForRoute(route) {
+    currentActiveRoute = route;
+    currentModality = 'junkman';
+    currentLap = 'single';
+    currentCarFilter = 'all';
+
+    // Sincronizar UI de filtros compactos Tracker.gg
+    const pillMod = document.getElementById('pill-val-modality');
+    if (pillMod) pillMod.textContent = 'Junkman';
+    const pillLap = document.getElementById('pill-val-lap');
+    if (pillLap) pillLap.textContent = 'Single Lap';
+    const pillCar = document.getElementById('pill-val-car');
+    if (pillCar) pillCar.textContent = 'Todos';
+
+    const pillLapWrapper = document.getElementById('pill-wrapper-lap');
+    if (pillLapWrapper) {
+        pillLapWrapper.style.display = route.type === 'Circuito' ? 'inline-flex' : 'none';
+    }
+
+    // Reiniciar estados activos en popovers
+    document.querySelectorAll('.tracker-popover-menu').forEach(menu => {
+        menu.querySelectorAll('.popover-item').forEach((item, idx) => {
+            if (idx === 0) item.classList.add('active');
+            else item.classList.remove('active');
+        });
+    });
+
     const circuitTabs = document.getElementById('container-tabs-circuit');
     const sprintDragTabs = document.getElementById('container-tabs-sprintdrag');
 
@@ -1126,7 +1342,7 @@ async function loadLeaderboardForRoute(route) {
         renderTableRows('tbody-bmw-fast', mergeLeaderboardData(d4, fbBmwFast));
     } else {
         if (circuitTabs) circuitTabs.classList.remove('active-group');
-        if (sprintDragTabs) sprintDragTabs.classList.add('active-group');
+        if (sprintDragTabs) sprintDragTabs.classList.remove('active-group');
         switchSprintDragTab('sprintdrag-junkman', sprintDragTabs.querySelector('.tab-btn'));
 
         const [dJunkman, dBmw, fbData] = await Promise.all([
@@ -1165,6 +1381,7 @@ function renderTableRows(tbodyId, dataRows) {
 
         let rowHighlightClass = displayRank === 1 ? 'active-row' : '';
         tr.className = `blacklist-row ${rowHighlightClass}`;
+        tr.setAttribute('data-car', row.car || '');
 
         let videoBtnHTML = (row.yt && row.yt !== "#" && row.yt.startsWith("http"))
             ? `<a href="${row.yt}" target="_blank" rel="noopener noreferrer" class="btn-yt-link" style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; font-size: 8.9px; background: rgba(255, 0, 0, 0.15); border: 1px solid rgba(255, 0, 0, 0.4); color: #ff5555; text-decoration: none; border-radius: 4px; font-family: var(--font-racing); font-weight: 700; transition: all 0.2s ease;">▶ Video</a>`
@@ -1178,35 +1395,71 @@ function renderTableRows(tbodyId, dataRows) {
 
         const blBadgeClass = displayRank === 1 ? 'bl-badge-gold' : displayRank === 2 ? 'bl-badge-silver' : displayRank === 3 ? 'bl-badge-bronze' : '';
 
+        // Badge hexagonal para Top 3 o número limpio para #4+
+        let rankBadgeHTML = '';
+        if (displayRank === 1) {
+            rankBadgeHTML = `
+                <div class="hex-badge">
+                    <svg class="hex-svg" viewBox="0 0 36 36">
+                        <polygon class="hex-shape hex-shape-gold" points="18,2 33,10 33,26 18,34 3,26 3,10"/>
+                        <text x="18" y="19" class="hex-text">1</text>
+                    </svg>
+                </div>`;
+        } else if (displayRank === 2) {
+            rankBadgeHTML = `
+                <div class="hex-badge">
+                    <svg class="hex-svg" viewBox="0 0 36 36">
+                        <polygon class="hex-shape hex-shape-silver" points="18,2 33,10 33,26 18,34 3,26 3,10"/>
+                        <text x="18" y="19" class="hex-text">2</text>
+                    </svg>
+                </div>`;
+        } else if (displayRank === 3) {
+            rankBadgeHTML = `
+                <div class="hex-badge">
+                    <svg class="hex-svg" viewBox="0 0 36 36">
+                        <polygon class="hex-shape hex-shape-bronze" points="18,2 33,10 33,26 18,34 3,26 3,10"/>
+                        <text x="18" y="19" class="hex-text">3</text>
+                    </svg>
+                </div>`;
+        } else {
+            rankBadgeHTML = `<span class="rank-plain">${displayRank}</span>`;
+        }
+
+        const formattedTime = formatRaceTime(row.time);
+
         tr.innerHTML = `
-            <td>
-                <span class="bl-rank-badge ${rankBadgeClass}">${displayRank}</span>
+            <td class="col-place">
+                ${rankBadgeHTML}
             </td>
-            <td>
-                <div class="driver-cell-flex">
-                    <div class="driver-names-row">
-                        <span class="driver-cell-name">${row.driver}</span>
-                        ${aliasTag}
-                    </div>
-                    <div class="driver-bl-sublabel ${blBadgeClass}">
-                        <span class="bl-word-white">Blacklist</span> <span class="bl-num-accent">${displayRank}</span>
+            <td class="col-player">
+                <div class="driver-name-cell-wrapper">
+                    ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(row.driver) : ''}
+                    <div class="driver-cell-flex">
+                        <div class="driver-names-row">
+                            <span class="driver-cell-name">${row.driver}</span>
+                            ${aliasTag}
+                        </div>
+                        <div class="driver-car-sub">
+                            <span class="car-name-text">${row.car || 'BMW M3 GTR'}</span>
+                            <span class="bl-chip ${blBadgeClass}">BL #${displayRank}</span>
+                        </div>
                     </div>
                 </div>
             </td>
-            <td>
-                <span class="rep-money-cell" style="font-size: 12.2px; text-shadow: 0 0 10px rgba(0, 255, 136, 0.45); font-family: var(--font-mono); font-weight: 800;">${row.time}</span>
+            <td class="col-time">
+                <span class="time-stat-val">${formattedTime}</span>
             </td>
-            <td>
-                <span style="color: #ffffff; font-weight: 700; font-size: 10.5px; letter-spacing: 0.3px;">${row.car}</span>
+            <td class="col-desktop">
+                <span style="color: #ffffff; font-weight: 700; font-size: 10.5px; letter-spacing: 0.3px;">${row.car || '--'}</span>
             </td>
-            <td>
+            <td class="col-desktop">
                 <span class="champ-group-tag" style="color: #38bdf8; background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3); font-family: var(--font-racing); font-weight: 700; letter-spacing: 0.5px;">🎮 ${row.device || 'PC'}</span>
             </td>
-            <td>
+            <td class="col-desktop">
                 <span class="champ-group-tag" style="color: #ffd700; background: rgba(255, 215, 0, 0.1); border-color: rgba(255, 215, 0, 0.3); font-family: var(--font-racing); font-weight: 700; letter-spacing: 0.5px;">⚙️ ${row.gearbox || 'Manual'}</span>
             </td>
-            <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 9.7px;">${row.date || '--'}</td>
-            <td>${videoBtnHTML}</td>
+            <td class="col-desktop" style="color: var(--text-muted); font-family: var(--font-mono); font-size: 9.7px;">${row.date || '--'}</td>
+            <td class="col-desktop">${videoBtnHTML}</td>
         `;
         tbody.appendChild(tr);
     });
@@ -1242,6 +1495,7 @@ function renderTop3PodiumCards(containerId, top3Array, metricKey = 'records', me
                     <div class="podium-header">
                         <div class="podium-avatar-wrapper">
                             <div class="podium-avatar">${rankNum === 1 ? '🥇' : (rankNum === 2 ? '🥈' : '🥉')}</div>
+                            ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(driver.driver, 'xlarge') : ''}
                             <div class="podium-driver-info">
                                 <h4>${driver.driver}</h4>
                                 <span class="podium-badge-label">${badge}</span>
@@ -1320,7 +1574,7 @@ async function generateHallOfFame() {
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td class="${posClass}">#${pos}</td>
-            <td><strong style="color: #ffffff; font-size: 12.2px;">${item.driver}</strong></td>
+            <td>${window.NFSOperators ? window.NFSOperators.getDriverCellHTML(item.driver) : `<strong style="color: #ffffff; font-size: 12.2px;">${item.driver}</strong>`}</td>
             <td style="color: var(--nfs-orange); font-family: var(--font-mono); font-weight: 800; font-size: 13px; text-shadow: var(--nfs-subtle-glow);">${item.records} Récords</td>
             <td><span class="telemetry-pill">PC / Multi</span></td>
             <td><span class="telemetry-pill" style="color: var(--nfs-orange); font-weight: bold;">${badge}</span></td>
@@ -1417,7 +1671,7 @@ async function renderGlobalPodiumTable(tbodyId, filterType = null) {
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td class="${posClass}">#${pos}</td>
-            <td><strong style="color: #ffffff; font-size: 12.2px;">${item.driver}</strong></td>
+            <td>${window.NFSOperators ? window.NFSOperators.getDriverCellHTML(item.driver) : `<strong style="color: #ffffff; font-size: 12.2px;">${item.driver}</strong>`}</td>
             <td style="color: #ffd700; font-family: var(--font-mono); font-weight: 800; font-size: 12.2px; text-shadow: var(--gold-glow);">${item.first}</td>
             <td style="color: #e2e8f0; font-family: var(--font-mono); font-weight: 800; font-size: 12.2px; text-shadow: var(--silver-glow);">${item.second}</td>
             <td style="color: #ff9f43; font-family: var(--font-mono); font-weight: 800; font-size: 12.2px; text-shadow: var(--bronze-glow);">${item.third}</td>
@@ -1585,7 +1839,10 @@ function renderDriverSearchUI(containerId) {
 
         resultsEl.innerHTML = `
             <div style="background: var(--bg-surface-elevated); padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid var(--nfs-orange); box-shadow: 0 4px 20px rgba(0,0,0,0.4);">
-                <h2 style="color: #ffffff; font-family: var(--font-racing); font-size: 21.1px; margin: 0 0 12px 0;">👤 ${profile.driver}</h2>
+                <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 12px;">
+                    ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(profile.driver, 'xlarge') : ''}
+                    <h2 style="color: #ffffff; font-family: var(--font-racing); font-size: 24px; margin: 0; text-transform: uppercase;">${profile.driver}</h2>
+                </div>
                 <div style="display: flex; gap: 15px; font-weight: bold; flex-wrap: wrap; font-family: var(--font-racing); font-size: 13px;">
                     <span style="color: #ffd700; text-shadow: var(--gold-glow);">🥇 1ros: ${profile.stats.first}</span>
                     <span style="color: #e2e8f0; text-shadow: var(--silver-glow);">🥈 2dos: ${profile.stats.second}</span>
@@ -1612,6 +1869,48 @@ function renderDriverSearchUI(containerId) {
 
     btn.onclick = executeSearch;
     input.onkeyup = (e) => { if (e.key === 'Enter') executeSearch(); };
+}
+
+// =======================================================
+// BUSCADOR RÁPIDO HERO TRACKER.GG (PILOTO O RUTA)
+// =======================================================
+function handleHeroQuickSearch(event) {
+    if (event.key === 'Enter') {
+        executeHeroQuickSearch();
+    }
+}
+
+function executeHeroQuickSearch() {
+    const input = document.getElementById('hero-quick-search');
+    if (!input) return;
+    const query = input.value.trim();
+    if (!query) return;
+
+    // Verificar si la búsqueda coincide con una ruta oficial
+    const routes = typeof routesData !== 'undefined' ? routesData : [];
+    const matchedRoute = routes.find(r => r.name && r.name.toLowerCase().includes(query.toLowerCase()));
+
+    if (matchedRoute) {
+        switchView('routes');
+        const routeInput = document.getElementById('route-search');
+        if (routeInput) {
+            routeInput.value = query;
+            if (typeof filterRoutes === 'function') {
+                filterRoutes();
+            }
+        }
+    } else {
+        // Asumir búsqueda de piloto y redirigir al expediente
+        switchView('driverprofile');
+        setTimeout(() => {
+            const driverInput = document.getElementById('driver-search-input');
+            const searchBtn = document.getElementById('btn-search-driver');
+            if (driverInput) {
+                driverInput.value = query;
+                if (searchBtn) searchBtn.click();
+            }
+        }, 150);
+    }
 }
 
 // =======================================================
@@ -2762,13 +3061,16 @@ function renderBlacklistUI() {
                 <span class="bl-rank-badge ${rankBadgeClass}">${standingRank}</span>
             </td>
             <td>
-                <div class="driver-cell-flex">
-                    <div class="driver-names-row">
-                        <span class="driver-cell-name">${driver.name}</span>
-                        <span class="driver-cell-alias">"${driver.alias}"</span>
-                    </div>
-                    <div class="driver-bl-sublabel ${blBadgeClass}">
-                        <span class="bl-word-white">Blacklist</span> <span class="bl-num-accent">${standingRank}</span>
+                <div class="driver-name-cell-wrapper">
+                    ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(driver.alias || driver.name) : ''}
+                    <div class="driver-cell-flex">
+                        <div class="driver-names-row">
+                            <span class="driver-cell-name">${driver.name}</span>
+                            <span class="driver-cell-alias">"${driver.alias}"</span>
+                        </div>
+                        <div class="driver-bl-sublabel ${blBadgeClass}">
+                            <span class="bl-word-white">Blacklist</span> <span class="bl-num-accent">${standingRank}</span>
+                        </div>
                     </div>
                 </div>
             </td>
@@ -3365,6 +3667,7 @@ function renderRegisteredPilotsUI() {
         item.innerHTML = `
             <div class="registered-pilot-left">
                 <div class="reg-slot-badge ${badgeClass}">${slotNum}</div>
+                ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(pilot.name) : ''}
                 <div class="reg-pilot-info">
                     <div class="reg-pilot-name">
                         ${pilot.name} ${pilot.alias ? `<span style="color: var(--nfs-orange);">"${pilot.alias}"</span>` : ''}
