@@ -1,4 +1,4 @@
-# robots.txt for NFS Ranks v.5 (NFSRANKSMW)
+# robots.txt for NFSMWRanks (nfsmwranks.online)
 User-agent: *
 Allow: /
 Disallow: /scratch/
@@ -7,5 +7,7 @@ Disallow: /*.cpp$
 Disallow: /*.ini$
 
 # Sitemaps oficiales
+Sitemap: https://nfsmwranks.online/sitemap.xml
 Sitemap: https://nfsranksmw.github.io/2005/sitemap.xml
 Sitemap: https://nfsranksmw.pages.dev/sitemap.xml
+
