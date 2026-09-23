@@ -124,6 +124,12 @@ function switchView(viewId) {
             initLiveMapSimulation();
         }
     }
+
+    if (viewId === 'submit') {
+        if (typeof handleCategoryOrRouteChange === 'function') {
+            handleCategoryOrRouteChange();
+        }
+    }
 }
 
 function toggleNavDropdown(dropdownId) {
@@ -1035,7 +1041,7 @@ async function renderRoutes(dataToRender) {
         const typeClass = route.type ? route.type.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") : "circuito";
 
         if (route.type === "Circuito") {
-            iconHtml = `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: #f8fafc; filter: drop-shadow(0 0 4px rgba(226, 232, 240, 0.5));">
+            iconHtml = `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: #ffd700; filter: drop-shadow(0 0 6px rgba(255, 183, 0, 0.6));">
                 <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.23-5.23"></path>
             </svg>`;
         } else if (route.type === "Sprint") {
@@ -1188,9 +1194,9 @@ function extractCategoryRecords(routeFirebaseData, categoryKey) {
     }
     if (!Array.isArray(raw)) return [];
 
-    return raw.filter(Boolean).map(item => ({
+    return raw.filter(item => item && item.driver && String(item.driver).trim() !== "" && (item.time || item.declaredTime)).map(item => ({
         rank: item.rank ? (String(item.rank).startsWith('#') ? item.rank : `#${item.rank}`) : "#--",
-        driver: item.driver || "Piloto",
+        driver: String(item.driver).trim(),
         time: item.time || item.declaredTime || "--:--.---",
         car: item.car || "BMW M3 GTR",
         device: item.device || "PC",
@@ -2138,6 +2144,77 @@ function handleVideoUrlChange() {
 // =======================================================
 // ENVÍO DE TIEMPOS VÍA WEBHOOK A DISCORD & HOMOLOGACIÓN
 // =======================================================
+// MANEJO DE CATEGORÍA Y TIPO DE VUELTA EN FORMULARIO
+// =======================================================
+function handleCategoryOrRouteChange() {
+    const carInput = document.getElementById('sub-car');
+    const routeInput = document.getElementById('sub-route');
+    const categorySelect = document.getElementById('sub-category');
+    const lapTypeGroup = document.getElementById('group-sub-lap-type');
+
+    if (carInput && categorySelect) {
+        const carVal = carInput.value.trim().toLowerCase();
+        if (carVal.includes('bmw m3 gtr')) {
+            categorySelect.value = 'BMW M3 GTR';
+        }
+    }
+
+    if (routeInput && lapTypeGroup) {
+        const routeVal = routeInput.value.trim().toLowerCase();
+        const routes = typeof routesData !== 'undefined' ? routesData : [];
+        const matchedRoute = routes.find(r => r.name.toLowerCase() === routeVal);
+        if (matchedRoute) {
+            lapTypeGroup.style.display = matchedRoute.type === 'Circuito' ? 'block' : 'none';
+        } else {
+            lapTypeGroup.style.display = 'block';
+        }
+    }
+}
+
+function goToRouteLeaderboardAfterSubmit(routeName, categoryKey) {
+    if (typeof routesData === 'undefined' || !routesData) {
+        switchView('routes');
+        return;
+    }
+    const route = routesData.find(r => r.name.trim().toLowerCase() === routeName.trim().toLowerCase());
+    if (!route) {
+        switchView('routes');
+        return;
+    }
+
+    const titleEl = document.getElementById('leaderboard-title');
+    if (titleEl) titleEl.innerText = `Leaderboard: ${route.name} (${route.type})`;
+
+    loadLeaderboardForRoute(route);
+    switchView('leaderboard');
+
+    setTimeout(() => {
+        if (categoryKey.includes('bmw')) {
+            const modBtn = document.querySelector('#popover-modality button[onclick*="bmw"]');
+            selectLeaderboardModality('bmw', modBtn);
+        } else {
+            const modBtn = document.querySelector('#popover-modality button[onclick*="junkman"]');
+            selectLeaderboardModality('junkman', modBtn);
+        }
+
+        if (route.type === 'Circuito') {
+            if (categoryKey.includes('fast')) {
+                const lapBtn = document.querySelector('#popover-lap button[onclick*="fast"]');
+                selectLeaderboardLap('fast', lapBtn);
+            } else {
+                const lapBtn = document.querySelector('#popover-lap button[onclick*="single"]');
+                selectLeaderboardLap('single', lapBtn);
+            }
+        }
+
+        const lbSection = document.getElementById('view-leaderboard');
+        if (lbSection) lbSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 250);
+}
+
+// =======================================================
+// ENVÍO Y HOMOLOGACIÓN AUTOMÁTICA DE TIEMPOS
+// =======================================================
 async function handleTimeSubmit(event) {
     event.preventDefault();
 
@@ -2149,6 +2226,12 @@ async function handleTimeSubmit(event) {
     const car = document.getElementById('sub-car').value.trim();
     const modeEl = document.querySelector('input[name="sub-mode"]:checked');
     const mode = modeEl ? modeEl.value : 'Online';
+
+    const categoryEl = document.getElementById('sub-category');
+    const category = categoryEl ? categoryEl.value.trim() : 'Junkman';
+
+    const lapTypeEl = document.getElementById('sub-lap-type');
+    const lapType = lapTypeEl ? lapTypeEl.value.trim() : 'Single Lap';
 
     const video = document.getElementById('sub-video').value.trim();
     const startMark = document.getElementById('sub-start-mark').value.trim();
@@ -2217,86 +2300,255 @@ async function handleTimeSubmit(event) {
     }
 
     btn.disabled = true;
-    btn.innerHTML = "<span>⏳</span> Homologando y Enviando Registro...";
+    btn.innerHTML = "<span>⏳</span> Homologando y Registrando en Base de Datos...";
     status.style.color = "var(--nfs-orange)";
-    status.innerText = "Validación aprobada. Procesando envío a la red oficial...";
+    status.innerText = "Telemetría aprobada. Conectando con Firebase Realtime Database y Google Sheets...";
 
-    const gasPayload = {
+    // Determinar tipo de ruta y clave de categoría en Firebase
+    const routes = typeof routesData !== 'undefined' ? routesData : [];
+    const matchedRoute = routes.find(r => r.name.toLowerCase() === route.toLowerCase());
+    const isCircuit = matchedRoute ? matchedRoute.type === 'Circuito' : true;
+
+    let categoryKey = 'junkman_single';
+    if (isCircuit) {
+        if (category === 'BMW M3 GTR') {
+            categoryKey = (lapType === 'Fast Lap') ? 'bmw_fast' : 'bmw_single';
+        } else {
+            categoryKey = (lapType === 'Fast Lap') ? 'junkman_fast' : 'junkman_single';
+        }
+    } else {
+        categoryKey = (category === 'BMW M3 GTR') ? 'bmw' : 'junkman';
+    }
+
+    const routeKey = sanitizeFirebaseKey(route);
+    const submissionId = "SUB-" + Date.now();
+    const currentDateStr = new Date().toISOString().split('T')[0];
+
+    const submissionPayload = {
+        id: submissionId,
+        timestamp: new Date().toISOString(),
+        date: currentDateStr,
         driver: driver,
         car: car,
         route: route,
+        category: category,
+        lapType: lapType,
+        categoryKey: categoryKey,
         mode: mode,
-        declaredTime: formatMsToTime(declaredMs),
-        videoUrl: video,
+        time: formatMsToTime(declaredMs),
+        timeMs: declaredMs,
         startMark: formatMsToTime(startMs),
         endMark: formatMsToTime(endMs),
+        diff: formatMsToTime(diffMs),
+        videoUrl: video,
         gearbox: gearbox,
-        device: device
+        device: device,
+        status: "HOMOLOGADO_OFICIAL"
     };
 
-    const discordPayload = {
-        embeds: [{
-            title: "🏎️ ¡NUEVO TIEMPO HOMOLOGADO!",
-            color: 16742144, // #ff7700
-            description: `**Verificación de Telemetría:** Tiempo declarado validado exitosamente contra las marcas de video.`,
-            fields: [
-                { name: "👤 Piloto", value: driver, inline: true },
-                { name: "🚗 Auto", value: car, inline: true },
-                { name: "🏁 Pista", value: route, inline: true },
-                { name: "🌐 Modalidad", value: mode, inline: true },
-                { name: "⏱️ Tiempo Declarado", value: formatMsToTime(declaredMs), inline: true },
-                { name: "📐 Marcas Video", value: `${formatMsToTime(startMs)} → ${formatMsToTime(endMs)} (Δ: ${formatMsToTime(diffMs)})`, inline: true },
-                { name: "⚙️ Transmisión", value: gearbox, inline: true },
-                { name: "🎮 Control", value: device, inline: true },
-                { name: "🎬 Video YouTube", value: `[Ver en YouTube](${video})`, inline: false }
-            ],
-            footer: { text: "NFS Most Wanted Official Leaderboards • Homologación de Telemetría" },
-            timestamp: new Date().toISOString()
-        }]
-    };
+    let assignedRankStr = "#1";
 
     try {
-        const dispatchTasks = [];
+        // =========================================================================
+        // 1. ESCRITURA DIRECTA A FIREBASE RTDB: /submissions/<submissionId> (AUDITORÍA)
+        // =========================================================================
+        if (FIREBASE_RTDB_BASE_URL) {
+            try {
+                await fetch(`${FIREBASE_RTDB_BASE_URL}/submissions/${submissionId}.json`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(submissionPayload)
+                });
+                console.info("Firebase: Registro de telemetría guardado en /submissions");
+            } catch (fbSubErr) {
+                console.warn("Aviso guardando en /submissions de Firebase:", fbSubErr);
+            }
 
-        // 1. Envío al conector de Google Apps Script (Google Sheets & Firebase)
+            // =========================================================================
+            // 2. ACTUALIZACIÓN DIRECTA EN LEADERBOARD: /leaderboards/<routeKey>/<categoryKey>
+            // =========================================================================
+            try {
+                const lbEndpoint = `${FIREBASE_RTDB_BASE_URL}/leaderboards/${routeKey}/${categoryKey}.json`;
+                let existingRecords = [];
+                const lbRes = await fetch(lbEndpoint);
+                if (lbRes.ok) {
+                    const lbData = await lbRes.json();
+                    if (Array.isArray(lbData)) {
+                        existingRecords = lbData.filter(Boolean);
+                    } else if (lbData && typeof lbData === 'object') {
+                        existingRecords = Object.values(lbData).filter(Boolean);
+                    }
+                }
+
+                const newLbRecord = {
+                    rank: "#--",
+                    driver: driver,
+                    time: formatMsToTime(declaredMs),
+                    car: car,
+                    device: device,
+                    gearbox: gearbox,
+                    date: currentDateStr,
+                    yt: video,
+                    submissionId: submissionId
+                };
+
+                // Comprobar si el piloto ya tenía un tiempo en esta categoría
+                const existingIdx = existingRecords.findIndex(r =>
+                    r && r.driver && r.driver.trim().toLowerCase() === driver.toLowerCase()
+                );
+
+                if (existingIdx !== -1) {
+                    const prevMs = parseTimeToMs(existingRecords[existingIdx].time);
+                    if (prevMs === null || declaredMs < prevMs) {
+                        existingRecords[existingIdx] = newLbRecord;
+                    }
+                } else {
+                    existingRecords.push(newLbRecord);
+                }
+
+                // Ordenar por tiempo ascendente (más rápido primero)
+                existingRecords.sort((a, b) => {
+                    const msA = parseTimeToMs(a.time);
+                    const msB = parseTimeToMs(b.time);
+                    if (msA !== null && msB !== null && msA !== msB) return msA - msB;
+                    if (msA !== null && msB === null) return -1;
+                    if (msA === null && msB !== null) return 1;
+                    return (a.driver || '').localeCompare(b.driver || '');
+                });
+
+                // Asignar nuevas posiciones #1, #2, #3...
+                existingRecords = existingRecords.map((item, idx) => ({
+                    ...item,
+                    rank: `#${idx + 1}`
+                }));
+
+                const myRec = existingRecords.find(r => r.submissionId === submissionId || (r.driver && r.driver.trim().toLowerCase() === driver.toLowerCase()));
+                if (myRec && myRec.rank) {
+                    assignedRankStr = myRec.rank;
+                }
+
+                // Guardar la tabla actualizada en Firebase
+                await fetch(lbEndpoint, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(existingRecords)
+                });
+                console.info(`Firebase: Leaderboard actualizado en /leaderboards/${routeKey}/${categoryKey} con ${existingRecords.length} filas.`);
+            } catch (fbLbErr) {
+                console.warn("Aviso actualizando /leaderboards en Firebase:", fbLbErr);
+            }
+        }
+
+        // =========================================================================
+        // 3. INVALIDAR CACHÉS LOCALES PARA ACTUALIZACIÓN INMEDIATA
+        // =========================================================================
+        if (typeof memoryCache !== 'undefined') {
+            Object.keys(memoryCache).forEach(k => {
+                if (k.includes(routeKey) || k.includes('podiums') || k.includes('hall_of_fame') || k.includes('cache_v6')) {
+                    delete memoryCache[k];
+                }
+            });
+        }
+        try {
+            Object.keys(localStorage).forEach(k => {
+                if (k.startsWith('compiled_podiums_') || k.startsWith('compiled_hall_of_fame_') || k.startsWith('nfs_cache_')) {
+                    localStorage.removeItem(k);
+                }
+            });
+
+            // Guardar en historial local de envíos del usuario
+            const localSubs = JSON.parse(localStorage.getItem('nfs_local_submissions') || '[]');
+            localSubs.unshift(submissionPayload);
+            localStorage.setItem('nfs_local_submissions', JSON.stringify(localSubs.slice(0, 50)));
+        } catch (e) {
+            console.warn("Error invalidando caché de localStorage:", e);
+        }
+
+        // =========================================================================
+        // 4. DESPACHO ASÍNCRONO A GOOGLE APPS SCRIPT (GOOGLE SHEETS)
+        // =========================================================================
         if (typeof GOOGLE_APPS_SCRIPT_WEBAPP_URL !== 'undefined' &&
             GOOGLE_APPS_SCRIPT_WEBAPP_URL &&
             GOOGLE_APPS_SCRIPT_WEBAPP_URL !== "URL_DE_TU_GOOGLE_APPS_SCRIPT_WEBAPP_AQUI") {
-            dispatchTasks.push(
-                fetch(GOOGLE_APPS_SCRIPT_WEBAPP_URL, {
-                    method: 'POST',
-                    mode: 'no-cors', // Permite envío cross-origin a Google Apps Script Web App
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(gasPayload)
-                }).then(() => {
-                    console.info("Registro despachado a Google Apps Script Connector.");
-                }).catch(err => {
-                    console.warn("Aviso al enviar a Google Apps Script:", err);
+            fetch(GOOGLE_APPS_SCRIPT_WEBAPP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({
+                    ...submissionPayload,
+                    assignedRank: assignedRankStr
                 })
-            );
+            }).then(() => {
+                console.info("Registro despachado a Google Apps Script Connector.");
+            }).catch(err => {
+                console.warn("Aviso al enviar a Google Apps Script:", err);
+            });
         }
 
-        // 2. Envío al Webhook de Discord
+        // =========================================================================
+        // 5. DESPACHO AL WEBHOOK DE DISCORD
+        // =========================================================================
         if (typeof DISCORD_WEBHOOK_URL !== 'undefined' &&
             DISCORD_WEBHOOK_URL &&
             DISCORD_WEBHOOK_URL !== "URL_DE_TU_WEBHOOK_DE_DISCORD_AQUI") {
-            dispatchTasks.push(
-                fetch(DISCORD_WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(discordPayload)
-                }).catch(err => {
-                    console.warn("Aviso al enviar a Discord Webhook:", err);
-                })
-            );
+            const discordPayload = {
+                embeds: [{
+                    title: `🏎️ ¡NUEVO RÉCORD HOMOLOGADO [${assignedRankStr}]!`,
+                    color: 16742144, // #ff7700
+                    description: `**Verificación de Telemetría:** Tiempo validado y registrado automáticamente en Firebase Realtime Database.`,
+                    fields: [
+                        { name: "👤 Piloto", value: driver, inline: true },
+                        { name: "🚗 Auto", value: car, inline: true },
+                        { name: "🏁 Pista", value: `${route} (${isCircuit ? lapType : 'Sprint/Drag'})`, inline: true },
+                        { name: "🏆 Categoría", value: category, inline: true },
+                        { name: "⏱️ Tiempo Homologado", value: formatMsToTime(declaredMs), inline: true },
+                        { name: "📊 Posición Asignada", value: assignedRankStr, inline: true },
+                        { name: "📐 Marcas Video", value: `${formatMsToTime(startMs)} → ${formatMsToTime(endMs)} (Δ: ${formatMsToTime(diffMs)})`, inline: true },
+                        { name: "⚙️ Transmisión", value: gearbox, inline: true },
+                        { name: "🎮 Control", value: device, inline: true },
+                        { name: "🎬 Video YouTube", value: `[Ver en YouTube](${video})`, inline: false }
+                    ],
+                    footer: { text: "NFS Most Wanted Official Leaderboards • Homologación de Telemetría" },
+                    timestamp: new Date().toISOString()
+                }]
+            };
+
+            fetch(DISCORD_WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(discordPayload)
+            }).catch(err => console.warn("Aviso al enviar a Discord Webhook:", err));
         }
 
-        if (dispatchTasks.length > 0) {
-            await Promise.allSettled(dispatchTasks);
-        }
-
+        // =========================================================================
+        // 6. RETROALIMENTACIÓN VISUAL COMPLETA CON BOTÓN INTERACTIVO
+        // =========================================================================
         status.style.color = "var(--green-neon)";
-        status.innerHTML = `✅ <strong>¡REGISTRO VALIDADO Y ENVIADO CON ÉXITO!</strong><br>El tiempo declarado (<code>${formatMsToTime(declaredMs)}</code>) coincide exactamente con la diferencia de marcas (<code>${formatMsToTime(diffMs)}</code>). El registro ha sido enviado a la hoja de telemetría de Google Sheets y a la cola de homologación para Firebase Realtime Database.`;
+        status.innerHTML = `
+            <div style="background: rgba(0, 255, 136, 0.08); border: 1px solid var(--green-neon); border-radius: 10px; padding: 18px 22px; text-align: left; margin-top: 15px; box-shadow: 0 4px 20px rgba(0, 255, 136, 0.15);">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                    <span style="font-size: 22px;">✅</span>
+                    <strong style="font-size: 16px; color: #ffffff; font-family: var(--font-racing); text-transform: uppercase; letter-spacing: 0.5px;">
+                        ¡TIEMPO HOMOLOGADO Y REGISTRADO CON ÉXITO!
+                    </strong>
+                </div>
+                <p style="color: #cbd5e1; font-size: 13px; line-height: 1.5; margin: 0 0 12px 0;">
+                    El tiempo declarado (<code>${formatMsToTime(declaredMs)}</code>) coincide con la diferencia de marcas de video (Δ: <code>${formatMsToTime(diffMs)}</code>). El registro se guardó en <strong>Firebase Realtime Database</strong> y en la cola de <strong>Google Sheets</strong>.
+                </p>
+                <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; padding: 6px 14px; margin-bottom: 14px;">
+                    <span style="color: var(--nfs-orange); font-size: 15px;">🏁</span>
+                    <span style="color: #ffffff; font-size: 12.5px; font-weight: 700; font-family: var(--font-racing);">
+                        Posición Oficial Asignada: <span style="color: var(--green-neon); font-size: 14px;">${assignedRankStr}</span> en ${route} (${category} ${isCircuit ? '• ' + lapType : ''})
+                    </span>
+                </div>
+                <div>
+                    <button type="button" class="btn-explored" onclick="goToRouteLeaderboardAfterSubmit('${route.replace(/'/g, "\\'")}', '${categoryKey}')" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; font-size: 12px; font-weight: 800;">
+                        🏎️ Ver mi tiempo en el Leaderboard Oficial →
+                    </button>
+                </div>
+            </div>
+        `;
+
         document.getElementById('form-submit-time').reset();
         validateTimeMarksLive();
     } catch (error) {

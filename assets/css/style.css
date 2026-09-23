@@ -1856,8 +1856,8 @@ h2.section-title span.glow {
 
 /* Acentos de categoría coherentes con Leaderboards */
 .route-card.type-circuito::before {
-    background: #cbd5e1;
-    box-shadow: 0 0 8px rgba(226, 232, 240, 0.4);
+    background: linear-gradient(180deg, #ffd700 0%, #ff7700 100%);
+    box-shadow: 0 0 10px rgba(255, 183, 0, 0.55);
 }
 
 .route-card.type-sprint::before {
@@ -1875,8 +1875,8 @@ h2.section-title span.glow {
 }
 
 .route-card.type-circuito:hover {
-    border-color: #cbd5e1;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 12px rgba(226, 232, 240, 0.2);
+    border-color: #ffd700;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(255, 183, 0, 0.35);
 }
 
 .route-card.type-drag:hover {
@@ -1909,9 +1909,9 @@ h2.section-title span.glow {
 }
 
 .type-circuito .route-icon-box {
-    color: #f8fafc;
-    border-color: rgba(226, 232, 240, 0.18);
-    background: rgba(255, 255, 255, 0.05);
+    color: #ffd700;
+    border-color: rgba(255, 215, 0, 0.35);
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.12), rgba(255, 119, 0, 0.08));
 }
 
 .type-drag .route-icon-box {
@@ -1924,9 +1924,9 @@ h2.section-title span.glow {
 }
 
 .route-card.type-circuito:hover .route-icon-box {
-    border-color: #cbd5e1;
-    background: rgba(226, 232, 240, 0.14);
-    box-shadow: 0 0 10px rgba(226, 232, 240, 0.3);
+    border-color: #ffd700;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 119, 0, 0.2));
+    box-shadow: 0 0 12px rgba(255, 183, 0, 0.45);
 }
 
 .route-card.type-drag:hover .route-icon-box {
@@ -1949,10 +1949,10 @@ h2.section-title span.glow {
 }
 
 .route-badge-letter.badge-circuito {
-    background: rgba(226, 232, 240, 0.18);
-    color: #f8fafc;
-    border-color: rgba(226, 232, 240, 0.45);
-    box-shadow: 0 0 6px rgba(226, 232, 240, 0.25);
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.22), rgba(255, 119, 0, 0.2));
+    color: #ffd700;
+    border-color: rgba(255, 215, 0, 0.45);
+    box-shadow: 0 0 8px rgba(255, 183, 0, 0.3);
 }
 
 .route-badge-letter.badge-sprint {
@@ -1993,8 +1993,8 @@ h2.section-title span.glow {
 }
 
 .route-card.type-circuito:hover .route-info h3 {
-    color: #ffffff;
-    text-shadow: 0 0 8px rgba(226, 232, 240, 0.5);
+    color: #fffbeb;
+    text-shadow: 0 0 10px rgba(255, 183, 0, 0.6);
 }
 
 .route-record-preview {
@@ -2041,9 +2041,9 @@ h2.section-title span.glow {
 }
 
 .type-circuito .route-action-icon {
-    background: rgba(226, 232, 240, 0.1);
-    border-color: rgba(226, 232, 240, 0.3);
-    color: #f8fafc;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.12), rgba(255, 119, 0, 0.1));
+    border-color: rgba(255, 215, 0, 0.35);
+    color: #ffd700;
 }
 
 .type-drag .route-action-icon {
@@ -2061,10 +2061,10 @@ h2.section-title span.glow {
 }
 
 .route-card.type-circuito:hover .route-action-icon {
-    background: #e2e8f0;
+    background: linear-gradient(135deg, #ffd700, #ff7700);
     color: #000000;
-    border-color: #ffffff;
-    box-shadow: 0 0 14px rgba(226, 232, 240, 0.6);
+    border-color: #ffd700;
+    box-shadow: 0 0 14px rgba(255, 183, 0, 0.7);
 }
 
 .route-card.type-drag:hover .route-action-icon {
@@ -5607,7 +5607,7 @@ footer strong {
     color: var(--text-muted);
 }
 
-.card-circuito .cat-badge { color: #eab308; background: rgba(234, 179, 8, 0.12); }
+.card-circuito .cat-badge { color: #ffd700; background: linear-gradient(135deg, rgba(255, 215, 0, 0.18), rgba(255, 119, 0, 0.15)); border: 1px solid rgba(255, 215, 0, 0.4); }
 .card-sprint .cat-badge { color: var(--nfs-orange); background: rgba(244, 81, 30, 0.12); }
 .card-drag .cat-badge { color: #ef4444; background: rgba(239, 68, 68, 0.12); }
 
@@ -8994,3 +8994,728 @@ table td[class*="rank-"],
 #bl-detail-ride {
     font-weight: 700 !important;
 }
+
+/* ==========================================================================
+   10. VIDEO FLASH COMERCIAL // PROMO WEB NFSRANKS.ONLINE
+   ========================================================================== */
+.promo-video-flash {
+    width: 100%;
+    margin: 20px 0 28px 0;
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+
+.promo-video-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 24px;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(18, 22, 34, 0.95), rgba(10, 12, 18, 0.98));
+    border: 1px solid rgba(244, 81, 30, 0.3);
+    border-radius: 14px;
+    padding: 24px;
+    overflow: hidden;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 24px rgba(244, 81, 30, 0.12);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.promo-video-card:hover {
+    border-color: rgba(244, 81, 30, 0.55);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.75), 0 0 32px rgba(244, 81, 30, 0.2);
+}
+
+.promo-video-glow {
+    position: absolute;
+    top: -80px;
+    right: -80px;
+    width: 240px;
+    height: 240px;
+    background: radial-gradient(circle, rgba(244, 81, 30, 0.18), transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.promo-video-media {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    border-radius: 10px;
+    overflow: hidden;
+    background: #000;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+    z-index: 1;
+}
+
+.promo-video-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.promo-video-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.promo-video-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(244, 81, 30, 0.15);
+    border: 1px solid rgba(244, 81, 30, 0.4);
+    color: var(--nfs-orange);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-family: var(--font-racing), 'Rajdhani', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    width: fit-content;
+    text-transform: uppercase;
+}
+
+.promo-video-title {
+    font-family: var(--font-racing), 'Rajdhani', sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    line-height: 1.25;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    margin: 0;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.promo-video-desc {
+    font-family: var(--font-ui), 'Inter', sans-serif;
+    font-size: 13px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.75);
+    margin: 0;
+}
+
+.promo-video-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+@media (max-width: 960px) {
+    .promo-video-card {
+        grid-template-columns: 1fr;
+        padding: 18px;
+        gap: 18px;
+    }
+    .promo-video-title {
+        font-size: 18px;
+    }
+}
+
+/* ==========================================================================
+   11. BANNER COMERCIAL BLACKLIST 2026
+   ========================================================================== */
+.blacklist-promo-commercial-card {
+    position: relative;
+    background: linear-gradient(135deg, rgba(20, 15, 25, 0.95), rgba(12, 12, 16, 0.98));
+    border: 1px solid rgba(168, 85, 247, 0.35);
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin-bottom: 24px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(168, 85, 247, 0.12);
+}
+
+.bl-promo-glow {
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.2), transparent 70%);
+    pointer-events: none;
+}
+
+.bl-promo-content {
+    position: relative;
+    z-index: 1;
+}
+
+.bl-promo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(168, 85, 247, 0.15);
+    border: 1px solid rgba(168, 85, 247, 0.4);
+    color: #c084fc;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-family: var(--font-racing), 'Rajdhani', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.bl-promo-title {
+    font-family: var(--font-racing), 'Rajdhani', sans-serif;
+    font-size: 20px;
+    font-weight: 900;
+    color: #ffffff;
+    letter-spacing: 1px;
+    margin: 0 0 8px 0;
+}
+
+.bl-promo-desc {
+    font-family: var(--font-ui), 'Inter', sans-serif;
+    font-size: 13px;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.75);
+    margin: 0 0 16px 0;
+    max-width: 850px;
+}
+
+.bl-promo-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* ==========================================================================
+   12. SECCIÓN TUTORIAL DEL TORNEO // GUÍA PASO A PASO
+   ========================================================================== */
+.tutorial-video-card {
+    background: rgba(15, 18, 26, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 30px;
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 24px;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.tutorial-video-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 */
+    border-radius: 10px;
+    overflow: hidden;
+    background: #000;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tutorial-video-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.tutorial-video-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.tutorial-video-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-racing), 'Rajdhani', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    color: var(--cyan-electric);
+    background: rgba(0, 229, 255, 0.1);
+    border: 1px solid rgba(0, 229, 255, 0.3);
+    padding: 4px 10px;
+    border-radius: 4px;
+    width: fit-content;
+}
+
+.tutorial-video-headline {
+    font-family: var(--font-racing), 'Rajdhani', sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: #ffffff;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.tutorial-video-text {
+    font-family: var(--font-ui), 'Inter', sans-serif;
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.75);
+    margin: 0;
+}
+
+.tutorial-stepper-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 36px;
+}
+
+.tutorial-step-card {
+    background: rgba(18, 22, 32, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.tutorial-step-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(244, 81, 30, 0.4);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6), 0 0 20px rgba(244, 81, 30, 0.12);
+}
+
+.step-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.step-badge {
+    font-family: var(--font-racing), 'Rajdhani', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: var(--nfs-orange);
+    background: rgba(244, 81, 30, 0.12);
+    border: 1px solid rgba(244, 81, 30, 0.3);
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.step-icon {
+    font-size: 20px;
+}
+
+.step-title {
+    font-family: var(--font-racing), 'Rajdhani', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0 0 10px 0;
+    line-height: 1.35;
+}
+
+.step-desc {
+    font-family: var(--font-ui), 'Inter', sans-serif;
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0 0 14px 0;
+}
+
+.step-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 18px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-grow: 1;
+}
+
+.step-list li {
+    position: relative;
+    padding-left: 16px;
+    font-family: var(--font-ui), 'Inter', sans-serif;
+    font-size: 11.5px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.step-list li::before {
+    content: '•';
+    position: absolute;
+    left: 4px;
+    color: var(--nfs-orange);
+    font-weight: bold;
+}
+
+.step-action {
+    margin-top: auto;
+}
+
+.step-action .btn-explored {
+    width: 100%;
+    justify-content: center;
+    font-size: 11.5px;
+    padding: 8px 12px;
+}
+
+@media (max-width: 1080px) {
+    .tutorial-stepper-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .tutorial-video-card {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .tutorial-stepper-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================================================
+   13. FOOTER MODERNO // ESTILO NFSREADERS.WORLD (POWERED BY + NAVIGATION)
+   ========================================================================== */
+.site-footer {
+    background: linear-gradient(180deg, #0a0d14 0%, #06080d 100%);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 48px 24px 20px 24px;
+    color: #ffffff;
+    box-sizing: border-box;
+    width: 100%;
+    margin-top: 40px;
+    text-align: left;
+}
+
+/* SECCIÓN POWERED BY */
+.powered-by-section {
+    max-width: 1200px;
+    margin: 0 auto 42px auto;
+    text-align: left;
+}
+
+.powered-by-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.powered-by-title {
+    font-family: var(--font-racing), 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    color: #ffffff;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.powered-by-subtitle {
+    font-family: var(--font-ui), 'Inter', sans-serif;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: 0;
+    letter-spacing: 0.3px;
+}
+
+.powered-by-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.powered-by-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+    padding: 22px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    cursor: pointer;
+}
+
+.powered-by-card:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.045);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.powered-by-icon-box {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    color: #ffffff;
+    transition: transform 0.25s ease;
+}
+
+.powered-by-card:hover .powered-by-icon-box {
+    transform: scale(1.08);
+}
+
+.powered-by-name {
+    font-family: var(--font-racing), 'Rajdhani', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #ffffff;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+}
+
+.powered-by-role {
+    font-family: var(--font-ui), 'Inter', sans-serif;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* GRID PRINCIPAL DE NAVEGACIÓN (BRAND + PLAY + EXPLORE + COMMUNITY) */
+.footer-main-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1fr;
+    gap: 36px;
+    padding-top: 10px;
+    align-items: start;
+    text-align: left;
+}
+
+.footer-brand-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.footer-brand-logo {
+    font-family: var(--font-racing), 'Rajdhani', sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    text-align: left;
+}
+
+.footer-brand-logo .logo-accent {
+    color: var(--nfs-orange);
+}
+
+.footer-brand-logo .logo-tld {
+    color: var(--cyan-electric);
+    font-size: 15px;
+}
+
+.footer-brand-desc {
+    font-family: var(--font-ui), 'Inter', sans-serif;
+    font-size: 12.5px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    margin: 12px 0 18px 0;
+    max-width: 320px;
+    text-align: left;
+}
+
+.footer-social-links {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-social-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.footer-social-btn:hover {
+    color: #ffffff;
+    background: rgba(244, 81, 30, 0.12);
+    border-color: var(--nfs-orange);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(244, 81, 30, 0.2);
+}
+
+.footer-nav-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.footer-col-title {
+    font-family: var(--font-racing), 'Rajdhani', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #ffffff;
+    margin: 0 0 16px 0;
+    text-transform: uppercase;
+    position: relative;
+    padding-bottom: 6px;
+    text-align: left;
+}
+
+.footer-col-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 24px;
+    height: 2px;
+    background: var(--nfs-orange);
+    border-radius: 1px;
+}
+
+.footer-nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    text-align: left;
+}
+
+.footer-nav-list li {
+    text-align: left;
+}
+
+.footer-nav-list li a {
+    font-family: var(--font-ui), 'Inter', sans-serif;
+    font-size: 12.5px;
+    color: rgba(255, 255, 255, 0.65);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s ease, transform 0.2s ease;
+    text-align: left;
+}
+
+.footer-nav-list li a:hover {
+    color: var(--nfs-orange);
+    transform: translateX(3px);
+}
+
+.footer-nav-list .col-arrow {
+    color: var(--nfs-orange);
+    font-size: 14px;
+    font-weight: bold;
+    opacity: 0.7;
+    transition: transform 0.2s ease;
+}
+
+.footer-nav-list li a:hover .col-arrow {
+    opacity: 1;
+    transform: translateX(2px);
+}
+
+/* COPYRIGHT Y DISCLAIMER */
+.footer-bottom-bar {
+    max-width: 1200px;
+    margin: 40px auto 0 auto;
+    padding-top: 22px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    text-align: left;
+}
+
+.footer-bottom-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    text-align: left;
+}
+
+.footer-copy {
+    font-family: var(--font-ui), 'Inter', sans-serif;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0;
+    text-align: left;
+}
+
+.footer-copy strong {
+    color: #ffffff !important;
+}
+
+.footer-disclaimer {
+    font-family: var(--font-ui), 'Inter', sans-serif;
+    font-size: 10px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.35);
+    margin: 0;
+    text-align: left;
+}
+
+/* RESPONSIVE FOOTER */
+@media (max-width: 960px) {
+    .powered-by-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .footer-main-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 28px;
+    }
+    .footer-brand-col {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 540px) {
+    .powered-by-header {
+        flex-direction: column;
+        gap: 4px;
+    }
+    .powered-by-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    .powered-by-card {
+        padding: 16px 10px;
+    }
+    .powered-by-icon-box {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 8px;
+    }
+    .footer-main-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+}
+

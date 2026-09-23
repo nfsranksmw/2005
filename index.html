@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -183,6 +183,13 @@
                                 d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
                         </svg>
                         <span data-i18n="nav_championship_register">Inscríbete al Torneo</span>
+                    </a>
+                    <a href="#" onclick="switchView('tutorial'); closeAllDropdowns();" id="nav-tutorial">
+                        <svg class="nav-icon-svg" viewBox="0 0 24 24">
+                            <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z" />
+                        </svg>
+                        <span data-i18n="nav_tutorial">Tutorial del Torneo</span>
                     </a>
                     <a href="#" onclick="switchView('past-tournaments'); closeAllDropdowns();"
                         id="nav-past-tournaments">
@@ -502,6 +509,46 @@
                 </div>
             </div>
 
+            <!-- VIDEO FLASH COMERCIAL // PROMO WEB NFSRANKS.ONLINE -->
+            <div class="promo-video-flash">
+                <div class="promo-video-card">
+                    <div class="promo-video-glow"></div>
+                    <div class="promo-video-media">
+                        <iframe class="promo-video-iframe"
+                            src="https://www.youtube.com/embed/JdkZaxGD4tY?rel=0&modestbranding=1"
+                            title="Trailer Oficial NFSRANKS.ONLINE - Need for Speed Most Wanted (2005)"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                    </div>
+                    <div class="promo-video-content">
+                        <div class="promo-video-badge">
+                            <span>🔥</span> <span data-i18n="promo_trailer_badge">OFFICIAL TRAILER // ROCKPORT ESPORTS
+                                2026</span>
+                        </div>
+                        <h2 class="promo-video-title" data-i18n="promo_trailer_title">REVIVE LA LEYENDA. CONVIÉRTETE EN
+                            EL #1 DE LA BLACKLIST.</h2>
+                        <p class="promo-video-desc" data-i18n="promo_trailer_desc">
+                            Need for Speed: Most Wanted (2005) llevado al siguiente nivel competitivo. Telemetría en
+                            tiempo real, récords mundiales homologados en YouTube, base de datos en Firebase y el torneo
+                            más exigente de la historia de Rockport.
+                        </p>
+                        <div class="promo-video-actions">
+                            <button type="button" class="btn-explored" onclick="switchView('tutorial')">
+                                <span>📖</span> <span data-i18n="promo_btn_tutorial">Ver Torneo & Tutorial</span>
+                            </button>
+                            <button type="button" class="btn-explored btn-secondary-tracker"
+                                onclick="switchView('championship-register')">
+                                <span>🏎️</span> <span data-i18n="promo_btn_register">Inscríbete Ahora</span>
+                            </button>
+                            <button type="button" class="btn-explored btn-secondary-tracker"
+                                onclick="switchView('routes')">
+                                <span>⚡</span> <span data-i18n="promo_btn_leaderboard">Ver Leaderboards</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- PORTAL DASHBOARD CON MÓDULOS LATERALES (ESPORTS HUB) -->
             <div class="home-portal-wrapper">
                 <div class="home-portal-grid">
@@ -590,6 +637,45 @@
                             </div>
                         </div>
 
+                        <!-- VIDEO FLASH COMERCIAL PROMO NFSRANKS.ONLINE -->
+                        <div class="promo-video-flash">
+                            <div class="promo-video-card">
+                                <div class="promo-video-media">
+                                    <iframe class="promo-video-iframe"
+                                        src="https://www.youtube.com/embed/JdkZaxGD4tY?rel=0&modestbranding=1"
+                                        title="Tráiler Oficial Comercial NFSRANKS.ONLINE - Need for Speed Most Wanted 2005"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowfullscreen></iframe>
+                                </div>
+                                <div class="promo-video-content">
+                                    <div class="promo-video-badge">
+                                        <span>🔥</span> TRÁILER OFICIAL // PROMO COMERCIAL
+                                    </div>
+                                    <h3 class="promo-video-title">
+                                        LA RED DEFINITIVA DE TELEMETRÍA Y RÉCORDS MUNDIALES
+                                    </h3>
+                                    <p class="promo-video-desc">
+                                        Revive la adrenalina pura de Rockport City con el legendario BMW M3 GTR. Récords
+                                        mundiales homologados milimétricamente con marcas de video de YouTube, torneos
+                                        semanales en vivo y la lucha definitiva por el trono de la Blacklist 2026.
+                                    </p>
+                                    <div class="promo-video-actions">
+                                        <button type="button" class="btn-explored" onclick="switchView('routes')">
+                                            <span>🏁</span> Explorar Leaderboards Oficiales
+                                        </button>
+                                        <button type="button" class="btn-explored btn-secondary-tracker"
+                                            onclick="switchView('championship-register')">
+                                            <span>🏆</span> Inscribirme al Torneo 2026
+                                        </button>
+                                        <button type="button" class="btn-explored btn-secondary-tracker"
+                                            onclick="switchView('tutorial')">
+                                            <span>📖</span> Ver Tutorial Paso a Paso
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- MODOS DE COMPETICIÓN (CIRCUITO, SPRINT, DRAG) -->
                         <div class="home-categories-grid">
                             <div class="home-category-card card-circuito" onclick="setCategoryAndGo('Circuito')">
@@ -597,7 +683,7 @@
                                     <span class="cat-icon">
                                         <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
                                             stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                                            stroke-linejoin="round" style="color: var(--nfs-orange);">
+                                            stroke-linejoin="round" style="color: #ffd700;">
                                             <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.23-5.23"></path>
                                         </svg>
                                     </span>
@@ -939,7 +1025,8 @@
                         <span class="title-main">LEADERBOARDS</span>
                         <span class="title-accent">// SECTORES DE CARRERA</span>
                     </h2>
-                    <p class="tracker-header-desc">Registro global de tiempos y telemetría por circuitos, sprints y drags oficiales.</p>
+                    <p class="tracker-header-desc">Registro global de tiempos y telemetría por circuitos, sprints y
+                        drags oficiales.</p>
                 </div>
             </div>
 
@@ -994,7 +1081,7 @@
                     <button class="filter-btn" onclick="setCategory('Circuito', this)">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
                             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
-                            style="vertical-align: middle; margin-right: 6px; color: #f8fafc;">
+                            style="vertical-align: middle; margin-right: 6px; color: #ffd700;">
                             <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.23-5.23"></path>
                         </svg> <span data-i18n="filter_circuits">Circuits</span>
                     </button>
@@ -1023,7 +1110,8 @@
             <div class="tracker-section-header">
                 <div class="tracker-header-badge">
                     <svg viewBox="0 0 24 24">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" />
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" />
                     </svg>
                 </div>
                 <div class="tracker-header-content">
@@ -1032,10 +1120,12 @@
                         <span class="title-main">LEADERBOARD:</span>
                         <span class="title-accent">RUTA</span>
                     </h2>
-                    <p class="tracker-header-desc">Registro detallado de tiempos, pilotos y telemetría para este sector.</p>
+                    <p class="tracker-header-desc">Registro detallado de tiempos, pilotos y telemetría para este sector.
+                    </p>
                 </div>
                 <div class="tracker-header-actions">
-                    <button class="filter-btn" onclick="switchView('routes')" data-i18n="btn_back_to_routes">← Volver al Índice de Rutas</button>
+                    <button class="filter-btn" onclick="switchView('routes')" data-i18n="btn_back_to_routes">← Volver al
+                        Índice de Rutas</button>
                 </div>
             </div>
 
@@ -1337,7 +1427,8 @@
             <div class="tracker-section-header">
                 <div class="tracker-header-badge">
                     <svg viewBox="0 0 24 24">
-                        <path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0 0 11 15.9V19H7v2h10v-2h-4v-3.1c1.94-.38 3.51-1.74 3.61-3.96 2.47-.31 4.39-2.39 4.39-4.94V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/>
+                        <path
+                            d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0 0 11 15.9V19H7v2h10v-2h-4v-3.1c1.94-.38 3.51-1.74 3.61-3.96 2.47-.31 4.39-2.39 4.39-4.94V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z" />
                     </svg>
                 </div>
                 <div class="tracker-header-content">
@@ -1346,7 +1437,8 @@
                         <span class="title-main">DESAFÍOS</span>
                         <span class="title-accent">// SEMANALES</span>
                     </h2>
-                    <p class="tracker-header-desc">Completa los retos semanales en las rutas oficiales de Rockport City, supera el crono objetivo y reclama tu recompensa de la comunidad.</p>
+                    <p class="tracker-header-desc">Completa los retos semanales en las rutas oficiales de Rockport City,
+                        supera el crono objetivo y reclama tu recompensa de la comunidad.</p>
                 </div>
             </div>
 
@@ -1433,7 +1525,8 @@
             <div class="tracker-section-header">
                 <div class="tracker-header-badge">
                     <svg viewBox="0 0 24 24">
-                        <path d="M12 2C6.48 2 2 6.48 2 12c0 2.85 1.2 5.41 3.11 7.24.24.23.55.36.89.36h1.2v-2.2c0-.44.36-.8.8-.8s.8.36.8.8v2.2h6v-2.2c0-.44.36-.8.8-.8s.8.36.8.8v2.2h1.2c.34 0 .65-.13.89-.36C20.8 17.41 22 14.85 22 12c0-5.52-4.48-10-10-10zm-3 10.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm6 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12c0 2.85 1.2 5.41 3.11 7.24.24.23.55.36.89.36h1.2v-2.2c0-.44.36-.8.8-.8s.8.36.8.8v2.2h6v-2.2c0-.44.36-.8.8-.8s.8.36.8.8v2.2h1.2c.34 0 .65-.13.89-.36C20.8 17.41 22 14.85 22 12c0-5.52-4.48-10-10-10zm-3 10.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm6 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
                     </svg>
                 </div>
                 <div class="tracker-header-content">
@@ -1442,7 +1535,36 @@
                         <span class="title-main">BLACKLIST EVENT</span>
                         <span class="title-accent">// RANKS 2026</span>
                     </h2>
-                    <p class="tracker-header-desc">Campeonato Oficial de 4 Semanas: 15 Pilotos, 8 Desafíos por semana y rotación en 5 grupos. Los mejores tiempos otorgan bonos de puntos y reputación ($ REP).</p>
+                    <p class="tracker-header-desc">Campeonato Oficial de 4 Semanas: 15 Pilotos, 8 Desafíos por semana y
+                        rotación en 5 grupos. Los mejores tiempos otorgan bonos de puntos y reputación ($ REP).</p>
+                </div>
+            </div>
+
+            <!-- BANNER COMERCIAL PROMOCIONAL BLACKLIST 2026 -->
+            <div class="blacklist-promo-commercial-card">
+                <div class="bl-promo-glow"></div>
+                <div class="bl-promo-content">
+                    <div class="bl-promo-badge">
+                        <span>⚡</span> CAMPEONATO OFICIAL • ROCKPORT BLACKLIST 2026
+                    </div>
+                    <h3 class="bl-promo-title">15 RIVALES // 4 SEMANAS // $23.5M REP EN PREMIOS</h3>
+                    <p class="bl-promo-desc">
+                        Cuatro semanas de clasificación al límite: Circuitos Urbanos, Sprints Costeros a máxima
+                        velocidad, Speed Traps de aceleración Drag y la Gran Final 1v1 contra el jefe #1 Razor.
+                    </p>
+                    <div class="bl-promo-actions">
+                        <button type="button" class="btn-explored" onclick="switchView('championship-register')">
+                            <span>🏎️</span> Inscribirme a la Blacklist 2026
+                        </button>
+                        <button type="button" class="btn-explored btn-secondary-tracker"
+                            onclick="switchView('tutorial')">
+                            <span>📖</span> Cómo Funciona el Torneo (Tutorial Paso a Paso)
+                        </button>
+                        <button type="button" class="btn-explored btn-secondary-tracker"
+                            onclick="switchView('championship-standings')">
+                            <span>📊</span> Ver Clasificación General
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -1572,7 +1694,8 @@
             <div class="tracker-section-header">
                 <div class="tracker-header-badge">
                     <svg viewBox="0 0 24 24">
-                        <path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0 0 11 15.9V19H7v2h10v-2h-4v-3.1c1.94-.38 3.51-1.74 3.61-3.96 2.47-.31 4.39-2.39 4.39-4.94V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/>
+                        <path
+                            d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0 0 11 15.9V19H7v2h10v-2h-4v-3.1c1.94-.38 3.51-1.74 3.61-3.96 2.47-.31 4.39-2.39 4.39-4.94V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z" />
                     </svg>
                 </div>
                 <div class="tracker-header-content">
@@ -1581,7 +1704,8 @@
                         <span class="title-main">CLASIFICACIÓN</span>
                         <span class="title-accent">// BLACKLIST 2026 STANDINGS</span>
                     </h2>
-                    <p class="tracker-header-desc">Tabla acumulada de pilotos clasificados por puntuación total, podios de carrera, bonos por tiempos y reputación ($ REP).</p>
+                    <p class="tracker-header-desc">Tabla acumulada de pilotos clasificados por puntuación total, podios
+                        de carrera, bonos por tiempos y reputación ($ REP).</p>
                 </div>
             </div>
 
@@ -1696,7 +1820,8 @@
             <div class="tracker-section-header">
                 <div class="tracker-header-badge">
                     <svg viewBox="0 0 24 24">
-                        <path d="M12 2C6.48 2 2 6.48 2 12c0 2.85 1.2 5.41 3.11 7.24.24.23.55.36.89.36h1.2v-2.2c0-.44.36-.8.8-.8s.8.36.8.8v2.2h6v-2.2c0-.44.36-.8.8-.8s.8.36.8.8v2.2h1.2c.34 0 .65-.13.89-.36C20.8 17.41 22 14.85 22 12c0-5.52-4.48-10-10-10zm-3 10.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm6 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12c0 2.85 1.2 5.41 3.11 7.24.24.23.55.36.89.36h1.2v-2.2c0-.44.36-.8.8-.8s.8.36.8.8v2.2h6v-2.2c0-.44.36-.8.8-.8s.8.36.8.8v2.2h1.2c.34 0 .65-.13.89-.36C20.8 17.41 22 14.85 22 12c0-5.52-4.48-10-10-10zm-3 10.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm6 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
                     </svg>
                 </div>
                 <div class="tracker-header-content">
@@ -1705,7 +1830,8 @@
                         <span class="title-main">FICHAS TÉCNICAS</span>
                         <span class="title-accent" id="bl-cards-title-glow">// BLACKLIST OFICIAL</span>
                     </h2>
-                    <p class="tracker-header-desc">Expedientes técnicos y tácticos oficiales de los corredores de Rockport City, clasificados en orden riguroso con vehículos, estadísticas y reputación.</p>
+                    <p class="tracker-header-desc">Expedientes técnicos y tácticos oficiales de los corredores de
+                        Rockport City, clasificados en orden riguroso con vehículos, estadísticas y reputación.</p>
                 </div>
             </div>
 
@@ -1747,7 +1873,8 @@
             <div class="tracker-section-header">
                 <div class="tracker-header-badge">
                     <svg viewBox="0 0 24 24">
-                        <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                        <path
+                            d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
                     </svg>
                 </div>
                 <div class="tracker-header-content">
@@ -1756,7 +1883,8 @@
                         <span class="title-main">INSCRIPCIÓN AL TORNEO</span>
                         <span class="title-accent">// BLACKLIST EVENT 2026</span>
                     </h2>
-                    <p class="tracker-header-desc">Únete a la parrilla oficial del Campeonato Blacklist 2026 de Rockport City. Regístrate con tu vehículo y disponibilidad horaria para asegurar tu plaza oficial.</p>
+                    <p class="tracker-header-desc">Únete a la parrilla oficial del Campeonato Blacklist 2026 de Rockport
+                        City. Regístrate con tu vehículo y disponibilidad horaria para asegurar tu plaza oficial.</p>
                 </div>
             </div>
 
@@ -1937,7 +2065,8 @@
             <div class="tracker-section-header">
                 <div class="tracker-header-badge">
                     <svg viewBox="0 0 24 24">
-                        <path d="M4 10v7h3v-7H4zm6 0v7h3v-7h-3zM2 22h19v-3H2v3zm14-12v7h3v-7h-3zm-4.5-9L2 6v2h19V6l-9.5-5z"/>
+                        <path
+                            d="M4 10v7h3v-7H4zm6 0v7h3v-7h-3zM2 22h19v-3H2v3zm14-12v7h3v-7h-3zm-4.5-9L2 6v2h19V6l-9.5-5z" />
                     </svg>
                 </div>
                 <div class="tracker-header-content">
@@ -1946,7 +2075,8 @@
                         <span class="title-main">SALÓN HISTÓRICO</span>
                         <span class="title-accent">// EVENTOS PASADOS NFSRANKSMW</span>
                     </h2>
-                    <p class="tracker-header-desc">Registro oficial de competiciones históricas: llaves de enfrentamientos, marcadores verificados y campeones coronados.</p>
+                    <p class="tracker-header-desc">Registro oficial de competiciones históricas: llaves de
+                        enfrentamientos, marcadores verificados y campeones coronados.</p>
                 </div>
             </div>
 
@@ -2064,7 +2194,8 @@
             <div class="tracker-section-header">
                 <div class="tracker-header-badge">
                     <svg viewBox="0 0 24 24">
-                        <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .55-.45 1-1 1H6c-.55 0-1-.45-1-1v-1h14v1z"/>
+                        <path
+                            d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .55-.45 1-1 1H6c-.55 0-1-.45-1-1v-1h14v1z" />
                     </svg>
                 </div>
                 <div class="tracker-header-content">
@@ -2073,7 +2204,8 @@
                         <span class="title-main">SALÓN DE LA FAMA</span>
                         <span class="title-accent">// LEYENDAS DE ROCKPORT</span>
                     </h2>
-                    <p class="tracker-header-desc">Cuadro de honor de los pilotos con mayor cantidad de récords mundiales y victorias en la historia de la comunidad.</p>
+                    <p class="tracker-header-desc">Cuadro de honor de los pilotos con mayor cantidad de récords
+                        mundiales y victorias en la historia de la comunidad.</p>
                 </div>
             </div>
 
@@ -2106,7 +2238,8 @@
             <div class="tracker-section-header">
                 <div class="tracker-header-badge">
                     <svg viewBox="0 0 24 24">
-                        <path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0 0 11 15.9V19H7v2h10v-2h-4v-3.1c1.94-.38 3.51-1.74 3.61-3.96 2.47-.31 4.39-2.39 4.39-4.94V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/>
+                        <path
+                            d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0 0 11 15.9V19H7v2h10v-2h-4v-3.1c1.94-.38 3.51-1.74 3.61-3.96 2.47-.31 4.39-2.39 4.39-4.94V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z" />
                     </svg>
                 </div>
                 <div class="tracker-header-content">
@@ -2115,7 +2248,8 @@
                         <span class="title-main">TOP GLOBAL</span>
                         <span class="title-accent">// PODIOS TOTALES</span>
                     </h2>
-                    <p class="tracker-header-desc">Clasificación acumulada de pilotos basada en el total de 1°, 2° y 3° puestos obtenidos en todas las rutas oficiales.</p>
+                    <p class="tracker-header-desc">Clasificación acumulada de pilotos basada en el total de 1°, 2° y 3°
+                        puestos obtenidos en todas las rutas oficiales.</p>
                 </div>
             </div>
 
@@ -2149,7 +2283,7 @@
             <div class="tracker-section-header">
                 <div class="tracker-header-badge">
                     <svg viewBox="0 0 24 24">
-                        <path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/>
+                        <path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z" />
                     </svg>
                 </div>
                 <div class="tracker-header-content">
@@ -2158,7 +2292,8 @@
                         <span class="title-main">CLASIFICACIÓN</span>
                         <span class="title-accent">// POR CATEGORÍAS</span>
                     </h2>
-                    <p class="tracker-header-desc">Desglose de pilotos líderes segmentados por modalidad: Circuitos de resistencia, Sprints de velocidad punta y Drags.</p>
+                    <p class="tracker-header-desc">Desglose de pilotos líderes segmentados por modalidad: Circuitos de
+                        resistencia, Sprints de velocidad punta y Drags.</p>
                 </div>
             </div>
 
@@ -2264,7 +2399,8 @@
             <div class="tracker-section-header">
                 <div class="tracker-header-badge">
                     <svg viewBox="0 0 24 24">
-                        <path d="m22.7 19-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+                        <path
+                            d="m22.7 19-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z" />
                     </svg>
                 </div>
                 <div class="tracker-header-content">
@@ -2273,7 +2409,8 @@
                         <span class="title-main" data-i18n="guides_title">Guías de Rendimiento</span>
                         <span class="title-accent" data-i18n="guides_glow">// Tuning de Competición</span>
                     </h2>
-                    <p class="tracker-header-desc" data-i18n="guides_subtitle">Setups de telemetría, sliders de ajuste y consejos de conducción para los 10 modelos de autos oficiales de Rockport City.</p>
+                    <p class="tracker-header-desc" data-i18n="guides_subtitle">Setups de telemetría, sliders de ajuste y
+                        consejos de conducción para los 10 modelos de autos oficiales de Rockport City.</p>
                 </div>
             </div>
 
@@ -2322,7 +2459,8 @@
             <div class="tracker-section-header">
                 <div class="tracker-header-badge">
                     <svg viewBox="0 0 24 24">
-                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                        <path
+                            d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
                     </svg>
                 </div>
                 <div class="tracker-header-content">
@@ -2331,7 +2469,8 @@
                         <span class="title-main" data-i18n="rules_title">Normativa Oficial</span>
                         <span class="title-accent" data-i18n="rules_glow">// Código Deportivo & Verificación</span>
                     </h2>
-                    <p class="tracker-header-desc" data-i18n="rules_subtitle">Reglamento oficial y obligatorio para la homologación de récords mundiales y participación en torneos de NFSRANKSMW.</p>
+                    <p class="tracker-header-desc" data-i18n="rules_subtitle">Reglamento oficial y obligatorio para la
+                        homologación de récords mundiales y participación en torneos de NFSRANKSMW.</p>
                 </div>
             </div>
 
@@ -2555,12 +2694,158 @@
             </div>
         </section>
 
+        <!-- SECCIÓN: TUTORIAL Y CÓMO PARTICIPAR EN EL TORNEO PASO A PASO -->
+        <section id="view-tutorial" class="view-section">
+            <div class="tracker-section-header">
+                <div class="tracker-header-badge">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z" />
+                    </svg>
+                </div>
+                <div class="tracker-header-content">
+                    <div class="tracker-header-sup">ESPORTS GUIDE // GUÍA PASO A PASO</div>
+                    <h2 class="tracker-header-title">
+                        <span class="title-main">TUTORIAL OFICIAL</span>
+                        <span class="title-accent">// CÓMO PARTICIPAR EN EL TORNEO 2026</span>
+                    </h2>
+                    <p class="tracker-header-desc">
+                        Aprende paso a paso cómo registrarte, competir en las 4 semanas de desafíos oficiales, grabar tu
+                        telemetría en YouTube y homologar tus tiempos en la red oficial de Rockport City.
+                    </p>
+                </div>
+            </div>
+
+            <!-- MÓDULO DE VIDEO TUTORIAL (ADAPTABLE PARA IA / YOUTUBE) -->
+            <div class="tutorial-video-card">
+                <div class="tutorial-video-wrapper">
+                    <iframe class="tutorial-video-frame"
+                        src="https://www.youtube.com/embed/JdkZaxGD4tY?rel=0&modestbranding=1"
+                        title="Video Tutorial Oficial - Torneo NFSRANKS 2026"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen></iframe>
+                </div>
+                <div class="tutorial-video-info">
+                    <div class="tutorial-video-tag">
+                        <span>🎬</span> VIDEO GUÍA OFICIAL • REGLAMENTO & PROCEDIMIENTO TELEMÉTRICO
+                    </div>
+                    <h3 class="tutorial-video-headline">Procedimiento Oficial de Competición y Homologación</h3>
+                    <p class="tutorial-video-text">
+                        En este video explicativo se detallan los requisitos de grabación sin cortes, las pautas de
+                        telemetría de salida y meta, y el sistema de adjudicación de puntos en tiempo real sincronizado
+                        con Firebase Realtime Database y Google Sheets.
+                    </p>
+                </div>
+            </div>
+
+            <!-- STEPPER DE 4 PASOS DETALLADOS -->
+            <div class="tutorial-stepper-grid">
+                <!-- Paso 1 -->
+                <div class="tutorial-step-card">
+                    <div class="step-card-header">
+                        <span class="step-badge">PASO 01</span>
+                        <span class="step-icon">👤</span>
+                    </div>
+                    <h3 class="step-title">Inscripción y Asignación de Operador</h3>
+                    <p class="step-desc">
+                        Accede a la sección de <strong>Inscripción al Torneo</strong>. Rellena tu Nombre/Nick de piloto,
+                        tu usuario de Discord, tu vehículo preferido y modalidad de carrera.
+                    </p>
+                    <ul class="step-list">
+                        <li>Asignación automática de un <strong>icono SVG de Operador único</strong> para tu perfil.
+                        </li>
+                        <li>Entrada inmediata en la parrilla oficial y sincronización con Discord.</li>
+                    </ul>
+                    <div class="step-action">
+                        <button type="button" class="btn-explored" onclick="switchView('championship-register')">Ir a
+                            Inscripciones →</button>
+                    </div>
+                </div>
+
+                <!-- Paso 2 -->
+                <div class="tutorial-step-card">
+                    <div class="step-card-header">
+                        <span class="step-badge">PASO 02</span>
+                        <span class="step-icon">🏎️</span>
+                    </div>
+                    <h3 class="step-title">Formato de las 4 Semanas</h3>
+                    <p class="step-desc">
+                        El campeonato se divide en cuatro semanas con diferentes pruebas y rotación de vehículos:
+                    </p>
+                    <ul class="step-list">
+                        <li><strong>Semana 1 (Circuito):</strong> Trazados urbanos con mejoras Junkman y NOS (+100 PTS).
+                        </li>
+                        <li><strong>Semana 2 (Sprint):</strong> Pruebas punto a punto con el BMW M3 GTR oficial (+100
+                            PTS).</li>
+                        <li><strong>Semana 3 (Drag):</strong> Aceleración pura y cambios manuales al milisegundo (+100
+                            PTS).</li>
+                        <li><strong>Semana 4 (Gran Final):</strong> Duelos directos 1v1 por el trono de la Blacklist.
+                        </li>
+                    </ul>
+                    <div class="step-action">
+                        <button type="button" class="btn-explored" onclick="switchView('challenges')">Ver Desafíos
+                            Semanales →</button>
+                    </div>
+                </div>
+
+                <!-- Paso 3 -->
+                <div class="tutorial-step-card">
+                    <div class="step-card-header">
+                        <span class="step-badge">PASO 03</span>
+                        <span class="step-icon">⏱️</span>
+                    </div>
+                    <h3 class="step-title">Grabación y Homologación Telemática</h3>
+                    <p class="step-desc">
+                        Sube tu video de la carrera a YouTube y envíalo mediante el formulario oficial:
+                    </p>
+                    <ul class="step-list">
+                        <li><strong>Video íntegro:</strong> Sin cortes ni ediciones entre el inicio y el cruce de meta.
+                        </li>
+                        <li><strong>Marcas de tiempo:</strong> Minuto y segundo de salida (luz verde) y de fin (meta).
+                        </li>
+                        <li><strong>Tolerancia de 50ms:</strong> El tiempo declarado debe coincidir con la diferencia
+                            calculada.</li>
+                        <li><strong>Actualización automática:</strong> Tu tiempo se guarda al instante en Firebase RTDB.
+                        </li>
+                    </ul>
+                    <div class="step-action">
+                        <button type="button" class="btn-explored" onclick="switchView('submit')">Ir a Enviar Tiempo
+                            →</button>
+                    </div>
+                </div>
+
+                <!-- Paso 4 -->
+                <div class="tutorial-step-card">
+                    <div class="step-card-header">
+                        <span class="step-badge">PASO 04</span>
+                        <span class="step-icon">👑</span>
+                    </div>
+                    <h3 class="step-title">Puntuación y Bolsa de $23.5M REP</h3>
+                    <p class="step-desc">
+                        Compite por los máximos honores, puntos de campeonato y recompensas de reputación:
+                    </p>
+                    <ul class="step-list">
+                        <li><strong>Puntos por puesto:</strong> P1 (100 PTS), P2 (75 PTS), P3 (50 PTS) y escalonado.
+                        </li>
+                        <li><strong>Bonos especiales:</strong> Récords mundiales otorgan reputación ($ REP) extra.</li>
+                        <li><strong>Salón de la Fama:</strong> Los 3 mejores pilotos quedarán inmortalizados para
+                            siempre.</li>
+                    </ul>
+                    <div class="step-action">
+                        <button type="button" class="btn-explored" onclick="switchView('championship-standings')">Ver
+                            Clasificación General →</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- SECCIÓN: EXPEDIENTE OFICIAL DE PILOTO -->
         <section id="view-driverprofile" class="view-section">
             <div class="tracker-section-header">
                 <div class="tracker-header-badge">
                     <svg viewBox="0 0 24 24">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        <path
+                            d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
                     </svg>
                 </div>
                 <div class="tracker-header-content">
@@ -2569,7 +2854,8 @@
                         <span class="title-main">EXPEDIENTE DE PILOTO</span>
                         <span class="title-accent">// TELEMETRÍA INDIVIDUAL</span>
                     </h2>
-                    <p class="tracker-header-desc">Historial completo de tiempos, podios, rutas dominadas y telemetría de rendimiento por corredor.</p>
+                    <p class="tracker-header-desc">Historial completo de tiempos, podios, rutas dominadas y telemetría
+                        de rendimiento por corredor.</p>
                 </div>
             </div>
             <div id="search-driver-wrapper"></div>
@@ -2580,7 +2866,8 @@
             <div class="tracker-section-header">
                 <div class="tracker-header-badge">
                     <svg viewBox="0 0 24 24">
-                        <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/>
+                        <path
+                            d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z" />
                     </svg>
                 </div>
                 <div class="tracker-header-content">
@@ -2589,7 +2876,8 @@
                         <span class="title-main" data-i18n="submit_title">REGISTRO OFICIAL DE TIEMPO</span>
                         <span class="title-accent">// VIDEO VERIFICADO</span>
                     </h2>
-                    <p class="tracker-header-desc" data-i18n="submit_subtitle">Envía tu tiempo con la evidencia en video de YouTube para su homologación en el Leaderboard Oficial de Rockport City.</p>
+                    <p class="tracker-header-desc" data-i18n="submit_subtitle">Envía tu tiempo con la evidencia en video
+                        de YouTube para su homologación en el Leaderboard Oficial de Rockport City.</p>
                 </div>
             </div>
 
@@ -2628,7 +2916,8 @@
                             <label class="form-label" for="sub-route" data-i18n="submit_track">🏁 Pista /
                                 Trazado</label>
                             <input type="text" id="sub-route" list="list-nfs-routes" class="form-control" required
-                                placeholder="Ej: City Perimeter">
+                                placeholder="Ej: City Perimeter" oninput="handleCategoryOrRouteChange()"
+                                onchange="handleCategoryOrRouteChange()">
                             <datalist id="list-nfs-routes">
                                 <option value="City Perimeter">
                                 <option value="Camden & Dunwich">
@@ -2650,7 +2939,8 @@
                         <div class="form-group">
                             <label class="form-label" for="sub-car" data-i18n="submit_car">🚗 Auto Utilizado</label>
                             <input type="text" id="sub-car" list="list-nfs-cars" class="form-control" required
-                                placeholder="Ej: BMW M3 GTR">
+                                placeholder="Ej: BMW M3 GTR" oninput="handleCategoryOrRouteChange()"
+                                onchange="handleCategoryOrRouteChange()">
                             <datalist id="list-nfs-cars">
                                 <option value="BMW M3 GTR">
                                 <option value="Porsche Carrera GT">
@@ -2665,6 +2955,30 @@
                                 <option value="Toyota Supra">
                                 <option value="Mercedes-Benz SLR McLaren">
                             </datalist>
+                        </div>
+                    </div>
+
+                    <!-- FILA 2.5: CATEGORÍA Y TIPO DE VUELTA -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="sub-category" data-i18n="submit_category">🏆 Categoría
+                                Oficial</label>
+                            <select id="sub-category" class="form-control" onchange="handleCategoryOrRouteChange()">
+                                <option value="Junkman">Junkman (All Upgrades / Autos de Calle)</option>
+                                <option value="BMW M3 GTR">BMW M3 GTR (Competición Oficial)</option>
+                            </select>
+                            <span class="field-hint">Selecciona la división técnica correspondiente al vehículo
+                                utilizado.</span>
+                        </div>
+                        <div class="form-group" id="group-sub-lap-type">
+                            <label class="form-label" for="sub-lap-type" data-i18n="submit_lap_type">⏱️ Tipo de Vuelta
+                                (Circuitos)</label>
+                            <select id="sub-lap-type" class="form-control">
+                                <option value="Single Lap">Vuelta Única (Single Lap - 1 Vuelta)</option>
+                                <option value="Fast Lap">Vuelta Rápida (Fast Lap - Vuelta Récord)</option>
+                            </select>
+                            <span class="field-hint">Aplica a carreras de circuito (en Sprint o Drag se registra el
+                                tiempo total).</span>
                         </div>
                     </div>
 
@@ -2806,16 +3120,20 @@
                 <div class="tracker-section-header" style="margin-bottom: 25px;">
                     <div class="tracker-header-badge">
                         <svg viewBox="0 0 24 24">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14.5c-2.49 0-4.5-2.01-4.5-4.5S9.51 7.5 12 7.5s4.5 2.01 4.5 4.5-2.01 4.5-4.5 4.5zm0-5.5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1z"/>
+                            <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14.5c-2.49 0-4.5-2.01-4.5-4.5S9.51 7.5 12 7.5s4.5 2.01 4.5 4.5-2.01 4.5-4.5 4.5zm0-5.5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1z" />
                         </svg>
                     </div>
                     <div class="tracker-header-content">
-                        <div class="tracker-header-sup" data-i18n="dl_title">💾 ARCHIVO OFICIAL DE INSTALACIÓN // PC DVD EDITION</div>
+                        <div class="tracker-header-sup" data-i18n="dl_title">💾 ARCHIVO OFICIAL DE INSTALACIÓN // PC DVD
+                            EDITION</div>
                         <h1 class="tracker-header-title">
                             <span class="title-main">NEED FOR SPEED: MOST WANTED</span>
                             <span class="title-accent">// (2005) PC EDITION</span>
                         </h1>
-                        <p class="tracker-header-desc" data-i18n="dl_desc">Descarga directa oficial de la versión completa para PC en formato imagen ISO. Incluye el Patch Oficial v1.3 y Crack No-CD preconfigurado por ZimanX.</p>
+                        <p class="tracker-header-desc" data-i18n="dl_desc">Descarga directa oficial de la versión
+                            completa para PC en formato imagen ISO. Incluye el Patch Oficial v1.3 y Crack No-CD
+                            preconfigurado por ZimanX.</p>
                     </div>
                 </div>
 
@@ -3080,16 +3398,20 @@
                     <div class="tracker-section-header" style="margin-bottom: 20px;">
                         <div class="tracker-header-badge">
                             <svg viewBox="0 0 24 24">
-                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                                <path
+                                    d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
                             </svg>
                         </div>
                         <div class="tracker-header-content">
-                            <div class="tracker-header-sup" data-i18n="map_tag">📡 TELEMETRÍA SATELITAL // ROCKPORT CITY GPS</div>
+                            <div class="tracker-header-sup" data-i18n="map_tag">📡 TELEMETRÍA SATELITAL // ROCKPORT CITY
+                                GPS</div>
                             <h1 class="tracker-header-title">
                                 <span class="title-main" data-i18n="map_title">ROCKPORT MAP LIVE</span>
                                 <span class="title-accent">// GPS VIRTUAL</span>
                             </h1>
-                            <p class="tracker-header-desc" data-i18n="map_subtitle">Mapa geográfico oficial en alta resolución de Rockport City (2005). Explora la topografía, los distritos, accesos bloqueados y trazados de persecución policial.</p>
+                            <p class="tracker-header-desc" data-i18n="map_subtitle">Mapa geográfico oficial en alta
+                                resolución de Rockport City (2005). Explora la topografía, los distritos, accesos
+                                bloqueados y trazados de persecución policial.</p>
                         </div>
                     </div>
 
@@ -3351,7 +3673,8 @@
             <div class="tracker-section-header">
                 <div class="tracker-header-badge">
                     <svg viewBox="0 0 24 24">
-                        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                        <path
+                            d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
                     </svg>
                 </div>
                 <div class="tracker-header-content">
@@ -3360,7 +3683,9 @@
                         <span class="title-main" data-i18n="members_title">Miembros Oficiales</span>
                         <span class="title-accent" data-i18n="members_glow">// Comunidad Discord</span>
                     </h2>
-                    <p class="tracker-header-desc" data-i18n="members_desc">Directorio oficial de los miembros y pilotos de la comunidad de Discord de NFSRANKSMW, organizados por sus roles y rangos competitivos en Rockport City.</p>
+                    <p class="tracker-header-desc" data-i18n="members_desc">Directorio oficial de los miembros y pilotos
+                        de la comunidad de Discord de NFSRANKSMW, organizados por sus roles y rangos competitivos en
+                        Rockport City.</p>
                 </div>
             </div>
 
@@ -3492,19 +3817,182 @@
         </section>
     </main>
 
-    <!-- FOOTER ESTILO FÓRMULA 1 -->
-    <footer>
-        <div class="footer-content">
-            <p style="margin: 0;">
-                <strong style="color: #ffffff;">Need for Speed: Most Wanted (2005)</strong> — <span
-                    data-i18n="footer_sub">Still racing after dark.</span>
-                <br>
-                <strong data-i18n="footer_rights">©NFSRANKSMW 2026 Todos los derechos reservados.</strong>
-                <br>
-                <span style="font-size: 9.7px; opacity: 0.6; display: inline-block; margin-top: 6px;"
-                    data-i18n="footer_disclaimer">Not affiliated with Electronic Arts or the Need for Speed™ brand. All
-                    trademarks belong to their respective owners.</span>
-            </p>
+    <!-- FOOTER MODERNO ESTILO NFSREADERS.WORLD // POWERED BY + PLAY/EXPLORE/COMMUNITY -->
+    <footer class="site-footer">
+        <!-- SECCIÓN 1: POWERED BY (COLABORADORES Y SERVICIOS CORE) -->
+        <div class="powered-by-section">
+            <div class="powered-by-header">
+                <h3 class="powered-by-title" data-i18n="footer_powered_by">POWERED BY</h3>
+                <p class="powered-by-subtitle" data-i18n="footer_powered_sub">Infrastructure and services behind
+                    nfsmwranks.online</p>
+            </div>
+            <div class="powered-by-grid">
+                <!-- 1. GITHUB.IO -->
+                <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="powered-by-card"
+                    title="GitHub Pages / GitHub.io">
+                    <div class="powered-by-icon-box">
+                        <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+                            <path
+                                d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z" />
+                        </svg>
+                    </div>
+                    <span class="powered-by-name">GITHUB.IO</span>
+                    <span class="powered-by-role">Pages & CDN</span>
+                </a>
+
+                <!-- 2. FIREBASE -->
+                <a href="https://firebase.google.com" target="_blank" rel="noopener noreferrer" class="powered-by-card"
+                    title="Google Firebase Realtime Database">
+                    <div class="powered-by-icon-box">
+                        <svg viewBox="0 0 24 24" width="36" height="36" fill="#FFA611">
+                            <path
+                                d="M4.686 19.336L8.03 3.013a.62.62 0 0 1 1.157-.107l2.84 5.378-7.34 11.052zm14.628-4.542l-1.954-12.06a.623.623 0 0 0-1.127-.249L3.483 19.336l8.528 4.792a1.986 1.986 0 0 0 1.958 0l8.345-4.792-3-4.542zm-6.17-5.07L10.5 5.25a.62.62 0 0 0-1.108-.069L2.83 17.848l10.314-8.124z"
+                                fill="#FFA000" />
+                            <path d="M12.011 9.724L10.5 5.25a.62.62 0 0 0-1.108-.069L2.83 17.848l9.181-8.124z"
+                                fill="#F57C00" />
+                            <path d="M13.144 9.724l-1.133.001 7.303 9.611 1.972-4.542-8.142-5.07z" fill="#FFCA28" />
+                        </svg>
+                    </div>
+                    <span class="powered-by-name">FIREBASE</span>
+                    <span class="powered-by-role">Realtime DB</span>
+                </a>
+
+                <!-- 3. SPACESHIP -->
+                <a href="https://www.spaceship.com" target="_blank" rel="noopener noreferrer" class="powered-by-card"
+                    title="Spaceship Domains & Cloud DNS">
+                    <div class="powered-by-icon-box">
+                        <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+                            <path
+                                d="M13.13 2.05a1.2 1.2 0 0 0-1.13.01L4.2 6.64a1.2 1.2 0 0 0-.6.98v8.76c0 .41.22.8.6.98l7.8 4.58c.36.21.8.21 1.16 0l7.8-4.58c.38-.22.6-.61.6-1.02V7.62c0-.41-.22-.8-.6-.98l-7.8-4.59h-.03zm-.63 2.15 6.7 3.94-6.7 3.94-6.7-3.94 6.7-3.94zm-7.7 5.75 6.7 3.94v7.7l-6.7-3.94V9.95zm15.4 0v7.7l-6.7 3.94v-7.7l6.7-3.94z" />
+                        </svg>
+                    </div>
+                    <span class="powered-by-name">SPACESHIP</span>
+                    <span class="powered-by-role">Domain & DNS</span>
+                </a>
+
+                <!-- 4. DISCORD -->
+                <a href="https://discord.gg/pgP45wSN8K" target="_blank" rel="noopener noreferrer"
+                    class="powered-by-card" title="Discord Official Community">
+                    <div class="powered-by-icon-box">
+                        <svg viewBox="0 0 24 24" width="36" height="36" fill="#5865F2">
+                            <path
+                                d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
+                        </svg>
+                    </div>
+                    <span class="powered-by-name">DISCORD</span>
+                    <span class="powered-by-role">Community Hub</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 2: GRID PRINCIPAL DE NAVEGACIÓN (BRAND + PLAY + EXPLORE + COMMUNITY) -->
+        <div class="footer-main-grid">
+            <!-- COLUMNA BRANDING -->
+            <div class="footer-brand-col">
+                <div class="footer-brand-logo">
+                    <span class="logo-accent">NFSMW</span>RANKS<span class="logo-tld">.ONLINE</span>
+                </div>
+                <p class="footer-brand-desc" data-i18n="footer_brand_desc">
+                    Need for Speed: Most Wanted (2005) — Rockport World Records, Telemetry Verification & Esports Hub.
+                    Still racing after dark.
+                </p>
+                <div class="footer-social-links">
+                    <a href="https://discord.gg/pgP45wSN8K" target="_blank" rel="noopener noreferrer"
+                        class="footer-social-btn" title="Discord Community">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                            <path
+                                d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
+                        </svg>
+                    </a>
+                    <a href="https://www.youtube.com/watch?v=JdkZaxGD4tY" target="_blank" rel="noopener noreferrer"
+                        class="footer-social-btn" title="YouTube Trailer">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                            <path
+                                d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                        </svg>
+                    </a>
+                    <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="footer-social-btn"
+                        title="GitHub Repository">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                            <path
+                                d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z" />
+                        </svg>
+                    </a>
+                    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="footer-social-btn"
+                        title="Twitter / X">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                            <path
+                                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- COLUMNA PLAY -->
+            <div class="footer-nav-col">
+                <h4 class="footer-col-title" data-i18n="footer_col_play">PLAY</h4>
+                <ul class="footer-nav-list">
+                    <li><a href="#" onclick="switchView('download')"><span class="col-arrow">›</span> <span
+                                data-i18n="nav_dropdown_download">Descargar Most Wanted (2005)</span></a></li>
+                    <li><a href="#" onclick="switchView('routes')"><span class="col-arrow">›</span> <span
+                                data-i18n="footer_link_leaderboards">Leaderboards & Récords</span></a></li>
+                    <li><a href="#" onclick="switchView('blacklist')"><span class="col-arrow">›</span> <span
+                                data-i18n="footer_link_blacklist">Reto Blacklist 2026</span></a></li>
+                    <li><a href="#" onclick="switchView('submit')"><span class="col-arrow">›</span> <span
+                                data-i18n="nav_submit_time">Enviar Tiempo Telemetría</span></a></li>
+                    <li><a href="#" onclick="switchView('championship-register')"><span class="col-arrow">›</span> <span
+                                data-i18n="nav_championship_register">Inscripción al Torneo</span></a></li>
+                </ul>
+            </div>
+
+            <!-- COLUMNA EXPLORE -->
+            <div class="footer-nav-col">
+                <h4 class="footer-col-title" data-i18n="footer_col_explore">EXPLORE</h4>
+                <ul class="footer-nav-list">
+                    <li><a href="#" onclick="switchView('globaldrivers')"><span class="col-arrow">›</span> <span
+                                data-i18n="nav_top_drivers">Top Corredores Globales</span></a></li>
+                    <li><a href="#" onclick="switchView('blacklist-cards')"><span class="col-arrow">›</span> <span
+                                data-i18n="nav_blacklist_cards">Fichas Técnicas & Liveries</span></a></li>
+                    <li><a href="#" onclick="switchView('guides')"><span class="col-arrow">›</span> <span
+                                data-i18n="nav_guides">Guías de Rendimiento & Tuning</span></a></li>
+                    <li><a href="#" onclick="switchView('tutorial')"><span class="col-arrow">›</span> <span
+                                data-i18n="nav_tutorial">Tutorial Oficial del Torneo</span></a></li>
+                    <li><a href="#" onclick="switchView('past-tournaments')"><span class="col-arrow">›</span> <span
+                                data-i18n="nav_past_tournaments">Torneos Anteriores (Challonge)</span></a></li>
+                </ul>
+            </div>
+
+            <!-- COLUMNA COMMUNITY -->
+            <div class="footer-nav-col">
+                <h4 class="footer-col-title" data-i18n="footer_col_community">COMMUNITY</h4>
+                <ul class="footer-nav-list">
+                    <li><a href="https://discord.gg/pgP45wSN8K" target="_blank" rel="noopener noreferrer"><span
+                                class="col-arrow">›</span> <span data-i18n="footer_link_discord">Servidor Oficial
+                                Discord</span></a></li>
+                    <li><a href="#" onclick="switchView('members')"><span class="col-arrow">›</span> <span
+                                data-i18n="nav_dropdown_members">Miembros Oficiales</span></a></li>
+                    <li><a href="#" onclick="switchView('rules')"><span class="col-arrow">›</span> <span
+                                data-i18n="nav_rules">Reglas & Normativo Oficial</span></a></li>
+                    <li><a href="#" onclick="switchView('map')"><span class="col-arrow">›</span> <span
+                                data-i18n="nav_dropdown_map">Mapa Rockport en Vivo</span></a></li>
+                    <li><a href="#" onclick="switchView('halloffame')"><span class="col-arrow">›</span> <span
+                                data-i18n="nav_halloffame">Salón de la Fama</span></a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 3: COPYRIGHT Y DISCLAIMER -->
+        <div class="footer-bottom-bar">
+            <div class="footer-bottom-content">
+                <p class="footer-copy">
+                    <strong style="color: #ffffff;">NFSMWRANKS.ONLINE</strong> — <span data-i18n="footer_rights">© 2026
+                        Todos los derechos reservados.</span>
+                </p>
+                <p class="footer-disclaimer" data-i18n="footer_disclaimer">
+                    Not affiliated with Electronic Arts or the Need for Speed™ brand. All trademarks belong to their
+                    respective owners. Powered by GitHub.io, Firebase, Spaceship & Discord.
+                </p>
+            </div>
         </div>
     </footer>
 

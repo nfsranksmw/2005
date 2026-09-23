@@ -51,11 +51,11 @@ function getSpreadsheet() {
       return SpreadsheetApp.openById(id);
     } catch (e) {
       Logger.log("Error abriendo hoja por ID: " + e);
-      throw new Error("No se pudo abrir la hoja con el ID especificado en CONFIG.SPREADSHEET_ID (" + CONFIG.SPREADSHEET_ID + "). Verifica que el ID sea correcto y que tengas permisos.");
+      return null;
     }
   }
 
-  throw new Error("No se encontró el archivo de Google Sheets. Asegúrate de: 1) Abrir Apps Script desde 'Extensiones > Apps Script' dentro de tu hoja de cálculo, O 2) Colocar el ID o URL de tu hoja de cálculo en CONFIG.SPREADSHEET_ID.");
+  return null;
 }
 
 // ==============================================================================================
@@ -198,55 +198,66 @@ function doPost(e) {
       }, 422);
     }
 
-    // 4. Guardar en Google Sheets (Hoja de Envíos Pendientes)
-    const ss = getSpreadsheet();
-    let sheet = ss.getSheetByName(CONFIG.SHEET_SUBMISSIONS_NAME);
-    if (!sheet) {
-      sheet = inicializarHojaEnvios(ss);
-    }
-
-    const submissionId = "SUB-" + Date.now();
+    // 4. Guardar en Google Sheets (Hoja de Envíos Pendientes) si la hoja está disponible
+    const submissionId = String(payload.submissionId || ("SUB-" + Date.now()));
     const now = new Date();
     const formattedDate = Utilities.formatDate(now, Session.getScriptTimeZone() || "GMT-4", "yyyy-MM-dd HH:mm:ss");
 
-    sheet.appendRow([
-      submissionId,
-      formattedDate,
-      driver,
-      car,
-      route,
-      category,
-      mode,
-      formatMsToTime(declaredMs),
-      formatMsToTime(startMs),
-      formatMsToTime(endMs),
-      formatMsToTime(diffMs),
-      videoUrl,
-      gearbox,
-      device,
-      "PENDIENTE",
-      declaredMs
-    ]);
+    try {
+      const ss = getSpreadsheet();
+      if (ss) {
+        let sheet = ss.getSheetByName(CONFIG.SHEET_SUBMISSIONS_NAME);
+        if (!sheet) {
+          sheet = inicializarHojaEnvios(ss);
+        }
+        sheet.appendRow([
+          submissionId,
+          formattedDate,
+          driver,
+          car,
+          route,
+          category,
+          mode,
+          formatMsToTime(declaredMs),
+          formatMsToTime(startMs),
+          formatMsToTime(endMs),
+          formatMsToTime(diffMs),
+          videoUrl,
+          gearbox,
+          device,
+          "PENDIENTE",
+          declaredMs
+        ]);
+      } else {
+        Logger.log("Aviso: No hay hoja de cálculo disponible. Guardado en Google Sheets omitido.");
+      }
+    } catch (sheetErr) {
+      Logger.log("Aviso: Error escribiendo en Google Sheets: " + sheetErr);
+    }
 
-    // Opcional: También registrar en Firebase bajo /submissions/<submissionId> para auditoría
-    registrarSubmissionEnFirebase(submissionId, {
-      id: submissionId,
-      timestamp: formattedDate,
-      driver: driver,
-      car: car,
-      route: route,
-      category: category,
-      mode: mode,
-      time: formatMsToTime(declaredMs),
-      timeMs: declaredMs,
-      startMark: formatMsToTime(startMs),
-      endMark: formatMsToTime(endMs),
-      diff: formatMsToTime(diffMs),
-      videoUrl: videoUrl,
-      gearbox: gearbox,
-      device: device,
-      status: "PENDIENTE"
-    });
+    // 5. Registrar en Firebase bajo /submissions/<submissionId> para auditoría
+    try {
+      registrarSubmissionEnFirebase(submissionId, {
+        id: submissionId,
+        timestamp: formattedDate,
+        driver: driver,
+        car: car,
+        route: route,
+        category: category,
+        mode: mode,
+        time: formatMsToTime(declaredMs),
+        timeMs: declaredMs,
+        startMark: formatMsToTime(startMs),
+        endMark: formatMsToTime(endMs),
+        diff: formatMsToTime(diffMs),
+        videoUrl: videoUrl,
+        gearbox: gearbox,
+        device: device,
+        status: "PENDIENTE"
+      });
+    } catch (fbErr) {
+      Logger.log("Aviso: Error registrando en Firebase: " + fbErr);
+    }
 
     return createJsonResponse({
       status: "success",
