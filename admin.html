@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comisaría & Administración Oficial | NFSMWRANKS.ONLINE</title>
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+    <link rel="alternate icon" type="image/png" href="assets/img/nfsranksmwlogo.png">
+
+    <!-- Tipografías de Alto Rendimiento -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+
+    <!-- Firebase Compat SDKs (App, Auth, Database) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+</head>
+
+<body class="admin-body">
+
+    <!-- TOPBAR ADMINISTRATIVA -->
+    <header class="admin-navbar">
+        <div class="admin-logo-group">
+            <span class="admin-badge-tag">ADMIN</span>
+            <div>
+                <div class="admin-title-text">NFSMWRANKS // COMISARÍA OFICIAL</div>
+                <div class="admin-subtitle-text">PANEL TÉCNICO DE HOMOLOGACIÓN & LEADERBOARDS</div>
+            </div>
+        </div>
+
+        <div class="admin-nav-actions">
+            <a href="index.html" class="admin-btn admin-btn-outline admin-btn-sm">
+                🌐 Ver Web Pública
+            </a>
+
+            <div id="admin-nav-user" style="display: none;" class="admin-user-pill">
+                <span>🛡️</span>
+                <span id="admin-user-email">admin@nfsranks.online</span>
+                <button type="button" onclick="handleAdminLogout()" class="admin-btn admin-btn-outline admin-btn-sm" style="margin-left: 8px; padding: 3px 8px;">
+                    Salir
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ======================================================= -->
+    <!-- PANTALLA 1: INICIO DE SESIÓN ADMINISTRATIVO             -->
+    <!-- ======================================================= -->
+    <main id="view-login" class="login-view-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-header-icon">⚖️</div>
+                <h1 class="login-title">Acceso a Comisaría</h1>
+                <p class="login-desc">Panel de verificación y homologación técnica de récords para comisarios de NFSMWRANKS.</p>
+            </div>
+
+            <div id="login-error-msg" class="login-error"></div>
+
+            <form id="form-admin-login" class="login-form">
+                <div class="form-group">
+                    <label for="login-email">Correo Electrónico (Firebase Auth)</label>
+                    <input type="email" id="login-email" required placeholder="admin@nfsranks.online" autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="login-pass">Contraseña</label>
+                    <input type="password" id="login-pass" required placeholder="••••••••••••" autocomplete="current-password">
+                </div>
+
+                <button type="submit" id="btn-login-submit" class="admin-btn admin-btn-primary" style="width: 100%; justify-content: center; padding: 12px; margin-top: 10px;">
+                    Acceder al Panel de Control
+                </button>
+            </form>
+
+            <div style="margin-top: 22px; padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 11.5px; color: var(--text-muted); text-align: center;">
+                <span>🔒 Protegido con Firebase Authentication & Realtime Database</span>
+            </div>
+        </div>
+    </main>
+
+    <!-- ======================================================= -->
+    <!-- PANTALLA 2: DASHBOARD DE GESTIÓN Y HOMOLOGACIÓN         -->
+    <!-- ======================================================= -->
+    <main id="view-dashboard" class="admin-container" style="display: none;">
+
+        <!-- TABS DE NAVEGACIÓN SUPERIOR -->
+        <div class="admin-tabs-bar">
+            <button type="button" class="admin-tab-btn active" id="tab-btn-submissions" onclick="switchAdminTab('submissions')">
+                <span>📥 Cola de Moderación</span>
+                <span class="badge-count" id="badge-submissions-pending">0</span>
+            </button>
+            <button type="button" class="admin-tab-btn" id="tab-btn-leaderboard" onclick="switchAdminTab('leaderboard')">
+                <span>📊 Gestor de Leaderboards</span>
+            </button>
+            <button type="button" class="admin-tab-btn" id="tab-btn-seasons" onclick="switchAdminTab('seasons')">
+                <span>🏆 Clasificación de Temporadas</span>
+            </button>
+            <button type="button" class="admin-tab-btn" id="tab-btn-migration" onclick="switchAdminTab('migration')">
+                <span>⚡ Migración Masiva 1-Clic</span>
+            </button>
+        </div>
+
+        <!-- TARJETAS DE MÉTRICAS -->
+        <div class="admin-metrics-grid">
+            <div class="metric-card">
+                <div class="metric-icon" style="color: var(--nfs-orange);">⏳</div>
+                <div class="metric-data">
+                    <h4>Pendientes de Revisión</h4>
+                    <div class="metric-val" id="metric-pending-val" style="color: var(--nfs-orange);">0</div>
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon" style="color: var(--green-neon);">✓</div>
+                <div class="metric-data">
+                    <h4>Tiempos Aprobados</h4>
+                    <div class="metric-val" id="metric-approved-val" style="color: var(--green-neon);">0</div>
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon" style="color: var(--f1-red);">✗</div>
+                <div class="metric-data">
+                    <h4>Rechazados / Descartados</h4>
+                    <div class="metric-val" id="metric-rejected-val" style="color: #f87171;">0</div>
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon" style="color: var(--cyan-neon);">📁</div>
+                <div class="metric-data">
+                    <h4>Total Solicitudes</h4>
+                    <div class="metric-val" id="metric-total-val" style="color: #fff;">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================================= -->
+        <!-- SECCIÓN 1: COLA DE MODERACIÓN (/submissions)            -->
+        <!-- ======================================================= -->
+        <section id="sec-submissions" class="admin-tab-content">
+            <div class="admin-section-header">
+                <h2 class="admin-section-title">
+                    <span>⏱️ Solicitudes de Tiempos Enviadas</span>
+                </h2>
+
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <div class="status-filter-pills">
+                        <button type="button" class="status-pill-btn active" onclick="filterSubmissions('pending', this)">
+                            Pendientes
+                        </button>
+                        <button type="button" class="status-pill-btn" onclick="filterSubmissions('approved', this)">
+                            Aprobados
+                        </button>
+                        <button type="button" class="status-pill-btn" onclick="filterSubmissions('rejected', this)">
+                            Rechazados
+                        </button>
+                        <button type="button" class="status-pill-btn" onclick="filterSubmissions('all', this)">
+                            Todos
+                        </button>
+                    </div>
+
+                    <button type="button" class="admin-btn admin-btn-outline admin-btn-sm" onclick="loadSubmissions()">
+                        🔄 Actualizar
+                    </button>
+                </div>
+            </div>
+
+            <div id="submissions-loading" style="display: none; text-align: center; padding: 30px; color: var(--nfs-orange);">
+                <span>⏳ Cargando solicitudes en vivo desde Firebase...</span>
+            </div>
+
+            <div id="submissions-list-container" class="submissions-list"></div>
+        </section>
+
+        <!-- ======================================================= -->
+        <!-- SECCIÓN 2: GESTOR DE LEADERBOARDS (/leaderboards)       -->
+        <!-- ======================================================= -->
+        <section id="sec-leaderboard" class="admin-tab-content" style="display: none;">
+            <div class="admin-section-header">
+                <h2 class="admin-section-title">
+                    <span>🏆 Gestor Directo de Leaderboards</span>
+                </h2>
+                <button type="button" class="admin-btn admin-btn-outline admin-btn-sm" onclick="loadLeaderboardTab()">
+                    🔄 Recargar Tabla
+                </button>
+            </div>
+
+            <div class="lb-manager-filters">
+                <div>
+                    <label style="display: block; font-size: 11.5px; color: var(--text-muted); font-family: var(--font-heading); margin-bottom: 6px; text-transform: uppercase;">
+                        🏁 Pista Oficial (86 Rutas)
+                    </label>
+                    <select id="lb-select-route" onchange="handleLbRouteChange()"></select>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 11.5px; color: var(--text-muted); font-family: var(--font-heading); margin-bottom: 6px; text-transform: uppercase;">
+                        🏆 Categoría Técnica
+                    </label>
+                    <select id="lb-select-category" onchange="handleLbCategoryChange()"></select>
+                </div>
+            </div>
+
+            <div style="background: rgba(0,0,0,0.3); padding: 12px 18px; border-radius: 8px 8px 0 0; border: 1px solid var(--admin-card-border); border-bottom: none; display: flex; justify-content: space-between; align-items: center;">
+                <strong id="lb-current-title" style="font-family: var(--font-heading); font-size: 15px; color: var(--nfs-orange); text-transform: uppercase;">
+                    --
+                </strong>
+                <span style="font-size: 11.5px; color: var(--text-muted);">Los cambios se reflejan inmediatamente en la web pública.</span>
+            </div>
+
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 70px;">Puesto</th>
+                            <th>Piloto</th>
+                            <th>Tiempo</th>
+                            <th>Vehículo</th>
+                            <th>Hardware</th>
+                            <th>Fecha</th>
+                            <th style="width: 80px;">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lb-table-body">
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 25px; color: var(--text-muted);">
+                                Selecciona una pista para consultar sus récords oficiales.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ======================================================= -->
+        <!-- SECCIÓN 3: MIGRACIÓN HISTÓRICA 1-CLIC                   -->
+        <!-- ======================================================= -->
+        <section id="sec-migration" class="admin-tab-content" style="display: none;">
+            <div class="migration-card">
+                <div class="migration-header">
+                    <div style="font-size: 38px;">⚡</div>
+                    <div>
+                        <h2 style="margin: 0 0 6px 0; font-family: var(--font-heading); font-size: 22px; text-transform: uppercase;">
+                            Migración Masiva desde Google Sheets
+                        </h2>
+                        <p style="margin: 0; color: var(--text-secondary); font-size: 13px;">
+                            Descarga e inserta automáticamente los récords históricos de las 86 pistas oficiales directamente en Firebase Realtime Database.
+                        </p>
+                    </div>
+                </div>
+
+                <div style="background: rgba(255, 119, 0, 0.08); border: 1px solid rgba(255, 119, 0, 0.3); border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+                    <strong style="color: var(--nfs-orange); font-size: 13.5px; display: block; margin-bottom: 4px;">ℹ️ ¿Qué hace este proceso?</strong>
+                    <ul style="margin: 0; padding-left: 20px; font-size: 12.5px; color: #cbd5e1; line-height: 1.5;">
+                        <li>Lee los 4 CSVs de cada Circuito (Junkman Single/Fast, BMW Single/Fast) y los 2 CSVs de cada Sprint/Drag.</li>
+                        <li>Convierte automáticamente las cadenas de tiempo a milisegundos numéricos (<code>timeMs</code>).</li>
+                        <li>Escribe de forma optimizada en <code>/leaderboards/{routeKey}/{categoryKey}</code> en Firebase RTDB.</li>
+                        <li>Permite que el portal web opere 100% desacoplado de Google Sheets de forma permanente.</li>
+                    </ul>
+                </div>
+
+                <button type="button" id="btn-start-migration" class="admin-btn admin-btn-primary" onclick="startOneClickMigration()" style="width: 100%; justify-content: center; padding: 14px; font-size: 15px;">
+                    🚀 Iniciar Migración Histórica en 1 Clic (86 Pistas)
+                </button>
+
+                <div id="migration-progress-box" class="migration-progress-box" style="display: none;">
+                    <div style="display: flex; justify-content: space-between; font-size: 12.5px; font-family: var(--font-heading); font-weight: 700;">
+                        <span id="migration-status-label">Procesando pistas...</span>
+                    </div>
+                    <div class="progress-bar-track">
+                        <div id="progress-bar-fill" class="progress-bar-fill"></div>
+                    </div>
+                    <div id="migration-log" class="progress-log-console"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 4: GESTOR DE CLASIFICACIÓN DE TEMPORADAS BLACKLIST -->
+        <section id="sec-seasons" class="admin-tab-content" style="display: none;">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <div>
+                        <h2>🏆 Clasificación de Temporadas Blacklist (4 Pistas Semanales)</h2>
+                        <p>Valida récords de desafíos semanales (2 Circuitos + 2 Sprints), calcula puntos de temporada y publica la tabla oficial en Firebase RTDB con notificación automática a Discord.</p>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button type="button" class="admin-btn admin-btn-primary" onclick="recalcAndPublishSeasonStandings()">
+                            ⚡ Recalcular y Publicar en RTDB
+                        </button>
+                        <button type="button" class="admin-btn admin-btn-outline" onclick="loadSeasonStandingsAdmin()" title="Recargar datos">
+                            🔄 Actualizar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SELECTORES DE TEMPORADA Y SEMANA -->
+                <div class="admin-filter-bar" style="margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 14px; align-items: center;">
+                    <div class="admin-form-group" style="min-width: 250px; margin-bottom: 0;">
+                        <label class="admin-label">Temporada Oficial</label>
+                        <select id="season-admin-select-season" class="admin-input" onchange="handleSeasonAdminChange()">
+                            <option value="season_1">Blacklist Temporada 1 (Noviembre 2026)</option>
+                            <option value="season_2">Blacklist Temporada 2 (Diciembre 2026)</option>
+                        </select>
+                    </div>
+
+                    <div class="admin-form-group" style="min-width: 200px; margin-bottom: 0;">
+                        <label class="admin-label">Semana de Pruebas</label>
+                        <select id="season-admin-select-week" class="admin-input" onchange="handleSeasonAdminWeekChange()">
+                            <option value="all">🏆 General Acumulado (4 Semanas)</option>
+                            <option value="1">Semana 1 (4 Pistas)</option>
+                            <option value="2">Semana 2 (4 Pistas)</option>
+                            <option value="3">Semana 3 (4 Pistas)</option>
+                            <option value="4">Semana 4 (Gran Final)</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-left: auto; display: flex; align-items: center; gap: 10px;">
+                        <span id="season-admin-sync-badge" class="status-badge status-badge-approved">🟢 Sincronizado</span>
+                        <button type="button" class="admin-btn admin-btn-sm admin-btn-outline" onclick="openAddSeasonPilotModal()">
+                            ➕ Añadir Piloto Manual
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TARJETAS DE LOS 4 DESAFÍOS DE LA SEMANA -->
+                <div id="season-admin-challenges-preview" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 24px;">
+                    <!-- Se llena dinámicamente con las 4 pruebas de la semana -->
+                </div>
+
+                <!-- TABLA DE CLASIFICACIÓN DE TEMPORADA -->
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 55px; text-align: center;">Pos</th>
+                                <th>Piloto</th>
+                                <th style="text-align: center;">Semana 1</th>
+                                <th style="text-align: center;">Semana 2</th>
+                                <th style="text-align: center;">Semana 3</th>
+                                <th style="text-align: center;">Semana 4</th>
+                                <th style="text-align: center;">Puntos Totales</th>
+                                <th>Recompensas & Bolsa Bounty ($)</th>
+                                <th style="text-align: center;">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-season-standings-admin">
+                            <tr>
+                                <td colspan="9" style="text-align: center; color: var(--text-muted); padding: 30px;">
+                                    Cargando clasificación de la temporada...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL DE PREVISUALIZACIÓN DE VIDEO -->
+    <div id="admin-video-modal" class="admin-modal-overlay" style="display: none;">
+        <div class="admin-modal-box">
+            <div class="admin-modal-header">
+                <h3>🎬 Inspección Telemática de Video</h3>
+                <button type="button" class="admin-modal-close" onclick="closeVideoPreview()">✕</button>
+            </div>
+            <div class="admin-modal-body">
+                <div class="video-frame-container">
+                    <iframe id="admin-video-iframe" src="" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/routes-data.js"></script>
+    <script src="assets/js/seasons-data.js"></script>
+    <script src="assets/js/firebase-config.js"></script>
+    <script src="assets/js/discord-notifier.js"></script>
+    <script src="assets/js/admin.js"></script>
+</body>
+
+</html>
