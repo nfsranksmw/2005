@@ -30,7 +30,7 @@ const DISCORD_WEBHOOK_URL = "URL_DE_TU_WEBHOOK_DE_DISCORD_AQUI";
 const GOOGLE_APPS_SCRIPT_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzi0i3UMk4nywlcJlCX_leHJBjEJZ0a-gkAA_rTl2Q6B0iL7EglOLLVyPyoiZMagBQQ/exec";
 
 // URL Base de Firebase Realtime Database para Leaderboards
-const FIREBASE_RTDB_BASE_URL = "https://nfsranks-blacklist-default-rtdb.firebaseio.com";
+var FIREBASE_RTDB_BASE_URL = (window.FIREBASE_RTDB_BASE_URL || (window.NFS_FIREBASE && window.NFS_FIREBASE.RTDB_URL) || "https://nfsranks-blacklist-default-rtdb.firebaseio.com");
 
 // =======================================================
 // TELEMETRÍA EN VIVO (ESTILO FÓRMULA 1)
@@ -68,7 +68,138 @@ function toggleMenu() {
     }
 }
 
-function switchView(viewId) {
+// =======================================================
+// VENTANA FLOTANTE Y BOTÓN DESPLEGABLE DE DISCORD
+// =======================================================
+function toggleDiscordFloatingDrawer(event, forceState) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    const container = document.getElementById('discord-floating-container');
+    const trigger = document.getElementById('discord-floating-btn');
+    if (!container) return;
+    const isOpen = container.classList.contains('open');
+    const nextState = forceState !== undefined ? forceState : !isOpen;
+    if (nextState) {
+        container.classList.add('open');
+        if (trigger) trigger.setAttribute('aria-expanded', 'true');
+    } else {
+        container.classList.remove('open');
+        if (trigger) trigger.setAttribute('aria-expanded', 'false');
+    }
+}
+
+// Cierre al hacer clic fuera del panel flotante o pulsar Escape
+document.addEventListener('click', function (e) {
+    const container = document.getElementById('discord-floating-container');
+    if (container && container.classList.contains('open')) {
+        if (!container.contains(e.target)) {
+            toggleDiscordFloatingDrawer(null, false);
+        }
+    }
+});
+
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+        const container = document.getElementById('discord-floating-container');
+        if (container && container.classList.contains('open')) {
+            toggleDiscordFloatingDrawer(null, false);
+        }
+    }
+});
+
+
+const SECTION_PATH_MAP = {
+    'home': '/',
+    'routes': '/routes',
+    'leaderboard': '/leaderboard',
+    'leaderboards': '/leaderboards',
+    'challenges': '/desafio',
+    'desafio': '/desafio',
+    'blacklist': '/blacklist',
+    'championship-standings': '/championship-standings',
+    'blacklist-cards': '/blacklist-cards',
+    'championship-register': '/championship-register',
+    'past-tournaments': '/past-tournaments',
+    'halloffame': '/halloffame',
+    'globaldrivers': '/globaldrivers',
+    'globalroutes': '/globalroutes',
+    'guides': '/guides',
+    'rules': '/rules',
+    'tutorial': '/tutorial',
+    'driverprofile': '/driverprofile',
+    'submit': '/submit',
+    'download': '/download',
+    'map': '/map',
+    'members': '/members'
+};
+
+function resolveViewFromUrl() {
+    if (typeof window === 'undefined') return 'home';
+
+    // 1. Pathname
+    const pathParts = window.location.pathname.toLowerCase().split('/').filter(Boolean);
+    for (let i = pathParts.length - 1; i >= 0; i--) {
+        const seg = decodeURIComponent(pathParts[i]);
+        if (seg === 'leaderboard' || seg === 'leaderboards') return 'leaderboard';
+        if (seg === 'desafio' || seg === 'desafío' || seg === 'challenges' || seg === 'desafios' || seg === 'desafíos') return 'challenges';
+        if (seg === 'routes' || seg === 'rutas') return 'routes';
+        if (seg === 'blacklist') return 'blacklist';
+        if (seg === 'championship-standings' || seg === 'standings') return 'championship-standings';
+        if (seg === 'blacklist-cards' || seg === 'cards') return 'blacklist-cards';
+        if (seg === 'championship-register' || seg === 'register') return 'championship-register';
+        if (seg === 'past-tournaments' || seg === 'tournaments') return 'past-tournaments';
+        if (seg === 'halloffame') return 'halloffame';
+        if (seg === 'globaldrivers') return 'globaldrivers';
+        if (seg === 'globalroutes') return 'globalroutes';
+        if (seg === 'guides' || seg === 'guias' || seg === 'guías') return 'guides';
+        if (seg === 'rules' || seg === 'reglas') return 'rules';
+        if (seg === 'tutorial') return 'tutorial';
+        if (seg === 'driverprofile' || seg === 'driver' || seg === 'profile') return 'driverprofile';
+        if (seg === 'submit' || seg === 'enviar') return 'submit';
+        if (seg === 'download' || seg === 'descargas') return 'download';
+        if (seg === 'map' || seg === 'mapa') return 'map';
+        if (seg === 'members' || seg === 'miembros') return 'members';
+    }
+
+    // 2. Query param ?view=...
+    const sp = new URLSearchParams(window.location.search);
+    if (sp.has('view')) {
+        const v = sp.get('view').toLowerCase();
+        if (document.getElementById('view-' + v)) return v;
+    }
+
+    // 3. Hash #view-...
+    const hash = window.location.hash.toLowerCase().replace(/^#view-|^#/, '');
+    if (hash && document.getElementById('view-' + hash)) {
+        return hash;
+    }
+
+    return 'home';
+}
+
+function updateBrowserHistory(viewId) {
+    if (typeof window === 'undefined' || !window.history || window.location.protocol === 'file:') return;
+
+    let targetPath = SECTION_PATH_MAP[viewId] || `/${viewId}`;
+    let search = window.location.search;
+
+    // Si salimos de leaderboard hacia otra sección, limpiamos los query params de ruta si existían
+    if (viewId !== 'leaderboard' && search.includes('route=')) {
+        search = '';
+    }
+
+    const fullUrl = targetPath + (search || '');
+    const currentClean = window.location.pathname.replace(/\/$/, '') || '/';
+    const targetClean = targetPath.replace(/\/$/, '') || '/';
+
+    if (currentClean !== targetClean) {
+        window.history.pushState({ viewId: viewId }, '', fullUrl);
+    }
+}
+
+function switchView(viewId, updateHistory = true) {
     document.querySelectorAll('.view-section').forEach(section => {
         section.classList.remove('active');
     });
@@ -105,7 +236,18 @@ function switchView(viewId) {
 
     closeAllDropdowns();
     closeAllTrackerPopovers();
+    const discordFloating = document.getElementById('discord-floating-container');
+    if (discordFloating) {
+        discordFloating.style.display = (viewId === 'home') ? 'block' : 'none';
+    }
+    if (typeof toggleDiscordFloatingDrawer === 'function') {
+        toggleDiscordFloatingDrawer(null, false);
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (updateHistory) {
+        updateBrowserHistory(viewId);
+    }
 
     if (viewId === 'members') {
         if (typeof renderDiscordMembers === 'function') {
@@ -126,11 +268,27 @@ function switchView(viewId) {
     }
 
     if (viewId === 'submit') {
+        if (typeof initSubmitRouteSelector === 'function') {
+            initSubmitRouteSelector();
+        }
         if (typeof handleCategoryOrRouteChange === 'function') {
             handleCategoryOrRouteChange();
         }
     }
 }
+
+// Escuchar navegación del historial del navegador (atrás / adelante)
+window.addEventListener('popstate', (e) => {
+    const view = (e.state && e.state.viewId) ? e.state.viewId : resolveViewFromUrl();
+    if (view) {
+        switchView(view, false);
+    }
+});
+
+// Exportación explícita a window para compatibilidad global con eventos inline
+window.switchView = switchView;
+window.resolveViewFromUrl = resolveViewFromUrl;
+window.toggleDiscordFloatingDrawer = toggleDiscordFloatingDrawer;
 
 function toggleNavDropdown(dropdownId) {
     const target = document.getElementById(dropdownId);
@@ -1071,7 +1229,7 @@ async function renderRoutes(dataToRender) {
                 <div class="route-badge-letter badge-${typeClass}">${letterBadge}</div>
             </div>
             <div class="route-info">
-                <h3>${route.name}</h3>
+                <h3>${route.name}${route.alias ? ` <span style="font-size: 11px; color: var(--nfs-orange); font-weight: normal; opacity: 0.85;">(${route.alias})</span>` : ''}</h3>
                 <div class="route-preview-placeholder" style="font-size: 9.7px; color: #64748b;">Cargando récord...</div>
             </div>
             <div class="route-action-icon" title="Ver Telemetría">🏁</div>
@@ -1092,25 +1250,10 @@ async function loadCardPreviewLazy(cardElement, route) {
     if (!previewContainer) return;
 
     try {
-        let sampleSheet = "";
-
-        if (route && route.sheets) {
-            if (route.type === "Circuito") {
-                sampleSheet = route.sheets.junkmanSingle || route.sheets.bmwSingle || route.sheets.junkman || route.sheets.bmw || "";
-            } else if (route.type === "Drag") {
-                sampleSheet = route.sheets.junkman || route.sheets.bmw || route.sheets.drag || Object.values(route.sheets)[0] || "";
-            } else {
-                sampleSheet = route.sheets.junkman || route.sheets.bmw || Object.values(route.sheets)[0] || "";
-            }
-        }
-
-        if (!sampleSheet || sampleSheet.trim() === "") {
-            previewContainer.innerHTML = `<span style="font-style: italic; color: #64748b; font-size: 9.7px;">Disponible para récord</span>`;
-            return;
-        }
-
-        let rows = await fetchGoogleSheetData(sampleSheet, 5);
-        let topRow = Array.isArray(rows) ? rows.find(r => r.rank && (r.rank.includes("1") || r.rank === "1")) : null;
+        const fbData = await fetchFirebaseRouteRecords(route.name);
+        const catKey = (route.type === "Circuito") ? 'junkman_single' : 'junkman';
+        const rows = extractCategoryRecords(fbData, catKey);
+        const topRow = (rows && rows.length > 0) ? rows[0] : null;
 
         if (topRow) {
             previewContainer.outerHTML = `
@@ -1120,7 +1263,7 @@ async function loadCardPreviewLazy(cardElement, route) {
                 </div>
                 <div style="overflow: hidden; width: 100%; margin-top: 3px;">
                     <div style="white-space: nowrap; font-size: 8.9px; font-weight: 700; color: #94a3b8; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis;">
-                        🏎️ ${topRow.car}
+                        🏎️ ${topRow.car || 'BMW M3 GTR'}
                     </div>
                 </div>
             `;
@@ -1141,7 +1284,7 @@ function filterRoutes() {
 
     const filtered = sourceData.filter(route => {
         const matchesCategory = currentCategory === 'all' || route.type === currentCategory;
-        const matchesSearch = route.name.toLowerCase().includes(query);
+        const matchesSearch = route.name.toLowerCase().includes(query) || (route.alias && route.alias.toLowerCase().includes(query));
         return matchesCategory && matchesSearch;
     });
     renderRoutes(filtered);
@@ -1194,107 +1337,43 @@ function extractCategoryRecords(routeFirebaseData, categoryKey) {
     }
     if (!Array.isArray(raw)) return [];
 
-    return raw.filter(item => item && item.driver && String(item.driver).trim() !== "" && (item.time || item.declaredTime)).map(item => ({
-        rank: item.rank ? (String(item.rank).startsWith('#') ? item.rank : `#${item.rank}`) : "#--",
-        driver: String(item.driver).trim(),
-        time: item.time || item.declaredTime || "--:--.---",
-        car: item.car || "BMW M3 GTR",
-        device: item.device || "PC",
-        gearbox: item.gearbox || "Manual",
-        date: item.date || new Date().toISOString().split('T')[0],
-        yt: item.yt || item.videoUrl || "#"
-    }));
-}
-
-function mergeLeaderboardData(sheetRows = [], firebaseRows = []) {
-    const sRows = Array.isArray(sheetRows) ? sheetRows : [];
-    const fbRows = Array.isArray(firebaseRows) ? firebaseRows : [];
-
-    if (fbRows.length === 0) return sRows;
-    if (sRows.length === 0) return fbRows;
-
-    const combined = [...sRows];
-
-    fbRows.forEach(fb => {
-        if (!fb || !fb.driver) return;
-        const fbDriver = String(fb.driver).trim().toLowerCase();
-        const fbTime = String(fb.time || fb.declaredTime || '').trim();
-
-        const exists = combined.some(r => {
-            const rDriver = String(r.driver || '').trim().toLowerCase();
-            const rTime = String(r.time || '').trim();
-            return rDriver === fbDriver && rTime === fbTime;
-        });
-
-        if (!exists) {
-            combined.push({
-                rank: fb.rank || '#--',
-                driver: fb.driver,
-                time: fb.time || fb.declaredTime || '--:--.---',
-                car: fb.car || 'BMW M3 GTR',
-                device: fb.device || 'PC',
-                gearbox: fb.gearbox || 'Manual',
-                date: fb.date || new Date().toISOString().split('T')[0],
-                yt: fb.yt || fb.videoUrl || '#'
-            });
-        }
+    let list = raw.filter(item => item && item.driver && String(item.driver).trim() !== "" && (item.time || item.declaredTime)).map(item => {
+        const timeStr = item.time || item.declaredTime || "--:--.---";
+        const parseFn = (typeof NFS_FIREBASE !== 'undefined' && NFS_FIREBASE.parseTimeToMs) ? NFS_FIREBASE.parseTimeToMs : parseTimeToMs;
+        const timeMs = item.timeMs !== undefined ? parseInt(item.timeMs, 10) : parseFn(timeStr);
+        return {
+            driver: String(item.driver).trim(),
+            time: timeStr,
+            timeMs: isNaN(timeMs) ? null : timeMs,
+            car: item.car || "BMW M3 GTR",
+            device: item.device || item.platform || "PC",
+            gearbox: item.gearbox || "Manual",
+            date: item.date || new Date().toISOString().split('T')[0],
+            yt: item.yt || item.videoUrl || item.video || "#",
+            submissionId: item.submissionId || ""
+        };
     });
 
-    combined.sort((a, b) => {
-        const msA = parseTimeToMs(a.time);
-        const msB = parseTimeToMs(b.time);
-        if (msA !== null && msB !== null && msA !== msB) return msA - msB;
-        if (msA !== null && msB === null) return -1;
-        if (msA === null && msB !== null) return 1;
+    // Orden ascendente estricto por milisegundos (más rápido al frente)
+    list.sort((a, b) => {
+        if (a.timeMs !== null && b.timeMs !== null && a.timeMs !== b.timeMs) {
+            return a.timeMs - b.timeMs;
+        }
+        if (a.timeMs !== null && b.timeMs === null) return -1;
+        if (a.timeMs === null && b.timeMs !== null) return 1;
         return (a.driver || '').localeCompare(b.driver || '');
     });
 
-    return combined.map((item, idx) => ({
+    // Asignación de rangos dinámicos calculados #1, #2, #3...
+    return list.map((item, idx) => ({
         ...item,
         rank: `#${idx + 1}`
     }));
 }
 
-/// =======================================================
-// FORMATEO DE TIEMPO TELEMÉTRICO F1 / STOPWATCH (mm:ss.sss)
-// =======================================================
-function formatRaceTime(timeStr) {
-    if (!timeStr || typeof timeStr !== 'string') return timeStr || '--:--.---';
-    const clean = timeStr.trim();
-    if (!clean || clean === '--' || clean === '-') return clean;
-
-    const colonParts = clean.split(':');
-    if (colonParts.length === 2) {
-        const mins = parseInt(colonParts[0], 10);
-        const secParts = colonParts[1].split('.');
-        const secs = parseInt(secParts[0], 10);
-        let ms = secParts[1] || '000';
-        if (ms.length === 1) ms = ms + '00';
-        else if (ms.length === 2) ms = ms + '0';
-        else if (ms.length > 3) ms = ms.slice(0, 3);
-        const padMins = isNaN(mins) ? '00' : String(mins).padStart(2, '0');
-        const padSecs = isNaN(secs) ? '00' : String(secs).padStart(2, '0');
-        return `${padMins}:${padSecs}.${ms}`;
-    } else if (colonParts.length === 1) {
-        const dotParts = colonParts[0].split('.');
-        if (dotParts.length === 2) {
-            const totalSecs = parseInt(dotParts[0], 10);
-            let ms = dotParts[1] || '000';
-            if (ms.length === 1) ms = ms + '00';
-            else if (ms.length === 2) ms = ms + '0';
-            else if (ms.length > 3) ms = ms.slice(0, 3);
-            if (!isNaN(totalSecs)) {
-                const mins = Math.floor(totalSecs / 60);
-                const secs = totalSecs % 60;
-                return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}.${ms}`;
-            }
-        }
-    }
-    return clean;
-}
-
 // =======================================================
 // CARGA Y RENDERIZADO DE TABLAS INDIVIDUALES (LEADERBOARDS)
+// CONEXIÓN DIRECTA A FIREBASE REALTIME DATABASE (DESACOPLADO DE SHEETS)
 // =======================================================
 async function loadLeaderboardForRoute(route) {
     currentActiveRoute = route;
@@ -1328,47 +1407,49 @@ async function loadLeaderboardForRoute(route) {
 
     document.querySelectorAll('.circuit-section, .sprintdrag-section').forEach(sec => sec.classList.remove('active'));
 
-    const fbDataPromise = fetchFirebaseRouteRecords(route.name);
+    // Consulta directa a Firebase Realtime Database
+    const fbData = await fetchFirebaseRouteRecords(route.name);
 
     if (route.type === "Circuito") {
         if (circuitTabs) circuitTabs.classList.add('active-group');
         if (sprintDragTabs) sprintDragTabs.classList.remove('active-group');
         switchCircuitTab('junkman-single', circuitTabs.querySelector('.tab-btn'));
 
-        const [d1, d2, d3, d4, fbData] = await Promise.all([
-            fetchGoogleSheetData(route.sheets.junkmanSingle),
-            fetchGoogleSheetData(route.sheets.junkmanFast),
-            fetchGoogleSheetData(route.sheets.bmwSingle),
-            fetchGoogleSheetData(route.sheets.bmwFast),
-            fbDataPromise
-        ]);
-
         const fbJunkmanSingle = extractCategoryRecords(fbData, 'junkman_single');
         const fbJunkmanFast = extractCategoryRecords(fbData, 'junkman_fast');
         const fbBmwSingle = extractCategoryRecords(fbData, 'bmw_single');
         const fbBmwFast = extractCategoryRecords(fbData, 'bmw_fast');
 
-        renderTableRows('tbody-junkman-single', mergeLeaderboardData(d1, fbJunkmanSingle));
-        renderTableRows('tbody-junkman-fast', mergeLeaderboardData(d2, fbJunkmanFast));
-        renderTableRows('tbody-bmw-single', mergeLeaderboardData(d3, fbBmwSingle));
-        renderTableRows('tbody-bmw-fast', mergeLeaderboardData(d4, fbBmwFast));
+        renderTableRows('tbody-junkman-single', fbJunkmanSingle);
+        renderTableRows('tbody-junkman-fast', fbJunkmanFast);
+        renderTableRows('tbody-bmw-single', fbBmwSingle);
+        renderTableRows('tbody-bmw-fast', fbBmwFast);
     } else {
         if (circuitTabs) circuitTabs.classList.remove('active-group');
         if (sprintDragTabs) sprintDragTabs.classList.add('active-group');
         switchSprintDragTab('sprintdrag-junkman', sprintDragTabs.querySelector('.tab-btn'));
 
-        const [dJunkman, dBmw, fbData] = await Promise.all([
-            fetchGoogleSheetData(route.sheets.junkman),
-            fetchGoogleSheetData(route.sheets.bmw),
-            fbDataPromise
-        ]);
-
         const fbJunkman = extractCategoryRecords(fbData, 'junkman');
         const fbBmw = extractCategoryRecords(fbData, 'bmw');
 
-        renderTableRows('tbody-sprintdrag-junkman', mergeLeaderboardData(dJunkman, fbJunkman));
-        renderTableRows('tbody-sprintdrag-bmw', mergeLeaderboardData(dBmw, fbBmw));
+        renderTableRows('tbody-sprintdrag-junkman', fbJunkman);
+        renderTableRows('tbody-sprintdrag-bmw', fbBmw);
     }
+}
+
+function formatRaceTime(timeStr) {
+    if (!timeStr) return '--:--.---';
+    if (typeof timeStr === 'number') {
+        return window.NFS_FIREBASE ? window.NFS_FIREBASE.formatMsToTime(timeStr) : String(timeStr);
+    }
+    const clean = String(timeStr).trim();
+    if (window.NFS_FIREBASE && window.NFS_FIREBASE.parseTimeToMs) {
+        const ms = window.NFS_FIREBASE.parseTimeToMs(clean);
+        if (ms !== null) {
+            return window.NFS_FIREBASE.formatMsToTime(ms);
+        }
+    }
+    return clean;
 }
 
 function renderTableRows(tbodyId, dataRows) {
@@ -1535,31 +1616,34 @@ async function generateHallOfFame() {
     const hofTbody = document.getElementById('tbody-hall-of-fame');
     if (!hofTbody) return;
 
-    const sortedDrivers = await fetchWithMemoryAndStorageCache('compiled_hall_of_fame_v4', async () => {
+    const sortedDrivers = await fetchWithMemoryAndStorageCache('compiled_hall_of_fame_v5', async () => {
         const driverCounts = {};
-        const sourceData = typeof routesData !== 'undefined' ? routesData : [];
+        const baseUrl = (window.NFS_FIREBASE && window.NFS_FIREBASE.RTDB_URL) ? window.NFS_FIREBASE.RTDB_URL : "https://nfsranks-blacklist-default-rtdb.firebaseio.com";
 
-        const tasks = [];
-        for (const route of sourceData) {
-            if (!route.sheets) continue;
-            const sheetUrls = Object.values(route.sheets).filter(url => url && typeof url === 'string' && url.trim() !== "");
-
-            for (const url of sheetUrls) {
-                tasks.push(fetchWithTimeout(url, 5, 3000));
-            }
-        }
-
-        const results = await Promise.all(tasks);
-
-        results.forEach(rows => {
-            if (rows && rows.length > 0) {
-                const topDriverRow = rows.find(r => r.rank && (r.rank.includes("1") || r.rank === "1"));
-                if (topDriverRow && topDriverRow.driver) {
-                    let driverName = topDriverRow.driver.trim().toUpperCase();
-                    driverCounts[driverName] = (driverCounts[driverName] || 0) + 1;
+        try {
+            const res = await fetch(`${baseUrl}/leaderboards.json`);
+            if (res.ok) {
+                const allLb = await res.json();
+                if (allLb && typeof allLb === 'object') {
+                    Object.values(allLb).forEach(routeObj => {
+                        if (!routeObj || typeof routeObj !== 'object') return;
+                        Object.values(routeObj).forEach(catRecords => {
+                            let list = Array.isArray(catRecords) ? catRecords : (catRecords && typeof catRecords === 'object' ? Object.values(catRecords) : []);
+                            list = list.filter(Boolean);
+                            if (list.length > 0) {
+                                const topDriver = list.find(r => r.rank && (String(r.rank).includes("1") || String(r.rank) === "1"));
+                                if (topDriver && topDriver.driver) {
+                                    const dName = topDriver.driver.trim().toUpperCase();
+                                    driverCounts[dName] = (driverCounts[dName] || 0) + 1;
+                                }
+                            }
+                        });
+                    });
                 }
             }
-        });
+        } catch (e) {
+            console.warn("Aviso generando Hall of Fame desde Firebase:", e);
+        }
 
         const drivers = Object.keys(driverCounts).map(driver => ({ driver: driver, records: driverCounts[driver] }));
         drivers.sort((a, b) => b.records - a.records);
@@ -1596,43 +1680,46 @@ async function generateHallOfFame() {
 }
 
 async function processPodiumsForRoutes(filterType = null) {
-    const cacheKey = `compiled_podiums_v5_${filterType ? filterType.toLowerCase() : 'all'}`;
+    const cacheKey = `compiled_podiums_v6_${filterType ? filterType.toLowerCase() : 'all'}`;
 
     return await fetchWithMemoryAndStorageCache(cacheKey, async () => {
         const podiumStats = {};
         const sourceData = typeof routesData !== 'undefined' ? routesData : [];
-        const rowLimit = 7;
-        const tasks = [];
+        const baseUrl = (window.NFS_FIREBASE && window.NFS_FIREBASE.RTDB_URL) ? window.NFS_FIREBASE.RTDB_URL : "https://nfsranks-blacklist-default-rtdb.firebaseio.com";
+        const sanitizeFn = (window.NFS_FIREBASE && window.NFS_FIREBASE.sanitizeKey) ? window.NFS_FIREBASE.sanitizeKey : (str => str.toLowerCase().replace(/[^a-z0-9_-]/g, '_'));
 
-        for (const route of sourceData) {
-            if (filterType && route.type && route.type.toLowerCase() !== filterType.toLowerCase()) continue;
-            if (!route.sheets) continue;
+        try {
+            const res = await fetch(`${baseUrl}/leaderboards.json`);
+            if (res.ok) {
+                const allLb = await res.json();
+                if (allLb && typeof allLb === 'object') {
+                    for (const route of sourceData) {
+                        if (filterType && route.type && route.type.toLowerCase() !== filterType.toLowerCase()) continue;
+                        const routeKey = sanitizeFn(route.name);
+                        const routeLb = allLb[routeKey];
+                        if (!routeLb || typeof routeLb !== 'object') continue;
 
-            const sheetUrls = Object.values(route.sheets).filter(url => url && typeof url === 'string' && url.trim() !== "");
-            for (const url of sheetUrls) {
-                tasks.push(fetchWithTimeout(url, rowLimit, 3000));
-            }
-        }
-
-        const results = await Promise.all(tasks);
-
-        results.forEach(rows => {
-            if (!rows || rows.length === 0) return;
-            rows.forEach(r => {
-                if (!r.rank || !r.driver) return;
-                let rankNum = parseInt(r.rank.replace(/[^0-9]/g, ''));
-
-                if ([1, 2, 3].includes(rankNum)) {
-                    let driverName = r.driver.trim().toUpperCase();
-                    if (!podiumStats[driverName]) {
-                        podiumStats[driverName] = { first: 0, second: 0, third: 0 };
+                        Object.values(routeLb).forEach(catRecords => {
+                            let list = Array.isArray(catRecords) ? catRecords : (catRecords && typeof catRecords === 'object' ? Object.values(catRecords) : []);
+                            list = list.filter(Boolean);
+                            list.slice(0, 3).forEach((r, idx) => {
+                                if (!r || !r.driver) return;
+                                const rankNum = idx + 1;
+                                let driverName = r.driver.trim().toUpperCase();
+                                if (!podiumStats[driverName]) {
+                                    podiumStats[driverName] = { first: 0, second: 0, third: 0 };
+                                }
+                                if (rankNum === 1) podiumStats[driverName].first++;
+                                if (rankNum === 2) podiumStats[driverName].second++;
+                                if (rankNum === 3) podiumStats[driverName].third++;
+                            });
+                        });
                     }
-                    if (rankNum === 1) podiumStats[driverName].first++;
-                    if (rankNum === 2) podiumStats[driverName].second++;
-                    if (rankNum === 3) podiumStats[driverName].third++;
                 }
-            });
-        });
+            }
+        } catch (e) {
+            console.warn("Aviso procesando podios desde Firebase:", e);
+        }
 
         const resultsArray = Object.keys(podiumStats).map(driver => {
             let stats = podiumStats[driver];
@@ -1759,49 +1846,42 @@ async function searchDriverProfile(driverQuery) {
     const sourceData = typeof routesData !== 'undefined' ? routesData : [];
     const driverTracks = [];
 
-    for (const route of sourceData) {
-        if (!route.sheets) continue;
-        const sheetEntries = Object.entries(route.sheets);
+    const baseUrl = (window.NFS_FIREBASE && window.NFS_FIREBASE.RTDB_URL) ? window.NFS_FIREBASE.RTDB_URL : "https://nfsranks-blacklist-default-rtdb.firebaseio.com";
+    const sanitizeFn = (window.NFS_FIREBASE && window.NFS_FIREBASE.sanitizeKey) ? window.NFS_FIREBASE.sanitizeKey : (str => str.toLowerCase().replace(/[^a-z0-9_-]/g, '_'));
 
-        for (const [sheetKey, sheetUrl] of sheetEntries) {
-            if (!sheetUrl || typeof sheetUrl !== 'string') continue;
+    try {
+        const res = await fetch(`${baseUrl}/leaderboards.json`);
+        if (res.ok) {
+            const allLb = await res.json();
+            if (allLb && typeof allLb === 'object') {
+                for (const route of sourceData) {
+                    const routeKey = sanitizeFn(route.name);
+                    const routeLb = allLb[routeKey];
+                    if (!routeLb || typeof routeLb !== 'object') continue;
 
-            const possibleCacheKeys = [
-                `nfs_cache_v6_${sheetUrl}_max7`,
-                `nfs_cache_v6_${sheetUrl}_max5`,
-                `nfs_cache_v6_${sheetUrl}_max20`,
-                `nfs_cache_v6_${sheetUrl}`,
-                `nfs_cache_${sheetUrl}_max7`,
-                `nfs_cache_${sheetUrl}_max5`,
-                `nfs_cache_${sheetUrl}_max20`,
-                `nfs_cache_${sheetUrl}`
-            ];
-
-            let cachedRows = null;
-            for (const key of possibleCacheKeys) {
-                if (memoryCache[key] && Array.isArray(memoryCache[key].data)) {
-                    cachedRows = memoryCache[key].data;
-                    break;
-                }
-            }
-
-            if (cachedRows) {
-                const userRow = cachedRows.find(r => r.driver && r.driver.trim().toUpperCase() === driverStats.driver);
-                if (userRow) {
-                    driverTracks.push({
-                        routeName: route.name || "Ruta General",
-                        routeType: route.type || "Carrera",
-                        category: sheetKey,
-                        rank: userRow.rank || "-",
-                        time: userRow.time || "--:--.--",
-                        car: userRow.car || "Desconocido",
-                        gearbox: userRow.gearbox || "M/A",
-                        device: userRow.device || "PC",
-                        yt: userRow.yt || "#"
-                    });
+                    for (const [catKey, catRecords] of Object.entries(routeLb)) {
+                        let list = Array.isArray(catRecords) ? catRecords : (catRecords && typeof catRecords === 'object' ? Object.values(catRecords) : []);
+                        list = list.filter(Boolean);
+                        const userRow = list.find(r => r.driver && r.driver.trim().toUpperCase() === driverStats.driver);
+                        if (userRow) {
+                            driverTracks.push({
+                                routeName: route.name || "Ruta General",
+                                routeType: route.type || "Carrera",
+                                category: catKey.replace('_', ' ').toUpperCase(),
+                                rank: userRow.rank || "-",
+                                time: userRow.time || "--:--.---",
+                                car: userRow.car || "BMW M3 GTR",
+                                gearbox: userRow.gearbox || "Manual",
+                                device: userRow.device || "PC",
+                                yt: userRow.yt || "#"
+                            });
+                        }
+                    }
                 }
             }
         }
+    } catch (e) {
+        console.warn("Aviso buscando registros de piloto en Firebase:", e);
     }
 
     return {
@@ -1938,40 +2018,89 @@ function executeHeroQuickSearch() {
  */
 function parseTimeToMs(timeStr) {
     if (!timeStr) return null;
-    let s = String(timeStr).trim().toLowerCase().replace(',', '.');
+    let s = String(timeStr).trim().toLowerCase();
+    if (!s || s === '--' || s === '-' || s === 'n/a' || s === 'none') return null;
 
-    // Patrón con texto: 1m 20s 750ms
-    const textMatch = s.match(/(?:(\d+)h)?\s*(?:(\d+)m)?\s*(?:(\d+(?:\.\d+)?)s)?\s*(?:(\d+)ms)?/);
+    // 1. Patrón con texto: 1m 20s 750ms, 19s 810ms, 0m 24s 010ms
+    const textMatch = s.match(/(?:(\d+)h)?\s*(?:(\d+)m)?\s*(?:(\d+(?:[.,]\d+)?)s)?\s*(?:(\d+)ms)?/);
     if (textMatch && (textMatch[1] || textMatch[2] || textMatch[3] || textMatch[4])) {
         const h = parseInt(textMatch[1] || '0', 10);
         const m = parseInt(textMatch[2] || '0', 10);
-        const sec = parseFloat(textMatch[3] || '0');
-        const ms = parseInt(textMatch[4] || '0', 10);
+        const sec = parseFloat((textMatch[3] || '0').replace(',', '.'));
+        const msRaw = textMatch[4];
+        let ms = 0;
+        if (msRaw) {
+            let padded = msRaw;
+            if (padded.length === 1) padded += '00';
+            else if (padded.length === 2) padded += '0';
+            else if (padded.length > 3) padded = padded.slice(0, 3);
+            ms = parseInt(padded, 10);
+        }
         const total = (h * 3600 + m * 60 + sec) * 1000 + ms;
         if (total > 0) return Math.round(total);
     }
 
-    // Patrón con dos puntos: [HH:]MM:SS[.mmm] o SS.mmm
-    const parts = s.split(':');
-    if (parts.length === 3) {
-        const h = parseInt(parts[0], 10);
-        const m = parseInt(parts[1], 10);
-        const sec = parseFloat(parts[2]);
-        if (!isNaN(h) && !isNaN(m) && !isNaN(sec)) {
-            return Math.round((h * 3600 + m * 60 + sec) * 1000);
-        }
-    } else if (parts.length === 2) {
-        const m = parseInt(parts[0], 10);
-        const sec = parseFloat(parts[1]);
-        if (!isNaN(m) && !isNaN(sec)) {
-            return Math.round((m * 60 + sec) * 1000);
-        }
-    } else if (parts.length === 1) {
-        const sec = parseFloat(parts[0]);
-        if (!isNaN(sec)) {
-            return Math.round(sec * 1000);
+    // 2. Formato con dos puntos decimales: "4.56.26" o "4.59.04" (minutos.segundos.centésimas)
+    const dotParts = s.split('.');
+    if (dotParts.length === 3 && !s.includes(':')) {
+        const mins = parseInt(dotParts[0], 10);
+        const secs = parseInt(dotParts[1], 10);
+        let msStr = dotParts[2] || '0';
+        if (msStr.length === 1) msStr += '00';
+        else if (msStr.length === 2) msStr += '0';
+        else if (msStr.length > 3) msStr = msStr.slice(0, 3);
+        const ms = parseInt(msStr, 10);
+        if (!isNaN(mins) && !isNaN(secs) && !isNaN(ms)) {
+            return (mins * 60 * 1000) + (secs * 1000) + ms;
         }
     }
+
+    // 3. Patrón con dos puntos: [HH:]MM:SS[.mmm] o "35:42:00"
+    if (s.includes(':')) {
+        const parts = s.split(':');
+        if (parts.length === 3) {
+            const p1 = parseInt(parts[0], 10);
+            const p2 = parseInt(parts[1], 10);
+            const p3 = parseInt(parts[2], 10);
+            if (p3 === 0 && p1 < 60) {
+                let msStr = parts[1] || '0';
+                if (msStr.length === 1) msStr += '00';
+                else if (msStr.length === 2) msStr += '0';
+                return (p1 * 1000) + parseInt(msStr, 10);
+            }
+            return (p1 * 3600000) + (p2 * 60000) + (p3 * 1000);
+        } else if (parts.length === 2) {
+            const mins = parseInt(parts[0], 10);
+            const secParts = parts[1].split('.');
+            const secs = parseInt(secParts[0], 10);
+            let msStr = secParts[1] || '0';
+            if (msStr.length === 1) msStr += '00';
+            else if (msStr.length === 2) msStr += '0';
+            else if (msStr.length > 3) msStr = msStr.slice(0, 3);
+            const ms = parseInt(msStr, 10);
+            if (!isNaN(mins) && !isNaN(secs)) {
+                return (mins * 60 * 1000) + (secs * 1000) + (isNaN(ms) ? 0 : ms);
+            }
+        }
+    }
+
+    // 4. Formato con un punto: "37.23"
+    if (s.includes('.')) {
+        const parts = s.split('.');
+        const secs = parseInt(parts[0], 10);
+        let msStr = parts[1] || '0';
+        if (msStr.length === 1) msStr += '00';
+        else if (msStr.length === 2) msStr += '0';
+        else if (msStr.length > 3) msStr = msStr.slice(0, 3);
+        const ms = parseInt(msStr, 10);
+        if (!isNaN(secs)) {
+            return (secs * 1000) + (isNaN(ms) ? 0 : ms);
+        }
+    }
+
+    const plain = parseInt(s, 10);
+    if (!isNaN(plain)) return plain * 1000;
+
     return null;
 }
 
@@ -1988,13 +2117,107 @@ function formatMsToTime(ms) {
 }
 
 /**
+ * Máscara estricta de tiempo de carrera (MM:SS.mmm) mientras el usuario escribe
+ */
+function applyRaceTimeMask(input) {
+    if (!input) return;
+    let val = input.value.replace(/\D/g, '');
+    if (val.length > 7) val = val.substring(0, 7);
+
+    let formatted = '';
+    if (val.length > 0) {
+        formatted = val.substring(0, 2);
+    }
+    if (val.length > 2) {
+        formatted += ':' + val.substring(2, 4);
+    }
+    if (val.length > 4) {
+        formatted += '.' + val.substring(4, 7);
+    }
+    input.value = formatted;
+}
+
+/**
+ * Inicializa el selector de pistas del formulario con las 86 rutas agrupadas
+ */
+function initSubmitRouteSelector() {
+    const select = document.getElementById('sub-route');
+    if (!select) return;
+    if (select.options.length > 5) return; // Ya inicializado
+
+    const currentValue = select.value;
+    select.innerHTML = '<option value="">-- Selecciona una de las 86 pistas oficiales --</option>';
+
+    if (typeof routesData === 'undefined' || !routesData.length) return;
+
+    const circuitTracks = routesData.filter(r => r.type === 'Circuito');
+    const sprintTracks = routesData.filter(r => r.type === 'Sprint');
+    const dragTracks = routesData.filter(r => r.type === 'Drag');
+
+    const createGroup = (label, tracks) => {
+        const optgroup = document.createElement('optgroup');
+        optgroup.label = `${label} (${tracks.length})`;
+        tracks.forEach(track => {
+            const opt = document.createElement('option');
+            opt.value = track.name;
+            opt.textContent = track.alias ? `${track.name} (${track.alias})` : `${track.name}`;
+            optgroup.appendChild(opt);
+        });
+        return optgroup;
+    };
+
+    if (circuitTracks.length) select.appendChild(createGroup('🏁 Circuitos', circuitTracks));
+    if (sprintTracks.length) select.appendChild(createGroup('⚡ Sprints', sprintTracks));
+    if (dragTracks.length) select.appendChild(createGroup('🔥 Drags', dragTracks));
+
+    if (currentValue) select.value = currentValue;
+}
+
+/**
+ * Modal de confirmación de envío a homologación
+ */
+function openSubmissionSuccessModal(data) {
+    const modal = document.getElementById('modal-submission-success');
+    if (!modal) return;
+    const timeEl = document.getElementById('succ-modal-time');
+    const trackEl = document.getElementById('succ-modal-track');
+    const carEl = document.getElementById('succ-modal-car');
+    const idEl = document.getElementById('succ-modal-id');
+
+    if (timeEl) timeEl.innerText = data.time || '--:--.---';
+    if (trackEl) trackEl.innerText = data.route || '--';
+    if (carEl) carEl.innerText = data.car || '--';
+    if (idEl) idEl.innerText = data.id || '--';
+
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeSubmissionSuccessModal() {
+    const modal = document.getElementById('modal-submission-success');
+    if (modal) modal.style.display = 'none';
+    document.body.style.overflow = '';
+}
+
+/**
  * Valida en vivo las marcas de inicio, fin y el tiempo declarado.
  * Compara (Fin - Inicio) con el Tiempo Declarado y actualiza la UI.
  */
 function validateTimeMarksLive() {
+    const declaredInput = document.getElementById('sub-time');
+    if (declaredInput) {
+        const declaredVal = declaredInput.value.trim();
+        const declaredMs = parseTimeToMs(declaredVal);
+        declaredInput.classList.remove('field-error', 'field-success');
+        if (declaredMs !== null) {
+            declaredInput.classList.add('field-success');
+        } else if (declaredVal.length === 9) {
+            declaredInput.classList.add('field-error');
+        }
+    }
+
     const startInput = document.getElementById('sub-start-mark');
     const endInput = document.getElementById('sub-end-mark');
-    const declaredInput = document.getElementById('sub-time');
 
     const dispStart = document.getElementById('disp-start');
     const dispEnd = document.getElementById('disp-end');
@@ -2234,75 +2457,68 @@ async function handleTimeSubmit(event) {
     const lapType = lapTypeEl ? lapTypeEl.value.trim() : 'Single Lap';
 
     const video = document.getElementById('sub-video').value.trim();
-    const startMark = document.getElementById('sub-start-mark').value.trim();
-    const endMark = document.getElementById('sub-end-mark').value.trim();
+    const startInputEl = document.getElementById('sub-start-mark');
+    const endInputEl = document.getElementById('sub-end-mark');
+    const startMark = startInputEl ? startInputEl.value.trim() : '';
+    const endMark = endInputEl ? endInputEl.value.trim() : '';
     const timeDeclared = document.getElementById('sub-time').value.trim();
 
     const gearbox = document.getElementById('sub-gearbox') ? document.getElementById('sub-gearbox').value : 'Manual';
     const device = document.getElementById('sub-device') ? document.getElementById('sub-device').value : 'Teclado';
 
-    // Parseo milimétrico de tiempos
-    const startMs = parseTimeToMs(startMark);
-    const endMs = parseTimeToMs(endMark);
+    const seasonId = document.getElementById('sub-season-id') ? document.getElementById('sub-season-id').value.trim() : '';
+    const weekNum = document.getElementById('sub-week-num') ? document.getElementById('sub-week-num').value.trim() : '';
+    const challengeId = document.getElementById('sub-challenge-id') ? document.getElementById('sub-challenge-id').value.trim() : '';
+    const rewardDesc = document.getElementById('sub-reward-desc') ? document.getElementById('sub-reward-desc').value.trim() : '';
+
+    // Parseo de tiempo declarado en pantalla
     const declaredMs = parseTimeToMs(timeDeclared);
-
-    // Validar existencia de formatos válidos
-    if (startMs === null) {
-        status.style.color = "var(--f1-red)";
-        status.innerText = "❌ Formato inválido en la Marca de Inicio. Usa MM:SS.mmm (ej: 00:15.200).";
-        document.getElementById('sub-start-mark').focus();
-        return false;
-    }
-
-    if (endMs === null) {
-        status.style.color = "var(--f1-red)";
-        status.innerText = "❌ Formato inválido en la Marca de Fin. Usa MM:SS.mmm (ej: 01:35.950).";
-        document.getElementById('sub-end-mark').focus();
-        return false;
-    }
 
     if (declaredMs === null) {
         status.style.color = "var(--f1-red)";
-        status.innerText = "❌ Formato inválido en el Tiempo Declarado. Usa MM:SS.mmm (ej: 01:20.750).";
+        status.innerText = "❌ Formato inválido en el Tiempo Declarado en Pantalla. Usa MM:SS.mmm (ej: 01:20.750).";
         document.getElementById('sub-time').focus();
         return false;
     }
 
-    if (endMs <= startMs) {
-        status.style.color = "var(--f1-red)";
-        status.innerText = "❌ La Marca de Fin debe ser posterior a la Marca de Inicio.";
-        document.getElementById('sub-end-mark').focus();
-        return false;
+    // Parseo y validación de marcas de video si están presentes
+    const startMs = startMark ? parseTimeToMs(startMark) : null;
+    const endMs = endMark ? parseTimeToMs(endMark) : null;
+    let diffMs = null;
+
+    if (startMs !== null && endMs !== null) {
+        if (endMs <= startMs) {
+            status.style.color = "var(--f1-red)";
+            status.innerText = "❌ La Marca de Fin debe ser posterior a la Marca de Inicio.";
+            if (endInputEl) endInputEl.focus();
+            return false;
+        }
+        diffMs = endMs - startMs;
+        const discrepancyMs = Math.abs(diffMs - declaredMs);
+        const toleranceMs = 50; // 50ms de tolerancia por redondeo de frames de video
+
+        if (discrepancyMs > toleranceMs) {
+            status.style.color = "var(--f1-red)";
+            const diffSec = (discrepancyMs / 1000).toFixed(3);
+            status.innerText = `❌ VALIDACIÓN RECHAZADA: El tiempo declarado (${formatMsToTime(declaredMs)}) no coincide con la diferencia calculada de las marcas de video (${formatMsToTime(diffMs)}). Desfase detectado: ${diffSec}s.`;
+            return false;
+        }
     }
 
-    // VALIDACIÓN ESTRICTA: EL TIEMPO DECLARADO DEBE COINCIDIR CON LA DIFERENCIA (Fin - Inicio)
-    const diffMs = endMs - startMs;
-    const discrepancyMs = Math.abs(diffMs - declaredMs);
-    const toleranceMs = 50; // 50ms de tolerancia por redondeo de frames de video
-
-    if (discrepancyMs > toleranceMs) {
+    // Validación de URL de Video (YouTube o Twitch)
+    const isYouTube = video.includes('youtube.com') || video.includes('youtu.be');
+    const isTwitch = video.includes('twitch.tv');
+    if (!isYouTube && !isTwitch) {
         status.style.color = "var(--f1-red)";
-        const diffSec = (discrepancyMs / 1000).toFixed(3);
-        status.innerText = `❌ VALIDACIÓN RECHAZADA: El tiempo declarado (${formatMsToTime(declaredMs)}) no coincide con la diferencia calculada de las marcas de video (${formatMsToTime(diffMs)}). Desfase detectado: ${diffSec}s. Los valores deben coincidir para homologar el tiempo.`;
-
-        const box = document.getElementById('telemetry-comparison-panel');
-        if (box) box.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        validateTimeMarksLive();
-        return false;
-    }
-
-    // Validación de URL de YouTube
-    if (!video.includes('youtube.com') && !video.includes('youtu.be')) {
-        status.style.color = "var(--f1-red)";
-        status.innerText = "❌ Por favor introduce un enlace válido de YouTube (ej: https://www.youtube.com/watch?v=... o https://youtu.be/...).";
+        status.innerText = "❌ Por favor introduce un enlace válido de YouTube o Twitch (ej: https://www.youtube.com/watch?v=... o https://twitch.tv/videos/...).";
         document.getElementById('sub-video').focus();
         return false;
     }
 
     btn.disabled = true;
-    btn.innerHTML = "<span>⏳</span> Homologando y Registrando en Base de Datos...";
+    btn.innerHTML = "<span>⏳</span> Enviando Registro a Homologación...";
     status.style.color = "var(--nfs-orange)";
-    status.innerText = "Telemetría aprobada. Conectando con Firebase Realtime Database y Google Sheets...";
+    status.innerText = "Verificando telemetría y registrando en la cola de homologación...";
 
     // Determinar tipo de ruta y clave de categoría en Firebase
     const routes = typeof routesData !== 'undefined' ? routesData : [];
@@ -2337,14 +2553,21 @@ async function handleTimeSubmit(event) {
         mode: mode,
         time: formatMsToTime(declaredMs),
         timeMs: declaredMs,
-        startMark: formatMsToTime(startMs),
-        endMark: formatMsToTime(endMs),
-        diff: formatMsToTime(diffMs),
+        startMark: startMs !== null ? formatMsToTime(startMs) : '',
+        endMark: endMs !== null ? formatMsToTime(endMs) : '',
+        diff: diffMs !== null ? formatMsToTime(diffMs) : '',
         videoUrl: video,
         gearbox: gearbox,
         device: device,
-        status: "HOMOLOGADO_OFICIAL"
+        status: "pending"
     };
+
+    if (seasonId) {
+        submissionPayload.seasonId = seasonId;
+        submissionPayload.weekNum = parseInt(weekNum, 10) || 1;
+        submissionPayload.challengeId = challengeId;
+        submissionPayload.rewardDesc = rewardDesc;
+    }
 
     let assignedRankStr = "#1";
 
@@ -2364,79 +2587,8 @@ async function handleTimeSubmit(event) {
                 console.warn("Aviso guardando en /submissions de Firebase:", fbSubErr);
             }
 
-            // =========================================================================
-            // 2. ACTUALIZACIÓN DIRECTA EN LEADERBOARD: /leaderboards/<routeKey>/<categoryKey>
-            // =========================================================================
-            try {
-                const lbEndpoint = `${FIREBASE_RTDB_BASE_URL}/leaderboards/${routeKey}/${categoryKey}.json`;
-                let existingRecords = [];
-                const lbRes = await fetch(lbEndpoint);
-                if (lbRes.ok) {
-                    const lbData = await lbRes.json();
-                    if (Array.isArray(lbData)) {
-                        existingRecords = lbData.filter(Boolean);
-                    } else if (lbData && typeof lbData === 'object') {
-                        existingRecords = Object.values(lbData).filter(Boolean);
-                    }
-                }
-
-                const newLbRecord = {
-                    rank: "#--",
-                    driver: driver,
-                    time: formatMsToTime(declaredMs),
-                    car: car,
-                    device: device,
-                    gearbox: gearbox,
-                    date: currentDateStr,
-                    yt: video,
-                    submissionId: submissionId
-                };
-
-                // Comprobar si el piloto ya tenía un tiempo en esta categoría
-                const existingIdx = existingRecords.findIndex(r =>
-                    r && r.driver && r.driver.trim().toLowerCase() === driver.toLowerCase()
-                );
-
-                if (existingIdx !== -1) {
-                    const prevMs = parseTimeToMs(existingRecords[existingIdx].time);
-                    if (prevMs === null || declaredMs < prevMs) {
-                        existingRecords[existingIdx] = newLbRecord;
-                    }
-                } else {
-                    existingRecords.push(newLbRecord);
-                }
-
-                // Ordenar por tiempo ascendente (más rápido primero)
-                existingRecords.sort((a, b) => {
-                    const msA = parseTimeToMs(a.time);
-                    const msB = parseTimeToMs(b.time);
-                    if (msA !== null && msB !== null && msA !== msB) return msA - msB;
-                    if (msA !== null && msB === null) return -1;
-                    if (msA === null && msB !== null) return 1;
-                    return (a.driver || '').localeCompare(b.driver || '');
-                });
-
-                // Asignar nuevas posiciones #1, #2, #3...
-                existingRecords = existingRecords.map((item, idx) => ({
-                    ...item,
-                    rank: `#${idx + 1}`
-                }));
-
-                const myRec = existingRecords.find(r => r.submissionId === submissionId || (r.driver && r.driver.trim().toLowerCase() === driver.toLowerCase()));
-                if (myRec && myRec.rank) {
-                    assignedRankStr = myRec.rank;
-                }
-
-                // Guardar la tabla actualizada en Firebase
-                await fetch(lbEndpoint, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(existingRecords)
-                });
-                console.info(`Firebase: Leaderboard actualizado en /leaderboards/${routeKey}/${categoryKey} con ${existingRecords.length} filas.`);
-            } catch (fbLbErr) {
-                console.warn("Aviso actualizando /leaderboards en Firebase:", fbLbErr);
-            }
+            // Nota: Los tiempos NO se publican directamente en /leaderboards.
+            // Permanecen en /submissions (pending) hasta ser homologados en admin.html.
         }
 
         // =========================================================================
@@ -2465,50 +2617,45 @@ async function handleTimeSubmit(event) {
         }
 
         // =========================================================================
-        // 4. DESPACHO ASÍNCRONO A GOOGLE APPS SCRIPT (GOOGLE SHEETS)
-        // =========================================================================
-        if (typeof GOOGLE_APPS_SCRIPT_WEBAPP_URL !== 'undefined' &&
-            GOOGLE_APPS_SCRIPT_WEBAPP_URL &&
-            GOOGLE_APPS_SCRIPT_WEBAPP_URL !== "URL_DE_TU_GOOGLE_APPS_SCRIPT_WEBAPP_AQUI") {
-            fetch(GOOGLE_APPS_SCRIPT_WEBAPP_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({
-                    ...submissionPayload,
-                    assignedRank: assignedRankStr
-                })
-            }).then(() => {
-                console.info("Registro despachado a Google Apps Script Connector.");
-            }).catch(err => {
-                console.warn("Aviso al enviar a Google Apps Script:", err);
-            });
-        }
-
-        // =========================================================================
-        // 5. DESPACHO AL WEBHOOK DE DISCORD
+        // 4. DESPACHO AL WEBHOOK DE DISCORD (AVISO DE TIEMPO PENDIENTE DE HOMOLOGACIÓN)
         // =========================================================================
         if (typeof DISCORD_WEBHOOK_URL !== 'undefined' &&
             DISCORD_WEBHOOK_URL &&
             DISCORD_WEBHOOK_URL !== "URL_DE_TU_WEBHOOK_DE_DISCORD_AQUI") {
+            const discordFields = [
+                { name: "👤 Piloto", value: driver, inline: true },
+                { name: "🚗 Auto", value: car, inline: true },
+                { name: "🏁 Pista", value: `${route} (${isCircuit ? lapType : 'Sprint/Drag'})`, inline: true },
+                { name: "🏆 Categoría", value: category, inline: true },
+                { name: "⏱️ Tiempo Declarado", value: formatMsToTime(declaredMs), inline: true },
+                { name: "⚙️ Transmisión", value: gearbox, inline: true },
+                { name: "🎮 Control", value: device, inline: true },
+                { name: "🎬 Video", value: `[Ver Video](${video})`, inline: false }
+            ];
+
+            if (startMs !== null && endMs !== null && diffMs !== null) {
+                discordFields.splice(5, 0, {
+                    name: "📐 Marcas Video",
+                    value: `${formatMsToTime(startMs)} → ${formatMsToTime(endMs)} (Δ: ${formatMsToTime(diffMs)})`,
+                    inline: true
+                });
+            }
+
+            if (seasonId) {
+                discordFields.push({
+                    name: "🏆 Desafío de Temporada",
+                    value: `${seasonId.toUpperCase()} • Semana ${weekNum} (${challengeId})`,
+                    inline: false
+                });
+            }
+
             const discordPayload = {
                 embeds: [{
-                    title: `🏎️ ¡NUEVO RÉCORD HOMOLOGADO [${assignedRankStr}]!`,
+                    title: `📥 NUEVA SOLICITUD DE TIEMPO [${submissionId}]`,
                     color: 16742144, // #ff7700
-                    description: `**Verificación de Telemetría:** Tiempo validado y registrado automáticamente en Firebase Realtime Database.`,
-                    fields: [
-                        { name: "👤 Piloto", value: driver, inline: true },
-                        { name: "🚗 Auto", value: car, inline: true },
-                        { name: "🏁 Pista", value: `${route} (${isCircuit ? lapType : 'Sprint/Drag'})`, inline: true },
-                        { name: "🏆 Categoría", value: category, inline: true },
-                        { name: "⏱️ Tiempo Homologado", value: formatMsToTime(declaredMs), inline: true },
-                        { name: "📊 Posición Asignada", value: assignedRankStr, inline: true },
-                        { name: "📐 Marcas Video", value: `${formatMsToTime(startMs)} → ${formatMsToTime(endMs)} (Δ: ${formatMsToTime(diffMs)})`, inline: true },
-                        { name: "⚙️ Transmisión", value: gearbox, inline: true },
-                        { name: "🎮 Control", value: device, inline: true },
-                        { name: "🎬 Video YouTube", value: `[Ver en YouTube](${video})`, inline: false }
-                    ],
-                    footer: { text: "NFS Most Wanted Official Leaderboards • Homologación de Telemetría" },
+                    description: `Un piloto ha enviado un nuevo récord para revisión técnica en **NFSRANKSMW**. Pendiente de homologación.`,
+                    fields: discordFields,
+                    footer: { text: "NFSMWRANKS • Comisaría de Homologación de Tiempos" },
                     timestamp: new Date().toISOString()
                 }]
             };
@@ -2521,35 +2668,27 @@ async function handleTimeSubmit(event) {
         }
 
         // =========================================================================
-        // 6. RETROALIMENTACIÓN VISUAL COMPLETA CON BOTÓN INTERACTIVO
+        // 5. MODAL OFICIAL DE CONFIRMACIÓN Y FEEDBACK VISUAL
         // =========================================================================
+        openSubmissionSuccessModal(submissionPayload);
+
         status.style.color = "var(--green-neon)";
         status.innerHTML = `
-            <div style="background: rgba(0, 255, 136, 0.08); border: 1px solid var(--green-neon); border-radius: 10px; padding: 18px 22px; text-align: left; margin-top: 15px; box-shadow: 0 4px 20px rgba(0, 255, 136, 0.15);">
-                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                    <span style="font-size: 22px;">✅</span>
-                    <strong style="font-size: 16px; color: #ffffff; font-family: var(--font-racing); text-transform: uppercase; letter-spacing: 0.5px;">
-                        ¡TIEMPO HOMOLOGADO Y REGISTRADO CON ÉXITO!
+            <div style="background: rgba(0, 255, 136, 0.08); border: 1px solid var(--green-neon); border-radius: 8px; padding: 14px 20px; text-align: left; margin-top: 15px; box-shadow: 0 4px 15px rgba(0, 255, 136, 0.1);">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                    <span style="font-size: 18px;">⏳</span>
+                    <strong style="color: #ffffff; font-family: var(--font-racing); text-transform: uppercase;">
+                        ¡TIEMPO REGISTRADO EN COLA DE HOMOLOGACIÓN!
                     </strong>
                 </div>
-                <p style="color: #cbd5e1; font-size: 13px; line-height: 1.5; margin: 0 0 12px 0;">
-                    El tiempo declarado (<code>${formatMsToTime(declaredMs)}</code>) coincide con la diferencia de marcas de video (Δ: <code>${formatMsToTime(diffMs)}</code>). El registro se guardó en <strong>Firebase Realtime Database</strong> y en la cola de <strong>Google Sheets</strong>.
+                <p style="color: #cbd5e1; font-size: 12.5px; line-height: 1.4; margin: 0;">
+                    Solicitud <strong>${submissionId}</strong> enviada a los comisarios oficiales. Tu tiempo (${formatMsToTime(declaredMs)}) se publicará en el Leaderboard tras verificar el video.
                 </p>
-                <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; padding: 6px 14px; margin-bottom: 14px;">
-                    <span style="color: var(--nfs-orange); font-size: 15px;">🏁</span>
-                    <span style="color: #ffffff; font-size: 12.5px; font-weight: 700; font-family: var(--font-racing);">
-                        Posición Oficial Asignada: <span style="color: var(--green-neon); font-size: 14px;">${assignedRankStr}</span> en ${route} (${category} ${isCircuit ? '• ' + lapType : ''})
-                    </span>
-                </div>
-                <div>
-                    <button type="button" class="btn-explored" onclick="goToRouteLeaderboardAfterSubmit('${route.replace(/'/g, "\\'")}', '${categoryKey}')" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; font-size: 12px; font-weight: 800;">
-                        🏎️ Ver mi tiempo en el Leaderboard Oficial →
-                    </button>
-                </div>
             </div>
         `;
 
         document.getElementById('form-submit-time').reset();
+        clearSeasonSubmissionContext();
         validateTimeMarksLive();
     } catch (error) {
         console.error("Error enviando tiempo:", error);
@@ -2561,55 +2700,36 @@ async function handleTimeSubmit(event) {
     }
 }
 
+// Exportación explícita a window para compatibilidad con eventos inline del formulario
+window.applyRaceTimeMask = applyRaceTimeMask;
+window.initSubmitRouteSelector = initSubmitRouteSelector;
+window.openSubmissionSuccessModal = openSubmissionSuccessModal;
+window.closeSubmissionSuccessModal = closeSubmissionSuccessModal;
+window.validateTimeMarksLive = validateTimeMarksLive;
+window.handleTimeSubmit = handleTimeSubmit;
+window.handleCategoryOrRouteChange = handleCategoryOrRouteChange;
+window.handleVideoUrlChange = handleVideoUrlChange;
+
 // =======================================================
-// SISTEMA DE DESAFÍOS SEMANALES (Inspirado en NightRiderz World)
+// SISTEMA OFICIAL DE TEMPORADAS BLACKLIST & 4 DESAFÍOS SEMANALES
+// Temporada 1: Noviembre 2026 (4 Semanas)
+// Temporada 2: Diciembre 2026 (4 Semanas)
+// 4 Pistas semanales: 2 Circuitos (1 Junkman, 1 BMW) + 2 Sprints (1 Junkman, 1 BMW)
 // =======================================================
-let currentChallengeYear = 2026;
-let currentChallengeWeek = 1;
-let challengeActiveFilter = 'all';
 
-function getISOWeek(date) {
-    const target = new Date(date.valueOf());
-    const dayNr = (date.getDay() + 6) % 7;
-    target.setDate(target.getDate() - dayNr + 3);
-    const firstThursday = target.valueOf();
-    target.setMonth(0, 1);
-    if (target.getDay() !== 4) {
-        target.setMonth(0, 1 + ((4 - target.getDay()) + 7) % 7);
-    }
-    return 1 + Math.ceil((firstThursday - target) / 604800000);
-}
+let currentSeasonId = 'season_1';
+let currentSeasonWeek = 1;
+let currentChallengesMode = 'challenges'; // 'challenges' | 'standings'
+let cachedSeasonStandings = {};
 
-function getWeekDateRangeString(year, week) {
-    if (typeof CHAMPIONSHIP_WEEKS_DATA !== 'undefined') {
-        if (CHAMPIONSHIP_WEEKS_DATA[week]) {
-            return `${CHAMPIONSHIP_WEEKS_DATA[week].title} · (${CHAMPIONSHIP_WEEKS_DATA[week].dates})`;
-        } else if (year === 2026 && week >= 40 && week <= 43) {
-            const wData = CHAMPIONSHIP_WEEKS_DATA[week - 39];
-            if (wData) return `${wData.title} · (${wData.dates})`;
-        }
-    }
-    const simple = new Date(year, 0, 1 + (week - 1) * 7);
-    const dayOfWeek = simple.getDay();
-    const ISOweekStart = new Date(simple);
-    if (dayOfWeek <= 4)
-        ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
-    else
-        ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
-
-    const ISOweekEnd = new Date(ISOweekStart);
-    ISOweekEnd.setDate(ISOweekStart.getDate() + 6);
-
-    const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-    return `Semana ${week} · del ${ISOweekStart.getDate()} de ${months[ISOweekStart.getMonth()]} al ${ISOweekEnd.getDate()} de ${months[ISOweekEnd.getMonth()]} de ${year}`;
-}
-
-function createSeededRandom(seed) {
-    let s = seed % 2147483647;
-    if (s <= 0) s += 2147483646;
-    return function () {
-        return (s = s * 16807 % 2147483647) / 2147483647;
-    };
+function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
 }
 
 function getCompletedChallenges() {
@@ -2637,251 +2757,311 @@ function toggleChallengeComplete(challengeId) {
     renderChallengesUI();
 }
 
-function startChallengeSubmission(routeName, carName) {
+/**
+ * Iniciar envío desde la ficha de desafío de temporada
+ * Preselecciona automáticamente pista, categoría, auto y vincula metadatos del evento
+ */
+function startSeasonChallengeSubmission(seasonId, weekNum, challengeId, trackName, category, carName, rewardDesc) {
+    // Cambiar a la vista de formulario de envío
     switchView('submit');
+
+    // Activar banner de contexto en el formulario
+    const banner = document.getElementById('sub-season-banner');
+    const bannerTitle = document.getElementById('sub-season-banner-title');
+    const bannerDesc = document.getElementById('sub-season-banner-desc');
+    const season = (typeof SEASONS_DATA !== 'undefined' && SEASONS_DATA[seasonId]) ? SEASONS_DATA[seasonId] : null;
+    const seasonName = season ? season.name : 'Temporada Blacklist';
+
+    if (banner) banner.style.display = 'flex';
+    if (bannerTitle) bannerTitle.innerHTML = `🏆 DESAFÍO OFICIAL VINCULADO: ${seasonName} • SEMANA ${weekNum}`;
+    if (bannerDesc) bannerDesc.innerHTML = `🏁 <strong>${escapeHtml(trackName)}</strong> (${escapeHtml(category)}) — Recompensa: <strong>${escapeHtml(rewardDesc || 'Puntos PTS & Bounty')}</strong>`;
+
+    // Campos ocultos
+    const seasonIdInput = document.getElementById('sub-season-id');
+    const weekNumInput = document.getElementById('sub-week-num');
+    const challengeIdInput = document.getElementById('sub-challenge-id');
+    const rewardDescInput = document.getElementById('sub-reward-desc');
+
+    if (seasonIdInput) seasonIdInput.value = seasonId;
+    if (weekNumInput) weekNumInput.value = weekNum;
+    if (challengeIdInput) challengeIdInput.value = challengeId;
+    if (rewardDescInput) rewardDescInput.value = rewardDesc || '';
+
+    // Preseleccionar pista oficial
     const routeInput = document.getElementById('sub-route');
-    const carInput = document.getElementById('sub-car');
-    if (routeInput) routeInput.value = routeName;
-    if (carInput) {
-        const cleanCar = carName.replace('Solo ', '').replace(' (Sin Nitro)', '').trim();
-        carInput.value = cleanCar !== 'Cualquier Auto' ? cleanCar : 'BMW M3 GTR';
-    }
-    const form = document.getElementById('form-submit-time');
-    if (form) {
-        form.scrollIntoView({ behavior: 'smooth' });
-    }
-}
-
-function generateWeeklyChallenges(year, week) {
-    const sourceRoutes = typeof routesData !== 'undefined' ? routesData : [];
-    if (sourceRoutes.length === 0) return [];
-
-    const difficultyConfig = [
-        { diff: 'Muy Fácil', class: 'diff-very-easy', multiplier: 1.15, reward: '500 SB', cash: '$100.000' },
-        { diff: 'Muy Fácil', class: 'diff-very-easy', multiplier: 1.12, reward: '500 SB', cash: '$150.000' },
-        { diff: 'Fácil', class: 'diff-easy', multiplier: 1.08, reward: '1.000 SB', cash: '$250.000' },
-        { diff: 'Fácil', class: 'diff-easy', multiplier: 1.05, reward: '1.000 SB', cash: '$300.000' },
-        { diff: 'Medio', class: 'diff-medium', multiplier: 1.02, reward: '2.000 SB', cash: '$500.000' },
-        { diff: 'Medio', class: 'diff-medium', multiplier: 0.99, reward: '2.000 SB', cash: '$600.000' },
-        { diff: 'Duro', class: 'diff-hard', multiplier: 0.96, reward: '2.500 SB', cash: '$750.000' },
-        { diff: 'Extremo', class: 'diff-extreme', multiplier: 0.93, reward: '3.500 SB', cash: '$1.000.000' }
-    ];
-
-    const modeLabels = {
-        'Circuito': 'MODO CONTRARRELOJ // SINGLE LAP',
-        'Sprint': 'SPRINT TELEMETRÍA // FULL ROUTE',
-        'Drag': 'DRAG TIME ATTACK // PURA POTENCIA'
-    };
-
-    // Sincronización oficial con el Campeonato Blacklist 2026 (Rotación de Grupos y Retos):
-    // Las 8 rutas de las sesiones semanales coinciden exactamente con las 8 pistas de la semana del torneo.
-    let champWeekNum = null;
-    if (typeof CHAMPIONSHIP_WEEKS_DATA !== 'undefined') {
-        if (CHAMPIONSHIP_WEEKS_DATA[week]) {
-            champWeekNum = week;
-        } else if (year === 2026 && week >= 40 && week <= 43) {
-            champWeekNum = week - 39;
+    if (routeInput) {
+        routeInput.value = trackName;
+        if (typeof handleCategoryOrRouteChange === 'function') {
+            handleCategoryOrRouteChange();
         }
     }
 
-    if (champWeekNum && CHAMPIONSHIP_WEEKS_DATA[champWeekNum]) {
-        const champWeek = CHAMPIONSHIP_WEEKS_DATA[champWeekNum];
-        const challenges = [];
-
-        champWeek.challenges.forEach((ch, i) => {
-            const routeObj = sourceRoutes.find(r => r.name.toLowerCase() === ch.route.toLowerCase()) || {
-                name: ch.route,
-                type: ch.type,
-                sheets: {}
-            };
-            const diff = difficultyConfig[i] || difficultyConfig[0];
-            const topTime = ch.top3 && ch.top3[0] ? ch.top3[0].time : '01:25.000';
-            const topPilot = ch.top3 && ch.top3[0] ? ch.top3[0].pilot : 'Razor';
-            const topCar = ch.top3 && ch.top3[0] ? ch.top3[0].car : 'BMW M3 GTR';
-            const carRestr = ch.carRestriction || `${topCar} (${topPilot})`;
-            const repPrize = ch.top3 && ch.top3[0] && ch.top3[0].repBadge ? ch.top3[0].repBadge : diff.cash;
-            const completedCount = 55 + (i * 22);
-
-            challenges.push({
-                id: `${year}-w${week}-ch${i + 1}`,
-                index: i + 1,
-                route: routeObj,
-                difficulty: diff.diff,
-                diffClass: diff.class,
-                carRestriction: carRestr,
-                targetTime: topTime,
-                reward: diff.reward,
-                cashReward: repPrize,
-                communityCount: completedCount,
-                modeLabel: modeLabels[ch.type] || 'MODO CONTRARRELOJ'
-            });
-        });
-
-        return challenges;
+    // Preseleccionar categoría
+    const categorySelect = document.getElementById('sub-category');
+    if (categorySelect) {
+        if (category && category.includes('BMW')) {
+            categorySelect.value = 'BMW M3 GTR';
+        } else {
+            categorySelect.value = 'Junkman';
+        }
+        if (typeof handleCategoryOrRouteChange === 'function') {
+            handleCategoryOrRouteChange();
+        }
     }
 
-    const rng = createSeededRandom(year * 100 + week);
-    const shuffledRoutes = [...sourceRoutes].sort(() => rng() - 0.5);
-
-    const carRestrictions = [
-        "BMW M3 GTR (Auto Bonus)",
-        "Porsche Carrera GT (Junkman)",
-        "Porsche Cayman S (No Junkman)",
-        "Chevrolet Corvette C6.R (Stock)",
-        "Fiat Punto (Stock)",
-        "Mazda RX-8 (No Junkman)",
-        "Subaru Impreza WRX (Stock)",
-        "Mitsubishi Lancer Evo VIII (No Junkman)"
-    ];
-
-    const challenges = [];
-    const count = Math.min(8, shuffledRoutes.length);
-
-    for (let i = 0; i < count; i++) {
-        const route = shuffledRoutes[i];
-        const diff = difficultyConfig[i] || difficultyConfig[0];
-        const car = carRestrictions[Math.floor(rng() * carRestrictions.length)];
-        const completedCount = Math.floor(rng() * 250) + 45;
-
-        let baseSeconds = 90;
-        if (route.type === 'Sprint') baseSeconds = 125;
-        if (route.type === 'Drag') baseSeconds = 30;
-
-        baseSeconds = Math.round((baseSeconds + (route.name.length * 2) % 30) * diff.multiplier);
-        const mins = Math.floor(baseSeconds / 60);
-        const secs = baseSeconds % 60;
-        const millis = Math.floor(rng() * 900) + 100;
-        const formattedTime = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}.${millis}`;
-
-        challenges.push({
-            id: `${year}-w${week}-ch${i + 1}`,
-            index: i + 1,
-            route: route,
-            difficulty: diff.diff,
-            diffClass: diff.class,
-            carRestriction: car,
-            targetTime: formattedTime,
-            reward: diff.reward,
-            cashReward: diff.cash,
-            communityCount: completedCount,
-            modeLabel: modeLabels[route.type] || 'MODO CONTRARRELOJ'
-        });
+    // Preseleccionar auto
+    const carInput = document.getElementById('sub-car');
+    if (carInput) {
+        if ((category && category.includes('BMW')) || (carName && carName.includes('BMW'))) {
+            carInput.value = 'BMW M3 GTR';
+        } else {
+            carInput.value = '';
+            carInput.placeholder = 'Cualquier Auto (con piezas Junkman)';
+        }
     }
 
-    return challenges;
+    const form = document.getElementById('form-submit-time');
+    if (form) {
+        form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 }
 
+/**
+ * Desvincular reto de temporada y restaurar formulario limpio
+ */
+function clearSeasonSubmissionContext() {
+    const banner = document.getElementById('sub-season-banner');
+    if (banner) banner.style.display = 'none';
+
+    const seasonIdInput = document.getElementById('sub-season-id');
+    const weekNumInput = document.getElementById('sub-week-num');
+    const challengeIdInput = document.getElementById('sub-challenge-id');
+    const rewardDescInput = document.getElementById('sub-reward-desc');
+
+    if (seasonIdInput) seasonIdInput.value = '';
+    if (weekNumInput) weekNumInput.value = '';
+    if (challengeIdInput) challengeIdInput.value = '';
+    if (rewardDescInput) rewardDescInput.value = '';
+}
+
+/**
+ * Compatibilidad con envíos directos genéricos
+ */
+function startChallengeSubmission(routeName, carName) {
+    startSeasonChallengeSubmission(currentSeasonId, currentSeasonWeek, 'direct', routeName, carName.includes('BMW') ? 'BMW M3 GTR' : 'Junkman', carName, 'Bolsa de Temporada');
+}
+
+/**
+ * Cambiar temporada activa (Temporada 1 Noviembre vs Temporada 2 Diciembre)
+ */
+function switchChallengeSeason(seasonId, btn) {
+    if (!seasonId) return;
+    currentSeasonId = seasonId;
+
+    document.querySelectorAll('.season-pill-btn').forEach(b => b.classList.remove('active'));
+    const targetBtn = btn || document.getElementById(`btn-season-${seasonId}`);
+    if (targetBtn) targetBtn.classList.add('active');
+
+    currentSeasonWeek = 1;
+    updateSeasonWeekPills();
+
+    if (currentChallengesMode === 'standings') {
+        loadSeasonStandingsLive();
+    } else {
+        renderChallengesUI();
+    }
+}
+
+/**
+ * Establecer semana activa (1 a 4)
+ */
+function setSeasonWeek(weekNum) {
+    currentSeasonWeek = Math.max(1, Math.min(4, parseInt(weekNum, 10) || 1));
+    updateSeasonWeekPills();
+    renderChallengesUI();
+}
+
+/**
+ * Navegar semanas hacia adelante o atrás (+1 / -1)
+ */
+function changeSeasonWeek(delta) {
+    let nextWeek = currentSeasonWeek + delta;
+    if (nextWeek > 4) nextWeek = 1;
+    else if (nextWeek < 1) nextWeek = 4;
+    setSeasonWeek(nextWeek);
+}
+
+function updateSeasonWeekPills() {
+    for (let w = 1; w <= 4; w++) {
+        const pill = document.getElementById(`btn-week-pill-${w}`);
+        if (pill) {
+            if (w === currentSeasonWeek) {
+                pill.classList.add('active');
+            } else {
+                pill.classList.remove('active');
+            }
+        }
+    }
+}
+
+/**
+ * Alternar entre vista de Fichas de Desafíos y Tabla de Clasificación de Temporada
+ */
+function setChallengesViewMode(mode) {
+    currentChallengesMode = mode;
+    const btnChallenges = document.getElementById('btn-subtab-challenges');
+    const btnStandings = document.getElementById('btn-subtab-season-standings');
+    const containerCards = document.getElementById('container-challenges-cards');
+    const containerStandings = document.getElementById('container-season-standings');
+
+    if (mode === 'standings') {
+        if (btnChallenges) btnChallenges.classList.remove('active');
+        if (btnStandings) btnStandings.classList.add('active');
+        if (containerCards) containerCards.style.display = 'none';
+        if (containerStandings) containerStandings.style.display = 'block';
+        loadSeasonStandingsLive();
+    } else {
+        if (btnChallenges) btnChallenges.classList.add('active');
+        if (btnStandings) btnStandings.classList.remove('active');
+        if (containerCards) containerCards.style.display = 'block';
+        if (containerStandings) containerStandings.style.display = 'none';
+        renderChallengesUI();
+    }
+}
+
+/**
+ * Renderizado de las 4 tarjetas oficiales de la semana seleccionada
+ */
 function renderChallengesUI() {
     const gridContainer = document.getElementById('challenges-grid');
     if (!gridContainer) return;
 
-    const challenges = generateWeeklyChallenges(currentChallengeYear, currentChallengeWeek);
-    const completedList = getCompletedChallenges();
+    const season = (typeof SEASONS_DATA !== 'undefined' && SEASONS_DATA[currentSeasonId])
+        ? SEASONS_DATA[currentSeasonId]
+        : null;
 
-    const dateRangeEl = document.getElementById('challenge-week-daterange');
-    const weekLabelEl = document.getElementById('challenge-week-label');
-    const totalCountEl = document.getElementById('challenge-total-count');
-    const pendingCountEl = document.getElementById('challenge-pending-count');
-    const completedCountEl = document.getElementById('challenge-completed-count');
-
-    const total = challenges.length;
-    const completedCount = challenges.filter(c => completedList.includes(c.id)).length;
-    const pendingCount = total - completedCount;
-
-    if (dateRangeEl) dateRangeEl.textContent = getWeekDateRangeString(currentChallengeYear, currentChallengeWeek);
-    if (weekLabelEl) weekLabelEl.textContent = `Semana ${currentChallengeWeek}, ${currentChallengeYear}`;
-    if (totalCountEl) totalCountEl.textContent = total;
-    if (pendingCountEl) pendingCountEl.textContent = pendingCount;
-    if (completedCountEl) completedCountEl.textContent = completedCount;
-
-    const pillAll = document.getElementById('count-pill-all');
-    const pillTodo = document.getElementById('count-pill-todo');
-    const pillComp = document.getElementById('count-pill-completed');
-    if (pillAll) pillAll.textContent = total;
-    if (pillTodo) pillTodo.textContent = pendingCount;
-    if (pillComp) pillComp.textContent = completedCount;
-
-    const filtered = challenges.filter(c => {
-        const isDone = completedList.includes(c.id);
-        if (challengeActiveFilter === 'todo') return !isDone;
-        if (challengeActiveFilter === 'completed') return isDone;
-        return true;
-    });
-
-    if (filtered.length === 0) {
-        gridContainer.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 40px; font-family: var(--font-racing); font-size: 14.6px;">No hay desafíos en esta categoría para la semana seleccionada.</p>`;
+    if (!season || !season.weeks) {
+        gridContainer.innerHTML = '<p style="color:var(--text-muted); text-align:center; padding:30px;">Cargando calendario de temporadas...</p>';
         return;
     }
 
-    const thumbImages = [
-        'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=600&q=80',
-        'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=600&q=80',
-        'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=600&q=80',
-        'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=600&q=80'
-    ];
+    const weekIdx = Math.max(0, Math.min(season.weeks.length - 1, currentSeasonWeek - 1));
+    const currentWeekData = season.weeks[weekIdx];
+    const challenges = currentWeekData ? currentWeekData.challenges : [];
+    const completedList = getCompletedChallenges();
 
+    // Actualización de barras de información de cabecera
+    const dateRangeEl = document.getElementById('challenge-week-daterange');
+    const weekInfoLabel = document.getElementById('season-week-info-label');
+    const totalCountEl = document.getElementById('challenge-total-count');
+    const rewardPotEl = document.getElementById('challenge-reward-pot');
+
+    if (dateRangeEl) dateRangeEl.textContent = currentWeekData.dateRange || '01 Nov - 28 Nov 2026';
+    if (weekInfoLabel) weekInfoLabel.textContent = `${season.name} • ${currentWeekData.title}`;
+    if (totalCountEl) totalCountEl.textContent = `${challenges.length} Retos Oficiales`;
+
+    // Calcular bolsa total de la semana
+    let totalBountyNum = 0;
+    challenges.forEach(ch => {
+        if (ch.reward && ch.reward.bounty) {
+            const num = parseInt(ch.reward.bounty.replace(/[^0-9]/g, ''), 10) || 0;
+            totalBountyNum += num;
+        }
+    });
+    if (rewardPotEl) {
+        rewardPotEl.textContent = totalBountyNum > 0 ? `$${totalBountyNum.toLocaleString('de-DE')} Bounty` : '$2.000.000 Bounty';
+    }
+
+    updateSeasonWeekPills();
+
+    // Renderizar exactamente las 4 tarjetas
     let html = '';
-    filtered.forEach((ch, idx) => {
+    challenges.forEach((ch, idx) => {
         const isDone = completedList.includes(ch.id);
-        const thumbUrl = thumbImages[idx % thumbImages.length];
+        const isCircuit = ch.type === 'Circuito';
+        const isBMW = ch.category.includes('BMW');
+        const catBadgeClass = isBMW ? 'cat-bmw' : 'cat-junkman';
+        const catBadgeText = isBMW ? '👑 BMW M3 GTR REGLAMENTARIO' : '⚡ JUNKMAN (CUALQUIER AUTO)';
+        const catIcon = isBMW ? '🏎️' : '🔧';
+        const rewardDesc = ch.reward ? ch.reward.desc : '300 PTS Blacklist • $500.000 Bounty';
+
+        const carImg = isBMW
+            ? 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=700&q=80'
+            : (idx === 0 ? 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=700&q=80' : 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=700&q=80');
 
         html += `
-            <div class="challenge-card ${isDone ? 'is-completed' : ''}">
+            <div class="challenge-card season-ch-card ${isDone ? 'is-completed' : ''}" id="card-${ch.id}">
                 <div>
-                    <!-- Miniatura con badges -->
-                    <div class="challenge-thumb" style="background-image: url('${thumbUrl}');">
-                        <div class="challenge-thumb-header">
-                            <span class="difficulty-badge ${ch.diffClass}">${ch.difficulty}</span>
-                            <span class="challenge-tier-pill">🏁 ${ch.route.type}</span>
+                    <!-- Miniatura y badges superiores -->
+                    <div class="challenge-thumb" style="background-image: url('${ch.thumb || carImg}');">
+                        <div class="challenge-thumb-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <span class="season-cat-badge ${catBadgeClass}">
+                                ${catIcon} ${catBadgeText}
+                            </span>
+                            <span class="challenge-tier-pill" style="font-size: 11px;">
+                                🏁 ${ch.type} ${isCircuit && ch.lapType ? '• ' + ch.lapType : ''}
+                            </span>
                         </div>
                     </div>
 
-                    <!-- Estadísticas de corredores -->
-                    <div class="challenge-community-row">
-                        <span>👥</span>
-                        <span>${ch.communityCount} corredores completaron</span>
-                    </div>
-
-                    <!-- Datos del desafío -->
-                    <div class="challenge-body">
-                        <div>
-                            <span class="challenge-mode-label">${ch.modeLabel}</span>
-                            <h3 class="challenge-route-name" title="${ch.route.name}">${ch.route.name}</h3>
+                    <!-- Cuerpo de la ficha -->
+                    <div class="challenge-body" style="padding: 16px;">
+                        <div style="margin-bottom: 10px;">
+                            <span class="challenge-mode-label" style="font-size: 10.5px; color: ${isBMW ? 'var(--cyan-neon)' : 'var(--nfs-orange)'};">
+                                ${isCircuit ? 'TRAZADO DE CIRCUITO // CONTRARRELOJ' : 'TRAZADO DE SPRINT // FULL SPEED'}
+                            </span>
+                            <h3 class="challenge-route-name" style="font-size: 19px; margin-top: 2px;" title="${ch.track}">
+                                ${ch.track}
+                            </h3>
                         </div>
 
-                        <!-- Tiempo objetivo -->
-                        <div class="challenge-time-box">
-                            <span style="font-size: 14.6px;">⏱️</span>
-                            <div>
-                                <div style="font-size: 8.1px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">TIEMPO OBJETIVO</div>
-                                <div class="challenge-time-val" style="color: var(--nfs-orange); text-shadow: var(--nfs-subtle-glow);">
-                                    - ${ch.targetTime}
+                        <!-- Tiempo Objetivo y Vehículo -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+                            <div class="challenge-time-box" style="margin: 0; padding: 8px 10px;">
+                                ⏱️
+                                <div>
+                                    <div style="font-size: 8.5px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">TIEMPO OBJETIVO</div>
+                                    <div class="challenge-time-val" style="color: var(--green-neon); font-size: 14px;">
+                                        ${ch.targetTime}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="challenge-time-box" style="margin: 0; padding: 8px 10px; background: rgba(255,255,255,0.03);">
+                                🚗
+                                <div>
+                                    <div style="font-size: 8.5px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">VEHÍCULO</div>
+                                    <div style="font-size: 11px; font-weight: 800; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${ch.car}">
+                                        ${ch.car}
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Restricciones -->
-                        <div class="challenge-restriction">
-                            <span style="color: var(--nfs-orange);">🚗</span>
-                            <span>${ch.carRestriction}</span>
+                        <!-- Grid de Recompensas -->
+                        <div class="season-reward-grid">
+                            <div class="season-reward-cell">
+                                <span class="rw-lbl">💰 Bolsa Bounty</span>
+                                <span class="rw-val" style="color: var(--green-neon);">${ch.reward ? ch.reward.bounty : '$500.000'}</span>
+                            </div>
+                            <div class="season-reward-cell">
+                                <span class="rw-lbl">⭐ Puntos Blacklist</span>
+                                <span class="rw-val" style="color: var(--nfs-orange);">${ch.reward ? ch.reward.pts : '300'} PTS</span>
+                            </div>
                         </div>
-
-                        <!-- Recompensa -->
-                        <div class="challenge-reward-bar">
-                            <span>⭐</span>
-                            <span>RECOMPENSA: ${ch.reward} // ${ch.cashReward}</span>
+                        <div style="font-size: 11px; color: #cbd5e1; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                            <span>🎖️</span> <span><strong>Trofeo:</strong> ${ch.reward ? ch.reward.badge : 'Medalla Oficial'}</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Acciones -->
-                <div class="challenge-actions-row">
-                    <button class="btn-toggle-complete ${isDone ? 'completed' : 'incomplete'}" onclick="toggleChallengeComplete('${ch.id}')">
-                        ${isDone ? '✅ COMPLETADO' : '❌ NO COMPLETADO'}
+                <!-- Botones de Acción -->
+                <div class="challenge-actions-row" style="padding: 12px 16px; background: rgba(0,0,0,0.25); border-top: 1px solid rgba(255,255,255,0.06); gap: 10px;">
+                    <button type="button" class="btn-toggle-complete ${isDone ? 'completed' : 'incomplete'}" onclick="toggleChallengeComplete('${ch.id}')" style="flex: 1; padding: 10px; font-size: 11.5px;">
+                        ${isDone ? '✅ COMPLETADO' : '⭕ MARCAR HECHO'}
                     </button>
                     
-                    <button class="btn-challenge-submit" onclick="startChallengeSubmission('${ch.route.name}', '${ch.carRestriction}')">
-                        🚀 Enviar Registro a Moderación
+                    <button type="button" class="btn-challenge-submit" onclick="startSeasonChallengeSubmission('${season.id}', ${currentWeekData.weekNum}, '${ch.id}', '${escapeHtml(ch.track)}', '${escapeHtml(ch.category)}', '${escapeHtml(ch.car)}', '${escapeHtml(rewardDesc)}')" style="flex: 1.4; padding: 10px; font-size: 12px;">
+                        🚀 Enviar Récord
                     </button>
                 </div>
             </div>
@@ -2891,38 +3071,192 @@ function renderChallengesUI() {
     gridContainer.innerHTML = html;
 }
 
-function changeChallengeWeek(delta) {
-    currentChallengeWeek += delta;
-    if (currentChallengeWeek > 52) {
-        currentChallengeWeek = 1;
-        currentChallengeYear++;
-    } else if (currentChallengeWeek < 1) {
-        currentChallengeWeek = 52;
-        currentChallengeYear--;
+/**
+ * Cargar y renderizar en vivo la clasificación de temporada desde Firebase RTDB
+ */
+async function loadSeasonStandingsLive(forceRefresh = false) {
+    const tbody = document.getElementById('tbody-season-standings-live');
+    const podiumContainer = document.getElementById('season-podium-container');
+    const titleEl = document.getElementById('season-standings-title');
+
+    const season = (typeof SEASONS_DATA !== 'undefined' && SEASONS_DATA[currentSeasonId])
+        ? SEASONS_DATA[currentSeasonId]
+        : null;
+    const seasonName = season ? season.name : 'Temporada Blacklist';
+    const seasonPeriod = season ? season.period : '2026';
+
+    if (titleEl) {
+        titleEl.textContent = `🏆 CLASIFICACIÓN OFICIAL: ${seasonName.toUpperCase()} (${seasonPeriod.toUpperCase()})`;
     }
-    renderChallengesUI();
+
+    if (tbody && (!cachedSeasonStandings[currentSeasonId] || forceRefresh)) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="9" style="text-align: center; color: var(--cyan-neon); padding: 40px; font-family: var(--font-racing); font-size: 13.5px;">
+                    <div style="display: inline-block; animation: spin 1s linear infinite; margin-right: 8px;">🔄</div>
+                    Consultando tabla de clasificación de ${seasonName} desde Firebase RTDB...
+                </td>
+            </tr>
+        `;
+    }
+
+    if (cachedSeasonStandings[currentSeasonId] && !forceRefresh) {
+        renderSeasonStandingsLive(cachedSeasonStandings[currentSeasonId]);
+        return;
+    }
+
+    const baseUrl = (window.NFS_FIREBASE && window.NFS_FIREBASE.RTDB_URL)
+        ? window.NFS_FIREBASE.RTDB_URL
+        : "https://nfsranks-blacklist-default-rtdb.firebaseio.com";
+
+    try {
+        const res = await fetch(`${baseUrl}/seasons/${currentSeasonId}/standings.json`);
+        let standings = null;
+        if (res.ok) {
+            standings = await res.json();
+        }
+
+        let list = [];
+        if (Array.isArray(standings)) {
+            list = standings.filter(Boolean);
+        } else if (standings && typeof standings === 'object') {
+            list = Object.values(standings).filter(Boolean);
+        }
+
+        // Si aún no hay registros publicados, proveer un preview elegante de pilotos aspirantes
+        if (list.length === 0) {
+            list = [
+                { rank: "#1", driver: "Razor", s1: 100, s2: 85, s3: 90, s4: 95, totalPts: 370, totalBounty: "$7.400.000", badgeTitle: "Rey de Rockport City", rewardMedals: "Oro & Trofeo Legend" },
+                { rank: "#2", driver: "Bull", s1: 80, s2: 75, s3: 82, s4: 88, totalPts: 325, totalBounty: "$6.500.000", badgeTitle: "Élite Blacklist #1", rewardMedals: "Plata de Temporada" },
+                { rank: "#3", driver: "Ronnie", s1: 70, s2: 68, s3: 75, s4: 72, totalPts: 285, totalBounty: "$5.700.000", badgeTitle: "Élite Blacklist #1", rewardMedals: "Plata de Temporada" },
+                { rank: "#4", driver: "Torque", s1: 50, s2: 55, s3: 60, s4: 58, totalPts: 223, totalBounty: "$4.460.000", badgeTitle: "Veterano Oficial", rewardMedals: "Plata de Temporada" },
+                { rank: "#5", driver: "Ming", s1: 45, s2: 48, s3: 52, s4: 50, totalPts: 195, totalBounty: "$3.900.000", badgeTitle: "Veterano Oficial", rewardMedals: "Plata de Temporada" },
+                { rank: "#6", driver: "Webster", s1: 35, s2: 40, s3: 42, s4: 45, totalPts: 162, totalBounty: "$3.240.000", badgeTitle: "Veterano Oficial", rewardMedals: "Completador Oficial" }
+            ];
+        }
+
+        cachedSeasonStandings[currentSeasonId] = list;
+        renderSeasonStandingsLive(list);
+    } catch (e) {
+        console.warn("Error cargando clasificación de temporada:", e);
+        if (tbody) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="9" style="text-align: center; color: var(--f1-red); padding: 30px; font-family: var(--font-racing);">
+                        ❌ No se pudo conectar con Firebase RTDB. Verifica tu conexión a internet o intenta nuevamente.
+                    </td>
+                </tr>
+            `;
+        }
+    }
 }
 
-function resetToCurrentWeek() {
-    const today = new Date();
-    currentChallengeYear = today.getFullYear();
-    currentChallengeWeek = getISOWeek(today);
-    renderChallengesUI();
-}
+function renderSeasonStandingsLive(list) {
+    const tbody = document.getElementById('tbody-season-standings-live');
+    const podiumContainer = document.getElementById('season-podium-container');
+    if (!tbody) return;
 
-function setChallengeFilter(filter, btn) {
-    document.querySelectorAll('.challenge-filter-pills .filter-btn').forEach(b => b.classList.remove('active'));
-    if (btn) btn.classList.add('active');
-    challengeActiveFilter = filter;
-    renderChallengesUI();
+    if (!list || list.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="9" style="text-align: center; color: var(--text-muted); padding: 40px; font-family: var(--font-racing);">
+                    No hay tiempos puntuados aún para esta temporada. ¡Sé el primero en enviar tu récord!
+                </td>
+            </tr>
+        `;
+        if (podiumContainer) podiumContainer.innerHTML = '';
+        return;
+    }
+
+    // Render podium Top 3
+    if (podiumContainer) {
+        const top3 = list.slice(0, 3);
+        const medals = ['🥇', '🥈', '🥉'];
+        const rankClasses = ['rank-1', 'rank-2', 'rank-3'];
+
+        podiumContainer.innerHTML = top3.map((p, idx) => {
+            const avatarSvg = (typeof OPERATOR_ICONS !== 'undefined') ? OPERATOR_ICONS.getAvatar(p.driver, 44) : '';
+            return `
+                <div class="season-podium-card ${rankClasses[idx]}">
+                    <span class="season-podium-medal">${medals[idx]}</span>
+                    <div style="width: 44px; height: 44px; border-radius: 50%; overflow: hidden; background: rgba(0,0,0,0.4); flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                        ${avatarSvg || '🏎️'}
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <div class="season-podium-driver" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            ${escapeHtml(p.driver)}
+                        </div>
+                        <div class="season-podium-pts">
+                            ${p.totalPts || 0} PTS BLACKLIST
+                        </div>
+                        <div class="season-podium-bounty">
+                            💰 ${p.totalBounty || '$0'}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // Render table rows
+    tbody.innerHTML = list.map((p, idx) => {
+        const rankNum = idx + 1;
+        const rankBadge = rankNum === 1 ? '🥇 #1' : (rankNum === 2 ? '🥈 #2' : (rankNum === 3 ? '🥉 #3' : `#${rankNum}`));
+        const avatarSvg = (typeof OPERATOR_ICONS !== 'undefined') ? OPERATOR_ICONS.getAvatar(p.driver, 24) : '';
+
+        return `
+            <tr>
+                <td style="text-align: center; font-family: var(--font-racing); font-weight: 800; color: ${rankNum <= 3 ? 'var(--nfs-orange)' : '#cbd5e1'}; font-size: 13.5px;">
+                    ${rankBadge}
+                </td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="display: inline-block; width: 24px; height: 24px; border-radius: 50%; overflow: hidden; vertical-align: middle;">
+                            ${avatarSvg}
+                        </span>
+                        <strong style="color: #ffffff; font-family: var(--font-racing); font-size: 13.5px;">${escapeHtml(p.driver)}</strong>
+                    </div>
+                </td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">${p.s1 || 0}</td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">${p.s2 || 0}</td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">${p.s3 || 0}</td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">${p.s4 || 0}</td>
+                <td style="text-align: center; font-family: var(--font-mono); font-size: 14.5px; font-weight: 900; color: var(--nfs-orange);">
+                    ${p.totalPts || 0} PTS
+                </td>
+                <td>
+                    <span style="color: var(--green-neon); font-family: var(--font-mono); font-weight: 700; font-size: 12.5px;">
+                        ${p.totalBounty || '$0'}
+                    </span>
+                </td>
+                <td>
+                    <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10.5px; font-weight: 700; background: rgba(6, 182, 212, 0.15); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.3);">
+                        ${p.badgeTitle || 'Aspirante Blacklist'}
+                    </span>
+                </td>
+            </tr>
+        `;
+    }).join('');
 }
 
 function initChallengesSystem() {
-    const today = new Date();
-    currentChallengeYear = today.getFullYear();
-    currentChallengeWeek = getISOWeek(today);
+    currentSeasonId = 'season_1';
+    currentSeasonWeek = 1;
     renderChallengesUI();
 }
+
+// Exportación global a window para eventos HTML
+window.switchChallengeSeason = switchChallengeSeason;
+window.setSeasonWeek = setSeasonWeek;
+window.changeSeasonWeek = changeSeasonWeek;
+window.setChallengesViewMode = setChallengesViewMode;
+window.startSeasonChallengeSubmission = startSeasonChallengeSubmission;
+window.clearSeasonSubmissionContext = clearSeasonSubmissionContext;
+window.startChallengeSubmission = startChallengeSubmission;
+window.toggleChallengeComplete = toggleChallengeComplete;
+window.loadSeasonStandingsLive = loadSeasonStandingsLive;
+window.renderChallengesUI = renderChallengesUI;
+window.initChallengesSystem = initChallengesSystem;
 
 // =======================================================
 // BLACKLIST EVENT // CAMPEONATO 2026 (4 SEMANAS • 5 GRUPOS • 8 DESAFÍOS)
@@ -4350,10 +4684,10 @@ async function syncLiveLeaderboardWithOfficialSheet() {
     if (!lbContainer || typeof routesData === 'undefined' || routesData.length === 0) return;
 
     try {
-        const sampleSheet = routesData[0].sheets ? (routesData[0].sheets.junkmanSingle || Object.values(routesData[0].sheets)[0]) : "";
-        if (!sampleSheet) return;
+        const route = routesData[0];
+        const fbData = await fetchFirebaseRouteRecords(route.name);
+        const rows = extractCategoryRecords(fbData, 'junkman_single');
 
-        const rows = await fetchGoogleSheetData(sampleSheet, 8);
         if (Array.isArray(rows) && rows.length > 0) {
             const validRows = rows.filter(r => r.rank && r.driver && r.time).slice(0, 5);
             if (validRows.length >= 3) {
@@ -4362,17 +4696,17 @@ async function syncLiveLeaderboardWithOfficialSheet() {
                     const rankNum = idx + 1;
                     const rankClass = rankNum === 1 ? 'live-lb-rank-1' : (rankNum === 2 ? 'live-lb-rank-2' : (rankNum === 3 ? 'live-lb-rank-3' : 'live-lb-rank-other'));
                     html += `
-                        <div class="live-lb-item" onclick="navigateFromLiveLeaderboard('${routesData[0].name}', '${routesData[0].type}')" title="Ver Leaderboard oficial de ${routesData[0].name}">
+                        <div class="live-lb-item" onclick="navigateFromLiveLeaderboard('${route.name.replace(/'/g, "\\'")}', '${route.type}')" title="Ver Leaderboard oficial de ${route.name}">
                             <div class="live-lb-left">
                                 <span class="live-lb-rank-num ${rankClass}">${rankNum}</span>
                                 <div class="live-lb-info">
                                     <div class="live-lb-driver">${rec.driver}</div>
-                                    <div class="live-lb-track">📍 ${routesData[0].name} (${routesData[0].type})</div>
+                                    <div class="live-lb-track">📍 ${route.name} (${route.type})</div>
                                 </div>
                             </div>
                             <div class="live-lb-right">
                                 <div class="live-lb-time">${rec.time}</div>
-                                <div class="live-lb-car">${rec.car || 'Carrera GT'}</div>
+                                <div class="live-lb-car">${rec.car || 'BMW M3 GTR'}</div>
                             </div>
                         </div>
                     `;
@@ -4737,6 +5071,22 @@ function filterTuningCars() {
 // INICIALIZACIÓN UNIFICADA (DOMContentLoaded)
 // =======================================================
 window.addEventListener('DOMContentLoaded', () => {
+    // 0. Detectar vista inicial solicitada por URL / Query Params / Hash
+    const initialView = (typeof resolveViewFromUrl === 'function') ? resolveViewFromUrl() : 'home';
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetRoute = urlParams.get('route');
+    const targetCat = urlParams.get('cat') || urlParams.get('category');
+
+    if (targetRoute) {
+        setTimeout(() => {
+            if (typeof goToRouteLeaderboardAfterSubmit === 'function') {
+                goToRouteLeaderboardAfterSubmit(targetRoute, targetCat || 'junkman');
+            }
+        }, 200);
+    } else if (initialView && initialView !== 'home') {
+        switchView(initialView, false);
+    }
+
     // 1. Reloj de telemetría F1
     startTelemetryClock();
 
@@ -4766,7 +5116,10 @@ window.addEventListener('DOMContentLoaded', () => {
     // 9. Inicializar Sección Oficial de Guías & Tuning
     initTuningSection();
 
-    // 10. Ejecución diferida en segundo plano para tablas globales y Hall of Fame
+    // 10. Inicializar Selector de Pistas en Formulario
+    initSubmitRouteSelector();
+
+    // 11. Ejecución diferida en segundo plano para tablas globales y Hall of Fame
     setTimeout(() => {
         generateHallOfFame();
         generateGlobalLeaderboards();

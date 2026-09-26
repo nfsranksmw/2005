@@ -304,6 +304,7 @@ const routesData = [
     // =======================================================
     { 
         name: "Seaside & Power Station", 
+        alias: "Bayshore & Power Station",
         type: "Sprint", 
         sheets: { 
             junkman: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTopj2KbigWGa77McjiDle5LG7yBMxeu5ZCmzznXiYJNjQvSAMnl_UeyAzCjQhcO8k-FNi7PlxlabXq/pub?gid=634347005&single=true&output=csv", 
@@ -686,8 +687,8 @@ const routesData = [
         name: "Heritage & Rosewood", 
         type: "Drag", 
         sheets: {
-            junkman: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRy9MkD7Ib6jePNVLsirED79Iqd8mYv81AprdYQD0DwpukKHViqo9IKKqzDzhAuB0B-qxfPyUZD_b7b/pub?gid=891834841&single=true&output=csv",
-            bmw:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRy9MkD7Ib6jePNVLsirED79Iqd8mYv81AprdYQD0DwpukKHViqo9IKKqzDzhAuB0B-qxfPyUZD_b7b/pub?gid=873743997&single=true&output=csv"
+            junkman: "https://docs.google.com/spreadsheets/d/1gvJwDubSBBoCJlGBCZV0m8F-4UbYUsd7uyFU2jGUu78/export?format=csv&gid=0",
+            bmw:     "https://docs.google.com/spreadsheets/d/1gvJwDubSBBoCJlGBCZV0m8F-4UbYUsd7uyFU2jGUu78/export?format=csv&gid=2049887754"
         } 
     },
     { 
