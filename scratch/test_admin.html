@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Admin Seasons & Discord</title>
+</head>
+<body>
+    <pre id="test-results"></pre>
+
+    <script src="../assets/js/routes-data.js"></script>
+    <script src="../assets/js/seasons-data.js"></script>
+    <script src="../assets/js/firebase-config.js"></script>
+    <script src="../assets/js/discord-notifier.js"></script>
+    <script src="../assets/js/admin.js"></script>
+
+    <script>
+        const results = [];
+        function assert(cond, name) {
+            if (cond) {
+                results.push(`PASS: ${name}`);
+            } else {
+                results.push(`FAIL: ${name}`);
+            }
+        }
+
+        try {
+            assert(typeof SEASONS_DATA !== 'undefined', "SEASONS_DATA en admin disponible");
+            assert(typeof NFS_DISCORD_NOTIFIER !== 'undefined', "NFS_DISCORD_NOTIFIER en admin disponible");
+            assert(typeof loadSeasonStandingsAdmin === 'function', "loadSeasonStandingsAdmin es función");
+            assert(typeof recalcAndPublishSeasonStandings === 'function', "recalcAndPublishSeasonStandings es función");
+            assert(typeof handleSeasonAdminChange === 'function', "handleSeasonAdminChange es función");
+            assert(typeof handleSeasonAdminWeekChange === 'function', "handleSeasonAdminWeekChange es función");
+            assert(typeof approveSubmission === 'function', "approveSubmission es función");
+            assert(typeof rejectSubmission === 'function', "rejectSubmission es función");
+            assert(typeof deleteSubmission === 'function', "deleteSubmission es función");
+
+            results.push("ALL_ADMIN_TESTS_COMPLETED");
+        } catch (e) {
+            results.push(`ERROR: ${e.message}\n${e.stack}`);
+        }
+
+        document.getElementById('test-results').textContent = results.join('\n');
+    </script>
+</body>
+</html>

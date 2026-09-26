@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+    <meta charset="UTF-8">
+    <title>Test Seasons &amp; Challenges</title>
+</head>
+<body>
+    <div id="view-challenges">
+        <div id="btn-season-season_1" class="season-pill-btn"></div>
+        <div id="btn-season-season_2" class="season-pill-btn active"></div>
+        <span id="challenge-week-daterange">01 Nov - 07 Nov 2026</span>
+        <span id="season-week-info-label">Blacklist Temporada 1 • Semana 1: Asalto Urbano</span>
+        <span id="challenge-total-count">4 Retos Oficiales</span>
+        <span id="challenge-reward-pot">$2.000.000 Bounty</span>
+        <div id="btn-week-pill-1" class="week-select-btn active"></div>
+        <div id="btn-week-pill-2" class="week-select-btn"></div>
+        <div id="btn-week-pill-3" class="week-select-btn"></div>
+        <div id="btn-week-pill-4" class="week-select-btn"></div>
+        <button id="btn-subtab-challenges" class="filter-btn active"></button>
+        <button id="btn-subtab-season-standings" class="filter-btn"></button>
+        <div id="container-challenges-cards">
+            <div id="challenges-grid" class="challenges-grid season-grid-4">
+            <div class="challenge-card season-ch-card " id="card-s1-w1-c1">
+                <div>
+                    <!-- Miniatura y badges superiores -->
+                    <div class="challenge-thumb" style="background-image: url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&amp;fit=crop&amp;w=600&amp;q=80');">
+                        <div class="challenge-thumb-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <span class="season-cat-badge cat-junkman">
+                                🔧 ⚡ JUNKMAN (CUALQUIER AUTO)
+                            </span>
+                            <span class="challenge-tier-pill" style="font-size: 11px;">
+                                🏁 Circuito • Single Lap
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Cuerpo de la ficha -->
+                    <div class="challenge-body" style="padding: 16px;">
+                        <div style="margin-bottom: 10px;">
+                            <span class="challenge-mode-label" style="font-size: 10.5px; color: var(--nfs-orange);">
+                                TRAZADO DE CIRCUITO // CONTRARRELOJ
+                            </span>
+                            <h3 class="challenge-route-name" style="font-size: 19px; margin-top: 2px;" title="City Perimeter">
+                                City Perimeter
+                            </h3>
+                        </div>
+
+                        <!-- Tiempo Objetivo y Vehículo -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+                            <div class="challenge-time-box" style="margin: 0; padding: 8px 10px;">
+                                ⏱️
+                                <div>
+                                    <div style="font-size: 8.5px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">TIEMPO OBJETIVO</div>
+                                    <div class="challenge-time-val" style="color: var(--green-neon); font-size: 14px;">
+                                        01:18.500
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="challenge-time-box" style="margin: 0; padding: 8px 10px; background: rgba(255,255,255,0.03);">
+                                🚗
+                                <div>
+                                    <div style="font-size: 8.5px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">VEHÍCULO</div>
+                                    <div style="font-size: 11px; font-weight: 800; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="Cualquier Auto (Junkman)">
+                                        Cualquier Auto (Junkman)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Grid de Recompensas -->
+                        <div class="season-reward-grid">
+                            <div class="season-reward-cell">
+                                <span class="rw-lbl">💰 Bolsa Bounty</span>
+                                <span class="rw-val" style="color: var(--green-neon);">$500.000</span>
+                            </div>
+                            <div class="season-reward-cell">
+                                <span class="rw-lbl">⭐ Puntos Blacklist</span>
+                                <span class="rw-val" style="color: var(--nfs-orange);">300 PTS</span>
+                            </div>
+                        </div>
+                        <div style="font-size: 11px; color: #cbd5e1; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                            <span>🎖️</span> <span><strong>Trofeo:</strong> Medalla de Oro S1-W1</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="challenge-actions-row" style="padding: 12px 16px; background: rgba(0,0,0,0.25); border-top: 1px solid rgba(255,255,255,0.06); gap: 10px;">
+                    <button type="button" class="btn-toggle-complete incomplete" onclick="toggleChallengeComplete('s1-w1-c1')" style="flex: 1; padding: 10px; font-size: 11.5px;">
+                        ⭕ MARCAR HECHO
+                    </button>
+                    
+                    <button type="button" class="btn-challenge-submit" onclick="startSeasonChallengeSubmission('season_1', 1, 's1-w1-c1', 'City Perimeter', 'Junkman', 'Cualquier Auto (Junkman)', '300 PTS Blacklist • $500.000 Bounty • Medalla de Oro')" style="flex: 1.4; padding: 10px; font-size: 12px;">
+                        🚀 Enviar Récord
+                    </button>
+                </div>
+            </div>
+        
+            <div class="challenge-card season-ch-card " id="card-s1-w1-c2">
+                <div>
+                    <!-- Miniatura y badges superiores -->
+                    <div class="challenge-thumb" style="background-image: url('https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&amp;fit=crop&amp;w=600&amp;q=80');">
+                        <div class="challenge-thumb-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <span class="season-cat-badge cat-bmw">
+                                🏎️ 👑 BMW M3 GTR REGLAMENTARIO
+                            </span>
+                            <span class="challenge-tier-pill" style="font-size: 11px;">
+                                🏁 Circuito • Single Lap
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Cuerpo de la ficha -->
+                    <div class="challenge-body" style="padding: 16px;">
+                        <div style="margin-bottom: 10px;">
+                            <span class="challenge-mode-label" style="font-size: 10.5px; color: var(--cyan-neon);">
+                                TRAZADO DE CIRCUITO // CONTRARRELOJ
+                            </span>
+                            <h3 class="challenge-route-name" style="font-size: 19px; margin-top: 2px;" title="Petersburgs">
+                                Petersburgs
+                            </h3>
+                        </div>
+
+                        <!-- Tiempo Objetivo y Vehículo -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+                            <div class="challenge-time-box" style="margin: 0; padding: 8px 10px;">
+                                ⏱️
+                                <div>
+                                    <div style="font-size: 8.5px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">TIEMPO OBJETIVO</div>
+                                    <div class="challenge-time-val" style="color: var(--green-neon); font-size: 14px;">
+                                        01:21.000
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="challenge-time-box" style="margin: 0; padding: 8px 10px; background: rgba(255,255,255,0.03);">
+                                🚗
+                                <div>
+                                    <div style="font-size: 8.5px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">VEHÍCULO</div>
+                                    <div style="font-size: 11px; font-weight: 800; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="BMW M3 GTR">
+                                        BMW M3 GTR
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Grid de Recompensas -->
+                        <div class="season-reward-grid">
+                            <div class="season-reward-cell">
+                                <span class="rw-lbl">💰 Bolsa Bounty</span>
+                                <span class="rw-val" style="color: var(--green-neon);">$500.000</span>
+                            </div>
+                            <div class="season-reward-cell">
+                                <span class="rw-lbl">⭐ Puntos Blacklist</span>
+                                <span class="rw-val" style="color: var(--nfs-orange);">300 PTS</span>
+                            </div>
+                        </div>
+                        <div style="font-size: 11px; color: #cbd5e1; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                            <span>🎖️</span> <span><strong>Trofeo:</strong> Trofeo M3 GTR S1-W1</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="challenge-actions-row" style="padding: 12px 16px; background: rgba(0,0,0,0.25); border-top: 1px solid rgba(255,255,255,0.06); gap: 10px;">
+                    <button type="button" class="btn-toggle-complete incomplete" onclick="toggleChallengeComplete('s1-w1-c2')" style="flex: 1; padding: 10px; font-size: 11.5px;">
+                        ⭕ MARCAR HECHO
+                    </button>
+                    
+                    <button type="button" class="btn-challenge-submit" onclick="startSeasonChallengeSubmission('season_1', 1, 's1-w1-c2', 'Petersburgs', 'BMW M3 GTR', 'BMW M3 GTR', '300 PTS Blacklist • $500.000 Bounty • Trofeo M3 GTR')" style="flex: 1.4; padding: 10px; font-size: 12px;">
+                        🚀 Enviar Récord
+                    </button>
+                </div>
+            </div>
+        
+            <div class="challenge-card season-ch-card " id="card-s1-w1-c3">
+                <div>
+                    <!-- Miniatura y badges superiores -->
+                    <div class="challenge-thumb" style="background-image: url('https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&amp;fit=crop&amp;w=600&amp;q=80');">
+                        <div class="challenge-thumb-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <span class="season-cat-badge cat-junkman">
+                                🔧 ⚡ JUNKMAN (CUALQUIER AUTO)
+                            </span>
+                            <span class="challenge-tier-pill" style="font-size: 11px;">
+                                🏁 Sprint 
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Cuerpo de la ficha -->
+                    <div class="challenge-body" style="padding: 16px;">
+                        <div style="margin-bottom: 10px;">
+                            <span class="challenge-mode-label" style="font-size: 10.5px; color: var(--nfs-orange);">
+                                TRAZADO DE SPRINT // FULL SPEED
+                            </span>
+                            <h3 class="challenge-route-name" style="font-size: 19px; margin-top: 2px;" title="Seaside &amp; Power Station">
+                                Seaside &amp; Power Station
+                            </h3>
+                        </div>
+
+                        <!-- Tiempo Objetivo y Vehículo -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+                            <div class="challenge-time-box" style="margin: 0; padding: 8px 10px;">
+                                ⏱️
+                                <div>
+                                    <div style="font-size: 8.5px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">TIEMPO OBJETIVO</div>
+                                    <div class="challenge-time-val" style="color: var(--green-neon); font-size: 14px;">
+                                        01:14.450
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="challenge-time-box" style="margin: 0; padding: 8px 10px; background: rgba(255,255,255,0.03);">
+                                🚗
+                                <div>
+                                    <div style="font-size: 8.5px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">VEHÍCULO</div>
+                                    <div style="font-size: 11px; font-weight: 800; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="Cualquier Auto (Junkman)">
+                                        Cualquier Auto (Junkman)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Grid de Recompensas -->
+                        <div class="season-reward-grid">
+                            <div class="season-reward-cell">
+                                <span class="rw-lbl">💰 Bolsa Bounty</span>
+                                <span class="rw-val" style="color: var(--green-neon);">$500.000</span>
+                            </div>
+                            <div class="season-reward-cell">
+                                <span class="rw-lbl">⭐ Puntos Blacklist</span>
+                                <span class="rw-val" style="color: var(--nfs-orange);">300 PTS</span>
+                            </div>
+                        </div>
+                        <div style="font-size: 11px; color: #cbd5e1; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                            <span>🎖️</span> <span><strong>Trofeo:</strong> Medalla Sprint S1-W1</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="challenge-actions-row" style="padding: 12px 16px; background: rgba(0,0,0,0.25); border-top: 1px solid rgba(255,255,255,0.06); gap: 10px;">
+                    <button type="button" class="btn-toggle-complete incomplete" onclick="toggleChallengeComplete('s1-w1-c3')" style="flex: 1; padding: 10px; font-size: 11.5px;">
+                        ⭕ MARCAR HECHO
+                    </button>
+                    
+                    <button type="button" class="btn-challenge-submit" onclick="startSeasonChallengeSubmission('season_1', 1, 's1-w1-c3', 'Seaside &amp; Power Station', 'Junkman', 'Cualquier Auto (Junkman)', '300 PTS Blacklist • $500.000 Bounty • Medalla Sprint')" style="flex: 1.4; padding: 10px; font-size: 12px;">
+                        🚀 Enviar Récord
+                    </button>
+                </div>
+            </div>
+        
+            <div class="challenge-card season-ch-card " id="card-s1-w1-c4">
+                <div>
+                    <!-- Miniatura y badges superiores -->
+                    <div class="challenge-thumb" style="background-image: url('https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&amp;fit=crop&amp;w=600&amp;q=80');">
+                        <div class="challenge-thumb-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <span class="season-cat-badge cat-bmw">
+                                🏎️ 👑 BMW M3 GTR REGLAMENTARIO
+                            </span>
+                            <span class="challenge-tier-pill" style="font-size: 11px;">
+                                🏁 Sprint 
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Cuerpo de la ficha -->
+                    <div class="challenge-body" style="padding: 16px;">
+                        <div style="margin-bottom: 10px;">
+                            <span class="challenge-mode-label" style="font-size: 10.5px; color: var(--cyan-neon);">
+                                TRAZADO DE SPRINT // FULL SPEED
+                            </span>
+                            <h3 class="challenge-route-name" style="font-size: 19px; margin-top: 2px;" title="Rosewood &amp; State">
+                                Rosewood &amp; State
+                            </h3>
+                        </div>
+
+                        <!-- Tiempo Objetivo y Vehículo -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+                            <div class="challenge-time-box" style="margin: 0; padding: 8px 10px;">
+                                ⏱️
+                                <div>
+                                    <div style="font-size: 8.5px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">TIEMPO OBJETIVO</div>
+                                    <div class="challenge-time-val" style="color: var(--green-neon); font-size: 14px;">
+                                        01:42.000
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="challenge-time-box" style="margin: 0; padding: 8px 10px; background: rgba(255,255,255,0.03);">
+                                🚗
+                                <div>
+                                    <div style="font-size: 8.5px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">VEHÍCULO</div>
+                                    <div style="font-size: 11px; font-weight: 800; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="BMW M3 GTR">
+                                        BMW M3 GTR
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Grid de Recompensas -->
+                        <div class="season-reward-grid">
+                            <div class="season-reward-cell">
+                                <span class="rw-lbl">💰 Bolsa Bounty</span>
+                                <span class="rw-val" style="color: var(--green-neon);">$500.000</span>
+                            </div>
+                            <div class="season-reward-cell">
+                                <span class="rw-lbl">⭐ Puntos Blacklist</span>
+                                <span class="rw-val" style="color: var(--nfs-orange);">300 PTS</span>
+                            </div>
+                        </div>
+                        <div style="font-size: 11px; color: #cbd5e1; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                            <span>🎖️</span> <span><strong>Trofeo:</strong> Emblema Rockport S1-W1</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="challenge-actions-row" style="padding: 12px 16px; background: rgba(0,0,0,0.25); border-top: 1px solid rgba(255,255,255,0.06); gap: 10px;">
+                    <button type="button" class="btn-toggle-complete incomplete" onclick="toggleChallengeComplete('s1-w1-c4')" style="flex: 1; padding: 10px; font-size: 11.5px;">
+                        ⭕ MARCAR HECHO
+                    </button>
+                    
+                    <button type="button" class="btn-challenge-submit" onclick="startSeasonChallengeSubmission('season_1', 1, 's1-w1-c4', 'Rosewood &amp; State', 'BMW M3 GTR', 'BMW M3 GTR', '300 PTS Blacklist • $500.000 Bounty • Emblema Rockport')" style="flex: 1.4; padding: 10px; font-size: 12px;">
+                        🚀 Enviar Récord
+                    </button>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div id="container-season-standings" style="display: none;">
+            <div id="season-standings-title">🏆 CLASIFICACIÓN OFICIAL: BLACKLIST TEMPORADA 2 (DICIEMBRE 2026)</div>
+            <div id="season-podium-container">
+                <div class="season-podium-card rank-1">
+                    <span class="season-podium-medal">🥇</span>
+                    <div style="width: 44px; height: 44px; border-radius: 50%; overflow: hidden; background: rgba(0,0,0,0.4); flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                        🏎️
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <div class="season-podium-driver" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            Razor
+                        </div>
+                        <div class="season-podium-pts">
+                            370 PTS BLACKLIST
+                        </div>
+                        <div class="season-podium-bounty">
+                            💰 $7.400.000
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="season-podium-card rank-2">
+                    <span class="season-podium-medal">🥈</span>
+                    <div style="width: 44px; height: 44px; border-radius: 50%; overflow: hidden; background: rgba(0,0,0,0.4); flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                        🏎️
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <div class="season-podium-driver" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            Bull
+                        </div>
+                        <div class="season-podium-pts">
+                            325 PTS BLACKLIST
+                        </div>
+                        <div class="season-podium-bounty">
+                            💰 $6.500.000
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="season-podium-card rank-3">
+                    <span class="season-podium-medal">🥉</span>
+                    <div style="width: 44px; height: 44px; border-radius: 50%; overflow: hidden; background: rgba(0,0,0,0.4); flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                        🏎️
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <div class="season-podium-driver" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            Ronnie
+                        </div>
+                        <div class="season-podium-pts">
+                            285 PTS BLACKLIST
+                        </div>
+                        <div class="season-podium-bounty">
+                            💰 $5.700.000
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table>
+                <tbody id="tbody-season-standings-live">
+            <tr>
+                <td style="text-align: center; font-family: var(--font-racing); font-weight: 800; color: var(--nfs-orange); font-size: 13.5px;">
+                    🥇 #1
+                </td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="display: inline-block; width: 24px; height: 24px; border-radius: 50%; overflow: hidden; vertical-align: middle;">
+                            
+                        </span>
+                        <strong style="color: #ffffff; font-family: var(--font-racing); font-size: 13.5px;">Razor</strong>
+                    </div>
+                </td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">100</td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">85</td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">90</td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">95</td>
+                <td style="text-align: center; font-family: var(--font-mono); font-size: 14.5px; font-weight: 900; color: var(--nfs-orange);">
+                    370 PTS
+                </td>
+                <td>
+                    <span style="color: var(--green-neon); font-family: var(--font-mono); font-weight: 700; font-size: 12.5px;">
+                        $7.400.000
+                    </span>
+                </td>
+                <td>
+                    <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10.5px; font-weight: 700; background: rgba(6, 182, 212, 0.15); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.3);">
+                        Rey de Rockport City
+                    </span>
+                </td>
+            </tr>
+        
+            <tr>
+                <td style="text-align: center; font-family: var(--font-racing); font-weight: 800; color: var(--nfs-orange); font-size: 13.5px;">
+                    🥈 #2
+                </td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="display: inline-block; width: 24px; height: 24px; border-radius: 50%; overflow: hidden; vertical-align: middle;">
+                            
+                        </span>
+                        <strong style="color: #ffffff; font-family: var(--font-racing); font-size: 13.5px;">Bull</strong>
+                    </div>
+                </td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">80</td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">75</td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">82</td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">88</td>
+                <td style="text-align: center; font-family: var(--font-mono); font-size: 14.5px; font-weight: 900; color: var(--nfs-orange);">
+                    325 PTS
+                </td>
+                <td>
+                    <span style="color: var(--green-neon); font-family: var(--font-mono); font-weight: 700; font-size: 12.5px;">
+                        $6.500.000
+                    </span>
+                </td>
+                <td>
+                    <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10.5px; font-weight: 700; background: rgba(6, 182, 212, 0.15); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.3);">
+                        Élite Blacklist #1
+                    </span>
+                </td>
+            </tr>
+        
+            <tr>
+                <td style="text-align: center; font-family: var(--font-racing); font-weight: 800; color: var(--nfs-orange); font-size: 13.5px;">
+                    🥉 #3
+                </td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="display: inline-block; width: 24px; height: 24px; border-radius: 50%; overflow: hidden; vertical-align: middle;">
+                            
+                        </span>
+                        <strong style="color: #ffffff; font-family: var(--font-racing); font-size: 13.5px;">Ronnie</strong>
+                    </div>
+                </td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">70</td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">68</td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">75</td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">72</td>
+                <td style="text-align: center; font-family: var(--font-mono); font-size: 14.5px; font-weight: 900; color: var(--nfs-orange);">
+                    285 PTS
+                </td>
+                <td>
+                    <span style="color: var(--green-neon); font-family: var(--font-mono); font-weight: 700; font-size: 12.5px;">
+                        $5.700.000
+                    </span>
+                </td>
+                <td>
+                    <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10.5px; font-weight: 700; background: rgba(6, 182, 212, 0.15); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.3);">
+                        Élite Blacklist #1
+                    </span>
+                </td>
+            </tr>
+        
+            <tr>
+                <td style="text-align: center; font-family: var(--font-racing); font-weight: 800; color: #cbd5e1; font-size: 13.5px;">
+                    #4
+                </td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="display: inline-block; width: 24px; height: 24px; border-radius: 50%; overflow: hidden; vertical-align: middle;">
+                            
+                        </span>
+                        <strong style="color: #ffffff; font-family: var(--font-racing); font-size: 13.5px;">Torque</strong>
+                    </div>
+                </td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">50</td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">55</td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">60</td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">58</td>
+                <td style="text-align: center; font-family: var(--font-mono); font-size: 14.5px; font-weight: 900; color: var(--nfs-orange);">
+                    223 PTS
+                </td>
+                <td>
+                    <span style="color: var(--green-neon); font-family: var(--font-mono); font-weight: 700; font-size: 12.5px;">
+                        $4.460.000
+                    </span>
+                </td>
+                <td>
+                    <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10.5px; font-weight: 700; background: rgba(6, 182, 212, 0.15); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.3);">
+                        Veterano Oficial
+                    </span>
+                </td>
+            </tr>
+        
+            <tr>
+                <td style="text-align: center; font-family: var(--font-racing); font-weight: 800; color: #cbd5e1; font-size: 13.5px;">
+                    #5
+                </td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="display: inline-block; width: 24px; height: 24px; border-radius: 50%; overflow: hidden; vertical-align: middle;">
+                            
+                        </span>
+                        <strong style="color: #ffffff; font-family: var(--font-racing); font-size: 13.5px;">Ming</strong>
+                    </div>
+                </td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">45</td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">48</td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">52</td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">50</td>
+                <td style="text-align: center; font-family: var(--font-mono); font-size: 14.5px; font-weight: 900; color: var(--nfs-orange);">
+                    195 PTS
+                </td>
+                <td>
+                    <span style="color: var(--green-neon); font-family: var(--font-mono); font-weight: 700; font-size: 12.5px;">
+                        $3.900.000
+                    </span>
+                </td>
+                <td>
+                    <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10.5px; font-weight: 700; background: rgba(6, 182, 212, 0.15); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.3);">
+                        Veterano Oficial
+                    </span>
+                </td>
+            </tr>
+        
+            <tr>
+                <td style="text-align: center; font-family: var(--font-racing); font-weight: 800; color: #cbd5e1; font-size: 13.5px;">
+                    #6
+                </td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="display: inline-block; width: 24px; height: 24px; border-radius: 50%; overflow: hidden; vertical-align: middle;">
+                            
+                        </span>
+                        <strong style="color: #ffffff; font-family: var(--font-racing); font-size: 13.5px;">Webster</strong>
+                    </div>
+                </td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">35</td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">40</td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">42</td>
+                <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">45</td>
+                <td style="text-align: center; font-family: var(--font-mono); font-size: 14.5px; font-weight: 900; color: var(--nfs-orange);">
+                    162 PTS
+                </td>
+                <td>
+                    <span style="color: var(--green-neon); font-family: var(--font-mono); font-weight: 700; font-size: 12.5px;">
+                        $3.240.000
+                    </span>
+                </td>
+                <td>
+                    <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10.5px; font-weight: 700; background: rgba(6, 182, 212, 0.15); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.3);">
+                        Veterano Oficial
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Submit modal elements -->
+    <div id="view-submit" class="active">
+        <div id="sub-season-banner" style="display: none;">
+            <div id="sub-season-banner-title">🏆 DESAFÍO OFICIAL VINCULADO: Blacklist Temporada 1 • SEMANA 1</div>
+            <div id="sub-season-banner-desc">🏁 <strong>Petersburgs</strong> (BMW M3 GTR) — Recompensa: <strong>300 PTS • $500.000 Bounty</strong></div>
+        </div>
+        <form id="form-submit-time">
+            <input type="hidden" id="sub-season-id" value="">
+            <input type="hidden" id="sub-week-num" value="">
+            <input type="hidden" id="sub-challenge-id" value="">
+            <input type="hidden" id="sub-reward-desc" value="">
+            <select id="sub-route"><option value="">-- Selecciona una de las 86 pistas oficiales --</option><optgroup label="🏁 Circuitos (29)"><option value="City Perimeter">City Perimeter</option><option value="Ironwood States">Ironwood States</option><option value="Campus Way">Campus Way</option><option value="Highlands">Highlands</option><option value="Petersburgs">Petersburgs</option><option value="Heritage Height">Heritage Height</option><option value="Omega">Omega</option><option value="Diamond">Diamond</option><option value="Hillcrest Boundary">Hillcrest Boundary</option><option value="Circle Rose">Circle Rose</option><option value="Switchback">Switchback</option><option value="Hospital Switchback">Hospital Switchback</option><option value="Dunwich Bay">Dunwich Bay</option><option value="Boundary">Boundary</option><option value="Century Square">Century Square</option><option value="Heritage &amp; Omega">Heritage &amp; Omega</option><option value="Little Italy">Little Italy</option><option value="Ironhorse">Ironhorse</option><option value="Waterfront">Waterfront</option><option value="Gray Point">Gray Point</option><option value="Omega &amp; Industries">Omega &amp; Industries</option><option value="Bay Bridge">Bay Bridge</option><option value="Camden Tunnel">Camden Tunnel</option><option value="Campus Interchange">Campus Interchange</option><option value="Country Club">Country Club</option><option value="East Park">East Park</option><option value="Oil Refinery">Oil Refinery</option><option value="Hastings">Hastings</option><option value="ClubHouse">ClubHouse</option></optgroup><optgroup label="⚡ Sprints (46)"><option value="Seaside &amp; Power Station">Seaside &amp; Power Station (Bayshore &amp; Power Station)</option><option value="NFS World Loop">NFS World Loop</option><option value="Diamond &amp; Unión">Diamond &amp; Unión</option><option value="Hwy 99 &amp; States">Hwy 99 &amp; States</option><option value="Clubhouse &amp; Hollis">Clubhouse &amp; Hollis</option><option value="Stadium &amp; Hwy 99">Stadium &amp; Hwy 99</option><option value="Rosewood &amp; State">Rosewood &amp; State</option><option value="Rosewood &amp; Lyon">Rosewood &amp; Lyon</option><option value="Unión &amp; Hollis">Unión &amp; Hollis</option><option value="Heritage &amp; Campus">Heritage &amp; Campus</option><option value="Campus Chancellor">Campus Chancellor</option><option value="Rockridge &amp; Unión">Rockridge &amp; Unión</option><option value="Chace &amp; Bristol">Chace &amp; Bristol</option><option value="Beacon &amp; Station">Beacon &amp; Station</option><option value="Bristol &amp; Bayshore">Bristol &amp; Bayshore</option><option value="Boundary &amp; Marina">Boundary &amp; Marina</option><option value="Stadium &amp; Hwy 1">Stadium &amp; Hwy 1</option><option value="North Bay &amp; Harbor">North Bay &amp; Harbor</option><option value="Camden &amp; Route 55">Camden &amp; Route 55</option><option value="Heritage &amp; Diamond">Heritage &amp; Diamond</option><option value="Camden &amp; Ironwood">Camden &amp; Ironwood</option><option value="Interchange &amp; Bond">Interchange &amp; Bond</option><option value="Union Row &amp; Ocean">Union Row &amp; Ocean</option><option value="Diamond Valley">Diamond Valley</option><option value="Stadium &amp; Chace">Stadium &amp; Chace</option><option value="West Park &amp; Lyon">West Park &amp; Lyon</option><option value="Hwy 201 &amp; Lyons">Hwy 201 &amp; Lyons</option><option value="Bond &amp; Country Club">Bond &amp; Country Club</option><option value="Lyon &amp; States">Lyon &amp; States</option><option value="Camden &amp; Fisher">Camden &amp; Fisher</option><option value="Beach &amp; Chancellor">Beach &amp; Chancellor</option><option value="State &amp; Warren">State &amp; Warren</option><option value="Valley &amp; State">Valley &amp; State</option><option value="Seagate &amp; Camden">Seagate &amp; Camden</option><option value="Bond &amp; Forest Green">Bond &amp; Forest Green</option><option value="Hwy 99 &amp; Projects">Hwy 99 &amp; Projects</option><option value="Seaside &amp; Lennox">Seaside &amp; Lennox</option><option value="Camden &amp; Dunwich">Camden &amp; Dunwich</option><option value="Ironhorse &amp; Coast">Ironhorse &amp; Coast</option><option value="Seaside &amp; Interchange">Seaside &amp; Interchange</option><option value="Hwy 2001">Hwy 2001</option><option value="Diamond Park">Diamond Park</option><option value="Industrial &amp; Bristol">Industrial &amp; Bristol</option><option value="Bay Bridge &amp; Seaside">Bay Bridge &amp; Seaside</option><option value="Forest Green">Forest Green</option><option value="Clubhouse &amp; Lennox">Clubhouse &amp; Lennox</option></optgroup><optgroup label="🔥 Drags (11)"><option value="Bayshore &amp; Boardwalk">Bayshore &amp; Boardwalk</option><option value="Heritage &amp; Rosewood">Heritage &amp; Rosewood</option><option value="Harbor &amp; Ocean">Harbor &amp; Ocean</option><option value="Seaside &amp; Camden">Seaside &amp; Camden</option><option value="Union &amp; Rockridge">Union &amp; Rockridge</option><option value="Ocean &amp; Harbor">Ocean &amp; Harbor</option><option value="Riverside &amp; Terrace">Riverside &amp; Terrace</option><option value="Rosewood &amp; Heritage">Rosewood &amp; Heritage</option><option value="Boardwalk &amp; Bayshore">Boardwalk &amp; Bayshore</option><option value="Camden &amp; Seaside">Camden &amp; Seaside</option><option value="Terrace &amp; Riverside">Terrace &amp; Riverside</option></optgroup></select>
+            <select id="sub-category"><option value="Junkman">Junkman</option><option value="BMW M3 GTR">BMW M3 GTR</option></select>
+            <input type="text" id="sub-car">
+        </form>
+    </div>
+
+    <pre id="test-results">PASS: SEASONS_DATA está definido
+PASS: Temporada 1 tiene 4 semanas
+PASS: Temporada 2 tiene 4 semanas
+PASS: Temporada 1 Semana 1 tiene exactamente 4 retos
+PASS: Temporada 1 Semana 1 tiene 2 circuitos
+PASS: Temporada 1 Semana 1 tiene 2 sprints
+PASS: T1-W1 tiene 1 circuito Junkman
+PASS: T1-W1 tiene 1 circuito BMW
+PASS: T1-W1 tiene 1 sprint Junkman
+PASS: T1-W1 tiene 1 sprint BMW
+PASS: Temporada 1 Semana 2 tiene exactamente 4 retos
+PASS: Temporada 1 Semana 2 tiene 2 circuitos
+PASS: Temporada 1 Semana 2 tiene 2 sprints
+PASS: T1-W2 tiene 1 circuito Junkman
+PASS: T1-W2 tiene 1 circuito BMW
+PASS: T1-W2 tiene 1 sprint Junkman
+PASS: T1-W2 tiene 1 sprint BMW
+PASS: Temporada 1 Semana 3 tiene exactamente 4 retos
+PASS: Temporada 1 Semana 3 tiene 2 circuitos
+PASS: Temporada 1 Semana 3 tiene 2 sprints
+PASS: T1-W3 tiene 1 circuito Junkman
+PASS: T1-W3 tiene 1 circuito BMW
+PASS: T1-W3 tiene 1 sprint Junkman
+PASS: T1-W3 tiene 1 sprint BMW
+PASS: Temporada 1 Semana 4 tiene exactamente 4 retos
+PASS: Temporada 1 Semana 4 tiene 2 circuitos
+PASS: Temporada 1 Semana 4 tiene 2 sprints
+PASS: T1-W4 tiene 1 circuito Junkman
+PASS: T1-W4 tiene 1 circuito BMW
+PASS: T1-W4 tiene 1 sprint Junkman
+PASS: T1-W4 tiene 1 sprint BMW
+PASS: renderChallengesUI genera exactamente 4 tarjetas (encontradas: 4)
+PASS: Primera tarjeta muestra categoría Junkman
+PASS: Primera tarjeta muestra Bolsa Bounty
+PASS: Primera tarjeta muestra Puntos Blacklist
+PASS: Cambio a Temporada 2 genera 4 tarjetas
+PASS: Label de cabecera refleja Temporada 2
+PASS: Semana 3 seleccionada exitosamente
+PASS: Semana 3 muestra 4 tarjetas
+PASS: Banner de contexto de desafío visible
+PASS: Campo oculto seasonId correcto
+PASS: Campo oculto weekNum correcto
+PASS: Campo oculto challengeId correcto
+PASS: Pista Petersburgs preseleccionada
+PASS: Categoría BMW M3 GTR preseleccionada
+PASS: Auto BMW M3 GTR preseleccionado
+PASS: Banner ocultado tras desvincular
+PASS: Campo oculto seasonId vaciado
+PASS: Tabla de clasificación de temporada tiene filas
+PASS: NFS_DISCORD_NOTIFIER está definido
+PASS: notifyApproval es función
+PASS: notifyRejection es función
+PASS: notifyDeletion es función
+PASS: notifySeasonStandings es función
+ALL_TESTS_COMPLETED</pre>
+
+    <script src="../assets/js/routes-data.js"></script>
+    <script src="../assets/js/seasons-data.js"></script>
+    <script src="../assets/js/operator-icons.js"></script>
+    <script src="../assets/js/firebase-config.js"></script>
+    <script src="../assets/js/discord-notifier.js"></script>
+    <script src="../assets/js/app.js"></script>
+
+    <script>
+        const results = [];
+        function assert(cond, name) {
+            if (cond) {
+                results.push(`PASS: ${name}`);
+            } else {
+                results.push(`FAIL: ${name}`);
+            }
+        }
+
+        try {
+            // 1. Data model check
+            assert(typeof SEASONS_DATA !== 'undefined', "SEASONS_DATA está definido");
+            assert(SEASONS_DATA.season_1 && SEASONS_DATA.season_1.weeks.length === 4, "Temporada 1 tiene 4 semanas");
+            assert(SEASONS_DATA.season_2 && SEASONS_DATA.season_2.weeks.length === 4, "Temporada 2 tiene 4 semanas");
+
+            // Check week challenge composition
+            SEASONS_DATA.season_1.weeks.forEach((w, wIdx) => {
+                assert(w.challenges.length === 4, `Temporada 1 Semana ${wIdx + 1} tiene exactamente 4 retos`);
+                const circuits = w.challenges.filter(c => c.type === 'Circuito');
+                const sprints = w.challenges.filter(c => c.type === 'Sprint');
+                assert(circuits.length === 2, `Temporada 1 Semana ${wIdx + 1} tiene 2 circuitos`);
+                assert(sprints.length === 2, `Temporada 1 Semana ${wIdx + 1} tiene 2 sprints`);
+                const junkmanCircuits = circuits.filter(c => c.category === 'Junkman');
+                const bmwCircuits = circuits.filter(c => c.category.includes('BMW'));
+                const junkmanSprints = sprints.filter(c => c.category === 'Junkman');
+                const bmwSprints = sprints.filter(c => c.category.includes('BMW'));
+                assert(junkmanCircuits.length === 1, `T1-W${wIdx + 1} tiene 1 circuito Junkman`);
+                assert(bmwCircuits.length === 1, `T1-W${wIdx + 1} tiene 1 circuito BMW`);
+                assert(junkmanSprints.length === 1, `T1-W${wIdx + 1} tiene 1 sprint Junkman`);
+                assert(bmwSprints.length === 1, `T1-W${wIdx + 1} tiene 1 sprint BMW`);
+            });
+
+            // 2. UI Render check
+            initChallengesSystem();
+            const grid = document.getElementById('challenges-grid');
+            const cards = grid.querySelectorAll('.season-ch-card');
+            assert(cards.length === 4, `renderChallengesUI genera exactamente 4 tarjetas (encontradas: ${cards.length})`);
+
+            // Verify first card
+            const firstCard = cards[0];
+            assert(firstCard.innerHTML.includes('JUNKMAN'), "Primera tarjeta muestra categoría Junkman");
+            assert(firstCard.innerHTML.includes('Bolsa Bounty'), "Primera tarjeta muestra Bolsa Bounty");
+            assert(firstCard.innerHTML.includes('Puntos Blacklist'), "Primera tarjeta muestra Puntos Blacklist");
+
+            // 3. Season switch test
+            switchChallengeSeason('season_2');
+            const s2Cards = grid.querySelectorAll('.season-ch-card');
+            assert(s2Cards.length === 4, "Cambio a Temporada 2 genera 4 tarjetas");
+            const headerLabel = document.getElementById('season-week-info-label');
+            assert(headerLabel && headerLabel.textContent.includes('Temporada 2'), "Label de cabecera refleja Temporada 2");
+
+            // 4. Week switch test
+            setSeasonWeek(3);
+            assert(currentSeasonWeek === 3, "Semana 3 seleccionada exitosamente");
+            const s2w3Cards = grid.querySelectorAll('.season-ch-card');
+            assert(s2w3Cards.length === 4, "Semana 3 muestra 4 tarjetas");
+
+            // 5. Submit context test
+            startSeasonChallengeSubmission('season_1', 1, 's1-w1-c2', 'Petersburgs', 'BMW M3 GTR', 'BMW M3 GTR', '300 PTS • $500.000 Bounty');
+            const banner = document.getElementById('sub-season-banner');
+            assert(banner.style.display !== 'none', "Banner de contexto de desafío visible");
+            assert(document.getElementById('sub-season-id').value === 'season_1', "Campo oculto seasonId correcto");
+            assert(document.getElementById('sub-week-num').value === '1', "Campo oculto weekNum correcto");
+            assert(document.getElementById('sub-challenge-id').value === 's1-w1-c2', "Campo oculto challengeId correcto");
+            assert(document.getElementById('sub-route').value === 'Petersburgs', "Pista Petersburgs preseleccionada");
+            assert(document.getElementById('sub-category').value === 'BMW M3 GTR', "Categoría BMW M3 GTR preseleccionada");
+            assert(document.getElementById('sub-car').value === 'BMW M3 GTR', "Auto BMW M3 GTR preseleccionado");
+
+            clearSeasonSubmissionContext();
+            assert(banner.style.display === 'none', "Banner ocultado tras desvincular");
+            assert(document.getElementById('sub-season-id').value === '', "Campo oculto seasonId vaciado");
+
+            // 6. Live standings render test
+            loadSeasonStandingsLive(true);
+            const podiumCards = document.getElementById('season-podium-container');
+            const tbody = document.getElementById('tbody-season-standings-live');
+            assert(tbody.children.length > 0, "Tabla de clasificación de temporada tiene filas");
+
+            // 7. Discord notifier test
+            assert(typeof NFS_DISCORD_NOTIFIER !== 'undefined', "NFS_DISCORD_NOTIFIER está definido");
+            assert(typeof NFS_DISCORD_NOTIFIER.notifyApproval === 'function', "notifyApproval es función");
+            assert(typeof NFS_DISCORD_NOTIFIER.notifyRejection === 'function', "notifyRejection es función");
+            assert(typeof NFS_DISCORD_NOTIFIER.notifyDeletion === 'function', "notifyDeletion es función");
+            assert(typeof NFS_DISCORD_NOTIFIER.notifySeasonStandings === 'function', "notifySeasonStandings es función");
+
+            results.push("ALL_TESTS_COMPLETED");
+        } catch (e) {
+            results.push(`ERROR: ${e.message} \n ${e.stack}`);
+        }
+
+        document.getElementById('test-results').textContent = results.join('\n');
+    </script>
+
+
+</body></html>
