@@ -743,6 +743,8 @@ async function approveSubmission(subKey) {
             gearbox: finalGearbox,
             date: finalDate,
             yt: finalVideo || '#',
+            videoUrl: finalVideo || '#',
+            video: finalVideo || '#',
             submissionId: sub.id || subKey,
             verified: true
         };
@@ -1287,7 +1289,9 @@ async function saveLeaderboardEntry(event) {
             date: dateVal,
             gearbox: gearboxVal,
             device: deviceVal,
-            videoUrl: videoVal
+            videoUrl: videoVal,
+            yt: videoVal,
+            video: videoVal
         };
 
         // Obtener la tabla de destino
@@ -1307,11 +1311,14 @@ async function saveLeaderboardEntry(event) {
         }
 
         if (editIdx >= 0 && isSameRouteAndCat) {
-            // Actualizar registro existente in-situ
+            // Actualizar registro existente in-situ asegurando que yt, video y videoUrl se sincronicen
             const existingRow = targetRecords[editIdx] || (currentLbRecords ? currentLbRecords[editIdx] : {}) || {};
             targetRecords[editIdx] = {
                 ...existingRow,
-                ...recordObj
+                ...recordObj,
+                videoUrl: videoVal,
+                yt: videoVal,
+                video: videoVal
             };
         } else if (editIdx >= 0 && !isSameRouteAndCat) {
             // Se movió de pista o categoría: remover de la tabla vieja

@@ -1314,10 +1314,11 @@ function sanitizeFirebaseKey(str) {
 async function fetchFirebaseRouteRecords(routeName) {
     if (!FIREBASE_RTDB_BASE_URL) return {};
     const routeKey = sanitizeFirebaseKey(routeName);
-    const url = `${FIREBASE_RTDB_BASE_URL}/leaderboards/${routeKey}.json`;
+    // Usar parámetro de tiempo y no-store para garantizar datos en vivo sin caché estancada
+    const url = `${FIREBASE_RTDB_BASE_URL}/leaderboards/${routeKey}.json?_t=${Date.now()}`;
 
     try {
-        const response = await fetch(url);
+        const response = await fetch(url, { cache: 'no-store' });
         if (!response.ok) return {};
         const data = await response.json();
         return (data && typeof data === 'object') ? data : {};
@@ -1335,12 +1336,40 @@ function extractCategoryRecords(routeFirebaseData, categoryKey) {
     if (!Array.isArray(raw) && typeof raw === 'object') {
         raw = Object.values(raw);
     }
+
+    // Comprobar si hay una versión actualizada en caché local reciente (guardada desde Comisaría / Admin)
+    try {
+        const routeName = (typeof currentActiveRoute !== 'undefined' && currentActiveRoute) ? currentActiveRoute.name : '';
+        if (routeName) {
+            const rKey = sanitizeFirebaseKey(routeName);
+            const localKey = `nfs_rtdb_leaderboards_${rKey}_${cKey}`;
+            const localStored = localStorage.getItem(localKey);
+            if (localStored) {
+                const localData = JSON.parse(localStored);
+                if (Array.isArray(localData) && localData.length > 0) {
+                    raw = localData;
+                }
+            }
+        }
+    } catch (e) {}
+
     if (!Array.isArray(raw)) return [];
 
     let list = raw.filter(item => item && item.driver && String(item.driver).trim() !== "" && (item.time || item.declaredTime)).map(item => {
         const timeStr = item.time || item.declaredTime || "--:--.---";
         const parseFn = (typeof NFS_FIREBASE !== 'undefined' && NFS_FIREBASE.parseTimeToMs) ? NFS_FIREBASE.parseTimeToMs : parseTimeToMs;
         const timeMs = item.timeMs !== undefined ? parseInt(item.timeMs, 10) : parseFn(timeStr);
+
+        // Resolución estricta de video: priorizar el campo modificado en Comisaría (videoUrl) sobre el histórico (yt)
+        let resolvedVideo = "#";
+        if (item.videoUrl && typeof item.videoUrl === 'string' && item.videoUrl.trim() !== "" && item.videoUrl.trim() !== "#") {
+            resolvedVideo = item.videoUrl.trim();
+        } else if (item.yt && typeof item.yt === 'string' && item.yt.trim() !== "" && item.yt.trim() !== "#") {
+            resolvedVideo = item.yt.trim();
+        } else if (item.video && typeof item.video === 'string' && item.video.trim() !== "" && item.video.trim() !== "#") {
+            resolvedVideo = item.video.trim();
+        }
+
         return {
             driver: String(item.driver).trim(),
             time: timeStr,
@@ -1349,7 +1378,9 @@ function extractCategoryRecords(routeFirebaseData, categoryKey) {
             device: item.device || item.platform || "PC",
             gearbox: item.gearbox || "Manual",
             date: item.date || new Date().toISOString().split('T')[0],
-            yt: item.yt || item.videoUrl || item.video || "#",
+            yt: resolvedVideo,
+            videoUrl: resolvedVideo,
+            video: resolvedVideo,
             submissionId: item.submissionId || ""
         };
     });
@@ -1873,7 +1904,8 @@ async function searchDriverProfile(driverQuery) {
                                 car: userRow.car || "BMW M3 GTR",
                                 gearbox: userRow.gearbox || "Manual",
                                 device: userRow.device || "PC",
-                                yt: userRow.yt || "#"
+                                yt: userRow.videoUrl || userRow.yt || userRow.video || "#",
+                                videoUrl: userRow.videoUrl || userRow.yt || userRow.video || "#"
                             });
                         }
                     }
