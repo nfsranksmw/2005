@@ -1173,139 +1173,7 @@
                 </div>
             </div>
 
-            <!-- FILTROS COMPACTOS ESTILO TRACKER.GG (Píldoras con Menús Desplegables Superpuestos) -->
-            <div class="tracker-pills-bar" id="leaderboard-filters-container">
-                <!-- Píldora 1: Modalidad (Junkman vs BMW M3 GTR) -->
-                <div class="tracker-pill-wrapper">
-                    <button type="button" class="tracker-pill-btn" id="pill-btn-modality"
-                        onclick="toggleTrackerPopover('popover-modality', this)">
-                        <svg class="pill-icon-svg" viewBox="0 0 24 24">
-                            <path
-                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" />
-                        </svg>
-                        <span class="pill-label">Modalidad:</span>
-                        <span class="pill-value" id="pill-val-modality">Junkman</span>
-                        <span class="pill-caret">▾</span>
-                    </button>
-                    <div class="tracker-popover-menu" id="popover-modality">
-                        <button type="button" class="popover-item active"
-                            onclick="selectLeaderboardModality('junkman', this)">
-                            <svg class="popover-icon" viewBox="0 0 24 24">
-                                <path
-                                    d="M12 2 2 7v2h20V7L12 2zm8 9h-2v7h2v-7zm-5 0h-2v7h2v-7zm-5 0H8v7h2v-7zm-5 0H4v7h2v-7zM2 20v2h20v-2H2z" />
-                            </svg>
-                            <span>Junkman (All Upgrades)</span>
-                        </button>
-                        <button type="button" class="popover-item" onclick="selectLeaderboardModality('bmw', this)">
-                            <svg class="popover-icon" viewBox="0 0 24 24">
-                                <path
-                                    d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.77l.11.34V17z" />
-                                <circle cx="7.5" cy="14.5" r="1.5" />
-                                <circle cx="16.5" cy="14.5" r="1.5" />
-                            </svg>
-                            <span>BMW M3 GTR</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Píldora 2: Tipo de Vuelta (Single Lap vs Fast Lap - Circuitos) -->
-                <div class="tracker-pill-wrapper" id="pill-wrapper-lap">
-                    <button type="button" class="tracker-pill-btn" id="pill-btn-lap"
-                        onclick="toggleTrackerPopover('popover-lap', this)">
-                        <svg class="pill-icon-svg" viewBox="0 0 24 24">
-                            <path
-                                d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
-                        </svg>
-                        <span class="pill-label">Categoría:</span>
-                        <span class="pill-value" id="pill-val-lap">Single Lap</span>
-                        <span class="pill-caret">▾</span>
-                    </button>
-                    <div class="tracker-popover-menu" id="popover-lap">
-                        <button type="button" class="popover-item active"
-                            onclick="selectLeaderboardLap('single', this)">
-                            <svg class="popover-icon" viewBox="0 0 24 24">
-                                <path
-                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" />
-                            </svg>
-                            <span>Single Lap (1 Vuelta)</span>
-                        </button>
-                        <button type="button" class="popover-item" onclick="selectLeaderboardLap('fast', this)">
-                            <svg class="popover-icon" viewBox="0 0 24 24">
-                                <path d="M7 2v11h3v9l7-12h-4l4-8z" />
-                            </svg>
-                            <span>Fast Lap (Vuelta Rápida)</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Píldora 3: Filtro de Vehículo -->
-                <div class="tracker-pill-wrapper">
-                    <button type="button" class="tracker-pill-btn" id="pill-btn-car"
-                        onclick="toggleTrackerPopover('popover-car', this)">
-                        <svg class="pill-icon-svg" viewBox="0 0 24 24">
-                            <path
-                                d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.77l.11.34V17z" />
-                            <circle cx="7.5" cy="14.5" r="1.5" />
-                            <circle cx="16.5" cy="14.5" r="1.5" />
-                        </svg>
-                        <span class="pill-label">Vehículo:</span>
-                        <span class="pill-value" id="pill-val-car">Todos</span>
-                        <span class="pill-caret">▾</span>
-                    </button>
-                    <div class="tracker-popover-menu" id="popover-car">
-                        <button type="button" class="popover-item active"
-                            onclick="selectLeaderboardCarFilter('all', this)">
-                            <svg class="popover-icon" viewBox="0 0 24 24">
-                                <path
-                                    d="M4 4h4v4H4V4zm6 0h4v4h-4V4zm6 0h4v4h-4V4zM4 10h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4zM4 16h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z" />
-                            </svg>
-                            <span>Todos los autos</span>
-                        </button>
-                        <button type="button" class="popover-item"
-                            onclick="selectLeaderboardCarFilter('Carrera GT', this)">
-                            <svg class="popover-icon" viewBox="0 0 24 24">
-                                <path
-                                    d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.77l.11.34V17z" />
-                                <circle cx="7.5" cy="14.5" r="1.5" />
-                                <circle cx="16.5" cy="14.5" r="1.5" />
-                            </svg>
-                            <span>Porsche Carrera GT</span>
-                        </button>
-                        <button type="button" class="popover-item"
-                            onclick="selectLeaderboardCarFilter('Ford GT', this)">
-                            <svg class="popover-icon" viewBox="0 0 24 24">
-                                <path
-                                    d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.77l.11.34V17z" />
-                                <circle cx="7.5" cy="14.5" r="1.5" />
-                                <circle cx="16.5" cy="14.5" r="1.5" />
-                            </svg>
-                            <span>Ford GT</span>
-                        </button>
-                        <button type="button" class="popover-item"
-                            onclick="selectLeaderboardCarFilter('Corvette C6.R', this)">
-                            <svg class="popover-icon" viewBox="0 0 24 24">
-                                <path
-                                    d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.77l.11.34V17z" />
-                                <circle cx="7.5" cy="14.5" r="1.5" />
-                                <circle cx="16.5" cy="14.5" r="1.5" />
-                            </svg>
-                            <span>Corvette C6.R</span>
-                        </button>
-                        <button type="button" class="popover-item"
-                            onclick="selectLeaderboardCarFilter('BMW M3 GTR', this)">
-                            <svg class="popover-icon" viewBox="0 0 24 24">
-                                <path
-                                    d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.77l.11.34V17z" />
-                                <circle cx="7.5" cy="14.5" r="1.5" />
-                                <circle cx="16.5" cy="14.5" r="1.5" />
-                            </svg>
-                            <span>BMW M3 GTR</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Pestañas para Circuitos (Desktop fallback) -->
+            <!-- Pestañas para Circuitos -->
             <div id="container-tabs-circuit" class="tabs-group">
                 <button class="tab-btn active" onclick="switchCircuitTab('junkman-single', this)">Junkman (Single
                     Lap)</button>
@@ -1334,10 +1202,10 @@
                                 <th class="col-player">Piloto</th>
                                 <th class="col-time">Tiempo Récord</th>
                                 <th class="col-desktop">Vehículo</th>
-                                <th class="col-desktop">Plataforma</th>
+                                <th class="col-desktop">Device</th>
                                 <th class="col-desktop">Caja</th>
                                 <th class="col-desktop">Fecha</th>
-                                <th class="col-desktop">Verificación</th>
+                                <th class="col-video" style="text-align: center; width: 68px;">Video</th>
                             </tr>
                         </thead>
                         <tbody id="tbody-junkman-single"></tbody>
@@ -1357,10 +1225,10 @@
                                 <th class="col-player">Piloto</th>
                                 <th class="col-time">Tiempo Récord</th>
                                 <th class="col-desktop">Vehículo</th>
-                                <th class="col-desktop">Plataforma</th>
+                                <th class="col-desktop">Device</th>
                                 <th class="col-desktop">Caja</th>
                                 <th class="col-desktop">Fecha</th>
-                                <th class="col-desktop">Verificación</th>
+                                <th class="col-video" style="text-align: center; width: 68px;">Video</th>
                             </tr>
                         </thead>
                         <tbody id="tbody-junkman-fast"></tbody>
@@ -1380,10 +1248,10 @@
                                 <th class="col-player">Piloto</th>
                                 <th class="col-time">Tiempo Récord</th>
                                 <th class="col-desktop">Vehículo</th>
-                                <th class="col-desktop">Plataforma</th>
+                                <th class="col-desktop">Device</th>
                                 <th class="col-desktop">Caja</th>
                                 <th class="col-desktop">Fecha</th>
-                                <th class="col-desktop">Verificación</th>
+                                <th class="col-video" style="text-align: center; width: 68px;">Video</th>
                             </tr>
                         </thead>
                         <tbody id="tbody-bmw-single"></tbody>
@@ -1403,10 +1271,10 @@
                                 <th class="col-player">Piloto</th>
                                 <th class="col-time">Tiempo Récord</th>
                                 <th class="col-desktop">Vehículo</th>
-                                <th class="col-desktop">Plataforma</th>
+                                <th class="col-desktop">Device</th>
                                 <th class="col-desktop">Caja</th>
                                 <th class="col-desktop">Fecha</th>
-                                <th class="col-desktop">Verificación</th>
+                                <th class="col-video" style="text-align: center; width: 68px;">Video</th>
                             </tr>
                         </thead>
                         <tbody id="tbody-bmw-fast"></tbody>
@@ -1427,10 +1295,10 @@
                                 <th class="col-player">Piloto</th>
                                 <th class="col-time">Tiempo Récord</th>
                                 <th class="col-desktop">Vehículo</th>
-                                <th class="col-desktop">Plataforma</th>
+                                <th class="col-desktop">Device</th>
                                 <th class="col-desktop">Caja</th>
                                 <th class="col-desktop">Fecha</th>
-                                <th class="col-desktop">Verificación</th>
+                                <th class="col-video" style="text-align: center; width: 68px;">Video</th>
                             </tr>
                         </thead>
                         <tbody id="tbody-sprintdrag-junkman"></tbody>
@@ -1450,10 +1318,10 @@
                                 <th class="col-player">Piloto</th>
                                 <th class="col-time">Tiempo Récord</th>
                                 <th class="col-desktop">Vehículo</th>
-                                <th class="col-desktop">Plataforma</th>
+                                <th class="col-desktop">Device</th>
                                 <th class="col-desktop">Caja</th>
                                 <th class="col-desktop">Fecha</th>
-                                <th class="col-desktop">Verificación</th>
+                                <th class="col-video" style="text-align: center; width: 68px;">Video</th>
                             </tr>
                         </thead>
                         <tbody id="tbody-sprintdrag-bmw"></tbody>
@@ -2328,7 +2196,7 @@
                             <th>Posición</th>
                             <th>Piloto</th>
                             <th>Récords Mundiales</th>
-                            <th>Plataforma</th>
+                            <th>Device</th>
                             <th>Insignia</th>
                         </tr>
                     </thead>
@@ -3151,9 +3019,26 @@
                             <label class="form-label" for="sub-device" data-i18n="submit_device">🎮 Dispositivo de
                                 Entrada</label>
                             <select id="sub-device" class="form-control">
-                                <option value="Teclado">Teclado</option>
-                                <option value="Mando">Mando / Pad</option>
-                                <option value="Volante">Volante</option>
+                                <optgroup label="🎮 PlayStation">
+                                    <option value="PlayStation 5 (DualSense)">PlayStation 5 (DualSense)</option>
+                                    <option value="PlayStation 4 (DualShock 4)">PlayStation 4 (DualShock 4)</option>
+                                    <option value="PlayStation 3 (DualShock 3)">PlayStation 3 (DualShock 3)</option>
+                                </optgroup>
+                                <optgroup label="🎮 Xbox">
+                                    <option value="Xbox One / Series X">Xbox One / Series X</option>
+                                    <option value="Xbox 360">Xbox 360</option>
+                                </optgroup>
+                                <optgroup label="🎮 Logitech">
+                                    <option value="Logitech Extreme 3D Pro">Logitech Extreme 3D Pro</option>
+                                    <option value="Logitech F310">Logitech F310</option>
+                                    <option value="Logitech F710">Logitech F710</option>
+                                    <option value="Logitech Dual Action">Logitech Dual Action</option>
+                                </optgroup>
+                                <optgroup label="⌨️ / 🏎️ Otros">
+                                    <option value="Teclado" selected>Teclado</option>
+                                    <option value="Volante">Volante</option>
+                                    <option value="Mando Genérico">Mando Genérico / Pad</option>
+                                </optgroup>
                             </select>
                         </div>
                     </div>
@@ -3940,7 +3825,7 @@
                 <a href="https://firebase.google.com" target="_blank" rel="noopener noreferrer" class="powered-by-card"
                     title="Google Firebase Realtime Database">
                     <div class="powered-by-icon-box">
-                        <img src="assets/img/firebase-logo.png" alt="Firebase Logo" class="powered-by-img">
+                        <img src="assets/img/firebase-logo.png" alt="Firebase Logo" class="powered-by-img firebase-logo">
                     </div>
                     <span class="powered-by-name">FIREBASE</span>
                     <span class="powered-by-role">Realtime DB</span>
@@ -4094,6 +3979,7 @@
     <script src="assets/js/tuning-data.js"></script>
     <script src="assets/js/i18n.js"></script>
     <script src="assets/js/operator-icons.js"></script>
+    <script src="assets/js/hardware-icons.js"></script>
     <script src="assets/js/firebase-config.js"></script>
     <script src="assets/js/discord-notifier.js"></script>
     <script src="assets/js/app.js"></script>

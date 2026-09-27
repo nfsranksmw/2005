@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 270 40" width="270" height="40">
+  <defs>
+    <linearGradient id="badgeGradFull" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E2263C" />
+      <stop offset="100%" stop-color="#C81D31" />
+    </linearGradient>
+  </defs>
+  <!-- Badge -->
+  <rect x="0" y="5" width="42" height="30" rx="6" fill="url(#badgeGradFull)"/>
+  <text x="21" y="26" text-anchor="middle" fill="#ffffff" font-family="'Barlow Semi Condensed', -apple-system, sans-serif" font-weight="900" font-size="18" letter-spacing="0.8">NFS</text>
+  <!-- Brand Name -->
+  <text x="52" y="27" fill="#ffffff" font-family="'Barlow Semi Condensed', -apple-system, sans-serif" font-weight="900" font-size="21" letter-spacing="1">NFSMWRANKS.ONLINE</text>
+</svg>
