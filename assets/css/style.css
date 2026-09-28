@@ -11101,9 +11101,80 @@ body > .skiptranslate {
     border-spacing: 0 !important;
 }
 
-/* Ocultar thead exactamente como en la Imagen 1 */
+/* Cabeceras oficiales de telemetría (thead) */
 #view-leaderboard .blacklist-table thead {
-    display: none !important;
+    display: table-header-group !important;
+}
+
+#view-leaderboard .blacklist-table thead tr {
+    background: rgba(14, 18, 27, 0.98) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+#view-leaderboard .blacklist-table thead th {
+    padding: 12px 14px !important;
+    font-family: var(--font-racing), sans-serif !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.8px !important;
+    text-transform: uppercase !important;
+    color: #64748b !important;
+    background: rgba(14, 18, 27, 0.98) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    vertical-align: middle !important;
+    white-space: nowrap !important;
+}
+
+#view-leaderboard .blacklist-table thead th.col-place {
+    width: 48px !important;
+    max-width: 52px !important;
+    text-align: center !important;
+    padding-left: 14px !important;
+    padding-right: 8px !important;
+}
+
+#view-leaderboard .blacklist-table thead th.col-player {
+    width: auto !important;
+    min-width: 230px !important;
+    text-align: left !important;
+    padding-left: 8px !important;
+    padding-right: 14px !important;
+}
+
+#view-leaderboard .blacklist-table thead th.col-time {
+    width: 120px !important;
+    min-width: 115px !important;
+    text-align: left !important;
+}
+
+#view-leaderboard .blacklist-table thead th.col-car {
+    width: 115px !important;
+    min-width: 105px !important;
+    text-align: left !important;
+}
+
+#view-leaderboard .blacklist-table thead th.col-device {
+    width: 165px !important;
+    min-width: 150px !important;
+    text-align: left !important;
+}
+
+#view-leaderboard .blacklist-table thead th.col-gearbox {
+    width: 95px !important;
+    min-width: 90px !important;
+    text-align: left !important;
+}
+
+#view-leaderboard .blacklist-table thead th.col-date {
+    width: 95px !important;
+    min-width: 90px !important;
+    text-align: left !important;
+}
+
+#view-leaderboard .blacklist-table thead th.col-video {
+    width: 85px !important;
+    min-width: 80px !important;
+    text-align: center !important;
 }
 
 /* 2. Filas de clasificación */
@@ -11493,6 +11564,13 @@ body > .skiptranslate {
         width: 100% !important;
     }
 
+    #view-leaderboard .blacklist-table thead th {
+        padding: 8px 4px !important;
+        font-size: 10px !important;
+        letter-spacing: 0.5px !important;
+    }
+
+    #view-leaderboard .blacklist-table th.col-place,
     #view-leaderboard .blacklist-table td.col-place {
         width: 36px !important;
         max-width: 38px !important;
@@ -11500,12 +11578,15 @@ body > .skiptranslate {
         padding: 8px 2px !important;
     }
 
+    #view-leaderboard .blacklist-table th.col-player,
     #view-leaderboard .blacklist-table td.col-player {
         width: auto !important;
+        text-align: left !important;
         padding: 8px 6px !important;
         overflow: hidden !important;
     }
 
+    #view-leaderboard .blacklist-table th.col-time,
     #view-leaderboard .blacklist-table td.col-time {
         width: 82px !important;
         max-width: 86px !important;
@@ -11517,6 +11598,7 @@ body > .skiptranslate {
         font-size: 12.5px !important;
     }
 
+    #view-leaderboard .blacklist-table th.col-video,
     #view-leaderboard .blacklist-table td.col-video {
         width: 58px !important;
         max-width: 62px !important;
