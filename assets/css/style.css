@@ -895,22 +895,34 @@ header {
 .hero-banner {
     position: relative;
     width: 100%;
-    min-height: 440px;
-    background: linear-gradient(180deg, rgba(15, 15, 18, 0.94) 0%, rgba(15, 15, 18, 0.84) 50%, rgba(15, 15, 18, 0.96) 100%), 
-                url('../img/bmw-m3-gtr.jpg') no-repeat center center / cover;
+    min-height: 480px;
+    background-image: 
+        linear-gradient(180deg, 
+            rgba(10, 12, 17, 0.70) 0%, 
+            rgba(10, 12, 17, 0.28) 32%, 
+            rgba(10, 12, 17, 0.55) 68%, 
+            rgba(7, 9, 14, 0.94) 94%,
+            #06080d 100%
+        ),
+        radial-gradient(ellipse at 50% 38%, rgba(0, 0, 0, 0.1) 0%, rgba(5, 7, 12, 0.65) 100%),
+        url('../img/hero-bmw-m3-gtr-banner.jpg');
+    background-repeat: no-repeat;
+    background-position: center 32%;
+    background-size: cover;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 45px 25px;
+    padding: 55px 25px 50px 25px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     overflow: hidden;
+    box-shadow: inset 0 20px 30px -15px rgba(0, 0, 0, 0.8), inset 0 -30px 40px -10px rgba(6, 8, 13, 0.95);
 }
 
 @media (min-width: 992px) {
     .hero-banner { 
-        min-height: 500px; 
-        padding: 55px 40px; 
+        min-height: 520px; 
+        padding: 60px 40px 55px 40px; 
     }
 }
 
@@ -966,12 +978,13 @@ header {
     margin: 0 0 6px 0;
     letter-spacing: 1.5px;
     text-align: center;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.95), 0 2px 6px rgba(0, 0, 0, 0.9);
 }
 
 .hero-banner-content h1 span.glow-text,
 .hero-main-title span.glow-text {
     color: var(--nfs-orange);
-    text-shadow: 0 0 25px rgba(255, 119, 0, 0.45), 0 0 50px rgba(255, 119, 0, 0.2);
+    text-shadow: 0 0 28px rgba(255, 119, 0, 0.7), 0 4px 18px rgba(0, 0, 0, 0.95);
 }
 
 @media (min-width: 768px) {
@@ -1014,10 +1027,13 @@ header {
     width: 100%;
     display: flex;
     align-items: center;
-    background: #18191e;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(18, 20, 28, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
     border-radius: 8px;
     padding: 4px 6px 4px 14px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
@@ -1327,96 +1343,139 @@ h2.section-title span.glow {
 }
 
 /* ==========================================================================
-   SISTEMA DE CABECERAS Y TÍTULOS DE SECCIÓN ESTILO TRACKER.GG (R6 SIEGE STATS)
+   SISTEMA UNIFICADO DE CABECERAS Y BANNERS DE SECCIÓN ESTILO NFS MOST WANTED
+   (Diseño panorámico compacto, -50% altura, centrado, títulos +30%)
    ========================================================================== */
 .tracker-section-header {
     display: flex;
-    align-items: flex-start;
-    gap: 18px;
-    margin-bottom: 26px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: 22px;
+    padding: 16px 24px 14px 24px;
+    border-radius: 12px;
     position: relative;
-    padding-bottom: 4px;
+    overflow: hidden;
+    min-height: 110px;
+    border: 1px solid rgba(255, 119, 0, 0.35);
+    background: 
+        linear-gradient(180deg, rgba(8, 10, 15, 0.72) 0%, rgba(8, 10, 15, 0.42) 40%, rgba(8, 10, 15, 0.78) 80%, rgba(6, 8, 12, 0.96) 100%),
+        radial-gradient(ellipse at center, rgba(255, 119, 0, 0.1) 0%, rgba(0, 0, 0, 0.65) 100%),
+        url('../img/sections-header-banner.jpg') no-repeat center 42% / cover;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0 20px rgba(255, 119, 0, 0.12);
+}
+
+.tracker-section-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent 0%, var(--nfs-orange, #ff6600) 30%, #ffaa00 50%, var(--nfs-orange, #ff6600) 70%, transparent 100%);
+    box-shadow: 0 0 10px var(--nfs-orange, #ff6600);
+}
+
+/* Fondo específico para rutas y leaderboards: BMW M3 GTR junto al muro de piedra */
+#view-routes .tracker-section-header,
+#view-leaderboard .tracker-section-header {
+    background: 
+        linear-gradient(180deg, rgba(8, 10, 15, 0.72) 0%, rgba(8, 10, 15, 0.42) 40%, rgba(8, 10, 15, 0.78) 80%, rgba(6, 8, 12, 0.96) 100%),
+        radial-gradient(ellipse at center, rgba(255, 119, 0, 0.1) 0%, rgba(0, 0, 0, 0.65) 100%),
+        url('../img/routes-header-banner.jpg') no-repeat center 60% / cover;
 }
 
 .tracker-header-badge {
-    width: 58px;
-    height: 58px;
-    min-width: 58px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, rgba(255, 102, 0, 0.28) 0%, rgba(20, 22, 28, 0.95) 100%);
-    border: 1.5px solid rgba(255, 119, 0, 0.45);
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    border-radius: 8px;
+    margin: 0 auto 4px auto;
+    background: linear-gradient(135deg, rgba(255, 102, 0, 0.35) 0%, rgba(15, 17, 23, 0.95) 100%);
+    border: 1px solid rgba(255, 119, 0, 0.6);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), inset 0 0 14px rgba(255, 119, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7), 0 0 10px rgba(255, 119, 0, 0.3);
     flex-shrink: 0;
     transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .tracker-section-header:hover .tracker-header-badge {
-    transform: translateY(-2px) scale(1.03);
+    transform: translateY(-2px) scale(1.04);
     border-color: var(--nfs-orange);
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.7), 0 0 16px rgba(255, 119, 0, 0.35), inset 0 0 16px rgba(255, 119, 0, 0.25);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.8), 0 0 14px rgba(255, 119, 0, 0.4);
 }
 
 .tracker-header-badge svg {
-    width: 30px;
-    height: 30px;
+    width: 16px;
+    height: 16px;
     fill: var(--nfs-orange);
-    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.85));
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.85));
     transition: transform 0.2s ease;
 }
 
 .tracker-header-badge .badge-emoji {
-    font-size: 26px;
+    font-size: 16px;
     line-height: 1;
-    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.8));
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
 }
 
 .tracker-header-content {
     display: flex;
     flex-direction: column;
-    gap: 3px;
-    flex-grow: 1;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    max-width: 920px;
+    margin: 0 auto;
     min-width: 0;
 }
 
 .tracker-header-sup {
     font-family: var(--font-racing);
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 800;
     color: var(--nfs-orange);
     text-transform: uppercase;
     letter-spacing: 1.5px;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
+    text-align: center;
     gap: 6px;
     margin-bottom: 2px;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95);
 }
 
 .tracker-header-sup::before {
     content: '';
     display: inline-block;
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
     border-radius: 50%;
     background: var(--nfs-orange);
-    box-shadow: 0 0 8px var(--nfs-orange);
+    box-shadow: 0 0 6px var(--nfs-orange);
 }
 
 .tracker-header-title {
     font-family: var(--font-racing) !important;
-    font-size: 28px !important;
+    font-size: clamp(28px, 3.2vw, 36px) !important;
     font-weight: 900 !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
+    letter-spacing: 0.8px !important;
     line-height: 1.15 !important;
     margin: 0 !important;
     color: #ffffff !important;
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
+    justify-content: center !important;
+    text-align: center !important;
+    width: 100% !important;
     gap: 8px;
+    text-shadow: 0 3px 14px rgba(0, 0, 0, 0.95), 0 2px 4px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 0, 0, 0.8) !important;
 }
 
 .tracker-header-title .title-main {
@@ -1425,70 +1484,102 @@ h2.section-title span.glow {
 
 .tracker-header-title .title-accent {
     color: var(--nfs-orange);
-    text-shadow: 0 0 16px rgba(255, 119, 0, 0.45);
+    text-shadow: 0 0 16px rgba(255, 119, 0, 0.5);
 }
 
 .tracker-header-desc {
     font-family: var(--font-ui);
-    font-size: 13px;
-    color: #94a3b8;
-    line-height: 1.45;
-    margin: 3px 0 0 0;
+    font-size: 12px;
+    color: #e2e8f0;
+    line-height: 1.35;
+    margin: 3px auto 0 auto !important;
     font-weight: 500;
-    max-width: 850px;
+    max-width: 720px;
+    text-align: center !important;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95) !important;
 }
 
-.tracker-header-actions {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
+/* En pantallas de escritorio, el botón de retorno de leaderboard se posiciona flotante a la derecha */
+@media (min-width: 768px) {
+    #view-leaderboard .tracker-section-header {
+        position: relative;
+    }
+    #view-leaderboard .tracker-section-header .tracker-header-actions {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        margin: 0 !important;
+        width: auto !important;
+        z-index: 2;
+    }
+}
+
+.tracker-header-actions .filter-btn {
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(255, 119, 0, 0.5);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    transition: all 0.25s ease;
+    padding: 6px 14px;
+    font-size: 11.5px;
+    font-weight: 700;
+}
+
+.tracker-header-actions .filter-btn:hover {
+    border-color: var(--nfs-orange);
+    background: rgba(255, 102, 0, 0.25);
+    box-shadow: 0 0 14px rgba(255, 102, 0, 0.5);
+    transform: translateY(-1px);
 }
 
 /* Adaptación Responsiva para Móvil (< 768px) */
 @media (max-width: 767px) {
     .tracker-section-header {
-        gap: 12px;
-        margin-bottom: 18px;
-        flex-wrap: wrap;
+        padding: 12px 14px 12px 14px !important;
+        margin-bottom: 16px !important;
+        min-height: auto !important;
     }
 
     .tracker-header-badge {
-        width: 44px;
-        height: 44px;
-        min-width: 44px;
-        border-radius: 9px;
+        width: 28px !important;
+        height: 28px !important;
+        min-width: 28px !important;
+        border-radius: 6px !important;
+        margin: 0 auto 3px auto !important;
     }
 
     .tracker-header-badge svg {
-        width: 22px;
-        height: 22px;
+        width: 14px !important;
+        height: 14px !important;
     }
 
     .tracker-header-badge .badge-emoji {
-        font-size: 20px;
+        font-size: 14px !important;
     }
 
     .tracker-header-sup {
-        font-size: 10px;
-        letter-spacing: 1px;
+        font-size: 9.5px !important;
+        letter-spacing: 1px !important;
     }
 
     .tracker-header-title {
-        font-size: 20px !important;
-        gap: 6px;
+        font-size: clamp(20px, 5.2vw, 24px) !important;
+        text-align: center !important;
+        justify-content: center !important;
+        gap: 5px;
     }
 
     .tracker-header-desc {
-        font-size: 11.5px;
-        line-height: 1.4;
+        font-size: 11px !important;
+        margin: 2px auto 0 auto !important;
     }
 
     .tracker-header-actions {
-        width: 100%;
-        margin-left: 0;
-        margin-top: 6px;
+        width: 100% !important;
+        margin: 6px auto 0 auto !important;
+        display: flex !important;
+        justify-content: center !important;
     }
 }
 
@@ -6934,11 +7025,11 @@ footer strong {
 .map-hero-banner {
     text-align: center;
     margin-bottom: 25px;
-    background: #18191e;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: transparent;
+    border: none;
     border-radius: 12px;
-    padding: 30px 25px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    padding: 0;
+    box-shadow: none;
 }
 
 .map-badge-tag {
@@ -9771,14 +9862,14 @@ table td[class*="rank-"],
     box-sizing: border-box;
     width: 100%;
     margin-top: 40px;
-    text-align: left;
+    text-align: center;
 }
 
 /* SECCIÓN POWERED BY */
 .powered-by-section {
     max-width: 1200px;
     margin: 0 auto 42px auto;
-    text-align: left;
+    text-align: center;
 }
 
 .powered-by-header {
@@ -9945,8 +10036,9 @@ table td[class*="rank-"],
 .footer-social-links {
     display: flex;
     flex-direction: row;
+    flex-wrap: nowrap;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 
 .footer-social-btn {
@@ -10054,23 +10146,24 @@ table td[class*="rank-"],
     margin: 40px auto 0 auto;
     padding-top: 22px;
     border-top: 1px solid rgba(255, 255, 255, 0.06);
-    text-align: left;
+    text-align: center;
 }
 
 .footer-bottom-content {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-    text-align: left;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-align: center;
 }
 
 .footer-copy {
     font-family: var(--font-ui), 'Inter', sans-serif;
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.6);
-    margin: 0;
-    text-align: left;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0 auto;
+    text-align: center;
 }
 
 .footer-copy strong {
@@ -10079,30 +10172,62 @@ table td[class*="rank-"],
 
 .footer-disclaimer {
     font-family: var(--font-ui), 'Inter', sans-serif;
-    font-size: 10px;
-    line-height: 1.5;
-    color: rgba(255, 255, 255, 0.35);
-    margin: 0;
-    text-align: left;
+    font-size: 11px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.4);
+    margin: 0 auto;
+    max-width: 900px;
+    text-align: center;
 }
 
 /* RESPONSIVE FOOTER */
-@media (max-width: 960px) {
+@media (max-width: 991px) and (min-width: 681px) {
     .powered-by-grid {
         grid-template-columns: repeat(2, 1fr);
     }
     .footer-main-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 28px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 32px;
+        text-align: center;
     }
     .footer-brand-col {
         grid-column: 1 / -1;
+        align-items: center;
+        text-align: center;
+        margin-bottom: 12px;
+    }
+    .footer-brand-logo {
+        justify-content: center;
+    }
+    .footer-brand-desc {
+        text-align: center;
+        margin: 12px auto 18px auto;
+        max-width: 480px;
+    }
+    .footer-social-links {
+        justify-content: center;
+    }
+    .footer-nav-col {
+        align-items: center;
+        text-align: center;
+    }
+    .footer-col-title::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .footer-nav-list {
+        align-items: center;
+    }
+    .footer-nav-list li {
+        text-align: center;
     }
 }
 
-@media (max-width: 540px) {
+@media (max-width: 680px) {
     .powered-by-header {
         flex-direction: column;
+        align-items: center;
+        text-align: center;
         gap: 4px;
     }
     .powered-by-grid {
@@ -10128,9 +10253,38 @@ table td[class*="rank-"],
         transform: scale(1.10);
         transform-origin: center center;
     }
+    .footer-brand-col {
+        align-items: center;
+        text-align: center;
+    }
+    .footer-brand-logo {
+        justify-content: center;
+    }
+    .footer-brand-desc {
+        text-align: center;
+        margin: 12px auto 18px auto;
+    }
+    .footer-social-links {
+        justify-content: center;
+    }
     .footer-main-grid {
         grid-template-columns: 1fr;
-        gap: 24px;
+        gap: 28px;
+        text-align: center;
+    }
+    .footer-nav-col {
+        align-items: center;
+        text-align: center;
+    }
+    .footer-col-title::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .footer-nav-list {
+        align-items: center;
+    }
+    .footer-nav-list li {
+        text-align: center;
     }
 }
 
@@ -10884,6 +11038,494 @@ table td[class*="rank-"],
     font-weight: 600;
 }
 
+/* ==========================================================================
+   GOOGLE TRANSLATE SEAMLESS INTEGRATION & CLEAN STYLING
+   ========================================================================== */
+.goog-te-banner-frame.skiptranslate,
+.goog-te-banner-frame,
+#goog-gt-tt,
+.goog-te-balloon-frame {
+    display: none !important;
+    visibility: hidden !important;
+}
 
+body {
+    top: 0px !important;
+    position: static !important;
+}
 
+.skiptranslate {
+    display: none !important;
+}
 
+body > .skiptranslate {
+    display: none !important;
+}
+
+.goog-tooltip,
+.goog-tooltip:hover {
+    display: none !important;
+}
+
+.goog-text-highlight {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* ==========================================================================
+   ESTILO DEFINITIVO DE TABLAS DE CLASIFICACIÓN DE RUTAS (REFERENCIA IMAGEN 1)
+   Tablas de Telemetría Oficial de Tiempos: Píldoras de Hardware, Badges
+   Hexagonales, Indicador World Record P1, y Tipografía de Precisión Monospaced.
+   ========================================================================== */
+
+/* 1. Contenedor de la tabla en formato tarjeta de fibra oscura */
+#view-leaderboard .blacklist-table-wrapper {
+    background: rgba(11, 14, 21, 0.94) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    margin-top: 14px !important;
+    margin-bottom: 24px !important;
+}
+
+#view-leaderboard .table-section > h3 {
+    display: none !important; /* Cabeceras redundantes eliminadas para que la tabla comience directo tras las pestañas */
+}
+
+#view-leaderboard .blacklist-table {
+    width: 100% !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+}
+
+/* Ocultar thead exactamente como en la Imagen 1 */
+#view-leaderboard .blacklist-table thead {
+    display: none !important;
+}
+
+/* 2. Filas de clasificación */
+#view-leaderboard .blacklist-row {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
+    transition: background 0.2s ease, border-color 0.2s ease !important;
+    cursor: default;
+}
+
+#view-leaderboard .blacklist-row:last-child {
+    border-bottom: none !important;
+}
+
+#view-leaderboard .blacklist-row:hover {
+    background: rgba(255, 255, 255, 0.035) !important;
+}
+
+/* Fila 1: Puesto #1 World Record con barra indicadora naranja y gradiente cálido */
+#view-leaderboard .blacklist-row.active-row {
+    border-left: 4px solid #ff7700 !important;
+    background: linear-gradient(90deg, rgba(255, 119, 0, 0.16) 0%, rgba(255, 119, 0, 0.03) 55%, transparent 100%) !important;
+}
+
+#view-leaderboard .blacklist-row.active-row:hover {
+    background: linear-gradient(90deg, rgba(255, 119, 0, 0.22) 0%, rgba(255, 119, 0, 0.06) 55%, transparent 100%) !important;
+}
+
+/* Celdas generales */
+#view-leaderboard .blacklist-table td {
+    padding: 12px 14px !important;
+    vertical-align: middle !important;
+}
+
+/* 3. Columna 1: Badges de Posición (Hexágonos Top 3 & Números 4+) */
+#view-leaderboard .blacklist-table td.col-place {
+    width: 48px !important;
+    max-width: 52px !important;
+    text-align: center !important;
+    padding-left: 14px !important;
+    padding-right: 8px !important;
+}
+
+#view-leaderboard .hex-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 34px !important;
+    height: 34px !important;
+    vertical-align: middle !important;
+}
+
+#view-leaderboard .hex-svg {
+    width: 34px !important;
+    height: 34px !important;
+    overflow: visible !important;
+}
+
+#view-leaderboard .hex-shape-gold {
+    fill: #221404 !important;
+    stroke: #ff9900 !important;
+    stroke-width: 2 !important;
+    filter: drop-shadow(0 0 7px rgba(255, 153, 0, 0.7)) !important;
+}
+
+#view-leaderboard .hex-shape-silver {
+    fill: #151922 !important;
+    stroke: #cbd5e1 !important;
+    stroke-width: 2 !important;
+    filter: drop-shadow(0 0 6px rgba(203, 213, 225, 0.45)) !important;
+}
+
+#view-leaderboard .hex-shape-bronze {
+    fill: #1f1008 !important;
+    stroke: #ea580c !important;
+    stroke-width: 2 !important;
+    filter: drop-shadow(0 0 6px rgba(234, 88, 12, 0.45)) !important;
+}
+
+#view-leaderboard .hex-text {
+    font-family: var(--font-racing), sans-serif !important;
+    font-weight: 900 !important;
+    font-size: 14.5px !important;
+    fill: #ffffff !important;
+    text-anchor: middle !important;
+    dominant-baseline: central !important;
+}
+
+#view-leaderboard .rank-plain {
+    font-family: var(--font-ui), 'Inter', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 13.5px !important;
+    color: #64748b !important;
+    text-align: center !important;
+    display: inline-block !important;
+    width: 34px !important;
+}
+
+/* 4. Columna 2: Piloto, Avatar de Operador y Tags de Récord */
+#view-leaderboard .blacklist-table td.col-player {
+    width: auto !important;
+    min-width: 230px !important;
+    padding-left: 8px !important;
+    padding-right: 14px !important;
+}
+
+#view-leaderboard .driver-name-cell-wrapper {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    vertical-align: middle !important;
+}
+
+#view-leaderboard .operator-badge-box {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    min-height: 38px !important;
+    border-radius: 7px !important;
+    border: 2px solid var(--op-color, #ff4612) !important;
+    background: var(--op-bg, #121316) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5) !important;
+    flex-shrink: 0 !important;
+}
+
+#view-leaderboard .operator-badge-box svg {
+    width: 24px !important;
+    height: 24px !important;
+}
+
+#view-leaderboard .driver-cell-flex {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2px !important;
+}
+
+#view-leaderboard .driver-names-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-wrap: wrap !important;
+}
+
+#view-leaderboard .driver-cell-name {
+    font-family: var(--font-ui), 'Inter', sans-serif !important;
+    font-size: 14.5px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    line-height: 1.2 !important;
+}
+
+#view-leaderboard .driver-cell-alias.alias-wr {
+    color: #ff7700 !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.5px !important;
+    text-transform: uppercase !important;
+    text-shadow: 0 0 8px rgba(255, 119, 0, 0.4) !important;
+}
+
+#view-leaderboard .driver-cell-alias.alias-top2 {
+    color: #cbd5e1 !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.5px !important;
+    text-transform: uppercase !important;
+}
+
+#view-leaderboard .driver-cell-alias.alias-top3 {
+    color: #ea580c !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.5px !important;
+    text-transform: uppercase !important;
+}
+
+#view-leaderboard .driver-cell-alias.alias-driver {
+    color: #64748b !important;
+    font-size: 9px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+    text-transform: uppercase !important;
+}
+
+#view-leaderboard .driver-car-sub {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    font-size: 11px !important;
+    color: #94a3b8 !important;
+}
+
+#view-leaderboard .car-name-text {
+    color: #94a3b8 !important;
+    font-weight: 500 !important;
+    font-size: 11px !important;
+}
+
+#view-leaderboard .bl-chip {
+    font-family: var(--font-racing), sans-serif !important;
+    font-size: 8.5px !important;
+    font-weight: 800 !important;
+    padding: 1px 5px !important;
+    border-radius: 3px !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: #94a3b8 !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    flex-shrink: 0 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.3px !important;
+}
+
+#view-leaderboard .bl-chip.bl-badge-gold {
+    background: rgba(255, 119, 0, 0.15) !important;
+    color: #ff7700 !important;
+    border-color: rgba(255, 119, 0, 0.45) !important;
+}
+
+#view-leaderboard .bl-chip.bl-badge-silver {
+    background: rgba(203, 213, 225, 0.12) !important;
+    color: #e2e8f0 !important;
+    border-color: rgba(203, 213, 225, 0.35) !important;
+}
+
+#view-leaderboard .bl-chip.bl-badge-bronze {
+    background: rgba(234, 88, 12, 0.12) !important;
+    color: #ea580c !important;
+    border-color: rgba(234, 88, 12, 0.35) !important;
+}
+
+/* 5. Columna 3: Tiempo Récord en Monospace */
+#view-leaderboard .blacklist-table td.col-time {
+    width: 120px !important;
+    min-width: 115px !important;
+}
+
+#view-leaderboard .time-stat-val {
+    font-family: var(--font-mono, 'JetBrains Mono', monospace) !important;
+    font-variant-numeric: tabular-nums !important;
+    font-size: 15.5px !important;
+    font-weight: 800 !important;
+    color: #ffffff !important;
+    letter-spacing: 0.5px !important;
+}
+
+/* 6. Columna 4: Vehículo */
+#view-leaderboard .blacklist-table td.col-car {
+    width: 115px !important;
+    min-width: 105px !important;
+}
+
+#view-leaderboard .leaderboard-car-text {
+    color: #cbd5e1 !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.2px !important;
+}
+
+/* 7. Columna 5: Píldora de Dispositivo */
+#view-leaderboard .blacklist-table td.col-device {
+    width: 165px !important;
+    min-width: 150px !important;
+}
+
+#view-leaderboard .leaderboard-device-pill,
+#view-leaderboard .hw-public-tag {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: rgba(20, 24, 33, 0.9) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 6px !important;
+    padding: 4px 10px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    color: #e2e8f0 !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35) !important;
+    white-space: nowrap !important;
+}
+
+#view-leaderboard .leaderboard-device-pill svg,
+#view-leaderboard .hw-public-tag svg {
+    width: 14px !important;
+    height: 14px !important;
+    fill: #cbd5e1 !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    flex-shrink: 0 !important;
+}
+
+/* 8. Columna 6: Píldora de Transmisión (Caja de Cambios) */
+#view-leaderboard .blacklist-table td.col-gearbox {
+    width: 95px !important;
+    min-width: 90px !important;
+}
+
+#view-leaderboard .leaderboard-gearbox-pill {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    background: rgba(20, 24, 33, 0.9) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 6px !important;
+    padding: 4px 10px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    color: #e2e8f0 !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35) !important;
+    white-space: nowrap !important;
+}
+
+#view-leaderboard .leaderboard-gearbox-pill .gear-icon {
+    color: #fbbf24 !important;
+    font-size: 11.5px !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.4)) !important;
+    flex-shrink: 0 !important;
+}
+
+/* 9. Columna 7: Fecha de Registro */
+#view-leaderboard .blacklist-table td.col-date {
+    width: 95px !important;
+    min-width: 90px !important;
+}
+
+#view-leaderboard .leaderboard-date-text {
+    font-family: var(--font-mono, monospace) !important;
+    font-size: 11.5px !important;
+    color: #94a3b8 !important;
+    letter-spacing: 0.3px !important;
+}
+
+/* 10. Columna 8: Botón de Video */
+#view-leaderboard .blacklist-table td.col-video {
+    width: 85px !important;
+    min-width: 80px !important;
+    text-align: center !important;
+}
+
+#view-leaderboard .btn-yt-link {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    background: rgba(220, 38, 38, 0.12) !important;
+    border: 1px solid rgba(239, 68, 68, 0.45) !important;
+    color: #ef4444 !important;
+    border-radius: 4px !important;
+    padding: 3px 9px !important;
+    font-family: var(--font-racing), sans-serif !important;
+    font-size: 9.5px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.5px !important;
+    text-transform: uppercase !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+#view-leaderboard .btn-yt-link:hover {
+    background: rgba(239, 68, 68, 0.35) !important;
+    border-color: #ef4444 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.55) !important;
+    transform: translateY(-1px) !important;
+}
+
+#view-leaderboard .no-video-text {
+    color: #475569 !important;
+    font-family: var(--font-mono, monospace) !important;
+    font-size: 11px !important;
+}
+
+/* 11. Adaptación Responsiva para Móvil (< 768px) */
+@media (max-width: 767px) {
+    #view-leaderboard .blacklist-table th.col-desktop,
+    #view-leaderboard .blacklist-table td.col-desktop {
+        display: none !important;
+    }
+
+    #view-leaderboard .blacklist-table {
+        table-layout: fixed !important;
+        width: 100% !important;
+    }
+
+    #view-leaderboard .blacklist-table td.col-place {
+        width: 36px !important;
+        max-width: 38px !important;
+        text-align: center !important;
+        padding: 8px 2px !important;
+    }
+
+    #view-leaderboard .blacklist-table td.col-player {
+        width: auto !important;
+        padding: 8px 6px !important;
+        overflow: hidden !important;
+    }
+
+    #view-leaderboard .blacklist-table td.col-time {
+        width: 82px !important;
+        max-width: 86px !important;
+        text-align: right !important;
+        padding: 8px 4px !important;
+    }
+
+    #view-leaderboard .blacklist-table td.col-time .time-stat-val {
+        font-size: 12.5px !important;
+    }
+
+    #view-leaderboard .blacklist-table td.col-video {
+        width: 58px !important;
+        max-width: 62px !important;
+        text-align: center !important;
+        padding: 8px 2px !important;
+    }
+
+    #view-leaderboard .blacklist-table td.col-video .btn-yt-link {
+        padding: 4px 6px !important;
+        font-size: 8.5px !important;
+    }
+}

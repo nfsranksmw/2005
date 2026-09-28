@@ -1242,10 +1242,10 @@
         const badgeHTML = getOperatorBadgeHTML(driverName);
         const nameClean = (driverName || 'Desconocido').trim();
         return `
-            <div class="driver-name-cell-wrapper">
+            <div class="driver-name-cell-wrapper notranslate" translate="no">
                 ${badgeHTML}
                 <div class="driver-cell-info-col">
-                    <span class="driver-name-text">${nameClean}</span>
+                    <span class="driver-name-text notranslate" translate="no">${nameClean}</span>
                     ${extraInfoHTML ? `<div class="driver-cell-extra-info">${extraInfoHTML}</div>` : ''}
                 </div>
             </div>

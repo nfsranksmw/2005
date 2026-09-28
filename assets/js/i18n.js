@@ -18,8 +18,8 @@
  */
 
 const I18N_LANGUAGES = {
-    es: { code: 'ES', flag: '🇪🇸', name: 'Español', native: 'Español' },
-    en: { code: 'EN', flag: '🇺🇸', name: 'English', native: 'English' },
+    en: { code: 'EN', flag: '🇺🇸', name: 'English', native: 'English (Primary)' },
+    es: { code: 'ES', flag: '🇪🇸', name: 'Español', native: 'Español (Secundario)' },
     pt: { code: 'PT', flag: '🇧🇷', name: 'Português', native: 'Português' },
     zh: { code: 'ZH', flag: '🇨🇳', name: 'Chino', native: '中文' },
     ja: { code: 'JA', flag: '🇯🇵', name: 'Japonés', native: '日本語' },
@@ -80,9 +80,22 @@ const I18N_TRANSLATIONS = {
         discord_tag: "COMUNIDAD OFICIAL • NFSRANKSMW",
         discord_title: "¡ÚNETE AL SERVIDOR OFICIAL DE DISCORD!",
         discord_desc: "Salas de competición en vivo, eventos semanales, soporte técnico de telemetría y coordinación directa de partidas con los pilotos de la comunidad.",
-        discord_btn: "UNIRSE A DISCORD",
+        discord_btn: "UNIRSE AL SERVIDOR OFICIAL",
         discord_floating_label: "Únete al servidor oficial de Discord",
         discord_floating_label_mob: "Únete a Discord",
+        discord_online_members: "108+ Pilotos Conectados",
+        discord_close_title: "Cerrar ventana",
+        discord_feat1_title: "Duelos 1v1 y Reto Blacklist",
+        discord_feat1_sub: "Coordinación de carreras y torneos",
+        discord_feat2_title: "Homologación de Récords",
+        discord_feat2_sub: "Revisión telemática milimétrica",
+        discord_feat3_title: "Comunidad Activa 2026",
+        discord_feat3_sub: "Premios, soporte y salas de voz",
+
+        tutorial_sup: "ESPORTS GUIDE // GUÍA PASO A PASO",
+        tutorial_title_main: "TUTORIAL OFICIAL",
+        tutorial_title_sub: "// CÓMO PARTICIPAR EN EL TORNEO 2026",
+        tutorial_desc: "Aprende paso a paso cómo registrarte, competir en las 4 semanas de desafíos oficiales, grabar tu telemetría en YouTube y homologar tus tiempos en la red oficial de Rockport City.",
 
         hero_tag: "OFFICIAL SPEED LEADERBOARDS • NEED FOR SPEED RUNS 2005",
         hero_sub: "NEED FOR SPEED RUNS 2005",
@@ -358,7 +371,31 @@ const I18N_TRANSLATIONS = {
         promo_trailer_desc: "Need for Speed: Most Wanted (2005) llevado al siguiente nivel competitivo. Telemetría en tiempo real, récords mundiales homologados en YouTube, base de datos en Firebase y el torneo más exigente de la historia de Rockport.",
         promo_btn_tutorial: "Ver Torneo & Tutorial",
         promo_btn_register: "Inscríbete Ahora",
-        promo_btn_leaderboard: "Ver Leaderboards"
+        promo_btn_leaderboard: "Ver Leaderboards",
+        btn_load_more_drivers: "⬇️ Cargar más pilotos",
+        col_device: "Dispositivo",
+        col_gearbox: "Caja",
+        hero_search_placeholder: "Buscar piloto, circuito o récord oficial...",
+        hero_stat_drivers: "108 Pilotos",
+        hero_stat_routes: "24 Rutas",
+        hero_stat_blacklist: "Blacklist 2026",
+        promo_video_badge_2: "TRÁILER OFICIAL // PROMO COMERCIAL",
+        promo_video_title_2: "LA RED DEFINITIVA DE TELEMETRÍA Y RÉCORDS MUNDIALES",
+        promo_video_desc_2: "Revive la adrenalina pura de Rockport City con el legendario BMW M3 GTR. Récords mundiales homologados milimétricamente con marcas de video de YouTube, torneos semanales en vivo y la lucha definitiva por el trono de la Blacklist 2026.",
+        promo_video_btn_lb: "🏁 Explorar Leaderboards Oficiales",
+        promo_video_btn_reg: "🏆 Inscribirme al Torneo 2026",
+        promo_video_btn_tut: "📖 Ver Tutorial Paso a Paso",
+        week_prev_title: "Semana Anterior",
+        week_next_title: "Semana Siguiente",
+        no_records_yet: "No hay récords registrados todavía.",
+        col_records: "Récords Mundiales",
+        podium_badge_1: "Leyenda Absoluta",
+        podium_badge_2: "Elite Driver",
+        podium_badge_3: "Contendiente",
+        quick_jump_title: "⚡ SALTO RÁPIDO A PILOTO: ",
+        reg_empty_msg: "Aún no hay pilotos inscritos.",
+        reg_empty_sub: "Completa el formulario oficial para reclamar la plaza #1 del Campeonato Blacklist 2026.",
+        weekly_group: "Grupo Semanal:"
     },
 
     en: {
@@ -411,9 +448,22 @@ const I18N_TRANSLATIONS = {
         discord_tag: "OFFICIAL COMMUNITY • NFSRANKSMW",
         discord_title: "JOIN THE OFFICIAL DISCORD SERVER!",
         discord_desc: "Live competition voice rooms, weekly events, telemetry support, and direct race matchmaking with community drivers.",
-        discord_btn: "JOIN DISCORD",
+        discord_btn: "JOIN OFFICIAL SERVER",
         discord_floating_label: "Join the official Discord server",
         discord_floating_label_mob: "Join Discord",
+        discord_online_members: "108+ Drivers Online",
+        discord_close_title: "Close window",
+        discord_feat1_title: "1v1 Duels & Blacklist Challenge",
+        discord_feat1_sub: "Race and tournament coordination",
+        discord_feat2_title: "Record Homologation",
+        discord_feat2_sub: "Millimeter telemetry review",
+        discord_feat3_title: "Active 2026 Community",
+        discord_feat3_sub: "Prizes, support & voice channels",
+
+        tutorial_sup: "ESPORTS GUIDE // STEP-BY-STEP GUIDE",
+        tutorial_title_main: "OFFICIAL TUTORIAL",
+        tutorial_title_sub: "// HOW TO PARTICIPATE IN TOURNAMENT 2026",
+        tutorial_desc: "Learn step by step how to register, compete across 4 weeks of official challenges, record your telemetry on YouTube, and homologate your times on Rockport City's official network.",
 
         hero_tag: "OFFICIAL SPEED LEADERBOARDS • NEED FOR SPEED RUNS 2005",
         hero_sub: "NEED FOR SPEED RUNS 2005",
@@ -689,7 +739,31 @@ const I18N_TRANSLATIONS = {
         promo_trailer_desc: "Need for Speed: Most Wanted (2005) taken to the next competitive level. Realtime telemetry, YouTube verified world records, Firebase database and the most demanding tournament in Rockport history.",
         promo_btn_tutorial: "View Tournament & Tutorial",
         promo_btn_register: "Register Now",
-        promo_btn_leaderboard: "View Leaderboards"
+        promo_btn_leaderboard: "View Leaderboards",
+        btn_load_more_drivers: "⬇️ Load more drivers",
+        col_device: "Device",
+        col_gearbox: "Gearbox",
+        hero_search_placeholder: "Search driver, track or official record...",
+        hero_stat_drivers: "108 Drivers",
+        hero_stat_routes: "24 Routes",
+        hero_stat_blacklist: "Blacklist 2026",
+        promo_video_badge_2: "OFFICIAL TRAILER // COMMERCIAL PROMO",
+        promo_video_title_2: "THE DEFINITIVE TELEMETRY AND WORLD RECORDS NETWORK",
+        promo_video_desc_2: "Relive the pure adrenaline of Rockport City with the legendary BMW M3 GTR. World records homologated down to the millisecond with YouTube video marks, live weekly tournaments, and the ultimate battle for the 2026 Blacklist throne.",
+        promo_video_btn_lb: "🏁 Explore Official Leaderboards",
+        promo_video_btn_reg: "🏆 Register for Tournament 2026",
+        promo_video_btn_tut: "📖 View Step-by-Step Tutorial",
+        week_prev_title: "Previous Week",
+        week_next_title: "Next Week",
+        no_records_yet: "No records registered yet.",
+        col_records: "World Records",
+        podium_badge_1: "Absolute Legend",
+        podium_badge_2: "Elite Driver",
+        podium_badge_3: "Contender",
+        quick_jump_title: "⚡ QUICK JUMP TO DRIVER: ",
+        reg_empty_msg: "No drivers registered yet.",
+        reg_empty_sub: "Complete the official form to claim slot #1 in the Blacklist 2026 Championship.",
+        weekly_group: "Weekly Group:"
     },
 
     pt: {
@@ -2884,7 +2958,7 @@ const I18N_TRANSLATIONS = {
     }
 };
 
-let currentLanguage = 'es';
+let currentLanguage = 'en';
 
 /**
  * Obtener el idioma activo actual
@@ -2894,19 +2968,60 @@ function getCurrentLanguage() {
 }
 
 /**
- * Traducir una clave con fallback
+ * Traducir una clave con fallback (inglés como base primaria)
  */
 function t(key, fallback = '') {
-    const langDict = I18N_TRANSLATIONS[currentLanguage] || I18N_TRANSLATIONS.es;
+    const langDict = I18N_TRANSLATIONS[currentLanguage] || I18N_TRANSLATIONS.en;
     if (langDict && langDict[key] !== undefined) {
         return langDict[key];
     }
-    const fallbackDict = I18N_TRANSLATIONS.es;
+    const fallbackDict = I18N_TRANSLATIONS.en || I18N_TRANSLATIONS.es;
     if (fallbackDict && fallbackDict[key] !== undefined) {
         return fallbackDict[key];
     }
     return fallback || key;
 }
+
+/**
+ * Integración con Google Translate: sincroniza la cookie y el elemento selector oficial
+ */
+function triggerGoogleTranslate(lang) {
+    try {
+        let gtLang = lang;
+        if (lang === 'zh') gtLang = 'zh-CN';
+
+        const domain = window.location.hostname;
+        const cookieVal = (lang === 'en') ? '/en/en' : `/en/${gtLang}`;
+
+        // Establecer cookie googtrans para el dominio raíz y la ruta /
+        document.cookie = `googtrans=${cookieVal}; path=/;`;
+        if (domain && domain !== 'localhost' && !domain.match(/^\d+\.\d+\.\d+\.\d+$/)) {
+            document.cookie = `googtrans=${cookieVal}; path=/; domain=.${domain}`;
+            document.cookie = `googtrans=${cookieVal}; path=/; domain=${domain}`;
+        }
+
+        // Si el combo select de Google Translate ya está en el DOM, sincronizar su evento
+        const combo = document.querySelector('.goog-te-combo');
+        if (combo) {
+            combo.value = (lang === 'en') ? '' : gtLang;
+            combo.dispatchEvent(new Event('change'));
+        }
+    } catch (e) {
+        console.warn('[i18n] Google Translate bridge info:', e);
+    }
+}
+
+/**
+ * Callback de inicialización del Widget oficial de Google Translate
+ */
+window.googleTranslateElementInit = function() {
+    if (typeof google === 'undefined' || !google.translate) return;
+    new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,es,pt,zh-CN,ja,ru,it,fr,af',
+        autoDisplay: false
+    }, 'google_translate_element');
+};
 
 /**
  * Cambiar idioma activo, actualizar DOM y almacenar preferencia
@@ -2930,7 +3045,7 @@ function setLanguage(lang, event) {
     }
 
     // Actualizar botón selector en header
-    const langMeta = I18N_LANGUAGES[lang] || I18N_LANGUAGES.es;
+    const langMeta = I18N_LANGUAGES[lang] || I18N_LANGUAGES.en;
     const flagEl = document.getElementById('current-lang-flag');
     const codeEl = document.getElementById('current-lang-code');
     if (flagEl) flagEl.textContent = langMeta.flag;
@@ -2948,10 +3063,13 @@ function setLanguage(lang, event) {
     // Cerrar dropdown
     closeLangDropdown();
 
-    // Aplicar traducción a los elementos del DOM
+    // 1. Aplicar traducción instantánea a los elementos del DOM (diccionario optimizado)
     applyTranslations(lang);
 
-    // Notificar cambio a otros módulos (Leaderboards, Blacklist, Map)
+    // 2. Sincronizar Google Translate para traducir cualquier texto dinámico o no catalogado
+    triggerGoogleTranslate(lang);
+
+    // 3. Notificar cambio a otros módulos (Leaderboards, Blacklist, Map)
     window.dispatchEvent(new CustomEvent('nfs:languageChanged', { detail: { lang } }));
 }
 
@@ -2959,7 +3077,8 @@ function setLanguage(lang, event) {
  * Aplica las traducciones a todos los elementos con atributos data-i18n
  */
 function applyTranslations(lang) {
-    const dict = I18N_TRANSLATIONS[lang] || I18N_TRANSLATIONS.es;
+    const dict = I18N_TRANSLATIONS[lang] || I18N_TRANSLATIONS.en;
+    const fallbackDict = I18N_TRANSLATIONS.en;
     if (!dict) return;
 
     // 1. Textos generales
@@ -2967,6 +3086,8 @@ function applyTranslations(lang) {
         const key = el.getAttribute('data-i18n');
         if (dict[key] !== undefined) {
             el.textContent = dict[key];
+        } else if (fallbackDict && fallbackDict[key] !== undefined) {
+            el.textContent = fallbackDict[key];
         }
     });
 
@@ -2975,6 +3096,8 @@ function applyTranslations(lang) {
         const key = el.getAttribute('data-i18n-html');
         if (dict[key] !== undefined) {
             el.innerHTML = dict[key];
+        } else if (fallbackDict && fallbackDict[key] !== undefined) {
+            el.innerHTML = fallbackDict[key];
         }
     });
 
@@ -2983,6 +3106,8 @@ function applyTranslations(lang) {
         const key = el.getAttribute('data-i18n-placeholder');
         if (dict[key] !== undefined) {
             el.setAttribute('placeholder', dict[key]);
+        } else if (fallbackDict && fallbackDict[key] !== undefined) {
+            el.setAttribute('placeholder', fallbackDict[key]);
         }
     });
 
@@ -2991,6 +3116,8 @@ function applyTranslations(lang) {
         const key = el.getAttribute('data-i18n-title');
         if (dict[key] !== undefined) {
             el.setAttribute('title', dict[key]);
+        } else if (fallbackDict && fallbackDict[key] !== undefined) {
+            el.setAttribute('title', fallbackDict[key]);
         }
     });
 
@@ -3030,18 +3157,18 @@ function closeLangDropdown() {
 }
 
 /**
- * Inicialización de i18n
+ * Inicialización de i18n con Inglés como idioma primario por defecto
  */
 function initI18n() {
-    let savedLang = 'es';
+    let savedLang = 'en';
     try {
-        savedLang = localStorage.getItem('nfs_selected_lang') || 'es';
+        savedLang = localStorage.getItem('nfs_selected_lang') || 'en';
     } catch (e) {
-        savedLang = 'es';
+        savedLang = 'en';
     }
 
     if (!I18N_TRANSLATIONS[savedLang]) {
-        savedLang = 'es';
+        savedLang = 'en';
     }
 
     // Escuchador global de clics para cerrar menú al hacer clic fuera
@@ -3061,3 +3188,4 @@ if (document.readyState === 'loading') {
 } else {
     initI18n();
 }
+

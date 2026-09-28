@@ -1024,7 +1024,7 @@ async function loadLeaderboardTab() {
             html += `
                 <tr>
                     <td><span class="table-rank-badge ${rankBadge}">#${rankNum}</span></td>
-                    <td><strong style="color: #fff;">${escapeHtml(row.driver || '--')}</strong></td>
+                    <td><strong class="notranslate" translate="no" style="color: #fff;">${escapeHtml(row.driver || '--')}</strong></td>
                     <td style="font-family: var(--font-mono); font-weight: 700; color: var(--nfs-orange); font-size: 14px;">${row.time || '--:--.---'}</td>
                     <td>${escapeHtml(row.car || 'BMW M3 GTR')}</td>
                     <td>${window.NFS_HARDWARE ? window.NFS_HARDWARE.getBadgeHTML(row.device, row.gearbox) : `<span style="color: var(--cyan-neon); font-size: 11.5px;">${escapeHtml(row.device || 'PC')} / ${escapeHtml(row.gearbox || 'Manual')}</span>`}</td>
@@ -1804,7 +1804,7 @@ function renderSeasonStandingsAdminTable() {
                 <td style="text-align: center; font-family: var(--font-mono); ${posColor}">${posBadge}</td>
                 <td>
                     <div style="display: flex; align-items: center; gap: 8px;">
-                        <span style="font-family: var(--font-heading); font-size: 13.5px; font-weight: 700; color: #fff;">${escapeHtml(p.driver)}</span>
+                        <span class="notranslate" translate="no" style="font-family: var(--font-heading); font-size: 13.5px; font-weight: 700; color: #fff;">${escapeHtml(p.driver)}</span>
                         ${p.badgeTitle ? `<span style="font-size: 9.5px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15); padding: 1px 5px; border-radius: 3px; color: #cbd5e1;">${escapeHtml(p.badgeTitle)}</span>` : ''}
                     </div>
                 </td>

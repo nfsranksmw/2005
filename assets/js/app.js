@@ -394,7 +394,7 @@ function selectLeaderboardLap(lap, el) {
 function selectLeaderboardCarFilter(car, el) {
     currentCarFilter = car;
     const pillVal = document.getElementById('pill-val-car');
-    if (pillVal) pillVal.textContent = car === 'all' ? 'Todos' : car;
+    if (pillVal) pillVal.textContent = car === 'all' ? 'All' : car;
 
     if (el && el.parentElement) {
         el.parentElement.querySelectorAll('.popover-item').forEach(i => i.classList.remove('active'));
@@ -1217,8 +1217,6 @@ async function renderRoutes(dataToRender) {
         card._routeData = route;
 
         card.onclick = () => {
-            const titleEl = document.getElementById('leaderboard-title');
-            if (titleEl) titleEl.innerText = `Leaderboard: ${route.name} (${route.type})`;
             loadLeaderboardForRoute(route);
             switchView('leaderboard');
         };
@@ -1230,7 +1228,7 @@ async function renderRoutes(dataToRender) {
             </div>
             <div class="route-info">
                 <h3>${route.name}${route.alias ? ` <span style="font-size: 11px; color: var(--nfs-orange); font-weight: normal; opacity: 0.85;">(${route.alias})</span>` : ''}</h3>
-                <div class="route-preview-placeholder" style="font-size: 9.7px; color: #64748b;">Cargando récord...</div>
+                <div class="route-preview-placeholder" style="font-size: 9.7px; color: #64748b;">${typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es' ? 'Cargando récord...' : 'Loading record...'}</div>
             </div>
             <div class="route-action-icon" title="Ver Telemetría">🏁</div>
         `;
@@ -1412,13 +1410,28 @@ async function loadLeaderboardForRoute(route) {
     currentLap = 'single';
     currentCarFilter = 'all';
 
+    // Actualizar cabecera de la ruta (Banner personalizado y centrado)
+    const titleEl = document.getElementById('leaderboard-title');
+    if (titleEl && route) {
+        titleEl.innerHTML = `<span class="title-main">LEADERBOARD:</span> <span class="title-accent">${escapeHtml(route.name)}</span> <span class="title-sub" style="font-size: 0.72em; opacity: 0.85; color: #cbd5e1; margin-left: 6px;">(${escapeHtml(route.type)})</span>`;
+    }
+    const supEl = document.getElementById('leaderboard-sup');
+    if (supEl && route) {
+        const typeText = route.type ? route.type.toUpperCase() : 'ROUTE';
+        supEl.innerText = `${typeText} TELEMETRY // ROCKPORT TIMING`;
+    }
+    const descEl = document.getElementById('leaderboard-desc');
+    if (descEl && route) {
+        descEl.innerText = `Detailed record of times, drivers, and telemetry for ${route.name} (${route.type}).`;
+    }
+
     // Sincronizar UI de filtros compactos Tracker.gg
     const pillMod = document.getElementById('pill-val-modality');
     if (pillMod) pillMod.textContent = 'Junkman';
     const pillLap = document.getElementById('pill-val-lap');
     if (pillLap) pillLap.textContent = 'Single Lap';
     const pillCar = document.getElementById('pill-val-car');
-    if (pillCar) pillCar.textContent = 'Todos';
+    if (pillCar) pillCar.textContent = 'All';
 
     const pillLapWrapper = document.getElementById('pill-wrapper-lap');
     if (pillLapWrapper) {
@@ -1508,14 +1521,14 @@ function renderTableRows(tbodyId, dataRows) {
         tr.setAttribute('data-car', row.car || '');
 
         let videoBtnHTML = (row.yt && row.yt !== "#" && row.yt.startsWith("http"))
-            ? `<a href="${row.yt}" target="_blank" rel="noopener noreferrer" class="btn-yt-link" style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; font-size: 8.9px; background: rgba(255, 0, 0, 0.15); border: 1px solid rgba(255, 0, 0, 0.4); color: #ff5555; text-decoration: none; border-radius: 4px; font-family: var(--font-racing); font-weight: 700; transition: all 0.2s ease;">▶ Video</a>`
-            : `<span style="color: var(--text-dimmed); font-size: 9.7px; font-style: italic;">Sin video</span>`;
+            ? `<a href="${row.yt}" target="_blank" rel="noopener noreferrer" class="btn-yt-link">▶ VIDEO</a>`
+            : `<span class="no-video-text">--</span>`;
 
         let aliasTag = '';
-        if (displayRank === 1) aliasTag = '<span class="driver-cell-alias">👑 RECORD MUNDIAL</span>';
-        else if (displayRank === 2) aliasTag = '<span class="driver-cell-alias" style="color: #cbd5e1;">🥈 TOP 2 MUNDIAL</span>';
-        else if (displayRank === 3) aliasTag = '<span class="driver-cell-alias" style="color: #cd7f32;">🥉 TOP 3 MUNDIAL</span>';
-        else aliasTag = '<span class="driver-cell-alias" style="color: var(--text-muted); font-size: 8.1px;">PILOTO OFICIAL</span>';
+        if (displayRank === 1) aliasTag = '<span class="driver-cell-alias alias-wr">👑 WORLD RECORD</span>';
+        else if (displayRank === 2) aliasTag = '<span class="driver-cell-alias alias-top2">🥈 TOP 2 WORLD</span>';
+        else if (displayRank === 3) aliasTag = '<span class="driver-cell-alias alias-top3">🥉 TOP 3 WORLD</span>';
+        else aliasTag = '<span class="driver-cell-alias alias-driver">OFFICIAL DRIVER</span>';
 
         const blBadgeClass = displayRank === 1 ? 'bl-badge-gold' : displayRank === 2 ? 'bl-badge-silver' : displayRank === 3 ? 'bl-badge-bronze' : '';
 
@@ -1551,6 +1564,12 @@ function renderTableRows(tbodyId, dataRows) {
 
         const formattedTime = formatRaceTime(row.time);
 
+        let gbRaw = (row.gearbox || 'Manual').trim();
+        let gbDisplay = 'Manual';
+        if (gbRaw.toLowerCase().includes('auto')) {
+            gbDisplay = 'Auto';
+        }
+
         tr.innerHTML = `
             <td class="col-place">
                 ${rankBadgeHTML}
@@ -1560,7 +1579,7 @@ function renderTableRows(tbodyId, dataRows) {
                     ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(row.driver) : ''}
                     <div class="driver-cell-flex">
                         <div class="driver-names-row">
-                            <span class="driver-cell-name">${row.driver}</span>
+                            <span class="driver-cell-name notranslate" translate="no">${row.driver}</span>
                             ${aliasTag}
                         </div>
                         <div class="driver-car-sub">
@@ -1573,16 +1592,21 @@ function renderTableRows(tbodyId, dataRows) {
             <td class="col-time">
                 <span class="time-stat-val">${formattedTime}</span>
             </td>
-            <td class="col-desktop">
-                <span style="color: #ffffff; font-weight: 700; font-size: 10.5px; letter-spacing: 0.3px;">${row.car || '--'}</span>
+            <td class="col-desktop col-car">
+                <span class="leaderboard-car-text">${row.car || '--'}</span>
             </td>
-            <td class="col-desktop">
-                ${window.NFS_HARDWARE ? window.NFS_HARDWARE.getPublicTagHTML(row.device) : `<span class="champ-group-tag" style="color: #38bdf8; background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3); font-family: var(--font-racing); font-weight: 700; letter-spacing: 0.5px;">🎮 ${row.device || 'PC'}</span>`}
+            <td class="col-desktop col-device">
+                ${window.NFS_HARDWARE ? window.NFS_HARDWARE.getPublicTagHTML(row.device) : `<span class="leaderboard-device-pill hw-public-tag">🎮 <span class="device-label">${row.device || 'Teclado'}</span></span>`}
             </td>
-            <td class="col-desktop">
-                <span class="champ-group-tag" style="color: #ffd700; background: rgba(255, 215, 0, 0.1); border-color: rgba(255, 215, 0, 0.3); font-family: var(--font-racing); font-weight: 700; letter-spacing: 0.5px;">⚙️ ${row.gearbox || 'Manual'}</span>
+            <td class="col-desktop col-gearbox">
+                <span class="leaderboard-gearbox-pill" title="Transmisión: ${gbRaw}">
+                    <span class="gear-icon">⚙️</span>
+                    <span class="gearbox-label">${gbDisplay}</span>
+                </span>
             </td>
-            <td class="col-desktop" style="color: var(--text-muted); font-family: var(--font-mono); font-size: 9.7px;">${row.date || '--'}</td>
+            <td class="col-desktop col-date">
+                <span class="leaderboard-date-text">${row.date || '--'}</span>
+            </td>
             <td class="col-video" style="text-align: center;">${videoBtnHTML}</td>
         `;
         tbody.appendChild(tr);
@@ -1603,7 +1627,7 @@ function renderTop3PodiumCards(containerId, top3Array, metricKey = 'records', me
 
     const trophies = ['👑', '🥈', '🥉'];
     const rankClasses = ['rank-1', 'rank-2', 'rank-3'];
-    const badgeTitles = ['Leyenda Absoluta', 'Elite Driver', 'Contendiente'];
+    const badgeTitles = [t('podium_badge_1', 'Absolute Legend'), t('podium_badge_2', 'Elite Driver'), t('podium_badge_3', 'Contender')];
 
     let html = '';
     top3Array.slice(0, 3).forEach((driver, idx) => {
@@ -1621,7 +1645,7 @@ function renderTop3PodiumCards(containerId, top3Array, metricKey = 'records', me
                             <div class="podium-avatar">${rankNum === 1 ? '🥇' : (rankNum === 2 ? '🥈' : '🥉')}</div>
                             ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(driver.driver, 'xlarge') : ''}
                             <div class="podium-driver-info">
-                                <h4>${driver.driver}</h4>
+                                <h4 class="notranslate" translate="no">${driver.driver}</h4>
                                 <span class="podium-badge-label">${badge}</span>
                             </div>
                         </div>
@@ -1683,26 +1707,26 @@ async function generateHallOfFame() {
 
     // 1. Renderizar Podio Top 3 de tarjetas (lokal.gg)
     if (sortedDrivers && sortedDrivers.length >= 3) {
-        renderTop3PodiumCards('podium-hall-of-fame', sortedDrivers, 'records', 'Récords Mundiales');
+        renderTop3PodiumCards('podium-hall-of-fame', sortedDrivers, 'records', t('col_records', 'World Records'));
     }
 
     // 2. Renderizar tabla deportiva completa
     hofTbody.innerHTML = '';
     if (!sortedDrivers || sortedDrivers.length === 0) {
-        hofTbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">No hay récords registrados todavía.</td></tr>`;
+        hofTbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">${t('no_records_yet', 'No records registered yet.')}</td></tr>`;
         return;
     }
 
     sortedDrivers.forEach((item, index) => {
         let pos = index + 1;
         let posClass = pos === 1 ? "rank-1" : (pos === 2 ? "rank-2" : (pos === 3 ? "rank-3" : ""));
-        let badge = pos === 1 ? "👑 Leyenda Absoluta" : (pos <= 3 ? "🔥 Elite Driver" : "⭐ Contendiente");
+        let badge = pos === 1 ? "👑 " + t('podium_badge_1', 'Absolute Legend') : (pos <= 3 ? "🔥 " + t('podium_badge_2', 'Elite Driver') : "⭐ " + t('podium_badge_3', 'Contender'));
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td class="${posClass}">#${pos}</td>
-            <td>${window.NFSOperators ? window.NFSOperators.getDriverCellHTML(item.driver) : `<strong style="color: #ffffff; font-size: 12.2px;">${item.driver}</strong>`}</td>
-            <td style="color: var(--nfs-orange); font-family: var(--font-mono); font-weight: 800; font-size: 13px; text-shadow: var(--nfs-subtle-glow);">${item.records} Récords</td>
+            <td>${window.NFSOperators ? window.NFSOperators.getDriverCellHTML(item.driver) : `<strong class="notranslate" translate="no" style="color: #ffffff; font-size: 12.2px;">${item.driver}</strong>`}</td>
+            <td style="color: var(--nfs-orange); font-family: var(--font-mono); font-weight: 800; font-size: 13px; text-shadow: var(--nfs-subtle-glow);">${item.records} ${t('col_records', 'Records')}</td>
             <td><span class="telemetry-pill">PC / Multi</span></td>
             <td><span class="telemetry-pill" style="color: var(--nfs-orange); font-weight: bold;">${badge}</span></td>
         `;
@@ -1801,7 +1825,7 @@ async function renderGlobalPodiumTable(tbodyId, filterType = null) {
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td class="${posClass}">#${pos}</td>
-            <td>${window.NFSOperators ? window.NFSOperators.getDriverCellHTML(item.driver) : `<strong style="color: #ffffff; font-size: 12.2px;">${item.driver}</strong>`}</td>
+            <td>${window.NFSOperators ? window.NFSOperators.getDriverCellHTML(item.driver) : `<strong class="notranslate" translate="no" style="color: #ffffff; font-size: 12.2px;">${item.driver}</strong>`}</td>
             <td style="color: #ffd700; font-family: var(--font-mono); font-weight: 800; font-size: 12.2px; text-shadow: var(--gold-glow);">${item.first}</td>
             <td style="color: #e2e8f0; font-family: var(--font-mono); font-weight: 800; font-size: 12.2px; text-shadow: var(--silver-glow);">${item.second}</td>
             <td style="color: #ff9f43; font-family: var(--font-mono); font-weight: 800; font-size: 12.2px; text-shadow: var(--bronze-glow);">${item.third}</td>
@@ -1834,9 +1858,10 @@ function renderLoadMoreButton(tbodyId, onClickHandler) {
         tableContainer.parentNode.insertBefore(btnContainer, tableContainer.nextSibling);
     }
 
+    const loadMoreText = (typeof window.nfsI18n !== 'undefined' && window.nfsI18n.t) ? window.nfsI18n.t('btn_load_more_drivers') : 'Load more drivers';
     btnContainer.innerHTML = `
-        <button class="btn-load-more">
-            ⬇️ Cargar más pilotos
+        <button class="btn-load-more" data-i18n="btn_load_more_drivers">
+            ⬇️ ${loadMoreText}
         </button>
     `;
 
@@ -2437,9 +2462,6 @@ function goToRouteLeaderboardAfterSubmit(routeName, categoryKey) {
         return;
     }
 
-    const titleEl = document.getElementById('leaderboard-title');
-    if (titleEl) titleEl.innerText = `Leaderboard: ${route.name} (${route.type})`;
-
     loadLeaderboardForRoute(route);
     switchView('leaderboard');
 
@@ -2965,7 +2987,7 @@ function renderChallengesUI() {
         : null;
 
     if (!season || !season.weeks) {
-        gridContainer.innerHTML = '<p style="color:var(--text-muted); text-align:center; padding:30px;">Cargando calendario de temporadas...</p>';
+        gridContainer.innerHTML = `<p style="color:var(--text-muted); text-align:center; padding:30px;">${typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es' ? 'Cargando calendario de temporadas...' : 'Loading season schedule...'}</p>`;
         return;
     }
 
@@ -3253,7 +3275,7 @@ function renderSeasonStandingsLive(list) {
                         ${avatarSvg || '🏎️'}
                     </div>
                     <div style="flex: 1; min-width: 0;">
-                        <div class="season-podium-driver" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        <div class="season-podium-driver notranslate" translate="no" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                             ${escapeHtml(p.driver)}
                         </div>
                         <div class="season-podium-pts">
@@ -3284,7 +3306,7 @@ function renderSeasonStandingsLive(list) {
                         <span style="display: inline-block; width: 24px; height: 24px; border-radius: 50%; overflow: hidden; vertical-align: middle;">
                             ${avatarSvg}
                         </span>
-                        <strong style="color: #ffffff; font-family: var(--font-racing); font-size: 13.5px;">${escapeHtml(p.driver)}</strong>
+                        <strong class="notranslate" translate="no" style="color: #ffffff; font-family: var(--font-racing); font-size: 13.5px;">${escapeHtml(p.driver)}</strong>
                     </div>
                 </td>
                 <td style="text-align: center; font-family: var(--font-mono); color: #cbd5e1;">${p.s1 || 0}</td>
@@ -3579,7 +3601,7 @@ function renderChampionshipGroups(weekNumber) {
                         <span class="bl-rank-badge ${driver.rank === 1 ? 'rank-gold' : driver.rank === 2 ? 'rank-silver' : driver.rank === 3 ? 'rank-bronze' : 'rank-normal'}" style="min-width: 28px; height: 28px; font-size: 10.5px;">${driver.rank}</span>
                         ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(driver.alias || driver.name) : ''}
                         <div>
-                            <div class="pilot-item-name">${driver.name} <span style="color: var(--nfs-orange);">"${driver.alias}"</span></div>
+                            <div class="pilot-item-name notranslate" translate="no">${driver.name} <span style="color: var(--nfs-orange);">"${driver.alias}"</span></div>
                             <div class="pilot-item-car">${driver.ride}</div>
                         </div>
                     </div>
@@ -3634,7 +3656,7 @@ function renderChampionshipChallenges(weekNumber) {
                         <span class="badge-bonus ${bonusClass}">${t.badge}</span>
                         ${repBadgeText ? `<span class="badge-rep-money">${repBadgeText}</span>` : ''}
                         <div>
-                            <span style="font-weight: 700; color: #ffffff;">${pilotDisplay}</span>
+                            <span class="notranslate" translate="no" style="font-weight: 700; color: #ffffff;">${pilotDisplay}</span>
                             ${t.car ? `<span style="color: var(--text-muted); font-size: 8.9px; margin-left: 4px;">• ${t.car}</span>` : ''}
                         </div>
                     </div>
@@ -3833,9 +3855,9 @@ function renderBlacklistUI() {
                 <div class="driver-name-cell-wrapper">
                     ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(driver.alias || driver.name) : ''}
                     <div class="driver-cell-flex">
-                        <div class="driver-names-row">
-                            <span class="driver-cell-name">${driver.name}</span>
-                            <span class="driver-cell-alias">"${driver.alias}"</span>
+                        <div class="driver-names-row notranslate" translate="no">
+                            <span class="driver-cell-name notranslate" translate="no">${driver.name}</span>
+                            <span class="driver-cell-alias notranslate" translate="no">"${driver.alias}"</span>
                         </div>
                         <div class="driver-bl-sublabel ${blBadgeClass}">
                             <span class="bl-word-white">Blacklist</span> <span class="bl-num-accent">${standingRank}</span>
@@ -3979,7 +4001,7 @@ function renderAllTacticalCards() {
                 <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%;">
                     <div>
                         <div class="blacklist-number-title">Blacklist ${currentStandingRank}</div>
-                        <div class="blacklist-driver-fullname">${driver.name} "${driver.alias}"</div>
+                        <div class="blacklist-driver-fullname notranslate" translate="no">${driver.name} "${driver.alias}"</div>
                     </div>
                     ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(driver.alias || driver.name, 'xlarge') : ''}
                 </div>
@@ -3995,8 +4017,8 @@ function renderAllTacticalCards() {
                     <span class="spec-value">${driver.strength}</span>
                 </div>
                 <div class="spec-row">
-                    <span class="spec-label">Grupo Semanal:</span>
-                    <span class="spec-value" style="color: var(--nfs-orange);">${groupName} (Semana ${currentChampionshipWeek})</span>
+                    <span class="spec-label" data-i18n="weekly_group">${window.nfsI18n ? window.nfsI18n.t('weekly_group') : 'Weekly Group'}:</span>
+                    <span class="spec-value" style="color: var(--nfs-orange);">${groupName} (${window.nfsI18n ? window.nfsI18n.t('label_week') : 'Week'} ${currentChampionshipWeek})</span>
                 </div>
             </div>
 
@@ -4006,11 +4028,11 @@ function renderAllTacticalCards() {
                 </div>
                 <p class="bio-text">${driver.bio}</p>
                 <div class="bio-bracket-bottom"></div>
-                <div class="tactical-signature">${driver.signature || driver.alias.toUpperCase()}</div>
+                <div class="tactical-signature notranslate" translate="no">${driver.signature || driver.alias.toUpperCase()}</div>
                 ${driver.youtube ? `
                 <div style="margin-top: 10px;">
                     <a href="${driver.youtube}" target="_blank" rel="noopener noreferrer" class="tactical-yt-btn">
-                        <span>▶</span> Ver Canal / Video YouTube
+                        <span>▶</span> ${window.nfsI18n ? window.nfsI18n.t('promo_video_watch') : 'Watch Channel / YouTube Video'}
                     </a>
                 </div>
                 ` : ''}
@@ -4082,7 +4104,8 @@ function renderQuickJumpPills() {
 
     const totalPilots = Math.max(15, blacklistDrivers.length);
     if (titleEl) {
-        titleEl.textContent = `⚡ SALTO RÁPIDO A PILOTO (ORDEN BLACKLIST 1 AL ${totalPilots}):`;
+        const titleText = (typeof window.nfsI18n !== 'undefined' && window.nfsI18n.t) ? window.nfsI18n.t('quick_jump_title') : '⚡ QUICK JUMP TO DRIVER';
+        titleEl.textContent = `${titleText} (1 - ${totalPilots}):`;
     }
 
     container.innerHTML = '';
@@ -4090,7 +4113,8 @@ function renderQuickJumpPills() {
     sorted.forEach((d, idx) => {
         const standingRank = idx + 1;
         const btn = document.createElement('button');
-        btn.className = 'jump-pill';
+        btn.className = 'jump-pill notranslate';
+        btn.setAttribute('translate', 'no');
         btn.onclick = () => scrollToPilotCard(d.rank);
 
         let icon = '';
@@ -4108,25 +4132,28 @@ function updateChampionshipRosterLabels() {
 
     // Actualizar texto de sub-pestañas en toda la web
     document.querySelectorAll('.subtab-cards-label').forEach(el => {
-        el.textContent = `Fichas Técnicas (1 al ${totalPilots})`;
+        const labelText = (typeof window.nfsI18n !== 'undefined' && window.nfsI18n.t) ? window.nfsI18n.t('tab_technical_sheets') : 'Driver Dossiers';
+        el.textContent = `${labelText} (1 - ${totalPilots})`;
     });
 
     // Actualizar título de la sección de fichas técnicas
     const titleGlow = document.getElementById('bl-cards-title-glow');
     if (titleGlow) {
-        titleGlow.textContent = `// Blacklist 1 al ${totalPilots}`;
+        titleGlow.textContent = `// Blacklist 1 - ${totalPilots}`;
     }
 
     // Actualizar título de tabla de clasificación general
     const standingsTitle = document.getElementById('bl-standings-title');
     if (standingsTitle) {
-        standingsTitle.innerHTML = `<span>🏆</span> CLASIFICACIÓN GENERAL OFICIAL DEL CAMPEONATO (TOP ${totalPilots})`;
+        const standingsText = (typeof window.nfsI18n !== 'undefined' && window.nfsI18n.t) ? window.nfsI18n.t('champ_standings_title') : 'OFFICIAL CHAMPIONSHIP OVERALL STANDINGS';
+        standingsTitle.innerHTML = `<span>🏆</span> ${standingsText} (TOP ${totalPilots})`;
     }
 
     // Actualizar telemetría de pilotos en competición
     const pilotsCountEl = document.getElementById('bl-standings-pilots-count');
     if (pilotsCountEl) {
-        pilotsCountEl.textContent = `${totalPilots} Corredores`;
+        const driversText = (typeof window.nfsI18n !== 'undefined' && window.nfsI18n.t) ? window.nfsI18n.t('hero_stat_drivers') : 'Drivers';
+        pilotsCountEl.textContent = `${totalPilots} ${driversText}`;
     }
 
     // Actualizar resumen en formulario de inscripción
@@ -4136,17 +4163,17 @@ function updateChampionshipRosterLabels() {
 
     if (regSummarySlots) {
         if (totalReg <= 15) {
-            regSummarySlots.textContent = `${totalReg} / 15 Ocupadas`;
+            regSummarySlots.textContent = `${totalReg} / 15 ${typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es' ? 'Ocupadas' : 'Occupied'}`;
         } else {
-            regSummarySlots.textContent = `${totalReg} / ${totalReg} Plazas (Parrilla Extendida)`;
+            regSummarySlots.textContent = `${totalReg} / ${totalReg} ${typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es' ? 'Plazas (Parrilla Extendida)' : 'Slots (Extended Grid)'}`;
         }
     }
 
     if (regCountPill) {
         if (totalReg <= 15) {
-            regCountPill.innerHTML = `<span id="reg-count-num">${totalReg}</span> / 15 Plazas`;
+            regCountPill.innerHTML = `<span id="reg-count-num">${totalReg}</span> / 15 ${typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es' ? 'Plazas' : 'Slots'}`;
         } else {
-            regCountPill.innerHTML = `<span id="reg-count-num">${totalReg}</span> Plazas (Ampliadas)`;
+            regCountPill.innerHTML = `<span id="reg-count-num">${totalReg}</span> ${typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es' ? 'Plazas (Ampliadas)' : 'Slots (Extended)'}`;
         }
     }
 }
@@ -4449,14 +4476,14 @@ function renderRegisteredPilotsUI() {
         const item = document.createElement('div');
         item.className = 'registered-pilot-item is-user';
 
-        const statusLabel = `PLAZA #${slotNum}`;
+        const statusLabel = `${typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es' ? 'PLAZA' : 'SLOT'} #${slotNum}`;
 
         item.innerHTML = `
             <div class="registered-pilot-left">
                 <div class="reg-slot-badge ${badgeClass}">${slotNum}</div>
                 ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(pilot.alias || pilot.name) : ''}
                 <div class="reg-pilot-info">
-                    <div class="reg-pilot-name">
+                    <div class="reg-pilot-name notranslate" translate="no">
                         ${pilot.name} ${pilot.alias ? `<span style="color: var(--nfs-orange);">"${pilot.alias}"</span>` : ''}
                     </div>
                     <div class="reg-pilot-car">
@@ -4471,7 +4498,7 @@ function renderRegisteredPilotsUI() {
                 <span class="reg-status-badge status-official">${statusLabel}</span>
                 ${pilot.youtube ? `
                     <a href="${pilot.youtube}" target="_blank" rel="noopener noreferrer" class="btn-yt-link">
-                        ▶ Canal / Video
+                        ▶ ${typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es' ? 'Canal / Video' : 'Channel / Video'}
                     </a>
                 ` : ''}
             </div>
@@ -4817,12 +4844,13 @@ function initHomeSidebarModules() {
         let html = "";
         HOME_LIVE_LEADERBOARD_RECORDS.forEach(rec => {
             const rankClass = rec.rank === 1 ? 'live-lb-rank-1' : (rec.rank === 2 ? 'live-lb-rank-2' : (rec.rank === 3 ? 'live-lb-rank-3' : 'live-lb-rank-other'));
+            const viewTitle = typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es' ? `Ver Leaderboard oficial de ${rec.route}` : `View official Leaderboard for ${rec.route}`;
             html += `
-                <div class="live-lb-item" onclick="navigateFromLiveLeaderboard('${rec.route}', '${rec.routeType}')" title="Ver Leaderboard oficial de ${rec.route}">
+                <div class="live-lb-item" onclick="navigateFromLiveLeaderboard('${rec.route}', '${rec.routeType}')" title="${viewTitle}">
                     <div class="live-lb-left">
                         <span class="live-lb-rank-num ${rankClass}">${rec.rank}</span>
                         <div class="live-lb-info">
-                            <div class="live-lb-driver">${rec.driver}</div>
+                            <div class="live-lb-driver notranslate" translate="no">${rec.driver}</div>
                             <div class="live-lb-track">📍 ${rec.route} (${rec.routeType})</div>
                         </div>
                     </div>
@@ -4856,12 +4884,13 @@ async function syncLiveLeaderboardWithOfficialSheet() {
                 validRows.forEach((rec, idx) => {
                     const rankNum = idx + 1;
                     const rankClass = rankNum === 1 ? 'live-lb-rank-1' : (rankNum === 2 ? 'live-lb-rank-2' : (rankNum === 3 ? 'live-lb-rank-3' : 'live-lb-rank-other'));
+                    const viewTitle = typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es' ? `Ver Leaderboard oficial de ${route.name}` : `View official Leaderboard for ${route.name}`;
                     html += `
-                        <div class="live-lb-item" onclick="navigateFromLiveLeaderboard('${route.name.replace(/'/g, "\\'")}', '${route.type}')" title="Ver Leaderboard oficial de ${route.name}">
+                        <div class="live-lb-item" onclick="navigateFromLiveLeaderboard('${route.name.replace(/'/g, "\\'")}', '${route.type}')" title="${viewTitle}">
                             <div class="live-lb-left">
                                 <span class="live-lb-rank-num ${rankClass}">${rankNum}</span>
                                 <div class="live-lb-info">
-                                    <div class="live-lb-driver">${rec.driver}</div>
+                                    <div class="live-lb-driver notranslate" translate="no">${rec.driver}</div>
                                     <div class="live-lb-track">📍 ${route.name} (${route.type})</div>
                                 </div>
                             </div>
@@ -4884,8 +4913,6 @@ function navigateFromLiveLeaderboard(routeName, routeType) {
     if (typeof routesData !== 'undefined') {
         const found = routesData.find(r => r.name.toLowerCase() === routeName.toLowerCase());
         if (found) {
-            const titleEl = document.getElementById('leaderboard-title');
-            if (titleEl) titleEl.innerText = `Leaderboard: ${found.name} (${found.type})`;
             loadLeaderboardForRoute(found);
             switchView('leaderboard');
             return;
@@ -5007,8 +5034,8 @@ function renderDiscordMembers(filterRole = 'all', searchQuery = '') {
             <td>
                 <div class="member-cell-flex">
                     <div class="member-avatar-badge role-${m.roleCategory}">${initialLetter}</div>
-                    <div class="driver-cell-flex">
-                        <span class="driver-cell-name">${m.name}</span>
+                    <div class="driver-cell-flex notranslate" translate="no">
+                        <span class="driver-cell-name notranslate" translate="no">${m.name}</span>
                         <span style="font-family: var(--font-mono); font-size: 8.9px; color: var(--text-dimmed);">@${m.username}</span>
                     </div>
                 </div>
@@ -5026,7 +5053,7 @@ function renderDiscordMembers(filterRole = 'all', searchQuery = '') {
                 ${joinMethodHTML}
             </td>
             <td>
-                <span class="champ-group-tag" style="color: var(--green-neon); background: rgba(0, 255, 136, 0.1); border-color: rgba(0, 255, 136, 0.3); font-weight: 700;">● Activo</span>
+                <span class="champ-group-tag" style="color: var(--green-neon); background: rgba(0, 255, 136, 0.1); border-color: rgba(0, 255, 136, 0.3); font-weight: 700;">● ${typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es' ? 'Activo' : 'Active'}</span>
             </td>
         `;
 

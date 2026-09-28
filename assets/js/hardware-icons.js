@@ -215,9 +215,9 @@
         const displayDevice = item.short || item.label || 'Teclado';
 
         return `
-            <span class="champ-group-tag hw-public-tag" title="${item.label}">
+            <span class="leaderboard-device-pill hw-public-tag" title="${item.label}">
                 ${svg}
-                <span style="color: #ffffff; font-weight: 700;">${displayDevice}</span>
+                <span class="device-label">${displayDevice}</span>
             </span>
         `.trim();
     }

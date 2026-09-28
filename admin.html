@@ -116,8 +116,7 @@
                 onclick="switchAdminTab('championship')">
                 <span>⚔️ Campeonato Blacklist 2026</span>
             </button>
-            <button type="button" class="admin-tab-btn" id="tab-btn-challenges"
-                onclick="switchAdminTab('challenges')">
+            <button type="button" class="admin-tab-btn" id="tab-btn-challenges" onclick="switchAdminTab('challenges')">
                 <span>🎯 Editor Fichas Desafíos (T1 & T2)</span>
             </button>
             <button type="button" class="admin-tab-btn" id="tab-btn-seasons" onclick="switchAdminTab('seasons')">
@@ -209,10 +208,12 @@
                     <span>🏆 Gestor Directo de Leaderboards</span>
                 </h2>
                 <div style="display: flex; gap: 10px; align-items: center;">
-                    <button type="button" class="admin-btn admin-btn-primary admin-btn-sm" onclick="openAddLeaderboardModal()">
+                    <button type="button" class="admin-btn admin-btn-primary admin-btn-sm"
+                        onclick="openAddLeaderboardModal()">
                         ➕ Agregar Nuevo Tiempo
                     </button>
-                    <button type="button" class="admin-btn admin-btn-outline admin-btn-sm" onclick="loadLeaderboardTab()">
+                    <button type="button" class="admin-btn admin-btn-outline admin-btn-sm"
+                        onclick="loadLeaderboardTab()">
                         🔄 Recargar Tabla
                     </button>
                 </div>
@@ -420,80 +421,106 @@
                 <div class="admin-card-header">
                     <div>
                         <h2>⚔️ Campeonato Blacklist 2026 // Grupos &amp; Desafíos Semanales</h2>
-                        <p>Modifica los 5 Grupos de carrera y edita los 8 desafíos oficiales de cada semana con sus ganadores: Ganador Oro 🥇, Ganador Silver 🥈 y Ganador Bronce 🥉.</p>
+                        <p>Modifica los 5 Grupos de carrera y edita los 8 desafíos oficiales de cada semana con sus
+                            ganadores: Ganador Oro 🥇, Ganador Silver 🥈 y Ganador Bronce 🥉.</p>
                     </div>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                         <button type="button" class="admin-btn admin-btn-primary" onclick="saveChampionshipAdmin()">
                             💾 Guardar Cambios en RTDB
                         </button>
-                        <button type="button" class="admin-btn admin-btn-outline" style="border-color: #fbbf24; color: #fbbf24;" onclick="syncChampionshipWinnersWithStandings()">
+                        <button type="button" class="admin-btn admin-btn-outline"
+                            style="border-color: #fbbf24; color: #fbbf24;"
+                            onclick="syncChampionshipWinnersWithStandings()">
                             ⚡ Sincronizar con Clasificación General
                         </button>
-                        <button type="button" class="admin-btn admin-btn-outline" onclick="loadChampionshipAdmin()" title="Recargar">
+                        <button type="button" class="admin-btn admin-btn-outline" onclick="loadChampionshipAdmin()"
+                            title="Recargar">
                             🔄 Actualizar
                         </button>
                     </div>
                 </div>
 
                 <!-- SELECTOR DE SEMANA DEL CAMPEONATO -->
-                <div class="admin-filter-bar" style="margin-bottom: 22px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
-                    <div style="font-family: var(--font-heading); font-weight: 700; font-size: 13.5px; color: #fff; margin-right: 8px;">
+                <div class="admin-filter-bar"
+                    style="margin-bottom: 22px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+                    <div
+                        style="font-family: var(--font-heading); font-weight: 700; font-size: 13.5px; color: #fff; margin-right: 8px;">
                         <span>📅 SEMANA DEL CAMPEONATO:</span>
                     </div>
                     <div class="champ-admin-week-pills" style="display: flex; gap: 8px; flex-wrap: wrap;">
-                        <button type="button" class="admin-btn admin-btn-sm champ-admin-week-btn active" id="btn-champ-week-1" onclick="selectChampionshipAdminWeek(1)">
+                        <button type="button" class="admin-btn admin-btn-sm champ-admin-week-btn active"
+                            id="btn-champ-week-1" onclick="selectChampionshipAdminWeek(1)">
                             Semana 1 (03-09 Oct)
                         </button>
-                        <button type="button" class="admin-btn admin-btn-sm champ-admin-week-btn admin-btn-outline" id="btn-champ-week-2" onclick="selectChampionshipAdminWeek(2)">
+                        <button type="button" class="admin-btn admin-btn-sm champ-admin-week-btn admin-btn-outline"
+                            id="btn-champ-week-2" onclick="selectChampionshipAdminWeek(2)">
                             Semana 2 (10-16 Oct)
                         </button>
-                        <button type="button" class="admin-btn admin-btn-sm champ-admin-week-btn admin-btn-outline" id="btn-champ-week-3" onclick="selectChampionshipAdminWeek(3)">
+                        <button type="button" class="admin-btn admin-btn-sm champ-admin-week-btn admin-btn-outline"
+                            id="btn-champ-week-3" onclick="selectChampionshipAdminWeek(3)">
                             Semana 3 (17-23 Oct)
                         </button>
-                        <button type="button" class="admin-btn admin-btn-sm champ-admin-week-btn admin-btn-outline" id="btn-champ-week-4" onclick="selectChampionshipAdminWeek(4)">
+                        <button type="button" class="admin-btn admin-btn-sm champ-admin-week-btn admin-btn-outline"
+                            id="btn-champ-week-4" onclick="selectChampionshipAdminWeek(4)">
                             Semana 4 (24-31 Oct • Gran Final)
                         </button>
                     </div>
                     <div style="margin-left: auto;">
-                        <span id="champ-admin-status-badge" class="status-badge status-badge-approved">🟢 Datos Activos</span>
+                        <span id="champ-admin-status-badge" class="status-badge status-badge-approved">🟢 Datos
+                            Activos</span>
                     </div>
                 </div>
 
                 <!-- SUBSECCIÓN A: GESTIÓN DE GRUPOS DE CARRERA (TRÍOS • ROTACIÓN SEMANAL) -->
                 <div style="margin-bottom: 30px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px; flex-wrap: wrap; gap: 8px;">
                         <div>
-                            <h3 style="font-family: var(--font-heading); font-size: 15px; font-weight: 800; color: #fff; margin: 0; display: flex; align-items: center; gap: 8px;">
+                            <h3
+                                style="font-family: var(--font-heading); font-size: 15px; font-weight: 800; color: #fff; margin: 0; display: flex; align-items: center; gap: 8px;">
                                 <span>👥</span> MODIFICAR GRUPOS DE CARRERA (JUGADORES INSCRITOS • ROTACIÓN SEMANAL)
                             </h3>
-                            <span style="font-size: 11px; color: var(--text-muted);">Asigna el nombre, etiqueta y los jugadores inscritos para cada grupo</span>
+                            <span style="font-size: 11px; color: var(--text-muted);">Asigna el nombre, etiqueta y los
+                                jugadores inscritos para cada grupo</span>
                         </div>
                         <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-                            <button type="button" class="admin-btn admin-btn-sm" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; font-weight: 700; border: none; box-shadow: 0 2px 8px rgba(16,185,129,0.35); cursor: pointer;" onclick="saveChampionshipGroupsToAllWeeks()" title="Guardar esta configuración de grupos y replicarla en todas las semanas del campeonato">
+                            <button type="button" class="admin-btn admin-btn-sm"
+                                style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; font-weight: 700; border: none; box-shadow: 0 2px 8px rgba(16,185,129,0.35); cursor: pointer;"
+                                onclick="saveChampionshipGroupsToAllWeeks()"
+                                title="Guardar esta configuración de grupos y replicarla en todas las semanas del campeonato">
                                 💾 Guardar en Todos los Grupos
                             </button>
-                            <button type="button" class="admin-btn admin-btn-sm admin-btn-outline" onclick="saveChampionshipAdminGroupsOnly()" title="Guardar grupos únicamente para la semana activa">
+                            <button type="button" class="admin-btn admin-btn-sm admin-btn-outline"
+                                onclick="saveChampionshipAdminGroupsOnly()"
+                                title="Guardar grupos únicamente para la semana activa">
                                 💾 Guardar Grupos
                             </button>
-                            <button type="button" class="admin-btn admin-btn-sm admin-btn-primary" onclick="addChampionshipAdminGroup()">
+                            <button type="button" class="admin-btn admin-btn-sm admin-btn-primary"
+                                onclick="addChampionshipAdminGroup()">
                                 ➕ Agregar Nuevo Grupo
                             </button>
                         </div>
                     </div>
-                    <div id="champ-admin-groups-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">
+                    <div id="champ-admin-groups-container"
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">
                         <!-- Renderizado dinámico desde admin.js -->
                     </div>
                 </div>
 
                 <!-- SUBSECCIÓN B: EDITOR DE LOS 8 DESAFÍOS SEMANALES CON CASILLAS DE GANADORES -->
                 <div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
-                        <h3 style="font-family: var(--font-heading); font-size: 15px; font-weight: 800; color: var(--nfs-orange); margin: 0; display: flex; align-items: center; gap: 8px;">
-                            <span>⚡</span> EDITOR DE LOS 8 DESAFÍOS SEMANALES &amp; CASILLAS DE GANADORES (ORO, SILVER, BRONCE)
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
+                        <h3
+                            style="font-family: var(--font-heading); font-size: 15px; font-weight: 800; color: var(--nfs-orange); margin: 0; display: flex; align-items: center; gap: 8px;">
+                            <span>⚡</span> EDITOR DE LOS 8 DESAFÍOS SEMANALES &amp; CASILLAS DE GANADORES (ORO, SILVER,
+                            BRONCE)
                         </h3>
-                        <span style="font-size: 11px; color: var(--text-muted);">Configura el piloto, vehículo, tiempo y recompensa para el 1°, 2° y 3° puesto de cada desafío</span>
+                        <span style="font-size: 11px; color: var(--text-muted);">Configura el piloto, vehículo, tiempo y
+                            recompensa para el 1°, 2° y 3° puesto de cada desafío</span>
                     </div>
-                    <div id="champ-admin-challenges-container" style="display: flex; flex-direction: column; gap: 16px;">
+                    <div id="champ-admin-challenges-container"
+                        style="display: flex; flex-direction: column; gap: 16px;">
                         <!-- Renderizado dinámico desde admin.js -->
                     </div>
                 </div>
@@ -508,23 +535,29 @@
                 <div class="admin-card-header">
                     <div>
                         <h2>🎯 Editor de Fichas de Desafíos Semanales (Temporada 1 y 2)</h2>
-                        <p>Edita las fichas o tarjetas de cada semana con acceso directo al registro de tiempos y recompensas (créditos $, dinero y puntos PTS) por cada rango de logro: Diamante 💎, Oro 🥇, Plata 🥈 y Bronce 🥉.</p>
+                        <p>Edita las fichas o tarjetas de cada semana con acceso directo al registro de tiempos y
+                            recompensas (créditos $, dinero y puntos PTS) por cada rango de logro: Diamante 💎, Oro 🥇,
+                            Plata 🥈 y Bronce 🥉.</p>
                     </div>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                        <button type="button" class="admin-btn admin-btn-primary" onclick="saveSeasonChallengesEditor()">
+                        <button type="button" class="admin-btn admin-btn-primary"
+                            onclick="saveSeasonChallengesEditor()">
                             💾 Guardar Fichas y Tiempos en RTDB
                         </button>
-                        <button type="button" class="admin-btn admin-btn-outline" onclick="restoreDefaultSeasonChallenges()" title="Restaurar tiempos oficiales de fábrica">
+                        <button type="button" class="admin-btn admin-btn-outline"
+                            onclick="restoreDefaultSeasonChallenges()" title="Restaurar tiempos oficiales de fábrica">
                             🔄 Restaurar Valores por Defecto
                         </button>
                     </div>
                 </div>
 
                 <!-- SELECTOR DE TEMPORADA Y SEMANA -->
-                <div class="admin-filter-bar" style="margin-bottom: 22px; display: flex; flex-wrap: wrap; gap: 14px; align-items: center;">
+                <div class="admin-filter-bar"
+                    style="margin-bottom: 22px; display: flex; flex-wrap: wrap; gap: 14px; align-items: center;">
                     <div class="admin-form-group" style="min-width: 250px; margin-bottom: 0;">
                         <label class="admin-label">Temporada Oficial</label>
-                        <select id="challenges-editor-season-select" class="admin-input" onchange="handleChallengesEditorSeasonChange()">
+                        <select id="challenges-editor-season-select" class="admin-input"
+                            onchange="handleChallengesEditorSeasonChange()">
                             <option value="season_1">Blacklist Temporada 1 (Noviembre 2026)</option>
                             <option value="season_2">Blacklist Temporada 2 (Diciembre 2026)</option>
                         </select>
@@ -532,7 +565,8 @@
 
                     <div class="admin-form-group" style="min-width: 200px; margin-bottom: 0;">
                         <label class="admin-label">Semana de Desafíos</label>
-                        <select id="challenges-editor-week-select" class="admin-input" onchange="handleChallengesEditorWeekChange()">
+                        <select id="challenges-editor-week-select" class="admin-input"
+                            onchange="handleChallengesEditorWeekChange()">
                             <option value="1">Semana 1 (4 Fichas)</option>
                             <option value="2">Semana 2 (4 Fichas)</option>
                             <option value="3">Semana 3 (4 Fichas)</option>
@@ -541,12 +575,14 @@
                     </div>
 
                     <div style="margin-left: auto;">
-                        <span id="challenges-editor-sync-badge" class="status-badge status-badge-approved">🟢 Fichas Sincronizadas</span>
+                        <span id="challenges-editor-sync-badge" class="status-badge status-badge-approved">🟢 Fichas
+                            Sincronizadas</span>
                     </div>
                 </div>
 
                 <!-- CONTENEDOR DE LAS 4 FICHAS EDITABLES -->
-                <div id="challenges-editor-cards-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(460px, 1fr)); gap: 18px;">
+                <div id="challenges-editor-cards-container"
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(460px, 1fr)); gap: 18px;">
                     <!-- Renderizado dinámico desde admin.js con los 4 rangos: Diamante, Oro, Plata, Bronce -->
                 </div>
             </div>
@@ -586,7 +622,8 @@
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
                         <div>
                             <label class="admin-field-label">🏁 Pista Oficial</label>
-                            <select id="modal-lb-route" class="admin-form-input" onchange="handleModalLbRouteChange()"></select>
+                            <select id="modal-lb-route" class="admin-form-input"
+                                onchange="handleModalLbRouteChange()"></select>
                         </div>
                         <div>
                             <label class="admin-field-label">🏆 Categoría Técnica</label>
@@ -671,7 +708,8 @@
                     </div>
 
                     <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                        <button type="button" class="admin-btn admin-btn-outline" onclick="closeLeaderboardEntryModal()">
+                        <button type="button" class="admin-btn admin-btn-outline"
+                            onclick="closeLeaderboardEntryModal()">
                             Cancelar
                         </button>
                         <button type="submit" class="admin-btn admin-btn-primary" id="btn-save-lb-entry">
