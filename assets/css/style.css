@@ -11611,3 +11611,339 @@ body > .skiptranslate {
         font-size: 8.5px !important;
     }
 }
+
+/* ==========================================================================
+   12. ESTILO CARACTERÍSTICO BMW M3 GTR (AZUL & PLATEADO CON OPACIDAD LEVE)
+   ========================================================================== */
+
+/* Contenedor de tabla para categorías BMW (Single Lap, Fast Lap y Sprint/Drag) */
+#view-leaderboard #tab-bmw-single .blacklist-table-wrapper,
+#view-leaderboard #tab-bmw-fast .blacklist-table-wrapper,
+#view-leaderboard #tab-sprintdrag-bmw .blacklist-table-wrapper {
+    background: 
+        linear-gradient(135deg, 
+            rgba(30, 64, 175, 0.14) 0%, 
+            rgba(203, 213, 225, 0.08) 18%, 
+            rgba(11, 16, 26, 0.94) 42%, 
+            rgba(14, 22, 38, 0.95) 62%, 
+            rgba(37, 99, 235, 0.12) 82%, 
+            rgba(148, 163, 184, 0.06) 100%
+        ),
+        radial-gradient(circle at 10% 15%, rgba(59, 130, 246, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 90% 85%, rgba(203, 213, 225, 0.07) 0%, transparent 45%),
+        rgba(10, 15, 26, 0.95) !important;
+    border: 1px solid rgba(96, 165, 250, 0.28) !important;
+    box-shadow: 
+        0 14px 40px rgba(0, 0, 0, 0.8), 
+        inset 0 1px 0 rgba(226, 232, 240, 0.22), 
+        0 0 25px rgba(37, 99, 235, 0.1) !important;
+}
+
+/* Cabecera oficial para tablas BMW */
+#view-leaderboard #tab-bmw-single .blacklist-table thead tr,
+#view-leaderboard #tab-bmw-fast .blacklist-table thead tr,
+#view-leaderboard #tab-sprintdrag-bmw .blacklist-table thead tr {
+    background: linear-gradient(90deg, rgba(16, 32, 60, 0.98) 0%, rgba(18, 26, 42, 0.98) 50%, rgba(22, 36, 64, 0.98) 100%) !important;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.22) !important;
+}
+
+#view-leaderboard #tab-bmw-single .blacklist-table thead th,
+#view-leaderboard #tab-bmw-fast .blacklist-table thead th,
+#view-leaderboard #tab-sprintdrag-bmw .blacklist-table thead th {
+    color: #94a3b8 !important;
+    background: transparent !important;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.22) !important;
+}
+
+/* Filas y separadores en tablas BMW */
+#view-leaderboard #tab-bmw-single .blacklist-row,
+#view-leaderboard #tab-bmw-fast .blacklist-row,
+#view-leaderboard #tab-sprintdrag-bmw .blacklist-row {
+    border-bottom: 1px solid rgba(148, 163, 184, 0.08) !important;
+}
+
+#view-leaderboard #tab-bmw-single .blacklist-row:hover,
+#view-leaderboard #tab-bmw-fast .blacklist-row:hover,
+#view-leaderboard #tab-sprintdrag-bmw .blacklist-row:hover {
+    background: linear-gradient(90deg, rgba(59, 130, 246, 0.09) 0%, rgba(203, 213, 225, 0.04) 45%, transparent 100%) !important;
+}
+
+/* Fila 1 (World Record) para categorías BMW con barra indicadora azul y gradiente plateado-azulado */
+#view-leaderboard #tab-bmw-single .blacklist-row.active-row,
+#view-leaderboard #tab-bmw-fast .blacklist-row.active-row,
+#view-leaderboard #tab-sprintdrag-bmw .blacklist-row.active-row {
+    border-left: 4px solid #3b82f6 !important;
+    background: linear-gradient(90deg, rgba(37, 99, 235, 0.22) 0%, rgba(203, 213, 225, 0.09) 35%, rgba(37, 99, 235, 0.03) 70%, transparent 100%) !important;
+    box-shadow: inset 0 0 20px rgba(37, 99, 235, 0.06) !important;
+}
+
+#view-leaderboard #tab-bmw-single .blacklist-row.active-row:hover,
+#view-leaderboard #tab-bmw-fast .blacklist-row.active-row:hover,
+#view-leaderboard #tab-sprintdrag-bmw .blacklist-row.active-row:hover {
+    background: linear-gradient(90deg, rgba(37, 99, 235, 0.28) 0%, rgba(203, 213, 225, 0.12) 35%, rgba(37, 99, 235, 0.06) 70%, transparent 100%) !important;
+}
+
+/* Botones de funciones de video (▶ VIDEO) con acabado Azul Carreras & Plata */
+#view-leaderboard #tab-bmw-single .btn-yt-link,
+#view-leaderboard #tab-bmw-fast .btn-yt-link,
+#view-leaderboard #tab-sprintdrag-bmw .btn-yt-link {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.18) 0%, rgba(30, 58, 102, 0.32) 100%) !important;
+    border: 1px solid rgba(96, 165, 250, 0.45) !important;
+    color: #60a5fa !important;
+    box-shadow: 0 0 10px rgba(37, 99, 235, 0.25) !important;
+}
+
+#view-leaderboard #tab-bmw-single .btn-yt-link:hover,
+#view-leaderboard #tab-bmw-fast .btn-yt-link:hover,
+#view-leaderboard #tab-sprintdrag-bmw .btn-yt-link:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+    border-color: #bfdbfe !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 16px rgba(59, 130, 246, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Botones de Pestañas / Categorías BMW M3 GTR */
+#container-tabs-circuit .tab-btn[onclick*="bmw"],
+#container-tabs-sprintdrag .tab-btn[onclick*="bmw"] {
+    border-color: rgba(96, 165, 250, 0.28) !important;
+    transition: all 0.25s ease;
+}
+
+#container-tabs-circuit .tab-btn[onclick*="bmw"]:hover,
+#container-tabs-sprintdrag .tab-btn[onclick*="bmw"]:hover {
+    background: rgba(30, 58, 102, 0.38) !important;
+    border-color: rgba(96, 165, 250, 0.55) !important;
+    color: #93c5fd !important;
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.25) !important;
+}
+
+#container-tabs-circuit .tab-btn.active[onclick*="bmw"],
+#container-tabs-sprintdrag .tab-btn.active[onclick*="bmw"] {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.42) 0%, rgba(30, 58, 102, 0.32) 50%, rgba(148, 163, 184, 0.2) 100%) !important;
+    border-color: #60a5fa !important;
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    box-shadow: 0 0 16px rgba(59, 130, 246, 0.45), inset 0 1px 0 rgba(226, 232, 240, 0.35) !important;
+}
+
+/* Píldoras de Dispositivo y Transmisión en tablas BMW */
+#view-leaderboard #tab-bmw-single .leaderboard-device-pill,
+#view-leaderboard #tab-bmw-fast .leaderboard-device-pill,
+#view-leaderboard #tab-sprintdrag-bmw .leaderboard-device-pill,
+#view-leaderboard #tab-bmw-single .hw-public-tag,
+#view-leaderboard #tab-bmw-fast .hw-public-tag,
+#view-leaderboard #tab-sprintdrag-bmw .hw-public-tag,
+#view-leaderboard #tab-bmw-single .leaderboard-gearbox-pill,
+#view-leaderboard #tab-bmw-fast .leaderboard-gearbox-pill,
+#view-leaderboard #tab-sprintdrag-bmw .leaderboard-gearbox-pill {
+    background: rgba(18, 28, 48, 0.88) !important;
+    border: 1px solid rgba(148, 163, 184, 0.22) !important;
+    color: #e2e8f0 !important;
+}
+
+#view-leaderboard #tab-bmw-single .leaderboard-gearbox-pill .gear-icon,
+#view-leaderboard #tab-bmw-fast .leaderboard-gearbox-pill .gear-icon,
+#view-leaderboard #tab-sprintdrag-bmw .leaderboard-gearbox-pill .gear-icon {
+    color: #93c5fd !important;
+    filter: drop-shadow(0 0 4px rgba(147, 197, 253, 0.45)) !important;
+}
+
+/* Chips de Blacklist en tablas BMW */
+#view-leaderboard #tab-bmw-single .bl-chip,
+#view-leaderboard #tab-bmw-fast .bl-chip,
+#view-leaderboard #tab-sprintdrag-bmw .bl-chip {
+    background: rgba(30, 58, 102, 0.35) !important;
+    border-color: rgba(96, 165, 250, 0.3) !important;
+    color: #cbd5e1 !important;
+}
+
+#view-leaderboard #tab-bmw-single .bl-chip.bl-badge-gold,
+#view-leaderboard #tab-bmw-fast .bl-chip.bl-badge-gold,
+#view-leaderboard #tab-sprintdrag-bmw .bl-chip.bl-badge-gold {
+    background: rgba(37, 99, 235, 0.22) !important;
+    border-color: rgba(96, 165, 250, 0.6) !important;
+    color: #93c5fd !important;
+}
+
+/* Botón Volver al Índice en Leaderboards */
+#view-leaderboard .filter-btn:hover {
+    border-color: rgba(96, 165, 250, 0.45) !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.25) !important;
+}
+
+@media (max-width: 767px) {
+    .tabs-group .tab-btn.active[onclick*="bmw"] {
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.42) 0%, rgba(30, 58, 102, 0.32) 50%, rgba(148, 163, 184, 0.2) 100%) !important;
+        border-color: #60a5fa !important;
+        color: #ffffff !important;
+        box-shadow: 0 0 14px rgba(59, 130, 246, 0.4) !important;
+    }
+}
+
+/* ==========================================================================
+   13. ESTILO DISTINTIVO JUNKMAN (ÁMBAR CÁLIDO, ORO Y CARBONO ILUMINADO)
+   ========================================================================== */
+
+/* Contenedor de tabla para categorías Junkman (Single Lap, Fast Lap y Sprint/Drag) */
+#view-leaderboard #tab-junkman-single .blacklist-table-wrapper,
+#view-leaderboard #tab-junkman-fast .blacklist-table-wrapper,
+#view-leaderboard #tab-sprintdrag-junkman .blacklist-table-wrapper {
+    background: 
+        linear-gradient(135deg, 
+            rgba(255, 119, 0, 0.10) 0%, 
+            rgba(245, 158, 11, 0.06) 18%, 
+            rgba(19, 24, 35, 0.95) 42%, 
+            rgba(23, 29, 43, 0.96) 62%, 
+            rgba(234, 88, 12, 0.08) 82%, 
+            rgba(148, 163, 184, 0.05) 100%
+        ),
+        radial-gradient(circle at 10% 15%, rgba(255, 119, 0, 0.10) 0%, transparent 45%),
+        radial-gradient(circle at 90% 85%, rgba(245, 158, 11, 0.06) 0%, transparent 45%),
+        rgba(18, 23, 34, 0.96) !important;
+    border: 1px solid rgba(255, 153, 0, 0.32) !important;
+    box-shadow: 
+        0 14px 40px rgba(0, 0, 0, 0.75), 
+        inset 0 1px 0 rgba(255, 210, 140, 0.25), 
+        0 0 25px rgba(255, 119, 0, 0.1) !important;
+}
+
+/* Cabecera oficial para tablas Junkman */
+#view-leaderboard #tab-junkman-single .blacklist-table thead tr,
+#view-leaderboard #tab-junkman-fast .blacklist-table thead tr,
+#view-leaderboard #tab-sprintdrag-junkman .blacklist-table thead tr {
+    background: linear-gradient(90deg, rgba(28, 34, 48, 0.98) 0%, rgba(24, 28, 40, 0.98) 50%, rgba(30, 36, 52, 0.98) 100%) !important;
+    border-bottom: 1px solid rgba(255, 153, 0, 0.22) !important;
+}
+
+#view-leaderboard #tab-junkman-single .blacklist-table thead th,
+#view-leaderboard #tab-junkman-fast .blacklist-table thead th,
+#view-leaderboard #tab-sprintdrag-junkman .blacklist-table thead th {
+    color: #cbd5e1 !important;
+    background: transparent !important;
+    border-bottom: 1px solid rgba(255, 153, 0, 0.22) !important;
+}
+
+/* Filas y separadores en tablas Junkman */
+#view-leaderboard #tab-junkman-single .blacklist-row,
+#view-leaderboard #tab-junkman-fast .blacklist-row,
+#view-leaderboard #tab-sprintdrag-junkman .blacklist-row {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+#view-leaderboard #tab-junkman-single .blacklist-row:hover,
+#view-leaderboard #tab-junkman-fast .blacklist-row:hover,
+#view-leaderboard #tab-sprintdrag-junkman .blacklist-row:hover {
+    background: linear-gradient(90deg, rgba(255, 119, 0, 0.09) 0%, rgba(245, 158, 11, 0.04) 45%, transparent 100%) !important;
+}
+
+/* Fila 1 (World Record) para categorías Junkman */
+#view-leaderboard #tab-junkman-single .blacklist-row.active-row,
+#view-leaderboard #tab-junkman-fast .blacklist-row.active-row,
+#view-leaderboard #tab-sprintdrag-junkman .blacklist-row.active-row {
+    border-left: 4px solid #ff7700 !important;
+    background: linear-gradient(90deg, rgba(255, 119, 0, 0.24) 0%, rgba(251, 191, 36, 0.10) 35%, rgba(255, 119, 0, 0.03) 70%, transparent 100%) !important;
+    box-shadow: inset 0 0 20px rgba(255, 119, 0, 0.08) !important;
+}
+
+#view-leaderboard #tab-junkman-single .blacklist-row.active-row:hover,
+#view-leaderboard #tab-junkman-fast .blacklist-row.active-row:hover,
+#view-leaderboard #tab-sprintdrag-junkman .blacklist-row.active-row:hover {
+    background: linear-gradient(90deg, rgba(255, 119, 0, 0.30) 0%, rgba(251, 191, 36, 0.14) 35%, rgba(255, 119, 0, 0.06) 70%, transparent 100%) !important;
+}
+
+/* Botones de funciones de video (▶ VIDEO) con acabado Ámbar Cálido & Fuego */
+#view-leaderboard #tab-junkman-single .btn-yt-link,
+#view-leaderboard #tab-junkman-fast .btn-yt-link,
+#view-leaderboard #tab-sprintdrag-junkman .btn-yt-link {
+    background: linear-gradient(135deg, rgba(255, 119, 0, 0.18) 0%, rgba(220, 38, 38, 0.22) 100%) !important;
+    border: 1px solid rgba(255, 140, 0, 0.5) !important;
+    color: #ffaa33 !important;
+    box-shadow: 0 0 10px rgba(255, 119, 0, 0.25) !important;
+}
+
+#view-leaderboard #tab-junkman-single .btn-yt-link:hover,
+#view-leaderboard #tab-junkman-fast .btn-yt-link:hover,
+#view-leaderboard #tab-sprintdrag-junkman .btn-yt-link:hover {
+    background: linear-gradient(135deg, #ff7700 0%, #dc2626 100%) !important;
+    border-color: #ffd080 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 16px rgba(255, 119, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Botones de Pestañas / Categorías Junkman */
+#container-tabs-circuit .tab-btn[onclick*="junkman"],
+#container-tabs-sprintdrag .tab-btn[onclick*="junkman"] {
+    border-color: rgba(255, 140, 0, 0.3) !important;
+    color: #e2e8f0 !important;
+    transition: all 0.25s ease;
+}
+
+#container-tabs-circuit .tab-btn[onclick*="junkman"]:hover,
+#container-tabs-sprintdrag .tab-btn[onclick*="junkman"]:hover {
+    background: rgba(45, 26, 12, 0.45) !important;
+    border-color: rgba(255, 153, 0, 0.6) !important;
+    color: #ffb347 !important;
+    box-shadow: 0 0 12px rgba(255, 119, 0, 0.3) !important;
+}
+
+#container-tabs-circuit .tab-btn.active[onclick*="junkman"],
+#container-tabs-sprintdrag .tab-btn.active[onclick*="junkman"] {
+    background: linear-gradient(135deg, rgba(255, 119, 0, 0.45) 0%, rgba(217, 74, 0, 0.35) 50%, rgba(251, 191, 36, 0.22) 100%) !important;
+    border-color: #ff9900 !important;
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    box-shadow: 0 0 18px rgba(255, 119, 0, 0.5), inset 0 1px 0 rgba(255, 220, 150, 0.4) !important;
+}
+
+/* Píldoras de Dispositivo y Transmisión en tablas Junkman */
+#view-leaderboard #tab-junkman-single .leaderboard-device-pill,
+#view-leaderboard #tab-junkman-fast .leaderboard-device-pill,
+#view-leaderboard #tab-sprintdrag-junkman .leaderboard-device-pill,
+#view-leaderboard #tab-junkman-single .hw-public-tag,
+#view-leaderboard #tab-junkman-fast .hw-public-tag,
+#view-leaderboard #tab-sprintdrag-junkman .hw-public-tag,
+#view-leaderboard #tab-junkman-single .leaderboard-gearbox-pill,
+#view-leaderboard #tab-junkman-fast .leaderboard-gearbox-pill,
+#view-leaderboard #tab-sprintdrag-junkman .leaderboard-gearbox-pill {
+    background: rgba(24, 28, 40, 0.9) !important;
+    border: 1px solid rgba(255, 153, 0, 0.2) !important;
+    color: #e2e8f0 !important;
+}
+
+#view-leaderboard #tab-junkman-single .leaderboard-gearbox-pill .gear-icon,
+#view-leaderboard #tab-junkman-fast .leaderboard-gearbox-pill .gear-icon,
+#view-leaderboard #tab-sprintdrag-junkman .leaderboard-gearbox-pill .gear-icon {
+    color: #fbbf24 !important;
+    filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.6)) !important;
+}
+
+/* Chips de Blacklist en tablas Junkman */
+#view-leaderboard #tab-junkman-single .bl-chip,
+#view-leaderboard #tab-junkman-fast .bl-chip,
+#view-leaderboard #tab-sprintdrag-junkman .bl-chip {
+    background: rgba(45, 26, 12, 0.4) !important;
+    border-color: rgba(255, 140, 0, 0.35) !important;
+    color: #fed7aa !important;
+}
+
+#view-leaderboard #tab-junkman-single .bl-chip.bl-badge-gold,
+#view-leaderboard #tab-junkman-fast .bl-chip.bl-badge-gold,
+#view-leaderboard #tab-sprintdrag-junkman .bl-chip.bl-badge-gold {
+    background: rgba(255, 119, 0, 0.25) !important;
+    border-color: rgba(255, 153, 0, 0.7) !important;
+    color: #ffaa33 !important;
+}
+
+@media (max-width: 767px) {
+    .tabs-group .tab-btn.active[onclick*="junkman"] {
+        background: linear-gradient(135deg, rgba(255, 119, 0, 0.45) 0%, rgba(217, 74, 0, 0.35) 50%, rgba(251, 191, 36, 0.22) 100%) !important;
+        border-color: #ff9900 !important;
+        color: #ffffff !important;
+        box-shadow: 0 0 16px rgba(255, 119, 0, 0.45) !important;
+    }
+}
+
+
