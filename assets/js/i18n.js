@@ -186,6 +186,7 @@ const I18N_TRANSLATIONS = {
         col_time: "TIEMPO",
         col_video: "VIDEO",
         col_date: "FECHA",
+        col_time_bonus: "Time Bonificación",
         card_best_time: "MEJOR TIEMPO:",
         card_btn_view: "Ver Leaderboard",
         btn_back_to_routes: "← Volver al Índice de Rutas",
@@ -201,6 +202,8 @@ const I18N_TRANSLATIONS = {
         champ_pending_driver: "Por disputar",
         champ_groups_title: "GRUPOS DE LA SEMANA",
         champ_challenges_title: "DESAFÍOS DE LA SEMANA (8 RUTAS)",
+        champ_standings_title: "CLASIFICACIÓN GENERAL OFICIAL DEL CAMPEONATO",
+        tab_technical_sheets: "Fichas Técnicas",
         badge_official_trio: "TRÍO OFICIAL",
 
         cards_title: "FICHAS TÉCNICAS // BLACKLIST 1 AL 15",
@@ -212,6 +215,9 @@ const I18N_TRANSLATIONS = {
         card_accel: "Aceleración",
         card_top_speed: "Velocidad Punta",
         card_handling: "Manejo",
+        promo_video_watch: "Ver Canal de YouTube",
+        view_cards_horizontal: "Ficha Horizontal",
+        view_table_classic: "Tabla Clásica",
 
         reg_title: "INSCRIPCIÓN OFICIAL // TORNEO BLACKLIST 2026",
         reg_subtitle: "Regístrate para competir en las 4 semanas oficiales de Rockport City",
@@ -559,6 +565,7 @@ const I18N_TRANSLATIONS = {
         col_time: "RECORD TIME",
         col_video: "VIDEO",
         col_date: "DATE",
+        col_time_bonus: "Time Bonus",
         card_best_time: "BEST TIME:",
         card_btn_view: "View Leaderboard",
         btn_back_to_routes: "← Back to Routes Index",
@@ -574,6 +581,8 @@ const I18N_TRANSLATIONS = {
         champ_pending_driver: "To be contested",
         champ_groups_title: "GROUPS OF THE WEEK",
         champ_challenges_title: "CHALLENGES OF THE WEEK (8 ROUTES)",
+        champ_standings_title: "OFFICIAL CHAMPIONSHIP OVERALL STANDINGS",
+        tab_technical_sheets: "Driver Dossiers",
         badge_official_trio: "OFFICIAL TRIO",
 
         cards_title: "TACTICAL CARDS // BLACKLIST 1 TO 15",
@@ -585,6 +594,9 @@ const I18N_TRANSLATIONS = {
         card_accel: "Acceleration",
         card_top_speed: "Top Speed",
         card_handling: "Handling",
+        promo_video_watch: "Watch YouTube Channel",
+        view_cards_horizontal: "Horizontal Dossier",
+        view_table_classic: "Classic Table",
 
         reg_title: "OFFICIAL REGISTRATION // BLACKLIST TOURNAMENT 2026",
         reg_subtitle: "Register to compete in the 4 official weeks across Rockport City",

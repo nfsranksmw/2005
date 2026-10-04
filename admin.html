@@ -485,6 +485,12 @@
                         </div>
                         <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
                             <button type="button" class="admin-btn admin-btn-sm"
+                                style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: #fff; font-weight: 700; border: none; box-shadow: 0 2px 8px rgba(99,102,241,0.35); cursor: pointer;"
+                                onclick="generateChampionshipRotations()"
+                                title="Generar automáticamente rotaciones equilibradas para las Semanas 2, 3 y 4 basadas en los grupos de la Semana 1">
+                                🎲 Rotación Automática (Sem 2, 3 y 4)
+                            </button>
+                            <button type="button" class="admin-btn admin-btn-sm"
                                 style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; font-weight: 700; border: none; box-shadow: 0 2px 8px rgba(16,185,129,0.35); cursor: pointer;"
                                 onclick="saveChampionshipGroupsToAllWeeks()"
                                 title="Guardar esta configuración de grupos y replicarla en todas las semanas del campeonato">
@@ -507,27 +513,48 @@
                     </div>
                 </div>
 
-                <!-- SUBSECCIÓN B: EDITOR DE LOS 8 DESAFÍOS SEMANALES CON CASILLAS DE GANADORES -->
+                <!-- SUBSECCIÓN B: EDITOR DE LOS 8 DESAFÍOS SEMANALES CON CASILLAS DE GANADORES POR GRUPO -->
                 <div>
                     <div
                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px; flex-wrap: wrap; gap: 10px;">
                         <div>
                             <h3
                                 style="font-family: var(--font-heading); font-size: 15px; font-weight: 800; color: var(--nfs-orange); margin: 0; display: flex; align-items: center; gap: 8px;">
-                                <span>⚡</span> EDITOR DE LOS 8 DESAFÍOS SEMANALES &amp; CASILLAS DE GANADORES (ORO, SILVER,
-                                BRONCE)
+                                <span>⚡</span> EDITOR DE LOS 8 DESAFÍOS SEMANALES &amp; CASILLAS DE GANADORES POR GRUPO
                             </h3>
-                            <span style="font-size: 11px; color: var(--text-muted);">Edita circuito, tipo de carrera, auto restrictivo y los ganadores (1°, 2° y 3° puesto) de cada desafío</span>
+                            <span style="font-size: 11px; color: var(--text-muted);">Edita el circuito, auto restrictivo y los ganadores (Oro 🥇, Silver 🥈, Bronce 🥉) para cada grupo (Alfa, Beta, Gamma, Delta)</span>
                         </div>
                         <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-                            <button type="button" class="admin-btn admin-btn-sm"
+                            <button type="button" class="admin-btn admin-btn-sm" id="btn-save-champ-group-challenges"
                                 style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #fff; font-weight: 700; border: none; box-shadow: 0 2px 8px rgba(245,158,11,0.35); cursor: pointer;"
                                 onclick="saveChampionshipAllChallenges()"
-                                title="Guardar todos los 8 desafíos semanales de la semana activa">
-                                💾 Guardar Todos los Desafíos
+                                title="Guardar los 8 desafíos y ganadores del grupo seleccionado">
+                                💾 Guardar los 8 Desafíos del Grupo
+                            </button>
+                            <button type="button" class="admin-btn admin-btn-sm admin-btn-primary"
+                                onclick="saveChampionshipAdmin()"
+                                title="Guardar todos los grupos y desafíos de la semana actual">
+                                💾 Guardar Semana Completa
                             </button>
                         </div>
                     </div>
+
+                    <!-- BARRA SELECTORA DE GRUPO (ALFA, BETA, GAMMA, DELTA) PARA CASILLAS DE GANADORES -->
+                    <div class="champ-admin-group-selector-bar"
+                        style="background: rgba(18,22,34,0.85); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 12px 16px; margin-bottom: 18px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;">
+                        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                            <span style="font-family: var(--font-heading); font-weight: 800; font-size: 12.5px; color: #ffffff;">
+                                👥 EDITAR GANADORES POR GRUPO:
+                            </span>
+                            <div id="champ-admin-group-pills" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <!-- Renderizado dinámico desde admin.js: Grupo Alfa, Grupo Beta, Grupo Gamma, Grupo Delta -->
+                            </div>
+                        </div>
+                        <div id="champ-admin-group-active-info" style="font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 8px;">
+                            <!-- Muestra los pilotos del grupo activo -->
+                        </div>
+                    </div>
+
                     <div id="champ-admin-challenges-container"
                         style="display: flex; flex-direction: column; gap: 16px;">
                         <!-- Renderizado dinámico desde admin.js -->

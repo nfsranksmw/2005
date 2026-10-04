@@ -2052,6 +2052,7 @@ function deleteSeasonPilot(driverName) {
 // =======================================================
 
 let currentChampAdminWeek = 1;
+let currentChampAdminGroup = 0;
 let cachedChampWeeksData = null;
 let registeredChampionshipParticipants = [];
 
@@ -2069,14 +2070,34 @@ const FALLBACK_TOURNAMENT_PARTICIPANTS = [
 
 const GREEK_GROUP_NAMES = ["Alfa", "Beta", "Gama", "Delta", "Épsilon", "Zeta", "Eta", "Theta", "Iota", "Kappa", "Lambda", "Mu", "Nu", "Xi", "Ómicron", "Pi", "Rho", "Sigma", "Tau", "Upsilon", "Phi", "Chi", "Psi", "Omega"];
 
-function getDefaultChampionshipGroups() {
-    return [
-        { name: "Grupo Alfa (Líderes)", pilots: [1, 2, 3], tag: "🔥 TIER SUPREME" },
-        { name: "Grupo Beta (Aspirantes)", pilots: [4, 5, 6], tag: "⚡ TIER HIGH" },
-        { name: "Grupo Gama (Fuerza & Potencia)", pilots: [7, 8, 9], tag: "⚔️ TIER MID-HIGH" },
-        { name: "Grupo Delta (Técnica & Derrapes)", pilots: [10, 11, 12], tag: "🎯 TIER MID" },
-        { name: "Grupo Épsilon (Defensa de Posición)", pilots: [13, 14, 15], tag: "🛡️ TIER ENTRY" }
-    ];
+function getDefaultChampionshipGroups(weekNum = 1) {
+    const w = parseInt(weekNum, 10) || 1;
+    if (typeof CHAMPIONSHIP_WEEKS_DATA !== 'undefined' && CHAMPIONSHIP_WEEKS_DATA[w] && Array.isArray(CHAMPIONSHIP_WEEKS_DATA[w].groups) && CHAMPIONSHIP_WEEKS_DATA[w].groups.length > 0) {
+        return JSON.parse(JSON.stringify(CHAMPIONSHIP_WEEKS_DATA[w].groups));
+    }
+    const defaultRotations = {
+        1: [
+            { name: "Grupo Alpha (Líderes)", pilots: [1, 10, 3], tag: "🔥 TIER SUPREME" },
+            { name: "Grupo Beta (Aspirantes)", pilots: [4, 5, 6], tag: "⚡ TIER HIGH" },
+            { name: "Grupo Gamma (Fuerza & Potencia)", pilots: [7, 8, 9], tag: "⚔️ TIER MID-HIGH" }
+        ],
+        2: [
+            { name: "Grupo Alfa (Velocidad Pura)", pilots: [1, 5, 8], tag: "🔥 TIER SUPREME" },
+            { name: "Grupo Beta (Duelo Callejero)", pilots: [10, 6, 9], tag: "⚡ TIER HIGH" },
+            { name: "Grupo Gama (Fuerza & Asfalto)", pilots: [3, 4, 7], tag: "⚔️ TIER MID-HIGH" }
+        ],
+        3: [
+            { name: "Grupo Alfa (Cruce de Titanes)", pilots: [1, 6, 7], tag: "🔥 TIER SUPREME" },
+            { name: "Grupo Beta (Duelo de Élite)", pilots: [10, 4, 8], tag: "⚡ TIER HIGH" },
+            { name: "Grupo Gama (Guerra de Caballos)", pilots: [3, 5, 9], tag: "⚔️ TIER MID-HIGH" }
+        ],
+        4: [
+            { name: "Grupo Alfa (Gran Final • Corona)", pilots: [1, 4, 9], tag: "👑 CHAMPIONSHIP" },
+            { name: "Grupo Beta (Duelo por el Podio)", pilots: [10, 5, 7], tag: "🥈 PODIUM RACE" },
+            { name: "Grupo Gama (Batalla de Honor)", pilots: [3, 6, 8], tag: "⚔️ TOP HONORS" }
+        ]
+    };
+    return defaultRotations[w] ? JSON.parse(JSON.stringify(defaultRotations[w])) : JSON.parse(JSON.stringify(defaultRotations[1]));
 }
 
 async function loadChampionshipRegisteredParticipants() {
@@ -2140,6 +2161,35 @@ function getChampionshipDefaultWeeksData() {
         return CHAMPIONSHIP_WEEKS_DATA;
     }
     return null;
+}
+
+function normalizeChampionshipWeeksData(raw) {
+    if (!raw || typeof raw !== 'object') return null;
+    const normalized = {};
+    if (Array.isArray(raw)) {
+        raw.forEach((w, idx) => {
+            if (!w) return;
+            const wNum = (w.weekNumber || w.weekNum) ? parseInt(w.weekNumber || w.weekNum, 10) : (idx + 1);
+            if (!isNaN(wNum) && wNum >= 1 && wNum <= 4) {
+                w.weekNumber = wNum;
+                normalized[wNum] = w;
+                normalized[String(wNum)] = w;
+            }
+        });
+    } else {
+        Object.keys(raw).forEach(k => {
+            const w = raw[k];
+            if (!w) return;
+            const parsedK = parseInt(k, 10);
+            const wNum = (w.weekNumber || w.weekNum) ? parseInt(w.weekNumber || w.weekNum, 10) : parsedK;
+            if (!isNaN(wNum) && wNum >= 1 && wNum <= 4) {
+                w.weekNumber = wNum;
+                normalized[wNum] = w;
+                normalized[String(wNum)] = w;
+            }
+        });
+    }
+    return normalized;
 }
 
 function getChampionshipDefaultDrivers() {
@@ -2253,18 +2303,29 @@ function populateRoutesDatalist() {
 }
 
 function getActiveChampWeekData(weekNum) {
+    const num = parseInt(weekNum, 10);
     const defaults = getChampionshipDefaultWeeksData();
-    let src = cachedChampWeeksData || defaults;
-    if (!src) return null;
+    
+    if (cachedChampWeeksData) {
+        if (Array.isArray(cachedChampWeeksData)) {
+            const found = cachedChampWeeksData.find(w => w && (w.weekNumber === num || w.weekNum === num));
+            if (found) return found;
+        } else if (typeof cachedChampWeeksData === 'object') {
+            if (cachedChampWeeksData[num]) return cachedChampWeeksData[num];
+            if (cachedChampWeeksData[String(num)]) return cachedChampWeeksData[String(num)];
+        }
+    }
 
-    let week = src[weekNum] || src[String(weekNum)];
-    if (!week && Array.isArray(src)) {
-        week = src.find(w => w && (w.weekNumber === weekNum || w.weekNum === weekNum)) || src[weekNum];
+    if (defaults) {
+        if (Array.isArray(defaults)) {
+            const found = defaults.find(w => w && (w.weekNumber === num || w.weekNum === num));
+            if (found) return found;
+        } else if (typeof defaults === 'object') {
+            if (defaults[num]) return defaults[num];
+            if (defaults[String(num)]) return defaults[String(num)];
+        }
     }
-    if (!week && defaults) {
-        week = defaults[weekNum] || defaults[String(weekNum)];
-    }
-    return week;
+    return null;
 }
 
 async function loadChampionshipAdmin() {
@@ -2281,15 +2342,18 @@ async function loadChampionshipAdmin() {
     // Carga inmediata de memoria local o defaults para renderizado instantáneo (0ms)
     if (!cachedChampWeeksData) {
         try {
-            const local = localStorage.getItem('nfs_championship_weeks_data_v1');
+            const local = localStorage.getItem('nfs_championship_weeks_data_v3') || 
+                          localStorage.getItem('nfs_championship_weeks_data_v2') || 
+                          localStorage.getItem('nfs_championship_weeks_data_v1');
             if (local) {
-                cachedChampWeeksData = JSON.parse(local);
+                const parsed = JSON.parse(local);
+                cachedChampWeeksData = normalizeChampionshipWeeksData(parsed);
             }
         } catch (e) {}
     }
 
     if (!cachedChampWeeksData && defaults) {
-        cachedChampWeeksData = JSON.parse(JSON.stringify(defaults));
+        cachedChampWeeksData = normalizeChampionshipWeeksData(JSON.parse(JSON.stringify(defaults)));
     }
 
     // Renderizar de inmediato para que nunca quede la pantalla en blanco
@@ -2319,18 +2383,110 @@ async function loadChampionshipAdmin() {
         }
 
         if (data && typeof data === 'object') {
-            cachedChampWeeksData = data;
+            cachedChampWeeksData = normalizeChampionshipWeeksData(data);
             localStorage.removeItem('nfs_championship_weeks_data_v1');
             localStorage.removeItem('nfs_championship_weeks_data_v2');
-            localStorage.setItem('nfs_championship_weeks_data_v3', JSON.stringify(data));
+            localStorage.setItem('nfs_championship_weeks_data_v3', JSON.stringify(cachedChampWeeksData));
             if (typeof window !== 'undefined' && window.CHAMPIONSHIP_WEEKS_DATA) {
-                Object.assign(window.CHAMPIONSHIP_WEEKS_DATA, data);
+                Object.assign(window.CHAMPIONSHIP_WEEKS_DATA, cachedChampWeeksData);
             }
             selectChampionshipAdminWeek(currentChampAdminWeek);
             if (statusBadge) statusBadge.textContent = "🟢 Sincronizado RTDB";
         }
     } catch (e) {
         console.warn("Aviso al consultar RTDB para el campeonato:", e);
+    }
+}
+
+function getGroupIcon(idx) {
+    const icons = ["🔥", "⚡", "⚔️", "🎯", "👑", "🏁", "💨", "🛡️"];
+    return icons[idx % icons.length];
+}
+
+function getChampionshipDriverByRank(rank) {
+    const num = parseInt(rank, 10);
+    const participants = getChampionshipParticipantsList();
+    if (participants && Array.isArray(participants)) {
+        const p = participants.find((x, i) => (x.rank === num) || (i + 1 === num));
+        if (p) return { rank: num, alias: p.alias || p.name, name: p.name, ride: p.ride || 'Vehículo Oficial' };
+    }
+    const blDrivers = getChampionshipDefaultDrivers();
+    if (blDrivers && Array.isArray(blDrivers)) {
+        const d = blDrivers.find(x => x.rank === num);
+        if (d) return { rank: num, alias: d.alias || d.name, name: d.name, ride: d.ride || 'Vehículo Oficial' };
+    }
+    return { rank: num, alias: `Piloto #${num}`, name: `Piloto #${num}`, ride: 'Vehículo Oficial' };
+}
+
+function quickAssignPilotToWinner(chIdx, posIdx, pilotName, pilotRide) {
+    const pilotInput = document.getElementById(`ch-p${posIdx}-pilot-${chIdx}`);
+    const carInput = document.getElementById(`ch-p${posIdx}-car-${chIdx}`);
+    const timeInput = document.getElementById(`ch-p${posIdx}-time-${chIdx}`);
+
+    if (pilotInput) {
+        pilotInput.value = pilotName;
+    }
+    if (carInput && (!carInput.value || carInput.value.trim() === '')) {
+        carInput.value = pilotRide || '';
+    }
+    if (timeInput) {
+        timeInput.focus();
+    }
+}
+
+function selectChampionshipAdminGroup(grpIdx) {
+    currentChampAdminGroup = grpIdx;
+    renderChampionshipAdminGroupPills();
+    renderChampionshipAdminChallenges();
+}
+
+function renderChampionshipAdminGroupPills() {
+    const container = document.getElementById('champ-admin-group-pills');
+    const infoEl = document.getElementById('champ-admin-group-active-info');
+    const saveGroupBtn = document.getElementById('btn-save-champ-group-challenges');
+    if (!container) return;
+
+    const weekData = getActiveChampWeekData(currentChampAdminWeek);
+    const groups = (weekData && Array.isArray(weekData.groups) && weekData.groups.length > 0)
+        ? weekData.groups
+        : getDefaultChampionshipGroups(currentChampAdminWeek);
+
+    if (currentChampAdminGroup >= groups.length) {
+        currentChampAdminGroup = 0;
+    }
+
+    container.innerHTML = groups.map((grp, grpIdx) => {
+        const isActive = grpIdx === currentChampAdminGroup;
+        const icon = getGroupIcon(grpIdx);
+        return `
+            <button type="button" class="admin-btn admin-btn-sm champ-admin-group-btn ${isActive ? 'active' : 'admin-btn-outline'}" 
+                onclick="selectChampionshipAdminGroup(${grpIdx})"
+                title="Editar los 8 desafíos y ganadores de ${escapeHtml(grp.name)}">
+                <span>${icon}</span> ${escapeHtml(grp.name)}
+            </button>
+        `;
+    }).join('');
+
+    const activeGrp = groups[currentChampAdminGroup] || groups[0];
+    if (saveGroupBtn && activeGrp) {
+        saveGroupBtn.innerHTML = `💾 Guardar los 8 Desafíos (${escapeHtml(activeGrp.name)})`;
+        saveGroupBtn.title = `Guardar todos los 8 desafíos y ganadores para ${escapeHtml(activeGrp.name)} en la Semana ${currentChampAdminWeek}`;
+    }
+
+    if (infoEl && activeGrp) {
+        const pilots = Array.isArray(activeGrp.pilots) ? activeGrp.pilots : [currentChampAdminGroup * 3 + 1, currentChampAdminGroup * 3 + 2, currentChampAdminGroup * 3 + 3];
+        const p1 = getChampionshipDriverByRank(pilots[0]);
+        const p2 = getChampionshipDriverByRank(pilots[1]);
+        const p3 = getChampionshipDriverByRank(pilots[2]);
+
+        infoEl.innerHTML = `
+            <span style="font-weight: 700; color: #fff;">Trío ${escapeHtml(activeGrp.name)}:</span>
+            <span style="color: var(--nfs-orange);">🏎️ ${escapeHtml(p1.alias)}</span>
+            <span style="color: #cbd5e1;">•</span>
+            <span style="color: #38bdf8;">🏎️ ${escapeHtml(p2.alias)}</span>
+            <span style="color: #cbd5e1;">•</span>
+            <span style="color: #a7f3d0;">🏎️ ${escapeHtml(p3.alias)}</span>
+        `;
     }
 }
 
@@ -2349,6 +2505,7 @@ function selectChampionshipAdminWeek(weekNum) {
     }
 
     renderChampionshipAdminGroups();
+    renderChampionshipAdminGroupPills();
     renderChampionshipAdminChallenges();
 }
 
@@ -2358,12 +2515,12 @@ function renderChampionshipAdminGroups() {
 
     const weekData = getActiveChampWeekData(currentChampAdminWeek);
     if (weekData && (!weekData.groups || !Array.isArray(weekData.groups) || weekData.groups.length === 0)) {
-        weekData.groups = getDefaultChampionshipGroups();
+        weekData.groups = getDefaultChampionshipGroups(currentChampAdminWeek);
     }
 
     const groups = (weekData && Array.isArray(weekData.groups) && weekData.groups.length > 0)
         ? weekData.groups
-        : getDefaultChampionshipGroups();
+        : getDefaultChampionshipGroups(currentChampAdminWeek);
 
     container.innerHTML = groups.map((grp, grpIdx) => {
         const pilots = Array.isArray(grp.pilots) ? grp.pilots : [grpIdx * 3 + 1, grpIdx * 3 + 2, grpIdx * 3 + 3];
@@ -2433,24 +2590,27 @@ function getChampionshipGroupsFromUI() {
 async function persistChampionshipWeeksData(data) {
     if (!data) return false;
 
+    const normalized = normalizeChampionshipWeeksData(data) || data;
+    cachedChampWeeksData = normalized;
+
     // 1. Respaldo local instantáneo (0ms) en localStorage
     try {
         localStorage.removeItem('nfs_championship_weeks_data_v1');
         localStorage.removeItem('nfs_championship_weeks_data_v2');
-        localStorage.setItem('nfs_championship_weeks_data_v3', JSON.stringify(data));
+        localStorage.setItem('nfs_championship_weeks_data_v3', JSON.stringify(normalized));
     } catch (e) {
-        console.warn("Error guardando nfs_championship_weeks_data_v2 en localStorage:", e);
+        console.warn("Error guardando nfs_championship_weeks_data_v3 en localStorage:", e);
     }
 
     if (typeof window !== 'undefined' && window.CHAMPIONSHIP_WEEKS_DATA) {
-        Object.assign(window.CHAMPIONSHIP_WEEKS_DATA, data);
+        Object.assign(window.CHAMPIONSHIP_WEEKS_DATA, normalized);
     }
 
     // 2. Difusión en tiempo real entre pestañas abiertas de comisaría y web pública
     try {
         if (typeof BroadcastChannel !== 'undefined') {
             const bc = new BroadcastChannel('nfs_championship_sync');
-            bc.postMessage({ type: 'CHAMPIONSHIP_WEEKS_UPDATED', week: currentChampAdminWeek, data: data });
+            bc.postMessage({ type: 'CHAMPIONSHIP_WEEKS_UPDATED', week: currentChampAdminWeek, data: normalized });
             bc.close();
         }
     } catch (e) {}
@@ -2461,12 +2621,28 @@ async function persistChampionshipWeeksData(data) {
 
     let ok = false;
 
+    // Preparar array ordenado de 4 semanas para que RTDB mantenga un array 0-indexed [0..3]
+    let rtdbPayload = normalized;
+    if (normalized && typeof normalized === 'object' && !Array.isArray(normalized)) {
+        const arr = [];
+        for (let w = 1; w <= 4; w++) {
+            const wObj = normalized[w] || normalized[String(w)];
+            if (wObj) {
+                wObj.weekNumber = w;
+                arr.push(wObj);
+            }
+        }
+        if (arr.length === 4) {
+            rtdbPayload = arr;
+        }
+    }
+
     // 3. Guardado en nodo público oficial /records/championship_weeks_data (NUNCA bajo championship_participants)
     try {
         const res = await fetch(`${baseUrl}/records/championship_weeks_data.json`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+            body: JSON.stringify(rtdbPayload)
         });
         if (res.ok) {
             ok = true;
@@ -2478,7 +2654,7 @@ async function persistChampionshipWeeksData(data) {
     // 4. Guardado autenticado en /championship/weeks_data usando rtdbPut (con token Firebase Auth)
     try {
         if (typeof rtdbPut === 'function') {
-            await rtdbPut('championship/weeks_data', data);
+            await rtdbPut('championship/weeks_data', rtdbPayload);
             ok = true;
         }
     } catch (e) {
@@ -2498,10 +2674,24 @@ async function persistChampionshipWeeksData(data) {
     return ok;
 }
 
+function formatRotatedGroupName(baseName, defaultBase, subtitle) {
+    const raw = (baseName || defaultBase).trim();
+    if (/\(.*?\)/.test(raw)) {
+        return raw.replace(/\(.*?\)/, `(${subtitle})`);
+    }
+    return `${raw} (${subtitle})`;
+}
+
 async function saveChampionshipSingleGroup(grpIdx) {
-    const nameEl = document.getElementById(`grp-name-${grpIdx}`);
-    const grpName = nameEl ? nameEl.value.trim() : `Grupo #${grpIdx + 1}`;
-    await saveChampionshipAdminGroupsOnly();
+    const groups = getChampionshipGroupsFromUI();
+    const weekData = getActiveChampWeekData(currentChampAdminWeek);
+    if (weekData) {
+        weekData.groups = groups;
+    }
+    const grpName = (groups[grpIdx] && groups[grpIdx].name) ? groups[grpIdx].name : `Grupo #${grpIdx + 1}`;
+    await persistChampionshipWeeksData(cachedChampWeeksData);
+    renderChampionshipAdminGroupPills();
+    renderChampionshipAdminChallenges();
     showToast(`✓ ¡${grpName} guardado y sincronizado con la web!`, "success");
 }
 
@@ -2512,24 +2702,15 @@ async function saveChampionshipAdminGroupsOnly() {
         return;
     }
 
-    const defaults = getChampionshipDefaultWeeksData();
-    if (!cachedChampWeeksData) {
-        cachedChampWeeksData = defaults ? JSON.parse(JSON.stringify(defaults)) : {};
+    const weekData = getActiveChampWeekData(currentChampAdminWeek);
+    if (weekData) {
+        weekData.groups = groups;
     }
-
-    if (!cachedChampWeeksData[currentChampAdminWeek] && !cachedChampWeeksData[String(currentChampAdminWeek)]) {
-        if (defaults && (defaults[currentChampAdminWeek] || defaults[String(currentChampAdminWeek)])) {
-            cachedChampWeeksData[currentChampAdminWeek] = JSON.parse(JSON.stringify(defaults[currentChampAdminWeek] || defaults[String(currentChampAdminWeek)]));
-        } else {
-            cachedChampWeeksData[currentChampAdminWeek] = { groups: [], challenges: [] };
-        }
-    }
-
-    const weekObj = cachedChampWeeksData[currentChampAdminWeek] || cachedChampWeeksData[String(currentChampAdminWeek)];
-    weekObj.groups = groups;
 
     showToast(`💾 Guardando grupos de la Semana ${currentChampAdminWeek}...`, "info");
     const ok = await persistChampionshipWeeksData(cachedChampWeeksData);
+    renderChampionshipAdminGroupPills();
+    renderChampionshipAdminChallenges();
     if (ok) {
         showToast(`✓ ¡Grupos de la Semana ${currentChampAdminWeek} guardados y sincronizados con la web!`, "success");
     } else {
@@ -2547,32 +2728,77 @@ async function saveChampionshipGroupsToAllWeeks() {
         return;
     }
 
-    if (!confirm(`¿Confirmas que deseas guardar y aplicar estos ${groups.length} grupos a TODAS las semanas (1, 2, 3 y 4) del Campeonato Blacklist?`)) {
+    if (!confirm(`¿Confirmas que deseas aplicar y sincronizar la rotación de estos ${groups.length} grupos a TODAS las semanas (1, 2, 3 y 4) del Campeonato Blacklist?`)) {
         return;
     }
 
-    const defaults = getChampionshipDefaultWeeksData();
-    if (!cachedChampWeeksData) {
-        cachedChampWeeksData = defaults ? JSON.parse(JSON.stringify(defaults)) : {};
+    const numGroups = groups.length;
+    // Semana 1: siempre los grupos configurados
+    const w1Data = getActiveChampWeekData(1);
+    if (w1Data) {
+        w1Data.groups = JSON.parse(JSON.stringify(groups));
     }
 
-    // Replicar en todas las 4 semanas
-    for (let w = 1; w <= 4; w++) {
-        if (!cachedChampWeeksData[w] && !cachedChampWeeksData[String(w)]) {
-            if (defaults && (defaults[w] || defaults[String(w)])) {
-                cachedChampWeeksData[w] = JSON.parse(JSON.stringify(defaults[w] || defaults[String(w)]));
-            } else {
-                cachedChampWeeksData[w] = { groups: [], challenges: [] };
-            }
+    if (numGroups === 3) {
+        const g0 = groups[0].pilots || [1, 10, 3];
+        const g1 = groups[1].pilots || [4, 5, 6];
+        const g2 = groups[2].pilots || [7, 8, 9];
+
+        const w2 = getActiveChampWeekData(2);
+        if (w2) {
+            w2.groups = [
+                { name: formatRotatedGroupName(groups[0].name, "Grupo Alfa", "Velocidad Pura"), tag: groups[0].tag || "🔥 TIER SUPREME", pilots: [g0[0], g1[1], g2[1]] },
+                { name: formatRotatedGroupName(groups[1].name, "Grupo Beta", "Duelo Callejero"), tag: groups[1].tag || "⚡ TIER HIGH", pilots: [g0[1], g1[2], g2[2]] },
+                { name: formatRotatedGroupName(groups[2].name, "Grupo Gama", "Fuerza & Asfalto"), tag: groups[2].tag || "⚔️ TIER MID-HIGH", pilots: [g0[2], g1[0], g2[0]] }
+            ];
         }
-        const weekObj = cachedChampWeeksData[w] || cachedChampWeeksData[String(w)];
-        weekObj.groups = JSON.parse(JSON.stringify(groups));
+
+        const w3 = getActiveChampWeekData(3);
+        if (w3) {
+            w3.groups = [
+                { name: formatRotatedGroupName(groups[0].name, "Grupo Alfa", "Cruce de Titanes"), tag: groups[0].tag || "🔥 TIER SUPREME", pilots: [g0[0], g1[2], g2[0]] },
+                { name: formatRotatedGroupName(groups[1].name, "Grupo Beta", "Duelo de Élite"), tag: groups[1].tag || "⚡ TIER HIGH", pilots: [g0[1], g1[0], g2[1]] },
+                { name: formatRotatedGroupName(groups[2].name, "Grupo Gama", "Guerra de Caballos"), tag: groups[2].tag || "⚔️ TIER MID-HIGH", pilots: [g0[2], g1[1], g2[2]] }
+            ];
+        }
+
+        const w4 = getActiveChampWeekData(4);
+        if (w4) {
+            w4.groups = [
+                { name: formatRotatedGroupName(groups[0].name, "Grupo Alfa", "Gran Final • Corona"), tag: "👑 CHAMPIONSHIP", pilots: [g0[0], g1[0], g2[2]] },
+                { name: formatRotatedGroupName(groups[1].name, "Grupo Beta", "Duelo por el Podio"), tag: "🥈 PODIUM RACE", pilots: [g0[1], g1[1], g2[0]] },
+                { name: formatRotatedGroupName(groups[2].name, "Grupo Gama", "Batalla de Honor"), tag: "⚔️ TOP HONORS", pilots: [g0[2], g1[2], g2[1]] }
+            ];
+        }
+    } else {
+        const tier0 = groups.map(g => (g.pilots && g.pilots[0] !== undefined) ? g.pilots[0] : 1);
+        const tier1 = groups.map(g => (g.pilots && g.pilots[1] !== undefined) ? g.pilots[1] : 2);
+        const tier2 = groups.map(g => (g.pilots && g.pilots[2] !== undefined) ? g.pilots[2] : 3);
+
+        for (let w = 2; w <= 4; w++) {
+            const wObj = getActiveChampWeekData(w);
+            if (!wObj) continue;
+            const shift1 = (w - 1) % numGroups;
+            const shift2 = ((w - 1) * 2) % numGroups;
+
+            wObj.groups = groups.map((bg, gIdx) => ({
+                name: bg.name,
+                tag: bg.tag || "TIER OFICIAL",
+                pilots: [
+                    tier0[gIdx],
+                    tier1[(gIdx + shift1) % numGroups],
+                    tier2[(gIdx + shift2) % numGroups]
+                ]
+            }));
+        }
     }
 
-    showToast("💾 Guardando y aplicando en todos los grupos y semanas del campeonato...", "info");
+    showToast("💾 Guardando y aplicando rotación en todas las semanas del campeonato...", "info");
     const ok = await persistChampionshipWeeksData(cachedChampWeeksData);
+    renderChampionshipAdminGroupPills();
+    renderChampionshipAdminChallenges();
     if (ok) {
-        showToast(`✓ ¡Guardado con éxito! Se aplicaron los ${groups.length} grupos a todas las semanas y están sincronizados con la web.`, "success");
+        showToast(`✓ ¡Guardado con éxito! Se aplicó la rotación de los ${groups.length} grupos a todas las semanas y están sincronizados con la web.`, "success");
     } else {
         showToast(`✓ ¡Grupos guardados en caché local!`, "info");
     }
@@ -2582,24 +2808,11 @@ async function saveChampionshipGroupsToAllWeeks() {
 }
 
 async function addChampionshipAdminGroup() {
-    const defaults = getChampionshipDefaultWeeksData();
-    if (!cachedChampWeeksData) {
-        cachedChampWeeksData = defaults ? JSON.parse(JSON.stringify(defaults)) : {};
-    }
-    if (!cachedChampWeeksData[currentChampAdminWeek] && !cachedChampWeeksData[String(currentChampAdminWeek)]) {
-        if (defaults && (defaults[currentChampAdminWeek] || defaults[String(currentChampAdminWeek)])) {
-            cachedChampWeeksData[currentChampAdminWeek] = JSON.parse(JSON.stringify(defaults[currentChampAdminWeek] || defaults[String(currentChampAdminWeek)]));
-        } else {
-            cachedChampWeeksData[currentChampAdminWeek] = { groups: getDefaultChampionshipGroups(), challenges: [] };
-        }
-    }
+    const weekData = getActiveChampWeekData(currentChampAdminWeek);
+    if (!weekData) return;
 
-    const weekData = cachedChampWeeksData[currentChampAdminWeek] || cachedChampWeeksData[String(currentChampAdminWeek)];
-    if (!weekData.groups || !Array.isArray(weekData.groups)) {
-        weekData.groups = getDefaultChampionshipGroups();
-    }
-
-    const newIdx = weekData.groups.length;
+    const currentGroups = getChampionshipGroupsFromUI();
+    const newIdx = currentGroups.length;
     const greekName = GREEK_GROUP_NAMES[newIdx] || `Grupo #${newIdx + 1}`;
     const startPilot = newIdx * 3 + 1;
 
@@ -2609,8 +2822,24 @@ async function addChampionshipAdminGroup() {
         pilots: [startPilot, startPilot + 1, startPilot + 2]
     };
 
-    weekData.groups.push(newGroup);
+    const applyToAll = confirm(`¿Deseas agregar "${newGroup.name}" a TODAS las semanas (1, 2, 3 y 4)?\n\n• Haz clic en ACEPTAR para agregarlo a TODAS las semanas (habrá ${newIdx + 1} grupos en todo el campeonato).\n• Haz clic en CANCELAR para agregarlo sólo a la Semana ${currentChampAdminWeek}.`);
+
+    if (applyToAll) {
+        for (let w = 1; w <= 4; w++) {
+            const wObj = getActiveChampWeekData(w);
+            if (wObj && Array.isArray(wObj.groups)) {
+                wObj.groups.push(JSON.parse(JSON.stringify(newGroup)));
+            }
+        }
+    } else {
+        currentGroups.push(newGroup);
+        weekData.groups = currentGroups;
+    }
+
     renderChampionshipAdminGroups();
+    renderChampionshipAdminGroupPills();
+    renderChampionshipAdminChallenges();
+
     await persistChampionshipWeeksData(cachedChampWeeksData);
     showToast(`✓ ¡Nuevo ${newGroup.name} agregado y sincronizado con la web!`, "success");
 
@@ -2625,19 +2854,142 @@ async function addChampionshipAdminGroup() {
 
 async function deleteChampionshipAdminGroup(grpIdx) {
     const weekData = getActiveChampWeekData(currentChampAdminWeek);
-    if (!weekData || !Array.isArray(weekData.groups)) return;
+    if (!weekData) return;
 
-    const grp = weekData.groups[grpIdx];
+    const currentGroups = getChampionshipGroupsFromUI();
+    if (!currentGroups || currentGroups.length <= grpIdx) return;
+
+    const grp = currentGroups[grpIdx];
     const grpName = grp ? (grp.name || `Grupo #${grpIdx + 1}`) : `Grupo #${grpIdx + 1}`;
 
-    if (!confirm(`¿Estás seguro de eliminar "${grpName}" de la Semana ${currentChampAdminWeek}?`)) {
+    const applyToAll = confirm(`¿Deseas eliminar "${grpName}" de TODAS las semanas (1, 2, 3 y 4)?\n\n• Haz clic en ACEPTAR para eliminarlo de TODAS las semanas (quedarán ${currentGroups.length - 1} grupos en todo el campeonato).\n• Haz clic en CANCELAR para eliminarlo únicamente de la Semana ${currentChampAdminWeek}.`);
+
+    if (applyToAll) {
+        for (let w = 1; w <= 4; w++) {
+            const wObj = getActiveChampWeekData(w);
+            if (wObj && Array.isArray(wObj.groups)) {
+                if (wObj.groups.length > grpIdx && (wObj.groups[grpIdx].name === grpName || wObj.groups[grpIdx].name === grp.name)) {
+                    wObj.groups.splice(grpIdx, 1);
+                } else {
+                    const foundIdx = wObj.groups.findIndex(g => g.name === grpName);
+                    if (foundIdx !== -1) {
+                        wObj.groups.splice(foundIdx, 1);
+                    } else if (wObj.groups.length > grpIdx) {
+                        wObj.groups.splice(grpIdx, 1);
+                    }
+                }
+            }
+        }
+    } else {
+        currentGroups.splice(grpIdx, 1);
+        weekData.groups = currentGroups;
+    }
+
+    const remainingGroups = (getActiveChampWeekData(currentChampAdminWeek)?.groups) || [];
+    if (currentChampAdminGroup >= remainingGroups.length) {
+        currentChampAdminGroup = Math.max(0, remainingGroups.length - 1);
+    }
+
+    renderChampionshipAdminGroups();
+    renderChampionshipAdminGroupPills();
+    renderChampionshipAdminChallenges();
+
+    await persistChampionshipWeeksData(cachedChampWeeksData);
+    showToast(`✓ Grupo "${grpName}" eliminado correctamente y sincronizado con la web.`, "success");
+}
+
+async function generateChampionshipRotations() {
+    const week1Data = getActiveChampWeekData(1);
+    if (!week1Data) {
+        showToast("No se encontraron datos para la Semana 1.", "error");
         return;
     }
 
-    weekData.groups.splice(grpIdx, 1);
+    let baseGroups = (currentChampAdminWeek === 1) ? getChampionshipGroupsFromUI() : week1Data.groups;
+    if (!baseGroups || baseGroups.length === 0) {
+        baseGroups = week1Data.groups || getDefaultChampionshipGroups(1);
+    }
+
+    const numGroups = baseGroups.length;
+    if (numGroups < 2) {
+        showToast("Se necesitan al menos 2 grupos para generar rotaciones.", "warning");
+        return;
+    }
+
+    const confirmMsg = `¿Deseas generar automáticamente la rotación de grupos para las Semanas 2, 3 y 4 basándote en los ${numGroups} grupos de la Semana 1?\n\n• Se mantendrán los nombres de los grupos.\n• Los tríos de pilotos se rotarán de manera equilibrada para que cada semana enfrenten rivales distintos.\n• Los cambios se guardarán y sincronizarán inmediatamente con la web pública.`;
+    if (!confirm(confirmMsg)) {
+        return;
+    }
+
+    if (currentChampAdminWeek === 1) {
+        week1Data.groups = baseGroups;
+    }
+
+    if (numGroups === 3) {
+        const g0 = baseGroups[0].pilots || [1, 10, 3];
+        const g1 = baseGroups[1].pilots || [4, 5, 6];
+        const g2 = baseGroups[2].pilots || [7, 8, 9];
+
+        const w2Data = getActiveChampWeekData(2);
+        if (w2Data) {
+            w2Data.groups = [
+                { name: formatRotatedGroupName(baseGroups[0].name, "Grupo Alfa", "Velocidad Pura"), tag: baseGroups[0].tag || "🔥 TIER SUPREME", pilots: [g0[0], g1[1], g2[1]] },
+                { name: formatRotatedGroupName(baseGroups[1].name, "Grupo Beta", "Duelo Callejero"), tag: baseGroups[1].tag || "⚡ TIER HIGH", pilots: [g0[1], g1[2], g2[2]] },
+                { name: formatRotatedGroupName(baseGroups[2].name, "Grupo Gama", "Fuerza & Asfalto"), tag: baseGroups[2].tag || "⚔️ TIER MID-HIGH", pilots: [g0[2], g1[0], g2[0]] }
+            ];
+        }
+
+        const w3Data = getActiveChampWeekData(3);
+        if (w3Data) {
+            w3Data.groups = [
+                { name: formatRotatedGroupName(baseGroups[0].name, "Grupo Alfa", "Cruce de Titanes"), tag: baseGroups[0].tag || "🔥 TIER SUPREME", pilots: [g0[0], g1[2], g2[0]] },
+                { name: formatRotatedGroupName(baseGroups[1].name, "Grupo Beta", "Duelo de Élite"), tag: baseGroups[1].tag || "⚡ TIER HIGH", pilots: [g0[1], g1[0], g2[1]] },
+                { name: formatRotatedGroupName(baseGroups[2].name, "Grupo Gama", "Guerra de Caballos"), tag: baseGroups[2].tag || "⚔️ TIER MID-HIGH", pilots: [g0[2], g1[1], g2[2]] }
+            ];
+        }
+
+        const w4Data = getActiveChampWeekData(4);
+        if (w4Data) {
+            w4Data.groups = [
+                { name: formatRotatedGroupName(baseGroups[0].name, "Grupo Alfa", "Gran Final • Corona"), tag: "👑 CHAMPIONSHIP", pilots: [g0[0], g1[0], g2[2]] },
+                { name: formatRotatedGroupName(baseGroups[1].name, "Grupo Beta", "Duelo por el Podio"), tag: "🥈 PODIUM RACE", pilots: [g0[1], g1[1], g2[0]] },
+                { name: formatRotatedGroupName(baseGroups[2].name, "Grupo Gama", "Batalla de Honor"), tag: "⚔️ TOP HONORS", pilots: [g0[2], g1[2], g2[1]] }
+            ];
+        }
+    } else {
+        const tier0 = baseGroups.map(g => g.pilots[0]);
+        const tier1 = baseGroups.map(g => g.pilots[1]);
+        const tier2 = baseGroups.map(g => g.pilots[2]);
+
+        for (let w = 2; w <= 4; w++) {
+            const wObj = getActiveChampWeekData(w);
+            if (!wObj) continue;
+            const shift1 = (w - 1) % numGroups;
+            const shift2 = ((w - 1) * 2) % numGroups;
+
+            wObj.groups = baseGroups.map((bg, gIdx) => ({
+                name: bg.name,
+                tag: bg.tag || "TIER OFICIAL",
+                pilots: [
+                    tier0[gIdx],
+                    tier1[(gIdx + shift1) % numGroups],
+                    tier2[(gIdx + shift2) % numGroups]
+                ]
+            }));
+        }
+    }
+
     renderChampionshipAdminGroups();
-    await persistChampionshipWeeksData(cachedChampWeeksData);
-    showToast(`✓ Grupo "${grpName}" eliminado y sincronizado con la web.`, "success");
+    renderChampionshipAdminGroupPills();
+    renderChampionshipAdminChallenges();
+
+    showToast("💾 Guardando rotación de grupos en todas las semanas...", "info");
+    const ok = await persistChampionshipWeeksData(cachedChampWeeksData);
+    if (ok) {
+        showToast("✓ ¡Rotación automática para Semanas 2, 3 y 4 generada y sincronizada con éxito!", "success");
+    } else {
+        showToast("✓ Rotación generada y guardada en memoria local.", "info");
+    }
 }
 
 function renderChampionshipAdminChallenges() {
@@ -2667,8 +3019,41 @@ function renderChampionshipAdminChallenges() {
         }));
     }
 
+    const groups = (weekData && Array.isArray(weekData.groups) && weekData.groups.length > 0)
+        ? weekData.groups
+        : getDefaultChampionshipGroups(currentChampAdminWeek);
+
+    if (currentChampAdminGroup >= groups.length) {
+        currentChampAdminGroup = 0;
+    }
+
+    const grp = groups[currentChampAdminGroup] || groups[0] || { name: 'Grupo Alfa', pilots: [1, 2, 3] };
+    const grpName = grp.name || `Grupo #${currentChampAdminGroup + 1}`;
+    const grpPilotsRanks = Array.isArray(grp.pilots) ? grp.pilots : [currentChampAdminGroup * 3 + 1, currentChampAdminGroup * 3 + 2, currentChampAdminGroup * 3 + 3];
+    const grpPilots = grpPilotsRanks.map(r => getChampionshipDriverByRank(r));
+
     container.innerHTML = challenges.map((ch, idx) => {
-        const top3 = Array.isArray(ch.top3) ? ch.top3 : [{}, {}, {}];
+        let top3 = null;
+        if (ch.groupsWinners && ch.groupsWinners[currentChampAdminGroup]) {
+            top3 = ch.groupsWinners[currentChampAdminGroup];
+        } else if (ch.groupsWinners && ch.groupsWinners[grpName]) {
+            top3 = ch.groupsWinners[grpName];
+        } else if (ch.groupsResults && ch.groupsResults[grpName]) {
+            top3 = ch.groupsResults[grpName];
+        } else if (ch.groupsResults && ch.groupsResults[currentChampAdminGroup]) {
+            top3 = ch.groupsResults[currentChampAdminGroup];
+        } else if (currentChampAdminGroup === 0 && Array.isArray(ch.top3) && ch.top3.length > 0) {
+            top3 = ch.top3;
+        }
+
+        if (!top3 || !Array.isArray(top3) || top3.length < 3) {
+            top3 = [
+                { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 400000, repBadge: "💰 $400.000 REP" },
+                { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 250000, repBadge: "💰 $250.000 REP" },
+                { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 120000, repBadge: "💰 $120.000 REP" }
+            ];
+        }
+
         const g1 = top3[0] || {};
         const g2 = top3[1] || {};
         const g3 = top3[2] || {};
@@ -2680,21 +3065,21 @@ function renderChampionshipAdminChallenges() {
                     <div class="admin-challenge-title-group">
                         <span class="admin-challenge-badge-num">#0${idx + 1}</span>
                         <span style="font-family: var(--font-heading); font-size: 14.5px; font-weight: 800; color: #ffffff;">
-                            DESAFÍO SEMANAL #${idx + 1}
+                            DESAFÍO SEMANAL #${idx + 1} // ${escapeHtml(grpName.toUpperCase())}
                         </span>
                         <span class="status-badge" style="font-size: 10px; padding: 3px 8px; background: rgba(255,119,0,0.15); color: var(--nfs-orange); border: 1px solid rgba(255,119,0,0.4);">
-                            SEMANA ${currentChampAdminWeek}
+                            SEMANA ${currentChampAdminWeek} • ${escapeHtml(grpName)}
                         </span>
                     </div>
                     <div class="admin-challenge-actions">
                         <button type="button" class="admin-btn admin-btn-xs" onclick="saveChampionshipSingleChallenge(${idx})" 
                             style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; font-weight: 700; border: none; box-shadow: 0 2px 6px rgba(16,185,129,0.35); padding: 5px 12px; font-size: 11px; border-radius: 5px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;"
-                            title="Guardar este desafío individual y reflejarlo en la web pública">
-                            💾 Guardar Desafío #${idx + 1}
+                            title="Guardar este desafío individual para ${escapeHtml(grpName)}">
+                            💾 Guardar Desafío #${idx + 1} (${escapeHtml(grpName)})
                         </button>
                         <button type="button" class="admin-btn admin-btn-xs admin-btn-outline" onclick="resetChampionshipSingleChallenge(${idx})"
                             style="padding: 5px 10px; font-size: 11px; border-color: rgba(255,255,255,0.2); color: var(--text-muted);"
-                            title="Restablecer este desafío a sus valores predeterminados de la semana">
+                            title="Restablecer este desafío a sus valores predeterminados">
                             ↺ Resetear
                         </button>
                     </div>
@@ -2720,13 +3105,21 @@ function renderChampionshipAdminChallenges() {
                     </div>
                 </div>
 
-                <!-- Casillas de Ganadores: Oro, Silver, Bronce con márgenes óptimos -->
+                <!-- Casillas de Ganadores: Oro, Silver, Bronce para este Grupo -->
                 <div class="admin-winners-grid">
                     <!-- Ganador Oro (1° Puesto) -->
                     <div class="admin-winner-box admin-winner-gold">
                         <div class="admin-winner-header">
                             <span style="color: #fbbf24; font-weight: 800; font-size: 12px;">🥇 GANADOR ORO (1° PUESTO)</span>
-                            <span style="color: var(--nfs-orange); font-size: 11px; font-weight: 700;">+100 PTS</span>
+                            <span style="color: var(--nfs-orange); font-size: 11px; font-weight: 700;">+${(g1.bonus !== undefined && g1.bonus !== null && g1.bonus !== '') ? g1.bonus : 100} PTS</span>
+                        </div>
+                        <div style="display: flex; gap: 4px; align-items: center; margin-bottom: 2px; flex-wrap: wrap;">
+                            <span style="font-size: 10px; color: var(--text-muted); font-weight: 700;">⚡ Asignar:</span>
+                            ${grpPilots.map(p => `
+                                <button type="button" class="admin-winner-quick-chip" onclick="quickAssignPilotToWinner(${idx}, 1, '${escapeHtml(p.alias)}', '${escapeHtml(p.ride)}')">
+                                    ${escapeHtml(p.alias)}
+                                </button>
+                            `).join('')}
                         </div>
                         <div>
                             <label class="admin-field-label">Piloto Ganador</label>
@@ -2745,11 +3138,11 @@ function renderChampionshipAdminChallenges() {
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                             <div>
                                 <label class="admin-field-label">Bono Puntos</label>
-                                <input type="number" id="ch-p1-bonus-${idx}" class="admin-form-input" value="${g1.bonus || 100}">
+                                <input type="number" id="ch-p1-bonus-${idx}" class="admin-form-input" min="0" value="${(g1.bonus !== undefined && g1.bonus !== null && g1.bonus !== '') ? g1.bonus : 100}">
                             </div>
                             <div>
                                 <label class="admin-field-label">Recompensa REP ($)</label>
-                                <input type="number" id="ch-p1-rep-${idx}" class="admin-form-input" value="${g1.repMoney || 400000}">
+                                <input type="number" id="ch-p1-rep-${idx}" class="admin-form-input" min="0" value="${(g1.repMoney !== undefined && g1.repMoney !== null && g1.repMoney !== '') ? g1.repMoney : 400000}">
                             </div>
                         </div>
                     </div>
@@ -2758,7 +3151,15 @@ function renderChampionshipAdminChallenges() {
                     <div class="admin-winner-box admin-winner-silver">
                         <div class="admin-winner-header">
                             <span style="color: #e2e8f0; font-weight: 800; font-size: 12px;">🥈 GANADOR SILVER (2° PUESTO)</span>
-                            <span style="color: var(--nfs-orange); font-size: 11px; font-weight: 700;">+50 PTS</span>
+                            <span style="color: var(--nfs-orange); font-size: 11px; font-weight: 700;">+${(g2.bonus !== undefined && g2.bonus !== null && g2.bonus !== '') ? g2.bonus : 50} PTS</span>
+                        </div>
+                        <div style="display: flex; gap: 4px; align-items: center; margin-bottom: 2px; flex-wrap: wrap;">
+                            <span style="font-size: 10px; color: var(--text-muted); font-weight: 700;">⚡ Asignar:</span>
+                            ${grpPilots.map(p => `
+                                <button type="button" class="admin-winner-quick-chip" onclick="quickAssignPilotToWinner(${idx}, 2, '${escapeHtml(p.alias)}', '${escapeHtml(p.ride)}')">
+                                    ${escapeHtml(p.alias)}
+                                </button>
+                            `).join('')}
                         </div>
                         <div>
                             <label class="admin-field-label">Piloto Segundo</label>
@@ -2777,11 +3178,11 @@ function renderChampionshipAdminChallenges() {
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                             <div>
                                 <label class="admin-field-label">Bono Puntos</label>
-                                <input type="number" id="ch-p2-bonus-${idx}" class="admin-form-input" value="${g2.bonus || 50}">
+                                <input type="number" id="ch-p2-bonus-${idx}" class="admin-form-input" min="0" value="${(g2.bonus !== undefined && g2.bonus !== null && g2.bonus !== '') ? g2.bonus : 50}">
                             </div>
                             <div>
                                 <label class="admin-field-label">Recompensa REP ($)</label>
-                                <input type="number" id="ch-p2-rep-${idx}" class="admin-form-input" value="${g2.repMoney || 250000}">
+                                <input type="number" id="ch-p2-rep-${idx}" class="admin-form-input" min="0" value="${(g2.repMoney !== undefined && g2.repMoney !== null && g2.repMoney !== '') ? g2.repMoney : 250000}">
                             </div>
                         </div>
                     </div>
@@ -2790,7 +3191,15 @@ function renderChampionshipAdminChallenges() {
                     <div class="admin-winner-box admin-winner-bronze">
                         <div class="admin-winner-header">
                             <span style="color: #fdba74; font-weight: 800; font-size: 12px;">🥉 GANADOR BRONCE (3° PUESTO)</span>
-                            <span style="color: var(--nfs-orange); font-size: 11px; font-weight: 700;">+20 PTS</span>
+                            <span style="color: var(--nfs-orange); font-size: 11px; font-weight: 700;">+${(g3.bonus !== undefined && g3.bonus !== null && g3.bonus !== '') ? g3.bonus : 20} PTS</span>
+                        </div>
+                        <div style="display: flex; gap: 4px; align-items: center; margin-bottom: 2px; flex-wrap: wrap;">
+                            <span style="font-size: 10px; color: var(--text-muted); font-weight: 700;">⚡ Asignar:</span>
+                            ${grpPilots.map(p => `
+                                <button type="button" class="admin-winner-quick-chip" onclick="quickAssignPilotToWinner(${idx}, 3, '${escapeHtml(p.alias)}', '${escapeHtml(p.ride)}')">
+                                    ${escapeHtml(p.alias)}
+                                </button>
+                            `).join('')}
                         </div>
                         <div>
                             <label class="admin-field-label">Piloto Tercero</label>
@@ -2809,11 +3218,11 @@ function renderChampionshipAdminChallenges() {
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                             <div>
                                 <label class="admin-field-label">Bono Puntos</label>
-                                <input type="number" id="ch-p3-bonus-${idx}" class="admin-form-input" value="${g3.bonus || 20}">
+                                <input type="number" id="ch-p3-bonus-${idx}" class="admin-form-input" min="0" value="${(g3.bonus !== undefined && g3.bonus !== null && g3.bonus !== '') ? g3.bonus : 20}">
                             </div>
                             <div>
                                 <label class="admin-field-label">Recompensa REP ($)</label>
-                                <input type="number" id="ch-p3-rep-${idx}" class="admin-form-input" value="${g3.repMoney || 120000}">
+                                <input type="number" id="ch-p3-rep-${idx}" class="admin-form-input" min="0" value="${(g3.repMoney !== undefined && g3.repMoney !== null && g3.repMoney !== '') ? g3.repMoney : 120000}">
                             </div>
                         </div>
                     </div>
@@ -2821,10 +3230,10 @@ function renderChampionshipAdminChallenges() {
 
                 <!-- Barra inferior de guardado rápido -->
                 <div style="display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin-top: 4px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.04);">
-                    <span style="font-size: 10.5px; color: var(--text-muted); margin-right: auto;">Desafío #${idx + 1} de la Semana ${currentChampAdminWeek}</span>
+                    <span style="font-size: 10.5px; color: var(--text-muted); margin-right: auto;">Desafío #${idx + 1} de la Semana ${currentChampAdminWeek} • ${escapeHtml(grpName)}</span>
                     <button type="button" class="admin-btn admin-btn-xs" onclick="saveChampionshipSingleChallenge(${idx})" 
                         style="background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.5); color: #6ee7b7; padding: 4px 10px; font-size: 11px; border-radius: 4px; cursor: pointer;">
-                        💾 Guardar Cambios Desafío #${idx + 1}
+                        💾 Guardar Cambios (${escapeHtml(grpName)})
                     </button>
                 </div>
             </div>
@@ -2840,20 +3249,26 @@ function getChampionshipChallengeFromUI(idx) {
     const p1Pilot = document.getElementById(`ch-p1-pilot-${idx}`)?.value.trim() || 'Por disputar';
     const p1Car = document.getElementById(`ch-p1-car-${idx}`)?.value.trim() || '';
     const p1Time = document.getElementById(`ch-p1-time-${idx}`)?.value.trim() || '--:--.---';
-    const p1Bonus = parseInt(document.getElementById(`ch-p1-bonus-${idx}`)?.value || '100', 10);
-    const p1Rep = parseInt(document.getElementById(`ch-p1-rep-${idx}`)?.value || '400000', 10);
+    const p1BonusRaw = document.getElementById(`ch-p1-bonus-${idx}`)?.value;
+    const p1Bonus = (p1BonusRaw !== undefined && p1BonusRaw !== '' && !isNaN(parseInt(p1BonusRaw, 10))) ? parseInt(p1BonusRaw, 10) : 100;
+    const p1RepRaw = document.getElementById(`ch-p1-rep-${idx}`)?.value;
+    const p1Rep = (p1RepRaw !== undefined && p1RepRaw !== '' && !isNaN(parseInt(p1RepRaw, 10))) ? parseInt(p1RepRaw, 10) : 400000;
 
     const p2Pilot = document.getElementById(`ch-p2-pilot-${idx}`)?.value.trim() || 'Por disputar';
     const p2Car = document.getElementById(`ch-p2-car-${idx}`)?.value.trim() || '';
     const p2Time = document.getElementById(`ch-p2-time-${idx}`)?.value.trim() || '--:--.---';
-    const p2Bonus = parseInt(document.getElementById(`ch-p2-bonus-${idx}`)?.value || '50', 10);
-    const p2Rep = parseInt(document.getElementById(`ch-p2-rep-${idx}`)?.value || '250000', 10);
+    const p2BonusRaw = document.getElementById(`ch-p2-bonus-${idx}`)?.value;
+    const p2Bonus = (p2BonusRaw !== undefined && p2BonusRaw !== '' && !isNaN(parseInt(p2BonusRaw, 10))) ? parseInt(p2BonusRaw, 10) : 50;
+    const p2RepRaw = document.getElementById(`ch-p2-rep-${idx}`)?.value;
+    const p2Rep = (p2RepRaw !== undefined && p2RepRaw !== '' && !isNaN(parseInt(p2RepRaw, 10))) ? parseInt(p2RepRaw, 10) : 250000;
 
     const p3Pilot = document.getElementById(`ch-p3-pilot-${idx}`)?.value.trim() || 'Por disputar';
     const p3Car = document.getElementById(`ch-p3-car-${idx}`)?.value.trim() || '';
     const p3Time = document.getElementById(`ch-p3-time-${idx}`)?.value.trim() || '--:--.---';
-    const p3Bonus = parseInt(document.getElementById(`ch-p3-bonus-${idx}`)?.value || '20', 10);
-    const p3Rep = parseInt(document.getElementById(`ch-p3-rep-${idx}`)?.value || '120000', 10);
+    const p3BonusRaw = document.getElementById(`ch-p3-bonus-${idx}`)?.value;
+    const p3Bonus = (p3BonusRaw !== undefined && p3BonusRaw !== '' && !isNaN(parseInt(p3BonusRaw, 10))) ? parseInt(p3BonusRaw, 10) : 20;
+    const p3RepRaw = document.getElementById(`ch-p3-rep-${idx}`)?.value;
+    const p3Rep = (p3RepRaw !== undefined && p3RepRaw !== '' && !isNaN(parseInt(p3RepRaw, 10))) ? parseInt(p3RepRaw, 10) : 120000;
 
     return {
         id: `w${currentChampAdminWeek}-ch${idx + 1}`,
@@ -2866,27 +3281,27 @@ function getChampionshipChallengeFromUI(idx) {
                 car: p1Car,
                 time: p1Time,
                 bonus: p1Bonus,
-                badge: `🥇 +${p1Bonus} PTS`,
+                badge: p1Bonus > 0 ? `🥇 +${p1Bonus} PTS` : '0 PTS',
                 repMoney: p1Rep,
-                repBadge: `💰 $${p1Rep.toLocaleString('de-DE')} REP`
+                repBadge: p1Rep > 0 ? `💰 $${p1Rep.toLocaleString('de-DE')} REP` : '$0 REP'
             },
             {
                 pilot: p2Pilot,
                 car: p2Car,
                 time: p2Time,
                 bonus: p2Bonus,
-                badge: `🥈 +${p2Bonus} PTS`,
+                badge: p2Bonus > 0 ? `🥈 +${p2Bonus} PTS` : '0 PTS',
                 repMoney: p2Rep,
-                repBadge: `💰 $${p2Rep.toLocaleString('de-DE')} REP`
+                repBadge: p2Rep > 0 ? `💰 $${p2Rep.toLocaleString('de-DE')} REP` : '$0 REP'
             },
             {
                 pilot: p3Pilot,
                 car: p3Car,
                 time: p3Time,
                 bonus: p3Bonus,
-                badge: `🥉 +${p3Bonus} PTS`,
+                badge: p3Bonus > 0 ? `🥉 +${p3Bonus} PTS` : '0 PTS',
                 repMoney: p3Rep,
-                repBadge: `💰 $${p3Rep.toLocaleString('de-DE')} REP`
+                repBadge: p3Rep > 0 ? `💰 $${p3Rep.toLocaleString('de-DE')} REP` : '$0 REP'
             }
         ]
     };
@@ -2907,12 +3322,39 @@ async function saveChampionshipSingleChallenge(idx) {
     }
     const weekData = cachedChampWeeksData[currentChampAdminWeek] || cachedChampWeeksData[String(currentChampAdminWeek)];
     if (!weekData.challenges) weekData.challenges = [];
-    weekData.challenges[idx] = chData;
+    if (!weekData.challenges[idx]) {
+        weekData.challenges[idx] = {
+            id: `w${currentChampAdminWeek}-ch${idx + 1}`,
+            route: chData.route,
+            type: chData.type,
+            carRestriction: chData.carRestriction
+        };
+    }
 
-    showToast(`💾 Guardando Desafío #${idx + 1} (${chData.route})...`, "info");
+    const targetCh = weekData.challenges[idx];
+    targetCh.route = chData.route;
+    targetCh.type = chData.type;
+    targetCh.carRestriction = chData.carRestriction;
+
+    const grp = (weekData.groups && weekData.groups[currentChampAdminGroup]) || { name: `Grupo #${currentChampAdminGroup + 1}` };
+    const grpName = grp.name || `Grupo #${currentChampAdminGroup + 1}`;
+
+    if (!targetCh.groupsWinners) targetCh.groupsWinners = {};
+    targetCh.groupsWinners[currentChampAdminGroup] = chData.top3;
+    targetCh.groupsWinners[grpName] = chData.top3;
+
+    if (!targetCh.groupsResults) targetCh.groupsResults = {};
+    targetCh.groupsResults[grpName] = chData.top3;
+    targetCh.groupsResults[currentChampAdminGroup] = chData.top3;
+
+    if (currentChampAdminGroup === 0) {
+        targetCh.top3 = chData.top3;
+    }
+
+    showToast(`💾 Guardando Desafío #${idx + 1} para ${grpName}...`, "info");
     const ok = await persistChampionshipWeeksData(cachedChampWeeksData);
     if (ok) {
-        showToast(`✓ ¡Desafío #${idx + 1} (${chData.route}) guardado y sincronizado con la web!`, "success");
+        showToast(`✓ ¡Desafío #${idx + 1} (${targetCh.route}) de ${grpName} guardado y sincronizado con la web!`, "success");
     } else {
         showToast(`✓ ¡Desafío #${idx + 1} guardado en caché local!`, "info");
     }
@@ -2931,15 +3373,43 @@ async function saveChampionshipAllChallenges() {
         }
     }
     const weekData = cachedChampWeeksData[currentChampAdminWeek] || cachedChampWeeksData[String(currentChampAdminWeek)];
-    weekData.challenges = [];
+    if (!weekData.challenges) weekData.challenges = [];
+
+    const grp = (weekData.groups && weekData.groups[currentChampAdminGroup]) || { name: `Grupo #${currentChampAdminGroup + 1}` };
+    const grpName = grp.name || `Grupo #${currentChampAdminGroup + 1}`;
+
     for (let idx = 0; idx < 8; idx++) {
-        weekData.challenges.push(getChampionshipChallengeFromUI(idx));
+        const chData = getChampionshipChallengeFromUI(idx);
+        if (!weekData.challenges[idx]) {
+            weekData.challenges[idx] = {
+                id: `w${currentChampAdminWeek}-ch${idx + 1}`,
+                route: chData.route,
+                type: chData.type,
+                carRestriction: chData.carRestriction
+            };
+        }
+        const targetCh = weekData.challenges[idx];
+        targetCh.route = chData.route;
+        targetCh.type = chData.type;
+        targetCh.carRestriction = chData.carRestriction;
+
+        if (!targetCh.groupsWinners) targetCh.groupsWinners = {};
+        targetCh.groupsWinners[currentChampAdminGroup] = chData.top3;
+        targetCh.groupsWinners[grpName] = chData.top3;
+
+        if (!targetCh.groupsResults) targetCh.groupsResults = {};
+        targetCh.groupsResults[grpName] = chData.top3;
+        targetCh.groupsResults[currentChampAdminGroup] = chData.top3;
+
+        if (currentChampAdminGroup === 0) {
+            targetCh.top3 = chData.top3;
+        }
     }
 
-    showToast(`💾 Guardando los 8 desafíos de la Semana ${currentChampAdminWeek}...`, "info");
+    showToast(`💾 Guardando los 8 desafíos de ${grpName} (Semana ${currentChampAdminWeek})...`, "info");
     const ok = await persistChampionshipWeeksData(cachedChampWeeksData);
     if (ok) {
-        showToast(`✓ ¡Los 8 desafíos de la Semana ${currentChampAdminWeek} guardados y sincronizados con la web!`, "success");
+        showToast(`✓ ¡Los 8 desafíos de ${grpName} (Semana ${currentChampAdminWeek}) guardados y sincronizados con la web!`, "success");
     } else {
         showToast(`✓ ¡Desafíos guardados en caché local!`, "info");
     }
@@ -2950,15 +3420,34 @@ function resetChampionshipSingleChallenge(idx) {
     const defWeek = defaults ? (defaults[currentChampAdminWeek] || defaults[String(currentChampAdminWeek)]) : null;
     const defCh = defWeek && defWeek.challenges && defWeek.challenges[idx] ? defWeek.challenges[idx] : null;
 
-    if (!confirm(`¿Restablecer el Desafío #${idx + 1} a su configuración oficial por defecto?`)) return;
+    const weekData = getActiveChampWeekData(currentChampAdminWeek);
+    const groups = (weekData && Array.isArray(weekData.groups) && weekData.groups.length > 0)
+        ? weekData.groups
+        : getDefaultChampionshipGroups(currentChampAdminWeek);
+    const grp = groups[currentChampAdminGroup] || groups[0] || { name: `Grupo #${currentChampAdminGroup + 1}` };
+    const grpName = grp.name || `Grupo #${currentChampAdminGroup + 1}`;
 
-    if (defCh) {
-        const weekData = getActiveChampWeekData(currentChampAdminWeek);
-        if (weekData && weekData.challenges) {
-            weekData.challenges[idx] = JSON.parse(JSON.stringify(defCh));
-            renderChampionshipAdminChallenges();
-            showToast(`Desafío #${idx + 1} restablecido. Haz clic en "Guardar Desafío" para persistir el cambio.`, "info");
+    if (!confirm(`¿Restablecer el Desafío #${idx + 1} de ${grpName} a sus valores predeterminados?`)) return;
+
+    if (weekData && weekData.challenges && weekData.challenges[idx]) {
+        const targetCh = weekData.challenges[idx];
+        const defaultTop3 = (defCh && Array.isArray(defCh.top3)) ? defCh.top3 : [
+            { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 400000, repBadge: "💰 $400.000 REP" },
+            { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 250000, repBadge: "💰 $250.000 REP" },
+            { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 120000, repBadge: "💰 $120.000 REP" }
+        ];
+
+        if (!targetCh.groupsWinners) targetCh.groupsWinners = {};
+        targetCh.groupsWinners[currentChampAdminGroup] = JSON.parse(JSON.stringify(defaultTop3));
+        if (!targetCh.groupsResults) targetCh.groupsResults = {};
+        targetCh.groupsResults[grpName] = JSON.parse(JSON.stringify(defaultTop3));
+        targetCh.groupsResults[currentChampAdminGroup] = JSON.parse(JSON.stringify(defaultTop3));
+        if (currentChampAdminGroup === 0) {
+            targetCh.top3 = JSON.parse(JSON.stringify(defaultTop3));
         }
+
+        renderChampionshipAdminChallenges();
+        showToast(`Desafío #${idx + 1} de ${grpName} restablecido. Haz clic en "Guardar" para persistir el cambio.`, "info");
     }
 }
 
@@ -2983,10 +3472,36 @@ async function saveChampionshipAdmin() {
     // 1. Guardar todos los Grupos Dinámicamente
     weekData.groups = getChampionshipGroupsFromUI();
 
-    // 2. Guardar los 8 Desafíos
-    weekData.challenges = [];
+    // 2. Guardar los 8 Desafíos para el grupo activo
+    const grp = (weekData.groups && weekData.groups[currentChampAdminGroup]) || { name: `Grupo #${currentChampAdminGroup + 1}` };
+    const grpName = grp.name || `Grupo #${currentChampAdminGroup + 1}`;
+
     for (let idx = 0; idx < 8; idx++) {
-        weekData.challenges.push(getChampionshipChallengeFromUI(idx));
+        const chData = getChampionshipChallengeFromUI(idx);
+        if (!weekData.challenges[idx]) {
+            weekData.challenges[idx] = {
+                id: `w${currentChampAdminWeek}-ch${idx + 1}`,
+                route: chData.route,
+                type: chData.type,
+                carRestriction: chData.carRestriction
+            };
+        }
+        const targetCh = weekData.challenges[idx];
+        targetCh.route = chData.route;
+        targetCh.type = chData.type;
+        targetCh.carRestriction = chData.carRestriction;
+
+        if (!targetCh.groupsWinners) targetCh.groupsWinners = {};
+        targetCh.groupsWinners[currentChampAdminGroup] = chData.top3;
+        targetCh.groupsWinners[grpName] = chData.top3;
+
+        if (!targetCh.groupsResults) targetCh.groupsResults = {};
+        targetCh.groupsResults[grpName] = chData.top3;
+        targetCh.groupsResults[currentChampAdminGroup] = chData.top3;
+
+        if (currentChampAdminGroup === 0) {
+            targetCh.top3 = chData.top3;
+        }
     }
 
     // 3. Persistir en Firebase RTDB y localStorage con sincronización en tiempo real
@@ -2997,6 +3512,28 @@ async function saveChampionshipAdmin() {
     } else {
         showToast(`✓ ¡Semana ${currentChampAdminWeek} guardada en caché local!`, "info");
     }
+}
+
+/**
+ * Determina si una marca de tiempo representa una participación nula o no registrada:
+ * cadenas vacías, marcadores de posición ("--:--.---", "DNS", "DNF", "TBD"),
+ * o ceros absolutos ("00:00:00", "00:00.000", "0:00.000", etc.).
+ */
+function isZeroOrNullTime(timeStr) {
+    if (!timeStr) return true;
+    const clean = String(timeStr).trim().toUpperCase();
+    if (clean === '' || clean === '--:--.---' || clean === '--:--:--' || clean === '--:--' || clean === '--' || clean === '-' ||
+        clean === '00:00.000' || clean === '00:00:00' || clean === '00:00' || clean === '0:00.000' || clean === '0:00:00' ||
+        clean === '0' || clean === '0.0' || clean === '00.00' ||
+        clean === 'DNS' || clean === 'DNF' || clean === 'DSQ' || clean === 'TBD' ||
+        clean === 'NULO' || clean === 'NULL' || clean === 'NONE' || clean === 'POR DISPUTAR' || clean === 'EN ESPERA') {
+        return true;
+    }
+    const digitsOnly = clean.replace(/[^0-9]/g, '');
+    if (digitsOnly.length > 0 && digitsOnly.split('').every(ch => ch === '0')) {
+        return true;
+    }
+    return false;
 }
 
 async function syncChampionshipWinnersInternal() {
@@ -3022,14 +3559,15 @@ async function syncChampionshipWinnersInternal() {
             });
         }
 
-        // Reinicializar contadores de victorias, tiempos y reputación
+        // Reinicializar contadores de victorias, tiempos, bonos y reputación
         drivers.forEach(d => {
             d.victories = { p1: 0, p2: 0, p3: 0, p4: 0 };
             d.bestTimes = { first: 0, second: 0, third: 0 };
+            d.bonusPoints = 0;
             d.rep = 0;
         });
 
-        // Helper para resolver piloto
+        // Helper para resolver piloto de forma robusta
         const matchDriver = (pilotStr) => {
             if (!pilotStr || pilotStr === 'Por disputar' || pilotStr === 'En espera') return null;
             const clean = String(pilotStr).trim().toLowerCase();
@@ -3037,50 +3575,146 @@ async function syncChampionshipWinnersInternal() {
             if (!isNaN(num) && String(num) === clean) {
                 return drivers.find(d => d.rank === num);
             }
-            return drivers.find(d => 
-                (d.alias && d.alias.toLowerCase() === clean) ||
-                (d.name && d.name.toLowerCase() === clean) ||
-                (d.alias && (clean.includes(d.alias.toLowerCase()) || d.alias.toLowerCase().includes(clean)))
+            let found = drivers.find(d => 
+                (d.alias && d.alias.trim().toLowerCase() === clean) ||
+                (d.name && d.name.trim().toLowerCase() === clean)
             );
+            if (found) return found;
+
+            found = drivers.find(d => {
+                const dAlias = (d.alias || '').trim().toLowerCase();
+                const dName = (d.name || '').trim().toLowerCase();
+                if (dAlias && (clean.includes(dAlias) || dAlias.includes(clean))) return true;
+                if (dName && (clean.includes(dName) || dName.includes(clean))) return true;
+                return false;
+            });
+            return found || null;
         };
 
-        // Iterar todas las semanas del campeonato para computar ganadores
+        // Iterar todas las semanas del campeonato para computar ganadores por grupo (Alfa, Beta, Gama, Delta...)
         const weeksSource = cachedChampWeeksData || getChampionshipDefaultWeeksData() || {};
         Object.keys(weeksSource).forEach(wKey => {
             const wData = weeksSource[wKey];
             if (!wData || !Array.isArray(wData.challenges)) return;
 
             wData.challenges.forEach(ch => {
-                if (!ch.top3 || !Array.isArray(ch.top3)) return;
+                let groupsToProcess = [];
+                if (Array.isArray(wData.groups) && wData.groups.length > 0) {
+                    weekDataGroupLoop:
+                    for (let grpIdx = 0; grpIdx < wData.groups.length; grpIdx++) {
+                        const grp = wData.groups[grpIdx];
+                        const grpName = grp.name || `Grupo #${grpIdx + 1}`;
+                        let grpTop3 = null;
+                        if (ch.groupsWinners) {
+                            grpTop3 = ch.groupsWinners[grpIdx] || ch.groupsWinners[grpName] || ch.groupsWinners[String(grpIdx)];
+                        }
+                        if (!grpTop3 && ch.groupsResults) {
+                            grpTop3 = ch.groupsResults[grpName] || ch.groupsResults[grpIdx] || ch.groupsResults[String(grpIdx)];
+                        }
+                        if (!grpTop3 && grpIdx === 0 && Array.isArray(ch.top3)) {
+                            grpTop3 = ch.top3;
+                        }
+                        if (Array.isArray(grpTop3) && grpTop3.length > 0) {
+                            groupsToProcess.push(grpTop3);
+                        }
+                    }
+                }
 
-                // 1° Oro
-                if (ch.top3[0] && ch.top3[0].pilot) {
-                    const d = matchDriver(ch.top3[0].pilot);
-                    if (d) {
-                        d.victories.p1 = (d.victories.p1 || 0) + 1;
-                        d.bestTimes.first = (d.bestTimes.first || 0) + 1;
-                        d.rep = (d.rep || 0) + (parseInt(ch.top3[0].repMoney, 10) || 400000);
+                if (groupsToProcess.length === 0) {
+                    const sourceMap = ch.groupsWinners || ch.groupsResults;
+                    if (sourceMap && typeof sourceMap === 'object') {
+                        const numKeys = Object.keys(sourceMap).filter(k => !isNaN(parseInt(k, 10)));
+                        const targetKeys = numKeys.length > 0 ? numKeys : Object.keys(sourceMap);
+                        targetKeys.forEach(k => {
+                            if (Array.isArray(sourceMap[k]) && sourceMap[k].length > 0) {
+                                groupsToProcess.push(sourceMap[k]);
+                            }
+                        });
+                    } else if (Array.isArray(ch.top3)) {
+                        groupsToProcess.push(ch.top3);
                     }
                 }
-                // 2° Silver
-                if (ch.top3[1] && ch.top3[1].pilot) {
-                    const d = matchDriver(ch.top3[1].pilot);
-                    if (d) {
-                        d.victories.p2 = (d.victories.p2 || 0) + 1;
-                        d.bestTimes.second = (d.bestTimes.second || 0) + 1;
-                        d.rep = (d.rep || 0) + (parseInt(ch.top3[1].repMoney, 10) || 250000);
-                    }
-                }
-                // 3° Bronce
-                if (ch.top3[2] && ch.top3[2].pilot) {
-                    const d = matchDriver(ch.top3[2].pilot);
-                    if (d) {
-                        d.victories.p3 = (d.victories.p3 || 0) + 1;
-                        d.bestTimes.third = (d.bestTimes.third || 0) + 1;
-                        d.rep = (d.rep || 0) + (parseInt(ch.top3[2].repMoney, 10) || 120000);
-                    }
-                }
+
+                groupsToProcess.forEach(top3List => {
+                    if (!Array.isArray(top3List)) return;
+
+                    top3List.forEach((entry, posIdx) => {
+                        if (!entry || !entry.pilot || entry.pilot === 'Por disputar' || entry.pilot === 'En espera') return;
+                        const d = matchDriver(entry.pilot);
+                        if (!d) return;
+
+                        const time = (entry.time || '').trim();
+                        const isNullTime = isZeroOrNullTime(time);
+
+                        // Parse bonus and rep money (strictly preserving 0 and custom values)
+                        let bVal = 0;
+                        if (entry.bonus !== undefined && entry.bonus !== null && entry.bonus !== '') {
+                            const parsedB = parseInt(entry.bonus, 10);
+                            bVal = isNaN(parsedB) ? 0 : parsedB;
+                        } else if (!isNullTime) {
+                            bVal = posIdx === 0 ? 100 : (posIdx === 1 ? 50 : (posIdx === 2 ? 20 : 0));
+                        }
+
+                        let rVal = 0;
+                        if (entry.repMoney !== undefined && entry.repMoney !== null && entry.repMoney !== '') {
+                            const parsedR = parseInt(entry.repMoney, 10);
+                            rVal = isNaN(parsedR) ? 0 : parsedR;
+                        } else if (!isNullTime) {
+                            rVal = posIdx === 0 ? 400000 : (posIdx === 1 ? 250000 : (posIdx === 2 ? 120000 : 0));
+                        }
+
+                        // Criterio de Participación Nula:
+                        // 1. Si el tiempo es nulo/cero y bonos/rep son 0 -> Participación nula total (no suma nada).
+                        // 2. Si posIdx > 0 (2°, 3°, 4° puesto) y el tiempo es nulo -> No suma victorias ni puntos de posición.
+                        const isNullParticipation = (isNullTime && bVal === 0 && rVal === 0) || (posIdx > 0 && isNullTime);
+
+                        if (isNullParticipation) {
+                            // Si se asignó bono o rep manual explícito a una posición con tiempo nulo, acumularlo
+                            if (bVal > 0) d.bonusPoints = (d.bonusPoints || 0) + bVal;
+                            if (rVal > 0) d.rep = (d.rep || 0) + rVal;
+                            // Pero NO computar victorias ni mejores tiempos
+                            return;
+                        }
+
+                        // Acumular bonos y reputación exactos
+                        d.bonusPoints = (d.bonusPoints || 0) + bVal;
+                        d.rep = (d.rep || 0) + rVal;
+
+                        // Victorias y podios
+                        if (posIdx === 0) {
+                            // 1° puesto / Ganador: cuenta como victoria P1 si tiene tiempo válido O si se le asignaron bonos/rep (victoria otorgada en comisaría)
+                            if (!isNullTime || bVal > 0 || rVal > 0) {
+                                d.victories.p1 = (d.victories.p1 || 0) + 1;
+                                if (bVal > 0) d.bestTimes.first = (d.bestTimes.first || 0) + 1;
+                            }
+                        } else if (!isNullTime) {
+                            // 2°, 3° y 4° puesto SOLO se computan si compitió efectivamente (tiempo válido no nulo)
+                            if (posIdx === 1) {
+                                d.victories.p2 = (d.victories.p2 || 0) + 1;
+                                if (bVal > 0) d.bestTimes.second = (d.bestTimes.second || 0) + 1;
+                            } else if (posIdx === 2) {
+                                d.victories.p3 = (d.victories.p3 || 0) + 1;
+                                if (bVal > 0) d.bestTimes.third = (d.bestTimes.third || 0) + 1;
+                            } else if (posIdx === 3) {
+                                d.victories.p4 = (d.victories.p4 || 0) + 1;
+                            }
+                        }
+                    });
+                });
             });
+        });
+
+        // Calcular puntaje total consolidados para cada piloto
+        drivers.forEach(d => {
+            const v = d.victories || { p1: 0, p2: 0, p3: 0, p4: 0 };
+            const p1Pts = (v.p1 || 0) * 25;
+            const p2Pts = (v.p2 || 0) * 18;
+            const p3Pts = (v.p3 || 0) * 15;
+            const p4Pts = (v.p4 || 0) * 12;
+            const bonusPts = (typeof d.bonusPoints === 'number') ? d.bonusPoints : 0;
+            const repPts = Math.floor((d.rep || 0) / 10000);
+            d.points = p1Pts + p2Pts + p3Pts + p4Pts + bonusPts + repPts;
+            d.totalPts = d.points;
         });
 
         // Guardar pilotos actualizados en localStorage (v5 y v4 para retrocompatibilidad)
@@ -3473,5 +4107,9 @@ window.saveChampionshipGroupsToAllWeeks = saveChampionshipGroupsToAllWeeks;
 window.saveChampionshipSingleChallenge = saveChampionshipSingleChallenge;
 window.saveChampionshipAllChallenges = saveChampionshipAllChallenges;
 window.syncChampionshipWinnersInternal = syncChampionshipWinnersInternal;
+window.selectChampionshipAdminGroup = selectChampionshipAdminGroup;
+window.renderChampionshipAdminGroupPills = renderChampionshipAdminGroupPills;
+window.quickAssignPilotToWinner = quickAssignPilotToWinner;
+window.generateChampionshipRotations = generateChampionshipRotations;
 
 

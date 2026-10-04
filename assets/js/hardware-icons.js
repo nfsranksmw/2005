@@ -37,102 +37,128 @@
 
     const DEVICE_CATALOG = [
         // PlayStation
+        { id: "PlayStation DualSense", label: "PlayStation DualSense", short: "PlayStation DualSense", brand: "ps5_dualsense" },
+        { id: "PlayStation 5 DualSense", label: "PlayStation 5 DualSense", short: "PlayStation 5 DualSense", brand: "ps5_dualsense" },
         { id: "PlayStation 5 (DualSense)", label: "PlayStation 5 (DualSense)", short: "PlayStation DualSense", brand: "ps5_dualsense" },
+        { id: "PlayStation 4 DualSense", label: "PlayStation 4 DualSense", short: "PlayStation 4 DualSense", brand: "ps4_dualshock4" },
+        { id: "PlayStation DualShock 4", label: "PlayStation DualShock 4", short: "PlayStation DualShock 4", brand: "ps4_dualshock4" },
         { id: "PlayStation 4 (DualShock 4)", label: "PlayStation 4 (DualShock 4)", short: "PlayStation DualShock 4", brand: "ps4_dualshock4" },
+        { id: "PlayStation DualShock 3", label: "PlayStation DualShock 3", short: "PlayStation DualShock 3", brand: "ps3_dualshock3" },
         { id: "PlayStation 3 (DualShock 3)", label: "PlayStation 3 (DualShock 3)", short: "PlayStation DualShock 3", brand: "ps3_dualshock3" },
         
         // Xbox
-        { id: "Xbox One / Series X", label: "Xbox One / Series X", short: "Xbox Series / One", brand: "xbox" },
+        { id: "Xbox Series X", label: "Xbox Series X", short: "Xbox Series X", brand: "xbox" },
         { id: "Xbox 360", label: "Xbox 360", short: "Xbox 360", brand: "xbox" },
+        { id: "Xbox One / Series X", label: "Xbox One / Series X", short: "Xbox Series X", brand: "xbox" },
         
         // Logitech
-        { id: "Logitech Extreme 3D Pro", label: "Logitech Extreme 3D Pro", short: "Extreme 3D Pro", brand: "logitech_extreme3d" },
+        { id: "Logitech Dual Action", label: "Logitech Dual Action", short: "Logitech Dual Action", brand: "logitech" },
         { id: "Logitech F310", label: "Logitech F310", short: "Logitech F310", brand: "logitech" },
         { id: "Logitech F710", label: "Logitech F710", short: "Logitech F710", brand: "logitech" },
-        { id: "Logitech Dual Action", label: "Logitech Dual Action", short: "Logitech Dual Action", brand: "logitech" },
+        { id: "Logitech G920", label: "Logitech G920", short: "Logitech G920", brand: "wheel" },
+        { id: "Logitech Extreme 3D Pro", label: "Logitech Extreme 3D Pro", short: "Extreme 3D Pro", brand: "logitech_extreme3d" },
         
         // Periféricos / Otros
-        { id: "Teclado", label: "Teclado", short: "Teclado", brand: "keyboard" },
+        { id: "Keyboard", label: "Keyboard", short: "Keyboard", brand: "keyboard" },
+        { id: "Teclado", label: "Keyboard", short: "Keyboard", brand: "keyboard" },
         { id: "Volante", label: "Volante", short: "Volante", brand: "wheel" },
         { id: "Mando Genérico", label: "Mando Genérico / Pad", short: "Mando / Pad", brand: "gamepad" }
     ];
+
+    function safeText(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>"']/g, m => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[m]));
+    }
 
     /**
      * Resuelve un string de dispositivo a su registro oficial con coincidencia difusa (fuzzy match)
      */
     function resolveDevice(str) {
         if (!str || typeof str !== 'string') {
-            return DEVICE_CATALOG.find(d => d.id === "Teclado");
+            return DEVICE_CATALOG.find(d => d.id === "Keyboard") || DEVICE_CATALOG.find(d => d.id === "Teclado");
         }
         const clean = str.trim();
         const lower = clean.toLowerCase();
+        const noSpace = lower.replace(/[\s\-_/.]+/g, '');
 
         // 1. Coincidencia exacta por ID o por nombre corto
-        const exact = DEVICE_CATALOG.find(d => d.id.toLowerCase() === lower || d.short.toLowerCase() === lower);
+        const exact = DEVICE_CATALOG.find(d => {
+            const dLower = d.id.toLowerCase();
+            const dShort = d.short.toLowerCase();
+            const dNoSpace = dLower.replace(/[\s\-_/.]+/g, '');
+            const dShortNoSpace = dShort.replace(/[\s\-_/.]+/g, '');
+            return dLower === lower || dShort === lower || dNoSpace === noSpace || dShortNoSpace === noSpace;
+        });
         if (exact) return exact;
 
         // 2. Coincidencia por abreviaturas y modelos específicos según especificaciones oficiales
+        // Logitech G920 (Volante)
+        if (noSpace.includes("g920")) {
+            return DEVICE_CATALOG.find(d => d.id === "Logitech G920");
+        }
+
         // TA o DA -> Logitech Dual Action
-        if (lower === "ta" || lower === "da" || lower === "t.a." || lower === "d.a." || lower === "logitech ta" || lower === "logitech da" || lower.includes("dual action") || lower.includes("dualaction")) {
+        if (noSpace === "ta" || noSpace === "da" || noSpace.includes("dualaction") || lower.includes("logitech ta") || lower.includes("logitech da")) {
             return DEVICE_CATALOG.find(d => d.id === "Logitech Dual Action");
         }
 
-        // DS4 -> PlayStation DualShock 4
-        if (lower === "ds4" || lower === "ds 4" || lower === "ps4" || lower.includes("dualshock 4") || lower.includes("playstation 4") || lower.includes("ps4")) {
-            return DEVICE_CATALOG.find(d => d.id === "PlayStation 4 (DualShock 4)");
+        // PlayStation específicos
+        if (noSpace.includes("ps4") && noSpace.includes("dualsense")) {
+            return DEVICE_CATALOG.find(d => d.id === "PlayStation 4 DualSense");
         }
-
-        // DualShock 3 / DS3 -> PlayStation DualShock 3
-        if (lower === "ds3" || lower === "ds 3" || lower === "ps3" || lower.includes("dualshock 3") || lower.includes("playstation 3") || lower.includes("ps3")) {
-            return DEVICE_CATALOG.find(d => d.id === "PlayStation 3 (DualShock 3)");
+        if (noSpace.includes("ps5dualsense") || noSpace.includes("playstation5dualsense")) {
+            return DEVICE_CATALOG.find(d => d.id === "PlayStation 5 DualSense");
         }
-
-        // DualSense / PS5 -> PlayStation DualSense
-        if (lower.includes("dualsense") || lower.includes("ps5") || lower.includes("playstation 5")) {
-            return DEVICE_CATALOG.find(d => d.id === "PlayStation 5 (DualSense)");
+        if (noSpace.includes("dualsense") || noSpace.includes("ps5") || noSpace.includes("playstation5")) {
+            return DEVICE_CATALOG.find(d => d.id === "PlayStation DualSense");
+        }
+        if (noSpace === "ds4" || noSpace === "ps4" || noSpace.includes("dualshock4") || noSpace.includes("playstation4")) {
+            return DEVICE_CATALOG.find(d => d.id === "PlayStation DualShock 4");
+        }
+        if (noSpace === "ds3" || noSpace === "ps3" || noSpace.includes("dualshock3") || noSpace.includes("playstation3")) {
+            return DEVICE_CATALOG.find(d => d.id === "PlayStation DualShock 3");
         }
 
         // Logitech específicos
-        if (lower.includes("extreme") || lower.includes("3d pro") || lower.includes("extreme 3d")) {
+        if (noSpace.includes("extreme") || noSpace.includes("3dpro") || noSpace.includes("extreme3d")) {
             return DEVICE_CATALOG.find(d => d.id === "Logitech Extreme 3D Pro");
         }
-        if (lower.includes("f310")) {
-            return DEVICE_CATALOG.find(d => d.id === "Logitech F310");
-        }
-        if (lower.includes("f710")) {
+        if (noSpace.includes("f710")) {
             return DEVICE_CATALOG.find(d => d.id === "Logitech F710");
         }
-        if (lower.includes("logitech")) {
+        if (noSpace.includes("f310")) {
+            return DEVICE_CATALOG.find(d => d.id === "Logitech F310");
+        }
+        if (noSpace.includes("logitech")) {
             return DEVICE_CATALOG.find(d => d.id === "Logitech F310");
         }
 
-        // Xbox
-        if (lower.includes("series") || lower.includes("xbox one") || lower.includes("series x") || lower.includes("series s")) {
-            return DEVICE_CATALOG.find(d => d.id === "Xbox One / Series X");
-        }
-        if (lower.includes("360")) {
+        // Xbox específicos
+        if (noSpace.includes("360")) {
             return DEVICE_CATALOG.find(d => d.id === "Xbox 360");
         }
-        if (lower.includes("xbox")) {
-            return DEVICE_CATALOG.find(d => d.id === "Xbox One / Series X");
+        if (noSpace.includes("seriesx") || noSpace.includes("seriess") || noSpace.includes("xboxseries") || noSpace.includes("xboxone") || noSpace.includes("xbox")) {
+            return DEVICE_CATALOG.find(d => d.id === "Xbox Series X");
         }
 
         // PlayStation genérico
-        if (lower.includes("playstation") || lower.includes("dualshock")) {
-            return DEVICE_CATALOG.find(d => d.id === "PlayStation 4 (DualShock 4)");
+        if (noSpace.includes("playstation") || noSpace.includes("dualshock")) {
+            return DEVICE_CATALOG.find(d => d.id === "PlayStation DualShock 4");
         }
 
         // Otros periféricos
-        if (lower.includes("volante") || lower.includes("wheel") || lower.includes("g29") || lower.includes("g920") || lower.includes("thrustmaster")) {
+        if (noSpace.includes("volante") || noSpace.includes("wheel") || noSpace.includes("g29") || noSpace.includes("g27") || noSpace.includes("thrustmaster") || noSpace.includes("fanatec")) {
             return DEVICE_CATALOG.find(d => d.id === "Volante");
         }
-        if (lower.includes("teclado") || lower.includes("keyboard") || lower.includes("pc")) {
-            return DEVICE_CATALOG.find(d => d.id === "Teclado");
+        if (noSpace.includes("teclado") || noSpace.includes("keyboard") || noSpace === "pc") {
+            return DEVICE_CATALOG.find(d => d.id === "Keyboard");
         }
-        if (lower.includes("flight") || lower.includes("joystick")) {
+        if (noSpace.includes("flight") || noSpace.includes("joystick")) {
             return DEVICE_CATALOG.find(d => d.id === "Logitech Extreme 3D Pro");
         }
-        if (lower.includes("mando") || lower.includes("pad") || lower.includes("controller") || lower.includes("gamepad")) {
+        if (noSpace.includes("mando") || noSpace.includes("pad") || noSpace.includes("controller") || noSpace.includes("gamepad")) {
             return DEVICE_CATALOG.find(d => d.id === "Mando Genérico");
         }
 
@@ -162,17 +188,37 @@
      */
     function getDeviceSelectOptionsHTML(selectedVal) {
         const resolved = resolveDevice(selectedVal);
-        const resolvedId = resolved ? resolved.id : "Teclado";
+        const resolvedId = resolved ? (resolved.short || resolved.id) : "Keyboard";
 
-        const psList = DEVICE_CATALOG.filter(d => ["ps5_dualsense", "ps4_dualshock4", "ps3_dualshock3", "playstation"].includes(d.brand));
-        const xboxList = DEVICE_CATALOG.filter(d => d.brand === "xbox");
-        const logiList = DEVICE_CATALOG.filter(d => ["logitech", "logitech_extreme3d", "logitech_gamepad"].includes(d.brand));
-        const otherList = DEVICE_CATALOG.filter(d => ["keyboard", "wheel", "gamepad"].includes(d.brand));
+        const psList = [
+            { id: "PlayStation DualSense", label: "PlayStation DualSense" },
+            { id: "PlayStation 5 DualSense", label: "PlayStation 5 DualSense" },
+            { id: "PlayStation 4 DualSense", label: "PlayStation 4 DualSense" },
+            { id: "PlayStation DualShock 4", label: "PlayStation DualShock 4" },
+            { id: "PlayStation DualShock 3", label: "PlayStation DualShock 3" }
+        ];
+        const xboxList = [
+            { id: "Xbox Series X", label: "Xbox Series X" },
+            { id: "Xbox 360", label: "Xbox 360" },
+            { id: "Xbox One / Series X", label: "Xbox One / Series X" }
+        ];
+        const logiList = [
+            { id: "Logitech Dual Action", label: "Logitech Dual Action" },
+            { id: "Logitech F310", label: "Logitech F310" },
+            { id: "Logitech F710", label: "Logitech F710" },
+            { id: "Logitech G920", label: "Logitech G920 (Volante)" },
+            { id: "Logitech Extreme 3D Pro", label: "Logitech Extreme 3D Pro" }
+        ];
+        const otherList = [
+            { id: "Keyboard", label: "Keyboard" },
+            { id: "Volante", label: "Volante" },
+            { id: "Mando Genérico", label: "Mando Genérico / Pad" }
+        ];
 
         const renderGrp = (label, list) => {
             let html = `<optgroup label="${label}">`;
             list.forEach(item => {
-                const isSel = (item.id.toLowerCase() === resolvedId.toLowerCase()) ? 'selected' : '';
+                const isSel = (item.id.toLowerCase() === resolvedId.toLowerCase() || (resolved && (resolved.id.toLowerCase() === item.id.toLowerCase() || (resolved.short && resolved.short.toLowerCase() === item.id.toLowerCase())))) ? 'selected' : '';
                 html += `<option value="${item.id}" ${isSel}>${item.label}</option>`;
             });
             html += `</optgroup>`;
@@ -191,17 +237,17 @@
     function getHardwareBadgeHTML(deviceStr, gearboxStr) {
         const item = resolveDevice(deviceStr);
         const svg = getHardwareIconSVG(deviceStr, 14);
-        const displayDevice = item.short || item.label || 'Teclado';
+        const displayDevice = item.short || item.label || 'Keyboard';
         const displayGear = (gearboxStr || 'Manual').trim();
 
         return `
-            <div class="hw-composite-badge" title="${item.label} • ${displayGear}">
+            <div class="hw-composite-badge" title="${safeText(item.label)} • ${safeText(displayGear)}">
                 <span class="hw-device-badge">
                     ${svg}
-                    <span class="hw-device-label">${displayDevice}</span>
+                    <span class="hw-device-label">${safeText(displayDevice)}</span>
                 </span>
                 <span class="hw-badge-divider">/</span>
-                <span class="hw-gearbox-badge">${displayGear}</span>
+                <span class="hw-gearbox-badge">${safeText(displayGear)}</span>
             </div>
         `.trim();
     }
@@ -212,12 +258,12 @@
     function getPublicDeviceTagHTML(deviceStr) {
         const item = resolveDevice(deviceStr);
         const svg = getHardwareIconSVG(deviceStr, 13);
-        const displayDevice = item.short || item.label || 'Teclado';
+        const displayDevice = item.short || item.label || 'Keyboard';
 
         return `
-            <span class="leaderboard-device-pill hw-public-tag" title="${item.label}">
+            <span class="leaderboard-device-pill hw-public-tag" title="${safeText(item.label)}">
                 ${svg}
-                <span class="device-label">${displayDevice}</span>
+                <span class="device-label">${safeText(displayDevice)}</span>
             </span>
         `.trim();
     }

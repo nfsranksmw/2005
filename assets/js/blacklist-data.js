@@ -327,10 +327,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
         title: "Semana 1: Calificación & Tríos Iniciales (03 - 09 Oct)",
         dates: "03 Oct 2026 - 09 Oct 2026",
         groups: [
-            { name: "Grupo Alpha (Líderes)", pilots: [1, 2, 3], tag: "🔥 TIER SUPREME" },
+            { name: "Grupo Alpha (Líderes)", pilots: [1, 10, 3], tag: "🔥 TIER SUPREME" },
             { name: "Grupo Beta (Aspirantes)", pilots: [4, 5, 6], tag: "⚡ TIER HIGH" },
-            { name: "Grupo Gamma (Fuerza & Potencia)", pilots: [7, 8, 9], tag: "⚔️ TIER MID-HIGH" },
-            { name: "Grupo Delta (Técnica & Derrapes)", pilots: [10, 11, 12], tag: "🎯 TIER MID" }
+            { name: "Grupo Gamma (Fuerza & Potencia)", pilots: [7, 8, 9], tag: "⚔️ TIER MID-HIGH" }
         ],
         challenges: [
             {
@@ -428,10 +427,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
         title: "Semana 2: Rotación de Tríos & Duelos de Velocidad (10 - 16 Oct)",
         dates: "10 Oct 2026 - 16 Oct 2026",
         groups: [
-            { name: "Grupo Alpha (Velocidad Pura)", pilots: [1, 5, 8], tag: "🔥 TIER SUPREME" },
-            { name: "Grupo Beta (Duelo Callejero)", pilots: [2, 6, 9], tag: "⚡ TIER HIGH" },
-            { name: "Grupo Gamma (Fuerza & Asfalto)", pilots: [3, 4, 10], tag: "⚔️ TIER MID-HIGH" },
-            { name: "Grupo Delta (Batalla de Aspirantes)", pilots: [7, 11, 12], tag: "🎯 TIER MID" }
+            { name: "Grupo Alfa (Velocidad Pura)", pilots: [1, 5, 8], tag: "🔥 TIER SUPREME" },
+            { name: "Grupo Beta (Duelo Callejero)", pilots: [10, 6, 9], tag: "⚡ TIER HIGH" },
+            { name: "Grupo Gama (Fuerza & Asfalto)", pilots: [3, 4, 7], tag: "⚔️ TIER MID-HIGH" }
         ],
         challenges: [
             {
@@ -529,10 +527,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
         title: "Semana 3: Cruce de Grupos & Ascenso (17 - 23 Oct)",
         dates: "17 Oct 2026 - 23 Oct 2026",
         groups: [
-            { name: "Grupo Alpha (Cruce de Titanes)", pilots: [1, 4, 7], tag: "🔥 TIER SUPREME" },
-            { name: "Grupo Beta (Duelo de Élite)", pilots: [2, 5, 10], tag: "⚡ TIER HIGH" },
-            { name: "Grupo Gamma (Guerra de Caballos)", pilots: [3, 6, 8], tag: "⚔️ TIER MID-HIGH" },
-            { name: "Grupo Delta (Desafío de Ascenso)", pilots: [9, 11, 12], tag: "🎯 TIER MID" }
+            { name: "Grupo Alfa (Cruce de Titanes)", pilots: [1, 6, 7], tag: "🔥 TIER SUPREME" },
+            { name: "Grupo Beta (Duelo de Élite)", pilots: [10, 4, 8], tag: "⚡ TIER HIGH" },
+            { name: "Grupo Gama (Guerra de Caballos)", pilots: [3, 5, 9], tag: "⚔️ TIER MID-HIGH" }
         ],
         challenges: [
             {
@@ -630,10 +627,9 @@ const CHAMPIONSHIP_WEEKS_DATA = {
         title: "Semana 4: Gran Final del Campeonato (24 - 31 Oct)",
         dates: "24 Oct 2026 - 31 Oct 2026",
         groups: [
-            { name: "Grupo Alpha (Gran Final • Corona)", pilots: [1, 2, 4], tag: "👑 CHAMPIONSHIP" },
-            { name: "Grupo Beta (Duelo por el Podio)", pilots: [3, 5, 6], tag: "🥈 PODIUM RACE" },
-            { name: "Grupo Gamma (Batalla de Honor)", pilots: [7, 8, 9], tag: "⚔️ TOP HONORS" },
-            { name: "Grupo Delta (Duelo de Superación)", pilots: [10, 11, 12], tag: "🎯 CHALLENGER" }
+            { name: "Grupo Alfa (Gran Final • Corona)", pilots: [1, 4, 9], tag: "👑 CHAMPIONSHIP" },
+            { name: "Grupo Beta (Duelo por el Podio)", pilots: [10, 5, 7], tag: "🥈 PODIUM RACE" },
+            { name: "Grupo Gama (Batalla de Honor)", pilots: [3, 6, 8], tag: "⚔️ TOP HONORS" }
         ],
         challenges: [
             {

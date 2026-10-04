@@ -1,29 +1,42 @@
+function applyNormalizedChampionshipWeeksData(target, data) {
+    if (!target || !data || typeof data !== 'object') return;
+    if (Array.isArray(data)) {
+        data.forEach((w, idx) => {
+            if (!w) return;
+            const wNum = (w.weekNumber || w.weekNum) ? parseInt(w.weekNumber || w.weekNum, 10) : (idx + 1);
+            if (!isNaN(wNum) && wNum >= 1 && wNum <= 4) {
+                w.weekNumber = wNum;
+                target[wNum] = w;
+                target[String(wNum)] = w;
+            }
+        });
+    } else {
+        Object.keys(data).forEach(k => {
+            const w = data[k];
+            if (!w) return;
+            const parsedK = parseInt(k, 10);
+            const wNum = (w.weekNumber || w.weekNum) ? parseInt(w.weekNumber || w.weekNum, 10) : parsedK;
+            if (!isNaN(wNum) && wNum >= 1 && wNum <= 4) {
+                w.weekNumber = wNum;
+                target[wNum] = w;
+                target[String(wNum)] = w;
+            }
+        });
+    }
+}
+
 window.addEventListener('storage', (e) => {
-    if (e.key === 'nfs_championship_weeks_data_v2' && e.newValue) {
+    if ((e.key === 'nfs_championship_weeks_data_v3' || e.key === 'nfs_championship_weeks_data_v2' || e.key === 'nfs_championship_weeks_data_v1') && e.newValue) {
         try {
             const data = JSON.parse(e.newValue);
             if (data && typeof data === 'object' && typeof CHAMPIONSHIP_WEEKS_DATA !== 'undefined') {
-                if (Array.isArray(data)) {
-                    data.forEach((w, idx) => {
-                        if (w && idx > 0) {
-                            CHAMPIONSHIP_WEEKS_DATA[idx] = w;
-                            CHAMPIONSHIP_WEEKS_DATA[String(idx)] = w;
-                        }
-                    });
-                } else {
-                    Object.keys(data).forEach(k => {
-                        if (data[k]) {
-                            CHAMPIONSHIP_WEEKS_DATA[k] = data[k];
-                            const n = parseInt(k, 10);
-                            if (!isNaN(n)) CHAMPIONSHIP_WEEKS_DATA[n] = data[k];
-                        }
-                    });
-                }
+                applyNormalizedChampionshipWeeksData(CHAMPIONSHIP_WEEKS_DATA, data);
                 const activeW = (typeof currentChampionshipWeek !== 'undefined') ? currentChampionshipWeek : 1;
                 if (typeof renderChampionshipGroups === 'function') renderChampionshipGroups(activeW);
                 if (typeof renderChampionshipChallenges === 'function') renderChampionshipChallenges(activeW);
                 if (typeof renderBlacklistUI === 'function') renderBlacklistUI();
                 if (typeof renderAllTacticalCards === 'function') renderAllTacticalCards();
+                if (typeof syncBlacklistWithRotationsAndStandings === 'function') syncBlacklistWithRotationsAndStandings();
             }
         } catch (err) {}
     } else if (e.key === 'nfs_championship_participants_v2' && e.newValue) {
@@ -336,6 +349,12 @@ function switchView(viewId, updateHistory = true) {
         }
     }
 
+    if (viewId === 'leaderboard' || viewId === 'leaderboards') {
+        if (!currentActiveRoute && typeof routesData !== 'undefined' && routesData.length > 0) {
+            loadLeaderboardForRoute(routesData[0]);
+        }
+    }
+
 }
 
 // Escuchar navegaciÃ³n del historial del navegador (atrÃ¡s / adelante)
@@ -490,7 +509,8 @@ function switchCircuitTab(tabId, btn) {
 
     const targetTab = document.getElementById('tab-' + tabId);
     if (targetTab) targetTab.classList.add('active');
-    if (btn) btn.classList.add('active');
+    const tabButton = btn || document.querySelector(`#container-tabs-circuit button[onclick*="'${tabId}'"]`);
+    if (tabButton) tabButton.classList.add('active');
 
     // Sincronizar pÃ­ldoras
     if (tabId.includes('junkman')) {
@@ -520,7 +540,8 @@ function switchSprintDragTab(tabId, btn) {
 
     const targetTab = document.getElementById('tab-' + tabId);
     if (targetTab) targetTab.classList.add('active');
-    if (btn) btn.classList.add('active');
+    const tabButton = btn || document.querySelector(`#container-tabs-sprintdrag button[onclick*="'${tabId}'"]`);
+    if (tabButton) tabButton.classList.add('active');
 
     if (tabId.includes('junkman')) {
         currentModality = 'junkman';
@@ -1515,86 +1536,412 @@ async function loadLeaderboardForRoute(route) {
     // Consulta directa a Firebase Realtime Database
     const fbData = await fetchFirebaseRouteRecords(route.name);
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const queryTab = urlParams.get('tab');
+
     if (route.type === "Circuito") {
         if (circuitTabs) circuitTabs.classList.add('active-group');
         if (sprintDragTabs) sprintDragTabs.classList.remove('active-group');
-        switchCircuitTab('junkman-single', circuitTabs.querySelector('.tab-btn'));
+        let initialTab = 'junkman-single';
+        if (queryTab && ['junkman-single', 'junkman-fast', 'bmw-single', 'bmw-fast'].includes(queryTab)) {
+            initialTab = queryTab;
+        }
+        switchCircuitTab(initialTab);
 
         const fbJunkmanSingle = extractCategoryRecords(fbData, 'junkman_single');
         const fbJunkmanFast = extractCategoryRecords(fbData, 'junkman_fast');
         const fbBmwSingle = extractCategoryRecords(fbData, 'bmw_single');
         const fbBmwFast = extractCategoryRecords(fbData, 'bmw_fast');
 
-        renderTableRows('tbody-junkman-single', fbJunkmanSingle);
-        renderTableRows('tbody-junkman-fast', fbJunkmanFast);
-        renderTableRows('tbody-bmw-single', fbBmwSingle);
-        renderTableRows('tbody-bmw-fast', fbBmwFast);
+        currentLeaderboardRawData['tbody-junkman-single'] = fbJunkmanSingle;
+        currentLeaderboardRawData['tbody-junkman-fast'] = fbJunkmanFast;
+        currentLeaderboardRawData['tbody-bmw-single'] = fbBmwSingle;
+        currentLeaderboardRawData['tbody-bmw-fast'] = fbBmwFast;
+
+        const allRows = [...fbJunkmanSingle, ...fbJunkmanFast, ...fbBmwSingle, ...fbBmwFast];
+        updateLeaderboardCarFilterOptions(allRows);
+
+        renderLeaderboardComponent('tbody-junkman-single', { data: fbJunkmanSingle, vehicle: 'junkman' });
+        renderLeaderboardComponent('tbody-junkman-fast', { data: fbJunkmanFast, vehicle: 'junkman' });
+        renderLeaderboardComponent('tbody-bmw-single', { data: fbBmwSingle, vehicle: 'bmw' });
+        renderLeaderboardComponent('tbody-bmw-fast', { data: fbBmwFast, vehicle: 'bmw' });
     } else {
         if (circuitTabs) circuitTabs.classList.remove('active-group');
         if (sprintDragTabs) sprintDragTabs.classList.add('active-group');
-        switchSprintDragTab('sprintdrag-junkman', sprintDragTabs.querySelector('.tab-btn'));
+        let initialSprintTab = 'sprintdrag-junkman';
+        if (queryTab && ['sprintdrag-junkman', 'sprintdrag-bmw'].includes(queryTab)) {
+            initialSprintTab = queryTab;
+        }
+        switchSprintDragTab(initialSprintTab);
 
         const fbJunkman = extractCategoryRecords(fbData, 'junkman');
         const fbBmw = extractCategoryRecords(fbData, 'bmw');
 
-        renderTableRows('tbody-sprintdrag-junkman', fbJunkman);
-        renderTableRows('tbody-sprintdrag-bmw', fbBmw);
+        currentLeaderboardRawData['tbody-sprintdrag-junkman'] = fbJunkman;
+        currentLeaderboardRawData['tbody-sprintdrag-bmw'] = fbBmw;
+
+        const allRows = [...fbJunkman, ...fbBmw];
+        updateLeaderboardCarFilterOptions(allRows);
+
+        renderLeaderboardComponent('tbody-sprintdrag-junkman', { data: fbJunkman, vehicle: 'junkman' });
+        renderLeaderboardComponent('tbody-sprintdrag-bmw', { data: fbBmw, vehicle: 'bmw' });
     }
+
+    applyLeaderboardDensityClass();
+    updateDensityButtonsUI();
 }
 
-function formatRaceTime(timeStr) {
-    if (!timeStr) return '--:--.---';
-    if (typeof timeStr === 'number') {
-        return window.NFS_FIREBASE ? window.NFS_FIREBASE.formatMsToTime(timeStr) : String(timeStr);
+/**
+ * =======================================================
+ * UTILIDADES DE CONSISTENCIA DE DATOS (PASO A)
+ * =======================================================
+ */
+
+/**
+ * FORMATEO DE TIEMPO ÚNICO ESTÁNDAR: MM:SS.mmm
+ * Convierte cualquier formato de tiempo (ms, M:SS.mmm, MM:SS.mmm, SS.mmm, etc.)
+ * a la representación canónica estricta MM:SS.mmm (ej: 01:20.750; nunca 1:20.750).
+ */
+function formatRaceTimeStandard(timeVal) {
+    if (timeVal === null || timeVal === undefined || timeVal === '') return '--:--.---';
+    if (typeof timeVal === 'number') {
+        if (isNaN(timeVal) || timeVal <= 0) return '--:--.---';
+        const totalSecs = Math.floor(timeVal / 1000);
+        const remMs = Math.round(timeVal % 1000);
+        const mins = Math.floor(totalSecs / 60);
+        const secs = totalSecs % 60;
+        return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}.${String(remMs).padStart(3, '0')}`;
     }
-    const clean = String(timeStr).trim();
-    if (window.NFS_FIREBASE && window.NFS_FIREBASE.parseTimeToMs) {
-        const ms = window.NFS_FIREBASE.parseTimeToMs(clean);
-        if (ms !== null) {
-            return window.NFS_FIREBASE.formatMsToTime(ms);
+
+    const clean = String(timeVal).trim();
+    if (!clean || clean === '--' || clean === '--:--.---' || clean === 'TBD' || clean === 'n/a') {
+        return '--:--.---';
+    }
+
+    // 1. Si coincide con patrón MM:SS.mmm o M:SS.mmm
+    const colonMatch = clean.match(/^(\d{1,2}):(\d{1,2})(?:[.,](\d{1,3}))?$/);
+    if (colonMatch) {
+        const mins = parseInt(colonMatch[1], 10);
+        const secs = parseInt(colonMatch[2], 10);
+        let msRaw = colonMatch[3] || '0';
+        if (msRaw.length === 1) msRaw += '00';
+        else if (msRaw.length === 2) msRaw += '0';
+        else if (msRaw.length > 3) msRaw = msRaw.slice(0, 3);
+        const ms = parseInt(msRaw, 10);
+        return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}.${String(ms).padStart(3, '0')}`;
+    }
+
+    // 2. Si coincide con patrón de segundos con decimales (ej: 19.810s o 19.810)
+    const secOnlyMatch = clean.match(/^(\d{1,3})[.,](\d{1,3})s?$/);
+    if (secOnlyMatch) {
+        const totalSec = parseInt(secOnlyMatch[1], 10);
+        const mins = Math.floor(totalSec / 60);
+        const secs = totalSec % 60;
+        let msRaw = secOnlyMatch[2] || '0';
+        if (msRaw.length === 1) msRaw += '00';
+        else if (msRaw.length === 2) msRaw += '0';
+        else if (msRaw.length > 3) msRaw = msRaw.slice(0, 3);
+        const ms = parseInt(msRaw, 10);
+        return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}.${String(ms).padStart(3, '0')}`;
+    }
+
+    // 3. Fallback con parseTimeToMs si está disponible
+    if (typeof parseTimeToMs === 'function') {
+        const parsedMs = parseTimeToMs(clean);
+        if (parsedMs !== null && !isNaN(parsedMs) && parsedMs > 0) {
+            const totalSecs = Math.floor(parsedMs / 1000);
+            const remMs = Math.round(parsedMs % 1000);
+            const mins = Math.floor(totalSecs / 60);
+            const secs = totalSecs % 60;
+            return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}.${String(remMs).padStart(3, '0')}`;
         }
     }
+
     return clean;
 }
 
-function renderTableRows(tbodyId, dataRows) {
+function formatRaceTime(timeStr) {
+    return formatRaceTimeStandard(timeStr);
+}
+
+/**
+ * FORMATEO DE FECHA ÚNICO ESTÁNDAR: DD/MM/YYYY
+ * Convierte cualquier formato de fecha (YYYY-MM-DD, YYYY/MM/DD, DD-MM-YYYY, DD/MM/YYYY, ISO, etc.)
+ * a la representación canónica estricta DD/MM/YYYY (nunca mezclar con YYYY-MM-DD).
+ */
+function formatRecordDateStandard(dateVal) {
+    if (!dateVal || dateVal === '--' || dateVal === 'n/a' || dateVal === '-') return '--/--/----';
+    const clean = String(dateVal).trim();
+
+    // 1. Caso YYYY-MM-DD o YYYY/MM/DD o YYYY.MM.DD
+    const isoMatch = clean.match(/^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})/);
+    if (isoMatch) {
+        const year = isoMatch[1];
+        const month = String(isoMatch[2]).padStart(2, '0');
+        const day = String(isoMatch[3]).padStart(2, '0');
+        return `${day}/${month}/${year}`;
+    }
+
+    // 2. Caso DD/MM/YYYY o DD-MM-YYYY o DD.MM.YYYY
+    const dmyMatch = clean.match(/^(\d{1,2})[-/.](\d{1,2})[-/.](\d{4})/);
+    if (dmyMatch) {
+        const day = String(dmyMatch[1]).padStart(2, '0');
+        const month = String(dmyMatch[2]).padStart(2, '0');
+        const year = dmyMatch[3];
+        return `${day}/${month}/${year}`;
+    }
+
+    // 3. Fallback con objeto Date válido
+    const d = new Date(clean);
+    if (!isNaN(d.getTime())) {
+        const day = String(d.getUTCDate()).padStart(2, '0');
+        const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+        const year = d.getUTCFullYear();
+        return `${day}/${month}/${year}`;
+    }
+
+    return clean;
+}
+
+function normalizeGearboxLabel(gearboxVal) {
+    if (!gearboxVal) return 'Manual';
+    const clean = String(gearboxVal).trim().toLowerCase();
+    if (clean.includes('auto') || clean.includes('autom')) return 'Auto';
+    return 'Manual';
+}
+
+function normalizeDeviceLabel(deviceVal) {
+    if (!deviceVal) return 'Keyboard';
+    const clean = String(deviceVal).trim().toLowerCase();
+    if (clean.includes('key') || clean.includes('tecl') || clean === 'pc') return 'Keyboard';
+    if (clean.includes('wheel') || clean.includes('vol') || clean.includes('g29') || clean.includes('g920') || clean.includes('g27') || clean.includes('t300') || clean.includes('fanatec')) return 'Wheel';
+    if (clean.includes('cont') || clean.includes('mand') || clean.includes('pad') || clean.includes('xbox') || clean.includes('ps') || clean.includes('dual') || clean.includes('f310') || clean.includes('f710') || clean === 'ta' || clean === 'da') return 'Controller';
+    return String(deviceVal).trim();
+}
+
+/**
+ * =======================================================
+ * ESTADOS DE DENSIDAD, FILTROS Y DATOS CACHEADOS DEL LEADERBOARD
+ * =======================================================
+ */
+let currentLeaderboardRawData = {
+    'tbody-junkman-single': [],
+    'tbody-junkman-fast': [],
+    'tbody-bmw-single': [],
+    'tbody-bmw-fast': [],
+    'tbody-sprintdrag-junkman': [],
+    'tbody-sprintdrag-bmw': []
+};
+
+let currentLeaderboardFilters = {
+    car: 'all',
+    device: 'all',
+    gearbox: 'all',
+    search: ''
+};
+
+let currentLeaderboardDensity = 'comfortable';
+try {
+    const savedDensity = localStorage.getItem('nfs_leaderboard_density');
+    if (savedDensity === 'compact' || savedDensity === 'comfortable') {
+        currentLeaderboardDensity = savedDensity;
+    }
+} catch (e) {
+    console.warn('LocalStorage not available for density preference', e);
+}
+
+function setLeaderboardDensity(density) {
+    currentLeaderboardDensity = density === 'compact' ? 'compact' : 'comfortable';
+    try {
+        localStorage.setItem('nfs_leaderboard_density', currentLeaderboardDensity);
+    } catch (e) {
+        console.warn('LocalStorage error saving density preference', e);
+    }
+    applyLeaderboardDensityClass();
+    updateDensityButtonsUI();
+}
+
+function applyLeaderboardDensityClass() {
+    const isCompact = currentLeaderboardDensity === 'compact';
+    document.querySelectorAll('#view-leaderboard .blacklist-table-wrapper, #view-leaderboard .blacklist-table').forEach(el => {
+        if (isCompact) {
+            el.classList.add('blacklist-table-compact');
+        } else {
+            el.classList.remove('blacklist-table-compact');
+        }
+    });
+}
+
+function updateDensityButtonsUI() {
+    const btnComfortable = document.getElementById('btn-density-comfortable');
+    const btnCompact = document.getElementById('btn-density-compact');
+    if (btnComfortable && btnCompact) {
+        if (currentLeaderboardDensity === 'compact') {
+            btnComfortable.classList.remove('active');
+            btnCompact.classList.add('active');
+        } else {
+            btnComfortable.classList.add('active');
+            btnCompact.classList.remove('active');
+        }
+    }
+}
+
+function onLeaderboardFilterChange() {
+    const inputDriver = document.getElementById('lb-filter-driver');
+    const selectCar = document.getElementById('lb-filter-car');
+    const selectDev = document.getElementById('lb-filter-device');
+    const selectGb = document.getElementById('lb-filter-gearbox');
+    const clearBtn = document.getElementById('lb-search-clear');
+
+    if (inputDriver) {
+        currentLeaderboardFilters.search = inputDriver.value || '';
+        if (clearBtn) {
+            clearBtn.style.display = inputDriver.value ? 'inline-block' : 'none';
+        }
+    }
+    if (selectCar) currentLeaderboardFilters.car = selectCar.value || 'all';
+    if (selectDev) currentLeaderboardFilters.device = selectDev.value || 'all';
+    if (selectGb) currentLeaderboardFilters.gearbox = selectGb.value || 'all';
+
+    // Re-renderizar las tablas que tengan datos cargados en esta ruta
+    Object.keys(currentLeaderboardRawData).forEach(tbodyId => {
+        const rawList = currentLeaderboardRawData[tbodyId];
+        if (Array.isArray(rawList) && rawList.length > 0) {
+            renderLeaderboardComponent(tbodyId, { data: rawList });
+        }
+    });
+}
+
+function clearLeaderboardSearch() {
+    const inputDriver = document.getElementById('lb-filter-driver');
+    const clearBtn = document.getElementById('lb-search-clear');
+    if (inputDriver) {
+        inputDriver.value = '';
+    }
+    if (clearBtn) {
+        clearBtn.style.display = 'none';
+    }
+    currentLeaderboardFilters.search = '';
+    onLeaderboardFilterChange();
+}
+
+function updateLeaderboardCarFilterOptions(allRows) {
+    const selectCar = document.getElementById('lb-filter-car');
+    if (!selectCar) return;
+
+    const previousVal = selectCar.value;
+    const cars = new Set();
+    allRows.forEach(r => {
+        if (r && r.car && r.car.trim() && r.car !== '--') {
+            cars.add(r.car.trim());
+        }
+    });
+
+    const sortedCars = Array.from(cars).sort((a, b) => a.localeCompare(b));
+    let optionsHtml = `<option value="all">All Vehicles</option>`;
+    sortedCars.forEach(c => {
+        optionsHtml += `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`;
+    });
+
+    selectCar.innerHTML = optionsHtml;
+    if (cars.has(previousVal)) {
+        selectCar.value = previousVal;
+    } else {
+        selectCar.value = 'all';
+        currentLeaderboardFilters.car = 'all';
+    }
+}
+
+/**
+ * =======================================================
+ * COMPONENTE REUTILIZABLE: LEADERBOARD
+ * Props:
+ *  - tbodyId: ID del elemento <tbody>
+ *  - props.data: Array de registros de la categoría
+ *  - props.vehicle: 'junkman' | 'bmw' | 'all'
+ *  - props.options: Opciones adicionales de renderizado y filtros
+ * =======================================================
+ */
+function renderLeaderboardComponent(tbodyId, { data = [], vehicle = 'all', options = {} } = {}) {
     const tbody = document.getElementById(tbodyId);
     if (!tbody) return;
     tbody.innerHTML = '';
 
-    if (!dataRows || dataRows.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 25px; font-family: var(--font-racing); font-size: 13px;">Sin registros oficiales para esta categorÃ­a aÃºn.</td></tr>`;
+    const effectiveFilters = Object.assign({}, currentLeaderboardFilters, options.filters || {});
+    const searchStr = (effectiveFilters.search || '').trim().toLowerCase();
+    const carFilter = effectiveFilters.car || 'all';
+    const deviceFilter = effectiveFilters.device || 'all';
+    const gearboxFilter = effectiveFilters.gearbox || 'all';
+
+    // 1. Filtrado de registros
+    const filteredRows = (Array.isArray(data) ? data : []).filter(row => {
+        if (!row) return false;
+
+        // Búsqueda por piloto / alias
+        if (searchStr) {
+            const driverName = String(row.driver || '').toLowerCase();
+            const alias = String(row.alias || '').toLowerCase();
+            if (!driverName.includes(searchStr) && !alias.includes(searchStr)) {
+                return false;
+            }
+        }
+
+        // Filtro por vehículo
+        if (carFilter !== 'all') {
+            const rowCar = String(row.car || '').toLowerCase();
+            if (!rowCar.includes(carFilter.toLowerCase())) {
+                return false;
+            }
+        }
+
+        // Filtro por dispositivo
+        if (deviceFilter !== 'all') {
+            const normDev = normalizeDeviceLabel(row.device);
+            if (normDev.toLowerCase() !== deviceFilter.toLowerCase()) {
+                return false;
+            }
+        }
+
+        // Filtro por transmisión (gearbox)
+        if (gearboxFilter !== 'all') {
+            const normGb = normalizeGearboxLabel(row.gearbox);
+            if (normGb.toLowerCase() !== gearboxFilter.toLowerCase()) {
+                return false;
+            }
+        }
+
+        return true;
+    });
+
+    if (filteredRows.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 25px; font-family: var(--font-racing); font-size: 13px;">No matching records found with active filters.</td></tr>`;
         return;
     }
 
-    dataRows.forEach(row => {
+    // 2. Cálculo del tiempo de referencia para Delta respecto al #1
+    let top1Ms = null;
+    for (let r of filteredRows) {
+        const ms = (typeof parseTimeToMs === 'function') ? parseTimeToMs(r.time) : null;
+        if (ms !== null && ms > 0) {
+            top1Ms = ms;
+            break;
+        }
+    }
+
+    // 3. Renderizado de filas
+    filteredRows.forEach((row, rowIndex) => {
         const tr = document.createElement('tr');
         const rankNum = parseInt(String(row.rank).replace(/[^0-9]/g, ''), 10);
-        const displayRank = !isNaN(rankNum) && rankNum > 0 ? rankNum : (row.rank || '1');
+        const displayRank = !isNaN(rankNum) && rankNum > 0 ? rankNum : (rowIndex + 1);
 
-        let rankBadgeClass = 'rank-normal';
-        if (displayRank === 1) rankBadgeClass = 'rank-gold';
-        else if (displayRank === 2) rankBadgeClass = 'rank-silver';
-        else if (displayRank === 3) rankBadgeClass = 'rank-bronze';
-
-        let rowHighlightClass = displayRank === 1 ? 'active-row' : '';
-        tr.className = `blacklist-row ${rowHighlightClass}`;
+        tr.className = `blacklist-row rank-row-${displayRank} ${displayRank === 1 ? 'active-row' : ''}`;
         tr.setAttribute('data-car', row.car || '');
 
-        let videoBtnHTML = (row.yt && row.yt !== "#" && row.yt.startsWith("http"))
-            ? `<a href="${row.yt}" target="_blank" rel="noopener noreferrer" class="btn-yt-link"><svg viewBox="0 0 24 24" width="9" height="9" fill="currentColor" style="vertical-align: 0px; margin-right: 4px; display: inline-block;"><path d="M8 5v14l11-7z"/></svg>VIDEO</a>`
-            : `<span class="no-video-text">--</span>`;
-
-        let aliasTag = '';
-        if (displayRank === 1) aliasTag = '<span class="driver-cell-alias alias-wr">WORLD RECORD</span>';
-        else if (displayRank === 2) aliasTag = '<span class="driver-cell-alias alias-top2">TOP 2 WORLD</span>';
-        else if (displayRank === 3) aliasTag = '<span class="driver-cell-alias alias-top3">TOP 3 WORLD</span>';
-        else aliasTag = '<span class="driver-cell-alias alias-driver">OFFICIAL DRIVER</span>';
-
-        const blBadgeClass = displayRank === 1 ? 'bl-badge-gold' : displayRank === 2 ? 'bl-badge-silver' : displayRank === 3 ? 'bl-badge-bronze' : '';
-
-        // Badge hexagonal para Top 3 o nÃºmero limpio para #4+
+        // Jerarquía visual: Top 3 con hexágonos, colores y etiquetas
         let rankBadgeHTML = '';
+        let aliasTag = '';
+        let timeGlowClass = 'time-solid';
+
         if (displayRank === 1) {
             rankBadgeHTML = `
                 <div class="hex-badge">
@@ -1603,6 +1950,8 @@ function renderTableRows(tbodyId, dataRows) {
                         <text x="18" y="19" class="hex-text">1</text>
                     </svg>
                 </div>`;
+            aliasTag = '<span class="driver-cell-alias alias-wr">WORLD RECORD</span>';
+            timeGlowClass = 'time-glow-gold';
         } else if (displayRank === 2) {
             rankBadgeHTML = `
                 <div class="hex-badge">
@@ -1611,6 +1960,8 @@ function renderTableRows(tbodyId, dataRows) {
                         <text x="18" y="19" class="hex-text">2</text>
                     </svg>
                 </div>`;
+            aliasTag = '<span class="driver-cell-alias alias-top2">TOP 2 WORLD</span>';
+            timeGlowClass = 'time-glow-silver';
         } else if (displayRank === 3) {
             rankBadgeHTML = `
                 <div class="hex-badge">
@@ -1619,16 +1970,52 @@ function renderTableRows(tbodyId, dataRows) {
                         <text x="18" y="19" class="hex-text">3</text>
                     </svg>
                 </div>`;
+            aliasTag = '<span class="driver-cell-alias alias-top3">TOP 3 WORLD</span>';
+            timeGlowClass = 'time-glow-bronze';
         } else {
             rankBadgeHTML = `<span class="rank-plain">${displayRank}</span>`;
+            aliasTag = ''; // Máximo 2 badges por fila fuera del Top 3
+            timeGlowClass = 'time-solid'; // Sin glow para reducir cansancio visual
         }
 
-        const formattedTime = formatRaceTime(row.time);
+        const formattedTime = formatRaceTimeStandard(row.time);
+        const formattedDate = formatRecordDateStandard(row.date);
+        const normGearbox = normalizeGearboxLabel(row.gearbox);
+        const normDevice = normalizeDeviceLabel(row.device);
 
-        let gbRaw = (row.gearbox || 'Manual').trim();
-        let gbDisplay = 'Manual';
-        if (gbRaw.toLowerCase().includes('auto')) {
-            gbDisplay = 'Auto';
+        // Cálculo de Delta (+0.030s)
+        let deltaHTML = '';
+        const currentMs = (typeof parseTimeToMs === 'function') ? parseTimeToMs(row.time) : null;
+        if (top1Ms !== null && currentMs !== null && currentMs > 0) {
+            if (displayRank === 1 || currentMs === top1Ms) {
+                deltaHTML = `<span class="time-delta delta-wr">LEADER</span>`;
+            } else {
+                const diffMs = currentMs - top1Ms;
+                const diffSecs = (diffMs / 1000).toFixed(3);
+                deltaHTML = `<span class="time-delta" title="Gap to #1">+${diffSecs}s</span>`;
+            }
+        }
+
+        const videoBtnHTML = (row.yt && row.yt !== "#" && String(row.yt).startsWith("http"))
+            ? `<a href="${row.yt}" target="_blank" rel="noopener noreferrer" class="btn-yt-link"><svg viewBox="0 0 24 24" width="9" height="9" fill="currentColor" style="vertical-align: 0px; margin-right: 4px; display: inline-block;"><path d="M8 5v14l11-7z"/></svg>VIDEO</a>`
+            : `<span class="no-video-text">--</span>`;
+
+        // Sublínea de piloto: Máximo 2 badges fuera del Top 3
+        let carSubHTML = '';
+        if (displayRank <= 3) {
+            const blBadgeClass = displayRank === 1 ? 'bl-badge-gold' : displayRank === 2 ? 'bl-badge-silver' : 'bl-badge-bronze';
+            carSubHTML = `
+                <div class="driver-car-sub">
+                    <span class="car-name-text">${escapeHtml(row.car || 'Vehicle')}</span>
+                    <span class="bl-chip ${blBadgeClass}">TOP #${displayRank}</span>
+                </div>
+            `;
+        } else {
+            carSubHTML = `
+                <div class="driver-car-sub">
+                    <span class="car-name-text">${escapeHtml(row.car || 'Vehicle')}</span>
+                </div>
+            `;
         }
 
         tr.innerHTML = `
@@ -1640,39 +2027,44 @@ function renderTableRows(tbodyId, dataRows) {
                     ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(row.driver) : ''}
                     <div class="driver-cell-flex">
                         <div class="driver-names-row">
-                            <span class="driver-cell-name notranslate" translate="no">${row.driver}</span>
+                            <span class="driver-cell-name notranslate" translate="no">${escapeHtml(row.driver || 'Driver')}</span>
                             ${aliasTag}
                         </div>
-                        <div class="driver-car-sub">
-                            <span class="car-name-text">${row.car || 'BMW M3 GTR'}</span>
-                            <span class="bl-chip ${blBadgeClass}">BL #${displayRank}</span>
-                            <span class="bl-chip bl-chip-gearbox">${gbDisplay}</span>
-                        </div>
+                        ${carSubHTML}
                     </div>
                 </div>
             </td>
             <td class="col-time">
-                <span class="time-stat-val">${formattedTime}</span>
+                <div class="time-cell-wrapper">
+                    <span class="time-stat-val ${timeGlowClass}">${formattedTime}</span>
+                    ${deltaHTML}
+                </div>
             </td>
             <td class="col-desktop col-car">
-                <span class="leaderboard-car-text">${row.car || '--'}</span>
+                <span class="leaderboard-car-text">${escapeHtml(row.car || '--')}</span>
             </td>
             <td class="col-desktop col-device">
-                ${window.NFS_HARDWARE ? window.NFS_HARDWARE.getPublicTagHTML(row.device) : `<span class="leaderboard-device-pill hw-public-tag"><span class="device-label">${row.device || 'Teclado'}</span></span>`}
+                ${window.NFS_HARDWARE ? window.NFS_HARDWARE.getPublicTagHTML(row.device) : `<span class="leaderboard-device-pill hw-public-tag"><span class="device-label">${escapeHtml(row.device || 'Keyboard')}</span></span>`}
             </td>
             <td class="col-desktop col-gearbox">
-                <span class="leaderboard-gearbox-pill" title="Transmisión: ${gbRaw}">
+                <span class="leaderboard-gearbox-pill" title="Gearbox: ${escapeHtml(normGearbox)}">
                     <span class="gear-icon"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="vertical-align: -1.5px; display: inline-block;"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></span>
-                    <span class="gearbox-label">${gbDisplay}</span>
+                    <span class="gearbox-label">${escapeHtml(normGearbox)}</span>
                 </span>
             </td>
             <td class="col-desktop col-date">
-                <span class="leaderboard-date-text">${row.date || '--'}</span>
+                <span class="leaderboard-date-text">${formattedDate}</span>
             </td>
             <td class="col-video" style="text-align: center;">${videoBtnHTML}</td>
         `;
         tbody.appendChild(tr);
     });
+
+    applyLeaderboardDensityClass();
+}
+
+function renderTableRows(tbodyId, dataRows) {
+    renderLeaderboardComponent(tbodyId, { data: dataRows });
 }
 
 // =======================================================
@@ -3473,22 +3865,7 @@ async function loadRemoteChampionshipWeeksData() {
         const local = localStorage.getItem('nfs_championship_weeks_data_v3');
         if (local && typeof CHAMPIONSHIP_WEEKS_DATA !== 'undefined') {
             const parsed = JSON.parse(local);
-            if (Array.isArray(parsed)) {
-                parsed.forEach((w, idx) => {
-                    if (w && idx > 0) {
-                        CHAMPIONSHIP_WEEKS_DATA[idx] = w;
-                        CHAMPIONSHIP_WEEKS_DATA[String(idx)] = w;
-                    }
-                });
-            } else if (typeof parsed === 'object') {
-                Object.keys(parsed).forEach(k => {
-                    if (parsed[k]) {
-                        CHAMPIONSHIP_WEEKS_DATA[k] = parsed[k];
-                        const n = parseInt(k, 10);
-                        if (!isNaN(n)) CHAMPIONSHIP_WEEKS_DATA[n] = parsed[k];
-                    }
-                });
-            }
+            applyNormalizedChampionshipWeeksData(CHAMPIONSHIP_WEEKS_DATA, parsed);
             if (typeof renderChampionshipGroups === 'function') {
                 renderChampionshipGroups(currentChampionshipWeek);
             }
@@ -3531,22 +3908,7 @@ async function loadRemoteChampionshipWeeksData() {
 
         if (data && typeof data === 'object' && typeof CHAMPIONSHIP_WEEKS_DATA !== 'undefined') {
             localStorage.setItem('nfs_championship_weeks_data_v3', JSON.stringify(data));
-            if (Array.isArray(data)) {
-                data.forEach((w, idx) => {
-                    if (w && idx > 0) {
-                        CHAMPIONSHIP_WEEKS_DATA[idx] = w;
-                        CHAMPIONSHIP_WEEKS_DATA[String(idx)] = w;
-                    }
-                });
-            } else {
-                Object.keys(data).forEach(k => {
-                    if (data[k]) {
-                        CHAMPIONSHIP_WEEKS_DATA[k] = data[k];
-                        const n = parseInt(k, 10);
-                        if (!isNaN(n)) CHAMPIONSHIP_WEEKS_DATA[n] = data[k];
-                    }
-                });
-            }
+            applyNormalizedChampionshipWeeksData(CHAMPIONSHIP_WEEKS_DATA, data);
             if (typeof renderChampionshipGroups === 'function') {
                 renderChampionshipGroups(currentChampionshipWeek);
             }
@@ -3566,22 +3928,7 @@ async function loadRemoteChampionshipWeeksData() {
                     if (snap.exists()) {
                         const val = snap.val();
                         if (val && typeof val === 'object' && typeof CHAMPIONSHIP_WEEKS_DATA !== 'undefined') {
-                            if (Array.isArray(val)) {
-                                val.forEach((w, idx) => {
-                                    if (w && idx > 0) {
-                                        CHAMPIONSHIP_WEEKS_DATA[idx] = w;
-                                        CHAMPIONSHIP_WEEKS_DATA[String(idx)] = w;
-                                    }
-                                });
-                            } else {
-                                Object.keys(val).forEach(k => {
-                                    if (val[k]) {
-                                        CHAMPIONSHIP_WEEKS_DATA[k] = val[k];
-                                        const n = parseInt(k, 10);
-                                        if (!isNaN(n)) CHAMPIONSHIP_WEEKS_DATA[n] = val[k];
-                                    }
-                                });
-                            }
+                            applyNormalizedChampionshipWeeksData(CHAMPIONSHIP_WEEKS_DATA, val);
                             localStorage.setItem('nfs_championship_weeks_data_v3', JSON.stringify(val));
                             if (typeof syncBlacklistWithRotationsAndStandings === 'function') {
                                 syncBlacklistWithRotationsAndStandings();
@@ -3679,7 +4026,9 @@ function calculateDriverPoints(driver) {
     const p2Pts = (v.p2 || 0) * 18;
     const p3Pts = (v.p3 || 0) * 15;
     const p4Pts = (v.p4 || 0) * 12;
-    const bonusPts = ((bt.first || 0) * 100) + ((bt.second || 0) * 50) + ((bt.third || 0) * 20);
+    const bonusPts = (typeof driver.bonusPoints === 'number')
+        ? driver.bonusPoints
+        : (((bt.first || 0) * 100) + ((bt.second || 0) * 50) + ((bt.third || 0) * 20));
     const repPts = Math.floor((driver.rep || 0) / 10000);
     return p1Pts + p2Pts + p3Pts + p4Pts + bonusPts + repPts;
 }
@@ -3885,13 +4234,128 @@ function renderChampionshipGroups(weekNumber) {
     });
 }
 
+let currentChampionshipGroupTab = 0;
+
+function selectChampionshipGroupTab(grpIdx) {
+    currentChampionshipGroupTab = grpIdx;
+    renderChampionshipChallenges(currentChampionshipWeek);
+}
+
+/**
+ * Retorna el SVG de la medalla de podio (1º Oro, 2º Plata, 3º Bronce).
+ */
+function getChampionshipPodiumMedalSvg(pos) {
+    if (pos === 1) {
+        return `
+            <svg class="podium-medal-svg medal-gold" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg" title="1º Puesto" aria-label="1º Puesto">
+                <circle cx="13" cy="13" r="11" fill="url(#chGoldMedalGrad)" stroke="#FFE875" stroke-width="1.3"/>
+                <circle cx="13" cy="13" r="8.5" fill="#15161b" stroke="#FFD700" stroke-width="0.8"/>
+                <text x="13" y="17.2" text-anchor="middle" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="12" fill="#FFD700">1</text>
+            </svg>
+        `.trim();
+    } else if (pos === 2) {
+        return `
+            <svg class="podium-medal-svg medal-silver" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg" title="2º Puesto" aria-label="2º Puesto">
+                <circle cx="13" cy="13" r="11" fill="url(#chSilverMedalGrad)" stroke="#FFFFFF" stroke-width="1.3"/>
+                <circle cx="13" cy="13" r="8.5" fill="#15161b" stroke="#CBD5E1" stroke-width="0.8"/>
+                <text x="13" y="17.2" text-anchor="middle" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="12" fill="#E2E8F0">2</text>
+            </svg>
+        `.trim();
+    } else {
+        return `
+            <svg class="podium-medal-svg medal-bronze" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg" title="3º Puesto" aria-label="3º Puesto">
+                <circle cx="13" cy="13" r="11" fill="url(#chBronzeMedalGrad)" stroke="#FFA05C" stroke-width="1.3"/>
+                <circle cx="13" cy="13" r="8.5" fill="#15161b" stroke="#CD7F32" stroke-width="0.8"/>
+                <text x="13" y="17.2" text-anchor="middle" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="12" fill="#CD7F32">3</text>
+            </svg>
+        `.trim();
+    }
+}
+
+/**
+ * Retorna el SVG vectorial para los puntos de bono (+PTS).
+ */
+function getChampionshipPointsSvg() {
+    return `
+        <svg class="ch-badge-icon pts-svg" viewBox="0 0 16 16" fill="currentColor" width="12" height="12" aria-hidden="true">
+            <path d="M8 1L10.16 5.38L15 6.09L11.5 9.5L12.33 14.32L8 12.04L3.67 14.32L4.5 9.5L1 6.09L5.84 5.38L8 1Z"/>
+        </svg>
+    `.trim();
+}
+
+/**
+ * Retorna el SVG vectorial para el dinero de reputación ($ REP).
+ */
+function getChampionshipRepSvg() {
+    return `
+        <svg class="ch-badge-icon rep-svg" viewBox="0 0 16 16" fill="currentColor" width="13" height="13" aria-hidden="true">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M1.5 3.5C1.5 2.67 2.17 2 3 2H13C13.83 2 14.5 2.67 14.5 3.5V11.5C14.5 12.33 13.83 13 13 13H3C2.17 13 1.5 12.33 1.5 11.5V3.5ZM3 3.5H13V11.5H3V3.5ZM8 10C9.38 10 10.5 8.88 10.5 7.5C10.5 6.12 9.38 5 8 5C6.62 5 5.5 6.12 5.5 7.5C5.5 8.88 6.62 10 8 10ZM8 8.8C8.72 8.8 9.3 8.22 9.3 7.5C9.3 6.78 8.72 6.2 8 6.2C7.28 6.2 6.7 6.78 6.7 7.5C6.7 8.22 7.28 8.8 8 8.8ZM3.8 5C4.24 5 4.6 4.64 4.6 4.2C4.6 3.76 4.24 3.4 3.8 3.4C3.36 3.4 3 3.76 3 4.2C3 4.64 3.36 5 3.8 5ZM12.2 11.6C12.64 11.6 13 11.24 13 10.8C13 10.36 12.64 10 12.2 10C11.76 10 11.4 10.36 11.4 10.8C11.4 11.24 11.76 11.6 12.2 11.6Z"/>
+        </svg>
+    `.trim();
+}
+
 function renderChampionshipChallenges(weekNumber) {
     const container = document.getElementById('champ-challenges-grid');
     if (!container) return;
 
     if (typeof CHAMPIONSHIP_WEEKS_DATA === 'undefined') return;
-    const weekData = CHAMPIONSHIP_WEEKS_DATA[weekNumber] || CHAMPIONSHIP_WEEKS_DATA[1];
+    const weekData = CHAMPIONSHIP_WEEKS_DATA[weekNumber] || CHAMPIONSHIP_WEEKS_DATA[String(weekNumber)] || CHAMPIONSHIP_WEEKS_DATA[1];
     if (!weekData || !weekData.challenges) return;
+
+    // Asegurar defs globales de gradientes SVG para las medallas
+    if (!document.getElementById('champ-svg-defs')) {
+        const svgDefs = document.createElement('div');
+        svgDefs.id = 'champ-svg-defs';
+        svgDefs.style.display = 'none';
+        svgDefs.innerHTML = `
+            <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" aria-hidden="true">
+                <defs>
+                    <linearGradient id="chGoldMedalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#FFF275" />
+                        <stop offset="50%" stop-color="#FFD700" />
+                        <stop offset="100%" stop-color="#B45309" />
+                    </linearGradient>
+                    <linearGradient id="chSilverMedalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#FFFFFF" />
+                        <stop offset="50%" stop-color="#CBD5E1" />
+                        <stop offset="100%" stop-color="#64748B" />
+                    </linearGradient>
+                    <linearGradient id="chBronzeMedalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#FFB37C" />
+                        <stop offset="50%" stop-color="#CD7F32" />
+                        <stop offset="100%" stop-color="#7C2D12" />
+                    </linearGradient>
+                </defs>
+            </svg>
+        `;
+        document.body.appendChild(svgDefs);
+    }
+
+    // Renderizar Filtro de Grupos
+    const filterContainer = document.getElementById('champ-challenges-group-filter');
+    const groups = (weekData.groups && Array.isArray(weekData.groups) && weekData.groups.length > 0)
+        ? weekData.groups
+        : [];
+
+    if (currentChampionshipGroupTab >= groups.length) {
+        currentChampionshipGroupTab = 0;
+    }
+
+    if (filterContainer && groups.length > 0) {
+        filterContainer.innerHTML = groups.map((grp, grpIdx) => {
+            const isActive = grpIdx === currentChampionshipGroupTab;
+            const icons = ["🔥", "⚡", "⚔️", "🎯", "👑", "🏁", "💨", "🛡️"];
+            const icon = icons[grpIdx % icons.length];
+            return `
+                <button type="button" class="champ-group-filter-btn ${isActive ? 'active' : ''}" onclick="selectChampionshipGroupTab(${grpIdx})">
+                    <span>${icon}</span> ${escapeHtml(grp.name)}
+                </button>
+            `;
+        }).join('');
+    }
+
+    const activeGrp = groups[currentChampionshipGroupTab] || { name: 'Grupo Alfa' };
+    const grpName = activeGrp.name || `Grupo #${currentChampionshipGroupTab + 1}`;
 
     container.innerHTML = '';
 
@@ -3899,25 +4363,97 @@ function renderChampionshipChallenges(weekNumber) {
         const card = document.createElement('div');
         card.className = 'champ-challenge-card';
 
+        let top3 = null;
+        if (ch.groupsWinners && ch.groupsWinners[currentChampionshipGroupTab]) {
+            top3 = ch.groupsWinners[currentChampionshipGroupTab];
+        } else if (ch.groupsWinners && ch.groupsWinners[grpName]) {
+            top3 = ch.groupsWinners[grpName];
+        } else if (ch.groupsResults && ch.groupsResults[grpName]) {
+            top3 = ch.groupsResults[grpName];
+        } else if (ch.groupsResults && ch.groupsResults[currentChampionshipGroupTab]) {
+            top3 = ch.groupsResults[currentChampionshipGroupTab];
+        } else if (currentChampionshipGroupTab === 0 && Array.isArray(ch.top3) && ch.top3.length > 0) {
+            top3 = ch.top3;
+        }
+
+        if (!top3 || !Array.isArray(top3)) {
+            top3 = ch.top3 || [];
+        }
+
         let top3Html = '';
-        ch.top3.forEach((t, tIdx) => {
+        top3.forEach((t, tIdx) => {
             const rowClass = tIdx === 0 ? 'podium-row-1' : tIdx === 1 ? 'podium-row-2' : 'podium-row-3';
-            const bonusClass = tIdx === 0 ? 'bonus-100' : tIdx === 1 ? 'bonus-50' : 'bonus-20';
-            const repBadgeText = t.repBadge || (t.repMoney ? `💰 $${t.repMoney.toLocaleString()} REP` : '');
+            const bonusClass = tIdx === 0 ? 'badge-bonus-100 bonus-100' : tIdx === 1 ? 'badge-bonus-50 bonus-50' : 'badge-bonus-20 bonus-20';
             const defaultPending = window.nfsI18n ? window.nfsI18n.t('champ_pending_driver') : 'Por disputar';
-            const pilotDisplay = (t.pilot === 'Por disputar' || !t.pilot) ? defaultPending : t.pilot;
+            const isPending = !t.pilot || t.pilot === 'Por disputar' || t.pilot === defaultPending;
+            const pilotDisplay = isPending ? defaultPending : t.pilot;
+
+            // Formato limpio de puntos de bono (sin emojis)
+            let bonusPtsFormatted = '';
+            if (typeof t.bonus === 'number') {
+                bonusPtsFormatted = `+${t.bonus} PTS`;
+            } else if (t.badge) {
+                const cleanPts = t.badge.replace(/[🥇🥈🥉👑🔥⚡💰]/g, '').trim();
+                bonusPtsFormatted = cleanPts.toUpperCase().includes('PTS') ? cleanPts : `+${cleanPts} PTS`;
+            } else {
+                const defaultBonus = tIdx === 0 ? 100 : tIdx === 1 ? 50 : 20;
+                bonusPtsFormatted = `+${defaultBonus} PTS`;
+            }
+
+            // Formato limpio de dinero REP (sin emojis)
+            let repFormatted = '';
+            if (typeof t.repMoney === 'number') {
+                repFormatted = `$${t.repMoney.toLocaleString('de-DE')} REP`;
+            } else if (t.repBadge) {
+                const cleanRep = t.repBadge.replace(/[💰$REP\s]/g, '').trim();
+                repFormatted = cleanRep ? `$${cleanRep} REP` : '$0 REP';
+            } else {
+                repFormatted = '$0 REP';
+            }
+
+            // Badge de operador SVG personalizado del piloto
+            let opBadgeHtml = '';
+            if (window.NFSOperators && !isPending) {
+                opBadgeHtml = window.NFSOperators.getOperatorBadgeHTML(pilotDisplay, 'champ-podium-op');
+            } else {
+                opBadgeHtml = `
+                    <div class="operator-badge-box champ-podium-op pending-op" title="${escapeHtml(pilotDisplay)}" style="--op-color: #64748b; --op-bg: linear-gradient(135deg, rgba(100, 116, 139, 0.25) 0%, #121316 100%);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="8" r="4.5"/>
+                            <path d="M4 20C4 16 7.6 13.5 12 13.5C16.4 13.5 20 16 20 20"/>
+                        </svg>
+                    </div>
+                `.trim();
+            }
+
+            const carHtml = t.car ? `<span class="podium-pilot-car">• ${escapeHtml(t.car)}</span>` : '';
+            const timeDisplay = t.time || '--:--.---';
 
             top3Html += `
                 <div class="champ-ch-podium-row ${rowClass}">
-                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                        <span class="badge-bonus ${bonusClass}">${t.badge}</span>
-                        ${repBadgeText ? `<span class="badge-rep-money">${repBadgeText}</span>` : ''}
-                        <div>
-                            <span class="notranslate" translate="no" style="font-weight: 700; color: #ffffff;">${pilotDisplay}</span>
-                            ${t.car ? `<span style="color: var(--text-muted); font-size: 8.9px; margin-left: 4px;">• ${t.car}</span>` : ''}
+                    <div class="podium-top-row">
+                        <div class="podium-pilot-col">
+                            ${getChampionshipPodiumMedalSvg(tIdx + 1)}
+                            ${opBadgeHtml}
+                            <div class="podium-names-col">
+                                <span class="podium-pilot-name notranslate" translate="no">${escapeHtml(pilotDisplay)}</span>
+                                ${carHtml}
+                            </div>
+                        </div>
+                        <div class="podium-time-col">
+                            <span class="podium-time-val">${escapeHtml(timeDisplay)}</span>
                         </div>
                     </div>
-                    <span style="font-family: var(--font-mono); font-weight: 700; color: var(--cyan-electric); font-size: 10.5px;">${t.time || '--:--.---'}</span>
+                    <div class="podium-bottom-row">
+                        <span class="badge-bonus ${bonusClass}">
+                            ${getChampionshipPointsSvg()}
+                            <span>${escapeHtml(bonusPtsFormatted)}</span>
+                        </span>
+                        <span class="badge-rep-money">
+                            ${getChampionshipRepSvg()}
+                            <span>${escapeHtml(repFormatted)}</span>
+                        </span>
+                    </div>
                 </div>
             `;
         });
@@ -3925,16 +4461,21 @@ function renderChampionshipChallenges(weekNumber) {
         const restrictionLabel = window.nfsI18n ? window.nfsI18n.t('champ_restriction_label') : 'AUTO RESTRICTIVO:';
         const restrictionHtml = ch.carRestriction ? `
             <div class="champ-ch-restriction">
-                <span style="color: var(--nfs-orange); font-size: 13px;">🚗</span>
+                <svg class="ch-car-svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true">
+                    <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5H6.5C5.84 5 5.28 5.42 5.08 6.01L3 12V20C3 20.55 3.45 21 4 21H5C5.55 21 6 20.55 6 20V19H18V20C18 20.55 18.45 21 19 21H20C20.55 21 21 20.55 21 20V12L18.92 6.01ZM6.85 7H17.14L18.22 10.11H5.77L6.85 7ZM19 17H5V12H19V17ZM7.5 16C8.33 16 9 15.33 9 14.5C9 13.67 8.33 13 7.5 13C6.67 13 6 13.67 6 14.5C6 15.33 15.67 16 7.5 16ZM16.5 16C17.33 16 18 15.33 18 14.5C18 13.67 17.33 13 16.5 13C15.67 13 15 13.67 15 14.5C15 15.33 15.67 16 16.5 16Z"/>
+                </svg>
                 <span class="restriction-label">${restrictionLabel}</span>
-                <span class="restriction-car">${ch.carRestriction}</span>
+                <span class="restriction-car">${escapeHtml(ch.carRestriction)}</span>
             </div>
         ` : '';
 
         card.innerHTML = `
             <div class="champ-ch-header">
-                <span class="champ-ch-title">#0${idx + 1} ${ch.route}</span>
-                <span class="champ-ch-type">${ch.type.toUpperCase()}</span>
+                <div style="display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;">
+                    <span class="champ-ch-title">#0${idx + 1} ${escapeHtml(ch.route)}</span>
+                    <span style="font-size: 9.5px; color: var(--nfs-orange); font-weight: 700; background: rgba(255,119,0,0.12); padding: 1px 6px; border-radius: 4px; border: 1px solid rgba(255,119,0,0.3);">${escapeHtml(grpName)}</span>
+                </div>
+                <span class="champ-ch-type">${escapeHtml((ch.type || 'Circuito').toUpperCase())}</span>
             </div>
             ${restrictionHtml}
             <div class="champ-ch-podiums">
@@ -3977,6 +4518,28 @@ function getSortedBlacklistDrivers() {
 }
 
 /**
+ * Determina si una marca de tiempo representa una participación nula o no registrada:
+ * cadenas vacías, marcadores de posición ("--:--.---", "DNS", "DNF", "TBD"),
+ * o ceros absolutos ("00:00:00", "00:00.000", "0:00.000", etc.).
+ */
+function isZeroOrNullTime(timeStr) {
+    if (!timeStr) return true;
+    const clean = String(timeStr).trim().toUpperCase();
+    if (clean === '' || clean === '--:--.---' || clean === '--:--:--' || clean === '--:--' || clean === '--' || clean === '-' ||
+        clean === '00:00.000' || clean === '00:00:00' || clean === '00:00' || clean === '0:00.000' || clean === '0:00:00' ||
+        clean === '0' || clean === '0.0' || clean === '00.00' ||
+        clean === 'DNS' || clean === 'DNF' || clean === 'DSQ' || clean === 'TBD' ||
+        clean === 'NULO' || clean === 'NULL' || clean === 'NONE' || clean === 'POR DISPUTAR' || clean === 'EN ESPERA') {
+        return true;
+    }
+    const digitsOnly = clean.replace(/[^0-9]/g, '');
+    if (digitsOnly.length > 0 && digitsOnly.split('').every(ch => ch === '0')) {
+        return true;
+    }
+    return false;
+}
+
+/**
  * Sincroniza e indexa las Fichas Técnicas y la Clasificación General con los ganadores de los desafíos
  * de las rotaciones semanales (CHAMPIONSHIP_WEEKS_DATA) o datos en vivo de competición guardados en admin.html.
  */
@@ -3987,6 +4550,7 @@ function syncBlacklistWithRotationsAndStandings() {
     blacklistDrivers.forEach(d => {
         d.victories = { p1: 0, p2: 0, p3: 0, p4: 0 };
         d.bestTimes = { first: 0, second: 0, third: 0 };
+        d.bonusPoints = 0;
         d.rep = 0;
         d.lastChallengeId = null;
     });
@@ -3998,43 +4562,107 @@ function syncBlacklistWithRotationsAndStandings() {
         if (!weekData || !Array.isArray(weekData.challenges)) return;
 
         weekData.challenges.forEach(ch => {
-            if (!ch.top3 || !Array.isArray(ch.top3)) return;
+            let groupsToProcess = [];
+            if (Array.isArray(weekData.groups) && weekData.groups.length > 0) {
+                weekData.groups.forEach((grp, grpIdx) => {
+                    const grpName = grp.name || `Grupo #${grpIdx + 1}`;
+                    let grpTop3 = null;
+                    if (ch.groupsWinners) {
+                        grpTop3 = ch.groupsWinners[grpIdx] || ch.groupsWinners[grpName] || ch.groupsWinners[String(grpIdx)];
+                    }
+                    if (!grpTop3 && ch.groupsResults) {
+                        grpTop3 = ch.groupsResults[grpName] || ch.groupsResults[grpIdx] || ch.groupsResults[String(grpIdx)];
+                    }
+                    if (!grpTop3 && grpIdx === 0 && Array.isArray(ch.top3)) {
+                        grpTop3 = ch.top3;
+                    }
+                    if (Array.isArray(grpTop3) && grpTop3.length > 0) {
+                        groupsToProcess.push(grpTop3);
+                    }
+                });
+            }
 
-            ch.top3.forEach((t, posIdx) => {
-                if (!t || !t.pilot || t.pilot === 'Por disputar' || t.pilot === 'En espera') return;
-                const driver = findBlacklistDriver(t.pilot);
-                if (!driver) return;
+            if (groupsToProcess.length === 0) {
+                const sourceMap = ch.groupsWinners || ch.groupsResults;
+                if (sourceMap && typeof sourceMap === 'object') {
+                    const numKeys = Object.keys(sourceMap).filter(k => !isNaN(parseInt(k, 10)));
+                    const targetKeys = numKeys.length > 0 ? numKeys : Object.keys(sourceMap);
+                    targetKeys.forEach(k => {
+                        if (Array.isArray(sourceMap[k]) && sourceMap[k].length > 0) {
+                            groupsToProcess.push(sourceMap[k]);
+                        }
+                    });
+                } else if (Array.isArray(ch.top3)) {
+                    groupsToProcess.push(ch.top3);
+                }
+            }
 
-                driver.lastChallengeId = ch.id;
+            groupsToProcess.forEach(top3List => {
+                if (!Array.isArray(top3List)) return;
 
-                // Recompensa en Dinero ($ REP)
-                const repMoney = parseInt(t.repMoney, 10) || 0;
-                if (repMoney > 0) {
+                top3List.forEach((t, posIdx) => {
+                    if (!t || !t.pilot || t.pilot === 'Por disputar' || t.pilot === 'En espera') return;
+                    const driver = findBlacklistDriver(t.pilot);
+                    if (!driver) return;
+
+                    const time = (t.time || '').trim();
+                    const isNullTime = isZeroOrNullTime(time);
+
+                    // Recompensa en Dinero ($ REP) - preservando 0 y valores personalizados
+                    let repMoney = 0;
+                    if (t.repMoney !== undefined && t.repMoney !== null && t.repMoney !== '') {
+                        const parsedR = parseInt(t.repMoney, 10);
+                        repMoney = isNaN(parsedR) ? 0 : parsedR;
+                    } else if (!isNullTime) {
+                        repMoney = posIdx === 0 ? 400000 : (posIdx === 1 ? 250000 : (posIdx === 2 ? 120000 : 0));
+                    }
+
+                    // Bono de Puntos - preservando 0 y valores personalizados
+                    let bonusVal = 0;
+                    if (t.bonus !== undefined && t.bonus !== null && t.bonus !== '') {
+                        const parsedB = parseInt(t.bonus, 10);
+                        bonusVal = isNaN(parsedB) ? 0 : parsedB;
+                    } else if (!isNullTime) {
+                        bonusVal = posIdx === 0 ? 100 : (posIdx === 1 ? 50 : (posIdx === 2 ? 20 : 0));
+                    }
+
+                    // Criterio de Participación Nula:
+                    // 1. Si el tiempo es nulo/cero y bonos/rep son 0 -> Participación nula total (no suma nada).
+                    // 2. Si posIdx > 0 (2°, 3°, 4° puesto) y el tiempo es nulo -> No suma victorias ni puntos de posición.
+                    const isNullParticipation = (isNullTime && bonusVal === 0 && repMoney === 0) || (posIdx > 0 && isNullTime);
+
+                    if (isNullParticipation) {
+                        // Si se asignó bono o rep manual explícito a una posición con tiempo nulo, acumularlo
+                        if (bonusVal > 0) driver.bonusPoints = (driver.bonusPoints || 0) + bonusVal;
+                        if (repMoney > 0) driver.rep = (driver.rep || 0) + repMoney;
+                        // Pero NO sumar victorias ni podios
+                        return;
+                    }
+
+                    driver.lastChallengeId = ch.id;
                     driver.rep = (driver.rep || 0) + repMoney;
-                }
+                    driver.bonusPoints = (driver.bonusPoints || 0) + bonusVal;
 
-                // Posiciones y Victorias (P1=25, P2=18, P3=15, P4=12)
-                // y Bonos de Mejor Tiempo (1°=100, 2°=50, 3°=20)
-                const bonusVal = parseInt(t.bonus, 10);
-
-                if (posIdx === 0) {
-                    driver.victories.p1 = (driver.victories.p1 || 0) + 1;
-                    if (bonusVal >= 100 || isNaN(bonusVal)) {
-                        driver.bestTimes.first = (driver.bestTimes.first || 0) + 1;
+                    // Posiciones y Victorias (P1=25, P2=18, P3=15, P4=12)
+                    if (posIdx === 0) {
+                        // El 1° puesto cuenta como victoria P1 si tiene tiempo válido O si se asignó bono/rep (victoria otorgada en comisaría)
+                        if (!isNullTime || bonusVal > 0 || repMoney > 0) {
+                            driver.victories.p1 = (driver.victories.p1 || 0) + 1;
+                            if (bonusVal > 0) driver.bestTimes.first = (driver.bestTimes.first || 0) + 1;
+                        }
+                    } else if (!isNullTime) {
+                        // Para 2°, 3° o 4° puesto solo se computa podio si compitió efectivamente (tiempo válido)
+                        if (posIdx === 1) {
+                            driver.victories.p2 = (driver.victories.p2 || 0) + 1;
+                            if (bonusVal > 0) driver.bestTimes.second = (driver.bestTimes.second || 0) + 1;
+                        } else if (posIdx === 2) {
+                            driver.victories.p3 = (driver.victories.p3 || 0) + 1;
+                            if (bonusVal > 0) driver.bestTimes.third = (driver.bestTimes.third || 0) + 1;
+                        } else if (posIdx === 3) {
+                            driver.victories.p4 = (driver.victories.p4 || 0) + 1;
+                        }
                     }
-                } else if (posIdx === 1) {
-                    driver.victories.p2 = (driver.victories.p2 || 0) + 1;
-                    if (bonusVal >= 50 || isNaN(bonusVal)) {
-                        driver.bestTimes.second = (driver.bestTimes.second || 0) + 1;
-                    }
-                } else if (posIdx === 2) {
-                    driver.victories.p3 = (driver.victories.p3 || 0) + 1;
-                    if (bonusVal >= 20 || isNaN(bonusVal)) {
-                        driver.bestTimes.third = (driver.bestTimes.third || 0) + 1;
-                    }
-                } else if (posIdx === 3) {
-                    driver.victories.p4 = (driver.victories.p4 || 0) + 1;
-                }
+                });
             });
         });
     });
@@ -4066,22 +4694,27 @@ function updatePilotScoreFromChallenge(pilotIdentifier, placement, bonusPts = 0,
     if (!driver.victories) driver.victories = { p1: 0, p2: 0, p3: 0, p4: 0 };
     if (!driver.bestTimes) driver.bestTimes = { first: 0, second: 0, third: 0 };
 
+    const b = (bonusPts !== undefined && bonusPts !== null && bonusPts !== '') ? parseInt(bonusPts, 10) : 0;
+    const safeBonus = isNaN(b) ? 0 : b;
+
+    const r = (repMoney !== undefined && repMoney !== null && repMoney !== '') ? parseInt(repMoney, 10) : 0;
+    const safeRep = isNaN(r) ? 0 : r;
+
     if (placement === 1) {
         driver.victories.p1 = (driver.victories.p1 || 0) + 1;
-        if (bonusPts >= 100) driver.bestTimes.first = (driver.bestTimes.first || 0) + 1;
+        if (safeBonus > 0) driver.bestTimes.first = (driver.bestTimes.first || 0) + 1;
     } else if (placement === 2) {
         driver.victories.p2 = (driver.victories.p2 || 0) + 1;
-        if (bonusPts >= 50) driver.bestTimes.second = (driver.bestTimes.second || 0) + 1;
+        if (safeBonus > 0) driver.bestTimes.second = (driver.bestTimes.second || 0) + 1;
     } else if (placement === 3) {
         driver.victories.p3 = (driver.victories.p3 || 0) + 1;
-        if (bonusPts >= 20) driver.bestTimes.third = (driver.bestTimes.third || 0) + 1;
+        if (safeBonus > 0) driver.bestTimes.third = (driver.bestTimes.third || 0) + 1;
     } else if (placement === 4) {
         driver.victories.p4 = (driver.victories.p4 || 0) + 1;
     }
 
-    if (repMoney > 0) {
-        driver.rep = (driver.rep || 0) + repMoney;
-    }
+    driver.bonusPoints = (driver.bonusPoints || 0) + safeBonus;
+    driver.rep = (driver.rep || 0) + safeRep;
 
     saveBlacklistData();
     renderBlacklistUI();
@@ -4118,11 +4751,11 @@ function renderBlacklistUI() {
     const totalRep = blacklistDrivers.reduce((sum, d) => sum + (d.rep || 0), 0);
     const totalRepEl = document.getElementById('bl-summary-rep');
     if (totalRepEl) {
-        totalRepEl.textContent = `$${totalRep.toLocaleString()}`;
+        totalRepEl.textContent = `$${totalRep.toLocaleString('de-DE')}`;
     }
     const repStandingsEl = document.getElementById('bl-standings-rep');
     if (repStandingsEl) {
-        repStandingsEl.textContent = `$${totalRep.toLocaleString()}`;
+        repStandingsEl.textContent = `$${totalRep.toLocaleString('de-DE')}`;
     }
     const pilotsCountEl = document.getElementById('bl-standings-pilots-count');
     if (pilotsCountEl) {
@@ -4153,6 +4786,9 @@ function renderBlacklistUI() {
         const totalPts = calculateDriverPoints(driver);
         const groupName = getDriverGroupForWeek(driver, currentChampionshipWeek);
         const bt = driver.bestTimes || { first: 0, second: 0, third: 0 };
+        const bonusPtsTotal = (typeof driver.bonusPoints === 'number')
+            ? driver.bonusPoints
+            : (((bt.first || 0) * 100) + ((bt.second || 0) * 50) + ((bt.third || 0) * 20));
         const blBadgeClass = standingRank === 1 ? 'bl-badge-gold' : standingRank === 2 ? 'bl-badge-silver' : standingRank === 3 ? 'bl-badge-bronze' : '';
 
         tr.innerHTML = `
@@ -4177,21 +4813,20 @@ function renderBlacklistUI() {
                 <span style="color: #ffffff; font-weight: 600;">${driver.ride}</span>
             </td>
             <td>
-                <span class="rep-money-cell">$${(driver.rep || 0).toLocaleString()}</span>
+                <span class="rep-money-cell">$${(driver.rep || 0).toLocaleString('de-DE')}</span>
             </td>
             <td style="color: #ffd700; font-weight: 800; font-family: var(--font-mono);">${driver.victories?.p1 || 0}</td>
             <td style="color: #e2e8f0; font-weight: 800; font-family: var(--font-mono);">${driver.victories?.p2 || 0}</td>
             <td style="color: #cd7f32; font-weight: 800; font-family: var(--font-mono);">${driver.victories?.p3 || 0}</td>
             <td style="color: #38bdf8; font-weight: 800; font-family: var(--font-mono);">${driver.victories?.p4 || 0}</td>
             <td>
-                <div class="bonus-summary-cell">
-                    <span class="mini-bonus-pill badge-bonus-100" title="1° Mejor Tiempo (+100 PTS)">🥇 ${bt.first || 0}</span>
-                    <span class="mini-bonus-pill badge-bonus-50" title="2° Mejor Tiempo (+50 PTS)">🥈 ${bt.second || 0}</span>
-                    <span class="mini-bonus-pill badge-bonus-20" title="3° Mejor Tiempo (+20 PTS)">🥉 ${bt.third || 0}</span>
-                </div>
+                ${bonusPtsTotal > 0
+                    ? `<span class="champ-time-bonus-pill">+${bonusPtsTotal.toLocaleString('de-DE')} PTS</span>`
+                    : `<span class="champ-time-bonus-pill zero">0 PTS</span>`
+                }
             </td>
             <td>
-                <span class="pts-cell">${totalPts.toLocaleString()} PTS</span>
+                <span class="pts-cell">${totalPts.toLocaleString('de-DE')} PTS</span>
             </td>
             <td>
                 <span class="champ-group-tag">${groupName}</span>
@@ -4203,6 +4838,13 @@ function renderBlacklistUI() {
 
         tbody.appendChild(tr);
     });
+
+    // Renderizar la lista de Fichas Técnicas Horizontales para la Clasificación General
+    renderStandingsHorizontalCards(sortedDrivers);
+
+    // Inicializar o aplicar modo de vista (Fichas Horizontales por defecto)
+    const savedMode = localStorage.getItem('nfs_standings_display_mode') || 'cards';
+    setStandingsDisplayMode(savedMode);
 
     // Actualizar la Ficha Táctica seleccionada
     updateBlacklistTacticalCard();
@@ -4219,7 +4861,14 @@ function selectBlacklistPilot(rank) {
         r.classList.toggle('active-row', rRank === rank);
     });
 
-    // Actualizar selecciÃ³n en grupos de carrera
+    // Actualizar tarjeta horizontal activa
+    const cards = document.querySelectorAll('.blacklist-horizontal-card');
+    cards.forEach(c => {
+        const cRank = parseInt(c.getAttribute('data-rank'), 10);
+        c.classList.toggle('active-card', cRank === rank);
+    });
+
+    // Actualizar selección en grupos de carrera
     document.querySelectorAll('.champ-group-pilot-item').forEach(el => {
         const rankSpan = el.querySelector('.bl-rank-badge');
         if (rankSpan && rankSpan.textContent.trim() === `${rank}`) {
@@ -4264,8 +4913,8 @@ function updateBlacklistTacticalCard() {
     if (groupEl) groupEl.textContent = `${groupName} (Semana ${currentChampionshipWeek})`;
     if (bioEl) bioEl.textContent = driver.bio;
     if (sigEl) sigEl.textContent = driver.signature || driver.alias.toUpperCase();
-    if (repEl) repEl.textContent = `$${(driver.rep || 0).toLocaleString()}`;
-    if (ptsEl) ptsEl.textContent = `${calculateDriverPoints(driver).toLocaleString()} PTS`;
+    if (repEl) repEl.textContent = `$${(driver.rep || 0).toLocaleString('de-DE')}`;
+    if (ptsEl) ptsEl.textContent = `${calculateDriverPoints(driver).toLocaleString('de-DE')} PTS`;
 
     if (b1El) b1El.textContent = `${bt.first || 0} ${bt.first === 1 ? 'vez' : 'veces'}`;
     if (b2El) b2El.textContent = `${bt.second || 0} ${bt.second === 1 ? 'vez' : 'veces'}`;
@@ -4281,7 +4930,7 @@ function renderAllTacticalCards() {
     const container = document.getElementById('blacklist-cards-grid');
     if (!container) return;
 
-    // Ordenar explÃ­citamente segÃºn la ClasificaciÃ³n General del Campeonato (1 al 15+)
+    // Ordenar explícitamente según la Clasificación General del Campeonato (1 al 15+)
     const sorted = getSortedBlacklistDrivers();
 
     container.innerHTML = '';
@@ -4339,63 +4988,63 @@ function renderAllTacticalCards() {
                 <p class="bio-text">${driver.bio}</p>
                 <div class="bio-bracket-bottom"></div>
                 <div class="tactical-signature notranslate" translate="no">${driver.signature || driver.alias.toUpperCase()}</div>
-                ${driver.youtube ? `
-                <div style="margin-top: 10px;">
-                    <a href="${driver.youtube}" target="_blank" rel="noopener noreferrer" class="tactical-yt-btn">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; margin-right: 4px;"><path d="M8 5v14l11-7z"/></svg> ${window.nfsI18n ? window.nfsI18n.t('promo_video_watch') : 'Watch Channel / YouTube Video'}
-                    </a>
-                </div>
-                ` : ''}
             </div>
+            ${driver.youtube ? `
+            <div class="tactical-yt-container" style="margin: -10px 0 16px 0; text-align: left;">
+                <a href="${driver.youtube}" target="_blank" rel="noopener noreferrer" class="tactical-yt-btn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; margin-right: 4px;"><path d="M8 5v14l11-7z"/></svg> ${window.nfsI18n ? window.nfsI18n.t('promo_video_watch') : 'Ver Canal de YouTube'}
+                </a>
+            </div>
+            ` : ''}
 
             <div class="tactical-metrics-grid">
                 <div class="metric-box rep-box">
-                    <span class="metric-label">DINERO DE REPUTACIÃ“N ($ REP)</span>
-                    <span class="metric-value rep-val">$${(driver.rep || 0).toLocaleString()}</span>
+                    <span class="metric-label">DINERO DE REPUTACIÓN ($ REP)</span>
+                    <span class="metric-value rep-val">$${(driver.rep || 0).toLocaleString('de-DE')}</span>
                 </div>
                 <div class="metric-box pts-box">
                     <span class="metric-label">PUNTOS TOTALES (SCORE)</span>
-                    <span class="metric-value">${totalPts.toLocaleString()} PTS</span>
+                    <span class="metric-value">${totalPts.toLocaleString('de-DE')} PTS</span>
                 </div>
             </div>
 
             <div class="tactical-bonuses-row">
                 <div class="bonus-chip chip-b1">
-                    <span class="bonus-tag">ðŸ¥‡ 1Â° MEJOR (+100)</span>
+                    <span class="bonus-tag">1° MEJOR (+100)</span>
                     <span class="bonus-val">${bt.first || 0} ${bt.first === 1 ? 'vez' : 'veces'}</span>
                 </div>
                 <div class="bonus-chip chip-b2">
-                    <span class="bonus-tag">ðŸ¥ˆ 2Â° MEJOR (+50)</span>
+                    <span class="bonus-tag">2° MEJOR (+50)</span>
                     <span class="bonus-val">${bt.second || 0} ${bt.second === 1 ? 'vez' : 'veces'}</span>
                 </div>
                 <div class="bonus-chip chip-b3">
-                    <span class="bonus-tag">ðŸ¥‰ 3Â° MEJOR (+20)</span>
+                    <span class="bonus-tag">3° MEJOR (+20)</span>
                     <span class="bonus-val">${bt.third || 0} ${bt.third === 1 ? 'vez' : 'veces'}</span>
                 </div>
             </div>
 
             <div class="tactical-podiums-breakdown">
                 <div class="podium-chip chip-p1">
-                    <span class="chip-pos">P1 (1Â°)</span>
+                    <span class="chip-pos">P1</span>
                     <span class="chip-val">${v.p1 || 0}</span>
                 </div>
                 <div class="podium-chip chip-p2">
-                    <span class="chip-pos">P2 (2Â°)</span>
+                    <span class="chip-pos">P2</span>
                     <span class="chip-val">${v.p2 || 0}</span>
                 </div>
                 <div class="podium-chip chip-p3">
-                    <span class="chip-pos">P3 (3Â°)</span>
+                    <span class="chip-pos">P3</span>
                     <span class="chip-val">${v.p3 || 0}</span>
                 </div>
                 <div class="podium-chip chip-p4">
-                    <span class="chip-pos">P4 (4Â°)</span>
+                    <span class="chip-pos">P4</span>
                     <span class="chip-val">${v.p4 || 0}</span>
                 </div>
             </div>
 
             <div class="tactical-action-bar">
                 <button class="btn-explored" style="width: 100%; justify-content: center; font-size: 13px;" onclick="switchView('championship-standings')">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; margin-right: 6px;"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0 0 11 15.9V19H7v2h10v-2h-4v-3.1c1.94-.38 3.51-1.74 3.61-3.96 2.47-.31 4.39-2.39 4.39-4.94V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg> Ver en ClasificaciÃ³n General
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; margin-right: 6px;"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0 0 11 15.9V19H7v2h10v-2h-4v-3.1c1.94-.38 3.51-1.74 3.61-3.96 2.47-.31 4.39-2.39 4.39-4.94V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg> Ver en Clasificación General
                 </button>
             </div>
         `;
@@ -4414,7 +5063,7 @@ function renderQuickJumpPills() {
 
     const totalPilots = Math.max(15, blacklistDrivers.length);
     if (titleEl) {
-        const titleText = (typeof window.nfsI18n !== 'undefined' && window.nfsI18n.t) ? window.nfsI18n.t('quick_jump_title') : 'âš¡ QUICK JUMP TO DRIVER';
+        const titleText = (typeof window.nfsI18n !== 'undefined' && window.nfsI18n.t) ? window.nfsI18n.t('quick_jump_title') : '⚡ QUICK JUMP TO DRIVER';
         titleEl.textContent = `${titleText} (1 - ${totalPilots}):`;
     }
 
@@ -4427,10 +5076,152 @@ function renderQuickJumpPills() {
         btn.setAttribute('translate', 'no');
         btn.onclick = () => scrollToPilotCard(d.rank);
 
-        if (standingRank === 1) icon = 'ðŸ‘ ';
+        let icon = '';
+        if (standingRank === 1) icon = '👑 ';
         btn.textContent = `${icon}#${standingRank} ${d.alias || d.name}`;
         container.appendChild(btn);
     });
+}
+
+/**
+ * Renderiza la Clasificación General del Campeonato en estilo Ficha Técnica Horizontal
+ * Combina todos los datos y estética visual de la Ficha Técnica vertical en filas horizontales
+ * con la misma altura de fila que la tabla general de campeonato.
+ */
+function renderStandingsHorizontalCards(sortedDrivers) {
+    const container = document.getElementById('standings-horizontal-cards-container');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    sortedDrivers.forEach((driver, idx) => {
+        if (window.NFSOperators) {
+            window.NFSOperators.linkPlayerAliases(driver.name, driver.alias);
+        }
+        const standingRank = idx + 1;
+        const totalPts = calculateDriverPoints(driver);
+        const groupName = getDriverGroupForWeek(driver, currentChampionshipWeek);
+        const bt = driver.bestTimes || { first: 0, second: 0, third: 0 };
+        const v = driver.victories || { p1: 0, p2: 0, p3: 0, p4: 0 };
+        const bonusPtsTotal = (typeof driver.bonusPoints === 'number')
+            ? driver.bonusPoints
+            : (((bt.first || 0) * 100) + ((bt.second || 0) * 50) + ((bt.third || 0) * 20));
+
+        let rankTier = standingRank === 1 ? 'tier-top1' : standingRank === 2 ? 'tier-top2' : standingRank === 3 ? 'tier-top3' : 'tier-normal';
+        let rankBadgeClass = standingRank === 1 ? 'rank-gold' : standingRank === 2 ? 'rank-silver' : standingRank === 3 ? 'rank-bronze' : 'rank-normal';
+        let statusClass = standingRank === 1 ? 'status-leader' : standingRank <= 3 ? 'status-contender' : 'status-active';
+        let blBadgeClass = standingRank === 1 ? 'bl-badge-gold' : standingRank === 2 ? 'bl-badge-silver' : standingRank === 3 ? 'bl-badge-bronze' : '';
+
+        const card = document.createElement('div');
+        card.className = `blacklist-horizontal-card ${rankTier} ${driver.rank === currentSelectedBlacklistRank ? 'active-card' : ''}`;
+        card.setAttribute('data-rank', driver.rank);
+        card.onclick = () => selectBlacklistPilot(driver.rank);
+
+        card.innerHTML = `
+            <!-- 1. Posición & Avatar Oficial -->
+            <div class="h-col-rank-avatar">
+                <span class="bl-rank-badge ${rankBadgeClass}">${standingRank}</span>
+                ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(driver.alias || driver.name, 'medium') : ''}
+            </div>
+
+            <!-- 2. Información del Piloto, Auto & Grupo Oficial -->
+            <div class="h-col-pilot">
+                <div class="driver-names-row notranslate" translate="no">
+                    <span class="driver-cell-name notranslate" translate="no">${driver.name}</span>
+                    <span class="driver-cell-alias notranslate" translate="no">"${driver.alias}"</span>
+                    <span class="driver-bl-sublabel ${blBadgeClass}">Blacklist ${standingRank}</span>
+                </div>
+                <div class="h-pilot-meta">
+                    <span class="h-car-name" title="Vehículo">🏎️ ${driver.ride}</span>
+                    <span class="champ-group-tag">${groupName}</span>
+                </div>
+            </div>
+
+            <!-- 3. Dinero de Reputación ($ REP) - Estilo Ficha Técnica en Verde Esmeralda -->
+            <div class="h-col-rep">
+                <div class="metric-box rep-box h-metric-box">
+                    <span class="metric-label">DINERO REP</span>
+                    <span class="metric-value rep-val">$${(driver.rep || 0).toLocaleString('de-DE')}</span>
+                </div>
+            </div>
+
+            <!-- 4. Desglose de Podios (P1, P2, P3, P4) - Estilo Ficha Técnica -->
+            <div class="h-col-podiums">
+                <div class="tactical-podiums-breakdown h-podiums-breakdown">
+                    <div class="podium-chip chip-p1" title="1° Puesto (Victorias)">
+                        <span class="chip-pos">P1</span>
+                        <span class="chip-val">${v.p1 || 0}</span>
+                    </div>
+                    <div class="podium-chip chip-p2" title="2° Puesto">
+                        <span class="chip-pos">P2</span>
+                        <span class="chip-val">${v.p2 || 0}</span>
+                    </div>
+                    <div class="podium-chip chip-p3" title="3° Puesto">
+                        <span class="chip-pos">P3</span>
+                        <span class="chip-val">${v.p3 || 0}</span>
+                    </div>
+                    <div class="podium-chip chip-p4" title="4° Puesto">
+                        <span class="chip-pos">P4</span>
+                        <span class="chip-val">${v.p4 || 0}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Bonificación de Tiempo -->
+            <div class="h-col-bonuses">
+                <div class="metric-box time-box h-metric-box">
+                    <span class="metric-label">TIME BONO</span>
+                    ${bonusPtsTotal > 0
+                        ? `<span class="champ-time-bonus-pill">+${bonusPtsTotal.toLocaleString('de-DE')} PTS</span>`
+                        : `<span class="champ-time-bonus-pill zero">0 PTS</span>`
+                    }
+                </div>
+            </div>
+
+            <!-- 6. Puntos Totales (Score) - Estilo Ficha Técnica en Oro/Ámbar -->
+            <div class="h-col-score">
+                <div class="metric-box pts-box h-metric-box">
+                    <span class="metric-label">TOTAL SCORE</span>
+                    <span class="metric-value pts-val">${totalPts.toLocaleString('de-DE')} PTS</span>
+                </div>
+            </div>
+
+            <!-- 7. Estatus Oficial y Acceso Rápido a Ficha Técnica -->
+            <div class="h-col-status">
+                <span class="status-badge ${statusClass}">${standingRank === 1 ? '👑 LÍDER #1' : (driver.status || 'PILOTO OFICIAL')}</span>
+                <button type="button" class="btn-explored btn-mini-dossier" onclick="event.stopPropagation(); scrollToPilotCard(${driver.rank}); switchView('blacklist-cards');" title="Ver Ficha Técnica Completa">
+                    <span>💀</span> Ficha
+                </button>
+            </div>
+        `;
+
+        container.appendChild(card);
+    });
+}
+
+/**
+ * Alterna entre la vista de Fichas Técnicas Horizontales y la Tabla Clásica en Standings
+ */
+function setStandingsDisplayMode(mode) {
+    const cardsContainer = document.getElementById('standings-horizontal-cards-container');
+    const tableWrapper = document.getElementById('standings-table-wrapper');
+    const btnCards = document.getElementById('btn-standings-view-cards');
+    const btnTable = document.getElementById('btn-standings-view-table');
+
+    const effectiveMode = (mode === 'table') ? 'table' : 'cards';
+    localStorage.setItem('nfs_standings_display_mode', effectiveMode);
+
+    if (effectiveMode === 'cards') {
+        if (cardsContainer) cardsContainer.style.display = 'flex';
+        if (tableWrapper) tableWrapper.style.display = 'none';
+        if (btnCards) btnCards.classList.add('active');
+        if (btnTable) btnTable.classList.remove('active');
+    } else {
+        if (cardsContainer) cardsContainer.style.display = 'none';
+        if (tableWrapper) tableWrapper.style.display = 'block';
+        if (btnCards) btnCards.classList.remove('active');
+        if (btnTable) btnTable.classList.add('active');
+    }
 }
 
 function updateChampionshipRosterLabels() {
@@ -4952,7 +5743,14 @@ window.syncBlacklistWithRotationsAndStandings = syncBlacklistWithRotationsAndSta
 window.renderBlacklistUI = renderBlacklistUI;
 window.selectBlacklistPilot = selectBlacklistPilot;
 window.switchChampionshipWeek = switchChampionshipWeek;
+window.selectChampionshipGroupTab = selectChampionshipGroupTab;
 window.initBlacklistSystem = initBlacklistSystem;
+window.formatRaceTimeStandard = formatRaceTimeStandard;
+window.formatRecordDateStandard = formatRecordDateStandard;
+window.renderLeaderboardComponent = renderLeaderboardComponent;
+window.setLeaderboardDensity = setLeaderboardDensity;
+window.onLeaderboardFilterChange = onLeaderboardFilterChange;
+window.clearLeaderboardSearch = clearLeaderboardSearch;
 
 // =======================================================
 // SALÃ“N HISTÃ“RICO DE TORNEOS (CHALLONGE HISTORIAL)
@@ -5732,6 +6530,32 @@ window.addEventListener('DOMContentLoaded', () => {
         switchView(initialView, false);
     }
 
+    // Parámetros de URL adicionales para Leaderboards (densidad, pestaña, búsqueda, dispositivo)
+    const targetDensity = urlParams.get('density');
+    if (targetDensity && typeof setLeaderboardDensity === 'function') {
+        setLeaderboardDensity(targetDensity);
+    }
+    const targetTab = urlParams.get('tab');
+    if (targetTab) {
+        setTimeout(() => {
+            const tabBtn = document.querySelector(`button[onclick*="'${targetTab}'"]`);
+            if (tabBtn) tabBtn.click();
+        }, 300);
+    }
+    const targetSearch = urlParams.get('search');
+    const targetDev = urlParams.get('device');
+    if (targetSearch || targetDev) {
+        setTimeout(() => {
+            const inputDriver = document.getElementById('lb-filter-driver');
+            const selectDev = document.getElementById('lb-filter-device');
+            if (targetSearch && inputDriver) inputDriver.value = targetSearch;
+            if (targetDev && selectDev) selectDev.value = targetDev;
+            if (typeof onLeaderboardFilterChange === 'function') {
+                onLeaderboardFilterChange();
+            }
+        }, 350);
+    }
+
     // 1. Reloj de telemetrÃ­a F1
     startTelemetryClock();
 
@@ -5812,23 +6636,11 @@ try {
         champChannel.onmessage = (event) => {
             if (event.data && event.data.data && typeof CHAMPIONSHIP_WEEKS_DATA !== 'undefined') {
                 const data = event.data.data;
-                if (Array.isArray(data)) {
-                    data.forEach((w, idx) => {
-                        if (w && idx > 0) {
-                            CHAMPIONSHIP_WEEKS_DATA[idx] = w;
-                            CHAMPIONSHIP_WEEKS_DATA[String(idx)] = w;
-                        }
-                    });
-                } else if (typeof data === 'object') {
-                    Object.keys(data).forEach(k => {
-                        if (data[k]) {
-                            CHAMPIONSHIP_WEEKS_DATA[k] = data[k];
-                            const n = parseInt(k, 10);
-                            if (!isNaN(n)) CHAMPIONSHIP_WEEKS_DATA[n] = data[k];
-                        }
-                    });
-                }
+                applyNormalizedChampionshipWeeksData(CHAMPIONSHIP_WEEKS_DATA, data);
                 localStorage.setItem('nfs_championship_weeks_data_v3', JSON.stringify(data));
+                const activeW = (typeof currentChampionshipWeek !== 'undefined') ? currentChampionshipWeek : 1;
+                if (typeof renderChampionshipGroups === 'function') renderChampionshipGroups(activeW);
+                if (typeof renderChampionshipChallenges === 'function') renderChampionshipChallenges(activeW);
                 if (typeof syncBlacklistWithRotationsAndStandings === 'function') {
                     syncBlacklistWithRotationsAndStandings();
                 }
@@ -5841,22 +6653,10 @@ try {
             try {
                 const data = JSON.parse(e.newValue);
                 if (data && typeof CHAMPIONSHIP_WEEKS_DATA !== 'undefined') {
-                    if (Array.isArray(data)) {
-                        data.forEach((w, idx) => {
-                            if (w && idx > 0) {
-                                CHAMPIONSHIP_WEEKS_DATA[idx] = w;
-                                CHAMPIONSHIP_WEEKS_DATA[String(idx)] = w;
-                            }
-                        });
-                    } else if (typeof data === 'object') {
-                        Object.keys(data).forEach(k => {
-                            if (data[k]) {
-                                CHAMPIONSHIP_WEEKS_DATA[k] = data[k];
-                                const n = parseInt(k, 10);
-                                if (!isNaN(n)) CHAMPIONSHIP_WEEKS_DATA[n] = data[k];
-                            }
-                        });
-                    }
+                    applyNormalizedChampionshipWeeksData(CHAMPIONSHIP_WEEKS_DATA, data);
+                    const activeW = (typeof currentChampionshipWeek !== 'undefined') ? currentChampionshipWeek : 1;
+                    if (typeof renderChampionshipGroups === 'function') renderChampionshipGroups(activeW);
+                    if (typeof renderChampionshipChallenges === 'function') renderChampionshipChallenges(activeW);
                     if (typeof syncBlacklistWithRotationsAndStandings === 'function') {
                         syncBlacklistWithRotationsAndStandings();
                     }

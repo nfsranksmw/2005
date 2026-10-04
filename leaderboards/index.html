@@ -1180,6 +1180,58 @@
                 <button class="tab-btn" onclick="switchSprintDragTab('sprintdrag-bmw', this)">BMW M3 GTR</button>
             </div>
 
+            <!-- Barra Unificada de Filtros y Densidad del Leaderboard -->
+            <div class="leaderboard-toolbar-wrapper" id="leaderboard-toolbar-wrapper">
+                <div class="lb-toolbar-left">
+                    <div class="lb-search-box">
+                        <span class="lb-search-icon">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        </span>
+                        <input type="text" id="lb-filter-driver" class="lb-input-search" placeholder="Search driver or alias..." oninput="onLeaderboardFilterChange()">
+                        <button type="button" id="lb-search-clear" class="lb-search-clear" onclick="clearLeaderboardSearch()" title="Clear search">✕</button>
+                    </div>
+
+                    <div class="lb-select-wrapper">
+                        <label for="lb-filter-car" class="lb-filter-label" data-i18n="lb_filter_car">Vehicle</label>
+                        <select id="lb-filter-car" class="lb-select" onchange="onLeaderboardFilterChange()">
+                            <option value="all">All Vehicles</option>
+                        </select>
+                    </div>
+
+                    <div class="lb-select-wrapper">
+                        <label for="lb-filter-device" class="lb-filter-label" data-i18n="lb_filter_device">Device</label>
+                        <select id="lb-filter-device" class="lb-select" onchange="onLeaderboardFilterChange()">
+                            <option value="all">All Devices</option>
+                            <option value="Keyboard">Keyboard</option>
+                            <option value="Controller">Controller</option>
+                            <option value="Wheel">Wheel</option>
+                        </select>
+                    </div>
+
+                    <div class="lb-select-wrapper">
+                        <label for="lb-filter-gearbox" class="lb-filter-label" data-i18n="lb_filter_gearbox">Gearbox</label>
+                        <select id="lb-filter-gearbox" class="lb-select" onchange="onLeaderboardFilterChange()">
+                            <option value="all">All Gearbox</option>
+                            <option value="Manual">Manual</option>
+                            <option value="Auto">Auto</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="lb-toolbar-right">
+                    <div class="lb-density-switch" title="Toggle table density">
+                        <button type="button" id="btn-density-comfortable" class="lb-density-btn active" onclick="setLeaderboardDensity('comfortable')">
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                            <span data-i18n="lb_view_comfortable">Comfortable</span>
+                        </button>
+                        <button type="button" id="btn-density-compact" class="lb-density-btn" onclick="setLeaderboardDensity('compact')">
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="4" x2="21" y2="4"></line><line x1="3" y1="8" x2="21" y2="8"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="16" x2="21" y2="16"></line><line x1="3" y1="20" x2="21" y2="20"></line></svg>
+                            <span data-i18n="lb_view_compact">Compact</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <!-- Tablas de Circuitos -->
             <div id="tab-junkman-single" class="table-section circuit-section">
                 <h3
@@ -1669,6 +1721,29 @@
                         </span>
                     </div>
                 </div>
+                <!-- FILTRO DE GRUPOS DE CARRERA PARA LOS 8 DESAFÍOS SEMANALES -->
+                <div class="champ-challenges-group-filter" id="champ-challenges-group-filter">
+                    <!-- Se llena dinámicamente desde JavaScript: Grupo Alpha, Grupo Beta, Grupo Gamma, Grupo Delta -->
+                </div>
+                <svg id="champ-svg-defs" style="position: absolute; width: 0; height: 0; overflow: hidden;" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="chGoldMedalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#FFF275" />
+                            <stop offset="50%" stop-color="#FFD700" />
+                            <stop offset="100%" stop-color="#B45309" />
+                        </linearGradient>
+                        <linearGradient id="chSilverMedalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#FFFFFF" />
+                            <stop offset="50%" stop-color="#CBD5E1" />
+                            <stop offset="100%" stop-color="#64748B" />
+                        </linearGradient>
+                        <linearGradient id="chBronzeMedalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#FFB37C" />
+                            <stop offset="50%" stop-color="#CD7F32" />
+                            <stop offset="100%" stop-color="#7C2D12" />
+                        </linearGradient>
+                    </defs>
+                </svg>
                 <div class="championship-challenges-grid" id="champ-challenges-grid">
                     <!-- Se llena dinámicamente desde JavaScript -->
                 </div>
@@ -1775,7 +1850,15 @@
                             PTS) • Reputation ($ REP / 10k)
                         </span>
                     </div>
-                    <div style="display: flex; gap: 10px;">
+                    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                        <div class="standings-view-toggle-group" style="display: inline-flex; gap: 4px; background: rgba(0,0,0,0.35); padding: 3px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08);">
+                            <button type="button" id="btn-standings-view-cards" class="btn-explored active" style="font-size: 11px; padding: 5px 10px; margin: 0;" onclick="setStandingsDisplayMode('cards')">
+                                <span>🎴</span> <span data-i18n="view_cards_horizontal">Ficha Horizontal</span>
+                            </button>
+                            <button type="button" id="btn-standings-view-table" class="btn-explored" style="font-size: 11px; padding: 5px 10px; margin: 0;" onclick="setStandingsDisplayMode('table')">
+                                <span>📋</span> <span data-i18n="view_table_classic">Tabla</span>
+                            </button>
+                        </div>
                         <button class="btn-explored" onclick="switchView('blacklist')">
                             <span>⚔️</span> Groups & Challenges
                         </button>
@@ -1787,7 +1870,13 @@
                     </div>
                 </div>
 
-                <div class="table-container blacklist-table-wrapper">
+                <!-- 1. VISTA OFICIAL: FICHAS TÉCNICAS HORIZONTALES (Ordenadas según Clasificación General) -->
+                <div id="standings-horizontal-cards-container" class="standings-horizontal-cards-list">
+                    <!-- Se llena dinámicamente desde JavaScript -->
+                </div>
+
+                <!-- 2. VISTA TABLA CLÁSICA (Alternativa) -->
+                <div class="table-container blacklist-table-wrapper" id="standings-table-wrapper" style="display: none;">
                     <table class="blacklist-table">
                         <thead>
                             <tr>
@@ -1799,7 +1888,7 @@
                                 <th>P2</th>
                                 <th>P3</th>
                                 <th>P4</th>
-                                <th>Time Bonuses (1st/2nd/3rd)</th>
+                                <th data-i18n="col_time_bonus">Time Bonificación</th>
                                 <th>Total Points</th>
                                 <th>Group</th>
                                 <th>Status</th>
