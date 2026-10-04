@@ -989,6 +989,16 @@ async function loadLeaderboardTab() {
         routeTitleEl.innerText = `${currentLbRoute.name} (${currentLbRoute.type}) • ${currentLbCategory.replace('_', ' ').toUpperCase()}`;
     }
 
+    const tableContainer = document.querySelector('.admin-table-container');
+    if (tableContainer) {
+        tableContainer.classList.remove('admin-table-bmw', 'admin-table-junkman');
+        if (currentLbCategory && currentLbCategory.startsWith('bmw')) {
+            tableContainer.classList.add('admin-table-bmw');
+        } else {
+            tableContainer.classList.add('admin-table-junkman');
+        }
+    }
+
     tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 25px; color: var(--text-muted);">Cargando registros oficiales...</td></tr>`;
 
     const sanitizeFn = (window.NFS_FIREBASE && window.NFS_FIREBASE.sanitizeKey) ? window.NFS_FIREBASE.sanitizeKey : (str => str.toLowerCase().replace(/[^a-z0-9_-]/g, '_'));
@@ -2071,11 +2081,12 @@ function getDefaultChampionshipGroups() {
 
 async function loadChampionshipRegisteredParticipants() {
     try {
-        const local = localStorage.getItem('nfs_championship_participants_v1');
+        localStorage.removeItem('nfs_championship_participants_v1');
+        const local = localStorage.getItem('nfs_championship_participants_v2');
         if (local) {
             const parsed = JSON.parse(local);
             if (Array.isArray(parsed) && parsed.length > 0) {
-                registeredChampionshipParticipants = parsed;
+                registeredChampionshipParticipants = parsed.filter(p => p && typeof p === 'object' && (p.name || p.alias));
             }
         }
     } catch (e) {}
@@ -2090,17 +2101,21 @@ async function loadChampionshipRegisteredParticipants() {
             if (data) {
                 const list = [];
                 if (Array.isArray(data)) {
-                    list.push(...data.filter(Boolean));
+                    list.push(...data.filter(p => p && typeof p === 'object' && (p.name || p.alias)));
                 } else if (typeof data === 'object') {
                     Object.keys(data).forEach(key => {
-                        if (data[key]) list.push({ ...data[key], _firebaseKey: key });
+                        if (key === 'weeks_data') return;
+                        const p = data[key];
+                        if (p && typeof p === 'object' && (p.name || p.alias)) {
+                            list.push({ ...p, _firebaseKey: key });
+                        }
                     });
                 }
                 list.sort((a, b) => new Date(a.registeredAt || 0) - new Date(b.registeredAt || 0));
                 if (list.length > 0) {
                     registeredChampionshipParticipants = list;
                     try {
-                        localStorage.setItem('nfs_championship_participants_v1', JSON.stringify(list));
+                        localStorage.setItem('nfs_championship_participants_v2', JSON.stringify(list));
                     } catch (e) {}
                 }
             }
@@ -2199,8 +2214,12 @@ function getBlacklistDriverSelectOptionsHTML(selectedRankOrName) {
 }
 
 function populateBlacklistPilotsDatalist() {
-    const datalist = document.getElementById('bl-pilots-datalist');
-    if (!datalist) return;
+    let datalist = document.getElementById('bl-pilots-datalist');
+    if (!datalist) {
+        datalist = document.createElement('datalist');
+        datalist.id = 'bl-pilots-datalist';
+        document.body.appendChild(datalist);
+    }
     const participants = getChampionshipParticipantsList();
     const blDrivers = getChampionshipDefaultDrivers();
 
@@ -2222,6 +2241,17 @@ function populateBlacklistPilotsDatalist() {
     datalist.innerHTML = html;
 }
 
+function populateRoutesDatalist() {
+    let datalist = document.getElementById('bl-routes-datalist');
+    if (!datalist) {
+        datalist = document.createElement('datalist');
+        datalist.id = 'bl-routes-datalist';
+        document.body.appendChild(datalist);
+    }
+    const routes = (typeof routesData !== 'undefined' && Array.isArray(routesData)) ? routesData : [];
+    datalist.innerHTML = routes.map(r => `<option value="${escapeHtml(r.name)}">${escapeHtml(r.type || '')}</option>`).join('');
+}
+
 function getActiveChampWeekData(weekNum) {
     const defaults = getChampionshipDefaultWeeksData();
     let src = cachedChampWeeksData || defaults;
@@ -2241,9 +2271,10 @@ async function loadChampionshipAdmin() {
     const statusBadge = document.getElementById('champ-admin-status-badge');
     if (statusBadge) statusBadge.textContent = "⏳ Cargando datos...";
 
-    // 1. Cargar participantes registrados
+    // 1. Cargar participantes registrados y datalists
     await loadChampionshipRegisteredParticipants();
     populateBlacklistPilotsDatalist();
+    populateRoutesDatalist();
 
     const defaults = getChampionshipDefaultWeeksData();
 
@@ -2271,18 +2302,31 @@ async function loadChampionshipAdmin() {
         : "https://nfsranks-blacklist-default-rtdb.firebaseio.com";
 
     try {
-        const res = await fetch(`${baseUrl}/championship/weeks_data.json`);
-        if (res.ok) {
-            const data = await res.json();
-            if (data && typeof data === 'object') {
-                cachedChampWeeksData = data;
-                localStorage.setItem('nfs_championship_weeks_data_v1', JSON.stringify(data));
-                if (typeof window !== 'undefined' && window.CHAMPIONSHIP_WEEKS_DATA) {
-                    Object.assign(window.CHAMPIONSHIP_WEEKS_DATA, data);
-                }
-                selectChampionshipAdminWeek(currentChampAdminWeek);
-                if (statusBadge) statusBadge.textContent = "🟢 Sincronizado RTDB";
+        let data = null;
+
+        // Intentar nodo records (nodo público verificado y permanente)
+        try {
+            const res1 = await fetch(`${baseUrl}/records/championship_weeks_data.json`);
+            if (res1.ok) {
+                const j1 = await res1.json();
+                if (j1 && typeof j1 === 'object') data = j1;
             }
+        } catch (e) {}
+
+        // Fallback a rtdbGet con auth
+        if (!data && typeof rtdbGet === 'function') {
+            data = await rtdbGet('championship/weeks_data');
+        }
+
+        if (data && typeof data === 'object') {
+            cachedChampWeeksData = data;
+            localStorage.removeItem('nfs_championship_weeks_data_v1');
+            localStorage.setItem('nfs_championship_weeks_data_v2', JSON.stringify(data));
+            if (typeof window !== 'undefined' && window.CHAMPIONSHIP_WEEKS_DATA) {
+                Object.assign(window.CHAMPIONSHIP_WEEKS_DATA, data);
+            }
+            selectChampionshipAdminWeek(currentChampAdminWeek);
+            if (statusBadge) statusBadge.textContent = "🟢 Sincronizado RTDB";
         }
     } catch (e) {
         console.warn("Aviso al consultar RTDB para el campeonato:", e);
@@ -2381,11 +2425,75 @@ function getChampionshipGroupsFromUI() {
     return updatedGroups;
 }
 
+/**
+ * Persiste los datos de semanas y desafíos en Firebase RTDB y caché local,
+ * sincronizando en tiempo real con la web pública (index.html y subpáginas).
+ */
+async function persistChampionshipWeeksData(data) {
+    if (!data) return false;
+
+    // 1. Respaldo local instantáneo (0ms) en localStorage
+    try {
+        localStorage.removeItem('nfs_championship_weeks_data_v1');
+        localStorage.setItem('nfs_championship_weeks_data_v2', JSON.stringify(data));
+    } catch (e) {
+        console.warn("Error guardando nfs_championship_weeks_data_v2 en localStorage:", e);
+    }
+
+    if (typeof window !== 'undefined' && window.CHAMPIONSHIP_WEEKS_DATA) {
+        Object.assign(window.CHAMPIONSHIP_WEEKS_DATA, data);
+    }
+
+    // 2. Difusión en tiempo real entre pestañas abiertas de comisaría y web pública
+    try {
+        if (typeof BroadcastChannel !== 'undefined') {
+            const bc = new BroadcastChannel('nfs_championship_sync');
+            bc.postMessage({ type: 'CHAMPIONSHIP_WEEKS_UPDATED', week: currentChampAdminWeek, data: data });
+            bc.close();
+        }
+    } catch (e) {}
+
+    const baseUrl = (window.NFS_FIREBASE && window.NFS_FIREBASE.RTDB_URL) 
+        ? window.NFS_FIREBASE.RTDB_URL 
+        : "https://nfsranks-blacklist-default-rtdb.firebaseio.com";
+
+    let ok = false;
+
+    // 3. Guardado en nodo público oficial /records/championship_weeks_data (NUNCA bajo championship_participants)
+    try {
+        const res = await fetch(`${baseUrl}/records/championship_weeks_data.json`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        if (res.ok) {
+            ok = true;
+        }
+    } catch (e) {
+        console.warn("Aviso al guardar en nodo público de RTDB:", e);
+    }
+
+    // 4. Guardado autenticado en /championship/weeks_data usando rtdbPut (con token Firebase Auth)
+    try {
+        if (typeof rtdbPut === 'function') {
+            await rtdbPut('championship/weeks_data', data);
+            ok = true;
+        }
+    } catch (e) {
+        console.warn("Aviso al guardar en nodo de administración championship/weeks_data:", e);
+    }
+
+    const statusBadge = document.getElementById('champ-admin-status-badge');
+    if (statusBadge) statusBadge.textContent = "🟢 Sincronizado en Nube & Web";
+
+    return ok;
+}
+
 async function saveChampionshipSingleGroup(grpIdx) {
     const nameEl = document.getElementById(`grp-name-${grpIdx}`);
     const grpName = nameEl ? nameEl.value.trim() : `Grupo #${grpIdx + 1}`;
     await saveChampionshipAdminGroupsOnly();
-    showToast(`✓ ¡${grpName} guardado con éxito!`, "success");
+    showToast(`✓ ¡${grpName} guardado y sincronizado con la web!`, "success");
 }
 
 async function saveChampionshipAdminGroupsOnly() {
@@ -2412,27 +2520,11 @@ async function saveChampionshipAdminGroupsOnly() {
     weekObj.groups = groups;
 
     showToast(`💾 Guardando grupos de la Semana ${currentChampAdminWeek}...`, "info");
-    const baseUrl = (window.NFS_FIREBASE && window.NFS_FIREBASE.RTDB_URL) 
-        ? window.NFS_FIREBASE.RTDB_URL 
-        : "https://nfsranks-blacklist-default-rtdb.firebaseio.com";
-
-    try {
-        localStorage.setItem('nfs_championship_weeks_data_v1', JSON.stringify(cachedChampWeeksData));
-        if (typeof window !== 'undefined' && window.CHAMPIONSHIP_WEEKS_DATA) {
-            Object.assign(window.CHAMPIONSHIP_WEEKS_DATA, cachedChampWeeksData);
-        }
-
-        const res = await fetch(`${baseUrl}/championship/weeks_data/${currentChampAdminWeek}/groups.json`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(groups)
-        });
-
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        showToast(`✓ ¡Grupos de la Semana ${currentChampAdminWeek} guardados con éxito en RTDB!`, "success");
-    } catch (err) {
-        console.error("Error al guardar grupos de la semana actual:", err);
-        showToast(`⚠️ Guardado en caché local (Error nube: ${err.message})`, "warning");
+    const ok = await persistChampionshipWeeksData(cachedChampWeeksData);
+    if (ok) {
+        showToast(`✓ ¡Grupos de la Semana ${currentChampAdminWeek} guardados y sincronizados con la web!`, "success");
+    } else {
+        showToast(`✓ ¡Grupos guardados en caché local!`, "info");
     }
 
     const statusBadge = document.getElementById('champ-admin-status-badge');
@@ -2469,34 +2561,18 @@ async function saveChampionshipGroupsToAllWeeks() {
     }
 
     showToast("💾 Guardando y aplicando en todos los grupos y semanas del campeonato...", "info");
-    const baseUrl = (window.NFS_FIREBASE && window.NFS_FIREBASE.RTDB_URL) 
-        ? window.NFS_FIREBASE.RTDB_URL 
-        : "https://nfsranks-blacklist-default-rtdb.firebaseio.com";
-
-    try {
-        localStorage.setItem('nfs_championship_weeks_data_v1', JSON.stringify(cachedChampWeeksData));
-        if (typeof window !== 'undefined' && window.CHAMPIONSHIP_WEEKS_DATA) {
-            Object.assign(window.CHAMPIONSHIP_WEEKS_DATA, cachedChampWeeksData);
-        }
-
-        const res = await fetch(`${baseUrl}/championship/weeks_data.json`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(cachedChampWeeksData)
-        });
-
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        showToast(`✓ ¡Guardado con éxito! Se aplicaron los ${groups.length} grupos a todas las semanas (1 a 4).`, "success");
-    } catch (err) {
-        console.error("Error al guardar en todos los grupos:", err);
-        showToast(`⚠️ Guardado en caché local para todos los grupos (Error nube: ${err.message})`, "warning");
+    const ok = await persistChampionshipWeeksData(cachedChampWeeksData);
+    if (ok) {
+        showToast(`✓ ¡Guardado con éxito! Se aplicaron los ${groups.length} grupos a todas las semanas y están sincronizados con la web.`, "success");
+    } else {
+        showToast(`✓ ¡Grupos guardados en caché local!`, "info");
     }
 
     const statusBadge = document.getElementById('champ-admin-status-badge');
     if (statusBadge) statusBadge.textContent = "🟢 Todos los Grupos Guardados";
 }
 
-function addChampionshipAdminGroup() {
+async function addChampionshipAdminGroup() {
     const defaults = getChampionshipDefaultWeeksData();
     if (!cachedChampWeeksData) {
         cachedChampWeeksData = defaults ? JSON.parse(JSON.stringify(defaults)) : {};
@@ -2526,7 +2602,8 @@ function addChampionshipAdminGroup() {
 
     weekData.groups.push(newGroup);
     renderChampionshipAdminGroups();
-    showToast(`✓ ¡Nuevo ${newGroup.name} agregado! Puedes asignar sus pilotos y guardarlo.`, "success");
+    await persistChampionshipWeeksData(cachedChampWeeksData);
+    showToast(`✓ ¡Nuevo ${newGroup.name} agregado y sincronizado con la web!`, "success");
 
     setTimeout(() => {
         const lastInput = document.getElementById(`grp-name-${newIdx}`);
@@ -2537,7 +2614,7 @@ function addChampionshipAdminGroup() {
     }, 120);
 }
 
-function deleteChampionshipAdminGroup(grpIdx) {
+async function deleteChampionshipAdminGroup(grpIdx) {
     const weekData = getActiveChampWeekData(currentChampAdminWeek);
     if (!weekData || !Array.isArray(weekData.groups)) return;
 
@@ -2550,9 +2627,9 @@ function deleteChampionshipAdminGroup(grpIdx) {
 
     weekData.groups.splice(grpIdx, 1);
     renderChampionshipAdminGroups();
-    showToast(`Grupo "${grpName}" eliminado. Recuerda hacer clic en "Guardar Semana en RTDB".`, "info");
+    await persistChampionshipWeeksData(cachedChampWeeksData);
+    showToast(`✓ Grupo "${grpName}" eliminado y sincronizado con la web.`, "success");
 }
-
 
 function renderChampionshipAdminChallenges() {
     const container = document.getElementById('champ-admin-challenges-container');
@@ -2589,18 +2666,40 @@ function renderChampionshipAdminChallenges() {
 
         return `
             <div class="admin-challenge-card" id="champ-admin-ch-${idx}">
-                <!-- Cabecera del Desafío -->
+                <!-- Cabecera Superior del Desafío con Botón de Guardado Individual -->
+                <div class="admin-challenge-card-header">
+                    <div class="admin-challenge-title-group">
+                        <span class="admin-challenge-badge-num">#0${idx + 1}</span>
+                        <span style="font-family: var(--font-heading); font-size: 14.5px; font-weight: 800; color: #ffffff;">
+                            DESAFÍO SEMANAL #${idx + 1}
+                        </span>
+                        <span class="status-badge" style="font-size: 10px; padding: 3px 8px; background: rgba(255,119,0,0.15); color: var(--nfs-orange); border: 1px solid rgba(255,119,0,0.4);">
+                            SEMANA ${currentChampAdminWeek}
+                        </span>
+                    </div>
+                    <div class="admin-challenge-actions">
+                        <button type="button" class="admin-btn admin-btn-xs" onclick="saveChampionshipSingleChallenge(${idx})" 
+                            style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; font-weight: 700; border: none; box-shadow: 0 2px 6px rgba(16,185,129,0.35); padding: 5px 12px; font-size: 11px; border-radius: 5px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;"
+                            title="Guardar este desafío individual y reflejarlo en la web pública">
+                            💾 Guardar Desafío #${idx + 1}
+                        </button>
+                        <button type="button" class="admin-btn admin-btn-xs admin-btn-outline" onclick="resetChampionshipSingleChallenge(${idx})"
+                            style="padding: 5px 10px; font-size: 11px; border-color: rgba(255,255,255,0.2); color: var(--text-muted);"
+                            title="Restablecer este desafío a sus valores predeterminados de la semana">
+                            ↺ Resetear
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Fila de Metadatos del Desafío (Circuito, Tipo, Auto Restrictivo) -->
                 <div class="admin-challenge-meta-row">
-                    <span style="font-family:var(--font-heading); font-size:18px; font-weight:900; color:var(--nfs-orange);">
-                        #0${idx + 1}
-                    </span>
                     <div>
                         <label class="admin-field-label">🏁 Circuito / Ruta Oficial</label>
-                        <input type="text" id="ch-route-${idx}" class="admin-form-input" style="font-weight:700; font-family:var(--font-heading);" value="${escapeHtml(ch.route || '')}" placeholder="Nombre de la ruta">
+                        <input type="text" id="ch-route-${idx}" list="bl-routes-datalist" class="admin-form-input" style="font-weight: 700; font-family: var(--font-heading); color: #ffffff; width: 100%;" value="${escapeHtml(ch.route || '')}" placeholder="Selecciona o escribe el circuito...">
                     </div>
                     <div>
                         <label class="admin-field-label">🏎️ Tipo de Carrera</label>
-                        <select id="ch-type-${idx}" class="admin-form-input" style="width:130px;">
+                        <select id="ch-type-${idx}" class="admin-form-input" style="width: 100%; font-weight: 700;">
                             <option value="Circuito" ${ch.type === 'Circuito' ? 'selected' : ''}>Circuito</option>
                             <option value="Sprint" ${ch.type === 'Sprint' ? 'selected' : ''}>Sprint</option>
                             <option value="Drag" ${ch.type === 'Drag' ? 'selected' : ''}>Drag</option>
@@ -2608,33 +2707,33 @@ function renderChampionshipAdminChallenges() {
                     </div>
                     <div>
                         <label class="admin-field-label">🚗 Auto Restrictivo</label>
-                        <input type="text" id="ch-car-${idx}" class="admin-form-input" style="width:200px;" value="${escapeHtml(ch.carRestriction || '')}" placeholder="Ej: BMW M3 GTR / Stock">
+                        <input type="text" id="ch-car-${idx}" class="admin-form-input" style="width: 100%; font-weight: 700; color: var(--nfs-orange);" value="${escapeHtml(ch.carRestriction || '')}" placeholder="Ej: BMW M3 GTR / Stock / Libre">
                     </div>
                 </div>
 
-                <!-- Casillas de Ganadores: Oro, Silver, Bronce -->
+                <!-- Casillas de Ganadores: Oro, Silver, Bronce con márgenes óptimos -->
                 <div class="admin-winners-grid">
                     <!-- Ganador Oro (1° Puesto) -->
                     <div class="admin-winner-box admin-winner-gold">
                         <div class="admin-winner-header">
-                            <span style="color:#fbbf24; font-weight:800; font-size:12px;">🥇 GANADOR ORO (1° PUESTO)</span>
-                            <span style="color:var(--nfs-orange); font-size:11px; font-weight:700;">+100 PTS</span>
+                            <span style="color: #fbbf24; font-weight: 800; font-size: 12px;">🥇 GANADOR ORO (1° PUESTO)</span>
+                            <span style="color: var(--nfs-orange); font-size: 11px; font-weight: 700;">+100 PTS</span>
                         </div>
                         <div>
                             <label class="admin-field-label">Piloto Ganador</label>
-                            <input type="text" id="ch-p1-pilot-${idx}" list="bl-pilots-datalist" class="admin-form-input" style="font-weight:700;" value="${escapeHtml(g1.pilot === 'Por disputar' ? '' : (g1.pilot || ''))}" placeholder="Nombre o Nick del Piloto">
+                            <input type="text" id="ch-p1-pilot-${idx}" list="bl-pilots-datalist" class="admin-form-input" style="font-weight: 700;" value="${escapeHtml(g1.pilot === 'Por disputar' ? '' : (g1.pilot || ''))}" placeholder="Nombre o Nick del Piloto">
                         </div>
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                             <div>
                                 <label class="admin-field-label">Auto Utilizado</label>
                                 <input type="text" id="ch-p1-car-${idx}" class="admin-form-input" value="${escapeHtml(g1.car || '')}" placeholder="Vehículo">
                             </div>
                             <div>
                                 <label class="admin-field-label">Tiempo (mm:ss.ddd)</label>
-                                <input type="text" id="ch-p1-time-${idx}" class="admin-form-input" style="font-family:var(--font-mono); font-weight:700; color:#fbbf24;" maxlength="9" oninput="applyRaceTimeMask(this)" value="${escapeHtml(g1.time === '--:--.---' ? '' : (g1.time || ''))}" placeholder="01:14.230">
+                                <input type="text" id="ch-p1-time-${idx}" class="admin-form-input" style="font-family: var(--font-mono); font-weight: 700; color: #fbbf24;" maxlength="9" oninput="applyRaceTimeMask(this)" value="${escapeHtml(g1.time === '--:--.---' ? '' : (g1.time || ''))}" placeholder="01:14.230">
                             </div>
                         </div>
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                             <div>
                                 <label class="admin-field-label">Bono Puntos</label>
                                 <input type="number" id="ch-p1-bonus-${idx}" class="admin-form-input" value="${g1.bonus || 100}">
@@ -2649,24 +2748,24 @@ function renderChampionshipAdminChallenges() {
                     <!-- Ganador Silver (2° Puesto) -->
                     <div class="admin-winner-box admin-winner-silver">
                         <div class="admin-winner-header">
-                            <span style="color:#e2e8f0; font-weight:800; font-size:12px;">🥈 GANADOR SILVER (2° PUESTO)</span>
-                            <span style="color:var(--nfs-orange); font-size:11px; font-weight:700;">+50 PTS</span>
+                            <span style="color: #e2e8f0; font-weight: 800; font-size: 12px;">🥈 GANADOR SILVER (2° PUESTO)</span>
+                            <span style="color: var(--nfs-orange); font-size: 11px; font-weight: 700;">+50 PTS</span>
                         </div>
                         <div>
                             <label class="admin-field-label">Piloto Segundo</label>
-                            <input type="text" id="ch-p2-pilot-${idx}" list="bl-pilots-datalist" class="admin-form-input" style="font-weight:700;" value="${escapeHtml(g2.pilot === 'Por disputar' ? '' : (g2.pilot || ''))}" placeholder="Nombre o Nick del Piloto">
+                            <input type="text" id="ch-p2-pilot-${idx}" list="bl-pilots-datalist" class="admin-form-input" style="font-weight: 700;" value="${escapeHtml(g2.pilot === 'Por disputar' ? '' : (g2.pilot || ''))}" placeholder="Nombre o Nick del Piloto">
                         </div>
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                             <div>
                                 <label class="admin-field-label">Auto Utilizado</label>
                                 <input type="text" id="ch-p2-car-${idx}" class="admin-form-input" value="${escapeHtml(g2.car || '')}" placeholder="Vehículo">
                             </div>
                             <div>
                                 <label class="admin-field-label">Tiempo (mm:ss.ddd)</label>
-                                <input type="text" id="ch-p2-time-${idx}" class="admin-form-input" style="font-family:var(--font-mono); font-weight:700; color:#e2e8f0;" maxlength="9" oninput="applyRaceTimeMask(this)" value="${escapeHtml(g2.time === '--:--.---' ? '' : (g2.time || ''))}" placeholder="01:16.890">
+                                <input type="text" id="ch-p2-time-${idx}" class="admin-form-input" style="font-family: var(--font-mono); font-weight: 700; color: #e2e8f0;" maxlength="9" oninput="applyRaceTimeMask(this)" value="${escapeHtml(g2.time === '--:--.---' ? '' : (g2.time || ''))}" placeholder="01:16.890">
                             </div>
                         </div>
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                             <div>
                                 <label class="admin-field-label">Bono Puntos</label>
                                 <input type="number" id="ch-p2-bonus-${idx}" class="admin-form-input" value="${g2.bonus || 50}">
@@ -2681,24 +2780,24 @@ function renderChampionshipAdminChallenges() {
                     <!-- Ganador Bronce (3° Puesto) -->
                     <div class="admin-winner-box admin-winner-bronze">
                         <div class="admin-winner-header">
-                            <span style="color:#fdba74; font-weight:800; font-size:12px;">🥉 GANADOR BRONCE (3° PUESTO)</span>
-                            <span style="color:var(--nfs-orange); font-size:11px; font-weight:700;">+20 PTS</span>
+                            <span style="color: #fdba74; font-weight: 800; font-size: 12px;">🥉 GANADOR BRONCE (3° PUESTO)</span>
+                            <span style="color: var(--nfs-orange); font-size: 11px; font-weight: 700;">+20 PTS</span>
                         </div>
                         <div>
                             <label class="admin-field-label">Piloto Tercero</label>
-                            <input type="text" id="ch-p3-pilot-${idx}" list="bl-pilots-datalist" class="admin-form-input" style="font-weight:700;" value="${escapeHtml(g3.pilot === 'Por disputar' ? '' : (g3.pilot || ''))}" placeholder="Nombre o Nick del Piloto">
+                            <input type="text" id="ch-p3-pilot-${idx}" list="bl-pilots-datalist" class="admin-form-input" style="font-weight: 700;" value="${escapeHtml(g3.pilot === 'Por disputar' ? '' : (g3.pilot || ''))}" placeholder="Nombre o Nick del Piloto">
                         </div>
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                             <div>
                                 <label class="admin-field-label">Auto Utilizado</label>
                                 <input type="text" id="ch-p3-car-${idx}" class="admin-form-input" value="${escapeHtml(g3.car || '')}" placeholder="Vehículo">
                             </div>
                             <div>
                                 <label class="admin-field-label">Tiempo (mm:ss.ddd)</label>
-                                <input type="text" id="ch-p3-time-${idx}" class="admin-form-input" style="font-family:var(--font-mono); font-weight:700; color:#fdba74;" maxlength="9" oninput="applyRaceTimeMask(this)" value="${escapeHtml(g3.time === '--:--.---' ? '' : (g3.time || ''))}" placeholder="01:19.450">
+                                <input type="text" id="ch-p3-time-${idx}" class="admin-form-input" style="font-family: var(--font-mono); font-weight: 700; color: #fdba74;" maxlength="9" oninput="applyRaceTimeMask(this)" value="${escapeHtml(g3.time === '--:--.---' ? '' : (g3.time || ''))}" placeholder="01:19.450">
                             </div>
                         </div>
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                             <div>
                                 <label class="admin-field-label">Bono Puntos</label>
                                 <input type="number" id="ch-p3-bonus-${idx}" class="admin-form-input" value="${g3.bonus || 20}">
@@ -2710,9 +2809,148 @@ function renderChampionshipAdminChallenges() {
                         </div>
                     </div>
                 </div>
+
+                <!-- Barra inferior de guardado rápido -->
+                <div style="display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin-top: 4px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.04);">
+                    <span style="font-size: 10.5px; color: var(--text-muted); margin-right: auto;">Desafío #${idx + 1} de la Semana ${currentChampAdminWeek}</span>
+                    <button type="button" class="admin-btn admin-btn-xs" onclick="saveChampionshipSingleChallenge(${idx})" 
+                        style="background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.5); color: #6ee7b7; padding: 4px 10px; font-size: 11px; border-radius: 4px; cursor: pointer;">
+                        💾 Guardar Cambios Desafío #${idx + 1}
+                    </button>
+                </div>
             </div>
         `;
     }).join('');
+}
+
+function getChampionshipChallengeFromUI(idx) {
+    const routeEl = document.getElementById(`ch-route-${idx}`);
+    const typeEl = document.getElementById(`ch-type-${idx}`);
+    const carEl = document.getElementById(`ch-car-${idx}`);
+
+    const p1Pilot = document.getElementById(`ch-p1-pilot-${idx}`)?.value.trim() || 'Por disputar';
+    const p1Car = document.getElementById(`ch-p1-car-${idx}`)?.value.trim() || '';
+    const p1Time = document.getElementById(`ch-p1-time-${idx}`)?.value.trim() || '--:--.---';
+    const p1Bonus = parseInt(document.getElementById(`ch-p1-bonus-${idx}`)?.value || '100', 10);
+    const p1Rep = parseInt(document.getElementById(`ch-p1-rep-${idx}`)?.value || '400000', 10);
+
+    const p2Pilot = document.getElementById(`ch-p2-pilot-${idx}`)?.value.trim() || 'Por disputar';
+    const p2Car = document.getElementById(`ch-p2-car-${idx}`)?.value.trim() || '';
+    const p2Time = document.getElementById(`ch-p2-time-${idx}`)?.value.trim() || '--:--.---';
+    const p2Bonus = parseInt(document.getElementById(`ch-p2-bonus-${idx}`)?.value || '50', 10);
+    const p2Rep = parseInt(document.getElementById(`ch-p2-rep-${idx}`)?.value || '250000', 10);
+
+    const p3Pilot = document.getElementById(`ch-p3-pilot-${idx}`)?.value.trim() || 'Por disputar';
+    const p3Car = document.getElementById(`ch-p3-car-${idx}`)?.value.trim() || '';
+    const p3Time = document.getElementById(`ch-p3-time-${idx}`)?.value.trim() || '--:--.---';
+    const p3Bonus = parseInt(document.getElementById(`ch-p3-bonus-${idx}`)?.value || '20', 10);
+    const p3Rep = parseInt(document.getElementById(`ch-p3-rep-${idx}`)?.value || '120000', 10);
+
+    return {
+        id: `w${currentChampAdminWeek}-ch${idx + 1}`,
+        route: routeEl ? routeEl.value.trim() : `Pista Oficial #${idx + 1}`,
+        type: typeEl ? typeEl.value : 'Circuito',
+        carRestriction: carEl ? carEl.value.trim() : 'Libre / Stock',
+        top3: [
+            {
+                pilot: p1Pilot,
+                car: p1Car,
+                time: p1Time,
+                bonus: p1Bonus,
+                badge: `🥇 +${p1Bonus} PTS`,
+                repMoney: p1Rep,
+                repBadge: `💰 $${p1Rep.toLocaleString('de-DE')} REP`
+            },
+            {
+                pilot: p2Pilot,
+                car: p2Car,
+                time: p2Time,
+                bonus: p2Bonus,
+                badge: `🥈 +${p2Bonus} PTS`,
+                repMoney: p2Rep,
+                repBadge: `💰 $${p2Rep.toLocaleString('de-DE')} REP`
+            },
+            {
+                pilot: p3Pilot,
+                car: p3Car,
+                time: p3Time,
+                bonus: p3Bonus,
+                badge: `🥉 +${p3Bonus} PTS`,
+                repMoney: p3Rep,
+                repBadge: `💰 $${p3Rep.toLocaleString('de-DE')} REP`
+            }
+        ]
+    };
+}
+
+async function saveChampionshipSingleChallenge(idx) {
+    const chData = getChampionshipChallengeFromUI(idx);
+    const defaults = getChampionshipDefaultWeeksData();
+    if (!cachedChampWeeksData) {
+        cachedChampWeeksData = defaults ? JSON.parse(JSON.stringify(defaults)) : {};
+    }
+    if (!cachedChampWeeksData[currentChampAdminWeek] && !cachedChampWeeksData[String(currentChampAdminWeek)]) {
+        if (defaults && (defaults[currentChampAdminWeek] || defaults[String(currentChampAdminWeek)])) {
+            cachedChampWeeksData[currentChampAdminWeek] = JSON.parse(JSON.stringify(defaults[currentChampAdminWeek] || defaults[String(currentChampAdminWeek)]));
+        } else {
+            cachedChampWeeksData[currentChampAdminWeek] = { groups: [], challenges: [] };
+        }
+    }
+    const weekData = cachedChampWeeksData[currentChampAdminWeek] || cachedChampWeeksData[String(currentChampAdminWeek)];
+    if (!weekData.challenges) weekData.challenges = [];
+    weekData.challenges[idx] = chData;
+
+    showToast(`💾 Guardando Desafío #${idx + 1} (${chData.route})...`, "info");
+    const ok = await persistChampionshipWeeksData(cachedChampWeeksData);
+    if (ok) {
+        showToast(`✓ ¡Desafío #${idx + 1} (${chData.route}) guardado y sincronizado con la web!`, "success");
+    } else {
+        showToast(`✓ ¡Desafío #${idx + 1} guardado en caché local!`, "info");
+    }
+}
+
+async function saveChampionshipAllChallenges() {
+    const defaults = getChampionshipDefaultWeeksData();
+    if (!cachedChampWeeksData) {
+        cachedChampWeeksData = defaults ? JSON.parse(JSON.stringify(defaults)) : {};
+    }
+    if (!cachedChampWeeksData[currentChampAdminWeek] && !cachedChampWeeksData[String(currentChampAdminWeek)]) {
+        if (defaults && (defaults[currentChampAdminWeek] || defaults[String(currentChampAdminWeek)])) {
+            cachedChampWeeksData[currentChampAdminWeek] = JSON.parse(JSON.stringify(defaults[currentChampAdminWeek] || defaults[String(currentChampAdminWeek)]));
+        } else {
+            cachedChampWeeksData[currentChampAdminWeek] = { groups: [], challenges: [] };
+        }
+    }
+    const weekData = cachedChampWeeksData[currentChampAdminWeek] || cachedChampWeeksData[String(currentChampAdminWeek)];
+    weekData.challenges = [];
+    for (let idx = 0; idx < 8; idx++) {
+        weekData.challenges.push(getChampionshipChallengeFromUI(idx));
+    }
+
+    showToast(`💾 Guardando los 8 desafíos de la Semana ${currentChampAdminWeek}...`, "info");
+    const ok = await persistChampionshipWeeksData(cachedChampWeeksData);
+    if (ok) {
+        showToast(`✓ ¡Los 8 desafíos de la Semana ${currentChampAdminWeek} guardados y sincronizados con la web!`, "success");
+    } else {
+        showToast(`✓ ¡Desafíos guardados en caché local!`, "info");
+    }
+}
+
+function resetChampionshipSingleChallenge(idx) {
+    const defaults = getChampionshipDefaultWeeksData();
+    const defWeek = defaults ? (defaults[currentChampAdminWeek] || defaults[String(currentChampAdminWeek)]) : null;
+    const defCh = defWeek && defWeek.challenges && defWeek.challenges[idx] ? defWeek.challenges[idx] : null;
+
+    if (!confirm(`¿Restablecer el Desafío #${idx + 1} a su configuración oficial por defecto?`)) return;
+
+    if (defCh) {
+        const weekData = getActiveChampWeekData(currentChampAdminWeek);
+        if (weekData && weekData.challenges) {
+            weekData.challenges[idx] = JSON.parse(JSON.stringify(defCh));
+            renderChampionshipAdminChallenges();
+            showToast(`Desafío #${idx + 1} restablecido. Haz clic en "Guardar Desafío" para persistir el cambio.`, "info");
+        }
+    }
 }
 
 async function saveChampionshipAdmin() {
@@ -2736,94 +2974,19 @@ async function saveChampionshipAdmin() {
     // 1. Guardar todos los Grupos Dinámicamente
     weekData.groups = getChampionshipGroupsFromUI();
 
-
     // 2. Guardar los 8 Desafíos
+    weekData.challenges = [];
     for (let idx = 0; idx < 8; idx++) {
-        if (!weekData.challenges[idx]) weekData.challenges[idx] = { id: `w${currentChampAdminWeek}-ch${idx+1}` };
-        const ch = weekData.challenges[idx];
-
-        const routeEl = document.getElementById(`ch-route-${idx}`);
-        const typeEl = document.getElementById(`ch-type-${idx}`);
-        const carEl = document.getElementById(`ch-car-${idx}`);
-
-        if (routeEl) ch.route = routeEl.value.trim();
-        if (typeEl) ch.type = typeEl.value;
-        if (carEl) ch.carRestriction = carEl.value.trim();
-
-        if (!ch.top3 || !Array.isArray(ch.top3)) {
-            ch.top3 = [{}, {}, {}];
-        }
-
-        // Ganador Oro
-        const p1Pilot = document.getElementById(`ch-p1-pilot-${idx}`)?.value.trim() || 'Por disputar';
-        const p1Car = document.getElementById(`ch-p1-car-${idx}`)?.value.trim() || '';
-        const p1Time = document.getElementById(`ch-p1-time-${idx}`)?.value.trim() || '--:--.---';
-        const p1Bonus = parseInt(document.getElementById(`ch-p1-bonus-${idx}`)?.value || '100', 10);
-        const p1Rep = parseInt(document.getElementById(`ch-p1-rep-${idx}`)?.value || '400000', 10);
-        ch.top3[0] = {
-            pilot: p1Pilot,
-            car: p1Car,
-            time: p1Time,
-            bonus: p1Bonus,
-            badge: `🥇 +${p1Bonus} PTS`,
-            repMoney: p1Rep,
-            repBadge: `💰 $${p1Rep.toLocaleString('de-DE')} REP`
-        };
-
-        // Ganador Silver
-        const p2Pilot = document.getElementById(`ch-p2-pilot-${idx}`)?.value.trim() || 'Por disputar';
-        const p2Car = document.getElementById(`ch-p2-car-${idx}`)?.value.trim() || '';
-        const p2Time = document.getElementById(`ch-p2-time-${idx}`)?.value.trim() || '--:--.---';
-        const p2Bonus = parseInt(document.getElementById(`ch-p2-bonus-${idx}`)?.value || '50', 10);
-        const p2Rep = parseInt(document.getElementById(`ch-p2-rep-${idx}`)?.value || '250000', 10);
-        ch.top3[1] = {
-            pilot: p2Pilot,
-            car: p2Car,
-            time: p2Time,
-            bonus: p2Bonus,
-            badge: `🥈 +${p2Bonus} PTS`,
-            repMoney: p2Rep,
-            repBadge: `💰 $${p2Rep.toLocaleString('de-DE')} REP`
-        };
-
-        // Ganador Bronce
-        const p3Pilot = document.getElementById(`ch-p3-pilot-${idx}`)?.value.trim() || 'Por disputar';
-        const p3Car = document.getElementById(`ch-p3-car-${idx}`)?.value.trim() || '';
-        const p3Time = document.getElementById(`ch-p3-time-${idx}`)?.value.trim() || '--:--.---';
-        const p3Bonus = parseInt(document.getElementById(`ch-p3-bonus-${idx}`)?.value || '20', 10);
-        const p3Rep = parseInt(document.getElementById(`ch-p3-rep-${idx}`)?.value || '120000', 10);
-        ch.top3[2] = {
-            pilot: p3Pilot,
-            car: p3Car,
-            time: p3Time,
-            bonus: p3Bonus,
-            badge: `🥉 +${p3Bonus} PTS`,
-            repMoney: p3Rep,
-            repBadge: `💰 $${p3Rep.toLocaleString('de-DE')} REP`
-        };
+        weekData.challenges.push(getChampionshipChallengeFromUI(idx));
     }
 
-    // 3. Persistir en Firebase RTDB y localStorage
-    showToast(`Guardando Semana ${currentChampAdminWeek} en Firebase RTDB...`, "info");
-    const baseUrl = (window.NFS_FIREBASE && window.NFS_FIREBASE.RTDB_URL) ? window.NFS_FIREBASE.RTDB_URL : "https://nfsranks-blacklist-default-rtdb.firebaseio.com";
-
-    try {
-        localStorage.setItem('nfs_championship_weeks_data_v1', JSON.stringify(cachedChampWeeksData));
-        if (typeof window !== 'undefined' && window.CHAMPIONSHIP_WEEKS_DATA) {
-            Object.assign(window.CHAMPIONSHIP_WEEKS_DATA, cachedChampWeeksData);
-        }
-
-        const res = await fetch(`${baseUrl}/championship/weeks_data.json`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(cachedChampWeeksData)
-        });
-
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        showToast(`✓ ¡Semana ${currentChampAdminWeek} guardada con éxito en Firebase RTDB!`, "success");
-    } catch (err) {
-        console.error("Error guardando campeonato en RTDB:", err);
-        showToast(`⚠️ Guardado en caché local (Error nube: ${err.message})`, "warning");
+    // 3. Persistir en Firebase RTDB y localStorage con sincronización en tiempo real
+    showToast(`Guardando Semana ${currentChampAdminWeek} completa en Firebase RTDB...`, "info");
+    const ok = await persistChampionshipWeeksData(cachedChampWeeksData);
+    if (ok) {
+        showToast(`✓ ¡Semana ${currentChampAdminWeek} completa guardada y sincronizada con la web!`, "success");
+    } else {
+        showToast(`✓ ¡Semana ${currentChampAdminWeek} guardada en caché local!`, "info");
     }
 }
 

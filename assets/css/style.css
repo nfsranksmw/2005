@@ -72,7 +72,7 @@ body {
     position: relative;
 }
 
-/* Fondo cinemático global con BMW M3 GTR Dark Studio (Need for Speed Most Wanted) */
+/* Fondo cinemático global con BMW M3 GTR Black Edition (Need for Speed Most Wanted) */
 body::before {
     content: '';
     position: fixed;
@@ -81,15 +81,39 @@ body::before {
     width: 100vw;
     height: 100vh;
     background-image: 
-        radial-gradient(ellipse at 65% 35%, rgba(15, 15, 18, 0.3) 0%, rgba(15, 15, 18, 0.75) 55%, #0f0f12 100%),
-        linear-gradient(180deg, rgba(15, 15, 18, 0.35) 0%, rgba(15, 15, 18, 0.85) 100%),
-        url('../img/bmw-m3-hero-dark.jpg');
+        radial-gradient(ellipse at 65% 35%, rgba(10, 12, 16, 0.40) 0%, rgba(10, 12, 16, 0.75) 55%, #080a0e 100%),
+        linear-gradient(180deg, rgba(10, 12, 16, 0.35) 0%, rgba(10, 12, 16, 0.80) 60%, #080a0e 100%),
+        url('../img/Black%20Edition.jpg');
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
-    opacity: 0.15;
+    opacity: 0.18;
     pointer-events: none;
     z-index: 0;
+}
+
+/* Fondo cinemático oscurecido para la sección de Comisaría & Administración (admin.html) */
+body.admin-body::before {
+    opacity: 0.22 !important;
+    background-image: 
+        radial-gradient(ellipse at 65% 35%, rgba(9, 11, 14, 0.40) 0%, rgba(9, 11, 14, 0.72) 55%, #06080d 100%),
+        linear-gradient(180deg, rgba(9, 11, 14, 0.35) 0%, rgba(9, 11, 14, 0.75) 55%, #06080d 100%),
+        url('../img/Black%20Edition.jpg') !important;
+}
+
+/* Fondo negro oficial para controles de selección (select, option, optgroup) */
+select option,
+select optgroup {
+    background-color: #06080d !important;
+    background: #06080d !important;
+    color: #ffffff !important;
+    padding: 8px 12px;
+}
+
+select optgroup {
+    background-color: #030407 !important;
+    color: var(--nfs-orange, #ff7700) !important;
+    font-weight: 800;
 }
 
 /* ==========================================================================
@@ -1381,9 +1405,9 @@ h2.section-title span.glow {
 #view-routes .tracker-section-header,
 #view-leaderboard .tracker-section-header {
     background: 
-        linear-gradient(180deg, rgba(8, 10, 15, 0.72) 0%, rgba(8, 10, 15, 0.42) 40%, rgba(8, 10, 15, 0.78) 80%, rgba(6, 8, 12, 0.96) 100%),
-        radial-gradient(ellipse at center, rgba(255, 119, 0, 0.1) 0%, rgba(0, 0, 0, 0.65) 100%),
-        url('../img/routes-header-banner.jpg') no-repeat center 60% / cover;
+        linear-gradient(180deg, rgba(8, 10, 15, 0.28) 0%, rgba(8, 10, 15, 0.05) 38%, rgba(8, 10, 15, 0.30) 75%, rgba(6, 8, 12, 0.68) 100%),
+        radial-gradient(ellipse at center, rgba(255, 119, 0, 0.04) 0%, rgba(0, 0, 0, 0.25) 100%),
+        url('../img/routes-header-banner.jpg') no-repeat center 58% / cover !important;
 }
 
 .tracker-header-badge {
@@ -5663,9 +5687,9 @@ footer strong {
 #view-members .blacklist-table-wrapper {
     margin-top: 15px;
     border-radius: 10px;
-    background: rgba(10, 14, 20, 0.85);
-    border: 1px solid var(--border-subtle);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+    background: #0b0e17 !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85) !important;
     overflow-x: auto;
     max-height: none !important;
     overflow-y: visible !important;
@@ -5741,22 +5765,7 @@ footer strong {
 }
 
 #view-home::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: 
-        radial-gradient(ellipse at 50% 20%, rgba(15, 15, 18, 0.15) 0%, rgba(15, 15, 18, 0.7) 55%, rgba(15, 15, 18, 0.98) 100%),
-        linear-gradient(to bottom, rgba(15, 15, 18, 0.2) 0%, rgba(15, 15, 18, 0.7) 40%, rgba(15, 15, 18, 0.98) 100%),
-        url('../img/bmw-m3-hero-dark.jpg');
-    background-repeat: no-repeat;
-    background-position: center 15%;
-    background-size: cover;
-    opacity: 0.22;
-    pointer-events: none;
-    z-index: 0;
+    display: none;
 }
 
 #view-home > * {
@@ -11078,13 +11087,62 @@ body > .skiptranslate {
    Tablas de Telemetría Oficial de Tiempos: Píldoras de Hardware, Badges
    Hexagonales, Indicador World Record P1, y Tipografía de Precisión Monospaced.
    ========================================================================== */
+/* ==========================================================================
+   LAYOUT AMPLIADO PANORÁMICO DE LEADERBOARDS (INSPIRADO EN COMISARIO OFICIAL ADMIN.HTML)
+   Estructura Widescreen de 1440px: Cabecera con imagen, pestañas y tablas
+   alineadas al mismo ancho exacto, ofreciendo máxima amplitud y legibilidad.
+   ========================================================================== */
+#view-leaderboard {
+    max-width: 1440px !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    box-sizing: border-box !important;
+}
+
+#view-leaderboard .tracker-section-header {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    margin-bottom: 20px !important;
+}
+
+#view-leaderboard .tracker-section-header .tracker-header-content {
+    max-width: 100% !important;
+    width: 100% !important;
+}
+
+#view-leaderboard .tabs-group {
+    display: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    margin-bottom: 16px !important;
+}
+
+#view-leaderboard .tabs-group.active-group {
+    display: flex !important;
+    gap: 8px !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+}
+
+#view-leaderboard .table-section {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
 
 /* 1. Contenedor de la tabla en formato tarjeta de fibra oscura */
 #view-leaderboard .blacklist-table-wrapper {
-    background: rgba(11, 14, 21, 0.94) !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    background: #0b0e17 !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
     border-radius: 12px !important;
-    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.92), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
     overflow-x: auto !important;
     overflow-y: visible !important;
     margin-top: 14px !important;
@@ -11097,6 +11155,7 @@ body > .skiptranslate {
 
 #view-leaderboard .blacklist-table {
     width: 100% !important;
+    table-layout: fixed !important;
     border-collapse: separate !important;
     border-spacing: 0 !important;
 }
@@ -11112,7 +11171,7 @@ body > .skiptranslate {
 }
 
 #view-leaderboard .blacklist-table thead th {
-    padding: 12px 14px !important;
+    padding: 13px 10px !important;
     font-family: var(--font-racing), sans-serif !important;
     font-size: 11px !important;
     font-weight: 800 !important;
@@ -11125,56 +11184,71 @@ body > .skiptranslate {
     white-space: nowrap !important;
 }
 
+/* Distribución simétrica y balanceada de columnas:
+   Tiempos cercanos al piloto y espaciado parejo en todas las columnas */
 #view-leaderboard .blacklist-table thead th.col-place {
-    width: 48px !important;
-    max-width: 52px !important;
+    width: 5% !important;
+    min-width: 48px !important;
+    max-width: 60px !important;
     text-align: center !important;
-    padding-left: 14px !important;
-    padding-right: 8px !important;
+    padding-left: 8px !important;
+    padding-right: 6px !important;
 }
 
 #view-leaderboard .blacklist-table thead th.col-player {
-    width: auto !important;
-    min-width: 230px !important;
+    width: 25% !important;
+    min-width: 220px !important;
     text-align: left !important;
-    padding-left: 8px !important;
+    padding-left: 6px !important;
     padding-right: 14px !important;
 }
 
 #view-leaderboard .blacklist-table thead th.col-time {
-    width: 120px !important;
-    min-width: 115px !important;
+    width: 12% !important;
+    min-width: 120px !important;
     text-align: left !important;
+    padding-left: 8px !important;
+    padding-right: 10px !important;
 }
 
 #view-leaderboard .blacklist-table thead th.col-car {
-    width: 115px !important;
-    min-width: 105px !important;
+    width: 13% !important;
+    min-width: 120px !important;
     text-align: left !important;
+    padding-left: 8px !important;
+    padding-right: 10px !important;
 }
 
 #view-leaderboard .blacklist-table thead th.col-device {
-    width: 165px !important;
+    width: 16% !important;
     min-width: 150px !important;
     text-align: left !important;
+    padding-left: 8px !important;
+    padding-right: 10px !important;
 }
 
 #view-leaderboard .blacklist-table thead th.col-gearbox {
-    width: 95px !important;
-    min-width: 90px !important;
+    width: 11% !important;
+    min-width: 100px !important;
     text-align: left !important;
+    padding-left: 8px !important;
+    padding-right: 10px !important;
 }
 
 #view-leaderboard .blacklist-table thead th.col-date {
-    width: 95px !important;
+    width: 9% !important;
     min-width: 90px !important;
     text-align: left !important;
+    padding-left: 8px !important;
+    padding-right: 10px !important;
 }
 
 #view-leaderboard .blacklist-table thead th.col-video {
-    width: 85px !important;
-    min-width: 80px !important;
+    width: 9% !important;
+    min-width: 85px !important;
     text-align: center !important;
+    padding-left: 6px !important;
+    padding-right: 8px !important;
 }
 
 /* 2. Filas de clasificación */
@@ -11205,17 +11279,18 @@ body > .skiptranslate {
 
 /* Celdas generales */
 #view-leaderboard .blacklist-table td {
-    padding: 12px 14px !important;
+    padding: 12px 10px !important;
     vertical-align: middle !important;
 }
 
 /* 3. Columna 1: Badges de Posición (Hexágonos Top 3 & Números 4+) */
 #view-leaderboard .blacklist-table td.col-place {
-    width: 48px !important;
-    max-width: 52px !important;
+    width: 5% !important;
+    min-width: 48px !important;
+    max-width: 60px !important;
     text-align: center !important;
-    padding-left: 14px !important;
-    padding-right: 8px !important;
+    padding-left: 8px !important;
+    padding-right: 6px !important;
 }
 
 #view-leaderboard .hex-badge {
@@ -11408,25 +11483,37 @@ body > .skiptranslate {
     border-color: rgba(234, 88, 12, 0.35) !important;
 }
 
-/* 5. Columna 3: Tiempo Récord en Monospace */
-#view-leaderboard .blacklist-table td.col-time {
-    width: 120px !important;
-    min-width: 115px !important;
+#view-leaderboard .bl-chip-gearbox {
+    display: none;
 }
 
-#view-leaderboard .time-stat-val {
+/* 5. Columna 3: Tiempo Récord en Monospace (Color Naranja Característico) */
+#view-leaderboard .blacklist-table td.col-time {
+    width: 12% !important;
+    min-width: 120px !important;
+    text-align: left !important;
+    padding-left: 8px !important;
+    padding-right: 10px !important;
+}
+
+#view-leaderboard .time-stat-val,
+#view-leaderboard .blacklist-table td.col-time .time-stat-val {
     font-family: var(--font-mono, 'JetBrains Mono', monospace) !important;
     font-variant-numeric: tabular-nums !important;
     font-size: 15.5px !important;
     font-weight: 800 !important;
     color: #ffffff !important;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px rgba(226, 232, 240, 0.45) !important;
     letter-spacing: 0.5px !important;
 }
 
 /* 6. Columna 4: Vehículo */
 #view-leaderboard .blacklist-table td.col-car {
-    width: 115px !important;
-    min-width: 105px !important;
+    width: 13% !important;
+    min-width: 120px !important;
+    text-align: left !important;
+    padding-left: 8px !important;
+    padding-right: 10px !important;
 }
 
 #view-leaderboard .leaderboard-car-text {
@@ -11438,8 +11525,11 @@ body > .skiptranslate {
 
 /* 7. Columna 5: Píldora de Dispositivo */
 #view-leaderboard .blacklist-table td.col-device {
-    width: 165px !important;
+    width: 16% !important;
     min-width: 150px !important;
+    text-align: left !important;
+    padding-left: 8px !important;
+    padding-right: 10px !important;
 }
 
 #view-leaderboard .leaderboard-device-pill,
@@ -11468,40 +11558,54 @@ body > .skiptranslate {
     flex-shrink: 0 !important;
 }
 
-/* 8. Columna 6: Píldora de Transmisión (Caja de Cambios) */
+/* 8. Columna 6: Píldora de Transmisión (Caja de Cambios Manual / Auto en Azul Eléctrico) */
 #view-leaderboard .blacklist-table td.col-gearbox {
-    width: 95px !important;
-    min-width: 90px !important;
+    width: 11% !important;
+    min-width: 100px !important;
+    text-align: left !important;
+    padding-left: 8px !important;
+    padding-right: 10px !important;
 }
 
 #view-leaderboard .leaderboard-gearbox-pill {
     display: inline-flex !important;
     align-items: center !important;
-    gap: 5px !important;
-    background: rgba(20, 24, 33, 0.9) !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    gap: 6px !important;
+    background: rgba(14, 25, 45, 0.85) !important;
+    border: 1px solid rgba(56, 189, 248, 0.3) !important;
     border-radius: 6px !important;
     padding: 4px 10px !important;
     font-size: 11px !important;
     font-weight: 600 !important;
-    color: #e2e8f0 !important;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35) !important;
+    color: #38bdf8 !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35), 0 0 8px rgba(56, 189, 248, 0.12) !important;
     white-space: nowrap !important;
 }
 
+#view-leaderboard .leaderboard-gearbox-pill .gearbox-label,
+#view-leaderboard .gearbox-label,
+.hw-gearbox-badge {
+    color: #38bdf8 !important;
+    font-weight: 700 !important;
+    text-shadow: 0 0 8px rgba(56, 189, 248, 0.45) !important;
+}
+
 #view-leaderboard .leaderboard-gearbox-pill .gear-icon {
-    color: #fbbf24 !important;
+    color: #38bdf8 !important;
     font-size: 11.5px !important;
     display: inline-block !important;
     vertical-align: middle !important;
-    filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.4)) !important;
+    filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.5)) !important;
     flex-shrink: 0 !important;
 }
 
 /* 9. Columna 7: Fecha de Registro */
 #view-leaderboard .blacklist-table td.col-date {
-    width: 95px !important;
+    width: 9% !important;
     min-width: 90px !important;
+    text-align: left !important;
+    padding-left: 8px !important;
+    padding-right: 10px !important;
 }
 
 #view-leaderboard .leaderboard-date-text {
@@ -11513,9 +11617,11 @@ body > .skiptranslate {
 
 /* 10. Columna 8: Botón de Video */
 #view-leaderboard .blacklist-table td.col-video {
-    width: 85px !important;
-    min-width: 80px !important;
+    width: 9% !important;
+    min-width: 85px !important;
     text-align: center !important;
+    padding-left: 6px !important;
+    padding-right: 8px !important;
 }
 
 #view-leaderboard .btn-yt-link {
@@ -11552,8 +11658,60 @@ body > .skiptranslate {
     font-size: 11px !important;
 }
 
-/* 11. Adaptación Responsiva para Móvil (< 768px) */
+/* 11. Adaptación Responsiva para Pantallas Medianas (< 1080px) */
+@media (max-width: 1080px) and (min-width: 768px) {
+    #view-leaderboard {
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+    }
+
+    #view-leaderboard .blacklist-table-wrapper {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    #view-leaderboard .blacklist-table {
+        min-width: 920px !important;
+        table-layout: auto !important;
+    }
+
+    #view-leaderboard .blacklist-table thead th {
+        padding: 11px 8px !important;
+        font-size: 10.5px !important;
+    }
+
+    #view-leaderboard .blacklist-table td {
+        padding: 10px 8px !important;
+    }
+
+    #view-leaderboard .driver-cell-name {
+        font-size: 13.5px !important;
+    }
+
+    #view-leaderboard .time-stat-val {
+        font-size: 14px !important;
+    }
+
+    #view-leaderboard .leaderboard-device-pill,
+    #view-leaderboard .leaderboard-gearbox-pill {
+        padding: 3px 8px !important;
+        font-size: 10.5px !important;
+    }
+}
+
+/* 12. Adaptación Responsiva para Móvil (< 768px) */
 @media (max-width: 767px) {
+    #view-leaderboard {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    #view-leaderboard .tracker-section-header {
+        padding: 14px 12px 12px 12px !important;
+        min-height: 90px !important;
+        margin-bottom: 14px !important;
+    }
+
     #view-leaderboard .blacklist-table th.col-desktop,
     #view-leaderboard .blacklist-table td.col-desktop {
         display: none !important;
@@ -11562,6 +11720,7 @@ body > .skiptranslate {
     #view-leaderboard .blacklist-table {
         table-layout: fixed !important;
         width: 100% !important;
+        min-width: 0 !important;
     }
 
     #view-leaderboard .blacklist-table thead th {
@@ -11572,8 +11731,8 @@ body > .skiptranslate {
 
     #view-leaderboard .blacklist-table th.col-place,
     #view-leaderboard .blacklist-table td.col-place {
-        width: 36px !important;
-        max-width: 38px !important;
+        width: 38px !important;
+        max-width: 42px !important;
         text-align: center !important;
         padding: 8px 2px !important;
     }
@@ -11588,20 +11747,22 @@ body > .skiptranslate {
 
     #view-leaderboard .blacklist-table th.col-time,
     #view-leaderboard .blacklist-table td.col-time {
-        width: 82px !important;
-        max-width: 86px !important;
+        width: 92px !important;
+        max-width: 96px !important;
         text-align: right !important;
         padding: 8px 4px !important;
     }
 
     #view-leaderboard .blacklist-table td.col-time .time-stat-val {
-        font-size: 12.5px !important;
+        font-size: 13px !important;
+        color: #ffffff !important;
+        text-shadow: 0 0 8px rgba(255, 255, 255, 0.6) !important;
     }
 
     #view-leaderboard .blacklist-table th.col-video,
     #view-leaderboard .blacklist-table td.col-video {
-        width: 58px !important;
-        max-width: 62px !important;
+        width: 62px !important;
+        max-width: 66px !important;
         text-align: center !important;
         padding: 8px 2px !important;
     }
@@ -11609,6 +11770,16 @@ body > .skiptranslate {
     #view-leaderboard .blacklist-table td.col-video .btn-yt-link {
         padding: 4px 6px !important;
         font-size: 8.5px !important;
+    }
+
+    .bl-chip-gearbox {
+        display: inline-block !important;
+        color: #38bdf8 !important;
+        border-color: rgba(56, 189, 248, 0.4) !important;
+        background: rgba(14, 25, 45, 0.8) !important;
+        font-weight: 700 !important;
+        font-size: 8.5px !important;
+        padding: 1px 4px !important;
     }
 }
 
@@ -11622,21 +11793,21 @@ body > .skiptranslate {
 #view-leaderboard #tab-sprintdrag-bmw .blacklist-table-wrapper {
     background: 
         linear-gradient(135deg, 
-            rgba(30, 64, 175, 0.14) 0%, 
+            rgba(30, 64, 175, 0.16) 0%, 
             rgba(203, 213, 225, 0.08) 18%, 
-            rgba(11, 16, 26, 0.94) 42%, 
-            rgba(14, 22, 38, 0.95) 62%, 
-            rgba(37, 99, 235, 0.12) 82%, 
-            rgba(148, 163, 184, 0.06) 100%
+            #0b101c 42%, 
+            #0e1422 62%, 
+            rgba(37, 99, 235, 0.14) 82%, 
+            #0b101c 100%
         ),
-        radial-gradient(circle at 10% 15%, rgba(59, 130, 246, 0.12) 0%, transparent 45%),
-        radial-gradient(circle at 90% 85%, rgba(203, 213, 225, 0.07) 0%, transparent 45%),
-        rgba(10, 15, 26, 0.95) !important;
-    border: 1px solid rgba(96, 165, 250, 0.28) !important;
+        radial-gradient(circle at 10% 15%, rgba(59, 130, 246, 0.15) 0%, transparent 45%),
+        radial-gradient(circle at 90% 85%, rgba(203, 213, 225, 0.08) 0%, transparent 45%),
+        #0a0f1c !important;
+    border: 1px solid rgba(96, 165, 250, 0.45) !important;
     box-shadow: 
-        0 14px 40px rgba(0, 0, 0, 0.8), 
-        inset 0 1px 0 rgba(226, 232, 240, 0.22), 
-        0 0 25px rgba(37, 99, 235, 0.1) !important;
+        0 16px 45px rgba(0, 0, 0, 0.95), 
+        inset 0 1px 0 rgba(226, 232, 240, 0.28), 
+        0 0 30px rgba(37, 99, 235, 0.22) !important;
 }
 
 /* Cabecera oficial para tablas BMW */
@@ -11683,24 +11854,71 @@ body > .skiptranslate {
     background: linear-gradient(90deg, rgba(37, 99, 235, 0.28) 0%, rgba(203, 213, 225, 0.12) 35%, rgba(37, 99, 235, 0.06) 70%, transparent 100%) !important;
 }
 
-/* Botones de funciones de video (▶ VIDEO) con acabado Azul Carreras & Plata */
+/* Botones de funciones de video (▶ VIDEO) con tonalidad idéntica a la caja de cambios (#38bdf8) */
 #view-leaderboard #tab-bmw-single .btn-yt-link,
 #view-leaderboard #tab-bmw-fast .btn-yt-link,
 #view-leaderboard #tab-sprintdrag-bmw .btn-yt-link {
-    background: linear-gradient(135deg, rgba(37, 99, 235, 0.18) 0%, rgba(30, 58, 102, 0.32) 100%) !important;
-    border: 1px solid rgba(96, 165, 250, 0.45) !important;
-    color: #60a5fa !important;
-    box-shadow: 0 0 10px rgba(37, 99, 235, 0.25) !important;
+    background: rgba(14, 25, 45, 0.88) !important;
+    border: 1px solid rgba(56, 189, 248, 0.35) !important;
+    color: #38bdf8 !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35), 0 0 8px rgba(56, 189, 248, 0.15) !important;
+    text-shadow: 0 0 8px rgba(56, 189, 248, 0.45) !important;
 }
 
 #view-leaderboard #tab-bmw-single .btn-yt-link:hover,
 #view-leaderboard #tab-bmw-fast .btn-yt-link:hover,
 #view-leaderboard #tab-sprintdrag-bmw .btn-yt-link:hover {
-    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
-    border-color: #bfdbfe !important;
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(14, 25, 45, 0.95) 100%) !important;
+    border-color: #38bdf8 !important;
     color: #ffffff !important;
-    box-shadow: 0 0 16px rgba(59, 130, 246, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.6) !important;
     transform: translateY(-1px) !important;
+}
+
+/* Tiempos Récord en tablas BMW M3 GTR (Single Lap, Fast Lap, Sprint y Drag) en blanco plata icónico (#ffffff) */
+#view-leaderboard #tab-bmw-single .time-stat-val,
+#view-leaderboard #tab-bmw-fast .time-stat-val,
+#view-leaderboard #tab-sprintdrag-bmw .time-stat-val,
+#view-leaderboard #tab-bmw-single .blacklist-table td.col-time .time-stat-val,
+#view-leaderboard #tab-bmw-fast .blacklist-table td.col-time .time-stat-val,
+#view-leaderboard #tab-sprintdrag-bmw .blacklist-table td.col-time .time-stat-val {
+    color: #ffffff !important;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.75), 0 0 20px rgba(226, 232, 240, 0.5) !important;
+}
+
+/* Badge oficial de posición en cabecera de fichas técnicas */
+.tactical-standing-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 14px;
+    font-family: var(--font-racing), 'Times New Roman', serif;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #cbd5e1;
+    white-space: nowrap;
+}
+.tactical-standing-badge.badge-gold {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.25) 0%, rgba(217, 119, 6, 0.3) 100%);
+    border-color: #ffd700;
+    color: #ffd700;
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
+}
+.tactical-standing-badge.badge-silver {
+    background: linear-gradient(135deg, rgba(226, 232, 240, 0.22) 0%, rgba(148, 163, 184, 0.25) 100%);
+    border-color: #e2e8f0;
+    color: #ffffff;
+    box-shadow: 0 0 10px rgba(226, 232, 240, 0.35);
+}
+.tactical-standing-badge.badge-bronze {
+    background: linear-gradient(135deg, rgba(205, 127, 50, 0.25) 0%, rgba(180, 83, 9, 0.3) 100%);
+    border-color: #cd7f32;
+    color: #ffaa55;
+    box-shadow: 0 0 10px rgba(205, 127, 50, 0.35);
 }
 
 /* Botones de Pestañas / Categorías BMW M3 GTR */
@@ -11727,26 +11945,40 @@ body > .skiptranslate {
     box-shadow: 0 0 16px rgba(59, 130, 246, 0.45), inset 0 1px 0 rgba(226, 232, 240, 0.35) !important;
 }
 
-/* Píldoras de Dispositivo y Transmisión en tablas BMW */
+/* Píldoras de Dispositivo en tablas BMW */
 #view-leaderboard #tab-bmw-single .leaderboard-device-pill,
 #view-leaderboard #tab-bmw-fast .leaderboard-device-pill,
 #view-leaderboard #tab-sprintdrag-bmw .leaderboard-device-pill,
 #view-leaderboard #tab-bmw-single .hw-public-tag,
 #view-leaderboard #tab-bmw-fast .hw-public-tag,
-#view-leaderboard #tab-sprintdrag-bmw .hw-public-tag,
-#view-leaderboard #tab-bmw-single .leaderboard-gearbox-pill,
-#view-leaderboard #tab-bmw-fast .leaderboard-gearbox-pill,
-#view-leaderboard #tab-sprintdrag-bmw .leaderboard-gearbox-pill {
+#view-leaderboard #tab-sprintdrag-bmw .hw-public-tag {
     background: rgba(18, 28, 48, 0.88) !important;
     border: 1px solid rgba(148, 163, 184, 0.22) !important;
     color: #e2e8f0 !important;
 }
 
+/* Píldoras de Transmisión (Manual / Auto en Azul) en tablas BMW */
+#view-leaderboard #tab-bmw-single .leaderboard-gearbox-pill,
+#view-leaderboard #tab-bmw-fast .leaderboard-gearbox-pill,
+#view-leaderboard #tab-sprintdrag-bmw .leaderboard-gearbox-pill {
+    background: rgba(14, 25, 45, 0.88) !important;
+    border: 1px solid rgba(56, 189, 248, 0.35) !important;
+    color: #38bdf8 !important;
+}
+
+#view-leaderboard #tab-bmw-single .leaderboard-gearbox-pill .gearbox-label,
+#view-leaderboard #tab-bmw-fast .leaderboard-gearbox-pill .gearbox-label,
+#view-leaderboard #tab-sprintdrag-bmw .leaderboard-gearbox-pill .gearbox-label {
+    color: #38bdf8 !important;
+    font-weight: 700 !important;
+    text-shadow: 0 0 8px rgba(56, 189, 248, 0.45) !important;
+}
+
 #view-leaderboard #tab-bmw-single .leaderboard-gearbox-pill .gear-icon,
 #view-leaderboard #tab-bmw-fast .leaderboard-gearbox-pill .gear-icon,
 #view-leaderboard #tab-sprintdrag-bmw .leaderboard-gearbox-pill .gear-icon {
-    color: #93c5fd !important;
-    filter: drop-shadow(0 0 4px rgba(147, 197, 253, 0.45)) !important;
+    color: #38bdf8 !important;
+    filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.5)) !important;
 }
 
 /* Chips de Blacklist en tablas BMW */
@@ -11792,21 +12024,21 @@ body > .skiptranslate {
 #view-leaderboard #tab-sprintdrag-junkman .blacklist-table-wrapper {
     background: 
         linear-gradient(135deg, 
-            rgba(255, 119, 0, 0.10) 0%, 
-            rgba(245, 158, 11, 0.06) 18%, 
-            rgba(19, 24, 35, 0.95) 42%, 
-            rgba(23, 29, 43, 0.96) 62%, 
-            rgba(234, 88, 12, 0.08) 82%, 
-            rgba(148, 163, 184, 0.05) 100%
+            rgba(255, 119, 0, 0.12) 0%, 
+            rgba(245, 158, 11, 0.07) 18%, 
+            #131823 42%, 
+            #171d2b 62%, 
+            rgba(234, 88, 12, 0.10) 82%, 
+            #131823 100%
         ),
-        radial-gradient(circle at 10% 15%, rgba(255, 119, 0, 0.10) 0%, transparent 45%),
-        radial-gradient(circle at 90% 85%, rgba(245, 158, 11, 0.06) 0%, transparent 45%),
-        rgba(18, 23, 34, 0.96) !important;
-    border: 1px solid rgba(255, 153, 0, 0.32) !important;
+        radial-gradient(circle at 10% 15%, rgba(255, 119, 0, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 90% 85%, rgba(245, 158, 11, 0.07) 0%, transparent 45%),
+        #111622 !important;
+    border: 1px solid rgba(255, 153, 0, 0.45) !important;
     box-shadow: 
-        0 14px 40px rgba(0, 0, 0, 0.75), 
-        inset 0 1px 0 rgba(255, 210, 140, 0.25), 
-        0 0 25px rgba(255, 119, 0, 0.1) !important;
+        0 16px 45px rgba(0, 0, 0, 0.95), 
+        inset 0 1px 0 rgba(255, 210, 140, 0.28), 
+        0 0 30px rgba(255, 119, 0, 0.20) !important;
 }
 
 /* Cabecera oficial para tablas Junkman */
@@ -11873,6 +12105,17 @@ body > .skiptranslate {
     transform: translateY(-1px) !important;
 }
 
+/* Tiempos Récord en tablas Junkman (Single Lap, Fast Lap, Sprint y Drag) en blanco plata (#ffffff) */
+#view-leaderboard #tab-junkman-single .time-stat-val,
+#view-leaderboard #tab-junkman-fast .time-stat-val,
+#view-leaderboard #tab-sprintdrag-junkman .time-stat-val,
+#view-leaderboard #tab-junkman-single .blacklist-table td.col-time .time-stat-val,
+#view-leaderboard #tab-junkman-fast .blacklist-table td.col-time .time-stat-val,
+#view-leaderboard #tab-sprintdrag-junkman .blacklist-table td.col-time .time-stat-val {
+    color: #ffffff !important;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.75), 0 0 20px rgba(226, 232, 240, 0.5) !important;
+}
+
 /* Botones de Pestañas / Categorías Junkman */
 #container-tabs-circuit .tab-btn[onclick*="junkman"],
 #container-tabs-sprintdrag .tab-btn[onclick*="junkman"] {
@@ -11898,26 +12141,40 @@ body > .skiptranslate {
     box-shadow: 0 0 18px rgba(255, 119, 0, 0.5), inset 0 1px 0 rgba(255, 220, 150, 0.4) !important;
 }
 
-/* Píldoras de Dispositivo y Transmisión en tablas Junkman */
+/* Píldoras de Dispositivo en tablas Junkman */
 #view-leaderboard #tab-junkman-single .leaderboard-device-pill,
 #view-leaderboard #tab-junkman-fast .leaderboard-device-pill,
 #view-leaderboard #tab-sprintdrag-junkman .leaderboard-device-pill,
 #view-leaderboard #tab-junkman-single .hw-public-tag,
 #view-leaderboard #tab-junkman-fast .hw-public-tag,
-#view-leaderboard #tab-sprintdrag-junkman .hw-public-tag,
-#view-leaderboard #tab-junkman-single .leaderboard-gearbox-pill,
-#view-leaderboard #tab-junkman-fast .leaderboard-gearbox-pill,
-#view-leaderboard #tab-sprintdrag-junkman .leaderboard-gearbox-pill {
+#view-leaderboard #tab-sprintdrag-junkman .hw-public-tag {
     background: rgba(24, 28, 40, 0.9) !important;
     border: 1px solid rgba(255, 153, 0, 0.2) !important;
     color: #e2e8f0 !important;
 }
 
+/* Píldoras de Transmisión (Manual / Auto en Azul) en tablas Junkman */
+#view-leaderboard #tab-junkman-single .leaderboard-gearbox-pill,
+#view-leaderboard #tab-junkman-fast .leaderboard-gearbox-pill,
+#view-leaderboard #tab-sprintdrag-junkman .leaderboard-gearbox-pill {
+    background: rgba(14, 25, 45, 0.9) !important;
+    border: 1px solid rgba(56, 189, 248, 0.3) !important;
+    color: #38bdf8 !important;
+}
+
+#view-leaderboard #tab-junkman-single .leaderboard-gearbox-pill .gearbox-label,
+#view-leaderboard #tab-junkman-fast .leaderboard-gearbox-pill .gearbox-label,
+#view-leaderboard #tab-sprintdrag-junkman .leaderboard-gearbox-pill .gearbox-label {
+    color: #38bdf8 !important;
+    font-weight: 700 !important;
+    text-shadow: 0 0 8px rgba(56, 189, 248, 0.45) !important;
+}
+
 #view-leaderboard #tab-junkman-single .leaderboard-gearbox-pill .gear-icon,
 #view-leaderboard #tab-junkman-fast .leaderboard-gearbox-pill .gear-icon,
 #view-leaderboard #tab-sprintdrag-junkman .leaderboard-gearbox-pill .gear-icon {
-    color: #fbbf24 !important;
-    filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.6)) !important;
+    color: #38bdf8 !important;
+    filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.5)) !important;
 }
 
 /* Chips de Blacklist en tablas Junkman */

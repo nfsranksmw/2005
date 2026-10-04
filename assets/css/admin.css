@@ -45,6 +45,15 @@ body.admin-body {
     flex-direction: column;
 }
 
+/* Fondo cinematográfico Black Edition oscurecido para Comisaría & Administración */
+body.admin-body::before {
+    opacity: 0.22 !important;
+    background-image: 
+        radial-gradient(ellipse at 65% 35%, rgba(9, 11, 14, 0.40) 0%, rgba(9, 11, 14, 0.72) 55%, #06080d 100%),
+        linear-gradient(180deg, rgba(9, 11, 14, 0.35) 0%, rgba(9, 11, 14, 0.75) 55%, #06080d 100%),
+        url('../img/Black%20Edition.jpg') !important;
+}
+
 /* =======================================================
    ADMIN TOPBAR
    ======================================================= */
@@ -673,34 +682,132 @@ body.admin-body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 14px;
-    background: var(--admin-card-bg);
-    border: 1px solid var(--admin-card-border);
+    background: #0b0e17 !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
     padding: 18px 20px;
     border-radius: 10px;
     margin-bottom: 20px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85) !important;
 }
 
-.lb-manager-filters select, .lb-manager-filters input {
+/* Control select y campo de entrada con fondo negro y borde visible */
+select,
+.admin-input,
+.admin-form-input,
+.lb-manager-filters select,
+.lb-manager-filters input,
+#lb-select-route,
+#lb-select-category {
     width: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background-color: #080a10 !important;
+    background: #080a10 !important;
+    border: 1px solid rgba(255, 255, 255, 0.22) !important;
     border-radius: 6px;
     padding: 10px 14px;
-    color: #fff;
+    color: #ffffff !important;
     font-size: 13.5px;
     box-sizing: border-box;
 }
 
-.lb-manager-filters select:focus, .lb-manager-filters input:focus {
-    outline: none;
-    border-color: var(--nfs-orange);
+/* Opciones desplegables (options y optgroups) con fondo 100% negro */
+select option,
+select optgroup,
+.admin-input option,
+.admin-form-input option,
+.lb-manager-filters select option,
+.lb-manager-filters select optgroup,
+#lb-select-route option,
+#lb-select-route optgroup,
+#lb-select-category option,
+#lb-select-category optgroup {
+    background-color: #06080d !important;
+    background: #06080d !important;
+    color: #ffffff !important;
+    padding: 10px 14px !important;
 }
 
+select optgroup {
+    background-color: #030407 !important;
+    background: #030407 !important;
+    color: var(--nfs-orange, #ff7700) !important;
+    font-weight: 800 !important;
+    font-size: 12px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.8px !important;
+    padding-top: 10px !important;
+    padding-bottom: 4px !important;
+}
+
+.lb-manager-filters select:focus, 
+.lb-manager-filters input:focus,
+#lb-select-route:focus,
+#lb-select-category:focus,
+.admin-input:focus,
+.admin-form-input:focus {
+    outline: none !important;
+    border-color: var(--nfs-orange, #ff7700) !important;
+    box-shadow: 0 0 12px rgba(255, 119, 0, 0.45) !important;
+}
+
+/* Barra de título sobre la tabla en admin.html */
+.lb-table-header-bar {
+    background: #0f1422 !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    border-bottom: none !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Contenedor base de tabla en admin.html (100% opaco para que resalte y no trasluzca) */
 .admin-table-container {
-    background: var(--admin-card-bg);
-    border: 1px solid var(--admin-card-border);
-    border-radius: 10px;
+    background: #0b0e17 !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    border-radius: 0 0 10px 10px;
     overflow-x: auto;
+    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.92) !important;
+}
+
+/* Estilo distintivo Junkman para la tabla en admin.html */
+.admin-table-container.admin-table-junkman {
+    background: 
+        linear-gradient(135deg, 
+            rgba(255, 119, 0, 0.12) 0%, 
+            rgba(245, 158, 11, 0.07) 18%, 
+            #111622 45%, 
+            #141b2a 65%, 
+            rgba(234, 88, 12, 0.10) 85%, 
+            #111622 100%
+        ),
+        #0f1420 !important;
+    border: 1px solid rgba(255, 153, 0, 0.45) !important;
+    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.95), inset 0 1px 0 rgba(255, 210, 140, 0.28), 0 0 25px rgba(255, 119, 0, 0.18) !important;
+}
+
+.admin-table-container.admin-table-junkman .admin-table th {
+    background: linear-gradient(90deg, #1c2230 0%, #181c28 50%, #1e2434 100%) !important;
+    border-bottom: 1px solid rgba(255, 153, 0, 0.3) !important;
+    color: #cbd5e1 !important;
+}
+
+/* Estilo característico BMW M3 GTR para la tabla en admin.html */
+.admin-table-container.admin-table-bmw {
+    background: 
+        linear-gradient(135deg, 
+            rgba(30, 64, 175, 0.16) 0%, 
+            rgba(203, 213, 225, 0.08) 18%, 
+            #0b101c 45%, 
+            #0e1422 65%, 
+            rgba(37, 99, 235, 0.14) 85%, 
+            #0b101c 100%
+        ),
+        #0a0e18 !important;
+    border: 1px solid rgba(96, 165, 250, 0.45) !important;
+    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.95), inset 0 1px 0 rgba(226, 232, 240, 0.28), 0 0 25px rgba(37, 99, 235, 0.2) !important;
+}
+
+.admin-table-container.admin-table-bmw .admin-table th {
+    background: linear-gradient(90deg, #101c32 0%, #121828 50%, #142036 100%) !important;
+    border-bottom: 1px solid rgba(96, 165, 250, 0.3) !important;
+    color: #94a3b8 !important;
 }
 
 .admin-table {
@@ -711,24 +818,25 @@ body.admin-body {
 }
 
 .admin-table th {
-    background: rgba(0, 0, 0, 0.35);
+    background: #0f1420;
     color: var(--text-muted);
     font-family: var(--font-heading);
     font-size: 11.5px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     padding: 14px 16px;
-    border-bottom: 1px solid var(--admin-card-border);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .admin-table td {
     padding: 12px 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     color: #e2e8f0;
+    background: rgba(10, 14, 22, 0.7);
 }
 
 .admin-table tr:hover td {
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(255, 255, 255, 0.04);
 }
 
 .table-rank-badge {
@@ -993,15 +1101,53 @@ body.admin-body {
     flex-direction: column;
     gap: 14px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-challenge-card:hover {
+    border-color: rgba(255, 119, 0, 0.35);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+}
+
+.admin-challenge-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.admin-challenge-title-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.admin-challenge-badge-num {
+    font-family: var(--font-heading);
+    font-size: 19px;
+    font-weight: 900;
+    color: var(--nfs-orange);
+    letter-spacing: 0.5px;
+}
+
+.admin-challenge-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 .admin-challenge-meta-row {
     display: grid;
-    grid-template-columns: auto 1fr auto auto;
-    gap: 12px;
+    grid-template-columns: 1.8fr 1fr 1.8fr;
+    gap: 14px;
     align-items: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    padding-bottom: 12px;
+    padding-bottom: 14px;
 }
 
 .admin-winners-grid {

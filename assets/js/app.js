@@ -1,6 +1,45 @@
+window.addEventListener('storage', (e) => {
+    if (e.key === 'nfs_championship_weeks_data_v2' && e.newValue) {
+        try {
+            const data = JSON.parse(e.newValue);
+            if (data && typeof data === 'object' && typeof CHAMPIONSHIP_WEEKS_DATA !== 'undefined') {
+                if (Array.isArray(data)) {
+                    data.forEach((w, idx) => {
+                        if (w && idx > 0) {
+                            CHAMPIONSHIP_WEEKS_DATA[idx] = w;
+                            CHAMPIONSHIP_WEEKS_DATA[String(idx)] = w;
+                        }
+                    });
+                } else {
+                    Object.keys(data).forEach(k => {
+                        if (data[k]) {
+                            CHAMPIONSHIP_WEEKS_DATA[k] = data[k];
+                            const n = parseInt(k, 10);
+                            if (!isNaN(n)) CHAMPIONSHIP_WEEKS_DATA[n] = data[k];
+                        }
+                    });
+                }
+                const activeW = (typeof currentChampionshipWeek !== 'undefined') ? currentChampionshipWeek : 1;
+                if (typeof renderChampionshipGroups === 'function') renderChampionshipGroups(activeW);
+                if (typeof renderChampionshipChallenges === 'function') renderChampionshipChallenges(activeW);
+                if (typeof renderBlacklistUI === 'function') renderBlacklistUI();
+                if (typeof renderAllTacticalCards === 'function') renderAllTacticalCards();
+            }
+        } catch (err) {}
+    } else if (e.key === 'nfs_championship_participants_v2' && e.newValue) {
+        try {
+            const parsed = JSON.parse(e.newValue);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+                registeredParticipants = parsed.filter(p => p && typeof p === 'object' && (p.name || p.alias));
+                mergeRegisteredParticipantsWithBlacklist();
+                renderRegisteredPilotsUI();
+            }
+        } catch (err) {}
+    }
+});
 /**
  * NFS: Most Wanted (2005) - World Records (NFSRANKSMW)
- * Lógica principal: Navegación, Telemetría F1, Caché Inteligente,
+ * LÃ³gica principal: NavegaciÃ³n, TelemetrÃ­a F1, CachÃ© Inteligente,
  * Lazy Loading, Renderizado de Podios Top 3 (estilo lokal.gg) y Tablas Deportivas.
  */
 
@@ -9,11 +48,11 @@
 // =======================================================
 let currentCategory = 'all';
 
-// Configuración de Caché (10 minutos de tiempo de vida / TTL)
+// ConfiguraciÃ³n de CachÃ© (10 minutos de tiempo de vida / TTL)
 const CACHE_TTL_MS = 10 * 60 * 1000;
 const memoryCache = {};
 
-// Paginación para tablas de podios
+// PaginaciÃ³n para tablas de podios
 const PODIUM_PAGE_SIZE = 10;
 const podiumDisplayLimits = {
     'tbody-global-drivers': PODIUM_PAGE_SIZE,
@@ -23,17 +62,17 @@ const podiumDisplayLimits = {
     'tbody-global-drag': PODIUM_PAGE_SIZE
 };
 
-// URL del Webhook de Discord para moderación
+// URL del Webhook de Discord para moderaciÃ³n
 const DISCORD_WEBHOOK_URL = "URL_DE_TU_WEBHOOK_DE_DISCORD_AQUI";
 
-// Conector Web App de Google Apps Script (Hojas de Cálculo & Firebase)
-const GOOGLE_APPS_SCRIPT_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzi0i3UMk4nywlcJlCX_leHJBjEJZ0a-gkAA_rTl2Q6B0iL7EglOLLVyPyoiZMagBQQ/exec";
+// Conector Web App de Google Apps Script (Hojas de CÃ¡lculo & Firebase)
+const GOOGLE_APPS_SCRIPT_WEBAPP_URL = "URL_DE_TU_GOOGLE_APPS_SCRIPT_WEBAPP_AQUI";
 
 // URL Base de Firebase Realtime Database para Leaderboards
 var FIREBASE_RTDB_BASE_URL = (window.FIREBASE_RTDB_BASE_URL || (window.NFS_FIREBASE && window.NFS_FIREBASE.RTDB_URL) || "https://nfsranks-blacklist-default-rtdb.firebaseio.com");
 
 // =======================================================
-// TELEMETRÍA EN VIVO (ESTILO FÓRMULA 1)
+// TELEMETRÃA EN VIVO (ESTILO FÃ“RMULA 1)
 // =======================================================
 function startTelemetryClock() {
     const clockEl = document.getElementById('telemetry-clock');
@@ -51,7 +90,7 @@ function startTelemetryClock() {
 }
 
 // =======================================================
-// NAVEGACIÓN Y PESTAÑAS (UI)
+// NAVEGACIÃ“N Y PESTAÃ‘AS (UI)
 // =======================================================
 function toggleMenu() {
     const mainNav = document.getElementById('main-nav');
@@ -59,7 +98,7 @@ function toggleMenu() {
     if (mainNav) {
         const isOpen = mainNav.classList.toggle('open');
         if (menuToggle) {
-            menuToggle.textContent = isOpen ? '✕' : '☰';
+            menuToggle.textContent = isOpen ? 'âœ•' : 'â˜°';
             menuToggle.classList.toggle('active', isOpen);
         }
         if (!isOpen) {
@@ -69,7 +108,7 @@ function toggleMenu() {
 }
 
 // =======================================================
-// VENTANA FLOTANTE Y BOTÓN DESPLEGABLE DE DISCORD
+// VENTANA FLOTANTE Y BOTÃ“N DESPLEGABLE DE DISCORD
 // =======================================================
 function toggleDiscordFloatingDrawer(event, forceState) {
     if (event) {
@@ -143,7 +182,7 @@ function resolveViewFromUrl() {
     for (let i = pathParts.length - 1; i >= 0; i--) {
         const seg = decodeURIComponent(pathParts[i]);
         if (seg === 'leaderboard' || seg === 'leaderboards') return 'leaderboard';
-        if (seg === 'desafio' || seg === 'desafío' || seg === 'challenges' || seg === 'desafios' || seg === 'desafíos') return 'challenges';
+        if (seg === 'desafio' || seg === 'desafÃ­o' || seg === 'challenges' || seg === 'desafios' || seg === 'desafÃ­os') return 'challenges';
         if (seg === 'routes' || seg === 'rutas') return 'routes';
         if (seg === 'blacklist') return 'blacklist';
         if (seg === 'championship-standings' || seg === 'standings') return 'championship-standings';
@@ -153,7 +192,7 @@ function resolveViewFromUrl() {
         if (seg === 'halloffame') return 'halloffame';
         if (seg === 'globaldrivers') return 'globaldrivers';
         if (seg === 'globalroutes') return 'globalroutes';
-        if (seg === 'guides' || seg === 'guias' || seg === 'guías') return 'guides';
+        if (seg === 'guides' || seg === 'guias' || seg === 'guÃ­as') return 'guides';
         if (seg === 'rules' || seg === 'reglas') return 'rules';
         if (seg === 'tutorial') return 'tutorial';
         if (seg === 'driverprofile' || seg === 'driver' || seg === 'profile') return 'driverprofile';
@@ -185,7 +224,7 @@ function updateBrowserHistory(viewId) {
     let targetPath = SECTION_PATH_MAP[viewId] || `/${viewId}`;
     let search = window.location.search;
 
-    // Si salimos de leaderboard hacia otra sección, limpiamos los query params de ruta si existían
+    // Si salimos de leaderboard hacia otra secciÃ³n, limpiamos los query params de ruta si existÃ­an
     if (viewId !== 'leaderboard' && search.includes('route=')) {
         search = '';
     }
@@ -216,7 +255,7 @@ function switchView(viewId, updateHistory = true) {
     if (targetNavLink) {
         targetNavLink.classList.add('active');
 
-        // Si el enlace pertenece a un menú desplegable, también iluminamos el botón padre
+        // Si el enlace pertenece a un menÃº desplegable, tambiÃ©n iluminamos el botÃ³n padre
         const parentDropdown = targetNavLink.closest('.nav-dropdown');
         if (parentDropdown) {
             const dropdownBtn = parentDropdown.querySelector('.nav-dropdown-btn');
@@ -230,7 +269,7 @@ function switchView(viewId, updateHistory = true) {
         mainNav.classList.remove('open');
     }
     if (menuToggle) {
-        menuToggle.textContent = '☰';
+        menuToggle.textContent = 'â˜°';
         menuToggle.classList.remove('active');
     }
 
@@ -275,9 +314,31 @@ function switchView(viewId, updateHistory = true) {
             handleCategoryOrRouteChange();
         }
     }
+
+    if (viewId === 'blacklist' || viewId === 'standings' || viewId === 'championship-standings' || viewId === 'challenges' || viewId === 'desafios' || viewId === 'cards' || viewId === 'blacklist-cards') {
+        if (typeof loadRemoteChampionshipWeeksData === 'function') {
+            loadRemoteChampionshipWeeksData();
+        }
+        if (typeof renderChampionshipGroups === 'function') {
+            renderChampionshipGroups(currentChampionshipWeek);
+        }
+        if (typeof renderBlacklistUI === 'function') {
+            renderBlacklistUI();
+        }
+        if (typeof renderAllTacticalCards === 'function') {
+            renderAllTacticalCards();
+        }
+    }
+
+    if (viewId === 'championship-register' || viewId === 'register') {
+        if (typeof renderRegisteredPilotsUI === 'function') {
+            renderRegisteredPilotsUI();
+        }
+    }
+
 }
 
-// Escuchar navegación del historial del navegador (atrás / adelante)
+// Escuchar navegaciÃ³n del historial del navegador (atrÃ¡s / adelante)
 window.addEventListener('popstate', (e) => {
     const view = (e.state && e.state.viewId) ? e.state.viewId : resolveViewFromUrl();
     if (view) {
@@ -285,7 +346,7 @@ window.addEventListener('popstate', (e) => {
     }
 });
 
-// Exportación explícita a window para compatibilidad global con eventos inline
+// ExportaciÃ³n explÃ­cita a window para compatibilidad global con eventos inline
 window.switchView = switchView;
 window.resolveViewFromUrl = resolveViewFromUrl;
 window.toggleDiscordFloatingDrawer = toggleDiscordFloatingDrawer;
@@ -304,7 +365,7 @@ function closeAllDropdowns() {
     document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
 }
 
-// Cerrar menús desplegables al hacer clic fuera
+// Cerrar menÃºs desplegables al hacer clic fuera
 document.addEventListener('click', (e) => {
     if (!e.target.closest('.nav-dropdown')) {
         closeAllDropdowns();
@@ -431,7 +492,7 @@ function switchCircuitTab(tabId, btn) {
     if (targetTab) targetTab.classList.add('active');
     if (btn) btn.classList.add('active');
 
-    // Sincronizar píldoras
+    // Sincronizar pÃ­ldoras
     if (tabId.includes('junkman')) {
         currentModality = 'junkman';
         const pMod = document.getElementById('pill-val-modality');
@@ -493,7 +554,7 @@ function switchInstallLang(lang) {
 }
 
 // =======================================================
-// INTERACTIVIDAD ROCKPORT MAP LIVE & SIMULACIÓN EN VIVO
+// INTERACTIVIDAD ROCKPORT MAP LIVE & SIMULACIÃ“N EN VIVO
 // =======================================================
 let currentMapZoom = 1.0;
 let mapSimulationRunning = true;
@@ -514,7 +575,7 @@ const SIMULATED_PILOTS = [
         baseKmh: 318,
         speed: 0.045,
         heat: 5,
-        status: 'Líder en Fuga // Downtown Express',
+        status: 'LÃ­der en Fuga // Downtown Express',
         district: 'Downtown Rockport',
         waypoints: [
             { x: 30.5, y: 62.0 },
@@ -606,7 +667,7 @@ const SIMULATED_PILOTS = [
         baseKmh: 310,
         speed: 0.042,
         heat: 5,
-        status: 'Persecución Extrema // City Perimeter',
+        status: 'PersecuciÃ³n Extrema // City Perimeter',
         district: 'Downtown Rockport',
         waypoints: [
             { x: 48.0, y: 52.0 },
@@ -662,7 +723,7 @@ const SIMULATED_PILOTS = [
         baseKmh: 330,
         speed: 0.054,
         heat: 5,
-        status: '🚨 CÓDIGO 3: Patrulla Autopista 99',
+        status: 'ðŸš¨ CÃ“DIGO 3: Patrulla Autopista 99',
         district: 'Highway 99 / Downtown',
         waypoints: [
             { x: 42.0, y: 45.0 },
@@ -790,7 +851,7 @@ function initLiveMapSimulation() {
             blip.innerHTML = `
                 <div class="blip-pulse" style="border-color: ${pilot.color};"></div>
                 <div class="blip-icon-wrapper" id="blip-icon-${pilot.id}">
-                    <span class="blip-car-icon">${pilot.isPolice ? '🚔' : '🏎️'}</span>
+                    <span class="blip-car-icon">${pilot.isPolice ? 'ðŸš”' : 'ðŸŽï¸'}</span>
                 </div>
                 <div class="blip-tag">
                     <span class="blip-name">${pilot.name}</span>
@@ -814,11 +875,11 @@ function initLiveMapSimulation() {
                         </div>
                         <div class="metric-box">
                             <span class="metric-lbl">HEAT LEVEL</span>
-                            <span class="metric-val" style="color: #ff3b30;">🔥 x${pilot.heat}</span>
+                            <span class="metric-val" style="color: #ff3b30;">ðŸ”¥ x${pilot.heat}</span>
                         </div>
                     </div>
                     <button type="button" class="btn-tooltip-center" onclick="event.stopPropagation(); focusMapOnPlayer('${pilot.id}');">
-                        🎯 <span data-i18n="map_focus_pilot">Centrar en este piloto</span>
+                        ðŸŽ¯ <span data-i18n="map_focus_pilot">Centrar en este piloto</span>
                     </button>
                 </div>
             `;
@@ -839,7 +900,7 @@ function initLiveMapSimulation() {
 
             chip.innerHTML = `
                 <div class="chip-avatar" style="border-color: ${pilot.color};">
-                    ${pilot.isPolice ? '🚔' : '🏎️'}
+                    ${pilot.isPolice ? 'ðŸš”' : 'ðŸŽï¸'}
                 </div>
                 <div class="chip-info">
                     <div class="chip-row-top">
@@ -998,12 +1059,12 @@ function togglePlayerSimulation() {
 
     if (mapSimulationRunning) {
         if (btnText) btnText.setAttribute('data-i18n', 'map_btn_pause_sim');
-        if (btnText) btnText.textContent = (typeof t === 'function' ? t('map_btn_pause_sim') : 'Pausar Simulación');
-        if (btnIcon) btnIcon.textContent = '⏸️';
+        if (btnText) btnText.textContent = (typeof t === 'function' ? t('map_btn_pause_sim') : 'Pausar SimulaciÃ³n');
+        if (btnIcon) btnIcon.textContent = 'â¸ï¸';
     } else {
         if (btnText) btnText.setAttribute('data-i18n', 'map_btn_resume_sim');
-        if (btnText) btnText.textContent = (typeof t === 'function' ? t('map_btn_resume_sim') : 'Reanudar Simulación');
-        if (btnIcon) btnIcon.textContent = '▶️';
+        if (btnText) btnText.textContent = (typeof t === 'function' ? t('map_btn_resume_sim') : 'Reanudar SimulaciÃ³n');
+        if (btnIcon) btnIcon.textContent = 'â–¶ï¸';
     }
 }
 
@@ -1035,7 +1096,7 @@ function updateLeaderboardStats(showingNum, totalNum, currentClass = 'ALL') {
 }
 
 // =======================================================
-// CACHÉ INTELIGENTE Y PETICIONES A GOOGLE SHEETS
+// CACHÃ‰ INTELIGENTE Y PETICIONES A GOOGLE SHEETS
 // =======================================================
 async function fetchGoogleSheetData(csvUrl, maxRows = null) {
     if (!csvUrl || csvUrl.trim() === "" || csvUrl.includes("PEGA_") || csvUrl.includes("URL_CSV_")) {
@@ -1064,7 +1125,7 @@ async function fetchGoogleSheetData(csvUrl, maxRows = null) {
         console.warn("No se pudo leer del localStorage:", e);
     }
 
-    // 3. Petición de Red con parseo CSV
+    // 3. PeticiÃ³n de Red con parseo CSV
     try {
         const response = await fetch(csvUrl);
         const text = await response.text();
@@ -1080,9 +1141,9 @@ async function fetchGoogleSheetData(csvUrl, maxRows = null) {
                 let driverStr = r[1].replace(/"/g, '').replace(/\r/g, '').trim();
 
                 // Ignorar filas de cabecera duplicadas en el CSV (ej: "Rank", "#Rank", "Driver", "Piloto")
-                if (rankRaw.toLowerCase().includes("rank") ||
+                if (rankRaw.toLowerCase().includes("rank") || 
                     rankRaw.toLowerCase().includes("pos") ||
-                    driverStr.toLowerCase() === "driver" ||
+                    driverStr.toLowerCase() === "driver" || 
                     driverStr.toLowerCase() === "piloto") {
                     continue;
                 }
@@ -1143,7 +1204,7 @@ async function fetchWithMemoryAndStorageCache(cacheKey, computationFn) {
             }
         }
     } catch (e) {
-        console.warn("Error leyendo de caché:", e);
+        console.warn("Error leyendo de cachÃ©:", e);
     }
 
     const computedData = await computationFn();
@@ -1153,7 +1214,7 @@ async function fetchWithMemoryAndStorageCache(cacheKey, computationFn) {
     try {
         localStorage.setItem(cacheKey, JSON.stringify(cachePayload));
     } catch (e) {
-        console.warn("Error guardando en caché:", e);
+        console.warn("Error guardando en cachÃ©:", e);
     }
 
     return computedData;
@@ -1173,7 +1234,7 @@ async function renderRoutes(dataToRender) {
     updateLeaderboardStats(dataToRender.length, sourceData.length, currentCategory);
 
     if (dataToRender.length === 0) {
-        container.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 30px; font-family: var(--font-racing); font-size: 14.6px;">No se encontraron circuitos ni rutas con ese nombre.</p>`;
+        container.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 30px; font-family: var(--font-racing); font-size: 18px;">No se encontraron circuitos ni rutas con ese nombre.</p>`;
         return;
     }
 
@@ -1203,13 +1264,13 @@ async function renderRoutes(dataToRender) {
                 <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.23-5.23"></path>
             </svg>`;
         } else if (route.type === "Sprint") {
-            iconHtml = `<span style="font-size: 17.8px; color: var(--nfs-orange);">⚡</span>`;
+iconHtml = `<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" style="color: var(--nfs-orange);"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>`;
         } else if (route.type === "Drag") {
             iconHtml = `<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" style="color: #f87171;">
                 <path d="M9 2h6v2H9V2zm1 3h4v2h-4V5zm-2 3h8v2H8V8zm1 3h6v2H9v-2zm-2 3h10v2H7v-2zm2 3h6v2H9v-2zm-3 3h12v2H6v-2z"/>
             </svg>`;
         } else {
-            iconHtml = `<span style="font-size: 17.8px; color: var(--nfs-orange);">🔄</span>`;
+iconHtml = `<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" style="color: var(--nfs-orange);"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>`;
         }
 
         const card = document.createElement('div');
@@ -1230,7 +1291,7 @@ async function renderRoutes(dataToRender) {
                 <h3>${route.name}${route.alias ? ` <span style="font-size: 11px; color: var(--nfs-orange); font-weight: normal; opacity: 0.85;">(${route.alias})</span>` : ''}</h3>
                 <div class="route-preview-placeholder" style="font-size: 9.7px; color: #64748b;">${typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es' ? 'Cargando récord...' : 'Loading record...'}</div>
             </div>
-            <div class="route-action-icon" title="Ver Telemetría">🏁</div>
+            <div class="route-action-icon" title="Ver Telemetría"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6h-5.6z"/></svg></div>
         `;
 
         container.appendChild(card);
@@ -1256,12 +1317,12 @@ async function loadCardPreviewLazy(cardElement, route) {
         if (topRow) {
             previewContainer.outerHTML = `
                 <div class="route-record-preview">
-                    <span class="route-time-display">⏱️ ${topRow.time}</span>
-                    <span class="driver-name">👤 ${topRow.driver}</span>
+<span class="route-time-display"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align: -1px; margin-right: 3px; display: inline-block;"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>${topRow.time}</span>
+<span class="driver-name"><svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor" style="vertical-align: -1px; margin-right: 3px; display: inline-block;"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>${topRow.driver}</span>
                 </div>
                 <div style="overflow: hidden; width: 100%; margin-top: 3px;">
                     <div style="white-space: nowrap; font-size: 8.9px; font-weight: 700; color: #94a3b8; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis;">
-                        🏎️ ${topRow.car || 'BMW M3 GTR'}
+<svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align: -1.5px; margin-right: 3px; display: inline-block;"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>${topRow.car || 'BMW M3 GTR'}
                     </div>
                 </div>
             `;
@@ -1279,7 +1340,7 @@ function filterRoutes() {
     const searchInput = document.getElementById('route-search');
     const query = searchInput ? searchInput.value.toLowerCase().trim() : "";
     const sourceData = typeof routesData !== 'undefined' ? routesData : [];
-
+    
     const filtered = sourceData.filter(route => {
         const matchesCategory = currentCategory === 'all' || route.type === currentCategory;
         const matchesSearch = route.name.toLowerCase().includes(query) || (route.alias && route.alias.toLowerCase().includes(query));
@@ -1312,7 +1373,7 @@ function sanitizeFirebaseKey(str) {
 async function fetchFirebaseRouteRecords(routeName) {
     if (!FIREBASE_RTDB_BASE_URL) return {};
     const routeKey = sanitizeFirebaseKey(routeName);
-    // Usar parámetro de tiempo y no-store para garantizar datos en vivo sin caché estancada
+    // Usar parÃ¡metro de tiempo y no-store para garantizar datos en vivo sin cachÃ© estancada
     const url = `${FIREBASE_RTDB_BASE_URL}/leaderboards/${routeKey}.json?_t=${Date.now()}`;
 
     try {
@@ -1335,7 +1396,7 @@ function extractCategoryRecords(routeFirebaseData, categoryKey) {
         raw = Object.values(raw);
     }
 
-    // Comprobar si hay una versión actualizada en caché local reciente (guardada desde Comisaría / Admin)
+    // Comprobar si hay una versiÃ³n actualizada en cachÃ© local reciente (guardada desde ComisarÃ­a / Admin)
     try {
         const routeName = (typeof currentActiveRoute !== 'undefined' && currentActiveRoute) ? currentActiveRoute.name : '';
         if (routeName) {
@@ -1358,7 +1419,7 @@ function extractCategoryRecords(routeFirebaseData, categoryKey) {
         const parseFn = (typeof NFS_FIREBASE !== 'undefined' && NFS_FIREBASE.parseTimeToMs) ? NFS_FIREBASE.parseTimeToMs : parseTimeToMs;
         const timeMs = item.timeMs !== undefined ? parseInt(item.timeMs, 10) : parseFn(timeStr);
 
-        // Resolución estricta de video: priorizar el campo modificado en Comisaría (videoUrl) sobre el histórico (yt)
+        // ResoluciÃ³n estricta de video: priorizar el campo modificado en ComisarÃ­a (videoUrl) sobre el histÃ³rico (yt)
         let resolvedVideo = "#";
         if (item.videoUrl && typeof item.videoUrl === 'string' && item.videoUrl.trim() !== "" && item.videoUrl.trim() !== "#") {
             resolvedVideo = item.videoUrl.trim();
@@ -1383,7 +1444,7 @@ function extractCategoryRecords(routeFirebaseData, categoryKey) {
         };
     });
 
-    // Orden ascendente estricto por milisegundos (más rápido al frente)
+    // Orden ascendente estricto por milisegundos (mÃ¡s rÃ¡pido al frente)
     list.sort((a, b) => {
         if (a.timeMs !== null && b.timeMs !== null && a.timeMs !== b.timeMs) {
             return a.timeMs - b.timeMs;
@@ -1393,7 +1454,7 @@ function extractCategoryRecords(routeFirebaseData, categoryKey) {
         return (a.driver || '').localeCompare(b.driver || '');
     });
 
-    // Asignación de rangos dinámicos calculados #1, #2, #3...
+    // AsignaciÃ³n de rangos dinÃ¡micos calculados #1, #2, #3...
     return list.map((item, idx) => ({
         ...item,
         rank: `#${idx + 1}`
@@ -1402,7 +1463,7 @@ function extractCategoryRecords(routeFirebaseData, categoryKey) {
 
 // =======================================================
 // CARGA Y RENDERIZADO DE TABLAS INDIVIDUALES (LEADERBOARDS)
-// CONEXIÓN DIRECTA A FIREBASE REALTIME DATABASE (DESACOPLADO DE SHEETS)
+// CONEXIÃ“N DIRECTA A FIREBASE REALTIME DATABASE (DESACOPLADO DE SHEETS)
 // =======================================================
 async function loadLeaderboardForRoute(route) {
     currentActiveRoute = route;
@@ -1502,7 +1563,7 @@ function renderTableRows(tbodyId, dataRows) {
     tbody.innerHTML = '';
 
     if (!dataRows || dataRows.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 25px; font-family: var(--font-racing); font-size: 13px;">Sin registros oficiales para esta categoría aún.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 25px; font-family: var(--font-racing); font-size: 13px;">Sin registros oficiales para esta categorÃ­a aÃºn.</td></tr>`;
         return;
     }
 
@@ -1521,18 +1582,18 @@ function renderTableRows(tbodyId, dataRows) {
         tr.setAttribute('data-car', row.car || '');
 
         let videoBtnHTML = (row.yt && row.yt !== "#" && row.yt.startsWith("http"))
-            ? `<a href="${row.yt}" target="_blank" rel="noopener noreferrer" class="btn-yt-link">▶ VIDEO</a>`
+            ? `<a href="${row.yt}" target="_blank" rel="noopener noreferrer" class="btn-yt-link"><svg viewBox="0 0 24 24" width="9" height="9" fill="currentColor" style="vertical-align: 0px; margin-right: 4px; display: inline-block;"><path d="M8 5v14l11-7z"/></svg>VIDEO</a>`
             : `<span class="no-video-text">--</span>`;
 
         let aliasTag = '';
-        if (displayRank === 1) aliasTag = '<span class="driver-cell-alias alias-wr">👑 WORLD RECORD</span>';
-        else if (displayRank === 2) aliasTag = '<span class="driver-cell-alias alias-top2">🥈 TOP 2 WORLD</span>';
-        else if (displayRank === 3) aliasTag = '<span class="driver-cell-alias alias-top3">🥉 TOP 3 WORLD</span>';
+        if (displayRank === 1) aliasTag = '<span class="driver-cell-alias alias-wr">WORLD RECORD</span>';
+        else if (displayRank === 2) aliasTag = '<span class="driver-cell-alias alias-top2">TOP 2 WORLD</span>';
+        else if (displayRank === 3) aliasTag = '<span class="driver-cell-alias alias-top3">TOP 3 WORLD</span>';
         else aliasTag = '<span class="driver-cell-alias alias-driver">OFFICIAL DRIVER</span>';
 
         const blBadgeClass = displayRank === 1 ? 'bl-badge-gold' : displayRank === 2 ? 'bl-badge-silver' : displayRank === 3 ? 'bl-badge-bronze' : '';
 
-        // Badge hexagonal para Top 3 o número limpio para #4+
+        // Badge hexagonal para Top 3 o nÃºmero limpio para #4+
         let rankBadgeHTML = '';
         if (displayRank === 1) {
             rankBadgeHTML = `
@@ -1585,6 +1646,7 @@ function renderTableRows(tbodyId, dataRows) {
                         <div class="driver-car-sub">
                             <span class="car-name-text">${row.car || 'BMW M3 GTR'}</span>
                             <span class="bl-chip ${blBadgeClass}">BL #${displayRank}</span>
+                            <span class="bl-chip bl-chip-gearbox">${gbDisplay}</span>
                         </div>
                     </div>
                 </div>
@@ -1596,11 +1658,11 @@ function renderTableRows(tbodyId, dataRows) {
                 <span class="leaderboard-car-text">${row.car || '--'}</span>
             </td>
             <td class="col-desktop col-device">
-                ${window.NFS_HARDWARE ? window.NFS_HARDWARE.getPublicTagHTML(row.device) : `<span class="leaderboard-device-pill hw-public-tag">🎮 <span class="device-label">${row.device || 'Teclado'}</span></span>`}
+                ${window.NFS_HARDWARE ? window.NFS_HARDWARE.getPublicTagHTML(row.device) : `<span class="leaderboard-device-pill hw-public-tag"><span class="device-label">${row.device || 'Teclado'}</span></span>`}
             </td>
             <td class="col-desktop col-gearbox">
                 <span class="leaderboard-gearbox-pill" title="Transmisión: ${gbRaw}">
-                    <span class="gear-icon">⚙️</span>
+                    <span class="gear-icon"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="vertical-align: -1.5px; display: inline-block;"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></span>
                     <span class="gearbox-label">${gbDisplay}</span>
                 </span>
             </td>
@@ -1616,7 +1678,7 @@ function renderTableRows(tbodyId, dataRows) {
 // =======================================================
 // RENDERIZADO DEL PODIO TOP 3 (Inspirado en lokal.gg Ref. 1)
 // =======================================================
-function renderTop3PodiumCards(containerId, top3Array, metricKey = 'records', metricLabel = 'Récords Mundiales') {
+function renderTop3PodiumCards(containerId, top3Array, metricKey = 'records', metricLabel = 'RÃ©cords Mundiales') {
     const container = document.getElementById(containerId);
     if (!container) return;
 
@@ -1625,7 +1687,7 @@ function renderTop3PodiumCards(containerId, top3Array, metricKey = 'records', me
         return;
     }
 
-    const trophies = ['👑', '🥈', '🥉'];
+const trophies = ['#1', '#2', '#3'];
     const rankClasses = ['rank-1', 'rank-2', 'rank-3'];
     const badgeTitles = [t('podium_badge_1', 'Absolute Legend'), t('podium_badge_2', 'Elite Driver'), t('podium_badge_3', 'Contender')];
 
@@ -1642,14 +1704,14 @@ function renderTop3PodiumCards(containerId, top3Array, metricKey = 'records', me
                 <div>
                     <div class="podium-header">
                         <div class="podium-avatar-wrapper">
-                            <div class="podium-avatar">${rankNum === 1 ? '🥇' : (rankNum === 2 ? '🥈' : '🥉')}</div>
+<div class="podium-avatar">#${rankNum}</div>
                             ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(driver.driver, 'xlarge') : ''}
                             <div class="podium-driver-info">
                                 <h4 class="notranslate" translate="no">${driver.driver}</h4>
                                 <span class="podium-badge-label">${badge}</span>
                             </div>
                         </div>
-                        <div class="podium-trophy">${trophy}</div>
+<div class="podium-trophy">#${rankNum}</div>
                     </div>
                 </div>
 
@@ -1720,7 +1782,7 @@ async function generateHallOfFame() {
     sortedDrivers.forEach((item, index) => {
         let pos = index + 1;
         let posClass = pos === 1 ? "rank-1" : (pos === 2 ? "rank-2" : (pos === 3 ? "rank-3" : ""));
-        let badge = pos === 1 ? "👑 " + t('podium_badge_1', 'Absolute Legend') : (pos <= 3 ? "🔥 " + t('podium_badge_2', 'Elite Driver') : "⭐ " + t('podium_badge_3', 'Contender'));
+let badge = pos === 1 ? t('podium_badge_1', 'Absolute Legend') : (pos <= 3 ? t('podium_badge_2', 'Elite Driver') : t('podium_badge_3', 'Contender'));
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
@@ -1800,16 +1862,16 @@ async function processPodiumsForRoutes(filterType = null) {
 async function renderGlobalPodiumTable(tbodyId, filterType = null) {
     const tbody = document.getElementById(tbodyId);
     if (!tbody) return;
-
+    
     const fullData = await processPodiumsForRoutes(filterType);
 
-    // Si es la tabla principal de pilotos, renderizamos también las tarjetas de podio superiores
+    // Si es la tabla principal de pilotos, renderizamos tambiÃ©n las tarjetas de podio superiores
     if (tbodyId === 'tbody-global-drivers' && fullData && fullData.length >= 3) {
         renderTop3PodiumCards('podium-global-drivers', fullData, 'total', 'Podios Totales');
     }
 
     if (!fullData || fullData.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">No hay podios registrados en esta categoría aún.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">No hay podios registrados en esta categorÃ­a aÃºn.</td></tr>`;
         removeLoadMoreButton(tbodyId);
         return;
     }
@@ -1861,7 +1923,7 @@ function renderLoadMoreButton(tbodyId, onClickHandler) {
     const loadMoreText = (typeof window.nfsI18n !== 'undefined' && window.nfsI18n.t) ? window.nfsI18n.t('btn_load_more_drivers') : 'Load more drivers';
     btnContainer.innerHTML = `
         <button class="btn-load-more" data-i18n="btn_load_more_drivers">
-            ⬇️ ${loadMoreText}
+            â¬‡ï¸ ${loadMoreText}
         </button>
     `;
 
@@ -1954,10 +2016,10 @@ function renderDriverSearchUI(containerId) {
 
     container.innerHTML = `
         <div class="driver-search-box" style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-top: 3px solid var(--nfs-orange); border-radius: 12px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-            <h3 style="margin-top: 0; color: #ffffff; font-family: var(--font-racing); font-size: 16.2px; text-transform: uppercase; letter-spacing: 1px;">🔍 Consultar Expediente de Piloto</h3>
+<h3 style="margin-top: 0; color: #ffffff; font-family: var(--font-racing); font-size: 20px; text-transform: uppercase; letter-spacing: 1px;">Consultar Expediente de Piloto</h3>
             <div style="display: flex; gap: 10px; margin-top: 14px;">
                 <input type="text" id="driver-search-input" placeholder="Nombre del piloto (ej: DJALIL, ZIMANX)..." class="form-control" style="flex: 1;">
-                <button id="btn-search-driver" class="btn-explored" style="padding: 10px 24px; font-size: 11.3px;">Buscar</button>
+                <button id="btn-search-driver" class="btn-explored" style="padding: 10px 24px; font-size: 14px;">Buscar</button>
             </div>
             <div id="driver-results-container" style="margin-top: 20px;"></div>
         </div>
@@ -1968,23 +2030,23 @@ function renderDriverSearchUI(containerId) {
 
     const executeSearch = async () => {
         const resultsEl = document.getElementById('driver-results-container');
-        resultsEl.innerHTML = `<p style="color: var(--nfs-orange); font-family: var(--font-racing); font-size: 13px;">⏱️ Consultando telemetría oficial...</p>`;
-
+resultsEl.innerHTML = `<p style="color: var(--nfs-orange); font-family: var(--font-racing); font-size: 16px;">Consultando telemetrÃ­a oficial...</p>`;
+        
         const profile = await searchDriverProfile(input.value);
         if (!profile) {
-            resultsEl.innerHTML = `<p style="color: var(--text-muted); font-size: 11.3px; padding: 10px 0;">No se encontraron registros activos para ese piloto.</p>`;
+            resultsEl.innerHTML = `<p style="color: var(--text-muted); font-size: 14px; padding: 10px 0;">No se encontraron registros activos para ese piloto.</p>`;
             return;
         }
 
         let tracksHtml = profile.tracks.length > 0 ? profile.tracks.map(t => `
             <tr>
                 <td><strong style="color: #ffffff;">${t.routeName}</strong> (${t.routeType})</td>
-                <td style="color: var(--nfs-orange); font-family: var(--font-racing); font-size: 13px; font-weight: bold;">#${t.rank}</td>
-                <td style="font-family: var(--font-mono); font-weight: 800; color: var(--nfs-orange);">⏱️ ${t.time}</td>
-                <td><span class="telemetry-pill">🚗 ${t.car}</span></td>
-                <td><span class="telemetry-pill">⚙️ ${t.gearbox}</span></td>
+                <td style="color: var(--nfs-orange); font-family: var(--font-racing); font-size: 16px; font-weight: bold;">#${t.rank}</td>
+<td style="font-family: var(--font-mono); font-weight: 800; color: var(--nfs-orange);">${t.time}</td>
+<td><span class="telemetry-pill">${t.car}</span></td>
+<td><span class="telemetry-pill">${t.gearbox}</span></td>
             </tr>
-        `).join('') : `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 15px;">Sin detalles de rutas precargadas aún en memoria.</td></tr>`;
+        `).join('') : `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 15px;">Sin detalles de rutas precargadas aÃºn en memoria.</td></tr>`;
 
         resultsEl.innerHTML = `
             <div style="background: var(--bg-surface-elevated); padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid var(--nfs-orange); box-shadow: 0 4px 20px rgba(0,0,0,0.4);">
@@ -1992,11 +2054,11 @@ function renderDriverSearchUI(containerId) {
                     ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(profile.driver, 'xlarge') : ''}
                     <h2 style="color: #ffffff; font-family: var(--font-racing); font-size: 24px; margin: 0; text-transform: uppercase;">${profile.driver}</h2>
                 </div>
-                <div style="display: flex; gap: 15px; font-weight: bold; flex-wrap: wrap; font-family: var(--font-racing); font-size: 13px;">
-                    <span style="color: #ffd700; text-shadow: var(--gold-glow);">🥇 1ros: ${profile.stats.first}</span>
-                    <span style="color: #e2e8f0; text-shadow: var(--silver-glow);">🥈 2dos: ${profile.stats.second}</span>
-                    <span style="color: #ff9f43; text-shadow: var(--bronze-glow);">🥉 3ros: ${profile.stats.third}</span>
-                    <span style="color: var(--nfs-orange); text-shadow: var(--nfs-subtle-glow);">📊 Total Podios: ${profile.stats.total}</span>
+                <div style="display: flex; gap: 15px; font-weight: bold; flex-wrap: wrap; font-family: var(--font-racing); font-size: 16px;">
+<span style="color: #ffd700; text-shadow: var(--gold-glow);">1ros: ${profile.stats.first}</span>
+<span style="color: #e2e8f0; text-shadow: var(--silver-glow);">2dos: ${profile.stats.second}</span>
+<span style="color: #ff9f43; text-shadow: var(--bronze-glow);">3ros: ${profile.stats.third}</span>
+<span style="color: var(--nfs-orange); text-shadow: var(--nfs-subtle-glow);">Total Podios: ${profile.stats.total}</span>
                 </div>
             </div>
             <div class="table-container">
@@ -2004,7 +2066,7 @@ function renderDriverSearchUI(containerId) {
                     <thead>
                         <tr>
                             <th>Ruta</th>
-                            <th>Posición</th>
+                            <th>PosiciÃ³n</th>
                             <th>Tiempo</th>
                             <th>Auto</th>
                             <th>Caja</th>
@@ -2021,7 +2083,7 @@ function renderDriverSearchUI(containerId) {
 }
 
 // =======================================================
-// BUSCADOR RÁPIDO HERO TRACKER.GG (PILOTO O RUTA)
+// BUSCADOR RÃPIDO HERO TRACKER.GG (PILOTO O RUTA)
 // =======================================================
 function handleHeroQuickSearch(event) {
     if (event.key === 'Enter') {
@@ -2035,7 +2097,7 @@ function executeHeroQuickSearch() {
     const query = input.value.trim();
     if (!query) return;
 
-    // Verificar si la búsqueda coincide con una ruta oficial
+    // Verificar si la bÃºsqueda coincide con una ruta oficial
     const routes = typeof routesData !== 'undefined' ? routesData : [];
     const matchedRoute = routes.find(r => r.name && r.name.toLowerCase().includes(query.toLowerCase()));
 
@@ -2049,7 +2111,7 @@ function executeHeroQuickSearch() {
             }
         }
     } else {
-        // Asumir búsqueda de piloto y redirigir al expediente
+        // Asumir bÃºsqueda de piloto y redirigir al expediente
         switchView('driverprofile');
         setTimeout(() => {
             const driverInput = document.getElementById('driver-search-input');
@@ -2063,7 +2125,7 @@ function executeHeroQuickSearch() {
 }
 
 // =======================================================
-// UTILIDADES DE TIEMPO & TELEMETRÍA DE VIDEO
+// UTILIDADES DE TIEMPO & TELEMETRÃA DE VIDEO
 // =======================================================
 
 /**
@@ -2078,7 +2140,7 @@ function parseTimeToMs(timeStr) {
     let s = String(timeStr).trim().toLowerCase();
     if (!s || s === '--' || s === '-' || s === 'n/a' || s === 'none') return null;
 
-    // 1. Patrón con texto: 1m 20s 750ms, 19s 810ms, 0m 24s 010ms
+    // 1. PatrÃ³n con texto: 1m 20s 750ms, 19s 810ms, 0m 24s 010ms
     const textMatch = s.match(/(?:(\d+)h)?\s*(?:(\d+)m)?\s*(?:(\d+(?:[.,]\d+)?)s)?\s*(?:(\d+)ms)?/);
     if (textMatch && (textMatch[1] || textMatch[2] || textMatch[3] || textMatch[4])) {
         const h = parseInt(textMatch[1] || '0', 10);
@@ -2097,7 +2159,7 @@ function parseTimeToMs(timeStr) {
         if (total > 0) return Math.round(total);
     }
 
-    // 2. Formato con dos puntos decimales: "4.56.26" o "4.59.04" (minutos.segundos.centésimas)
+    // 2. Formato con dos puntos decimales: "4.56.26" o "4.59.04" (minutos.segundos.centÃ©simas)
     const dotParts = s.split('.');
     if (dotParts.length === 3 && !s.includes(':')) {
         const mins = parseInt(dotParts[0], 10);
@@ -2112,7 +2174,7 @@ function parseTimeToMs(timeStr) {
         }
     }
 
-    // 3. Patrón con dos puntos: [HH:]MM:SS[.mmm] o "35:42:00"
+    // 3. PatrÃ³n con dos puntos: [HH:]MM:SS[.mmm] o "35:42:00"
     if (s.includes(':')) {
         const parts = s.split(':');
         if (parts.length === 3) {
@@ -2174,7 +2236,7 @@ function formatMsToTime(ms) {
 }
 
 /**
- * Máscara estricta de tiempo de carrera (MM:SS.mmm) mientras el usuario escribe
+ * MÃ¡scara estricta de tiempo de carrera (MM:SS.mmm) mientras el usuario escribe
  */
 function applyRaceTimeMask(input) {
     if (!input) return;
@@ -2223,15 +2285,15 @@ function initSubmitRouteSelector() {
         return optgroup;
     };
 
-    if (circuitTracks.length) select.appendChild(createGroup('🏁 Circuitos', circuitTracks));
-    if (sprintTracks.length) select.appendChild(createGroup('⚡ Sprints', sprintTracks));
-    if (dragTracks.length) select.appendChild(createGroup('🔥 Drags', dragTracks));
+    if (circuitTracks.length) select.appendChild(createGroup('ðŸ Circuitos', circuitTracks));
+    if (sprintTracks.length) select.appendChild(createGroup('âš¡ Sprints', sprintTracks));
+    if (dragTracks.length) select.appendChild(createGroup('ðŸ”¥ Drags', dragTracks));
 
     if (currentValue) select.value = currentValue;
 }
 
 /**
- * Modal de confirmación de envío a homologación
+ * Modal de confirmaciÃ³n de envÃ­o a homologaciÃ³n
  */
 function openSubmissionSuccessModal(data) {
     const modal = document.getElementById('modal-submission-success');
@@ -2312,25 +2374,25 @@ function validateTimeMarksLive() {
         banner.className = 'validation-status-banner state-idle';
     }
 
-    // Si aún faltan campos
+    // Si aÃºn faltan campos
     if (startMs === null || endMs === null) {
         if (dispDiff) dispDiff.innerText = '--:--.---';
         if (syncBtn) syncBtn.style.display = 'none';
         if (title) title.innerText = 'Esperando marcas de video y tiempo';
         if (desc) desc.innerText = 'Ingresa la marca de inicio, marca de fin y el tiempo declarado para verificar que coincidan exactamente.';
-        if (icon) icon.innerText = 'ℹ️';
+        if (icon) icon.innerText = 'â„¹ï¸';
         return;
     }
 
     // Si la marca de fin es menor o igual al inicio
     if (endMs <= startMs) {
-        if (dispDiff) dispDiff.innerText = 'Inválido';
+        if (dispDiff) dispDiff.innerText = 'InvÃ¡lido';
         if (syncBtn) syncBtn.style.display = 'none';
         endInput.classList.add('field-error');
         if (banner) banner.className = 'validation-status-banner state-mismatch';
-        if (title) title.innerText = '❌ Marca de Fin Inválida';
+        if (title) title.innerText = 'âŒ Marca de Fin InvÃ¡lida';
         if (desc) desc.innerText = 'La marca de fin del video debe ser estrictamente posterior a la marca de inicio.';
-        if (icon) icon.innerText = '⚠️';
+        if (icon) icon.innerText = 'âš ï¸';
         return;
     }
 
@@ -2338,40 +2400,40 @@ function validateTimeMarksLive() {
     const formattedDiff = formatMsToTime(diffMs);
     if (dispDiff) dispDiff.innerText = formattedDiff;
 
-    // Mostrar botón de sincronización rápida
+    // Mostrar botÃ³n de sincronizaciÃ³n rÃ¡pida
     if (syncBtn && syncVal) {
         syncVal.innerText = formattedDiff;
         syncBtn.style.display = 'block';
     }
 
-    // Si no ha ingresado tiempo declarado todavía
+    // Si no ha ingresado tiempo declarado todavÃ­a
     if (declaredMs === null) {
         if (title) title.innerText = `Diferencia en video: ${formattedDiff}`;
-        if (desc) desc.innerText = 'Ahora ingresa el tiempo declarado (o pulsa el botón para autocompletarlo con la diferencia del video).';
-        if (icon) icon.innerText = '⏱️';
+        if (desc) desc.innerText = 'Ahora ingresa el tiempo declarado (o pulsa el botÃ³n para autocompletarlo con la diferencia del video).';
+        if (icon) icon.innerText = 'â±ï¸';
         return;
     }
 
-    // Validación de concordancia con tolerancia de 50ms (para compensar diferencias de frames de video)
+    // ValidaciÃ³n de concordancia con tolerancia de 50ms (para compensar diferencias de frames de video)
     const discrepancyMs = Math.abs(diffMs - declaredMs);
     const toleranceMs = 50;
 
     if (discrepancyMs <= toleranceMs) {
         // Coincidencia exacta o dentro de tolerancia
         if (banner) banner.className = 'validation-status-banner state-match';
-        if (title) title.innerText = '✅ ¡Validación Aprobada!';
+        if (title) title.innerText = 'âœ… Â¡ValidaciÃ³n Aprobada!';
         if (desc) desc.innerText = `El tiempo declarado (${formatMsToTime(declaredMs)}) coincide exactamente con la diferencia de las marcas de video (${formattedDiff}).`;
-        if (icon) icon.innerText = '🏁';
+        if (icon) icon.innerText = 'ðŸ';
         startInput.classList.add('field-success');
         endInput.classList.add('field-success');
         declaredInput.classList.add('field-success');
     } else {
         // Discrepancia detectada
         if (banner) banner.className = 'validation-status-banner state-mismatch';
-        if (title) title.innerText = '❌ Discrepancia Detectada';
+        if (title) title.innerText = 'âŒ Discrepancia Detectada';
         const diffSec = (discrepancyMs / 1000).toFixed(3);
         if (desc) desc.innerText = `La diferencia del video es ${formattedDiff}, pero declaraste ${formatMsToTime(declaredMs)} (desfase de ${diffSec}s). Ambos valores deben coincidir antes de poder enviar.`;
-        if (icon) icon.innerText = '⚠️';
+        if (icon) icon.innerText = 'âš ï¸';
         declaredInput.classList.add('field-error');
         startInput.classList.add('field-error');
         endInput.classList.add('field-error');
@@ -2422,9 +2484,9 @@ function handleVideoUrlChange() {
 }
 
 // =======================================================
-// ENVÍO DE TIEMPOS VÍA WEBHOOK A DISCORD & HOMOLOGACIÓN
+// ENVÃO DE TIEMPOS VÃA WEBHOOK A DISCORD & HOMOLOGACIÃ“N
 // =======================================================
-// MANEJO DE CATEGORÍA Y TIPO DE VUELTA EN FORMULARIO
+// MANEJO DE CATEGORÃA Y TIPO DE VUELTA EN FORMULARIO
 // =======================================================
 function handleCategoryOrRouteChange() {
     const carInput = document.getElementById('sub-car');
@@ -2482,7 +2544,7 @@ function goToRouteLeaderboardAfterSubmit(routeName, categoryKey) {
 }
 
 // =======================================================
-// ENVÍO Y HOMOLOGACIÓN AUTOMÁTICA DE TIEMPOS
+// ENVÃO Y HOMOLOGACIÃ“N AUTOMÃTICA DE TIEMPOS
 // =======================================================
 async function handleTimeSubmit(event) {
     event.preventDefault();
@@ -2522,12 +2584,12 @@ async function handleTimeSubmit(event) {
 
     if (declaredMs === null) {
         status.style.color = "var(--f1-red)";
-        status.innerText = "❌ Formato inválido en el Tiempo Declarado en Pantalla. Usa MM:SS.mmm (ej: 01:20.750).";
+        status.innerText = "âŒ Formato invÃ¡lido en el Tiempo Declarado en Pantalla. Usa MM:SS.mmm (ej: 01:20.750).";
         document.getElementById('sub-time').focus();
         return false;
     }
 
-    // Parseo y validación de marcas de video si están presentes
+    // Parseo y validaciÃ³n de marcas de video si estÃ¡n presentes
     const startMs = startMark ? parseTimeToMs(startMark) : null;
     const endMs = endMark ? parseTimeToMs(endMark) : null;
     let diffMs = null;
@@ -2535,7 +2597,7 @@ async function handleTimeSubmit(event) {
     if (startMs !== null && endMs !== null) {
         if (endMs <= startMs) {
             status.style.color = "var(--f1-red)";
-            status.innerText = "❌ La Marca de Fin debe ser posterior a la Marca de Inicio.";
+            status.innerText = "âŒ La Marca de Fin debe ser posterior a la Marca de Inicio.";
             if (endInputEl) endInputEl.focus();
             return false;
         }
@@ -2546,27 +2608,27 @@ async function handleTimeSubmit(event) {
         if (discrepancyMs > toleranceMs) {
             status.style.color = "var(--f1-red)";
             const diffSec = (discrepancyMs / 1000).toFixed(3);
-            status.innerText = `❌ VALIDACIÓN RECHAZADA: El tiempo declarado (${formatMsToTime(declaredMs)}) no coincide con la diferencia calculada de las marcas de video (${formatMsToTime(diffMs)}). Desfase detectado: ${diffSec}s.`;
+            status.innerText = `âŒ VALIDACIÃ“N RECHAZADA: El tiempo declarado (${formatMsToTime(declaredMs)}) no coincide con la diferencia calculada de las marcas de video (${formatMsToTime(diffMs)}). Desfase detectado: ${diffSec}s.`;
             return false;
         }
     }
 
-    // Validación de URL de Video (YouTube o Twitch)
+    // ValidaciÃ³n de URL de Video (YouTube o Twitch)
     const isYouTube = video.includes('youtube.com') || video.includes('youtu.be');
     const isTwitch = video.includes('twitch.tv');
     if (!isYouTube && !isTwitch) {
         status.style.color = "var(--f1-red)";
-        status.innerText = "❌ Por favor introduce un enlace válido de YouTube o Twitch (ej: https://www.youtube.com/watch?v=... o https://twitch.tv/videos/...).";
+        status.innerText = "âŒ Por favor introduce un enlace vÃ¡lido de YouTube o Twitch (ej: https://www.youtube.com/watch?v=... o https://twitch.tv/videos/...).";
         document.getElementById('sub-video').focus();
         return false;
     }
 
     btn.disabled = true;
-    btn.innerHTML = "<span>⏳</span> Enviando Registro a Homologación...";
+    btn.innerHTML = "<span>â³</span> Enviando Registro a HomologaciÃ³n...";
     status.style.color = "var(--nfs-orange)";
-    status.innerText = "Verificando telemetría y registrando en la cola de homologación...";
+    status.innerText = "Verificando telemetrÃ­a y registrando en la cola de homologaciÃ³n...";
 
-    // Determinar tipo de ruta y clave de categoría en Firebase
+    // Determinar tipo de ruta y clave de categorÃ­a en Firebase
     const routes = typeof routesData !== 'undefined' ? routesData : [];
     const matchedRoute = routes.find(r => r.name.toLowerCase() === route.toLowerCase());
     const isCircuit = matchedRoute ? matchedRoute.type === 'Circuito' : true;
@@ -2619,7 +2681,7 @@ async function handleTimeSubmit(event) {
 
     try {
         // =========================================================================
-        // 1. ESCRITURA DIRECTA A FIREBASE RTDB: /submissions/<submissionId> (AUDITORÍA)
+        // 1. ESCRITURA DIRECTA A FIREBASE RTDB: /submissions/<submissionId> (AUDITORÃA)
         // =========================================================================
         if (FIREBASE_RTDB_BASE_URL) {
             try {
@@ -2628,7 +2690,7 @@ async function handleTimeSubmit(event) {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(submissionPayload)
                 });
-                console.info("Firebase: Registro de telemetría guardado en /submissions");
+                console.info("Firebase: Registro de telemetrÃ­a guardado en /submissions");
             } catch (fbSubErr) {
                 console.warn("Aviso guardando en /submissions de Firebase:", fbSubErr);
             }
@@ -2638,7 +2700,7 @@ async function handleTimeSubmit(event) {
         }
 
         // =========================================================================
-        // 3. INVALIDAR CACHÉS LOCALES PARA ACTUALIZACIÓN INMEDIATA
+        // 3. INVALIDAR CACHÃ‰S LOCALES PARA ACTUALIZACIÃ“N INMEDIATA
         // =========================================================================
         if (typeof memoryCache !== 'undefined') {
             Object.keys(memoryCache).forEach(k => {
@@ -2654,54 +2716,54 @@ async function handleTimeSubmit(event) {
                 }
             });
 
-            // Guardar en historial local de envíos del usuario
+            // Guardar en historial local de envÃ­os del usuario
             const localSubs = JSON.parse(localStorage.getItem('nfs_local_submissions') || '[]');
             localSubs.unshift(submissionPayload);
             localStorage.setItem('nfs_local_submissions', JSON.stringify(localSubs.slice(0, 50)));
         } catch (e) {
-            console.warn("Error invalidando caché de localStorage:", e);
+            console.warn("Error invalidando cachÃ© de localStorage:", e);
         }
 
         // =========================================================================
-        // 4. DESPACHO AL WEBHOOK DE DISCORD (AVISO DE TIEMPO PENDIENTE DE HOMOLOGACIÓN)
+        // 4. DESPACHO AL WEBHOOK DE DISCORD (AVISO DE TIEMPO PENDIENTE DE HOMOLOGACIÃ“N)
         // =========================================================================
         if (typeof DISCORD_WEBHOOK_URL !== 'undefined' &&
             DISCORD_WEBHOOK_URL &&
             DISCORD_WEBHOOK_URL !== "URL_DE_TU_WEBHOOK_DE_DISCORD_AQUI") {
             const discordFields = [
-                { name: "👤 Piloto", value: driver, inline: true },
-                { name: "🚗 Auto", value: car, inline: true },
-                { name: "🏁 Pista", value: `${route} (${isCircuit ? lapType : 'Sprint/Drag'})`, inline: true },
-                { name: "🏆 Categoría", value: category, inline: true },
-                { name: "⏱️ Tiempo Declarado", value: formatMsToTime(declaredMs), inline: true },
-                { name: "⚙️ Transmisión", value: gearbox, inline: true },
-                { name: "🎮 Control", value: device, inline: true },
-                { name: "🎬 Video", value: `[Ver Video](${video})`, inline: false }
+                { name: "ðŸ‘¤ Piloto", value: driver, inline: true },
+                { name: "ðŸš— Auto", value: car, inline: true },
+                { name: "ðŸ Pista", value: `${route} (${isCircuit ? lapType : 'Sprint/Drag'})`, inline: true },
+                { name: "ðŸ† CategorÃ­a", value: category, inline: true },
+                { name: "â±ï¸ Tiempo Declarado", value: formatMsToTime(declaredMs), inline: true },
+                { name: "âš™ï¸ TransmisiÃ³n", value: gearbox, inline: true },
+                { name: "ðŸŽ® Control", value: device, inline: true },
+                { name: "ðŸŽ¬ Video", value: `[Ver Video](${video})`, inline: false }
             ];
 
             if (startMs !== null && endMs !== null && diffMs !== null) {
                 discordFields.splice(5, 0, {
-                    name: "📐 Marcas Video",
-                    value: `${formatMsToTime(startMs)} → ${formatMsToTime(endMs)} (Δ: ${formatMsToTime(diffMs)})`,
+                    name: "ðŸ“ Marcas Video",
+                    value: `${formatMsToTime(startMs)} â†’ ${formatMsToTime(endMs)} (Î”: ${formatMsToTime(diffMs)})`,
                     inline: true
                 });
             }
 
             if (seasonId) {
                 discordFields.push({
-                    name: "🏆 Desafío de Temporada",
-                    value: `${seasonId.toUpperCase()} • Semana ${weekNum} (${challengeId})`,
+                    name: "ðŸ† DesafÃ­o de Temporada",
+                    value: `${seasonId.toUpperCase()} â€¢ Semana ${weekNum} (${challengeId})`,
                     inline: false
                 });
             }
 
             const discordPayload = {
                 embeds: [{
-                    title: `📥 NUEVA SOLICITUD DE TIEMPO [${submissionId}]`,
+                    title: `ðŸ“¥ NUEVA SOLICITUD DE TIEMPO [${submissionId}]`,
                     color: 16742144, // #ff7700
-                    description: `Un piloto ha enviado un nuevo récord para revisión técnica en **NFSRANKSMW**. Pendiente de homologación.`,
+                    description: `Un piloto ha enviado un nuevo rÃ©cord para revisiÃ³n tÃ©cnica en **NFSRANKSMW**. Pendiente de homologaciÃ³n.`,
                     fields: discordFields,
-                    footer: { text: "NFSMWRANKS • Comisaría de Homologación de Tiempos" },
+                    footer: { text: "NFSMWRANKS â€¢ ComisarÃ­a de HomologaciÃ³n de Tiempos" },
                     timestamp: new Date().toISOString()
                 }]
             };
@@ -2714,7 +2776,7 @@ async function handleTimeSubmit(event) {
         }
 
         // =========================================================================
-        // 5. MODAL OFICIAL DE CONFIRMACIÓN Y FEEDBACK VISUAL
+        // 5. MODAL OFICIAL DE CONFIRMACIÃ“N Y FEEDBACK VISUAL
         // =========================================================================
         openSubmissionSuccessModal(submissionPayload);
 
@@ -2722,13 +2784,13 @@ async function handleTimeSubmit(event) {
         status.innerHTML = `
             <div style="background: rgba(0, 255, 136, 0.08); border: 1px solid var(--green-neon); border-radius: 8px; padding: 14px 20px; text-align: left; margin-top: 15px; box-shadow: 0 4px 15px rgba(0, 255, 136, 0.1);">
                 <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-                    <span style="font-size: 18px;">⏳</span>
+                    <span style="font-size: 18px;">â³</span>
                     <strong style="color: #ffffff; font-family: var(--font-racing); text-transform: uppercase;">
-                        ¡TIEMPO REGISTRADO EN COLA DE HOMOLOGACIÓN!
+                        Â¡TIEMPO REGISTRADO EN COLA DE HOMOLOGACIÃ“N!
                     </strong>
                 </div>
                 <p style="color: #cbd5e1; font-size: 12.5px; line-height: 1.4; margin: 0;">
-                    Solicitud <strong>${submissionId}</strong> enviada a los comisarios oficiales. Tu tiempo (${formatMsToTime(declaredMs)}) se publicará en el Leaderboard tras verificar el video.
+                    Solicitud <strong>${submissionId}</strong> enviada a los comisarios oficiales. Tu tiempo (${formatMsToTime(declaredMs)}) se publicarÃ¡ en el Leaderboard tras verificar el video.
                 </p>
             </div>
         `;
@@ -2739,14 +2801,14 @@ async function handleTimeSubmit(event) {
     } catch (error) {
         console.error("Error enviando tiempo:", error);
         status.style.color = "var(--f1-red)";
-        status.innerText = "Error de conexión con el servidor. Inténtalo de nuevo más tarde.";
+        status.innerText = "Error de conexiÃ³n con el servidor. IntÃ©ntalo de nuevo mÃ¡s tarde.";
     } finally {
         btn.disabled = false;
-        btn.innerHTML = "<span>🚀</span> Enviar Registro a Homologación";
+        btn.innerHTML = "<span>ðŸš€</span> Enviar Registro a HomologaciÃ³n";
     }
 }
 
-// Exportación explícita a window para compatibilidad con eventos inline del formulario
+// ExportaciÃ³n explÃ­cita a window para compatibilidad con eventos inline del formulario
 window.applyRaceTimeMask = applyRaceTimeMask;
 window.initSubmitRouteSelector = initSubmitRouteSelector;
 window.openSubmissionSuccessModal = openSubmissionSuccessModal;
@@ -2757,7 +2819,7 @@ window.handleCategoryOrRouteChange = handleCategoryOrRouteChange;
 window.handleVideoUrlChange = handleVideoUrlChange;
 
 // =======================================================
-// SISTEMA OFICIAL DE TEMPORADAS BLACKLIST & 4 DESAFÍOS SEMANALES
+// SISTEMA OFICIAL DE TEMPORADAS BLACKLIST & 4 DESAFÃOS SEMANALES
 // Temporada 1: Noviembre 2026 (4 Semanas)
 // Temporada 2: Diciembre 2026 (4 Semanas)
 // 4 Pistas semanales: 2 Circuitos (1 Junkman, 1 BMW) + 2 Sprints (1 Junkman, 1 BMW)
@@ -2798,17 +2860,17 @@ function toggleChallengeComplete(challengeId) {
     try {
         localStorage.setItem('nfs_challenges_completed_v1', JSON.stringify(completed));
     } catch (e) {
-        console.warn("No se pudo guardar estado de desafío:", e);
+        console.warn("No se pudo guardar estado de desafÃ­o:", e);
     }
     renderChallengesUI();
 }
 
 /**
- * Iniciar envío desde la ficha de desafío de temporada
- * Preselecciona automáticamente pista, categoría, auto y vincula metadatos del evento
+ * Iniciar envÃ­o desde la ficha de desafÃ­o de temporada
+ * Preselecciona automÃ¡ticamente pista, categorÃ­a, auto y vincula metadatos del evento
  */
 function startSeasonChallengeSubmission(seasonId, weekNum, challengeId, trackName, category, carName, rewardDesc) {
-    // Cambiar a la vista de formulario de envío
+    // Cambiar a la vista de formulario de envÃ­o
     switchView('submit');
 
     // Activar banner de contexto en el formulario
@@ -2819,8 +2881,8 @@ function startSeasonChallengeSubmission(seasonId, weekNum, challengeId, trackNam
     const seasonName = season ? season.name : 'Temporada Blacklist';
 
     if (banner) banner.style.display = 'flex';
-    if (bannerTitle) bannerTitle.innerHTML = `🏆 DESAFÍO OFICIAL VINCULADO: ${seasonName} • SEMANA ${weekNum}`;
-    if (bannerDesc) bannerDesc.innerHTML = `🏁 <strong>${escapeHtml(trackName)}</strong> (${escapeHtml(category)}) — Recompensa: <strong>${escapeHtml(rewardDesc || 'Puntos PTS & Bounty')}</strong>`;
+    if (bannerTitle) bannerTitle.innerHTML = `ðŸ† DESAFÃO OFICIAL VINCULADO: ${seasonName} â€¢ SEMANA ${weekNum}`;
+    if (bannerDesc) bannerDesc.innerHTML = `ðŸ <strong>${escapeHtml(trackName)}</strong> (${escapeHtml(category)}) â€” Recompensa: <strong>${escapeHtml(rewardDesc || 'Puntos PTS & Bounty')}</strong>`;
 
     // Campos ocultos
     const seasonIdInput = document.getElementById('sub-season-id');
@@ -2842,7 +2904,7 @@ function startSeasonChallengeSubmission(seasonId, weekNum, challengeId, trackNam
         }
     }
 
-    // Preseleccionar categoría
+    // Preseleccionar categorÃ­a
     const categorySelect = document.getElementById('sub-category');
     if (categorySelect) {
         if (category && category.includes('BMW')) {
@@ -2891,7 +2953,7 @@ function clearSeasonSubmissionContext() {
 }
 
 /**
- * Compatibilidad con envíos directos genéricos
+ * Compatibilidad con envÃ­os directos genÃ©ricos
  */
 function startChallengeSubmission(routeName, carName) {
     startSeasonChallengeSubmission(currentSeasonId, currentSeasonWeek, 'direct', routeName, carName.includes('BMW') ? 'BMW M3 GTR' : 'Junkman', carName, 'Bolsa de Temporada');
@@ -2928,7 +2990,7 @@ function setSeasonWeek(weekNum) {
 }
 
 /**
- * Navegar semanas hacia adelante o atrás (+1 / -1)
+ * Navegar semanas hacia adelante o atrÃ¡s (+1 / -1)
  */
 function changeSeasonWeek(delta) {
     let nextWeek = currentSeasonWeek + delta;
@@ -2951,7 +3013,7 @@ function updateSeasonWeekPills() {
 }
 
 /**
- * Alternar entre vista de Fichas de Desafíos y Tabla de Clasificación de Temporada
+ * Alternar entre vista de Fichas de DesafÃ­os y Tabla de ClasificaciÃ³n de Temporada
  */
 function setChallengesViewMode(mode) {
     currentChallengesMode = mode;
@@ -2996,14 +3058,14 @@ function renderChallengesUI() {
     const challenges = currentWeekData ? currentWeekData.challenges : [];
     const completedList = getCompletedChallenges();
 
-    // Actualización de barras de información de cabecera
+    // ActualizaciÃ³n de barras de informaciÃ³n de cabecera
     const dateRangeEl = document.getElementById('challenge-week-daterange');
     const weekInfoLabel = document.getElementById('season-week-info-label');
     const totalCountEl = document.getElementById('challenge-total-count');
     const rewardPotEl = document.getElementById('challenge-reward-pot');
 
     if (dateRangeEl) dateRangeEl.textContent = currentWeekData.dateRange || '01 Nov - 28 Nov 2026';
-    if (weekInfoLabel) weekInfoLabel.textContent = `${season.name} • ${currentWeekData.title}`;
+    if (weekInfoLabel) weekInfoLabel.textContent = `${season.name} â€¢ ${currentWeekData.title}`;
     if (totalCountEl) totalCountEl.textContent = `${challenges.length} Retos Oficiales`;
 
     // Calcular bolsa total de la semana
@@ -3027,9 +3089,9 @@ function renderChallengesUI() {
         const isCircuit = ch.type === 'Circuito';
         const isBMW = ch.category.includes('BMW');
         const catBadgeClass = isBMW ? 'cat-bmw' : 'cat-junkman';
-        const catBadgeText = isBMW ? '👑 BMW M3 GTR REGLAMENTARIO' : '⚡ JUNKMAN (CUALQUIER AUTO)';
-        const catIcon = isBMW ? '🏎️' : '🔧';
-        const rewardDesc = ch.reward ? ch.reward.desc : '300 PTS Blacklist • $500.000 Bounty';
+const catBadgeText = isBMW ? 'BMW M3 GTR REGLAMENTARIO' : 'JUNKMAN (CUALQUIER AUTO)';
+const catIcon = '';
+        const rewardDesc = ch.reward ? ch.reward.desc : '300 PTS Blacklist â€¢ $500.000 Bounty';
 
         const carImg = isBMW
             ? 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=700&q=80'
@@ -3054,7 +3116,7 @@ function renderChallengesUI() {
                                 ${catIcon} ${catBadgeText}
                             </span>
                             <span class="challenge-tier-pill" style="font-size: 11px;">
-                                🏁 ${ch.type} ${isCircuit && ch.lapType ? '• ' + ch.lapType : ''}
+${ch.type} ${isCircuit && ch.lapType ? 'â€¢ ' + ch.lapType : ''}
                             </span>
                         </div>
                     </div>
@@ -3073,7 +3135,7 @@ function renderChallengesUI() {
                         <!-- Auto Reglamentario -->
                         <div class="challenge-car-banner" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 7px 11px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;">
                             <div style="display: flex; align-items: center; gap: 7px; overflow: hidden;">
-                                <span style="font-size: 13px;">🚗</span>
+<span style="font-size: 11px; font-weight: 800; color: var(--nfs-orange);">CAR</span>
                                 <span style="font-size: 11px; color: var(--text-muted); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">AUTO: <strong style="color: #ffffff;">${ch.car}</strong></span>
                             </div>
                             <span style="font-size: 9.5px; background: rgba(255,255,255,0.08); padding: 2px 6px; border-radius: 4px; color: #94a3b8; font-weight: 600; flex-shrink: 0;">Oficial</span>
@@ -3082,15 +3144,15 @@ function renderChallengesUI() {
                         <!-- ESCALA DE LOGROS Y TIEMPOS (DIAMANTE, ORO, PLATA, BRONCE) -->
                         <div class="season-tiers-table" style="background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.09); border-radius: 8px; overflow: hidden; margin-bottom: 12px;">
                             <div style="background: rgba(255,255,255,0.04); padding: 5px 9px; border-bottom: 1px solid rgba(255,255,255,0.07); display: flex; justify-content: space-between; font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">
-                                <span>🏆 RANGO</span>
-                                <span>⏱️ TIEMPO META</span>
-                                <span>🎁 RECOMPENSA</span>
+<span>RANGO</span>
+<span>TIEMPO META</span>
+<span>RECOMPENSA</span>
                             </div>
                             
                             <!-- Diamante -->
                             <div class="season-tier-row tier-diamond" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 9px; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(56, 189, 248, 0.04);">
                                 <div style="display: flex; align-items: center; gap: 5px;">
-                                    <span style="font-size: 11px;">💎</span>
+<span style="font-size: 10.5px; font-weight: 800; color: #38bdf8;">DIAMANTE</span>
                                     <span style="font-size: 10.5px; font-weight: 800; color: #38bdf8;">DIAMANTE</span>
                                 </div>
                                 <div style="font-family: var(--font-mono); font-size: 12.5px; font-weight: 800; color: #38bdf8; text-shadow: 0 0 8px rgba(56,189,248,0.4);">${tiers.diamond.time}</div>
@@ -3103,7 +3165,7 @@ function renderChallengesUI() {
                             <!-- Oro / Gold -->
                             <div class="season-tier-row tier-gold" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 9px; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(251, 191, 36, 0.05);">
                                 <div style="display: flex; align-items: center; gap: 5px;">
-                                    <span style="font-size: 11px;">🥇</span>
+<span style="font-size: 10.5px; font-weight: 800; color: #fbbf24;">ORO / GOLD</span>
                                     <span style="font-size: 10.5px; font-weight: 800; color: #fbbf24;">ORO / GOLD</span>
                                 </div>
                                 <div style="font-family: var(--font-mono); font-size: 12.5px; font-weight: 800; color: #fbbf24; text-shadow: 0 0 8px rgba(251,191,36,0.4);">${tiers.gold.time}</div>
@@ -3116,7 +3178,7 @@ function renderChallengesUI() {
                             <!-- Plata / Silver -->
                             <div class="season-tier-row tier-silver" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 9px; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(226, 232, 240, 0.03);">
                                 <div style="display: flex; align-items: center; gap: 5px;">
-                                    <span style="font-size: 11px;">🥈</span>
+<span style="font-size: 10.5px; font-weight: 800; color: #e2e8f0;">PLATA</span>
                                     <span style="font-size: 10.5px; font-weight: 800; color: #e2e8f0;">PLATA</span>
                                 </div>
                                 <div style="font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: #e2e8f0;">${tiers.silver.time}</div>
@@ -3129,7 +3191,7 @@ function renderChallengesUI() {
                             <!-- Bronce / Bronze -->
                             <div class="season-tier-row tier-bronze" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 9px; background: rgba(249, 115, 22, 0.03);">
                                 <div style="display: flex; align-items: center; gap: 5px;">
-                                    <span style="font-size: 11px;">🥉</span>
+<span style="font-size: 10.5px; font-weight: 800; color: #fdba74;">BRONCE</span>
                                     <span style="font-size: 10.5px; font-weight: 800; color: #fdba74;">BRONCE</span>
                                 </div>
                                 <div style="font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: #fdba74;">${tiers.bronze.time}</div>
@@ -3141,19 +3203,19 @@ function renderChallengesUI() {
                         </div>
 
                         <div style="font-size: 10.5px; color: #cbd5e1; display: flex; align-items: center; gap: 6px;">
-                            <span>🎖️</span> <span><strong>Trofeo Oficial:</strong> ${ch.reward ? ch.reward.badge : 'Medalla Oficial'}</span>
+<span><strong>Trofeo Oficial:</strong> ${ch.reward ? ch.reward.badge : 'Medalla Oficial'}</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Botones de Acción -->
+                <!-- Botones de AcciÃ³n -->
                 <div class="challenge-actions-row" style="padding: 12px 16px; background: rgba(0,0,0,0.25); border-top: 1px solid rgba(255,255,255,0.06); gap: 10px;">
                     <button type="button" class="btn-toggle-complete ${isDone ? 'completed' : 'incomplete'}" onclick="toggleChallengeComplete('${ch.id}')" style="flex: 1; padding: 10px; font-size: 11.5px;">
-                        ${isDone ? '✅ COMPLETADO' : '⭕ MARCAR HECHO'}
+${isDone ? 'COMPLETADO' : 'MARCAR HECHO'}
                     </button>
                     
                     <button type="button" class="btn-challenge-submit" onclick="startSeasonChallengeSubmission('${season.id}', ${currentWeekData.weekNum}, '${ch.id}', '${escapeHtml(ch.track)}', '${escapeHtml(ch.category)}', '${escapeHtml(ch.car)}', '${escapeHtml(rewardDesc)}')" style="flex: 1.4; padding: 10px; font-size: 12px;">
-                        🚀 Enviar Récord
+Enviar RÃ©cord
                     </button>
                 </div>
             </div>
@@ -3164,7 +3226,7 @@ function renderChallengesUI() {
 }
 
 /**
- * Cargar y renderizar en vivo la clasificación de temporada desde Firebase RTDB
+ * Cargar y renderizar en vivo la clasificaciÃ³n de temporada desde Firebase RTDB
  */
 async function loadSeasonStandingsLive(forceRefresh = false) {
     const tbody = document.getElementById('tbody-season-standings-live');
@@ -3178,15 +3240,15 @@ async function loadSeasonStandingsLive(forceRefresh = false) {
     const seasonPeriod = season ? season.period : '2026';
 
     if (titleEl) {
-        titleEl.textContent = `🏆 CLASIFICACIÓN OFICIAL: ${seasonName.toUpperCase()} (${seasonPeriod.toUpperCase()})`;
+        titleEl.textContent = `ðŸ† CLASIFICACIÃ“N OFICIAL: ${seasonName.toUpperCase()} (${seasonPeriod.toUpperCase()})`;
     }
 
     if (tbody && (!cachedSeasonStandings[currentSeasonId] || forceRefresh)) {
         tbody.innerHTML = `
             <tr>
                 <td colspan="9" style="text-align: center; color: var(--cyan-neon); padding: 40px; font-family: var(--font-racing); font-size: 13.5px;">
-                    <div style="display: inline-block; animation: spin 1s linear infinite; margin-right: 8px;">🔄</div>
-                    Consultando tabla de clasificación de ${seasonName} desde Firebase RTDB...
+                    <div style="display: inline-block; animation: spin 1s linear infinite; margin-right: 8px;">ðŸ”„</div>
+                    Consultando tabla de clasificaciÃ³n de ${seasonName} desde Firebase RTDB...
                 </td>
             </tr>
         `;
@@ -3215,12 +3277,12 @@ async function loadSeasonStandingsLive(forceRefresh = false) {
             list = Object.values(standings).filter(Boolean);
         }
 
-        // Si aún no hay registros publicados, proveer un preview elegante de pilotos aspirantes
+        // Si aÃºn no hay registros publicados, proveer un preview elegante de pilotos aspirantes
         if (list.length === 0) {
             list = [
                 { rank: "#1", driver: "Razor", s1: 100, s2: 85, s3: 90, s4: 95, totalPts: 370, totalBounty: "$7.400.000", badgeTitle: "Rey de Rockport City", rewardMedals: "Oro & Trofeo Legend" },
-                { rank: "#2", driver: "Bull", s1: 80, s2: 75, s3: 82, s4: 88, totalPts: 325, totalBounty: "$6.500.000", badgeTitle: "Élite Blacklist #1", rewardMedals: "Plata de Temporada" },
-                { rank: "#3", driver: "Ronnie", s1: 70, s2: 68, s3: 75, s4: 72, totalPts: 285, totalBounty: "$5.700.000", badgeTitle: "Élite Blacklist #1", rewardMedals: "Plata de Temporada" },
+                { rank: "#2", driver: "Bull", s1: 80, s2: 75, s3: 82, s4: 88, totalPts: 325, totalBounty: "$6.500.000", badgeTitle: "Ã‰lite Blacklist #1", rewardMedals: "Plata de Temporada" },
+                { rank: "#3", driver: "Ronnie", s1: 70, s2: 68, s3: 75, s4: 72, totalPts: 285, totalBounty: "$5.700.000", badgeTitle: "Ã‰lite Blacklist #1", rewardMedals: "Plata de Temporada" },
                 { rank: "#4", driver: "Torque", s1: 50, s2: 55, s3: 60, s4: 58, totalPts: 223, totalBounty: "$4.460.000", badgeTitle: "Veterano Oficial", rewardMedals: "Plata de Temporada" },
                 { rank: "#5", driver: "Ming", s1: 45, s2: 48, s3: 52, s4: 50, totalPts: 195, totalBounty: "$3.900.000", badgeTitle: "Veterano Oficial", rewardMedals: "Plata de Temporada" },
                 { rank: "#6", driver: "Webster", s1: 35, s2: 40, s3: 42, s4: 45, totalPts: 162, totalBounty: "$3.240.000", badgeTitle: "Veterano Oficial", rewardMedals: "Completador Oficial" }
@@ -3230,12 +3292,12 @@ async function loadSeasonStandingsLive(forceRefresh = false) {
         cachedSeasonStandings[currentSeasonId] = list;
         renderSeasonStandingsLive(list);
     } catch (e) {
-        console.warn("Error cargando clasificación de temporada:", e);
+        console.warn("Error cargando clasificaciÃ³n de temporada:", e);
         if (tbody) {
             tbody.innerHTML = `
                 <tr>
                     <td colspan="9" style="text-align: center; color: var(--f1-red); padding: 30px; font-family: var(--font-racing);">
-                        ❌ No se pudo conectar con Firebase RTDB. Verifica tu conexión a internet o intenta nuevamente.
+                        âŒ No se pudo conectar con Firebase RTDB. Verifica tu conexiÃ³n a internet o intenta nuevamente.
                     </td>
                 </tr>
             `;
@@ -3252,7 +3314,7 @@ function renderSeasonStandingsLive(list) {
         tbody.innerHTML = `
             <tr>
                 <td colspan="9" style="text-align: center; color: var(--text-muted); padding: 40px; font-family: var(--font-racing);">
-                    No hay tiempos puntuados aún para esta temporada. ¡Sé el primero en enviar tu récord!
+                    No hay tiempos puntuados aÃºn para esta temporada. Â¡SÃ© el primero en enviar tu rÃ©cord!
                 </td>
             </tr>
         `;
@@ -3263,7 +3325,7 @@ function renderSeasonStandingsLive(list) {
     // Render podium Top 3
     if (podiumContainer) {
         const top3 = list.slice(0, 3);
-        const medals = ['🥇', '🥈', '🥉'];
+        const medals = ['ðŸ¥‡', 'ðŸ¥ˆ', 'ðŸ¥‰'];
         const rankClasses = ['rank-1', 'rank-2', 'rank-3'];
 
         podiumContainer.innerHTML = top3.map((p, idx) => {
@@ -3272,7 +3334,7 @@ function renderSeasonStandingsLive(list) {
                 <div class="season-podium-card ${rankClasses[idx]}">
                     <span class="season-podium-medal">${medals[idx]}</span>
                     <div style="width: 44px; height: 44px; border-radius: 50%; overflow: hidden; background: rgba(0,0,0,0.4); flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
-                        ${avatarSvg || '🏎️'}
+                        ${avatarSvg || 'ðŸŽï¸'}
                     </div>
                     <div style="flex: 1; min-width: 0;">
                         <div class="season-podium-driver notranslate" translate="no" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
@@ -3282,7 +3344,7 @@ function renderSeasonStandingsLive(list) {
                             ${p.totalPts || 0} PTS BLACKLIST
                         </div>
                         <div class="season-podium-bounty">
-                            💰 ${p.totalBounty || '$0'}
+                            ðŸ’° ${p.totalBounty || '$0'}
                         </div>
                     </div>
                 </div>
@@ -3293,7 +3355,7 @@ function renderSeasonStandingsLive(list) {
     // Render table rows
     tbody.innerHTML = list.map((p, idx) => {
         const rankNum = idx + 1;
-        const rankBadge = rankNum === 1 ? '🥇 #1' : (rankNum === 2 ? '🥈 #2' : (rankNum === 3 ? '🥉 #3' : `#${rankNum}`));
+        const rankBadge = rankNum === 1 ? 'ðŸ¥‡ #1' : (rankNum === 2 ? 'ðŸ¥ˆ #2' : (rankNum === 3 ? 'ðŸ¥‰ #3' : `#${rankNum}`));
         const avatarSvg = (typeof OPERATOR_ICONS !== 'undefined') ? OPERATOR_ICONS.getAvatar(p.driver, 24) : '';
 
         return `
@@ -3378,36 +3440,88 @@ function mergeCustomChallengesIntoSeasonsData(customData) {
 }
 
 async function loadRemoteChampionshipWeeksData() {
+    // 1. Cargar inmediatamente desde localStorage para renderizado en 0ms
     try {
-        const local = localStorage.getItem('nfs_championship_weeks_data_v1');
+        localStorage.removeItem('nfs_championship_weeks_data_v1');
+        const local = localStorage.getItem('nfs_championship_weeks_data_v2');
         if (local && typeof CHAMPIONSHIP_WEEKS_DATA !== 'undefined') {
             const parsed = JSON.parse(local);
-            Object.keys(parsed).forEach(k => {
-                if (CHAMPIONSHIP_WEEKS_DATA[k]) {
-                    Object.assign(CHAMPIONSHIP_WEEKS_DATA[k], parsed[k]);
-                }
-            });
+            if (Array.isArray(parsed)) {
+                parsed.forEach((w, idx) => {
+                    if (w && idx > 0) {
+                        CHAMPIONSHIP_WEEKS_DATA[idx] = w;
+                        CHAMPIONSHIP_WEEKS_DATA[String(idx)] = w;
+                    }
+                });
+            } else if (typeof parsed === 'object') {
+                Object.keys(parsed).forEach(k => {
+                    if (parsed[k]) {
+                        CHAMPIONSHIP_WEEKS_DATA[k] = parsed[k];
+                        const n = parseInt(k, 10);
+                        if (!isNaN(n)) CHAMPIONSHIP_WEEKS_DATA[n] = parsed[k];
+                    }
+                });
+            }
+            if (typeof renderChampionshipGroups === 'function') {
+                renderChampionshipGroups(currentChampionshipWeek);
+            }
+            if (typeof renderChampionshipChallenges === 'function') {
+                renderChampionshipChallenges(currentChampionshipWeek);
+            }
         }
     } catch(e) {}
 
-    const baseUrl = (window.NFS_FIREBASE && window.NFS_FIREBASE.RTDB_URL) ? window.NFS_FIREBASE.RTDB_URL : "https://nfsranks-blacklist-default-rtdb.firebaseio.com";
+    // 2. Consultar nodos de Firebase Realtime Database con respaldo en cascada
+    const baseUrl = (window.NFS_FIREBASE && window.NFS_FIREBASE.RTDB_URL) 
+        ? window.NFS_FIREBASE.RTDB_URL 
+        : "https://nfsranks-blacklist-default-rtdb.firebaseio.com";
+
     try {
-        const res = await fetch(`${baseUrl}/championship/weeks_data.json`);
-        if (res.ok) {
-            const data = await res.json();
-            if (data && typeof data === 'object' && typeof CHAMPIONSHIP_WEEKS_DATA !== 'undefined') {
-                localStorage.setItem('nfs_championship_weeks_data_v1', JSON.stringify(data));
-                Object.keys(data).forEach(k => {
-                    if (CHAMPIONSHIP_WEEKS_DATA[k]) {
-                        Object.assign(CHAMPIONSHIP_WEEKS_DATA[k], data[k]);
+        let data = null;
+
+        // Prioridad 1: Nodo público verificado /records/championship_weeks_data
+        try {
+            const res1 = await fetch(`${baseUrl}/records/championship_weeks_data.json`);
+            if (res1.ok) {
+                const j1 = await res1.json();
+                if (j1 && typeof j1 === 'object') data = j1;
+            }
+        } catch (e) {}
+
+        // Prioridad 2: Nodo /championship/weeks_data
+        if (!data) {
+            try {
+                const res3 = await fetch(`${baseUrl}/championship/weeks_data.json`);
+                if (res3.ok) {
+                    const j3 = await res3.json();
+                    if (j3 && typeof j3 === 'object') data = j3;
+                }
+            } catch (e) {}
+        }
+
+        if (data && typeof data === 'object' && typeof CHAMPIONSHIP_WEEKS_DATA !== 'undefined') {
+            localStorage.setItem('nfs_championship_weeks_data_v2', JSON.stringify(data));
+            if (Array.isArray(data)) {
+                data.forEach((w, idx) => {
+                    if (w && idx > 0) {
+                        CHAMPIONSHIP_WEEKS_DATA[idx] = w;
+                        CHAMPIONSHIP_WEEKS_DATA[String(idx)] = w;
                     }
                 });
-                if (typeof renderChampionshipGroups === 'function') {
-                    renderChampionshipGroups(currentChampionshipWeek);
-                }
-                if (typeof renderChampionshipChallenges === 'function') {
-                    renderChampionshipChallenges(currentChampionshipWeek);
-                }
+            } else {
+                Object.keys(data).forEach(k => {
+                    if (data[k]) {
+                        CHAMPIONSHIP_WEEKS_DATA[k] = data[k];
+                        const n = parseInt(k, 10);
+                        if (!isNaN(n)) CHAMPIONSHIP_WEEKS_DATA[n] = data[k];
+                    }
+                });
+            }
+            if (typeof renderChampionshipGroups === 'function') {
+                renderChampionshipGroups(currentChampionshipWeek);
+            }
+            if (typeof renderChampionshipChallenges === 'function') {
+                renderChampionshipChallenges(currentChampionshipWeek);
             }
         }
     } catch (e) {
@@ -3423,7 +3537,7 @@ function initChallengesSystem() {
     renderChallengesUI();
 }
 
-// Exportación global a window para eventos HTML
+// ExportaciÃ³n global a window para eventos HTML
 window.switchChallengeSeason = switchChallengeSeason;
 window.setSeasonWeek = setSeasonWeek;
 window.changeSeasonWeek = changeSeasonWeek;
@@ -3437,10 +3551,10 @@ window.renderChallengesUI = renderChallengesUI;
 window.initChallengesSystem = initChallengesSystem;
 
 // =======================================================
-// BLACKLIST EVENT // CAMPEONATO 2026 (4 SEMANAS • 5 GRUPOS • 8 DESAFÍOS)
+// BLACKLIST EVENT // CAMPEONATO 2026 (4 SEMANAS â€¢ 5 GRUPOS â€¢ 8 DESAFÃOS)
 // =======================================================
 
-const BLACKLIST_STORAGE_KEY = 'nfs_blacklist_championship_2026_v4';
+const BLACKLIST_STORAGE_KEY = 'nfs_blacklist_championship_2026_v5';
 let blacklistDrivers = [];
 let currentSelectedBlacklistRank = 1;
 let currentChampionshipWeek = 1;
@@ -3450,6 +3564,7 @@ function loadBlacklistData() {
         localStorage.removeItem('nfs_blacklist_championship_2026_v1');
         localStorage.removeItem('nfs_blacklist_championship_2026_v2');
         localStorage.removeItem('nfs_blacklist_championship_2026_v3');
+        localStorage.removeItem('nfs_blacklist_championship_2026_v4');
         const saved = localStorage.getItem(BLACKLIST_STORAGE_KEY);
         if (saved) {
             blacklistDrivers = JSON.parse(saved);
@@ -3482,9 +3597,9 @@ function saveBlacklistData() {
 }
 
 /**
- * Fórmula de Puntuación del Campeonato 2026:
+ * FÃ³rmula de PuntuaciÃ³n del Campeonato 2026:
  * Puntos = (P1 * 25) + (P2 * 18) + (P3 * 15) + (P4 * 12) +
- *          (1° Mejores Tiempos * 100) + (2° Mejores Tiempos * 50) + (3° Mejores Tiempos * 20) +
+ *          (1Â° Mejores Tiempos * 100) + (2Â° Mejores Tiempos * 50) + (3Â° Mejores Tiempos * 20) +
  *          Math.floor(REP / 10000)
  */
 function calculateDriverPoints(driver) {
@@ -3508,16 +3623,13 @@ function getDriverGroupForWeek(rank, weekNum) {
             return grp.name;
         }
     }
-    // Asignar en rotación a los grupos para pilotos de parrilla extendida (> 15)
-    const groupNames = [
-        'Grupo Alpha (Líderes)',
-        'Grupo Beta (Aspirantes)',
-        'Grupo Gamma (Fuerza)',
-        'Grupo Delta (Técnica)',
-        'Grupo Épsilon (Defensa)'
-    ];
-    const groupIdx = (rank - 1) % 5;
-    return `${groupNames[groupIdx]} [Ext]`;
+    // Asignar en rotación a los grupos para pilotos de parrilla extendida
+    const numGroups = weekData.groups.length || 4;
+    const groupIdx = (rank - 1) % numGroups;
+    if (weekData.groups[groupIdx] && weekData.groups[groupIdx].name) {
+        return `${weekData.groups[groupIdx].name} [Ext]`;
+    }
+    return `Grupo #${groupIdx + 1} [Ext]`;
 }
 
 function switchChampionshipWeek(weekNumber, btn) {
@@ -3561,6 +3673,7 @@ function renderChampionshipGroups(weekNumber) {
 
     container.innerHTML = '';
 
+    const numGroups = (weekData.groups && weekData.groups.length) ? weekData.groups.length : 5;
     weekData.groups.forEach((grp, grpIdx) => {
         const groupCard = document.createElement('div');
         groupCard.className = 'champ-group-card';
@@ -3568,7 +3681,7 @@ function renderChampionshipGroups(weekNumber) {
         // Incluir pilotos base del grupo y cualquier piloto extendido (> 15) asignado por rotación
         const groupPilots = [...grp.pilots];
         blacklistDrivers.forEach(d => {
-            if (d.rank > 15 && (d.rank - 1) % 5 === grpIdx && !groupPilots.includes(d.rank)) {
+            if (d.rank > 15 && (d.rank - 1) % numGroups === grpIdx && !groupPilots.includes(d.rank)) {
                 groupPilots.push(d.rank);
             }
         });
@@ -3613,7 +3726,7 @@ function renderChampionshipGroups(weekNumber) {
             `;
         });
 
-        const defaultTag = window.nfsI18n ? window.nfsI18n.t('badge_official_trio') : 'TRÍO OFICIAL';
+        const defaultTag = window.nfsI18n ? window.nfsI18n.t('badge_official_trio') : 'GRUPO OFICIAL';
         groupCard.innerHTML = `
             <div class="champ-group-header">
                 <span class="champ-group-name">${grp.name}</span>
@@ -3645,7 +3758,7 @@ function renderChampionshipChallenges(weekNumber) {
         let top3Html = '';
         ch.top3.forEach((t, tIdx) => {
             const rowClass = tIdx === 0 ? 'podium-row-1' : tIdx === 1 ? 'podium-row-2' : 'podium-row-3';
-            const bonusClass = t.bonus === 100 ? 'badge-bonus-100' : t.bonus === 50 ? 'badge-bonus-50' : 'badge-bonus-20';
+            const bonusClass = tIdx === 0 ? 'bonus-100' : tIdx === 1 ? 'bonus-50' : 'bonus-20';
             const repBadgeText = t.repBadge || (t.repMoney ? `💰 $${t.repMoney.toLocaleString()} REP` : '');
             const defaultPending = window.nfsI18n ? window.nfsI18n.t('champ_pending_driver') : 'Por disputar';
             const pilotDisplay = (t.pilot === 'Por disputar' || !t.pilot) ? defaultPending : t.pilot;
@@ -3668,7 +3781,7 @@ function renderChampionshipChallenges(weekNumber) {
         const restrictionLabel = window.nfsI18n ? window.nfsI18n.t('champ_restriction_label') : 'AUTO RESTRICTIVO:';
         const restrictionHtml = ch.carRestriction ? `
             <div class="champ-ch-restriction">
-                <span style="color: var(--nfs-orange); font-size: 10.5px;">🚗</span>
+                <span style="color: var(--nfs-orange); font-size: 13px;">🚗</span>
                 <span class="restriction-label">${restrictionLabel}</span>
                 <span class="restriction-car">${ch.carRestriction}</span>
             </div>
@@ -3690,8 +3803,8 @@ function renderChampionshipChallenges(weekNumber) {
 }
 
 /**
- * Retorna los pilotos de la Blacklist ordenados dinámicamente según la Clasificación General del Campeonato.
- * Criterio: Puntos Totales Descendente -> Victorias P1 -> Mejores Tiempos 1° -> Dinero de Reputación -> Rango Base.
+ * Retorna los pilotos de la Blacklist ordenados dinÃ¡micamente segÃºn la ClasificaciÃ³n General del Campeonato.
+ * Criterio: Puntos Totales Descendente -> Victorias P1 -> Mejores Tiempos 1Â° -> Dinero de ReputaciÃ³n -> Rango Base.
  */
 function getSortedBlacklistDrivers() {
     return [...blacklistDrivers].sort((a, b) => {
@@ -3704,12 +3817,12 @@ function getSortedBlacklistDrivers() {
         const p1B = b.victories?.p1 || 0;
         if (p1B !== p1A) return p1B - p1A;
 
-        // Desempate 2: Bonos de 1° mejor tiempo (+100 PTS)
+        // Desempate 2: Bonos de 1Â° mejor tiempo (+100 PTS)
         const bt1A = a.bestTimes?.first || 0;
         const bt1B = b.bestTimes?.first || 0;
         if (bt1B !== bt1A) return bt1B - bt1A;
 
-        // Desempate 3: Dinero de Reputación ($ REP)
+        // Desempate 3: Dinero de ReputaciÃ³n ($ REP)
         const repA = a.rep || 0;
         const repB = b.rep || 0;
         if (repB !== repA) return repB - repA;
@@ -3720,8 +3833,8 @@ function getSortedBlacklistDrivers() {
 }
 
 /**
- * Sincroniza e indexa las Fichas Técnicas y la Clasificación General con los ganadores de los desafíos
- * de las rotaciones semanales (CHAMPIONSHIP_WEEKS_DATA) o datos en vivo de competición.
+ * Sincroniza e indexa las Fichas TÃ©cnicas y la ClasificaciÃ³n General con los ganadores de los desafÃ­os
+ * de las rotaciones semanales (CHAMPIONSHIP_WEEKS_DATA) o datos en vivo de competiciÃ³n.
  */
 function syncBlacklistWithRotationsAndStandings() {
     if (typeof CHAMPIONSHIP_WEEKS_DATA === 'undefined') return;
@@ -3750,8 +3863,8 @@ function syncBlacklistWithRotationsAndStandings() {
 }
 
 /**
- * Permite registrar o actualizar en tiempo real el resultado de un piloto en un desafío,
- * recalculando automáticamente la Clasificación General y re-indexando las Fichas Técnicas.
+ * Permite registrar o actualizar en tiempo real el resultado de un piloto en un desafÃ­o,
+ * recalculando automÃ¡ticamente la ClasificaciÃ³n General y re-indexando las Fichas TÃ©cnicas.
  */
 function updatePilotScoreFromChallenge(pilotIdentifier, placement, bonusPts = 0, repMoney = 0) {
     const driver = blacklistDrivers.find(d => 
@@ -3798,10 +3911,10 @@ function renderBlacklistUI() {
     const tbody = document.getElementById('tbody-blacklist-roster');
     if (!tbody) return;
 
-    // Ordenar dinámicamente según la Clasificación General del Campeonato (Puntos y Desempates)
+    // Ordenar dinÃ¡micamente segÃºn la ClasificaciÃ³n General del Campeonato (Puntos y Desempates)
     const sortedDrivers = getSortedBlacklistDrivers();
 
-    // Actualizar barra de resumen con el líder real actual
+    // Actualizar barra de resumen con el lÃ­der real actual
     const leader = sortedDrivers[0] || { name: 'Razor', alias: 'Razor', ride: 'BMW M3 GTR' };
     const leaderEl = document.getElementById('bl-summary-leader');
     if (leaderEl) {
@@ -3877,9 +3990,9 @@ function renderBlacklistUI() {
             <td style="color: #38bdf8; font-weight: 800; font-family: var(--font-mono);">${driver.victories?.p4 || 0}</td>
             <td>
                 <div class="bonus-summary-cell">
-                    <span class="mini-bonus-pill badge-bonus-100" title="1° Mejor Tiempo (+100 PTS)">🥇 ${bt.first || 0}</span>
-                    <span class="mini-bonus-pill badge-bonus-50" title="2° Mejor Tiempo (+50 PTS)">🥈 ${bt.second || 0}</span>
-                    <span class="mini-bonus-pill badge-bonus-20" title="3° Mejor Tiempo (+20 PTS)">🥉 ${bt.third || 0}</span>
+                    <span class="mini-bonus-pill badge-bonus-100" title="1Â° Mejor Tiempo (+100 PTS)">ðŸ¥‡ ${bt.first || 0}</span>
+                    <span class="mini-bonus-pill badge-bonus-50" title="2Â° Mejor Tiempo (+50 PTS)">ðŸ¥ˆ ${bt.second || 0}</span>
+                    <span class="mini-bonus-pill badge-bonus-20" title="3Â° Mejor Tiempo (+20 PTS)">ðŸ¥‰ ${bt.third || 0}</span>
                 </div>
             </td>
             <td>
@@ -3889,14 +4002,14 @@ function renderBlacklistUI() {
                 <span class="champ-group-tag">${groupName}</span>
             </td>
             <td>
-                <span class="status-badge ${statusClass}">${standingRank === 1 ? '👑 LÍDER #1' : driver.status || 'ACTIVO'}</span>
+                <span class="status-badge ${statusClass}">${standingRank === 1 ? 'ðŸ‘ LÃDER #1' : driver.status || 'ACTIVO'}</span>
             </td>
         `;
 
         tbody.appendChild(tr);
     });
 
-    // Actualizar la Ficha Táctica seleccionada
+    // Actualizar la Ficha TÃ¡ctica seleccionada
     updateBlacklistTacticalCard();
 }
 
@@ -3914,7 +4027,7 @@ function selectBlacklistPilot(rank) {
         }
     });
 
-    // Actualizar selección en grupos de carrera
+    // Actualizar selecciÃ³n en grupos de carrera
     document.querySelectorAll('.champ-group-pilot-item').forEach(el => {
         const rankSpan = el.querySelector('.bl-rank-badge');
         if (rankSpan && rankSpan.textContent.trim() === `${rank}`) {
@@ -3976,7 +4089,7 @@ function renderAllTacticalCards() {
     const container = document.getElementById('blacklist-cards-grid');
     if (!container) return;
 
-    // Ordenar explícitamente según la Clasificación General del Campeonato (1 al 15+)
+    // Ordenar explÃ­citamente segÃºn la ClasificaciÃ³n General del Campeonato (1 al 15+)
     const sorted = getSortedBlacklistDrivers();
 
     container.innerHTML = '';
@@ -4003,7 +4116,12 @@ function renderAllTacticalCards() {
                         <div class="blacklist-number-title">Blacklist ${currentStandingRank}</div>
                         <div class="blacklist-driver-fullname notranslate" translate="no">${driver.name} "${driver.alias}"</div>
                     </div>
-                    ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(driver.alias || driver.name, 'xlarge') : ''}
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div class="tactical-standing-badge ${currentStandingRank === 1 ? 'badge-gold' : currentStandingRank === 2 ? 'badge-silver' : currentStandingRank === 3 ? 'badge-bronze' : ''}">
+                            TOP ${currentStandingRank}
+                        </div>
+                        ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(driver.alias || driver.name, 'xlarge') : ''}
+                    </div>
                 </div>
             </div>
 
@@ -4032,7 +4150,7 @@ function renderAllTacticalCards() {
                 ${driver.youtube ? `
                 <div style="margin-top: 10px;">
                     <a href="${driver.youtube}" target="_blank" rel="noopener noreferrer" class="tactical-yt-btn">
-                        <span>▶</span> ${window.nfsI18n ? window.nfsI18n.t('promo_video_watch') : 'Watch Channel / YouTube Video'}
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; margin-right: 4px;"><path d="M8 5v14l11-7z"/></svg> ${window.nfsI18n ? window.nfsI18n.t('promo_video_watch') : 'Watch Channel / YouTube Video'}
                     </a>
                 </div>
                 ` : ''}
@@ -4040,7 +4158,7 @@ function renderAllTacticalCards() {
 
             <div class="tactical-metrics-grid">
                 <div class="metric-box rep-box">
-                    <span class="metric-label">DINERO DE REPUTACIÓN ($ REP)</span>
+                    <span class="metric-label">DINERO DE REPUTACIÃ“N ($ REP)</span>
                     <span class="metric-value rep-val">$${(driver.rep || 0).toLocaleString()}</span>
                 </div>
                 <div class="metric-box pts-box">
@@ -4051,41 +4169,41 @@ function renderAllTacticalCards() {
 
             <div class="tactical-bonuses-row">
                 <div class="bonus-chip chip-b1">
-                    <span class="bonus-tag">🥇 1° MEJOR (+100)</span>
+                    <span class="bonus-tag">ðŸ¥‡ 1Â° MEJOR (+100)</span>
                     <span class="bonus-val">${bt.first || 0} ${bt.first === 1 ? 'vez' : 'veces'}</span>
                 </div>
                 <div class="bonus-chip chip-b2">
-                    <span class="bonus-tag">🥈 2° MEJOR (+50)</span>
+                    <span class="bonus-tag">ðŸ¥ˆ 2Â° MEJOR (+50)</span>
                     <span class="bonus-val">${bt.second || 0} ${bt.second === 1 ? 'vez' : 'veces'}</span>
                 </div>
                 <div class="bonus-chip chip-b3">
-                    <span class="bonus-tag">🥉 3° MEJOR (+20)</span>
+                    <span class="bonus-tag">ðŸ¥‰ 3Â° MEJOR (+20)</span>
                     <span class="bonus-val">${bt.third || 0} ${bt.third === 1 ? 'vez' : 'veces'}</span>
                 </div>
             </div>
 
             <div class="tactical-podiums-breakdown">
                 <div class="podium-chip chip-p1">
-                    <span class="chip-pos">P1 (1°)</span>
+                    <span class="chip-pos">P1 (1Â°)</span>
                     <span class="chip-val">${v.p1 || 0}</span>
                 </div>
                 <div class="podium-chip chip-p2">
-                    <span class="chip-pos">P2 (2°)</span>
+                    <span class="chip-pos">P2 (2Â°)</span>
                     <span class="chip-val">${v.p2 || 0}</span>
                 </div>
                 <div class="podium-chip chip-p3">
-                    <span class="chip-pos">P3 (3°)</span>
+                    <span class="chip-pos">P3 (3Â°)</span>
                     <span class="chip-val">${v.p3 || 0}</span>
                 </div>
                 <div class="podium-chip chip-p4">
-                    <span class="chip-pos">P4 (4°)</span>
+                    <span class="chip-pos">P4 (4Â°)</span>
                     <span class="chip-val">${v.p4 || 0}</span>
                 </div>
             </div>
 
             <div class="tactical-action-bar">
-                <button class="btn-explored" style="width: 100%; justify-content: center; font-size: 10.5px;" onclick="switchView('championship-standings')">
-                    <span>🏆</span> Ver en Clasificación General
+                <button class="btn-explored" style="width: 100%; justify-content: center; font-size: 13px;" onclick="switchView('championship-standings')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; margin-right: 6px;"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0 0 11 15.9V19H7v2h10v-2h-4v-3.1c1.94-.38 3.51-1.74 3.61-3.96 2.47-.31 4.39-2.39 4.39-4.94V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg> Ver en ClasificaciÃ³n General
                 </button>
             </div>
         `;
@@ -4104,7 +4222,7 @@ function renderQuickJumpPills() {
 
     const totalPilots = Math.max(15, blacklistDrivers.length);
     if (titleEl) {
-        const titleText = (typeof window.nfsI18n !== 'undefined' && window.nfsI18n.t) ? window.nfsI18n.t('quick_jump_title') : '⚡ QUICK JUMP TO DRIVER';
+        const titleText = (typeof window.nfsI18n !== 'undefined' && window.nfsI18n.t) ? window.nfsI18n.t('quick_jump_title') : 'âš¡ QUICK JUMP TO DRIVER';
         titleEl.textContent = `${titleText} (1 - ${totalPilots}):`;
     }
 
@@ -4117,11 +4235,7 @@ function renderQuickJumpPills() {
         btn.setAttribute('translate', 'no');
         btn.onclick = () => scrollToPilotCard(d.rank);
 
-        let icon = '';
-        if (standingRank === 1) icon = '👑 ';
-        else if (standingRank === 2) icon = '🥈 ';
-        else if (standingRank === 3) icon = '🥉 ';
-
+        if (standingRank === 1) icon = 'ðŸ‘ ';
         btn.textContent = `${icon}#${standingRank} ${d.alias || d.name}`;
         container.appendChild(btn);
     });
@@ -4130,33 +4244,33 @@ function renderQuickJumpPills() {
 function updateChampionshipRosterLabels() {
     const totalPilots = Math.max(15, blacklistDrivers.length);
 
-    // Actualizar texto de sub-pestañas en toda la web
+    // Actualizar texto de sub-pestaÃ±as en toda la web
     document.querySelectorAll('.subtab-cards-label').forEach(el => {
         const labelText = (typeof window.nfsI18n !== 'undefined' && window.nfsI18n.t) ? window.nfsI18n.t('tab_technical_sheets') : 'Driver Dossiers';
         el.textContent = `${labelText} (1 - ${totalPilots})`;
     });
 
-    // Actualizar título de la sección de fichas técnicas
+    // Actualizar tÃ­tulo de la secciÃ³n de fichas tÃ©cnicas
     const titleGlow = document.getElementById('bl-cards-title-glow');
     if (titleGlow) {
         titleGlow.textContent = `// Blacklist 1 - ${totalPilots}`;
     }
 
-    // Actualizar título de tabla de clasificación general
+    // Actualizar tÃ­tulo de tabla de clasificaciÃ³n general
     const standingsTitle = document.getElementById('bl-standings-title');
     if (standingsTitle) {
         const standingsText = (typeof window.nfsI18n !== 'undefined' && window.nfsI18n.t) ? window.nfsI18n.t('champ_standings_title') : 'OFFICIAL CHAMPIONSHIP OVERALL STANDINGS';
         standingsTitle.innerHTML = `<span>🏆</span> ${standingsText} (TOP ${totalPilots})`;
     }
 
-    // Actualizar telemetría de pilotos en competición
+    // Actualizar telemetrÃ­a de pilotos en competiciÃ³n
     const pilotsCountEl = document.getElementById('bl-standings-pilots-count');
     if (pilotsCountEl) {
         const driversText = (typeof window.nfsI18n !== 'undefined' && window.nfsI18n.t) ? window.nfsI18n.t('hero_stat_drivers') : 'Drivers';
         pilotsCountEl.textContent = `${totalPilots} ${driversText}`;
     }
 
-    // Actualizar resumen en formulario de inscripción
+    // Actualizar resumen en formulario de inscripciÃ³n
     const regSummarySlots = document.getElementById('reg-summary-slots');
     const regCountPill = document.getElementById('registered-count-pill');
     const totalReg = registeredParticipants.length;
@@ -4188,30 +4302,149 @@ function scrollToPilotCard(rank) {
 }
 
 // =======================================================
-// SISTEMA DE INSCRIPCIÓN AL TORNEO // FIREBASE REALTIME DB
+// SISTEMA DE INSCRIPCIÃ“N AL TORNEO // FIREBASE REALTIME DB
 // =======================================================
 
 const CHAMPIONSHIP_FIREBASE_URL = 'https://nfsranks-blacklist-default-rtdb.firebaseio.com/championship_participants.json';
-const CHAMPIONSHIP_LOCAL_KEY = 'nfs_championship_participants_v1';
-let registeredParticipants = [];
+const CHAMPIONSHIP_LOCAL_KEY = 'nfs_championship_participants_v2';
+const CHAMPIONSHIP_DEFAULT_PARTICIPANTS = [
+    {
+        id: "reg_1789919672774_z8scz",
+        name: "ZimanX",
+        alias: "ZimanX",
+        ride: "Porsche Carrera GT",
+        schedule: "Sabados",
+        contact: "+584246950722",
+        youtube: "https://www.youtube.com/c/ZimanXPro/videos",
+        registeredAt: "2026-09-20T15:54:32.774Z",
+        isRealUser: true
+    },
+    {
+        id: "reg_1789929284331_s1eia",
+        name: "Mystic",
+        alias: "MysticX",
+        ride: "BMW M3 GTR",
+        schedule: "From Tuesday to Saturday",
+        contact: "Jollymystic",
+        youtube: "",
+        registeredAt: "2026-09-20T18:34:44.331Z",
+        isRealUser: true
+    },
+    {
+        id: "reg_1789931219145_vtige",
+        name: "Nebula",
+        alias: "Nebula",
+        ride: "Carrera GT y Lotus Elise",
+        schedule: "Sabado desde 20pm en adelante (hora chile)",
+        contact: "+569 67248491",
+        youtube: "https://youtube.com/@nebula_1984?si=K0_P-Fy-5fZEizaa",
+        registeredAt: "2026-09-20T19:06:59.147Z",
+        isRealUser: true
+    },
+    {
+        id: "reg_1789931571542_02cyt",
+        name: "xLeMondx",
+        alias: "xLeMondx",
+        ride: "Porsche Carrera GT",
+        schedule: "lun - sab 8pm - 12 am hora Peru",
+        contact: "",
+        youtube: "https://www.youtube.com/@xLeMondx",
+        registeredAt: "2026-09-20T19:12:51.542Z",
+        isRealUser: true
+    },
+    {
+        id: "reg_1789933200212_nmk8p",
+        name: "Avenger",
+        alias: "SRTxAvengerT",
+        ride: "Porsche Carrera GT Y LOTUS ELISE",
+        schedule: "Lunes a domingo despues de las 5 pm",
+        contact: "",
+        youtube: "https://www.youtube.com/@avenger7361",
+        registeredAt: "2026-09-20T19:40:00.212Z",
+        isRealUser: true
+    },
+    {
+        id: "reg_1790019032404_do690",
+        name: "DarkShido",
+        alias: "Shido",
+        ride: "BMW M3 GTR",
+        schedule: "sabado desde las 7pm hora venezuela",
+        contact: "Discord",
+        youtube: "https://www.youtube.com/@DarkShidoGT",
+        registeredAt: "2026-09-21T19:30:32.404Z",
+        isRealUser: true
+    },
+    {
+        id: "reg_1790048893233_ngfge",
+        name: "DannyLove",
+        alias: "DannyLove",
+        ride: "BMW M3 GTR",
+        schedule: "jueves - domingo | 7:30 pm",
+        contact: "+57 302 317 9484",
+        youtube: "",
+        registeredAt: "2026-09-22T03:48:13.233Z",
+        isRealUser: true
+    },
+    {
+        id: "reg_1790081808696_9dnrd",
+        name: "Lea4Speed0",
+        alias: "Lea",
+        ride: "Carrera GT & M3 GTR",
+        schedule: "Domingo 8:00 PM",
+        contact: "NA",
+        youtube: "https://youtube.com/@lea4speed0?si=zXkGE7AQBQ7kvE5I",
+        registeredAt: "2026-09-22T12:56:48.696Z",
+        isRealUser: true
+    },
+    {
+        id: "reg_1790428423711_ihb49",
+        name: "ellafreyafan",
+        alias: "NFSMW",
+        ride: "BMW M3 GTR",
+        schedule: "Mon-Sun 8PM - 12AM CET",
+        contact: "",
+        youtube: "https://www.youtube.com/channel/UCAU0np7Ruu16C7F9dnBVy8A",
+        registeredAt: "2026-09-26T13:13:43.711Z",
+        isRealUser: true
+    },
+    {
+        id: "reg_1790631864702_jb59c",
+        name: "N6 xBourne",
+        alias: "N6 xBourne",
+        ride: "Porsche Carrera GT y Lotus Elise",
+        schedule: "Horario Flexible",
+        contact: "jarheadvief",
+        youtube: "https://www.youtube.com/@N6_xBourne",
+        registeredAt: "2026-09-28T21:44:24.702Z",
+        isRealUser: true
+    }
+];
+
+let registeredParticipants = [...CHAMPIONSHIP_DEFAULT_PARTICIPANTS];
 
 /**
  * Carga los participantes registrados en el torneo.
- * Estrategia Híbrida: Lee inmediatamente de localStorage para 0 latencia
+ * Estrategia Híbrida: Lee inmediatamente de memoria / localStorage para 0 latencia
  * y sincroniza concurrentemente con Firebase Realtime Database.
  */
 function loadChampionshipParticipants() {
     // 1. Carga local inmediata
     try {
+        localStorage.removeItem('nfs_championship_participants_v1');
         const localData = localStorage.getItem(CHAMPIONSHIP_LOCAL_KEY);
         if (localData) {
-            registeredParticipants = JSON.parse(localData);
-            mergeRegisteredParticipantsWithBlacklist();
-            renderRegisteredPilotsUI();
+            const parsed = JSON.parse(localData);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+                const clean = parsed.filter(p => p && typeof p === 'object' && (p.name || p.alias));
+                if (clean.length > 0) registeredParticipants = clean;
+            }
         }
     } catch (e) {
         console.warn("Aviso al cargar participantes locales:", e);
     }
+
+    mergeRegisteredParticipantsWithBlacklist();
+    renderRegisteredPilotsUI();
 
     // 2. Sincronización con Firebase RTDB (REST API nativa)
     fetch(CHAMPIONSHIP_FIREBASE_URL)
@@ -4223,11 +4456,13 @@ function loadChampionshipParticipants() {
             if (data) {
                 const list = [];
                 if (Array.isArray(data)) {
-                    list.push(...data.filter(Boolean));
+                    list.push(...data.filter(p => p && typeof p === 'object' && (p.name || p.alias)));
                 } else if (typeof data === 'object') {
                     Object.keys(data).forEach(key => {
-                        if (data[key]) {
-                            list.push({ ...data[key], _firebaseKey: key });
+                        if (key === 'weeks_data') return;
+                        const p = data[key];
+                        if (p && typeof p === 'object' && (p.name || p.alias)) {
+                            list.push({ ...p, _firebaseKey: key });
                         }
                     });
                 }
@@ -4237,7 +4472,9 @@ function loadChampionshipParticipants() {
 
                 if (list.length > 0) {
                     registeredParticipants = list;
-                    localStorage.setItem(CHAMPIONSHIP_LOCAL_KEY, JSON.stringify(registeredParticipants));
+                    try {
+                        localStorage.setItem(CHAMPIONSHIP_LOCAL_KEY, JSON.stringify(registeredParticipants));
+                    } catch (e) {}
                     mergeRegisteredParticipantsWithBlacklist();
                     renderRegisteredPilotsUI();
                 }
@@ -4252,10 +4489,10 @@ function loadChampionshipParticipants() {
  * Guarda un nuevo participante en localStorage y Firebase Realtime Database
  */
 async function saveChampionshipParticipant(participantData) {
-    // 1. Guardado local inmediato y actualización reactiva de la UI
+    // 1. Guardado local inmediato y actualizaciÃ³n reactiva de la UI
     registeredParticipants.push(participantData);
     localStorage.setItem(CHAMPIONSHIP_LOCAL_KEY, JSON.stringify(registeredParticipants));
-
+    
     mergeRegisteredParticipantsWithBlacklist();
     renderRegisteredPilotsUI();
 
@@ -4277,7 +4514,7 @@ async function saveChampionshipParticipant(participantData) {
 }
 
 /**
- * Procesa el formulario de inscripción al torneo
+ * Procesa el formulario de inscripciÃ³n al torneo
  */
 async function handleChampionshipSubmit(event) {
     event.preventDefault();
@@ -4310,7 +4547,7 @@ async function handleChampionshipSubmit(event) {
         return;
     }
 
-    // Verificar si el piloto ya está registrado
+    // Verificar si el piloto ya estÃ¡ registrado
     const alreadyExists = registeredParticipants.some(p => p.name.toLowerCase() === name.toLowerCase());
     if (alreadyExists) {
         showRegisterFeedback(`El piloto "${name}" ya se encuentra registrado en el campeonato.`, "error");
@@ -4319,7 +4556,7 @@ async function handleChampionshipSubmit(event) {
 
     if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.innerHTML = `<span>⏳</span> REGISTRANDO PILOTO EN LA RED...`;
+        submitBtn.innerHTML = `<span>â³</span> REGISTRANDO PILOTO EN LA RED...`;
     }
 
     const newParticipant = {
@@ -4351,19 +4588,19 @@ async function handleChampionshipSubmit(event) {
 
     if (submitBtn) {
         submitBtn.disabled = false;
-        submitBtn.innerHTML = `<span>🚀</span> REGISTRARME EN EL CAMPEONATO 2026`;
+        submitBtn.innerHTML = `<span>ðŸš€</span> REGISTRARME EN EL CAMPEONATO 2026`;
     }
 
     const assignedRank = registeredParticipants.length;
     const totalParrilla = Math.max(15, registeredParticipants.length);
-    showRegisterFeedback(`¡Inscripción confirmada con éxito! Has sido asignado a la Plaza Oficial #${assignedRank} del Campeonato Blacklist 2026. La parrilla y las fichas técnicas se han actualizado automáticamente a ${totalParrilla} pilotos en tiempo real.`, "success");
+    showRegisterFeedback(`Â¡InscripciÃ³n confirmada con Ã©xito! Has sido asignado a la Plaza Oficial #${assignedRank} del Campeonato Blacklist 2026. La parrilla y las fichas tÃ©cnicas se han actualizado automÃ¡ticamente a ${totalParrilla} pilotos en tiempo real.`, "success");
 }
 
 function showRegisterFeedback(message, type) {
     const el = document.getElementById('register-feedback-msg');
     if (!el) return;
     el.className = `register-feedback-msg feedback-${type}`;
-    el.innerHTML = type === 'success' ? `<strong>✓ ÉXITO:</strong> ${message}` : `<strong>✕ ERROR:</strong> ${message}`;
+    el.innerHTML = type === 'success' ? `<strong>âœ“ Ã‰XITO:</strong> ${message}` : `<strong>âœ• ERROR:</strong> ${message}`;
     el.style.display = 'block';
     if (type === 'success') {
         setTimeout(() => {
@@ -4374,8 +4611,8 @@ function showRegisterFeedback(message, type) {
 
 /**
  * Cruza los participantes reales registrados con las plazas de la Blacklist.
- * Si supera los 15 participantes, la Blacklist y las fichas técnicas se expanden automáticamente
- * hasta 18, 20 o más pilotos en tiempo real.
+ * Si supera los 15 participantes, la Blacklist y las fichas tÃ©cnicas se expanden automÃ¡ticamente
+ * hasta 18, 20 o mÃ¡s pilotos en tiempo real.
  */
 function mergeRegisteredParticipantsWithBlacklist() {
     if (typeof DEFAULT_BLACKLIST_DRIVERS !== 'undefined') {
@@ -4388,13 +4625,14 @@ function mergeRegisteredParticipantsWithBlacklist() {
         }
         if (idx < 15 && blacklistDrivers[idx]) {
             const slot = blacklistDrivers[idx];
+            slot.rank = idx + 1;
             slot.name = p.name;
             slot.alias = p.alias || p.name;
             slot.ride = p.ride;
-            slot.strength = `${p.ride} • ${p.schedule || 'Competición en Vivo'}`;
-            slot.bio = `Piloto Oficial Inscrito en el Campeonato 2026. Disponibilidad: ${p.schedule || 'Horario Flexible'}.${p.contact ? ` Contacto: ${p.contact}.` : ''} Compite en Rockport City bajo verificación de juego limpio.`;
+            slot.strength = `${p.ride} â€¢ ${p.schedule || 'CompeticiÃ³n en Vivo'}`;
+            slot.bio = `Piloto Oficial Inscrito en el Campeonato 2026. Disponibilidad: ${p.schedule || 'Horario Flexible'}.${p.contact ? ` Contacto: ${p.contact}.` : ''} Compite en Rockport City bajo verificaciÃ³n de juego limpio.`;
             slot.signature = (p.alias || p.name).toUpperCase();
-            slot.status = idx === 0 ? "👑 LÍDER BLACKLIST #1 (OFICIAL)" : `PILOTO OFICIAL #${idx + 1}`;
+            slot.status = idx === 0 ? "ðŸ‘ LÃDER BLACKLIST #1 (OFICIAL)" : `PILOTO OFICIAL #${idx + 1}`;
             slot.youtube = p.youtube || '';
             slot.isRealUser = true;
             slot.schedule = p.schedule || '';
@@ -4410,11 +4648,11 @@ function mergeRegisteredParticipantsWithBlacklist() {
                 name: p.name,
                 alias: p.alias || p.name,
                 ride: p.ride,
-                strength: `${p.ride} • ${p.schedule || 'Parrilla Extendida'}`,
+                strength: `${p.ride} â€¢ ${p.schedule || 'Parrilla Extendida'}`,
                 rep: 0,
                 victories: { p1: 0, p2: 0, p3: 0, p4: 0 },
                 bestTimes: { first: 0, second: 0, third: 0 },
-                bio: `Piloto Oficial Inscrito en el Campeonato 2026 (Parrilla Extendida). Disponibilidad: ${p.schedule || 'Horario Flexible'}.${p.contact ? ` Contacto: ${p.contact}.` : ''} Compite en Rockport City bajo verificación de juego limpio.`,
+                bio: `Piloto Oficial Inscrito en el Campeonato 2026 (Parrilla Extendida). Disponibilidad: ${p.schedule || 'Horario Flexible'}.${p.contact ? ` Contacto: ${p.contact}.` : ''} Compite en Rockport City bajo verificaciÃ³n de juego limpio.`,
                 signature: (p.alias || p.name).toUpperCase(),
                 status: `PILOTO OFICIAL #${rankNum}`,
                 avatar: "assets/img/nfsranksmwlogo.png",
@@ -4450,12 +4688,16 @@ function renderRegisteredPilotsUI() {
     if (!listContainer) return;
 
     const total = registeredParticipants.length;
+    const countNumEl = document.getElementById('reg-count-num');
+    const countPill = document.getElementById('registered-count-pill');
+    if (countNumEl) countNumEl.textContent = total;
+    if (countPill) countPill.innerHTML = `<span id="reg-count-num">${total}</span> / 15 Slots`;
 
     if (total === 0) {
         listContainer.innerHTML = `
             <div class="empty-participants-msg">
-                <span style="font-size: 25.9px; display: block; margin-bottom: 8px;">🏁</span>
-                <strong>Aún no hay pilotos inscritos.</strong><br>
+                <span style="font-size: 32px; display: block; margin-bottom: 8px;">ðŸŽï¸</span>
+                <strong>AÃºn no hay pilotos inscritos.</strong><br>
                 Completa el formulario oficial para reclamar la plaza #1 del Campeonato Blacklist 2026.
             </div>
         `;
@@ -4487,10 +4729,10 @@ function renderRegisteredPilotsUI() {
                         ${pilot.name} ${pilot.alias ? `<span style="color: var(--nfs-orange);">"${pilot.alias}"</span>` : ''}
                     </div>
                     <div class="reg-pilot-car">
-                        <span>🏎️</span> ${pilot.ride}
+${pilot.ride}
                     </div>
                     <div class="reg-pilot-schedule">
-                        <span>⏰</span> ${pilot.schedule}
+${pilot.schedule}
                     </div>
                 </div>
             </div>
@@ -4498,7 +4740,7 @@ function renderRegisteredPilotsUI() {
                 <span class="reg-status-badge status-official">${statusLabel}</span>
                 ${pilot.youtube ? `
                     <a href="${pilot.youtube}" target="_blank" rel="noopener noreferrer" class="btn-yt-link">
-                        ▶ ${typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es' ? 'Canal / Video' : 'Channel / Video'}
+<svg viewBox="0 0 24 24" width="9" height="9" fill="currentColor" style="vertical-align: 0px; margin-right: 4px; display: inline-block;"><path d="M8 5v14l11-7z"/></svg>${typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es' ? 'Canal / Video' : 'Channel / Video'}
                     </a>
                 ` : ''}
             </div>
@@ -4516,7 +4758,7 @@ function initBlacklistSystem() {
 }
 
 // =======================================================
-// SALÓN HISTÓRICO DE TORNEOS (CHALLONGE HISTORIAL)
+// SALÃ“N HISTÃ“RICO DE TORNEOS (CHALLONGE HISTORIAL)
 // =======================================================
 let currentPastTournamentKey = 'ev1n0yug';
 let currentPastViewMode = 'brackets';
@@ -4530,7 +4772,7 @@ function switchPastTournament(key) {
     if (!PAST_TOURNAMENTS_DATA || !PAST_TOURNAMENTS_DATA[key]) return;
     currentPastTournamentKey = key;
 
-    // Actualizar píldoras selectoras de torneo
+    // Actualizar pÃ­ldoras selectoras de torneo
     document.querySelectorAll('#past-tournaments-pills .champ-pill').forEach(btn => btn.classList.remove('active'));
     const activePill = document.getElementById(`pill-tournament-${key}`);
     if (activePill) activePill.classList.add('active');
@@ -4581,19 +4823,19 @@ function renderPastTournamentHero(t) {
         <div class="past-hero-content">
             <div class="past-hero-badges">
                 <span class="past-badge-edition">${t.edition}</span>
-                <span class="past-badge-date">📅 ${t.date}</span>
-                <span class="past-badge-category">⚙️ ${t.category}</span>
-                <span class="past-badge-format">⚔️ ${t.format}</span>
+                <span class="past-badge-date">ðŸ“… ${t.date}</span>
+                <span class="past-badge-category">âš™ï¸ ${t.category}</span>
+                <span class="past-badge-format">âš”ï¸ ${t.format}</span>
             </div>
             <h2 class="past-hero-title">${t.title}</h2>
             <p class="past-hero-desc">
                 Organizado y disputado bajo las normas oficiales de <strong>${t.platform}</strong>. 
-                ${t.hosts ? `Coordinación y arbitraje: <span style="color: var(--nfs-orange);">${t.hosts}</span>.` : ''}
+                ${t.hosts ? `CoordinaciÃ³n y arbitraje: <span style="color: var(--nfs-orange);">${t.hosts}</span>.` : ''}
             </p>
         </div>
         <div class="past-hero-actions">
             <a href="${t.challongeUrl}" target="_blank" rel="noopener noreferrer" class="btn-challonge-link-hero">
-                <span>🔗</span> Ver Bracket Oficial en Challonge
+                <span>ðŸ”—</span> Ver Bracket Oficial en Challonge
             </a>
         </div>
     `;
@@ -4605,28 +4847,28 @@ function renderPastTournamentStats(t) {
 
     statsEl.innerHTML = `
         <div class="challenge-summary-item">
-            <span class="challenge-summary-icon">👑</span>
+            <span class="challenge-summary-icon">ðŸ‘‘</span>
             <div class="challenge-summary-content">
-                <span class="challenge-summary-label">CAMPEÓN HISTÓRICO</span>
-                <span class="challenge-summary-val" style="color: #ffd700; font-weight: 800;">${t.stats.champion} 🥇</span>
+                <span class="challenge-summary-label">CAMPEÃ“N HISTÃ“RICO</span>
+                <span class="challenge-summary-val" style="color: #ffd700; font-weight: 800;">${t.stats.champion} ðŸ¥‡</span>
             </div>
         </div>
         <div class="challenge-summary-item">
-            <span class="challenge-summary-icon">🥈</span>
+            <span class="challenge-summary-icon">ðŸ¥ˆ</span>
             <div class="challenge-summary-content">
-                <span class="challenge-summary-label">SUBCAMPEÓN</span>
+                <span class="challenge-summary-label">SUBCAMPEÃ“N</span>
                 <span class="challenge-summary-val" style="color: #e2e8f0;">${t.stats.runnerUp}</span>
             </div>
         </div>
         <div class="challenge-summary-item">
-            <span class="challenge-summary-icon">🏎️</span>
+            <span class="challenge-summary-icon">ðŸŽï¸</span>
             <div class="challenge-summary-content">
                 <span class="challenge-summary-label">PILOTOS EN EL CUADRO</span>
                 <span class="challenge-summary-val" style="color: #38bdf8; font-family: var(--font-mono);">${t.stats.totalPilots} Corredores</span>
             </div>
         </div>
         <div class="challenge-summary-item">
-            <span class="challenge-summary-icon">⚔️</span>
+            <span class="challenge-summary-icon">âš”ï¸</span>
             <div class="challenge-summary-content">
                 <span class="challenge-summary-label">PARTIDAS DISPUTADAS</span>
                 <span class="challenge-summary-val" style="color: var(--green-neon); font-family: var(--font-mono);">${t.stats.totalMatches} Enfrentamientos</span>
@@ -4671,14 +4913,14 @@ function renderPastTournamentBrackets(t) {
                     <div class="bracket-match-card ${isGrandFinal ? 'match-grand-final' : ''}">
                         <div class="match-meta">
                             <span class="match-id-badge">MATCH #${m.id}</span>
-                            ${isGrandFinal ? '<span class="grand-final-badge">👑 GRAN FINAL</span>' : ''}
+                            ${isGrandFinal ? '<span class="grand-final-badge">ðŸ‘‘ GRAN FINAL</span>' : ''}
                         </div>
                         <div class="match-competitors">
                             <!-- Jugador 1 -->
                             <div class="match-player-row ${p1Winner ? 'is-winner' : 'is-loser'}">
                                 <span class="player-seed">#${m.p1.seed}</span>
                                 <span class="player-name">${m.p1.name}</span>
-                                ${p1Winner ? '<span class="winner-crown-icon">👑</span>' : ''}
+                                ${p1Winner ? '<span class="winner-crown-icon">ðŸ‘‘</span>' : ''}
                                 <span class="player-score ${p1Winner ? 'score-winner' : ''}">${m.p1.score}</span>
                             </div>
                             <div class="match-row-divider"></div>
@@ -4686,7 +4928,7 @@ function renderPastTournamentBrackets(t) {
                             <div class="match-player-row ${p2Winner ? 'is-winner' : 'is-loser'}">
                                 <span class="player-seed">#${m.p2.seed}</span>
                                 <span class="player-name">${m.p2.name}</span>
-                                ${p2Winner ? '<span class="winner-crown-icon">👑</span>' : ''}
+                                ${p2Winner ? '<span class="winner-crown-icon">ðŸ‘‘</span>' : ''}
                                 <span class="player-score ${p2Winner ? 'score-winner' : ''}">${m.p2.score}</span>
                             </div>
                         </div>
@@ -4759,26 +5001,26 @@ function renderPastTournamentParticipants(t) {
 
     let html = '';
     t.participants.forEach(p => {
-        const isPodium = p.finalPos.includes('Campeón') || p.finalPos.includes('Lugar');
-        const posClass = p.finalPos.includes('Campeón') ? 'pos-champion' : (p.finalPos.includes('2do') ? 'pos-silver' : (p.finalPos.includes('3er') ? 'pos-bronze' : ''));
+        const isPodium = p.finalPos.includes('CampeÃ³n') || p.finalPos.includes('Lugar');
+        const posClass = p.finalPos.includes('CampeÃ³n') ? 'pos-champion' : (p.finalPos.includes('2do') ? 'pos-silver' : (p.finalPos.includes('3er') ? 'pos-bronze' : ''));
 
         html += `
             <tr class="${isPodium ? 'row-podium' : ''}">
                 <td style="font-family: var(--font-mono); font-weight: 700; color: var(--nfs-orange);">#${p.seed}</td>
                 <td>
                     <div style="display: flex; align-items: center; gap: 8px;">
-                        <strong style="color: #ffffff; font-size: 12.2px;">${p.name}</strong>
-                        ${p.finalPos.includes('Campeón') ? '<span class="crown-badge">👑 1°</span>' : ''}
+                        <strong style="color: #ffffff; font-size: 15px;">${p.name}</strong>
+                        ${p.finalPos.includes('CampeÃ³n') ? '<span class="crown-badge">ðŸ‘‘ 1Â°</span>' : ''}
                     </div>
                 </td>
                 <td>
                     <span class="past-final-pos ${posClass}">${p.finalPos}</span>
                 </td>
-                <td style="color: var(--text-muted); font-size: 10.5px;">
-                    ${p.finalPos.includes('Campeón') ? '🏆 Gran Finalista Vencedor' : (p.finalPos.includes('2do') ? '⚔️ Gran Finalista' : 'Completó cuadro de llaves')}
+                <td style="color: var(--text-muted); font-size: 13px;">
+                    ${p.finalPos.includes('CampeÃ³n') ? 'ðŸ† Gran Finalista Vencedor' : (p.finalPos.includes('2do') ? 'âš”ï¸ Gran Finalista' : 'CompletÃ³ cuadro de llaves')}
                 </td>
                 <td>
-                    <span class="badge-verified-challonge">✓ Verificado Challonge</span>
+                    <span class="badge-verified-challonge">âœ“ Verificado Challonge</span>
                 </td>
             </tr>
         `;
@@ -4788,9 +5030,9 @@ function renderPastTournamentParticipants(t) {
 }
 
 // =======================================================
-// MÓDULOS LATERALES DEL HOME (PORTAL DASHBOARD)
+// MÃ“DULOS LATERALES DEL HOME (PORTAL DASHBOARD)
 // =======================================================
-// Récords Oficiales verificados extraídos de las tablas del Leaderboard (Google Sheets de NFSRANKSMW)
+// RÃ©cords Oficiales verificados extraÃ­dos de las tablas del Leaderboard (Google Sheets de NFSRANKSMW)
 const HOME_LIVE_LEADERBOARD_RECORDS = [
     { rank: 1, driver: "Lea4Speed0", time: "1:20.750", car: "Carrera GT", route: "City Perimeter", routeType: "Circuito" },
     { rank: 2, driver: "SRTxAvenger", time: "1:20.767", car: "Carrera GT", route: "City Perimeter", routeType: "Circuito" },
@@ -4799,43 +5041,61 @@ const HOME_LIVE_LEADERBOARD_RECORDS = [
     { rank: 5, driver: "ZimanX", time: "1:20.87", car: "Carrera GT", route: "City Perimeter", routeType: "Circuito" }
 ];
 
+window.renderHomeEventLiveIndicator = function() {
+    const cdContainer = document.getElementById('home-event-countdown');
+    if (!cdContainer) return;
+    const cdTitle = document.querySelector('.event-countdown-container .countdown-title');
+    if (cdTitle) {
+        cdTitle.textContent = (typeof window.nfsI18n !== 'undefined' && window.nfsI18n.t)
+            ? window.nfsI18n.t('sidebar_bl_countdown_active')
+            : 'ESTADO DE LA COMPETICIÓN:';
+    }
+    const liveMsg = (typeof window.nfsI18n !== 'undefined' && window.nfsI18n.t)
+        ? window.nfsI18n.t('sidebar_bl_event_active')
+        : '¡EVENTO EN CURSO!';
+    cdContainer.innerHTML = `
+        <div class="event-live-indicator" style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 8px 12px; background: rgba(0, 255, 136, 0.1); border: 1px solid rgba(0, 255, 136, 0.4); border-radius: 6px; box-shadow: 0 0 14px rgba(0,255,136,0.25);">
+            <span class="pulse-dot" style="display: inline-block; width: 9px; height: 9px; border-radius: 50%; background-color: var(--green-neon); box-shadow: 0 0 8px var(--green-neon); flex-shrink: 0;"></span>
+            <span style="color: var(--green-neon); font-family: var(--font-racing); font-size: 15px; font-weight: 900; letter-spacing: 1px; text-shadow: 0 0 10px rgba(0,255,136,0.65); text-transform: uppercase;">🏁 ${liveMsg}</span>
+        </div>
+    `;
+};
+
 function initHomeSidebarModules() {
     // 1. Inicializar Cuenta Regresiva de NFS Most Wanted Blacklist 2026
     const targetDate = new Date("2026-10-03T00:00:00").getTime();
-    const daysEl = document.getElementById('cd-days');
-    const hoursEl = document.getElementById('cd-hours');
-    const minsEl = document.getElementById('cd-mins');
-    const secsEl = document.getElementById('cd-secs');
+    const now = new Date().getTime();
+    const diff = targetDate - now;
 
-    if (daysEl && hoursEl && minsEl && secsEl) {
-        const updateCountdown = () => {
-            const now = new Date().getTime();
-            const diff = targetDate - now;
+    if (diff <= 0) {
+        window.renderHomeEventLiveIndicator();
+    } else {
+        const daysEl = document.getElementById('cd-days');
+        const hoursEl = document.getElementById('cd-hours');
+        const minsEl = document.getElementById('cd-mins');
+        const secsEl = document.getElementById('cd-secs');
 
-            if (diff <= 0) {
-                daysEl.textContent = "00";
-                hoursEl.textContent = "00";
-                minsEl.textContent = "00";
-                secsEl.textContent = "00";
-                const cdContainer = document.getElementById('home-event-countdown');
-                if (cdContainer) {
-                    cdContainer.innerHTML = `<div style="color: var(--green-neon); font-family: var(--font-racing); font-size: 13px; font-weight: 800; text-align: center; width: 100%; padding: 6px 0; text-shadow: 0 0 10px rgba(0,255,136,0.6);">🏁 ¡EVENTO EN CURSO!</div>`;
+        if (daysEl && hoursEl && minsEl && secsEl) {
+            const updateCountdown = () => {
+                const currentDiff = targetDate - new Date().getTime();
+                if (currentDiff <= 0) {
+                    window.renderHomeEventLiveIndicator();
+                    return;
                 }
-                return;
-            }
 
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                const days = Math.floor(currentDiff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((currentDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((currentDiff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((currentDiff % (1000 * 60)) / 1000);
 
-            daysEl.textContent = String(days).padStart(2, '0');
-            hoursEl.textContent = String(hours).padStart(2, '0');
-            minsEl.textContent = String(minutes).padStart(2, '0');
-            secsEl.textContent = String(seconds).padStart(2, '0');
-        };
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
+                daysEl.textContent = String(days).padStart(2, '0');
+                hoursEl.textContent = String(hours).padStart(2, '0');
+                minsEl.textContent = String(minutes).padStart(2, '0');
+                secsEl.textContent = String(seconds).padStart(2, '0');
+            };
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        }
     }
 
     // 2. Renderizar Mini-Leaderboard con los pilotos oficiales originales
@@ -4863,7 +5123,7 @@ function initHomeSidebarModules() {
         });
         lbContainer.innerHTML = html;
 
-        // Sincronizar dinámicamente con la primera hoja oficial del Leaderboard
+        // Sincronizar dinÃ¡micamente con la primera hoja oficial del Leaderboard
         syncLiveLeaderboardWithOfficialSheet();
     }
 }
@@ -4891,7 +5151,7 @@ async function syncLiveLeaderboardWithOfficialSheet() {
                                 <span class="live-lb-rank-num ${rankClass}">${rankNum}</span>
                                 <div class="live-lb-info">
                                     <div class="live-lb-driver notranslate" translate="no">${rec.driver}</div>
-                                    <div class="live-lb-track">📍 ${route.name} (${route.type})</div>
+                                    <div class="live-lb-track">ðŸ“ ${route.name} (${route.type})</div>
                                 </div>
                             </div>
                             <div class="live-lb-right">
@@ -4905,7 +5165,7 @@ async function syncLiveLeaderboardWithOfficialSheet() {
             }
         }
     } catch (e) {
-        console.warn("Telemetría oficial cargada desde registros oficiales de la tabla.", e);
+        console.warn("TelemetrÃ­a oficial cargada desde registros oficiales de la tabla.", e);
     }
 }
 
@@ -4936,7 +5196,7 @@ function setCategoryAndGo(category) {
 }
 
 // =======================================================
-// SECCIÓN DE MIEMBROS DE DISCORD (ROSTER OFICIAL)
+// SECCIÃ“N DE MIEMBROS DE DISCORD (ROSTER OFICIAL)
 // =======================================================
 let currentMembersRoleFilter = 'all';
 let currentMembersSearchQuery = '';
@@ -4944,7 +5204,7 @@ let currentMembersSearchQuery = '';
 function initMembersSection() {
     if (typeof DISCORD_MEMBERS_DATA === 'undefined') return;
 
-    // Calcular estadísticas
+    // Calcular estadÃ­sticas
     const totalCount = DISCORD_MEMBERS_DATA.length;
     const adminCount = DISCORD_MEMBERS_DATA.filter(m => m.roleCategory === 'admin').length;
     const spCount = DISCORD_MEMBERS_DATA.filter(m => m.roleCategory === 'rank-sp').length;
@@ -4966,7 +5226,7 @@ function initMembersSection() {
     const cEl = document.getElementById('members-stat-c');
     if (cEl) cEl.textContent = cCount;
 
-    // Actualizar números de píldoras de filtro
+    // Actualizar nÃºmeros de pÃ­ldoras de filtro
     const pillAll = document.getElementById('count-members-all');
     if (pillAll) pillAll.textContent = totalCount;
     const pillAdmin = document.getElementById('count-members-admin');
@@ -5006,7 +5266,7 @@ function renderDiscordMembers(filterRole = 'all', searchQuery = '') {
     tbody.innerHTML = '';
 
     if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 30px; font-family: var(--font-racing); font-size: 13px;">No se encontraron miembros para el criterio de búsqueda.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 30px; font-family: var(--font-racing); font-size: 16px;">No se encontraron miembros para el criterio de bÃºsqueda.</td></tr>`;
         return;
     }
 
@@ -5024,8 +5284,8 @@ function renderDiscordMembers(filterRole = 'all', searchQuery = '') {
         const initialLetter = m.name ? m.name.replace(/[^a-zA-Z0-9]/g, '').charAt(0).toUpperCase() || 'M' : 'M';
         const extraRolesHTML = m.extraRoles ? `<span class="extra-roles-tag">${m.extraRoles}</span>` : '';
         const joinMethodHTML = (m.joinMethod && m.joinMethod !== 'Desconocido')
-            ? `<span class="join-method-tag">🔗 ${m.joinMethod}</span>`
-            : `<span style="color: var(--text-dimmed); font-size: 9.7px; font-style: italic;">Desconocido</span>`;
+            ? `<span class="join-method-tag">ðŸ”— ${m.joinMethod}</span>`
+            : `<span style="color: var(--text-dimmed); font-size: 12px; font-style: italic;">Desconocido</span>`;
 
         tr.innerHTML = `
             <td>
@@ -5041,7 +5301,7 @@ function renderDiscordMembers(filterRole = 'all', searchQuery = '') {
                 </div>
             </td>
             <td>
-                <span class="discord-role-pill role-${m.roleCategory}">● ${m.role} ${extraRolesHTML}</span>
+                <span class="discord-role-pill role-${m.roleCategory}">â— ${m.role} ${extraRolesHTML}</span>
             </td>
             <td>
                 <span style="font-family: var(--font-ui); font-size: 10.5px; color: #ffffff;">${m.memberSince}</span>
@@ -5053,7 +5313,7 @@ function renderDiscordMembers(filterRole = 'all', searchQuery = '') {
                 ${joinMethodHTML}
             </td>
             <td>
-                <span class="champ-group-tag" style="color: var(--green-neon); background: rgba(0, 255, 136, 0.1); border-color: rgba(0, 255, 136, 0.3); font-weight: 700;">● ${typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es' ? 'Activo' : 'Active'}</span>
+                <span class="champ-group-tag" style="color: var(--green-neon); background: rgba(0, 255, 136, 0.1); border-color: rgba(0, 255, 136, 0.3); font-weight: 700;">â— ${typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es' ? 'Activo' : 'Active'}</span>
             </td>
         `;
 
@@ -5079,7 +5339,7 @@ function filterDiscordMembers() {
 }
 
 // =======================================================
-// SECCIÓN DE GUÍAS & TUNING DE RENDIMIENTO (10 AUTOS OFICIALES)
+// SECCIÃ“N DE GUÃAS & TUNING DE RENDIMIENTO (10 AUTOS OFICIALES)
 // =======================================================
 let currentTuningDrivetrainFilter = 'all';
 let currentTuningSearchQuery = '';
@@ -5087,7 +5347,7 @@ let currentTuningSearchQuery = '';
 function initTuningSection() {
     if (typeof TUNING_CARS_DATA === 'undefined') return;
 
-    // Actualizar contadores de tracción en la barra de filtros
+    // Actualizar contadores de tracciÃ³n en la barra de filtros
     const totalCount = TUNING_CARS_DATA.length;
     const rwdCount = TUNING_CARS_DATA.filter(c => c.drivetrain === 'RWD').length;
     const awdCount = TUNING_CARS_DATA.filter(c => c.drivetrain === 'AWD').length;
@@ -5133,8 +5393,8 @@ function renderTuningGuides(drivetrainFilter = 'all', searchQuery = '') {
 
     if (filtered.length === 0) {
         container.innerHTML = `
-            <div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 50px 20px; font-family: var(--font-racing); font-size: 13px; background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); border-radius: 12px;">
-                🏎️ No se encontraron configuraciones de tuning para el criterio de búsqueda seleccionado.
+            <div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 50px 20px; font-family: var(--font-racing); font-size: 16px; background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); border-radius: 12px;">
+                ðŸŽï¸ No se encontraron configuraciones de tuning para el criterio de bÃºsqueda seleccionado.
             </div>
         `;
         return;
@@ -5183,11 +5443,11 @@ function renderTuningGuides(drivetrainFilter = 'all', searchQuery = '') {
         const expl = car.sliderExplanations || {};
 
         const slidersHTML = `
-            ${renderSliderRow('steering', 'tuning_slider_steering', 'Dirección', setup.steering || 0, expl.steering)}
+            ${renderSliderRow('steering', 'tuning_slider_steering', 'DirecciÃ³n', setup.steering || 0, expl.steering)}
             ${renderSliderRow('handling', 'tuning_slider_handling', 'Manejo', setup.handling || 0, expl.handling)}
             ${renderSliderRow('brakes', 'tuning_slider_brakes', 'Frenos', setup.brakes || 0, expl.brakes)}
             ${renderSliderRow('rideHeight', 'tuning_slider_ride_height', 'Altura', setup.rideHeight || 0, expl.rideHeight)}
-            ${renderSliderRow('aerodynamics', 'tuning_slider_aerodynamics', 'Aerodinámica', setup.aerodynamics || 0, expl.aerodynamics)}
+            ${renderSliderRow('aerodynamics', 'tuning_slider_aerodynamics', 'AerodinÃ¡mica', setup.aerodynamics || 0, expl.aerodynamics)}
             ${renderSliderRow('nitrous', 'tuning_slider_nitrous', 'Nitro (NOS)', setup.nitrous || 0, expl.nitrous)}
             ${renderSliderRow('turboSupercharger', 'tuning_slider_turbo', 'Turbo / Superc.', setup.turboSupercharger || 0, expl.turboSupercharger)}
         `;
@@ -5211,7 +5471,7 @@ function renderTuningGuides(drivetrainFilter = 'all', searchQuery = '') {
                         <span class="spec-strip-val">${car.power}</span>
                     </div>
                     <div class="spec-strip-item">
-                        <span class="spec-strip-label" data-i18n="tuning_spec_top_speed">VEL. MÁXIMA</span>
+                        <span class="spec-strip-label" data-i18n="tuning_spec_top_speed">VEL. MÃXIMA</span>
                         <span class="spec-strip-val">${car.topSpeed}</span>
                     </div>
                     <div class="spec-strip-item">
@@ -5224,13 +5484,13 @@ function renderTuningGuides(drivetrainFilter = 'all', searchQuery = '') {
 
                 <div class="tuning-sliders-box">
                     <div class="tuning-box-title">
-                        <span>⚙️</span> <span data-i18n="tuning_setup_title">SETUP DE PERFORMANCE (PAUSA > PERFORMANCE)</span>
+                        <span>âš™ï¸</span> <span data-i18n="tuning_setup_title">SETUP DE PERFORMANCE (PAUSA > PERFORMANCE)</span>
                     </div>
                     ${slidersHTML}
                 </div>
 
                 <div class="tuning-protip-box">
-                    <strong data-i18n="tuning_protip_title">CONSEJO DE CONDUCCIÓN PROFESIONAL:</strong>
+                    <strong data-i18n="tuning_protip_title">CONSEJO DE CONDUCCIÃ“N PROFESIONAL:</strong>
                     <div>${car.proTips}</div>
                 </div>
             </div>
@@ -5256,7 +5516,7 @@ function filterTuningCars() {
 }
 
 // =======================================================
-// INICIALIZACIÓN UNIFICADA (DOMContentLoaded)
+// INICIALIZACIÃ“N UNIFICADA (DOMContentLoaded)
 // =======================================================
 window.addEventListener('DOMContentLoaded', () => {
     // 0. Detectar vista inicial solicitada por URL / Query Params / Hash
@@ -5275,7 +5535,7 @@ window.addEventListener('DOMContentLoaded', () => {
         switchView(initialView, false);
     }
 
-    // 1. Reloj de telemetría F1
+    // 1. Reloj de telemetrÃ­a F1
     startTelemetryClock();
 
     // 2. Carga inmediata de las tarjetas de rutas con Lazy Loading
@@ -5283,31 +5543,31 @@ window.addEventListener('DOMContentLoaded', () => {
         renderRoutes(routesData);
     }
 
-    // 3. Inicializar Sistema de Desafíos Semanales
+    // 3. Inicializar Sistema de DesafÃ­os Semanales
     initChallengesSystem();
 
     // 4. Inicializar Sistema Blacklist Event 2026
     initBlacklistSystem();
 
-    // 5. Inicializar Salón Histórico de Torneos
+    // 5. Inicializar SalÃ³n HistÃ³rico de Torneos
     initPastTournaments();
 
-    // 6. Inicializar Módulos Laterales del Home (Evento 2026, Live Leaderboard, Desafíos)
+    // 6. Inicializar MÃ³dulos Laterales del Home (Evento 2026, Live Leaderboard, DesafÃ­os)
     initHomeSidebarModules();
 
     // 7. Renderizado del Buscador Oficial de Pilotos
     renderDriverSearchUI('search-driver-wrapper');
 
-    // 8. Inicializar Sección Oficial de Miembros de Discord
+    // 8. Inicializar SecciÃ³n Oficial de Miembros de Discord
     initMembersSection();
 
-    // 9. Inicializar Sección Oficial de Guías & Tuning
+    // 9. Inicializar SecciÃ³n Oficial de GuÃ­as & Tuning
     initTuningSection();
 
     // 10. Inicializar Selector de Pistas en Formulario
     initSubmitRouteSelector();
 
-    // 11. Ejecución diferida en segundo plano para tablas globales y Hall of Fame
+    // 11. EjecuciÃ³n diferida en segundo plano para tablas globales y Hall of Fame
     setTimeout(() => {
         generateHallOfFame();
         generateGlobalLeaderboards();
@@ -5315,10 +5575,10 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // =======================================================
-// INTEGRACIÓN DEL SISTEMA MULTILINGÜE (i18n)
+// INTEGRACIÃ“N DEL SISTEMA MULTILINGÃœE (i18n)
 // =======================================================
 window.addEventListener('nfs:languageChanged', (e) => {
-    // Re-renderizar módulos dinámicos cuando cambie el idioma
+    // Re-renderizar mÃ³dulos dinÃ¡micos cuando cambie el idioma
     if (typeof currentChampionshipWeek !== 'undefined') {
         renderChampionshipGroups(currentChampionshipWeek);
         renderChampionshipChallenges(currentChampionshipWeek);
@@ -5346,3 +5606,80 @@ window.addEventListener('nfs:languageChanged', (e) => {
     }
 });
 
+// =======================================================
+// SINCRONIZACIÓN EN TIEMPO REAL CON PANEL DE COMISARÍA (ADMIN)
+// =======================================================
+try {
+    if (typeof BroadcastChannel !== 'undefined') {
+        const champChannel = new BroadcastChannel('nfs_championship_sync');
+        champChannel.onmessage = (event) => {
+            if (event.data && event.data.data && typeof CHAMPIONSHIP_WEEKS_DATA !== 'undefined') {
+                const data = event.data.data;
+                if (Array.isArray(data)) {
+                    data.forEach((w, idx) => {
+                        if (w && idx > 0) {
+                            CHAMPIONSHIP_WEEKS_DATA[idx] = w;
+                            CHAMPIONSHIP_WEEKS_DATA[String(idx)] = w;
+                        }
+                    });
+                } else if (typeof data === 'object') {
+                    Object.keys(data).forEach(k => {
+                        if (data[k]) {
+                            CHAMPIONSHIP_WEEKS_DATA[k] = data[k];
+                            const n = parseInt(k, 10);
+                            if (!isNaN(n)) CHAMPIONSHIP_WEEKS_DATA[n] = data[k];
+                        }
+                    });
+                }
+                const activeW = (typeof currentChampionshipWeek !== 'undefined') ? currentChampionshipWeek : 1;
+                if (typeof renderChampionshipGroups === 'function') {
+                    renderChampionshipGroups(activeW);
+                }
+                if (typeof renderChampionshipChallenges === 'function') {
+                    renderChampionshipChallenges(activeW);
+                }
+                if (typeof renderBlacklistUI === 'function') {
+                    renderBlacklistUI();
+                }
+            }
+        };
+    }
+
+    window.addEventListener('storage', (e) => {
+        if (e.key === 'nfs_championship_weeks_data_v1' && e.newValue) {
+            try {
+                const data = JSON.parse(e.newValue);
+                if (data && typeof CHAMPIONSHIP_WEEKS_DATA !== 'undefined') {
+                    if (Array.isArray(data)) {
+                        data.forEach((w, idx) => {
+                            if (w && idx > 0) {
+                                CHAMPIONSHIP_WEEKS_DATA[idx] = w;
+                                CHAMPIONSHIP_WEEKS_DATA[String(idx)] = w;
+                            }
+                        });
+                    } else if (typeof data === 'object') {
+                        Object.keys(data).forEach(k => {
+                            if (data[k]) {
+                                CHAMPIONSHIP_WEEKS_DATA[k] = data[k];
+                                const n = parseInt(k, 10);
+                                if (!isNaN(n)) CHAMPIONSHIP_WEEKS_DATA[n] = data[k];
+                            }
+                        });
+                    }
+                    const activeW = (typeof currentChampionshipWeek !== 'undefined') ? currentChampionshipWeek : 1;
+                    if (typeof renderChampionshipGroups === 'function') {
+                        renderChampionshipGroups(activeW);
+                    }
+                    if (typeof renderChampionshipChallenges === 'function') {
+                        renderChampionshipChallenges(activeW);
+                    }
+                    if (typeof renderBlacklistUI === 'function') {
+                        renderBlacklistUI();
+                    }
+                }
+            } catch (err) {}
+        }
+    });
+} catch (e) {
+    console.warn("Aviso inicializando sincronización en vivo del campeonato:", e);
+}
