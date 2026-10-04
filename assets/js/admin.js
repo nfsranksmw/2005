@@ -99,6 +99,8 @@ function initAdminAuth() {
             firebase.auth().onAuthStateChanged((user) => {
                 if (user) {
                     onAdminAuthenticated(user);
+                } else if (localStorage.getItem('nfs_admin_session')) {
+                    checkEmergencyAccess();
                 } else {
                     onAdminLoggedOut();
                 }
@@ -210,6 +212,12 @@ function onAdminAuthenticated(user) {
     // Cargar datos del panel
     loadSubmissions();
     loadLeaderboardTab();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialTab = urlParams.get('tab') || (window.location.hash ? window.location.hash.replace('#', '') : null);
+    if (initialTab && typeof switchAdminTab === 'function') {
+        setTimeout(() => switchAdminTab(initialTab), 50);
+    }
 }
 
 function onAdminLoggedOut() {
@@ -2079,7 +2087,8 @@ function getDefaultChampionshipGroups(weekNum = 1) {
         1: [
             { name: "Grupo Alpha (Líderes)", pilots: [1, 10, 3], tag: "🔥 TIER SUPREME" },
             { name: "Grupo Beta (Aspirantes)", pilots: [4, 5, 6], tag: "⚡ TIER HIGH" },
-            { name: "Grupo Gamma (Fuerza & Potencia)", pilots: [7, 8, 9], tag: "⚔️ TIER MID-HIGH" }
+            { name: "Grupo Gamma (Fuerza & Potencia)", pilots: [7, 8, "open_11"], tag: "⚔️ TIER MID-HIGH" },
+            { name: "Grupo Delta (Competición)", pilots: [9, 2, "open_12"], tag: "🏁 TIER COMPETICIÓN" }
         ],
         2: [
             { name: "Grupo Alfa (Velocidad Pura)", pilots: [1, 5, 8], tag: "🔥 TIER SUPREME" },
@@ -2232,7 +2241,16 @@ function getBlacklistDriverSelectOptionsHTML(selectedRankOrName) {
     const cleanSelected = String(selectedRankOrName || '').toLowerCase().trim();
     const selRank = parseInt(selectedRankOrName, 10);
 
-    // 1. Pilotos Inscritos en el Torneo
+    // 1. Plazas Disponibles (Esperando Piloto)
+    const openSlotsHTML = `
+        <optgroup label="🟢 PLAZAS DISPONIBLES (ESPERANDO PILOTO)">
+            <option value="open_11" ${cleanSelected === 'open_11' ? 'selected' : ''}>🟢 Plaza Disponible #11 (Esperando Piloto)</option>
+            <option value="open_12" ${cleanSelected === 'open_12' ? 'selected' : ''}>🟢 Plaza Disponible #12 (Esperando Piloto)</option>
+            <option value="open" ${cleanSelected === 'open' ? 'selected' : ''}>🟢 Plaza Vacante Libre (Esperando Piloto)</option>
+        </optgroup>
+    `;
+
+    // 2. Pilotos Inscritos en el Torneo
     const participantsOptions = participants.map((p, idx) => {
         const rank = p.rank || (idx + 1);
         const name = p.name || `Piloto ${rank}`;
@@ -2240,20 +2258,25 @@ function getBlacklistDriverSelectOptionsHTML(selectedRankOrName) {
         const ride = p.ride || 'Vehículo Oficial';
         const displayLabel = alias !== name ? `${alias} (${name})` : alias;
         
-        const isSel = (!isNaN(selRank) && selRank === rank) || 
-                      (cleanSelected && (alias.toLowerCase() === cleanSelected || name.toLowerCase() === cleanSelected || String(rank) === cleanSelected));
+        const isSel = (!cleanSelected.startsWith('open')) && (
+            (!isNaN(selRank) && selRank === rank) || 
+            (cleanSelected && (alias.toLowerCase() === cleanSelected || name.toLowerCase() === cleanSelected || String(rank) === cleanSelected))
+        );
 
         return `<option value="${rank}" ${isSel ? 'selected' : ''}>🏆 #${rank} ${escapeHtml(displayLabel)} [${escapeHtml(ride)}]</option>`;
     }).join('');
 
-    // 2. Pilotos Oficiales Blacklist (Rivales)
+    // 3. Pilotos Oficiales Blacklist (Rivales)
     const blacklistOptions = blDrivers.map(d => {
-        const isSel = (!isNaN(selRank) && selRank === d.rank) ||
-                      (cleanSelected && (d.alias.toLowerCase() === cleanSelected || d.name.toLowerCase() === cleanSelected || String(d.rank) === cleanSelected));
+        const isSel = (!cleanSelected.startsWith('open')) && (
+            (!isNaN(selRank) && selRank === d.rank) ||
+            (cleanSelected && (d.alias.toLowerCase() === cleanSelected || d.name.toLowerCase() === cleanSelected || String(d.rank) === cleanSelected))
+        );
         return `<option value="${d.rank}" ${isSel ? 'selected' : ''}>🏁 #${d.rank} ${escapeHtml(d.alias)} - ${escapeHtml(d.name)} (${escapeHtml(d.ride)})</option>`;
     }).join('');
 
     return `
+        ${openSlotsHTML}
         <optgroup label="🏆 PILOTOS INSCRITOS EN EL TORNEO 2026">
             ${participantsOptions}
         </optgroup>
@@ -2524,8 +2547,9 @@ function renderChampionshipAdminGroups() {
 
     container.innerHTML = groups.map((grp, grpIdx) => {
         const pilots = Array.isArray(grp.pilots) ? grp.pilots : [grpIdx * 3 + 1, grpIdx * 3 + 2, grpIdx * 3 + 3];
+        const hasOpenSlots = pilots.some(p => String(p).startsWith('open'));
         return `
-            <div class="admin-group-card" id="admin-group-card-${grpIdx}" style="background: rgba(18,22,34,0.75); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 10px; transition: border-color 0.2s ease;">
+            <div class="admin-group-card" id="admin-group-card-${grpIdx}" style="background: rgba(18,22,34,0.75); border: 1px solid ${hasOpenSlots ? 'rgba(16,185,129,0.35)' : 'rgba(255,255,255,0.08)'}; border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 10px; transition: border-color 0.2s ease;">
                 <div class="admin-group-header-row" style="display: flex; align-items: center; gap: 8px; justify-content: space-between;">
                     <div style="display: flex; align-items: center; gap: 6px; flex: 1;">
                         <span style="font-size:18px;">👥</span>
@@ -2541,16 +2565,29 @@ function renderChampionshipAdminGroups() {
                         </button>
                     </div>
                 </div>
-                <div style="font-size:11px; color:var(--text-muted); font-weight:700; margin-top:2px;">Pilotos Asignados al Trío / Grupo:</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top:2px;">
+                    <div style="font-size:11px; color:var(--text-muted); font-weight:700;">Pilotos Asignados al Trío / Grupo:</div>
+                    ${hasOpenSlots ? `<span style="font-size:10px; font-weight:800; color:#34d399; background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.3); padding:2px 6px; border-radius:4px;">🟢 Contiene Plazas Disponibles</span>` : ''}
+                </div>
                 <div class="admin-group-pilots-list" style="display: flex; flex-direction: column; gap: 8px;">
                     ${[0, 1, 2].map(slotIdx => {
-                        const pRank = pilots[slotIdx] || (grpIdx * 3 + slotIdx + 1);
+                        const pRank = pilots[slotIdx] !== undefined ? pilots[slotIdx] : (grpIdx * 3 + slotIdx + 1);
+                        const isOpen = String(pRank).startsWith('open');
                         return `
-                            <div class="admin-group-pilot-row" style="display: flex; align-items: center; gap: 8px;">
-                                <span style="font-size:11px; color:var(--nfs-orange); font-weight:800; min-width:24px;">#${slotIdx + 1}</span>
-                                <select id="grp-p${slotIdx}-${grpIdx}" class="admin-form-input" style="padding:6px 10px; font-size:12px; font-weight:600; cursor:pointer; flex: 1;">
+                            <div class="admin-group-pilot-row" style="display: flex; align-items: center; gap: 8px; ${isOpen ? 'background: rgba(16,185,129,0.08); border: 1px dashed rgba(16,185,129,0.35); border-radius: 6px; padding: 4px 8px;' : ''}">
+                                <span style="font-size:11px; color:${isOpen ? '#34d399' : 'var(--nfs-orange)'}; font-weight:800; min-width:24px;">#${slotIdx + 1}</span>
+                                <select id="grp-p${slotIdx}-${grpIdx}" class="admin-form-input" style="padding:6px 10px; font-size:12px; font-weight:600; cursor:pointer; flex: 1; ${isOpen ? 'border-color: rgba(16,185,129,0.5); color: #6ee7b7;' : ''}">
                                     ${getBlacklistDriverSelectOptionsHTML(pRank)}
                                 </select>
+                                ${isOpen ? `
+                                    <button type="button" class="admin-btn admin-btn-xs" onclick="openAssignPilotToSlotModal(${grpIdx}, ${slotIdx})" title="Asignar piloto a esta plaza disponible" style="background: rgba(16,185,129,0.22); border: 1px solid #10b981; color: #a7f3d0; padding: 5px 10px; font-size: 11px; border-radius: 4px; cursor: pointer; white-space: nowrap; font-weight: 700; display: flex; align-items: center; gap: 4px;">
+                                        ➕ Asignar
+                                    </button>
+                                ` : `
+                                    <button type="button" class="admin-btn admin-btn-xs" onclick="openAssignPilotToSlotModal(${grpIdx}, ${slotIdx})" title="Reasignar piloto en esta casilla" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: var(--text-muted); padding: 5px 8px; font-size: 11px; border-radius: 4px; cursor: pointer; white-space: nowrap;">
+                                        ✏️
+                                    </button>
+                                `}
                             </div>
                         `;
                     }).join('')}
@@ -2563,6 +2600,19 @@ function renderChampionshipAdminGroups() {
 function getChampionshipGroupsFromUI() {
     const groupCards = document.querySelectorAll('#champ-admin-groups-container .admin-group-card');
     const updatedGroups = [];
+    const parsePilotVal = (val, defaultRank) => {
+        if (val === undefined || val === null || val === '') return defaultRank;
+        const strVal = String(val).trim();
+        if (strVal.startsWith('open')) return strVal;
+        const parsed = parseInt(strVal, 10);
+        if (!isNaN(parsed)) return parsed;
+        if (typeof resolveDriverRank === 'function') {
+            const resolved = resolveDriverRank(strVal);
+            if (resolved) return resolved;
+        }
+        return strVal || defaultRank;
+    };
+
     groupCards.forEach((card, grpIdx) => {
         const nameEl = document.getElementById(`grp-name-${grpIdx}`);
         const tagEl = document.getElementById(`grp-tag-${grpIdx}`);
@@ -2574,9 +2624,9 @@ function getChampionshipGroupsFromUI() {
             name: nameEl ? nameEl.value.trim() : `Grupo #${grpIdx + 1}`,
             tag: tagEl ? tagEl.value.trim() : 'TIER OFICIAL',
             pilots: [
-                parseInt(p0, 10) || resolveDriverRank(p0) || (grpIdx * 3 + 1),
-                parseInt(p1, 10) || resolveDriverRank(p1) || (grpIdx * 3 + 2),
-                parseInt(p2, 10) || resolveDriverRank(p2) || (grpIdx * 3 + 3)
+                parsePilotVal(p0, grpIdx * 3 + 1),
+                parsePilotVal(p1, grpIdx * 3 + 2),
+                parsePilotVal(p2, grpIdx * 3 + 3)
             ]
         });
     });
@@ -2896,6 +2946,141 @@ async function deleteChampionshipAdminGroup(grpIdx) {
 
     await persistChampionshipWeeksData(cachedChampWeeksData);
     showToast(`✓ Grupo "${grpName}" eliminado correctamente y sincronizado con la web.`, "success");
+}
+
+/**
+ * Abre el modal para asignar un piloto oficial o registrado a una plaza disponible en la Blacklist Event.
+ */
+function openAssignPilotToSlotModal(targetGrpIdx, targetSlotIdx) {
+    const modal = document.getElementById('modal-assign-slot');
+    if (!modal) return;
+
+    const weekData = getActiveChampWeekData(currentChampAdminWeek);
+    const groups = (weekData && Array.isArray(weekData.groups) && weekData.groups.length > 0)
+        ? weekData.groups
+        : getDefaultChampionshipGroups(currentChampAdminWeek);
+
+    // 1. Llenar selector de grupos
+    const grpSelect = document.getElementById('assign-slot-group-select');
+    if (grpSelect) {
+        grpSelect.innerHTML = groups.map((g, idx) => {
+            const hasOpen = Array.isArray(g.pilots) && g.pilots.some(p => String(p).startsWith('open'));
+            return `<option value="${idx}">${escapeHtml(g.name || `Grupo #${idx + 1}`)} ${hasOpen ? '🟢 [Plaza Disponible]' : ''}</option>`;
+        }).join('');
+
+        if (targetGrpIdx !== undefined && targetGrpIdx !== null && targetGrpIdx >= 0 && targetGrpIdx < groups.length) {
+            grpSelect.value = String(targetGrpIdx);
+        } else {
+            // Seleccionar por defecto el primer grupo con plaza libre
+            const firstOpenGrpIdx = groups.findIndex(g => Array.isArray(g.pilots) && g.pilots.some(p => String(p).startsWith('open')));
+            if (firstOpenGrpIdx >= 0) {
+                grpSelect.value = String(firstOpenGrpIdx);
+            } else {
+                grpSelect.value = "0";
+            }
+        }
+    }
+
+    // 2. Llenar casillas del grupo seleccionado
+    onAssignModalGroupChanged(targetSlotIdx);
+
+    // 3. Llenar selector de pilotos (Inscritos y Rivales Blacklist)
+    const pilotSelect = document.getElementById('assign-slot-pilot-select');
+    if (pilotSelect) {
+        pilotSelect.innerHTML = getBlacklistDriverSelectOptionsHTML('');
+    }
+
+    modal.style.display = 'flex';
+}
+
+function closeAssignPilotToSlotModal() {
+    const modal = document.getElementById('modal-assign-slot');
+    if (modal) modal.style.display = 'none';
+}
+
+function onAssignModalGroupChanged(preferredSlotIdx) {
+    const grpSelect = document.getElementById('assign-slot-group-select');
+    const slotSelect = document.getElementById('assign-slot-number-select');
+    if (!grpSelect || !slotSelect) return;
+
+    const grpIdx = parseInt(grpSelect.value, 10) || 0;
+    const weekData = getActiveChampWeekData(currentChampAdminWeek);
+    const groups = (weekData && Array.isArray(weekData.groups) && weekData.groups.length > 0)
+        ? weekData.groups
+        : getDefaultChampionshipGroups(currentChampAdminWeek);
+    const grp = groups[grpIdx] || { pilots: [1, 2, 3] };
+    const pilots = Array.isArray(grp.pilots) ? grp.pilots : [1, 2, 3];
+    const participants = getChampionshipParticipantsList();
+    const blDrivers = getChampionshipDefaultDrivers();
+
+    slotSelect.innerHTML = [0, 1, 2].map(sIdx => {
+        const val = pilots[sIdx];
+        const isOpen = String(val).startsWith('open');
+        let label = `Casilla #${sIdx + 1}: `;
+        if (isOpen) {
+            label += `🟢 DISPONIBLE (${val === 'open_11' ? 'Plaza #11' : val === 'open_12' ? 'Plaza #12' : 'Vacante Libre'})`;
+        } else {
+            const num = parseInt(val, 10);
+            const pInfo = (!isNaN(num)) ? (participants.find(p => p.rank === num) || blDrivers.find(d => d.rank === num)) : null;
+            const pName = pInfo ? (pInfo.alias || pInfo.name) : `#${val}`;
+            label += `Ocupado por ${pName}`;
+        }
+        return `<option value="${sIdx}">${label}</option>`;
+    }).join('');
+
+    if (preferredSlotIdx !== undefined && preferredSlotIdx !== null) {
+        slotSelect.value = String(preferredSlotIdx);
+    } else {
+        const openSlotIdx = pilots.findIndex(p => String(p).startsWith('open'));
+        if (openSlotIdx >= 0) {
+            slotSelect.value = String(openSlotIdx);
+        }
+    }
+}
+
+async function confirmAssignPilotToSlot() {
+    const grpSelect = document.getElementById('assign-slot-group-select');
+    const slotSelect = document.getElementById('assign-slot-number-select');
+    const pilotSelect = document.getElementById('assign-slot-pilot-select');
+
+    if (!grpSelect || !slotSelect || !pilotSelect) return;
+
+    const grpIdx = parseInt(grpSelect.value, 10);
+    const slotIdx = parseInt(slotSelect.value, 10);
+    const chosenPilotVal = pilotSelect.value;
+
+    if (isNaN(grpIdx) || isNaN(slotIdx) || !chosenPilotVal) {
+        alert("Por favor selecciona grupo, casilla y piloto.");
+        return;
+    }
+
+    // Actualizar valor en UI inmediata
+    const targetSelect = document.getElementById(`grp-p${slotIdx}-${grpIdx}`);
+    if (targetSelect) {
+        targetSelect.value = chosenPilotVal;
+    }
+
+    // Actualizar en caché de semanas
+    const weekData = getActiveChampWeekData(currentChampAdminWeek);
+    if (weekData && Array.isArray(weekData.groups) && weekData.groups[grpIdx]) {
+        if (!Array.isArray(weekData.groups[grpIdx].pilots)) {
+            weekData.groups[grpIdx].pilots = [1, 2, 3];
+        }
+        const parsedVal = (!isNaN(parseInt(chosenPilotVal, 10)) && !chosenPilotVal.startsWith('open'))
+            ? parseInt(chosenPilotVal, 10)
+            : chosenPilotVal;
+        weekData.groups[grpIdx].pilots[slotIdx] = parsedVal;
+    }
+
+    // Guardar cambios del grupo y difundir a Firebase RTDB
+    await saveChampionshipSingleGroup(grpIdx);
+
+    // Re-renderizar grupos en admin para actualizar el visual
+    renderChampionshipAdminGroups();
+
+    closeAssignPilotToSlotModal();
+
+    showToast(`✓ ¡Piloto asignado exitosamente a la Casilla #${slotIdx + 1} de ${weekData?.groups[grpIdx]?.name || `Grupo #${grpIdx + 1}`}!`, "success");
 }
 
 async function generateChampionshipRotations() {
@@ -4111,5 +4296,9 @@ window.selectChampionshipAdminGroup = selectChampionshipAdminGroup;
 window.renderChampionshipAdminGroupPills = renderChampionshipAdminGroupPills;
 window.quickAssignPilotToWinner = quickAssignPilotToWinner;
 window.generateChampionshipRotations = generateChampionshipRotations;
+window.openAssignPilotToSlotModal = openAssignPilotToSlotModal;
+window.closeAssignPilotToSlotModal = closeAssignPilotToSlotModal;
+window.onAssignModalGroupChanged = onAssignModalGroupChanged;
+window.confirmAssignPilotToSlot = confirmAssignPilotToSlot;
 
 

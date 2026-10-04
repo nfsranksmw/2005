@@ -20,9 +20,9 @@ const DEFAULT_BLACKLIST_DRIVERS = [
         alias: "ZimanX",
         ride: "Porsche Carrera GT",
         strength: "Porsche Carrera GT • Sabados",
-        rep: 0,
-        victories: { p1: 0, p2: 0, p3: 0, p4: 0 },
-        bestTimes: { first: 0, second: 0, third: 0 },
+        rep: 1390000,
+        victories: { p1: 0, p2: 2, p3: 4, p4: 0 },
+        bestTimes: { first: 0, second: 2, third: 4 },
         bio: "Piloto Oficial Inscrito en el Campeonato 2026. Disponibilidad: Sabados. Contacto: +584246950722. Compite en Rockport City bajo verificación de juego limpio.",
         signature: "ZIMANX",
         status: "👑 LÍDER BLACKLIST #1 (OFICIAL)",
@@ -60,9 +60,9 @@ const DEFAULT_BLACKLIST_DRIVERS = [
         alias: "Nebula",
         ride: "Carrera GT y Lotus Elise",
         strength: "Carrera GT y Lotus Elise • Sabado desde 20pm en adelante (hora chile)",
-        rep: 0,
-        victories: { p1: 0, p2: 0, p3: 0, p4: 0 },
-        bestTimes: { first: 0, second: 0, third: 0 },
+        rep: 2950000,
+        victories: { p1: 6, p2: 1, p3: 0, p4: 0 },
+        bestTimes: { first: 6, second: 1, third: 0 },
         bio: "Piloto Oficial Inscrito en el Campeonato 2026. Disponibilidad: Sabado desde 20pm en adelante (hora chile). Contacto: +569 67248491. Compite en Rockport City bajo verificación de juego limpio.",
         signature: "NEBULA",
         status: "PILOTO OFICIAL #3",
@@ -100,9 +100,9 @@ const DEFAULT_BLACKLIST_DRIVERS = [
         alias: "SRTxAvengerT",
         ride: "Porsche Carrera GT Y LOTUS ELISE",
         strength: "Porsche Carrera GT Y LOTUS ELISE • Lunes a domingo despues de las 5 pm",
-        rep: 0,
-        victories: { p1: 0, p2: 0, p3: 0, p4: 0 },
-        bestTimes: { first: 0, second: 0, third: 0 },
+        rep: 3288000,
+        victories: { p1: 8, p2: 0, p3: 0, p4: 0 },
+        bestTimes: { first: 8, second: 0, third: 0 },
         bio: "Piloto Oficial Inscrito en el Campeonato 2026. Disponibilidad: Lunes a domingo despues de las 5 pm. Compite en Rockport City bajo verificación de juego limpio.",
         signature: "SRTXAVENGERT",
         status: "PILOTO OFICIAL #5",
@@ -200,9 +200,9 @@ const DEFAULT_BLACKLIST_DRIVERS = [
         alias: "N6 xBourne",
         ride: "Porsche Carrera GT y Lotus Elise",
         strength: "Porsche Carrera GT y Lotus Elise • Horario Flexible",
-        rep: 0,
-        victories: { p1: 0, p2: 0, p3: 0, p4: 0 },
-        bestTimes: { first: 0, second: 0, third: 0 },
+        rep: 2140000,
+        victories: { p1: 2, p2: 4, p3: 2, p4: 0 },
+        bestTimes: { first: 2, second: 4, third: 2 },
         bio: "Piloto Oficial Inscrito en el Campeonato 2026. Disponibilidad: Horario Flexible. Contacto: jarheadvief. Compite en Rockport City bajo verificación de juego limpio.",
         signature: "N6 XBOURNE",
         status: "PILOTO OFICIAL #10",
@@ -329,7 +329,8 @@ const CHAMPIONSHIP_WEEKS_DATA = {
         groups: [
             { name: "Grupo Alpha (Líderes)", pilots: [1, 10, 3], tag: "🔥 TIER SUPREME" },
             { name: "Grupo Beta (Aspirantes)", pilots: [4, 5, 6], tag: "⚡ TIER HIGH" },
-            { name: "Grupo Gamma (Fuerza & Potencia)", pilots: [7, 8, 9], tag: "⚔️ TIER MID-HIGH" }
+            { name: "Grupo Gamma (Fuerza & Potencia)", pilots: [7, 8, "open_11"], tag: "⚔️ TIER MID-HIGH" },
+            { name: "Grupo Delta (Competición)", pilots: [9, 2, "open_12"], tag: "🏁 TIER COMPETICIÓN" }
         ],
         challenges: [
             {
@@ -338,10 +339,32 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Circuito",
                 carRestriction: "BMW M3 GTR (Auto Bonus)",
                 top3: [
-                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 400000, repBadge: "💰 $400.000 REP" },
-                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 250000, repBadge: "💰 $250.000 REP" },
-                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 120000, repBadge: "💰 $120.000 REP" }
-                ]
+                    { rank: 3, pilot: "Nebula", car: "Carrera GT y Lotus Elise", time: "01:34.450", bonus: 100, badge: "🥇 +100 PTS", repMoney: 400000, repBadge: "💰 $400.000 REP" },
+                    { rank: 10, pilot: "N6 xBourne", car: "Porsche Carrera GT y Lotus Elise", time: "01:34.800", bonus: 50, badge: "🥈 +50 PTS", repMoney: 250000, repBadge: "💰 $250.000 REP" },
+                    { rank: 1, pilot: "ZimanX", car: "Porsche Carrera GT", time: "01:35.400", bonus: 20, badge: "🥉 +20 PTS", repMoney: 120000, repBadge: "💰 $120.000 REP" }
+                ],
+                groupsResults: {
+                    0: [
+                        { rank: 3, pilot: "Nebula", car: "Carrera GT y Lotus Elise", time: "01:34.450", bonus: 100, repMoney: 400000 },
+                        { rank: 10, pilot: "N6 xBourne", car: "Porsche Carrera GT y Lotus Elise", time: "01:34.800", bonus: 50, repMoney: 250000 },
+                        { rank: 1, pilot: "ZimanX", car: "Porsche Carrera GT", time: "01:35.400", bonus: 20, repMoney: 120000 }
+                    ],
+                    1: [
+                        { rank: 5, pilot: "SRTxAvenger™", car: "Carrera GT & Lotus Elise", time: "01:32.120", bonus: 100, repMoney: 410000 },
+                        { rank: 6, pilot: "DarkShido", car: "BMW M3 GTR", time: "01:36.500", bonus: 50, repMoney: 200000 },
+                        { rank: 4, pilot: "xLeMondx", car: "Porsche Carrera GT", time: "01:38.200", bonus: 20, repMoney: 100000 }
+                    ],
+                    2: [
+                        { rank: 7, pilot: "DannyLove", car: "BMW M3 GTR", time: "--:--.---", bonus: 100, repMoney: 400000 },
+                        { rank: 8, pilot: "Lea4Speedo", car: "Carrera GT & M3 GTR", time: "--:--.---", bonus: 50, repMoney: 250000 },
+                        { rank: 11, pilot: "Plaza Disponible #11", car: "Por Inscribir", time: "--:--.---", bonus: 20, repMoney: 120000 }
+                    ],
+                    3: [
+                        { rank: 9, pilot: "EllaFreyaFan", car: "BMW M3 GTR", time: "--:--.---", bonus: 100, repMoney: 400000 },
+                        { rank: 2, pilot: "Mystic", car: "BMW M3 GTR", time: "--:--.---", bonus: 50, repMoney: 250000 },
+                        { rank: 12, pilot: "Plaza Disponible #12", car: "Por Inscribir", time: "--:--.---", bonus: 20, repMoney: 120000 }
+                    ]
+                }
             },
             {
                 id: "w1-ch2",
@@ -349,21 +372,65 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Sprint",
                 carRestriction: "Fiat Punto (Stock)",
                 top3: [
-                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 450000, repBadge: "💰 $450.000 REP" },
-                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 280000, repBadge: "💰 $280.000 REP" },
-                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 140000, repBadge: "💰 $140.000 REP" }
-                ]
+                    { rank: 3, pilot: "Nebula", car: "Carrera GT y Lotus Elise", time: "02:18.700", bonus: 100, badge: "🥇 +100 PTS", repMoney: 450000, repBadge: "💰 $450.000 REP" },
+                    { rank: 10, pilot: "N6 xBourne", car: "Porsche Carrera GT y Lotus Elise", time: "02:20.700", bonus: 50, badge: "🥈 +50 PTS", repMoney: 280000, repBadge: "💰 $280.000 REP" },
+                    { rank: 1, pilot: "ZimanX", car: "Porsche Carrera GT", time: "02:22.470", bonus: 20, badge: "🥉 +20 PTS", repMoney: 140000, repBadge: "💰 $140.000 REP" }
+                ],
+                groupsResults: {
+                    0: [
+                        { rank: 3, pilot: "Nebula", car: "Carrera GT y Lotus Elise", time: "02:18.700", bonus: 100, repMoney: 450000 },
+                        { rank: 10, pilot: "N6 xBourne", car: "Porsche Carrera GT y Lotus Elise", time: "02:20.700", bonus: 50, repMoney: 280000 },
+                        { rank: 1, pilot: "ZimanX", car: "Porsche Carrera GT", time: "02:22.470", bonus: 20, repMoney: 140000 }
+                    ],
+                    1: [
+                        { rank: 5, pilot: "SRTxAvenger™", car: "Carrera GT & Lotus Elise", time: "02:14.300", bonus: 100, repMoney: 440000 },
+                        { rank: 6, pilot: "DarkShido", car: "BMW M3 GTR", time: "02:19.400", bonus: 50, repMoney: 250000 },
+                        { rank: 4, pilot: "xLeMondx", car: "Porsche Carrera GT", time: "02:22.100", bonus: 20, repMoney: 120000 }
+                    ],
+                    2: [
+                        { rank: 7, pilot: "DannyLove", car: "BMW M3 GTR", time: "--:--.---", bonus: 100, repMoney: 450000 },
+                        { rank: 8, pilot: "Lea4Speedo", car: "Carrera GT & M3 GTR", time: "--:--.---", bonus: 50, repMoney: 280000 },
+                        { rank: 11, pilot: "Plaza Disponible #11", car: "Por Inscribir", time: "--:--.---", bonus: 20, repMoney: 140000 }
+                    ],
+                    3: [
+                        { rank: 9, pilot: "EllaFreyaFan", car: "BMW M3 GTR", time: "--:--.---", bonus: 100, repMoney: 450000 },
+                        { rank: 2, pilot: "Mystic", car: "BMW M3 GTR", time: "--:--.---", bonus: 50, repMoney: 280000 },
+                        { rank: 12, pilot: "Plaza Disponible #12", car: "Por Inscribir", time: "--:--.---", bonus: 20, repMoney: 140000 }
+                    ]
+                }
             },
             {
                 id: "w1-ch3",
                 route: "Bayshore & Boardwalk",
                 type: "Drag",
-                carRestriction: "Mazda RX-8 (No Junkman)",
+                carRestriction: "Mazda RX-8 (Junkman)",
                 top3: [
-                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 350000, repBadge: "💰 $350.000 REP" },
-                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 200000, repBadge: "💰 $200.000 REP" },
-                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 100000, repBadge: "💰 $100.000 REP" }
-                ]
+                    { rank: 3, pilot: "Nebula", car: "Carrera GT y Lotus Elise", time: "00:18.000", bonus: 100, badge: "🥇 +100 PTS", repMoney: 350000, repBadge: "💰 $350.000 REP" },
+                    { rank: 10, pilot: "N6 xBourne", car: "Porsche Carrera GT y Lotus Elise", time: "00:17.000", bonus: 50, badge: "🥈 +50 PTS", repMoney: 200000, repBadge: "💰 $200.000 REP" },
+                    { rank: 1, pilot: "ZimanX", car: "Porsche Carrera GT", time: "00:00.000", bonus: 20, badge: "🥉 +20 PTS", repMoney: 100000, repBadge: "💰 $100.000 REP" }
+                ],
+                groupsResults: {
+                    0: [
+                        { rank: 3, pilot: "Nebula", car: "Carrera GT y Lotus Elise", time: "00:18.000", bonus: 100, repMoney: 350000 },
+                        { rank: 10, pilot: "N6 xBourne", car: "Porsche Carrera GT y Lotus Elise", time: "00:17.000", bonus: 50, repMoney: 200000 },
+                        { rank: 1, pilot: "ZimanX", car: "Porsche Carrera GT", time: "00:00.000", bonus: 20, repMoney: 100000 }
+                    ],
+                    1: [
+                        { rank: 5, pilot: "SRTxAvenger™", car: "Carrera GT & Lotus Elise", time: "00:16.450", bonus: 100, repMoney: 340000 },
+                        { rank: 6, pilot: "DarkShido", car: "BMW M3 GTR", time: "00:17.800", bonus: 50, repMoney: 180000 },
+                        { rank: 4, pilot: "xLeMondx", car: "Porsche Carrera GT", time: "00:19.100", bonus: 20, repMoney: 90000 }
+                    ],
+                    2: [
+                        { rank: 7, pilot: "DannyLove", car: "BMW M3 GTR", time: "--:--.---", bonus: 100, repMoney: 350000 },
+                        { rank: 8, pilot: "Lea4Speedo", car: "Carrera GT & M3 GTR", time: "--:--.---", bonus: 50, repMoney: 200000 },
+                        { rank: 11, pilot: "Plaza Disponible #11", car: "Por Inscribir", time: "--:--.---", bonus: 20, repMoney: 100000 }
+                    ],
+                    3: [
+                        { rank: 9, pilot: "EllaFreyaFan", car: "BMW M3 GTR", time: "--:--.---", bonus: 100, repMoney: 350000 },
+                        { rank: 2, pilot: "Mystic", car: "BMW M3 GTR", time: "--:--.---", bonus: 50, repMoney: 200000 },
+                        { rank: 12, pilot: "Plaza Disponible #12", car: "Por Inscribir", time: "--:--.---", bonus: 20, repMoney: 100000 }
+                    ]
+                }
             },
             {
                 id: "w1-ch4",
@@ -371,21 +438,65 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Circuito",
                 carRestriction: "Cobalt SS (Stock)",
                 top3: [
-                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 400000, repBadge: "💰 $400.000 REP" },
-                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 250000, repBadge: "💰 $250.000 REP" },
-                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 120000, repBadge: "💰 $120.000 REP" }
-                ]
+                    { rank: 3, pilot: "Nebula", car: "Carrera GT y Lotus Elise", time: "01:43.670", bonus: 100, badge: "🥇 +100 PTS", repMoney: 400000, repBadge: "💰 $400.000 REP" },
+                    { rank: 1, pilot: "ZimanX", car: "Porsche Carrera GT", time: "01:45.270", bonus: 50, badge: "🥈 +50 PTS", repMoney: 250000, repBadge: "💰 $250.000 REP" },
+                    { rank: 10, pilot: "N6 xBourne", car: "Porsche Carrera GT y Lotus Elise", time: "01:47.380", bonus: 20, badge: "🥉 +20 PTS", repMoney: 120000, repBadge: "💰 $120.000 REP" }
+                ],
+                groupsResults: {
+                    0: [
+                        { rank: 3, pilot: "Nebula", car: "Carrera GT y Lotus Elise", time: "01:43.670", bonus: 100, repMoney: 400000 },
+                        { rank: 1, pilot: "ZimanX", car: "Porsche Carrera GT", time: "01:45.270", bonus: 50, repMoney: 250000 },
+                        { rank: 10, pilot: "N6 xBourne", car: "Porsche Carrera GT y Lotus Elise", time: "01:47.380", bonus: 20, repMoney: 120000 }
+                    ],
+                    1: [
+                        { rank: 5, pilot: "SRTxAvenger™", car: "Carrera GT & Lotus Elise", time: "01:40.850", bonus: 100, repMoney: 390000 },
+                        { rank: 6, pilot: "DarkShido", car: "BMW M3 GTR", time: "01:45.300", bonus: 50, repMoney: 220000 },
+                        { rank: 4, pilot: "xLeMondx", car: "Porsche Carrera GT", time: "01:47.900", bonus: 20, repMoney: 110000 }
+                    ],
+                    2: [
+                        { rank: 7, pilot: "DannyLove", car: "BMW M3 GTR", time: "--:--.---", bonus: 100, repMoney: 400000 },
+                        { rank: 8, pilot: "Lea4Speedo", car: "Carrera GT & M3 GTR", time: "--:--.---", bonus: 50, repMoney: 250000 },
+                        { rank: 11, pilot: "Plaza Disponible #11", car: "Por Inscribir", time: "--:--.---", bonus: 20, repMoney: 120000 }
+                    ],
+                    3: [
+                        { rank: 9, pilot: "EllaFreyaFan", car: "BMW M3 GTR", time: "--:--.---", bonus: 100, repMoney: 400000 },
+                        { rank: 2, pilot: "Mystic", car: "BMW M3 GTR", time: "--:--.---", bonus: 50, repMoney: 250000 },
+                        { rank: 12, pilot: "Plaza Disponible #12", car: "Por Inscribir", time: "--:--.---", bonus: 20, repMoney: 120000 }
+                    ]
+                }
             },
             {
                 id: "w1-ch5",
-                route: "Seaside & Power Station",
+                route: "Seaside & Power",
                 type: "Sprint",
-                carRestriction: "Subaru WRX (No Junkman)",
+                carRestriction: "Subaru WRX (Junkman)",
                 top3: [
-                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 500000, repBadge: "💰 $500.000 REP" },
-                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 300000, repBadge: "💰 $300.000 REP" },
-                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 150000, repBadge: "💰 $150.000 REP" }
-                ]
+                    { rank: 3, pilot: "Nebula", car: "Carrera GT y Lotus Elise", time: "01:25.190", bonus: 100, badge: "🥇 +100 PTS", repMoney: 500000, repBadge: "💰 $500.000 REP" },
+                    { rank: 10, pilot: "N6 xBourne", car: "Porsche Carrera GT y Lotus Elise", time: "01:26.360", bonus: 50, badge: "🥈 +50 PTS", repMoney: 300000, repBadge: "💰 $300.000 REP" },
+                    { rank: 1, pilot: "ZimanX", car: "Porsche Carrera GT", time: "01:27.450", bonus: 20, badge: "🥉 +20 PTS", repMoney: 150000, repBadge: "💰 $150.000 REP" }
+                ],
+                groupsResults: {
+                    0: [
+                        { rank: 3, pilot: "Nebula", car: "Carrera GT y Lotus Elise", time: "01:25.190", bonus: 100, repMoney: 500000 },
+                        { rank: 10, pilot: "N6 xBourne", car: "Porsche Carrera GT y Lotus Elise", time: "01:26.360", bonus: 50, repMoney: 300000 },
+                        { rank: 1, pilot: "ZimanX", car: "Porsche Carrera GT", time: "01:27.450", bonus: 20, repMoney: 150000 }
+                    ],
+                    1: [
+                        { rank: 5, pilot: "SRTxAvenger™", car: "Carrera GT & Lotus Elise", time: "01:23.200", bonus: 100, repMoney: 480000 },
+                        { rank: 6, pilot: "DarkShido", car: "BMW M3 GTR", time: "01:26.900", bonus: 50, repMoney: 280000 },
+                        { rank: 4, pilot: "xLeMondx", car: "Porsche Carrera GT", time: "01:29.500", bonus: 20, repMoney: 130000 }
+                    ],
+                    2: [
+                        { rank: 7, pilot: "DannyLove", car: "BMW M3 GTR", time: "--:--.---", bonus: 100, repMoney: 500000 },
+                        { rank: 8, pilot: "Lea4Speedo", car: "Carrera GT & M3 GTR", time: "--:--.---", bonus: 50, repMoney: 300000 },
+                        { rank: 11, pilot: "Plaza Disponible #11", car: "Por Inscribir", time: "--:--.---", bonus: 20, repMoney: 150000 }
+                    ],
+                    3: [
+                        { rank: 9, pilot: "EllaFreyaFan", car: "BMW M3 GTR", time: "--:--.---", bonus: 100, repMoney: 500000 },
+                        { rank: 2, pilot: "Mystic", car: "BMW M3 GTR", time: "--:--.---", bonus: 50, repMoney: 300000 },
+                        { rank: 12, pilot: "Plaza Disponible #12", car: "Por Inscribir", time: "--:--.---", bonus: 20, repMoney: 150000 }
+                    ]
+                }
             },
             {
                 id: "w1-ch6",
@@ -393,10 +504,32 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Circuito",
                 carRestriction: "Ford Mustang GT (Stock)",
                 top3: [
-                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 450000, repBadge: "💰 $450.000 REP" },
-                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 270000, repBadge: "💰 $270.000 REP" },
-                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 130000, repBadge: "💰 $130.000 REP" }
-                ]
+                    { rank: 3, pilot: "Nebula", car: "Carrera GT y Lotus Elise", time: "00:59.830", bonus: 100, badge: "🥇 +100 PTS", repMoney: 450000, repBadge: "💰 $450.000 REP" },
+                    { rank: 1, pilot: "ZimanX", car: "Porsche Carrera GT", time: "01:00.630", bonus: 50, badge: "🥈 +50 PTS", repMoney: 270000, repBadge: "💰 $270.000 REP" },
+                    { rank: 10, pilot: "N6 xBourne", car: "Porsche Carrera GT y Lotus Elise", time: "01:02.200", bonus: 20, badge: "🥉 +20 PTS", repMoney: 130000, repBadge: "💰 $130.000 REP" }
+                ],
+                groupsResults: {
+                    0: [
+                        { rank: 3, pilot: "Nebula", car: "Carrera GT y Lotus Elise", time: "00:59.830", bonus: 100, repMoney: 450000 },
+                        { rank: 1, pilot: "ZimanX", car: "Porsche Carrera GT", time: "01:00.630", bonus: 50, repMoney: 270000 },
+                        { rank: 10, pilot: "N6 xBourne", car: "Porsche Carrera GT y Lotus Elise", time: "01:02.200", bonus: 20, repMoney: 130000 }
+                    ],
+                    1: [
+                        { rank: 5, pilot: "SRTxAvenger™", car: "Carrera GT & Lotus Elise", time: "00:57.900", bonus: 100, repMoney: 440000 },
+                        { rank: 6, pilot: "DarkShido", car: "BMW M3 GTR", time: "01:01.200", bonus: 50, repMoney: 240000 },
+                        { rank: 4, pilot: "xLeMondx", car: "Porsche Carrera GT", time: "01:03.400", bonus: 20, repMoney: 110000 }
+                    ],
+                    2: [
+                        { rank: 7, pilot: "DannyLove", car: "BMW M3 GTR", time: "--:--.---", bonus: 100, repMoney: 450000 },
+                        { rank: 8, pilot: "Lea4Speedo", car: "Carrera GT & M3 GTR", time: "--:--.---", bonus: 50, repMoney: 270000 },
+                        { rank: 11, pilot: "Plaza Disponible #11", car: "Por Inscribir", time: "--:--.---", bonus: 20, repMoney: 130000 }
+                    ],
+                    3: [
+                        { rank: 9, pilot: "EllaFreyaFan", car: "BMW M3 GTR", time: "--:--.---", bonus: 100, repMoney: 450000 },
+                        { rank: 2, pilot: "Mystic", car: "BMW M3 GTR", time: "--:--.---", bonus: 50, repMoney: 270000 },
+                        { rank: 12, pilot: "Plaza Disponible #12", car: "Por Inscribir", time: "--:--.---", bonus: 20, repMoney: 130000 }
+                    ]
+                }
             },
             {
                 id: "w1-ch7",
@@ -404,10 +537,32 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Drag",
                 carRestriction: "Lotus Elise (No Junkman)",
                 top3: [
-                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 380000, repBadge: "💰 $380.000 REP" },
-                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 220000, repBadge: "💰 $220.000 REP" },
-                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 110000, repBadge: "💰 $110.000 REP" }
-                ]
+                    { rank: 3, pilot: "Nebula", car: "Carrera GT y Lotus Elise", time: "00:22.150", bonus: 100, badge: "🥇 +100 PTS", repMoney: 380000, repBadge: "💰 $380.000 REP" },
+                    { rank: 10, pilot: "N6 xBourne", car: "Porsche Carrera GT y Lotus Elise", time: "00:22.890", bonus: 50, badge: "🥈 +50 PTS", repMoney: 220000, repBadge: "💰 $220.000 REP" },
+                    { rank: 1, pilot: "ZimanX", car: "Porsche Carrera GT", time: "00:23.400", bonus: 20, badge: "🥉 +20 PTS", repMoney: 110000, repBadge: "💰 $110.000 REP" }
+                ],
+                groupsResults: {
+                    0: [
+                        { rank: 3, pilot: "Nebula", car: "Carrera GT y Lotus Elise", time: "00:22.150", bonus: 100, repMoney: 380000 },
+                        { rank: 10, pilot: "N6 xBourne", car: "Porsche Carrera GT y Lotus Elise", time: "00:22.890", bonus: 50, repMoney: 220000 },
+                        { rank: 1, pilot: "ZimanX", car: "Porsche Carrera GT", time: "00:23.400", bonus: 20, repMoney: 110000 }
+                    ],
+                    1: [
+                        { rank: 5, pilot: "SRTxAvenger™", car: "Carrera GT & Lotus Elise", time: "00:21.100", bonus: 100, repMoney: 360000 },
+                        { rank: 6, pilot: "DarkShido", car: "BMW M3 GTR", time: "00:23.150", bonus: 50, repMoney: 190000 },
+                        { rank: 4, pilot: "xLeMondx", car: "Porsche Carrera GT", time: "00:24.300", bonus: 20, repMoney: 90000 }
+                    ],
+                    2: [
+                        { rank: 7, pilot: "DannyLove", car: "BMW M3 GTR", time: "--:--.---", bonus: 100, repMoney: 380000 },
+                        { rank: 8, pilot: "Lea4Speedo", car: "Carrera GT & M3 GTR", time: "--:--.---", bonus: 50, repMoney: 220000 },
+                        { rank: 11, pilot: "Plaza Disponible #11", car: "Por Inscribir", time: "--:--.---", bonus: 20, repMoney: 110000 }
+                    ],
+                    3: [
+                        { rank: 9, pilot: "EllaFreyaFan", car: "BMW M3 GTR", time: "--:--.---", bonus: 100, repMoney: 380000 },
+                        { rank: 2, pilot: "Mystic", car: "BMW M3 GTR", time: "--:--.---", bonus: 50, repMoney: 220000 },
+                        { rank: 12, pilot: "Plaza Disponible #12", car: "Por Inscribir", time: "--:--.---", bonus: 20, repMoney: 110000 }
+                    ]
+                }
             },
             {
                 id: "w1-ch8",
@@ -415,10 +570,32 @@ const CHAMPIONSHIP_WEEKS_DATA = {
                 type: "Circuito",
                 carRestriction: "Porsche Carrera GT (Junkman)",
                 top3: [
-                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 480000, repBadge: "💰 $480.000 REP" },
-                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 290000, repBadge: "💰 $290.000 REP" },
-                    { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 140000, repBadge: "💰 $140.000 REP" }
-                ]
+                    { rank: 3, pilot: "Nebula", car: "Carrera GT y Lotus Elise", time: "01:18.900", bonus: 100, badge: "🥇 +100 PTS", repMoney: 480000, repBadge: "💰 $480.000 REP" },
+                    { rank: 10, pilot: "N6 xBourne", car: "Porsche Carrera GT y Lotus Elise", time: "01:19.450", bonus: 50, badge: "🥈 +50 PTS", repMoney: 290000, repBadge: "💰 $290.000 REP" },
+                    { rank: 1, pilot: "ZimanX", car: "Porsche Carrera GT", time: "01:20.100", bonus: 20, badge: "🥉 +20 PTS", repMoney: 140000, repBadge: "💰 $140.000 REP" }
+                ],
+                groupsResults: {
+                    0: [
+                        { rank: 3, pilot: "Nebula", car: "Carrera GT y Lotus Elise", time: "01:18.900", bonus: 100, repMoney: 480000 },
+                        { rank: 10, pilot: "N6 xBourne", car: "Porsche Carrera GT y Lotus Elise", time: "01:19.450", bonus: 50, repMoney: 290000 },
+                        { rank: 1, pilot: "ZimanX", car: "Porsche Carrera GT", time: "01:20.100", bonus: 20, repMoney: 140000 }
+                    ],
+                    1: [
+                        { rank: 5, pilot: "SRTxAvenger™", car: "Carrera GT & Lotus Elise", time: "01:16.800", bonus: 100, repMoney: 428000 },
+                        { rank: 6, pilot: "DarkShido", car: "BMW M3 GTR", time: "01:20.300", bonus: 50, repMoney: 260000 },
+                        { rank: 4, pilot: "xLeMondx", car: "Porsche Carrera GT", time: "01:22.500", bonus: 20, repMoney: 120000 }
+                    ],
+                    2: [
+                        { rank: 7, pilot: "DannyLove", car: "BMW M3 GTR", time: "--:--.---", bonus: 100, repMoney: 480000 },
+                        { rank: 8, pilot: "Lea4Speedo", car: "Carrera GT & M3 GTR", time: "--:--.---", bonus: 50, repMoney: 290000 },
+                        { rank: 11, pilot: "Plaza Disponible #11", car: "Por Inscribir", time: "--:--.---", bonus: 20, repMoney: 140000 }
+                    ],
+                    3: [
+                        { rank: 9, pilot: "EllaFreyaFan", car: "BMW M3 GTR", time: "--:--.---", bonus: 100, repMoney: 480000 },
+                        { rank: 2, pilot: "Mystic", car: "BMW M3 GTR", time: "--:--.---", bonus: 50, repMoney: 290000 },
+                        { rank: 12, pilot: "Plaza Disponible #12", car: "Por Inscribir", time: "--:--.---", bonus: 20, repMoney: 140000 }
+                    ]
+                }
             }
         ]
     },

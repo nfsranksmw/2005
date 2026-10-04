@@ -1,0 +1,111 @@
+<!-- ==============================================================================
+     BACKUP: SECCIÓN LEADERBOARDS (VIEW-ROUTES) Y SU ACCESO DE NAVEGACIÓN
+     Fecha de Respaldo: Octubre 2026
+     Origen: index.html (NFS Most Wanted Official Records Hub)
+     Motivo: La navegación principal ahora utiliza "Route to Track" (#view-routes-pistas)
+             como vista principal para la exploración de rutas y circuitos.
+     ============================================================================== -->
+
+<!-- 1. ENLACE ORIGINAL DEL MENÚ DE NAVEGACIÓN PRINCIPAL (#main-nav) -->
+<!--
+<a href="#" onclick="switchView('routes')" id="nav-routes">
+    <svg class="nav-icon-svg" viewBox="0 0 24 24">
+        <path d="M4 9h4v11H4zm6-5h4v16h-4zm6 8h4v8h-4z" />
+    </svg>
+    <span data-i18n="nav_leaderboards">Leaderboards</span>
+</a>
+-->
+
+<!-- 2. SECCIÓN COMPLETA DE RUTAS & LEADERBOARDS (#view-routes) -->
+<section id="view-routes" class="view-section">
+    <div class="tracker-section-header">
+        <div class="tracker-header-badge">
+            <svg viewBox="0 0 24 24">
+                <path d="M14.4 6 14 4H5v17h2v-7h5.6l.4 2h7V6z" />
+            </svg>
+        </div>
+        <div class="tracker-header-content">
+            <div class="tracker-header-sup">NEED FOR SPEED: MOST WANTED</div>
+            <h2 class="tracker-header-title">
+                <span class="title-main">LEADERBOARD</span>
+                <span class="title-accent">// RACE TRACKS</span>
+            </h2>
+            <p class="tracker-header-desc">Global time and telemetry registry across official circuits, sprints,
+                and drags.</p>
+        </div>
+    </div>
+
+    <!-- Telemetría superior -->
+    <div class="leaderboard-stats-bar">
+        <div class="stat-item">
+            <span class="stat-icon"><svg class="nav-icon-svg" viewBox="0 0 24 24"
+                    style="width:16px;height:16px;margin:0;">
+                    <path d="M14.4 6 14 4H5v17h2v-7h5.6l.4 2h7V6z" />
+                </svg></span>
+            <div class="stat-content">
+                <span class="stat-label">SHOWING</span>
+                <span class="stat-value" id="showing-count">--</span>
+            </div>
+        </div>
+        <div class="stat-item">
+            <span class="stat-icon"><svg class="nav-icon-svg" viewBox="0 0 24 24"
+                    style="width:16px;height:16px;margin:0;">
+                    <path d="M8 5v14l11-7z" />
+                </svg></span>
+            <div class="stat-content">
+                <span class="stat-label">ACTIVE ROUTES</span>
+                <span class="stat-value" id="total-races-count">--</span>
+            </div>
+        </div>
+        <div class="stat-item">
+            <span class="stat-icon"><svg class="nav-icon-svg" viewBox="0 0 24 24"
+                    style="width:16px;height:16px;margin:0;">
+                    <path
+                        d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
+                </svg></span>
+            <div class="stat-content">
+                <span class="stat-label">CATEGORY</span>
+                <span class="stat-value" id="current-class-filter" style="color: var(--nfs-orange);">ALL</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Barra de controles y filtros F1 / Tracker.gg Compact Pills -->
+    <div class="controls-wrapper">
+        <input type="text" id="route-search" class="search-input" placeholder="Search track or circuit..."
+            data-i18n-placeholder="search_track_placeholder" onkeyup="filterRoutes()">
+
+        <div class="filter-bar tracker-pills-bar">
+            <button class="filter-btn active" onclick="setCategory('all', this)">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"
+                    style="vertical-align: middle; margin-right: 6px;">
+                    <path
+                        d="M4 4h4v4H4V4zm6 0h4v4h-4V4zm6 0h4v4h-4V4zM4 10h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4zM4 16h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z" />
+                </svg> <span data-i18n="filter_all">All Races</span>
+            </button>
+            <button class="filter-btn" onclick="setCategory('Circuito', this)">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                    style="vertical-align: middle; margin-right: 6px; color: #ffd700;">
+                    <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.23-5.23"></path>
+                </svg> <span data-i18n="filter_circuits">Circuits</span>
+            </button>
+            <button class="filter-btn" onclick="setCategory('Sprint', this)">
+                <svg class="pill-icon-svg" viewBox="0 0 24 24"
+                    style="width:14px;height:14px;vertical-align:middle;margin-right:6px;fill:var(--nfs-orange);">
+                    <path d="M7 2v11h3v9l7-12h-4l4-8z" />
+                </svg> <span data-i18n="filter_sprints">Sprints</span>
+            </button>
+            <button class="filter-btn" onclick="setCategory('Drag', this)">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"
+                    style="vertical-align: middle; margin-right: 6px; color: var(--nfs-orange);">
+                    <path
+                        d="M9 2h6v2H9V2zm1 3h4v2h-4V5zm-2 3h8v2H8V8zm1 3h6v2H9v-2zm-2 3h10v2H7v-2zm2 3h6v2H9v-2zm-3 3h12v2H6v-2z" />
+                </svg> <span data-i18n="filter_drags">Drags</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Contenedor Grid de Rutas -->
+    <div class="routes-grid" id="routes-grid-container"></div>
+</section>

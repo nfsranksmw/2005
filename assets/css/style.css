@@ -13100,5 +13100,4337 @@ body > .skiptranslate {
     }
 }
 
+/* ==========================================================================
+   STITCH DESIGN SYSTEM: "MOST WANTED TELEMETRY" INTEGRATION
+   Paleta: Dark Neutral (#10131a), Apex Amber (#ffb800), Nitrous Flare (#ff5708),
+   Heat Radar Cyan (#00dbe9).
+   ========================================================================== */
+
+:root {
+    --stitch-bg: #10131a;
+    --stitch-surface-lowest: #0b0e15;
+    --stitch-surface-low: #191c23;
+    --stitch-surface: #1d2027;
+    --stitch-surface-high: #272a31;
+    --stitch-surface-highest: #32353c;
+    --stitch-primary: #ffb800;
+    --stitch-primary-light: #ffdca1;
+    --stitch-secondary: #ff5708;
+    --stitch-tertiary: #00dbe9;
+    --stitch-tertiary-bright: #6ef3ff;
+    --stitch-on-surface: #e0e2ec;
+    --stitch-on-surface-variant: #94a3b8;
+    --stitch-border-subtle: rgba(255, 255, 255, 0.08);
+    --stitch-border-amber: rgba(255, 184, 0, 0.25);
+    --stitch-border-cyan: rgba(0, 219, 233, 0.25);
+    --stitch-glow-amber: 0 0 16px rgba(255, 184, 0, 0.35);
+    --stitch-glow-cyan: 0 0 14px rgba(0, 219, 233, 0.3);
+}
+
+.material-symbols-outlined {
+    font-family: 'Material Symbols Outlined' !important;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 20px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+    vertical-align: middle;
+}
+
+/* NAVBAR / HEADER - STITCH COLOR UPDATE (Preserving Typography) */
+header {
+    background-color: rgba(16, 19, 26, 0.96) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    border-bottom: 1px solid rgba(255, 184, 0, 0.22) !important;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55) !important;
+}
+
+#main-nav a {
+    color: var(--stitch-on-surface-variant, #94a3b8) !important;
+    transition: color 0.2s ease, border-color 0.2s ease, text-shadow 0.2s ease;
+}
+
+#main-nav a:hover,
+.nav-dropdown-btn:hover {
+    color: var(--stitch-primary-light, #ffdca1) !important;
+}
+
+#main-nav a.active,
+.nav-dropdown-btn.active {
+    color: #ffffff !important;
+    border-bottom: 3px solid var(--stitch-primary, #ffb800) !important;
+    text-shadow: 0 0 12px rgba(255, 184, 0, 0.45);
+}
+
+.nav-dropdown-content {
+    background: #10131a !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-top: 3px solid var(--stitch-primary, #ffb800) !important;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.85) !important;
+}
+
+.nav-dropdown-content a {
+    color: var(--stitch-on-surface-variant, #94a3b8) !important;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.nav-dropdown-content a:hover {
+    background: #191c23 !important;
+    color: var(--stitch-primary-light, #ffdca1) !important;
+}
+
+/* ==========================================================================
+   SECCIÓN: RUTAS O PISTAS (STITCH TELEMETRY HUB)
+   ========================================================================== */
+#view-routes-pistas {
+    max-width: 1400px !important;
+    padding: 20px 15px 60px 15px !important;
+}
+
+.stitch-routes-explorer-wrapper {
+    max-width: 1360px;
+    margin: 10px auto 45px auto;
+    padding: 0 10px;
+    position: relative;
+}
+
+/* Ambient Top Light Glow Effect */
+.stitch-ambient-glow-1 {
+    position: absolute;
+    top: -60px;
+    left: 15%;
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle, rgba(255, 184, 0, 0.12) 0%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.stitch-ambient-glow-2 {
+    position: absolute;
+    top: 60px;
+    right: 5%;
+    width: 340px;
+    height: 340px;
+    background: radial-gradient(circle, rgba(255, 87, 8, 0.10) 0%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* 1. HERO / CONTEXT BANNER */
+.stitch-hero-banner {
+    position: relative;
+    background: var(--stitch-surface-lowest, #0b0e15);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 28px 32px;
+    overflow: hidden;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.stitch-watermark-text {
+    position: absolute;
+    right: -10px;
+    bottom: -35px;
+    pointer-events: none;
+    opacity: 0.035;
+    user-select: none;
+    font-family: var(--font-racing);
+    font-size: 140px;
+    font-weight: 900;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: -2px;
+    line-height: 1;
+}
+
+.stitch-top-accent-line {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 240px;
+    height: 2.5px;
+    background: linear-gradient(to left, var(--stitch-primary, #ffb800), var(--stitch-secondary, #ff5708), transparent);
+}
+
+.stitch-banner-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 1050px;
+}
+
+.stitch-tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+}
+
+.stitch-pill-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 184, 0, 0.15);
+    border: 1px solid rgba(255, 184, 0, 0.35);
+    color: var(--stitch-primary, #ffb800);
+    font-family: var(--font-racing);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 1.2px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    box-shadow: 0 0 12px rgba(255, 184, 0, 0.2);
+}
+
+.stitch-ping-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: var(--stitch-primary, #ffb800);
+    box-shadow: 0 0 8px var(--stitch-primary, #ffb800);
+    animation: stitchPing 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes stitchPing {
+    75%, 100% {
+        transform: scale(2.2);
+        opacity: 0;
+    }
+}
+
+.stitch-feed-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--stitch-on-surface-variant, #94a3b8);
+    font-weight: 600;
+}
+
+.stitch-feed-label .feed-online {
+    color: var(--stitch-tertiary, #00dbe9);
+}
+
+.stitch-hero-title {
+    font-family: var(--font-racing);
+    font-size: 2.35rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+    color: #ffffff;
+    line-height: 1.1;
+    margin: 0;
+}
+
+.stitch-hero-desc {
+    font-family: var(--font-ui);
+    font-size: 1.02rem;
+    color: var(--stitch-on-surface-variant, #94a3b8);
+    max-width: 850px;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Quick Telemetry Metrics Bar */
+.stitch-metrics-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    padding-top: 10px;
+}
+
+.stitch-metric-card {
+    background: rgba(25, 28, 35, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.2s ease;
+}
+
+.stitch-metric-card:hover {
+    background: var(--stitch-surface, #1d2027);
+    border-color: rgba(255, 184, 0, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.stitch-metric-label {
+    font-family: var(--font-racing);
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--stitch-on-surface-variant, #94a3b8);
+}
+
+.stitch-metric-val-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.stitch-metric-number {
+    font-family: var(--font-mono);
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--stitch-primary, #ffb800);
+    line-height: 1;
+}
+
+.stitch-metric-unit {
+    font-family: var(--font-racing);
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--stitch-on-surface-variant, #94a3b8);
+}
+
+.stitch-metric-subtext {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--stitch-tertiary, #00dbe9);
+    margin-top: 4px;
+}
+
+/* 2. CONTROL & FILTER BAR */
+.stitch-controls-wrapper {
+    background: var(--stitch-surface-lowest, #0b0e15);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 12px 18px;
+    margin: 18px 0 24px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    z-index: 10;
+}
+
+@media (min-width: 1024px) {
+    .stitch-controls-wrapper {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.stitch-search-filter-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.stitch-search-box {
+    position: relative;
+    flex: 1;
+    min-width: 240px;
+    max-width: 420px;
+}
+
+.stitch-search-input {
+    width: 100%;
+    background: var(--stitch-surface-low, #191c23);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    padding: 8px 36px 8px 34px;
+    font-family: var(--font-ui);
+    font-size: 12.5px;
+    color: #ffffff;
+    transition: all 0.2s ease;
+}
+
+.stitch-search-input:focus {
+    outline: none;
+    background: var(--stitch-surface-high, #272a31);
+    border-color: var(--stitch-primary, #ffb800);
+    box-shadow: 0 0 10px rgba(255, 184, 0, 0.3);
+}
+
+.stitch-search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--stitch-on-surface-variant, #94a3b8);
+    font-size: 16px;
+    pointer-events: none;
+}
+
+.stitch-search-shortcut {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--stitch-surface, #1d2027);
+    color: var(--stitch-on-surface-variant, #94a3b8);
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    padding: 2px 5px;
+    border-radius: 3px;
+    pointer-events: none;
+}
+
+.stitch-select-dropdown {
+    background: var(--stitch-surface-low, #191c23);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-family: var(--font-racing);
+    font-size: 11.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.stitch-select-dropdown:hover,
+.stitch-select-dropdown:focus {
+    background: var(--stitch-surface, #1d2027);
+    border-color: var(--stitch-primary, #ffb800);
+    outline: none;
+}
+
+/* Category Pills */
+.stitch-pills-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--stitch-surface-low, #191c23);
+    padding: 4px;
+    border-radius: 6px;
+    overflow-x: auto;
+}
+
+.stitch-pill-btn {
+    background: transparent;
+    border: none;
+    color: var(--stitch-on-surface-variant, #94a3b8);
+    font-family: var(--font-racing);
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.stitch-pill-btn:hover {
+    color: #ffffff;
+    background: var(--stitch-surface, #1d2027);
+}
+
+.stitch-pill-btn.active {
+    background: var(--stitch-primary, #ffb800);
+    color: #10131a !important;
+    font-weight: 900;
+    box-shadow: 0 0 14px rgba(255, 184, 0, 0.4);
+}
+
+/* 3. FEATURED / HOT ROUTE SPOTLIGHT */
+.stitch-spotlight-wrapper {
+    position: relative;
+    background: var(--stitch-surface-lowest, #0b0e15);
+    border: 1px solid rgba(255, 184, 0, 0.25);
+    border-radius: 14px;
+    padding: 26px 30px;
+    overflow: hidden;
+    margin-bottom: 30px;
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.6);
+}
+
+.stitch-spotlight-glow {
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(255, 184, 0, 0.12) 0%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(60px);
+    pointer-events: none;
+}
+
+.stitch-spotlight-grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 26px;
+    align-items: stretch;
+}
+
+@media (min-width: 1024px) {
+    .stitch-spotlight-grid {
+        grid-template-columns: 1fr 390px;
+    }
+}
+
+.stitch-spotlight-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+.stitch-spotlight-tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.stitch-spotlight-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #ff5708 0%, #ff7700 100%);
+    color: #ffffff;
+    font-family: var(--font-racing);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+    box-shadow: 0 0 12px rgba(255, 87, 8, 0.45);
+}
+
+.stitch-spotlight-sector {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--stitch-on-surface-variant, #94a3b8);
+    font-weight: 600;
+}
+
+.stitch-spotlight-title {
+    font-family: var(--font-racing);
+    font-size: 2.2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+    color: #ffffff;
+    margin: 4px 0 6px 0;
+    line-height: 1.1;
+}
+
+.stitch-spotlight-submeta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--stitch-on-surface-variant, #94a3b8);
+}
+
+.stitch-spotlight-submeta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Spotlight Metrics Box */
+.stitch-spotlight-metrics-box {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    background: var(--stitch-surface-low, #191c23);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 14px 18px;
+}
+
+@media (min-width: 640px) {
+    .stitch-spotlight-metrics-box {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.stitch-spotlight-metric-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.stitch-spotlight-metric-label {
+    font-family: var(--font-racing);
+    font-size: 10.5px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--stitch-on-surface-variant, #94a3b8);
+}
+
+.stitch-spotlight-metric-val {
+    font-family: var(--font-racing);
+    font-size: 16px;
+    font-weight: 800;
+    color: #ffffff;
+    margin-top: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.stitch-spotlight-metric-sub {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--stitch-tertiary, #00dbe9);
+    margin-top: 2px;
+}
+
+/* Spotlight CTAs */
+.stitch-spotlight-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding-top: 4px;
+}
+
+.stitch-btn-cta-primary {
+    background: var(--stitch-primary, #ffb800);
+    color: #10131a !important;
+    font-family: var(--font-racing);
+    font-size: 14px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 11px 22px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 0 16px rgba(255, 184, 0, 0.35);
+    transition: transform 0.2s ease, background 0.2s ease;
+    text-decoration: none;
+}
+
+.stitch-btn-cta-primary:hover {
+    background: #ffdca1;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(255, 184, 0, 0.5);
+}
+
+.stitch-btn-cta-secondary {
+    background: var(--stitch-surface, #1d2027);
+    color: var(--stitch-tertiary, #00dbe9) !important;
+    font-family: var(--font-racing);
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 11px 18px;
+    border-radius: 6px;
+    border: 1px solid rgba(0, 219, 233, 0.3);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.stitch-btn-cta-secondary:hover {
+    background: var(--stitch-surface-high, #272a31);
+    color: #ffffff !important;
+    border-color: var(--stitch-tertiary, #00dbe9);
+    transform: translateY(-1px);
+}
+
+.stitch-btn-cta-ghost {
+    background: var(--stitch-surface, #1d2027);
+    color: var(--stitch-on-surface-variant, #94a3b8) !important;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 11px 14px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.stitch-btn-cta-ghost:hover {
+    background: var(--stitch-surface-high, #272a31);
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Spotlight Vector Track HUD */
+.stitch-hud-map-card {
+    background: rgba(25, 28, 35, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    min-height: 250px;
+    overflow: hidden;
+}
+
+.stitch-hud-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--stitch-on-surface-variant, #94a3b8);
+    z-index: 2;
+}
+
+.stitch-hud-status {
+    color: var(--stitch-tertiary, #00dbe9);
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.stitch-hud-svg-container {
+    width: 100%;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0;
+    position: relative;
+    z-index: 2;
+}
+
+.stitch-hud-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--stitch-on-surface-variant, #94a3b8);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: 8px;
+    z-index: 2;
+}
+
+/* 4. ROUTES GRID (HIGH-FIDELITY TRACK CARDS) */
+.stitch-routes-section-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.stitch-routes-title-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.stitch-diamond-marker {
+    width: 10px;
+    height: 10px;
+    background: var(--stitch-primary, #ffb800);
+    transform: rotate(45deg);
+    border-radius: 2px;
+    box-shadow: 0 0 8px var(--stitch-primary, #ffb800);
+}
+
+.stitch-routes-main-title {
+    font-family: var(--font-racing);
+    font-size: 1.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+    margin: 0;
+}
+
+.stitch-routes-count {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--stitch-on-surface-variant, #94a3b8);
+}
+
+.stitch-mosaic-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+}
+
+@media (min-width: 768px) {
+    .stitch-mosaic-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1200px) {
+    .stitch-mosaic-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Track Card */
+.stitch-track-card {
+    position: relative;
+    background: var(--stitch-surface-lowest, #0b0e15);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.25s ease;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+}
+
+.stitch-track-card:hover {
+    background: var(--stitch-surface-low, #191c23);
+    border-color: rgba(255, 184, 0, 0.4);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 184, 0, 0.12);
+}
+
+.stitch-track-card.active-spotlight {
+    border-color: var(--stitch-primary, #ffb800);
+    box-shadow: 0 0 24px rgba(255, 184, 0, 0.3);
+}
+
+.stitch-card-top {
+    padding: 18px 20px 14px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.stitch-card-badge-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.stitch-card-cat-badge {
+    font-family: var(--font-racing);
+    font-size: 10.5px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.cat-badge-circuito {
+    background: rgba(255, 184, 0, 0.18);
+    color: var(--stitch-primary, #ffb800);
+    border: 1px solid rgba(255, 184, 0, 0.35);
+}
+
+.cat-badge-sprint {
+    background: rgba(255, 170, 51, 0.16);
+    color: #ffaa33;
+    border: 1px solid rgba(255, 170, 51, 0.4);
+}
+
+.stitch-track-card.sprint-card .stitch-card-wr-time {
+    color: #ffaa33 !important;
+}
+
+.stitch-track-card.sprint-card .stitch-card-stat-val {
+    color: #ffc266;
+}
+
+.cat-badge-drag {
+    background: rgba(255, 87, 8, 0.18);
+    color: var(--stitch-secondary, #ff5708);
+    border: 1px solid rgba(255, 87, 8, 0.35);
+}
+
+.stitch-card-district {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--stitch-on-surface-variant, #94a3b8);
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.stitch-card-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.stitch-card-title {
+    font-family: var(--font-racing);
+    font-size: 1.35rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin: 0;
+    transition: color 0.2s ease;
+}
+
+.stitch-track-card:hover .stitch-card-title {
+    color: var(--stitch-primary-light, #ffdca1);
+}
+
+.stitch-card-subdesc {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--stitch-on-surface-variant, #94a3b8);
+    margin: 2px 0 0 0;
+}
+
+.stitch-card-mini-svg {
+    width: 60px;
+    height: 44px;
+    flex-shrink: 0;
+}
+
+/* Card WR Box */
+.stitch-card-wr-box {
+    background: var(--stitch-surface, #1d2027);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.stitch-card-wr-label {
+    font-family: var(--font-racing);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--stitch-on-surface-variant, #94a3b8);
+}
+
+.stitch-card-wr-time {
+    font-family: var(--font-mono);
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--stitch-primary, #ffb800);
+    line-height: 1.1;
+    margin-top: 2px;
+}
+
+.stitch-card-wr-pilot {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.stitch-card-pilot-name {
+    font-family: var(--font-racing);
+    font-size: 14.5px;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.stitch-card-pilot-car {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--stitch-tertiary, #00dbe9);
+}
+
+/* Micro Stats */
+.stitch-card-micro-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding-top: 2px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--stitch-on-surface-variant, #94a3b8);
+}
+
+.stitch-card-stat-label {
+    display: block;
+    font-size: 9.5px;
+    text-transform: uppercase;
+    color: #6c7285;
+}
+
+.stitch-card-stat-val {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+/* Card Bottom Drawer */
+.stitch-card-bottom-drawer {
+    background: rgba(29, 32, 39, 0.7);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 11px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.stitch-card-link-lb {
+    font-family: 'Chivo', var(--font-racing), sans-serif;
+    font-size: 13.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--stitch-primary, #ffb800);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.stitch-card-link-lb:hover {
+    color: #ffffff;
+    transform: translateX(3px);
+}
+
+.stitch-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.stitch-card-action-btn {
+    background: transparent;
+    border: none;
+    color: var(--stitch-on-surface-variant, #94a3b8);
+    padding: 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+}
+
+.stitch-card-action-btn:hover {
+    background: var(--stitch-surface-high, #272a31);
+    color: #ffffff;
+    transform: scale(1.08);
+}
+
+.stitch-routes-toggle-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+}
+
+/* 5. LIVE TELEMETRY STREAM DRAWER (Dense Records Table) */
+.stitch-telemetry-drawer {
+    background: var(--stitch-surface-lowest, #0b0e15);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 24px;
+    margin-top: 30px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+
+.stitch-drawer-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.stitch-drawer-feed-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-racing);
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--stitch-tertiary, #00dbe9);
+}
+
+.stitch-drawer-title {
+    font-family: var(--font-racing);
+    font-size: 1.45rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+    margin: 4px 0 0 0;
+}
+
+.stitch-drawer-all-link {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--stitch-primary, #ffb800);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.stitch-drawer-all-link:hover {
+    color: #ffffff;
+}
+
+.stitch-table-wrapper {
+    overflow-x: auto;
+    margin-top: 14px;
+}
+
+.stitch-telemetry-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    text-align: left;
+}
+
+.stitch-telemetry-table thead tr {
+    background: var(--stitch-surface-low, #191c23);
+    color: var(--stitch-on-surface-variant, #94a3b8);
+    font-family: var(--font-racing);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.stitch-telemetry-table th {
+    padding: 10px 14px;
+    border: none;
+}
+
+.stitch-telemetry-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    color: #ffffff;
+}
+
+.stitch-telemetry-table tbody tr {
+    transition: background 0.15s ease;
+}
+
+.stitch-telemetry-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.stitch-row-wr {
+    background: rgba(255, 184, 0, 0.05);
+}
+
+.stitch-pos-badge {
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-racing);
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.stitch-pos-1 {
+    background: var(--stitch-primary, #ffb800);
+    color: #10131a;
+    box-shadow: 0 0 8px rgba(255, 184, 0, 0.5);
+}
+
+.stitch-delta-base {
+    color: var(--stitch-tertiary, #00dbe9);
+    font-weight: 700;
+}
+
+.stitch-delta-plus {
+    color: var(--stitch-secondary, #ff5708);
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   STITCH COMPONENTES: REDISEÑO DE HOME & LEADERBOARD
+   Diseño oficial extraído de StitchMCP (NFSMW Ranks)
+   ========================================================================== */
+
+/* 1. TOP LIVE TICKER STRIP (BAJO MENÚ) */
+.stitch-top-ticker-strip {
+    background: #191c23;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 6px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    position: relative;
+    z-index: 10;
+}
+
+.stitch-top-ticker-strip .ticker-left,
+.stitch-top-ticker-strip .ticker-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.stitch-ticker-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #ffdca1;
+}
+
+.stitch-ticker-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #ffb800;
+    box-shadow: 0 0 8px #ffb800;
+    animation: stitchPulse 1.8s infinite;
+}
+
+/* 2. HERO HOME (SOBREFONDO BMW M3 GTR CON OPACIDAD MANTENIDA) */
+.stitch-home-hero {
+    position: relative;
+    width: 100%;
+    padding: 60px 20px 50px 20px;
+    background-image: 
+        linear-gradient(180deg, 
+            rgba(10, 12, 17, 0.72) 0%, 
+            rgba(10, 12, 17, 0.32) 32%, 
+            rgba(10, 12, 17, 0.65) 68%, 
+            rgba(7, 9, 14, 0.96) 94%,
+            #0b0e15 100%
+        ),
+        radial-gradient(ellipse at 50% 38%, rgba(0, 0, 0, 0.1) 0%, rgba(5, 7, 12, 0.70) 100%),
+        url('../img/hero-bmw-m3-gtr-banner.jpg');
+    background-repeat: no-repeat;
+    background-position: center 32%;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+}
+
+.stitch-hero-inner {
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+.stitch-season-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    background: rgba(29, 32, 39, 0.85);
+    border: 1px solid rgba(255, 184, 0, 0.3);
+    border-radius: 4px;
+    font-family: 'Chivo', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: #ffdca1;
+    margin-bottom: 18px;
+    backdrop-blur-md: blur(8px);
+}
+
+.stitch-season-pill .pulse-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ff5708;
+    box-shadow: 0 0 10px #ff5708;
+    animation: stitchPulse 1.5s infinite;
+}
+
+.stitch-home-title {
+    font-family: 'Chivo', var(--font-racing), sans-serif;
+    font-size: clamp(38px, 5.5vw, 68px);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    margin: 0 0 14px 0;
+}
+
+.stitch-title-gradient {
+    background: linear-gradient(90deg, #ff5708 0%, #ffb800 50%, #ffdca1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: block;
+}
+
+.stitch-title-white {
+    color: #ffffff;
+    display: block;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+}
+
+.stitch-home-subtitle {
+    font-family: 'Hanken Grotesk', var(--font-ui), sans-serif;
+    font-size: clamp(14px, 1.4vw, 17px);
+    color: #94a3b8;
+    max-width: 720px;
+    line-height: 1.6;
+    margin: 0 auto 28px auto;
+}
+
+.stitch-home-subtitle strong {
+    color: #e0e2ec;
+}
+
+/* Command Search Bar */
+.stitch-command-search-bar {
+    width: 100%;
+    max-width: 680px;
+    background: rgba(39, 42, 49, 0.85);
+    border: 1px solid rgba(255, 184, 0, 0.35);
+    padding: 6px 8px 6px 16px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    backdrop-filter: blur(12px);
+    margin-bottom: 28px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stitch-command-search-bar:focus-within {
+    border-color: #ffb800;
+    box-shadow: 0 0 20px rgba(255, 184, 0, 0.25);
+}
+
+.stitch-command-search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #ffffff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13.5px;
+}
+
+.stitch-command-search-input::placeholder {
+    color: #94a3b8;
+}
+
+.stitch-command-btn {
+    background: linear-gradient(135deg, #ff5708 0%, #ffb800 100%);
+    color: #10131a;
+    border: none;
+    padding: 9px 20px;
+    font-family: 'Chivo', sans-serif;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 15px rgba(255, 87, 8, 0.35);
+    transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.stitch-command-btn:hover {
+    filter: brightness(1.12);
+    transform: translateY(-1px);
+}
+
+/* Telemetry Counters Strip */
+.stitch-telemetry-counters {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    width: 100%;
+    max-width: 760px;
+    margin-bottom: 26px;
+}
+
+@media (max-width: 768px) {
+    .stitch-telemetry-counters {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.stitch-counter-card {
+    background: rgba(29, 32, 39, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    padding: 12px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    backdrop-filter: blur(8px);
+}
+
+.stitch-counter-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.stitch-counter-lbl {
+    font-family: 'Chivo', sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: #94a3b8;
+    text-transform: uppercase;
+}
+
+/* Fast-Action Buttons */
+.stitch-hero-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.stitch-btn-primary-action {
+    background: #ff5708;
+    color: #ffffff;
+    font-family: 'Chivo', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 12px 24px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    box-shadow: 0 4px 18px rgba(255, 87, 8, 0.3);
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.stitch-btn-primary-action:hover {
+    background: #ff6a24;
+    transform: translateY(-2px);
+}
+
+.stitch-btn-secondary-action {
+    background: #272a31;
+    color: #e0e2ec;
+    font-family: 'Chivo', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 12px 24px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.stitch-btn-secondary-action:hover {
+    background: #363941;
+    color: #ffffff;
+}
+
+.stitch-btn-tertiary-action {
+    background: #191c23;
+    color: #00dbe9;
+    font-family: 'Chivo', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 12px 24px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    border: 1px solid rgba(0, 219, 233, 0.25);
+    transition: background 0.15s ease;
+}
+
+.stitch-btn-tertiary-action:hover {
+    background: rgba(0, 219, 233, 0.15);
+}
+
+/* 3. HIGHLIGHT BANNER: BLACKLIST REVIVAL */
+.stitch-highlight-banner {
+    max-width: 1360px;
+    margin: -10px auto 30px auto;
+    padding: 0 15px;
+    position: relative;
+    z-index: 5;
+}
+
+.stitch-highlight-card {
+    background: linear-gradient(90deg, #1d2027 0%, #272a31 50%, #1d2027 100%);
+    border: 1px solid rgba(255, 184, 0, 0.25);
+    border-left: 5px solid #ffb800;
+    border-radius: 6px;
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.stitch-highlight-text-block {
+    max-width: 820px;
+}
+
+.stitch-highlight-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Chivo', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    color: #ff5708;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.stitch-highlight-title {
+    font-family: 'Chivo', var(--font-racing), sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: #ffffff;
+    text-transform: uppercase;
+    margin: 0 0 6px 0;
+    letter-spacing: 0.02em;
+}
+
+.stitch-highlight-desc {
+    font-family: 'Hanken Grotesk', var(--font-ui), sans-serif;
+    font-size: 14px;
+    color: #94a3b8;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.stitch-highlight-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* 4. SPLIT MATRIX & CARDS */
+.stitch-grid-container {
+    max-width: 1360px;
+    margin: 0 auto 35px auto;
+    padding: 0 15px;
+}
+
+.stitch-grid-12 {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 24px;
+}
+
+@media (max-width: 1024px) {
+    .stitch-grid-12 {
+        grid-template-columns: 1fr;
+    }
+    .stitch-col-7, .stitch-col-5 {
+        grid-column: span 12 !important;
+    }
+}
+
+.stitch-col-7 {
+    grid-column: span 7;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.stitch-col-5 {
+    grid-column: span 5;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.stitch-card {
+    background: #1d2027;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    padding: 24px;
+    position: relative;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.stitch-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.stitch-card-title {
+    font-family: 'Chivo', var(--font-racing), sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    color: #ffffff;
+    text-transform: uppercase;
+    margin: 0 0 6px 0;
+    letter-spacing: 0.02em;
+}
+
+.stitch-card-desc {
+    font-family: 'Hanken Grotesk', var(--font-ui), sans-serif;
+    font-size: 13.5px;
+    color: #94a3b8;
+    line-height: 1.5;
+    margin: 0 0 16px 0;
+}
+
+/* Metric Trio */
+.stitch-kpi-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.stitch-kpi-item {
+    background: #191c23;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.stitch-kpi-val {
+    font-family: 'Chivo', sans-serif;
+    font-size: 17px;
+    font-weight: 900;
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.stitch-kpi-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+/* Video Promo Card */
+.stitch-video-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    align-items: center;
+}
+
+@media (max-width: 640px) {
+    .stitch-video-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.stitch-video-thumb-wrapper {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: 6px;
+    overflow: hidden;
+    background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDtmW_WXR4Lm9Wk3cjd2UlciPtjimBsvbS8V2oL9Ho-zq7AcZKCKTUemilsSmdU8OyJ6i_62c8qhVow-NHyHfbME8PmNeV2E7Z3JDkedmyfodQ7sOGfJ3JSvdQz64KE0VfgTV0A2XUEOkbVfH9BIGsUFs-yN8Jk80KOMhgPxQFOf1gbAa7iVYfU4JQAez8DFNaq7t3biLBxrJM1-qzHlDUob9sgRNxMDSFjTYkVn4qnWmlqKrOVEwRV');
+    background-size: cover;
+    background-position: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.6);
+}
+
+.stitch-video-play-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.stitch-video-play-overlay:hover {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.stitch-play-btn-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #ff5708;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(255, 87, 8, 0.6);
+    transition: transform 0.15s ease;
+}
+
+.stitch-play-btn-circle:hover {
+    transform: scale(1.1);
+}
+
+/* Competition Status Radar */
+.stitch-specs-list {
+    background: #191c23;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 13px;
+}
+
+.stitch-spec-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    padding-bottom: 6px;
+}
+
+.stitch-spec-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.stitch-spec-label {
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.stitch-spec-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    color: #e0e2ec;
+}
+
+/* Disciplines Cards */
+.stitch-disciplines-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+@media (max-width: 640px) {
+    .stitch-disciplines-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.stitch-discipline-card {
+    background: #1d2027;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.stitch-discipline-card:hover {
+    background: #272a31;
+    border-color: rgba(255, 184, 0, 0.4);
+}
+
+/* Bottom Anti-Cheat Strip */
+.stitch-bottom-ticker-strip {
+    background: #191c23;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 12px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* ==========================================================================
+   STITCH LEADERBOARD: ESTILO DE CABECERA Y TABLAS DE CLASIFICACIÓN
+   ========================================================================== */
+
+#view-leaderboard {
+    max-width: 1400px !important;
+    padding: 20px 15px 60px 15px !important;
+}
+
+/* Track Header Hero Banner */
+.stitch-lb-hero-banner {
+    position: relative;
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    background-image: 
+        linear-gradient(180deg, 
+            rgba(10, 12, 17, 0.78) 0%, 
+            rgba(16, 19, 26, 0.65) 45%, 
+            rgba(16, 19, 26, 0.95) 100%
+        ),
+        radial-gradient(ellipse at 50% 30%, rgba(255, 184, 0, 0.08) 0%, rgba(11, 14, 21, 0.85) 100%),
+        url('../img/hero-bmw-m3-gtr-banner.jpg');
+    background-repeat: no-repeat;
+    background-position: center 30%;
+    background-size: cover;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.stitch-lb-hero-inner {
+    padding: 24px 28px;
+    position: relative;
+    z-index: 2;
+}
+
+.stitch-lb-breadcrumb-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.stitch-lb-breadcrumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.stitch-lb-btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #1d2027;
+    color: #e0e2ec;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-family: 'Chivo', sans-serif;
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.stitch-lb-btn-back:hover {
+    background: #272a31;
+    color: #ffb800;
+}
+
+.stitch-lb-cockpit {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
+.stitch-lb-cockpit-info {
+    max-width: 760px;
+}
+
+.stitch-lb-tag-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.stitch-lb-type-badge {
+    background: #ff5708;
+    color: #ffffff;
+    font-family: 'Chivo', sans-serif;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    padding: 3px 10px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.stitch-lb-sector-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    color: #00dbe9;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.stitch-lb-title {
+    font-family: 'Chivo', var(--font-racing), sans-serif;
+    font-size: clamp(26px, 3.8vw, 44px);
+    font-weight: 900;
+    line-height: 1.1;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin: 0 0 10px 0;
+}
+
+.stitch-lb-title span.accent-name {
+    background: linear-gradient(90deg, #ffb800 0%, #ff5708 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.stitch-lb-desc {
+    font-family: 'Hanken Grotesk', var(--font-ui), sans-serif;
+    font-size: 14px;
+    color: #94a3b8;
+    line-height: 1.5;
+    margin: 0 0 14px 0;
+}
+
+.stitch-lb-specs-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #e0e2ec;
+}
+
+.stitch-lb-specs-row .spec-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.stitch-lb-specs-row .spec-item .label {
+    color: #94a3b8;
+}
+
+/* Fast WR Display Badge in Cockpit */
+.stitch-lb-wr-badge {
+    background: rgba(11, 14, 21, 0.88);
+    border: 1px solid rgba(255, 184, 0, 0.4);
+    border-radius: 6px;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    min-width: 280px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.stitch-lb-wr-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.stitch-lb-wr-tag {
+    font-family: 'Chivo', sans-serif;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    color: #ffb800;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.stitch-lb-wr-time-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.stitch-lb-wr-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 32px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.04em;
+    text-shadow: 0 0 16px rgba(255, 184, 0, 0.4);
+}
+
+.stitch-lb-wr-driver-row {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.stitch-lb-wr-driver-row .driver-name {
+    color: #ffdca1;
+    font-weight: 700;
+}
+
+/* Mode Selector & Category Tabs (Stitch Style) */
+.stitch-category-selector-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.stitch-category-tabs-group {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    background: #0b0e15;
+    padding: 4px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    flex-wrap: wrap;
+}
+
+.stitch-category-tabs-group.active-group {
+    display: flex !important;
+}
+
+.stitch-tab-btn {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #94a3b8;
+    font-family: 'Chivo', sans-serif;
+    font-size: 12.5px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stitch-tab-btn:hover {
+    color: #ffffff;
+    background: #191c23;
+}
+
+.stitch-tab-btn.active {
+    background: #272a31;
+    color: #ffb800;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Advanced Filter Toolbar (Stitch) */
+.stitch-filter-toolbar {
+    background: #191c23;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.stitch-filter-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    flex: 1;
+}
+
+.stitch-search-field {
+    position: relative;
+    min-width: 220px;
+    flex: 1;
+}
+
+.stitch-search-field input {
+    width: 100%;
+    background: #1d2027;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    padding: 8px 12px 8px 34px;
+    color: #ffffff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    outline: none;
+}
+
+.stitch-search-field input:focus {
+    border-color: #ffb800;
+}
+
+.stitch-select-box {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #1d2027;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.stitch-select-box select {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #ffdca1;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.stitch-select-box select option {
+    background: #1d2027;
+    color: #ffffff;
+}
+
+/* Density Switch */
+.stitch-density-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #0b0e15;
+    padding: 3px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+}
+
+.stitch-density-btn {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #94a3b8;
+    padding: 6px 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 600;
+    transition: all 0.15s ease;
+}
+
+.stitch-density-btn.active {
+    background: #1d2027;
+    color: #ffb800;
+}
+
+/* STITCH HIGH-FIDELITY LEADERBOARD TABLE */
+.stitch-table-card {
+    background: #0b0e15;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    overflow-x: auto;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    margin-bottom: 24px;
+}
+
+.stitch-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 980px;
+    text-align: left;
+}
+
+.stitch-table th {
+    background: #191c23;
+    padding: 12px 16px;
+    font-family: 'Chivo', sans-serif;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    color: #94a3b8;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.stitch-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    vertical-align: middle;
+    font-family: 'Hanken Grotesk', var(--font-ui), sans-serif;
+    font-size: 13.5px;
+}
+
+.stitch-table tr:hover td {
+    background: #1d2027;
+}
+
+.stitch-table.blacklist-table-compact th {
+    padding: 7px 12px;
+}
+
+.stitch-table.blacklist-table-compact td {
+    padding: 8px 12px;
+    font-size: 12.5px;
+}
+
+.stitch-table.blacklist-table-compact .stitch-rank-badge {
+    width: 26px;
+    height: 26px;
+    font-size: 12px;
+}
+
+.stitch-table.blacklist-table-compact .stitch-driver-avatar {
+    width: 30px;
+    height: 30px;
+}
+
+/* Rank Badges */
+.stitch-rank-badge {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Chivo', sans-serif;
+    font-size: 14px;
+    font-weight: 900;
+}
+
+.stitch-rank-1 {
+    background: #ffb800;
+    color: #10131a;
+    box-shadow: 0 0 12px rgba(255, 184, 0, 0.5);
+}
+
+.stitch-rank-2 {
+    background: #32353c;
+    color: #e0e2ec;
+}
+
+.stitch-rank-3 {
+    background: #272a31;
+    color: #ff5708;
+    border: 1px solid rgba(255, 87, 8, 0.4);
+}
+
+.stitch-rank-plain {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    color: #94a3b8;
+}
+
+/* Driver Cell */
+.stitch-driver-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.stitch-driver-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 4px;
+    background: #1d2027;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffb800;
+}
+
+.stitch-driver-name {
+    font-family: 'Chivo', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stitch-badge-tag {
+    font-family: 'Chivo', sans-serif;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    padding: 2px 6px;
+    border-radius: 3px;
+    text-transform: uppercase;
+}
+
+.stitch-badge-wr {
+    background: #ff5708;
+    color: #ffffff;
+}
+
+.stitch-badge-top {
+    background: #1d2027;
+    color: #00dbe9;
+    border: 1px solid rgba(0, 219, 233, 0.3);
+}
+
+.stitch-driver-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #94a3b8;
+    margin-top: 2px;
+}
+
+/* Time Cell */
+.stitch-time-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+}
+
+.stitch-time-delta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    margin-top: 2px;
+}
+
+/* Video Button */
+.stitch-btn-video {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #ff5708;
+    color: #ffffff;
+    font-family: 'Chivo', sans-serif;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    padding: 6px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(255, 87, 8, 0.35);
+    transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.stitch-btn-video:hover {
+    filter: brightness(1.15);
+    transform: translateY(-1px);
+}
+
+/* COMPLEMENTARY TELEMETRY CARDS (BELOW TABLE) */
+.stitch-telemetry-cards-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 20px;
+}
+
+@media (max-width: 900px) {
+    .stitch-telemetry-cards-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.stitch-tel-card {
+    background: #191c23;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.stitch-tel-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.stitch-tel-card-title {
+    font-family: 'Chivo', sans-serif;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ==========================================================================
+   STITCH FOOTER: DISEÑO OFICIAL DE 5 COLUMNAS
+   ========================================================================== */
+.stitch-site-footer {
+    background: #0b0e15;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    color: #94a3b8;
+    padding: 50px 20px 25px 20px;
+    font-family: 'Hanken Grotesk', var(--font-ui), sans-serif;
+    font-size: 13.5px;
+}
+
+.stitch-footer-inner {
+    max-width: 1360px;
+    margin: 0 auto;
+}
+
+.stitch-footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.2fr;
+    gap: 36px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+@media (max-width: 1024px) {
+    .stitch-footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .stitch-footer-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.stitch-footer-brand h3 {
+    font-family: 'Chivo', var(--font-racing), sans-serif;
+    font-size: 20px;
+    font-weight: 900;
+    color: #ffffff;
+    margin: 0 0 10px 0;
+    letter-spacing: 0.02em;
+}
+
+.stitch-footer-brand h3 span {
+    color: #ffb800;
+}
+
+.stitch-footer-badges {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+}
+
+.stitch-footer-badge {
+    background: #191c23;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-family: 'Chivo', sans-serif;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: #e0e2ec;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.stitch-footer-col h4 {
+    font-family: 'Chivo', sans-serif;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    color: #ffdca1;
+    text-transform: uppercase;
+    margin: 0 0 16px 0;
+}
+
+.stitch-footer-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.stitch-footer-col ul li a {
+    color: #94a3b8;
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.stitch-footer-col ul li a:hover {
+    color: #ffffff;
+}
+
+.stitch-footer-status-box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+}
+
+.stitch-status-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stitch-footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding-top: 24px;
+    font-size: 12.5px;
+    color: #64748b;
+}
+
+.stitch-footer-bottom a {
+    color: #94a3b8;
+    text-decoration: none;
+    margin-left: 16px;
+    transition: color 0.15s ease;
+}
+
+.stitch-footer-bottom a:hover {
+    color: #ffb800;
+}
+
+/* ==========================================================================
+   STITCH GLOBAL HARMONIZATION ACROSS ALL SECTIONS & SUBPAGES
+   - Primary: #ff5708 (Neon Orange)
+   - Secondary / Gold: #ffb800 (Podium Amber)
+   - Telemetry / Cyan: #00dbe9 (Cyber Blue)
+   - Backgrounds: #0b0e15 (Pitch Dark), #141824 (Card Dark), #191c23 (Header Dark)
+   - Typography: 'Chivo' (Headings), 'Hanken Grotesk' (Body/UI), 'JetBrains Mono' (Stats)
+   ========================================================================== */
+
+/* Universal Section Headers */
+.tracker-section-header {
+    background: 
+        linear-gradient(180deg, rgba(11, 14, 21, 0.88) 0%, rgba(11, 14, 21, 0.72) 40%, rgba(11, 14, 21, 0.94) 80%, #0b0e15 100%),
+        radial-gradient(ellipse at center, rgba(255, 87, 8, 0.12) 0%, rgba(0, 0, 0, 0.75) 100%),
+        url('../img/routes-header-banner.jpg') no-repeat center 50% / cover !important;
+    border: 1px solid rgba(255, 87, 8, 0.25) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.tracker-section-header::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 3px !important;
+    background: linear-gradient(90deg, transparent 0%, #ff5708 30%, #ffb800 50%, #ff5708 70%, transparent 100%) !important;
+    box-shadow: 0 0 10px #ff5708 !important;
+}
+
+.tracker-header-badge {
+    background: linear-gradient(135deg, rgba(255, 87, 8, 0.3) 0%, #141824 100%) !important;
+    border: 1px solid rgba(255, 87, 8, 0.5) !important;
+    color: #ffb800 !important;
+    border-radius: 6px !important;
+}
+
+.tracker-header-sup {
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 10.5px !important;
+    letter-spacing: 0.15em !important;
+    color: #00dbe9 !important;
+    font-weight: 700 !important;
+}
+
+.tracker-header-title {
+    font-family: 'Chivo', sans-serif !important;
+    font-size: 1.85rem !important;
+    font-weight: 900 !important;
+    letter-spacing: -0.02em !important;
+    text-transform: uppercase !important;
+}
+
+.tracker-header-title .title-main {
+    color: #ffffff !important;
+}
+
+.tracker-header-title .title-accent {
+    color: #ff5708 !important;
+    text-shadow: 0 0 12px rgba(255, 87, 8, 0.4) !important;
+}
+
+.tracker-header-desc {
+    font-family: 'Hanken Grotesk', sans-serif !important;
+    color: #94a3b8 !important;
+    font-size: 13.5px !important;
+    max-width: 820px !important;
+    line-height: 1.5 !important;
+}
+
+/* Universal Subtabs, Filter Buttons & Navigation Pills */
+.champ-subtabs-nav, .blacklist-subtabs, .past-view-mode-tabs, .tabs-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.champ-subtab-btn, .filter-btn, .tab-btn {
+    background: #141824 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 6px !important;
+    color: #94a3b8 !important;
+    font-family: 'Chivo', sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
+    padding: 8px 16px !important;
+    transition: all 0.18s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    cursor: pointer !important;
+}
+
+.champ-subtab-btn:hover, .filter-btn:hover, .tab-btn:hover {
+    background: #191c23 !important;
+    border-color: rgba(255, 87, 8, 0.4) !important;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+}
+
+.champ-subtab-btn.active, .filter-btn.active, .tab-btn.active {
+    background: linear-gradient(135deg, rgba(255, 87, 8, 0.22) 0%, #141824 100%) !important;
+    border-color: #ff5708 !important;
+    color: #ffb800 !important;
+    box-shadow: 0 0 12px rgba(255, 87, 8, 0.25) !important;
+}
+
+/* Universal Summary Bars & Telemetry Widgets */
+.challenges-summary-bar, .blacklist-stats-bar {
+    background: #0b0e15 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 8px !important;
+    padding: 12px 18px !important;
+    margin-bottom: 22px !important;
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+    gap: 12px !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+.challenge-summary-item {
+    background: #141824 !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-radius: 6px !important;
+    padding: 10px 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+}
+
+.challenge-summary-label {
+    font-family: 'Chivo', sans-serif !important;
+    font-size: 9.5px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.1em !important;
+    color: #94a3b8 !important;
+    text-transform: uppercase !important;
+}
+
+.challenge-summary-val {
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+}
+
+/* Universal Table Styling for ALL views */
+.table-container, .blacklist-table-wrapper, .stitch-table-card {
+    background: #0b0e15 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 8px !important;
+    overflow-x: auto !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5) !important;
+    margin-bottom: 24px !important;
+}
+
+.table-container table, .leaderboard-table, .blacklist-table, .stitch-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    min-width: 860px !important;
+    text-align: left !important;
+}
+
+.table-container table th, .leaderboard-table th, .blacklist-table th, .stitch-table th {
+    background: #191c23 !important;
+    padding: 12px 16px !important;
+    font-family: 'Chivo', sans-serif !important;
+    font-size: 11px !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.12em !important;
+    color: #94a3b8 !important;
+    text-transform: uppercase !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.table-container table td, .leaderboard-table td, .blacklist-table td, .stitch-table td {
+    padding: 13px 16px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    vertical-align: middle !important;
+    font-family: 'Hanken Grotesk', sans-serif !important;
+    font-size: 13.5px !important;
+    color: #e2e8f0 !important;
+}
+
+.table-container table tr:hover td, .leaderboard-table tr:hover td, .blacklist-table tr:hover td, .stitch-table tr:hover td {
+    background: #1d2027 !important;
+}
+
+/* Buttons in Stitch Style */
+.btn-explored, .stitch-btn-cta-primary {
+    background: linear-gradient(135deg, #ff5708 0%, #e04400 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 6px !important;
+    font-family: 'Chivo', sans-serif !important;
+    font-size: 12.5px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
+    padding: 8px 18px !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    box-shadow: 0 4px 14px rgba(255, 87, 8, 0.35) !important;
+    transition: all 0.18s ease !important;
+}
+
+.btn-explored:hover, .stitch-btn-cta-primary:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 18px rgba(255, 87, 8, 0.5) !important;
+    color: #ffffff !important;
+}
+
+.btn-secondary-tracker, .stitch-btn-cta-secondary {
+    background: #141824 !important;
+    color: #e2e8f0 !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 6px !important;
+    box-shadow: none !important;
+}
+
+.btn-secondary-tracker:hover, .stitch-btn-cta-secondary:hover {
+    border-color: #ff5708 !important;
+    color: #ffb800 !important;
+}
+
+/* Cards & Module Panels (Rules, Tuning, Registration, Past Tournaments) */
+.rule-card-pro, .tuning-car-card, .register-form-card, .registered-participants-panel, 
+.past-tournament-hero-card, .blacklist-promo-commercial-card, .roster-header {
+    background: #10141f !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+}
+
+.rule-card-pro:hover, .tuning-car-card:hover {
+    border-color: rgba(255, 87, 8, 0.4) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6) !important;
+}
+
+.rule-header-title, .roster-header h3, .register-card-header h3, .panel-header h3 {
+    font-family: 'Chivo', sans-serif !important;
+    font-weight: 900 !important;
+    letter-spacing: -0.01em !important;
+    text-transform: uppercase !important;
+}
+
+/* Inputs and Forms */
+.form-input, .search-input, .stitch-search-input {
+    background: #0b0e15 !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 6px !important;
+    color: #ffffff !important;
+    font-family: 'Hanken Grotesk', sans-serif !important;
+    font-size: 13.5px !important;
+    padding: 10px 14px !important;
+    transition: border-color 0.18s ease !important;
+}
+
+.form-input:focus, .search-input:focus, .stitch-search-input:focus {
+    border-color: #ff5708 !important;
+    box-shadow: 0 0 10px rgba(255, 87, 8, 0.25) !important;
+    outline: none !important;
+}
+
+/* Season & Championship Week Pills */
+.season-pill-btn, .week-select-btn, .champ-pill {
+    background: #141824 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 6px !important;
+    color: #94a3b8 !important;
+    font-family: 'Chivo', sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    padding: 8px 14px !important;
+    cursor: pointer !important;
+    transition: all 0.18s ease !important;
+}
+
+.season-pill-btn.active, .week-select-btn.active, .champ-pill.active {
+    background: #1c2233 !important;
+    border-color: #ff5708 !important;
+    color: #ffb800 !important;
+    box-shadow: 0 0 10px rgba(255, 87, 8, 0.3) !important;
+}
+
+/* ==========================================================================
+   STITCH REDESIGN 2026: BLACKLIST EVENT & CHAMPION STANDINGS
+   Matches Screen: 0c4881405e9340dc8c2c37b2d163c147 & 1592366d2f6946f7a6d055d91c240baf
+   ========================================================================== */
+
+/* Ambient Glow & Wrappers */
+.stitch-tournament-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.stitch-ambient-glows {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.stitch-glow-secondary {
+    position: absolute;
+    top: -60px;
+    left: 20%;
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle, rgba(255, 87, 8, 0.15) 0%, transparent 70%);
+    filter: blur(40px);
+}
+
+.stitch-glow-primary {
+    position: absolute;
+    top: 30%;
+    right: 5%;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(255, 184, 0, 0.12) 0%, transparent 70%);
+    filter: blur(40px);
+}
+
+/* Hero HUD Card */
+.stitch-hero-hud-card {
+    position: relative;
+    z-index: 1;
+    background: var(--stitch-surface-low, #191c23);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 24px 28px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+    margin-bottom: 16px;
+}
+
+.stitch-hud-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+}
+
+.stitch-hud-badge-official {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--stitch-surface-lowest, #0b0e15);
+    padding: 5px 14px;
+    border-radius: 9999px;
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.stitch-hud-tag-main {
+    font-family: var(--font-racing);
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--stitch-secondary, #ffb59c);
+    letter-spacing: 1.2px;
+}
+
+.stitch-hud-sep {
+    color: #514532;
+    font-family: var(--font-mono);
+    font-size: 11px;
+}
+
+.stitch-hud-tag-sub {
+    font-family: var(--font-racing);
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--stitch-on-surface-variant, #d5c4ab);
+    letter-spacing: 1px;
+}
+
+.stitch-hud-discord-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(50, 53, 60, 0.6);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--stitch-primary, #ffdca1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(255, 184, 0, 0.15);
+}
+
+.stitch-hud-discord-pill:hover {
+    background: rgba(50, 53, 60, 0.9);
+    border-color: rgba(255, 184, 0, 0.4);
+    transform: translateY(-1px);
+}
+
+.stitch-hud-title {
+    font-family: var(--font-racing);
+    font-size: 38px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: var(--stitch-on-surface, #e0e2ec);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 10px 0;
+    line-height: 1.15;
+}
+
+.stitch-sep-orange {
+    color: var(--stitch-secondary, #ff5708);
+}
+
+.stitch-title-gold {
+    color: var(--stitch-primary, #ffb800);
+    filter: drop-shadow(0 0 20px rgba(255, 184, 0, 0.35));
+}
+
+.stitch-hud-desc {
+    font-family: var(--font-base), 'Hanken Grotesk', sans-serif;
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: var(--stitch-on-surface-variant, #d5c4ab);
+    max-width: 860px;
+    margin: 0 0 20px 0;
+}
+
+.stitch-highlight-gold {
+    color: var(--stitch-primary, #ffdca1);
+    font-weight: 700;
+}
+
+.stitch-hud-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+}
+
+.stitch-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    background: var(--stitch-primary, #ffb800);
+    color: #412d00;
+    font-family: var(--font-racing);
+    font-size: 13.5px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 4px 16px rgba(255, 184, 0, 0.25);
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+
+.stitch-btn-primary:hover {
+    background: #ffba20;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(255, 184, 0, 0.4);
+}
+
+.stitch-btn-surface {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: var(--stitch-surface-high, #272a31);
+    color: var(--stitch-on-surface, #e0e2ec);
+    font-family: var(--font-racing);
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+
+.stitch-btn-surface:hover {
+    background: #363941;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.stitch-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: var(--stitch-surface, #1d2027);
+    color: var(--stitch-on-surface-variant, #d5c4ab);
+    font-family: var(--font-racing);
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+
+.stitch-btn-secondary:hover {
+    background: var(--stitch-surface-high, #272a31);
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+/* Live KPI Grid */
+.stitch-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.stitch-kpi-card {
+    background: var(--stitch-surface-low, #191c23);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    transition: transform 0.18s ease, background 0.18s ease;
+}
+
+.stitch-kpi-card:hover {
+    background: var(--stitch-surface, #1d2027);
+    transform: translateY(-1px);
+}
+
+.stitch-kpi-icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    background: var(--stitch-surface-lowest, #0b0e15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.stitch-kpi-icon-box.gold { color: var(--stitch-primary, #ffb800); }
+.stitch-kpi-icon-box.cyan { color: var(--stitch-tertiary, #00dbe9); }
+.stitch-kpi-icon-box.orange { color: var(--stitch-secondary, #ff5708); }
+
+.stitch-kpi-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.stitch-kpi-label {
+    font-family: var(--font-racing);
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--stitch-on-surface-variant, #94a3b8);
+}
+
+.stitch-kpi-val {
+    font-family: var(--font-racing);
+    font-size: 18px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #ffffff;
+    line-height: 1.2;
+    margin: 2px 0 1px 0;
+}
+
+.stitch-kpi-val.text-primary-gold { color: var(--stitch-primary, #ffb800); }
+.stitch-kpi-val.text-tertiary-cyan { color: var(--stitch-tertiary, #00dbe9); }
+
+.stitch-kpi-sub {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #64748b;
+}
+
+/* Timeline & Subtabs */
+.stitch-timeline-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 22px;
+}
+
+.stitch-week-selector-card {
+    background: var(--stitch-surface-lowest, #0b0e15);
+    padding: 8px 12px;
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.stitch-cal-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 6px;
+}
+
+.stitch-cal-label {
+    font-family: var(--font-racing);
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--stitch-on-surface-variant, #94a3b8);
+}
+
+.stitch-week-pills {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
+.stitch-week-pill {
+    background: var(--stitch-surface-low, #191c23);
+    color: #94a3b8;
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-family: var(--font-racing);
+    font-size: 11.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s ease;
+}
+
+.stitch-week-pill:hover {
+    background: var(--stitch-surface, #1d2027);
+    color: #ffffff;
+}
+
+.stitch-week-pill.active {
+    background: var(--stitch-surface-high, #272a31);
+    color: var(--stitch-primary, #ffb800);
+    border-color: rgba(255, 184, 0, 0.35);
+    box-shadow: 0 0 12px rgba(255, 184, 0, 0.25);
+}
+
+.stitch-week-pill.grand-final {
+    color: var(--stitch-secondary, #ffb59c);
+    border-color: rgba(255, 87, 8, 0.25);
+}
+
+.stitch-week-pill.grand-final:hover {
+    background: rgba(255, 87, 8, 0.15);
+}
+
+.stitch-subtabs-nav {
+    background: var(--stitch-surface-low, #191c23);
+    padding: 6px;
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.stitch-subtabs-nav .champ-subtab-btn {
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    color: #94a3b8;
+    font-family: var(--font-racing);
+    font-size: 12.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.stitch-subtabs-nav .champ-subtab-btn:hover {
+    background: var(--stitch-surface-high, #272a31);
+    color: #ffffff;
+}
+
+.stitch-subtabs-nav .champ-subtab-btn.active {
+    background: var(--stitch-surface-high, #272a31);
+    color: var(--stitch-primary, #ffb800);
+    font-weight: 900;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+/* Sections & Group Cards */
+.stitch-section-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 26px;
+}
+
+.stitch-section-header {
+    background: var(--stitch-surface-lowest, #0b0e15);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+@media (min-width: 768px) {
+    .stitch-section-header {
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: space-between;
+    }
+}
+
+.stitch-sec-header-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.stitch-sec-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.stitch-sec-title {
+    font-family: var(--font-racing);
+    font-size: 20px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #ffffff;
+    letter-spacing: -0.01em;
+    margin: 0;
+}
+
+.stitch-sec-badge {
+    font-family: var(--font-racing);
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--stitch-on-surface-variant, #94a3b8);
+    letter-spacing: 0.8px;
+}
+
+.stitch-sec-desc {
+    font-family: var(--font-base), 'Hanken Grotesk', sans-serif;
+    font-size: 13.5px;
+    color: var(--stitch-on-surface-variant, #94a3b8);
+    margin: 4px 0 0 0;
+}
+
+.stitch-date-window-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--stitch-surface-low, #191c23);
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--stitch-secondary, #ffb59c);
+    border: 1px solid rgba(255, 87, 8, 0.2);
+}
+
+.stitch-groups-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 14px;
+}
+
+.stitch-group-card {
+    background: var(--stitch-surface-low, #191c23);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    transition: transform 0.18s ease;
+}
+
+.stitch-group-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.stitch-group-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.stitch-group-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stitch-group-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+}
+
+.stitch-group-indicator.alpha { background: var(--stitch-secondary, #ff5708); }
+.stitch-group-indicator.beta { background: var(--stitch-primary, #ffb800); }
+.stitch-group-indicator.gamma { background: var(--stitch-tertiary, #00dbe9); }
+.stitch-group-indicator.delta { background: #9e8f78; }
+
+.stitch-group-name-text {
+    font-family: var(--font-racing);
+    font-size: 15px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+.stitch-group-tier-badge {
+    font-family: var(--font-racing);
+    font-size: 9.5px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.stitch-group-tier-badge.alpha {
+    background: rgba(255, 87, 8, 0.18);
+    color: var(--stitch-secondary, #ffb59c);
+    border: 1px solid rgba(255, 87, 8, 0.35);
+}
+
+.stitch-group-tier-badge.beta {
+    background: rgba(255, 184, 0, 0.18);
+    color: var(--stitch-primary, #ffb800);
+    border: 1px solid rgba(255, 184, 0, 0.35);
+}
+
+.stitch-group-tier-badge.gamma {
+    background: rgba(0, 219, 233, 0.18);
+    color: var(--stitch-tertiary, #00dbe9);
+    border: 1px solid rgba(0, 219, 233, 0.35);
+}
+
+.stitch-group-tier-badge.delta {
+    background: rgba(158, 143, 120, 0.18);
+    color: #d5c4ab;
+    border: 1px solid rgba(158, 143, 120, 0.35);
+}
+
+.stitch-group-pilots-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.stitch-pilot-item {
+    background: var(--stitch-surface, #1d2027);
+    border-radius: 8px;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.stitch-pilot-item:hover {
+    background: var(--stitch-surface-high, #272a31);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.stitch-pilot-item.selected {
+    background: var(--stitch-surface-high, #272a31);
+    border-color: var(--stitch-primary, #ffb800);
+    box-shadow: 0 0 10px rgba(255, 184, 0, 0.2);
+}
+
+.stitch-pilot-item.slot-open {
+    background: rgba(29, 32, 39, 0.45);
+    border: 1px dashed rgba(255, 255, 255, 0.15);
+}
+
+.stitch-pilot-item.slot-open:hover {
+    border-color: rgba(255, 184, 0, 0.4);
+    background: rgba(29, 32, 39, 0.7);
+}
+
+.stitch-rank-sq {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    font-family: var(--font-racing);
+    font-size: 13px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.stitch-rank-sq.gold {
+    background: var(--stitch-primary, #ffb800);
+    color: #412d00;
+    box-shadow: 0 2px 8px rgba(255, 184, 0, 0.35);
+}
+
+.stitch-rank-sq.silver {
+    background: #cbd5e1;
+    color: #1e293b;
+    box-shadow: 0 2px 8px rgba(203, 213, 225, 0.3);
+}
+
+.stitch-rank-sq.bronze {
+    background: var(--stitch-secondary, #ff5708);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(255, 87, 8, 0.3);
+}
+
+.stitch-rank-sq.normal {
+    background: var(--stitch-surface-highest, #32353c);
+    color: #ffffff;
+}
+
+.stitch-rank-sq.open-slot {
+    background: var(--stitch-surface-lowest, #0b0e15);
+    color: #94a3b8;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Standings Horizontal Cards Stream */
+.stitch-standings-stream {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.stitch-standings-card {
+    position: relative;
+    background: var(--stitch-surface-lowest, #0b0e15);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    padding: 12px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+    transition: all 0.18s ease;
+}
+
+@media (min-width: 1200px) {
+    .stitch-standings-card {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.stitch-standings-card:hover {
+    background: var(--stitch-surface-low, #191c23);
+    border-color: rgba(255, 255, 255, 0.12);
+    transform: translateY(-1px);
+}
+
+.stitch-standings-edge-gauge {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+}
+
+.stitch-standings-edge-gauge.gold {
+    background: var(--stitch-primary, #ffb800);
+    box-shadow: 0 0 12px #ffb800;
+}
+
+.stitch-standings-edge-gauge.silver {
+    background: #cbd5e1;
+    box-shadow: 0 0 10px #cbd5e1;
+}
+
+.stitch-standings-edge-gauge.bronze {
+    background: var(--stitch-secondary, #ff5708);
+    box-shadow: 0 0 10px #ff5708;
+}
+
+.stitch-standings-identity {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 290px;
+}
+
+.stitch-standings-rank-box {
+    width: 44px;
+    height: 44px;
+    border-radius: 6px;
+    font-family: var(--font-racing);
+    font-size: 20px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.stitch-standings-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 6px;
+    background: var(--stitch-surface-high, #272a31);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--stitch-primary, #ffb800);
+}
+
+.stitch-standings-pilot-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stitch-standings-name-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.stitch-standings-driver-name {
+    font-family: var(--font-racing);
+    font-size: 16px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #ffffff;
+    line-height: 1;
+}
+
+.stitch-standings-driver-alias {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--stitch-secondary, #ff5708);
+}
+
+.stitch-bl-pill {
+    font-family: var(--font-racing);
+    font-size: 9.5px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    background: rgba(255, 184, 0, 0.18);
+    color: var(--stitch-primary, #ffb800);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.stitch-standings-car-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 3px;
+    color: var(--stitch-on-surface-variant, #94a3b8);
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    text-transform: uppercase;
+}
+
+.stitch-standings-telemetry-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+}
+
+@media (min-width: 640px) {
+    .stitch-standings-telemetry-grid {
+        grid-template-columns: repeat(4, auto);
+        width: auto;
+    }
+}
+
+.stitch-telemetry-block {
+    background: var(--stitch-surface-high, #272a31);
+    padding: 6px 14px;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 110px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.stitch-telemetry-label {
+    font-family: var(--font-racing);
+    font-size: 9px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #94a3b8;
+}
+
+.stitch-telemetry-val {
+    font-family: var(--font-mono);
+    font-size: 14.5px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.stitch-telemetry-val.rep-money {
+    color: var(--stitch-tertiary, #00dbe9);
+}
+
+.stitch-telemetry-val.time-bono {
+    color: var(--stitch-primary, #ffb800);
+}
+
+.stitch-telemetry-val.total-score {
+    font-size: 17px;
+    font-weight: 900;
+    color: var(--stitch-primary, #ffb800);
+}
+
+.stitch-podiums-row {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    background: var(--stitch-surface-high, #272a31);
+    padding: 3px;
+    border-radius: 6px;
+}
+
+.stitch-podium-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2px 7px;
+    border-radius: 4px;
+}
+
+.stitch-podium-chip.p1 {
+    background: var(--stitch-primary, #ffb800);
+    color: #412d00;
+}
+
+.stitch-chip-pos {
+    font-family: var(--font-racing);
+    font-size: 8px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.stitch-chip-val {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 800;
+}
+
+.stitch-standings-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.stitch-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--font-racing);
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+.stitch-status-pill.leader {
+    background: rgba(255, 184, 0, 0.18);
+    color: var(--stitch-primary, #ffb800);
+    border: 1px solid rgba(255, 184, 0, 0.35);
+}
+
+.stitch-status-pill.contender {
+    background: rgba(255, 87, 8, 0.18);
+    color: var(--stitch-secondary, #ffb59c);
+    border: 1px solid rgba(255, 87, 8, 0.35);
+}
+
+.stitch-btn-dossier {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    background: var(--stitch-secondary, #ff5708);
+    color: #ffffff;
+    font-family: var(--font-racing);
+    font-size: 11.5px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-shadow: 0 2px 8px rgba(255, 87, 8, 0.3);
+}
+
+.stitch-btn-dossier:hover {
+    background: #ff7030;
+    transform: translateY(-1px);
+}
 
 
+
+/* ==============================================================================
+   STITCH MCP REDESIGN: RACING GROUPS & WEEKLY CHAMPIONSHIP CHALLENGES
+   ============================================================================== */
+
+/* Section A: Racing Groups Grid */
+.championship-groups-grid.stitch-groups-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 14px !important;
+    width: 100% !important;
+}
+
+@media (max-width: 1200px) {
+    .championship-groups-grid.stitch-groups-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (max-width: 640px) {
+    .championship-groups-grid.stitch-groups-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+.stitch-group-card {
+    background: #0f172a !important;
+    border: 1px solid #1e293b !important;
+    border-radius: 10px !important;
+    padding: 14px 12px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+    transition: transform 0.18s ease, border-color 0.18s ease !important;
+}
+
+.stitch-group-card:hover {
+    transform: translateY(-2px) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.stitch-group-header-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    padding-bottom: 2px !important;
+}
+
+.stitch-group-title {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+.stitch-group-indicator {
+    font-size: 11px !important;
+    line-height: 1 !important;
+    font-weight: 900 !important;
+    width: auto !important;
+    height: auto !important;
+    border-radius: 0 !important;
+}
+
+.stitch-group-indicator.alpha { color: #ea580c !important; }
+.stitch-group-indicator.beta { color: #eab308 !important; }
+.stitch-group-indicator.gamma { color: #06b6d4 !important; }
+.stitch-group-indicator.delta { color: #94a3b8 !important; }
+
+.stitch-group-name-text {
+    font-family: var(--font-racing), 'Cabinet Grotesk', system-ui, sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    color: #ffffff !important;
+    letter-spacing: 0.5px !important;
+}
+
+.stitch-group-tier-badge {
+    font-family: var(--font-racing), system-ui, sans-serif !important;
+    font-size: 9.5px !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.6px !important;
+    padding: 2px 7px !important;
+    border-radius: 4px !important;
+}
+
+.stitch-group-tier-badge.alpha {
+    background: rgba(234, 88, 12, 0.15) !important;
+    color: #f97316 !important;
+    border: 1px solid rgba(234, 88, 12, 0.35) !important;
+}
+
+.stitch-group-tier-badge.beta {
+    background: rgba(234, 179, 8, 0.15) !important;
+    color: #eab308 !important;
+    border: 1px solid rgba(234, 179, 8, 0.35) !important;
+}
+
+.stitch-group-tier-badge.gamma {
+    background: rgba(6, 182, 212, 0.15) !important;
+    color: #06b6d4 !important;
+    border: 1px solid rgba(6, 182, 212, 0.35) !important;
+}
+
+.stitch-group-tier-badge.delta {
+    background: rgba(148, 163, 184, 0.15) !important;
+    color: #cbd5e1 !important;
+    border: 1px solid rgba(148, 163, 184, 0.35) !important;
+}
+
+.stitch-group-pilots-list {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 7px !important;
+}
+
+.stitch-pilot-item {
+    background: #090e17 !important;
+    border-radius: 6px !important;
+    padding: 8px 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    border: 1px solid #1e293b !important;
+}
+
+.stitch-pilot-item:hover {
+    background: #131c2e !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.stitch-pilot-item.selected {
+    background: #172338 !important;
+    border-color: #eab308 !important;
+    box-shadow: 0 0 10px rgba(234, 179, 8, 0.2) !important;
+}
+
+.stitch-pilot-item.slot-open {
+    background: rgba(15, 23, 42, 0.5) !important;
+    border: 1px dashed rgba(255, 255, 255, 0.12) !important;
+}
+
+.stitch-pilot-item.slot-open:hover {
+    border-color: rgba(234, 179, 8, 0.4) !important;
+    background: rgba(15, 23, 42, 0.8) !important;
+}
+
+.stitch-rank-sq {
+    width: 26px !important;
+    height: 26px !important;
+    border-radius: 4px !important;
+    font-family: var(--font-racing), sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+}
+
+.stitch-rank-sq.gold {
+    background: #eab308 !important;
+    color: #000000 !important;
+    box-shadow: 0 2px 6px rgba(234, 179, 8, 0.35) !important;
+}
+
+.stitch-rank-sq.orange-leader {
+    background: #ea580c !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 6px rgba(234, 88, 12, 0.4) !important;
+}
+
+.stitch-rank-sq.silver {
+    background: #cbd5e1 !important;
+    color: #1e293b !important;
+}
+
+.stitch-rank-sq.bronze {
+    background: #f97316 !important;
+    color: #ffffff !important;
+}
+
+.stitch-rank-sq.normal {
+    background: #1e293b !important;
+    color: #cbd5e1 !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.stitch-rank-sq.open-slot {
+    background: #1e293b !important;
+    color: #94a3b8 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Section B: Weekly Championship Challenges Filter Bar */
+.champ-challenges-group-filter {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    padding-top: 4px !important;
+}
+
+.champ-group-filter-btn {
+    background: #0f172a !important;
+    color: #94a3b8 !important;
+    border: 1px solid #1e293b !important;
+    border-radius: 6px !important;
+    padding: 8px 16px !important;
+    font-family: var(--font-racing), sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    transition: all 0.15s ease !important;
+}
+
+.champ-group-filter-btn:hover {
+    background: #1e293b !important;
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.champ-group-filter-btn.active {
+    background: #eab308 !important;
+    color: #000000 !important;
+    font-weight: 900 !important;
+    border: none !important;
+    box-shadow: 0 2px 10px rgba(234, 179, 8, 0.35) !important;
+}
+
+.champ-legend-bonuses {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    background: #0b1120 !important;
+    padding: 6px 14px !important;
+    border-radius: 20px !important;
+    border: 1px solid #1e293b !important;
+    font-family: var(--font-mono) !important;
+    font-size: 11.5px !important;
+    font-weight: 800 !important;
+}
+
+/* Section B: Challenges Grid (3 columns) */
+.champ-challenges-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 16px !important;
+    width: 100% !important;
+}
+
+@media (max-width: 1100px) {
+    .champ-challenges-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (max-width: 700px) {
+    .champ-challenges-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+.champ-challenge-card {
+    background: #0b1120 !important;
+    border: 1px solid #1e293b !important;
+    border-radius: 10px !important;
+    padding: 14px 16px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+    transition: transform 0.18s ease, border-color 0.18s ease !important;
+}
+
+.champ-challenge-card:hover {
+    transform: translateY(-2px) !important;
+    border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+.champ-ch-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+    margin-bottom: 2px !important;
+    gap: 8px !important;
+}
+
+.champ-ch-title {
+    font-family: 'Cabinet Grotesk', var(--font-racing), sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 900 !important;
+    color: #f59e0b !important;
+    letter-spacing: 0.5px !important;
+    text-transform: uppercase !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.champ-ch-type {
+    font-family: var(--font-mono) !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    padding: 2px 8px !important;
+    border-radius: 4px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    flex-shrink: 0 !important;
+}
+
+.champ-ch-type.type-circuito {
+    background: rgba(30, 41, 59, 0.7) !important;
+    color: #94a3b8 !important;
+    border: 1px solid #334155 !important;
+}
+
+.champ-ch-type.type-sprint {
+    background: rgba(234, 88, 12, 0.15) !important;
+    color: #f97316 !important;
+    border: 1px solid rgba(234, 88, 12, 0.4) !important;
+}
+
+.champ-ch-type.type-drag {
+    background: rgba(6, 182, 212, 0.15) !important;
+    color: #06b6d4 !important;
+    border: 1px solid rgba(6, 182, 212, 0.4) !important;
+}
+
+.champ-ch-restriction {
+    background: rgba(15, 23, 42, 0.7) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-radius: 6px !important;
+    padding: 6px 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    font-size: 11px !important;
+    margin-bottom: 2px !important;
+}
+
+.champ-ch-restriction .restriction-label {
+    color: #94a3b8 !important;
+    font-family: var(--font-mono) !important;
+    font-weight: 800 !important;
+    font-size: 10.5px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.4px !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+}
+
+.champ-ch-restriction .restriction-car {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    font-size: 11px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    text-align: right !important;
+}
+
+.champ-ch-podiums {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+}
+
+.champ-ch-podium-row {
+    background: #0f172a !important;
+    border: 1px solid #1e293b !important;
+    border-radius: 6px !important;
+    padding: 7px 10px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    border-left: none !important;
+    transition: background 0.15s ease, border-color 0.15s ease !important;
+}
+
+.champ-ch-podium-row:hover {
+    background: #172338 !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.podium-pos-badge {
+    width: 20px !important;
+    height: 20px !important;
+    border-radius: 50% !important;
+    font-family: var(--font-racing), sans-serif !important;
+    font-size: 11px !important;
+    font-weight: 900 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+}
+
+.podium-pos-badge.pos-1 {
+    background: #eab308 !important;
+    color: #000000 !important;
+    box-shadow: 0 0 8px rgba(234, 179, 8, 0.4) !important;
+}
+
+.podium-pos-badge.pos-other {
+    background: #1e293b !important;
+    color: #94a3b8 !important;
+    border: 1px solid #334155 !important;
+}
+
+.podium-pilot-col {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    min-width: 0 !important;
+    flex: 1 !important;
+}
+
+.podium-pilot-name {
+    font-family: var(--font-racing), sans-serif !important;
+    font-size: 12.5px !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    color: #ffffff !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    line-height: 1.2 !important;
+}
+
+.podium-time-col {
+    min-width: 90px !important;
+    text-align: center !important;
+    flex-shrink: 0 !important;
+}
+
+.podium-time-val {
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    color: #38bdf8 !important;
+    letter-spacing: 0.5px !important;
+    line-height: 1 !important;
+}
+
+.podium-bonus-col {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    min-width: 60px !important;
+    line-height: 1.15 !important;
+}
+
+.podium-bonus-pts {
+    font-family: var(--font-mono) !important;
+    font-size: 10.5px !important;
+    font-weight: 800 !important;
+    color: #f59e0b !important;
+}
+
+.podium-bonus-rep {
+    font-family: var(--font-mono) !important;
+    font-size: 9.5px !important;
+    font-weight: 800 !important;
+    color: #38bdf8 !important;
+}

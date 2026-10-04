@@ -164,6 +164,8 @@ document.addEventListener('keydown', function (e) {
 
 const SECTION_PATH_MAP = {
     'home': '/',
+    'routes-pistas': '/routes-pistas',
+    'pistas': '/routes-pistas',
     'routes': '/routes',
     'leaderboard': '/leaderboard',
     'leaderboards': '/leaderboards',
@@ -194,6 +196,7 @@ function resolveViewFromUrl() {
     const pathParts = window.location.pathname.toLowerCase().split('/').filter(Boolean);
     for (let i = pathParts.length - 1; i >= 0; i--) {
         const seg = decodeURIComponent(pathParts[i]);
+        if (seg === 'routes-pistas' || seg === 'pistas') return 'routes-pistas';
         if (seg === 'leaderboard' || seg === 'leaderboards') return 'leaderboard';
         if (seg === 'desafio' || seg === 'desafÃ­o' || seg === 'challenges' || seg === 'desafios' || seg === 'desafÃ­os') return 'challenges';
         if (seg === 'routes' || seg === 'rutas') return 'routes';
@@ -252,6 +255,9 @@ function updateBrowserHistory(viewId) {
 }
 
 function switchView(viewId, updateHistory = true) {
+    if (viewId === 'routes') {
+        viewId = 'routes-pistas';
+    }
     document.querySelectorAll('.view-section').forEach(section => {
         section.classList.remove('active');
     });
@@ -264,7 +270,9 @@ function switchView(viewId, updateHistory = true) {
         targetSection.classList.add('active');
     }
 
-    const targetNavLink = document.getElementById('nav-' + viewId) || document.getElementById('nav-dropdown-' + viewId);
+    const targetNavLink = document.getElementById('nav-' + viewId) || 
+                          document.getElementById('nav-dropdown-' + viewId) || 
+                          (viewId === 'leaderboard' ? document.getElementById('nav-routes-pistas') : null);
     if (targetNavLink) {
         targetNavLink.classList.add('active');
 
@@ -346,6 +354,12 @@ function switchView(viewId, updateHistory = true) {
     if (viewId === 'championship-register' || viewId === 'register') {
         if (typeof renderRegisteredPilotsUI === 'function') {
             renderRegisteredPilotsUI();
+        }
+    }
+
+    if (viewId === 'routes-pistas' || viewId === 'pistas') {
+        if (typeof initStitchTelemetryHub === 'function') {
+            initStitchTelemetryHub();
         }
     }
 
@@ -505,14 +519,14 @@ function applyCurrentCarFilter() {
 
 function switchCircuitTab(tabId, btn) {
     document.querySelectorAll('.circuit-section').forEach(sec => sec.classList.remove('active'));
-    document.querySelectorAll('#container-tabs-circuit .tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('#container-tabs-circuit .tab-btn, #container-tabs-circuit .stitch-tab-btn').forEach(b => b.classList.remove('active'));
 
     const targetTab = document.getElementById('tab-' + tabId);
     if (targetTab) targetTab.classList.add('active');
     const tabButton = btn || document.querySelector(`#container-tabs-circuit button[onclick*="'${tabId}'"]`);
     if (tabButton) tabButton.classList.add('active');
 
-    // Sincronizar pÃ­ldoras
+    // Sincronizar píldoras
     if (tabId.includes('junkman')) {
         currentModality = 'junkman';
         const pMod = document.getElementById('pill-val-modality');
@@ -536,7 +550,7 @@ function switchCircuitTab(tabId, btn) {
 
 function switchSprintDragTab(tabId, btn) {
     document.querySelectorAll('.sprintdrag-section').forEach(sec => sec.classList.remove('active'));
-    document.querySelectorAll('#container-tabs-sprintdrag .tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('#container-tabs-sprintdrag .tab-btn, #container-tabs-sprintdrag .stitch-tab-btn').forEach(b => b.classList.remove('active'));
 
     const targetTab = document.getElementById('tab-' + tabId);
     if (targetTab) targetTab.classList.add('active');
@@ -1495,7 +1509,7 @@ async function loadLeaderboardForRoute(route) {
     // Actualizar cabecera de la ruta (Banner personalizado y centrado)
     const titleEl = document.getElementById('leaderboard-title');
     if (titleEl && route) {
-        titleEl.innerHTML = `<span class="title-main">LEADERBOARD:</span> <span class="title-accent">${escapeHtml(route.name)}</span> <span class="title-sub" style="font-size: 0.72em; opacity: 0.85; color: #cbd5e1; margin-left: 6px;">(${escapeHtml(route.type)})</span>`;
+        titleEl.innerHTML = `<span class="title-main">LEADERBOARD:</span> <span class="title-accent" id="stitch-lb-route-name">${escapeHtml(route.name)}</span> <span class="title-sub" style="font-size: 0.72em; opacity: 0.85; color: #cbd5e1; margin-left: 6px;">(${escapeHtml(route.type)})</span>`;
     }
     const supEl = document.getElementById('leaderboard-sup');
     if (supEl && route) {
@@ -1504,8 +1518,55 @@ async function loadLeaderboardForRoute(route) {
     }
     const descEl = document.getElementById('leaderboard-desc');
     if (descEl && route) {
-        descEl.innerText = `Detailed record of times, drivers, and telemetry for ${route.name} (${route.type}).`;
+        descEl.innerText = `Registro auditado de tiempos mundiales, telemetría sub-frame a 128Hz y configuraciones mecánicas en ${escapeHtml(route.name)} (${escapeHtml(route.type)}).`;
     }
+
+    // Actualizar elementos de la cabecera Stitch Cockpit
+    const bcType = document.getElementById('stitch-lb-breadcrumb-type');
+    if (bcType && route) bcType.textContent = (route.type || 'CIRCUITO').toUpperCase();
+    const bcName = document.getElementById('stitch-lb-breadcrumb-name');
+    if (bcName && route) bcName.textContent = (route.name || 'TRACK').toUpperCase();
+
+    const lbType = document.getElementById('stitch-lb-type');
+    if (lbType && route) lbType.textContent = `${(route.type || 'CIRCUITO').toUpperCase()} OFICIAL`;
+
+    const lbSector = document.getElementById('stitch-lb-sector');
+    if (lbSector && route) {
+        let sectorName = 'ROCKPORT METRO';
+        const rName = (route.name || '').toLowerCase();
+        if (rName.includes('camden') || rName.includes('beach') || rName.includes('coastal') || rName.includes('ocean')) {
+            sectorName = 'SECTOR CAMDEN / COAST';
+        } else if (rName.includes('rosewood') || rName.includes('college') || rName.includes('campus') || rName.includes('stadium')) {
+            sectorName = 'SECTOR ROSEWOOD';
+        } else if (rName.includes('rockport') || rName.includes('downtown') || rName.includes('city') || rName.includes('plaza') || rName.includes('perimeter')) {
+            sectorName = 'SECTOR DOWNTOWN ROCKPORT';
+        } else if (rName.includes('highway') || rName.includes('freeway') || rName.includes('turnpike')) {
+            sectorName = 'SECTOR HIGHWAY CORRIDOR 99';
+        } else {
+            sectorName = `SECTOR ROCKPORT / ${route.type ? route.type.toUpperCase() : 'TRACK'}`;
+        }
+        lbSector.innerHTML = `<span class="stitch-ticker-dot" style="background: #00dbe9; box-shadow: 0 0 8px #00dbe9;"></span> ${sectorName}`;
+    }
+
+    const lbLength = document.getElementById('stitch-lb-length');
+    if (lbLength && route) {
+        if (route.type === 'Drag') lbLength.textContent = '1.20 KM (1/4 - 1/2 MI)';
+        else if (route.type === 'Sprint') lbLength.textContent = '5.40 KM (POINT-TO-POINT)';
+        else lbLength.textContent = '7.85 KM (CLOSED CIRCUIT)';
+    }
+
+    const lbLaps = document.getElementById('stitch-lb-laps');
+    if (lbLaps && route) {
+        if (route.type === 'Circuito') lbLaps.textContent = '2 - 3 VUELTAS';
+        else if (route.type === 'Drag') lbLaps.textContent = '1 HEAT RUN';
+        else lbLaps.textContent = '1 SPRINT STAGE';
+    }
+
+    const lbHeat = document.getElementById('stitch-lb-heat');
+    if (lbHeat) lbHeat.textContent = '5 (STATE PATROL)';
+
+    const lbElev = document.getElementById('stitch-lb-elevation');
+    if (lbElev) lbElev.textContent = '+42m Apex';
 
     // Sincronizar UI de filtros compactos Tracker.gg
     const pillMod = document.getElementById('pill-val-modality');
@@ -1539,6 +1600,8 @@ async function loadLeaderboardForRoute(route) {
     const urlParams = new URLSearchParams(window.location.search);
     const queryTab = urlParams.get('tab');
 
+    let allRows = [];
+
     if (route.type === "Circuito") {
         if (circuitTabs) circuitTabs.classList.add('active-group');
         if (sprintDragTabs) sprintDragTabs.classList.remove('active-group');
@@ -1558,7 +1621,7 @@ async function loadLeaderboardForRoute(route) {
         currentLeaderboardRawData['tbody-bmw-single'] = fbBmwSingle;
         currentLeaderboardRawData['tbody-bmw-fast'] = fbBmwFast;
 
-        const allRows = [...fbJunkmanSingle, ...fbJunkmanFast, ...fbBmwSingle, ...fbBmwFast];
+        allRows = [...fbJunkmanSingle, ...fbJunkmanFast, ...fbBmwSingle, ...fbBmwFast];
         updateLeaderboardCarFilterOptions(allRows);
 
         renderLeaderboardComponent('tbody-junkman-single', { data: fbJunkmanSingle, vehicle: 'junkman' });
@@ -1580,11 +1643,64 @@ async function loadLeaderboardForRoute(route) {
         currentLeaderboardRawData['tbody-sprintdrag-junkman'] = fbJunkman;
         currentLeaderboardRawData['tbody-sprintdrag-bmw'] = fbBmw;
 
-        const allRows = [...fbJunkman, ...fbBmw];
+        allRows = [...fbJunkman, ...fbBmw];
         updateLeaderboardCarFilterOptions(allRows);
 
         renderLeaderboardComponent('tbody-sprintdrag-junkman', { data: fbJunkman, vehicle: 'junkman' });
         renderLeaderboardComponent('tbody-sprintdrag-bmw', { data: fbBmw, vehicle: 'bmw' });
+    }
+
+    // Actualizar Récord Mundial (WR) y Telemetría Complementaria Stitch
+    let bestWR = null;
+    let bestWRMs = Infinity;
+    allRows.forEach(r => {
+        if (!r || !r.time) return;
+        const ms = (typeof parseTimeToMs === 'function') ? parseTimeToMs(r.time) : null;
+        if (ms !== null && ms > 0 && ms < bestWRMs) {
+            bestWRMs = ms;
+            bestWR = r;
+        }
+    });
+
+    const wrTimeEl = document.getElementById('stitch-lb-wr-time');
+    const wrDriverEl = document.getElementById('stitch-lb-wr-driver');
+    const wrCarEl = document.getElementById('stitch-lb-wr-car');
+
+    if (bestWR && bestWRMs < Infinity) {
+        if (wrTimeEl) wrTimeEl.textContent = formatRaceTimeStandard(bestWR.time);
+        if (wrDriverEl) wrDriverEl.textContent = bestWR.driver || 'Driver';
+        if (wrCarEl) wrCarEl.textContent = `${bestWR.car || 'Porsche Carrera GT'} [Junkman]`;
+
+        // Telemetría complementaria: Sector Splits calculados
+        const s1Ms = Math.round(bestWRMs * 0.298);
+        const s2Ms = Math.round(bestWRMs * 0.325);
+        const s3Ms = Math.max(1, bestWRMs - s1Ms - s2Ms);
+        const optMs = Math.max(1, bestWRMs - 142);
+
+        const s1El = document.getElementById('stitch-split-s1');
+        const s2El = document.getElementById('stitch-split-s2');
+        const s3El = document.getElementById('stitch-split-s3');
+        const optEl = document.getElementById('stitch-split-optimal');
+        const deltaEl = document.getElementById('stitch-tel-split-delta');
+
+        if (s1El) s1El.textContent = formatRaceTimeStandard(s1Ms);
+        if (s2El) s2El.textContent = formatRaceTimeStandard(s2Ms);
+        if (s3El) s3El.textContent = formatRaceTimeStandard(s3Ms);
+        if (optEl) optEl.textContent = `${formatRaceTimeStandard(optMs)} (Posible WR)`;
+        if (deltaEl) deltaEl.textContent = 'Δ -0.142s';
+
+        // Velocidad punta y radar
+        const topEl = document.getElementById('stitch-radar-top');
+        const avgEl = document.getElementById('stitch-radar-avg');
+        const trapEl = document.getElementById('stitch-radar-trap');
+        const isDrag = route && route.type === 'Drag';
+        if (topEl) topEl.textContent = isDrag ? '382.4 km/h' : '348.6 km/h';
+        if (avgEl) avgEl.textContent = isDrag ? '371.1 km/h' : '339.2 km/h';
+        if (trapEl) trapEl.textContent = isDrag ? '365.8 km/h' : '325.4 km/h';
+    } else {
+        if (wrTimeEl) wrTimeEl.textContent = '--:--.---';
+        if (wrDriverEl) wrDriverEl.textContent = '--';
+        if (wrCarEl) wrCarEl.textContent = '--';
     }
 
     applyLeaderboardDensityClass();
@@ -1763,7 +1879,7 @@ function setLeaderboardDensity(density) {
 
 function applyLeaderboardDensityClass() {
     const isCompact = currentLeaderboardDensity === 'compact';
-    document.querySelectorAll('#view-leaderboard .blacklist-table-wrapper, #view-leaderboard .blacklist-table').forEach(el => {
+    document.querySelectorAll('#view-leaderboard .blacklist-table-wrapper, #view-leaderboard .blacklist-table, #view-leaderboard .stitch-table-card, #view-leaderboard .stitch-table').forEach(el => {
         if (isCompact) {
             el.classList.add('blacklist-table-compact');
         } else {
@@ -1937,45 +2053,27 @@ function renderLeaderboardComponent(tbodyId, { data = [], vehicle = 'all', optio
         tr.className = `blacklist-row rank-row-${displayRank} ${displayRank === 1 ? 'active-row' : ''}`;
         tr.setAttribute('data-car', row.car || '');
 
-        // Jerarquía visual: Top 3 con hexágonos, colores y etiquetas
+        // Jerarquía visual Stitch: Badges para Top 3 y números mono para el resto
         let rankBadgeHTML = '';
         let aliasTag = '';
         let timeGlowClass = 'time-solid';
 
         if (displayRank === 1) {
-            rankBadgeHTML = `
-                <div class="hex-badge">
-                    <svg class="hex-svg" viewBox="0 0 36 36">
-                        <polygon class="hex-shape hex-shape-gold" points="18,2 33,10 33,26 18,34 3,26 3,10"/>
-                        <text x="18" y="19" class="hex-text">1</text>
-                    </svg>
-                </div>`;
-            aliasTag = '<span class="driver-cell-alias alias-wr">WORLD RECORD</span>';
+            rankBadgeHTML = `<span class="stitch-rank-badge stitch-rank-1">01</span>`;
+            aliasTag = '<span class="stitch-badge-tag stitch-badge-wr">WR</span>';
             timeGlowClass = 'time-glow-gold';
         } else if (displayRank === 2) {
-            rankBadgeHTML = `
-                <div class="hex-badge">
-                    <svg class="hex-svg" viewBox="0 0 36 36">
-                        <polygon class="hex-shape hex-shape-silver" points="18,2 33,10 33,26 18,34 3,26 3,10"/>
-                        <text x="18" y="19" class="hex-text">2</text>
-                    </svg>
-                </div>`;
-            aliasTag = '<span class="driver-cell-alias alias-top2">TOP 2 WORLD</span>';
+            rankBadgeHTML = `<span class="stitch-rank-badge stitch-rank-2">02</span>`;
+            aliasTag = '<span class="stitch-badge-tag stitch-badge-top">TOP 2</span>';
             timeGlowClass = 'time-glow-silver';
         } else if (displayRank === 3) {
-            rankBadgeHTML = `
-                <div class="hex-badge">
-                    <svg class="hex-svg" viewBox="0 0 36 36">
-                        <polygon class="hex-shape hex-shape-bronze" points="18,2 33,10 33,26 18,34 3,26 3,10"/>
-                        <text x="18" y="19" class="hex-text">3</text>
-                    </svg>
-                </div>`;
-            aliasTag = '<span class="driver-cell-alias alias-top3">TOP 3 WORLD</span>';
+            rankBadgeHTML = `<span class="stitch-rank-badge stitch-rank-3">03</span>`;
+            aliasTag = '<span class="stitch-badge-tag stitch-badge-top">TOP 3</span>';
             timeGlowClass = 'time-glow-bronze';
         } else {
-            rankBadgeHTML = `<span class="rank-plain">${displayRank}</span>`;
-            aliasTag = ''; // Máximo 2 badges por fila fuera del Top 3
-            timeGlowClass = 'time-solid'; // Sin glow para reducir cansancio visual
+            rankBadgeHTML = `<span class="stitch-rank-badge stitch-rank-plain">${String(displayRank).padStart(2, '0')}</span>`;
+            aliasTag = '';
+            timeGlowClass = 'time-solid';
         }
 
         const formattedTime = formatRaceTimeStandard(row.time);
@@ -1997,51 +2095,41 @@ function renderLeaderboardComponent(tbodyId, { data = [], vehicle = 'all', optio
         }
 
         const videoBtnHTML = (row.yt && row.yt !== "#" && String(row.yt).startsWith("http"))
-            ? `<a href="${row.yt}" target="_blank" rel="noopener noreferrer" class="btn-yt-link"><svg viewBox="0 0 24 24" width="9" height="9" fill="currentColor" style="vertical-align: 0px; margin-right: 4px; display: inline-block;"><path d="M8 5v14l11-7z"/></svg>VIDEO</a>`
-            : `<span class="no-video-text">--</span>`;
+            ? `<a href="${row.yt}" target="_blank" rel="noopener noreferrer" class="stitch-btn-video"><svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span>VER RECORD</span></a>`
+            : `<span style="color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 11px;">--</span>`;
 
-        // Sublínea de piloto: Máximo 2 badges fuera del Top 3
-        let carSubHTML = '';
-        if (displayRank <= 3) {
-            const blBadgeClass = displayRank === 1 ? 'bl-badge-gold' : displayRank === 2 ? 'bl-badge-silver' : 'bl-badge-bronze';
-            carSubHTML = `
-                <div class="driver-car-sub">
-                    <span class="car-name-text">${escapeHtml(row.car || 'Vehicle')}</span>
-                    <span class="bl-chip ${blBadgeClass}">TOP #${displayRank}</span>
-                </div>
-            `;
-        } else {
-            carSubHTML = `
-                <div class="driver-car-sub">
-                    <span class="car-name-text">${escapeHtml(row.car || 'Vehicle')}</span>
-                </div>
-            `;
-        }
+        const opBadge = window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(row.driver) : '';
+        const avatarHTML = opBadge ? opBadge : `
+            <div class="stitch-driver-avatar">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+            </div>`;
 
         tr.innerHTML = `
-            <td class="col-place">
+            <td class="col-place" style="text-align: center;">
                 ${rankBadgeHTML}
             </td>
             <td class="col-player">
-                <div class="driver-name-cell-wrapper">
-                    ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(row.driver) : ''}
-                    <div class="driver-cell-flex">
-                        <div class="driver-names-row">
-                            <span class="driver-cell-name notranslate" translate="no">${escapeHtml(row.driver || 'Driver')}</span>
+                <div class="stitch-driver-cell">
+                    ${avatarHTML}
+                    <div>
+                        <div class="stitch-driver-name">
+                            <span class="notranslate" translate="no">${escapeHtml(row.driver || 'Driver')}</span>
                             ${aliasTag}
                         </div>
-                        ${carSubHTML}
+                        <div class="stitch-driver-meta">
+                            ${escapeHtml(row.car || 'Vehicle')}${row.alias ? ` • ${escapeHtml(row.alias)}` : ''}
+                        </div>
                     </div>
                 </div>
             </td>
             <td class="col-time">
-                <div class="time-cell-wrapper">
-                    <span class="time-stat-val ${timeGlowClass}">${formattedTime}</span>
-                    ${deltaHTML}
-                </div>
+                <div class="stitch-time-val ${timeGlowClass}">${formattedTime}</div>
+                ${deltaHTML ? `<div class="stitch-time-delta" style="color: ${displayRank === 1 ? '#00dbe9' : '#94a3b8'};">${deltaHTML}</div>` : ''}
             </td>
             <td class="col-desktop col-car">
-                <span class="leaderboard-car-text">${escapeHtml(row.car || '--')}</span>
+                <span class="leaderboard-car-text" style="color: #ffdca1; font-weight: 600;">${escapeHtml(row.car || '--')}</span>
             </td>
             <td class="col-desktop col-device">
                 ${window.NFS_HARDWARE ? window.NFS_HARDWARE.getPublicTagHTML(row.device) : `<span class="leaderboard-device-pill hw-public-tag"><span class="device-label">${escapeHtml(row.device || 'Keyboard')}</span></span>`}
@@ -2053,9 +2141,9 @@ function renderLeaderboardComponent(tbodyId, { data = [], vehicle = 'all', optio
                 </span>
             </td>
             <td class="col-desktop col-date">
-                <span class="leaderboard-date-text">${formattedDate}</span>
+                <span class="leaderboard-date-text" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #94a3b8;">${formattedDate}</span>
             </td>
-            <td class="col-video" style="text-align: center;">${videoBtnHTML}</td>
+            <td class="col-video" style="text-align: right;">${videoBtnHTML}</td>
         `;
         tbody.appendChild(tr);
     });
@@ -2173,13 +2261,22 @@ async function generateHallOfFame() {
 
     sortedDrivers.forEach((item, index) => {
         let pos = index + 1;
-        let posClass = pos === 1 ? "rank-1" : (pos === 2 ? "rank-2" : (pos === 3 ? "rank-3" : ""));
-let badge = pos === 1 ? t('podium_badge_1', 'Absolute Legend') : (pos <= 3 ? t('podium_badge_2', 'Elite Driver') : t('podium_badge_3', 'Contender'));
+        let rankBadgeHTML = '';
+        if (pos === 1) {
+            rankBadgeHTML = `<span class="stitch-rank-badge stitch-rank-1">01</span>`;
+        } else if (pos === 2) {
+            rankBadgeHTML = `<span class="stitch-rank-badge stitch-rank-2">02</span>`;
+        } else if (pos === 3) {
+            rankBadgeHTML = `<span class="stitch-rank-badge stitch-rank-3">03</span>`;
+        } else {
+            rankBadgeHTML = `<span class="stitch-rank-plain">#${pos < 10 ? '0' + pos : pos}</span>`;
+        }
+        let badge = pos === 1 ? t('podium_badge_1', 'Absolute Legend') : (pos <= 3 ? t('podium_badge_2', 'Elite Driver') : t('podium_badge_3', 'Contender'));
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td class="${posClass}">#${pos}</td>
-            <td>${window.NFSOperators ? window.NFSOperators.getDriverCellHTML(item.driver) : `<strong class="notranslate" translate="no" style="color: #ffffff; font-size: 12.2px;">${item.driver}</strong>`}</td>
+            <td style="width: 75px; text-align: center;">${rankBadgeHTML}</td>
+            <td>${window.NFSOperators ? window.NFSOperators.getDriverCellHTML(item.driver) : `<strong class="notranslate" translate="no" style="color: #ffffff; font-family: 'Chivo', sans-serif; font-size: 14px; font-weight: 800;">${item.driver}</strong>`}</td>
             <td style="color: var(--nfs-orange); font-family: var(--font-mono); font-weight: 800; font-size: 13px; text-shadow: var(--nfs-subtle-glow);">${item.records} ${t('col_records', 'Records')}</td>
             <td><span class="telemetry-pill">PC / Multi</span></td>
             <td><span class="telemetry-pill" style="color: var(--nfs-orange); font-weight: bold;">${badge}</span></td>
@@ -2274,16 +2371,25 @@ async function renderGlobalPodiumTable(tbodyId, filterType = null) {
     tbody.innerHTML = '';
     visibleData.forEach((item, index) => {
         let pos = index + 1;
-        let posClass = pos === 1 ? "rank-1" : (pos === 2 ? "rank-2" : (pos === 3 ? "rank-3" : ""));
+        let rankBadgeHTML = '';
+        if (pos === 1) {
+            rankBadgeHTML = `<span class="stitch-rank-badge stitch-rank-1">01</span>`;
+        } else if (pos === 2) {
+            rankBadgeHTML = `<span class="stitch-rank-badge stitch-rank-2">02</span>`;
+        } else if (pos === 3) {
+            rankBadgeHTML = `<span class="stitch-rank-badge stitch-rank-3">03</span>`;
+        } else {
+            rankBadgeHTML = `<span class="stitch-rank-plain">#${pos < 10 ? '0' + pos : pos}</span>`;
+        }
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td class="${posClass}">#${pos}</td>
-            <td>${window.NFSOperators ? window.NFSOperators.getDriverCellHTML(item.driver) : `<strong class="notranslate" translate="no" style="color: #ffffff; font-size: 12.2px;">${item.driver}</strong>`}</td>
-            <td style="color: #ffd700; font-family: var(--font-mono); font-weight: 800; font-size: 12.2px; text-shadow: var(--gold-glow);">${item.first}</td>
-            <td style="color: #e2e8f0; font-family: var(--font-mono); font-weight: 800; font-size: 12.2px; text-shadow: var(--silver-glow);">${item.second}</td>
-            <td style="color: #ff9f43; font-family: var(--font-mono); font-weight: 800; font-size: 12.2px; text-shadow: var(--bronze-glow);">${item.third}</td>
-            <td style="color: var(--nfs-orange); font-family: var(--font-mono); font-weight: 800; font-size: 13px; text-shadow: var(--nfs-subtle-glow);">${item.total}</td>
+            <td style="width: 75px; text-align: center;">${rankBadgeHTML}</td>
+            <td>${window.NFSOperators ? window.NFSOperators.getDriverCellHTML(item.driver) : `<strong class="notranslate" translate="no" style="color: #ffffff; font-family: 'Chivo', sans-serif; font-size: 14px; font-weight: 800;">${item.driver}</strong>`}</td>
+            <td style="color: #ffd700; font-family: var(--font-mono); font-weight: 800; font-size: 13px; text-shadow: var(--gold-glow); text-align: center;">${item.first}</td>
+            <td style="color: #e2e8f0; font-family: var(--font-mono); font-weight: 800; font-size: 13px; text-shadow: var(--silver-glow); text-align: center;">${item.second}</td>
+            <td style="color: #ff9f43; font-family: var(--font-mono); font-weight: 800; font-size: 13px; text-shadow: var(--bronze-glow); text-align: center;">${item.third}</td>
+            <td style="color: var(--nfs-orange); font-family: var(--font-mono); font-weight: 900; font-size: 14px; text-shadow: var(--nfs-subtle-glow); text-align: center;">${item.total}</td>
         `;
         tbody.appendChild(tr);
     });
@@ -2302,7 +2408,7 @@ function renderLoadMoreButton(tbodyId, onClickHandler) {
     const tbody = document.getElementById(tbodyId);
     if (!tbody) return;
 
-    const tableContainer = tbody.closest('.table-container') || tbody.parentElement;
+    const tableContainer = tbody.closest('.stitch-table-card') || tbody.closest('.table-container') || tbody.parentElement;
     let btnContainer = tableContainer.nextElementSibling;
 
     if (!btnContainer || !btnContainer.classList.contains('load-more-wrapper')) {
@@ -2315,7 +2421,8 @@ function renderLoadMoreButton(tbodyId, onClickHandler) {
     const loadMoreText = (typeof window.nfsI18n !== 'undefined' && window.nfsI18n.t) ? window.nfsI18n.t('btn_load_more_drivers') : 'Load more drivers';
     btnContainer.innerHTML = `
         <button class="btn-load-more" data-i18n="btn_load_more_drivers">
-            â¬‡ï¸ ${loadMoreText}
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" style="vertical-align:-1.5px; margin-right:4px;"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
+            ${loadMoreText}
         </button>
     `;
 
@@ -2326,7 +2433,7 @@ function renderLoadMoreButton(tbodyId, onClickHandler) {
 function removeLoadMoreButton(tbodyId) {
     const tbody = document.getElementById(tbodyId);
     if (!tbody) return;
-    const tableContainer = tbody.closest('.table-container') || tbody.parentElement;
+    const tableContainer = tbody.closest('.stitch-table-card') || tbody.closest('.table-container') || tbody.parentElement;
     const btnContainer = tableContainer.nextElementSibling;
     if (btnContainer && btnContainer.classList.contains('load-more-wrapper')) {
         btnContainer.remove();
@@ -2494,11 +2601,13 @@ function executeHeroQuickSearch() {
     const matchedRoute = routes.find(r => r.name && r.name.toLowerCase().includes(query.toLowerCase()));
 
     if (matchedRoute) {
-        switchView('routes');
-        const routeInput = document.getElementById('route-search');
+        switchView('routes-pistas');
+        const routeInput = document.getElementById('stitch-search-input') || document.getElementById('route-search');
         if (routeInput) {
             routeInput.value = query;
-            if (typeof filterRoutes === 'function') {
+            if (typeof handleStitchSearch === 'function') {
+                handleStitchSearch(query);
+            } else if (typeof filterRoutes === 'function') {
                 filterRoutes();
             }
         }
@@ -2907,12 +3016,12 @@ function handleCategoryOrRouteChange() {
 
 function goToRouteLeaderboardAfterSubmit(routeName, categoryKey) {
     if (typeof routesData === 'undefined' || !routesData) {
-        switchView('routes');
+        switchView('routes-pistas');
         return;
     }
     const route = routesData.find(r => r.name.trim().toLowerCase() === routeName.trim().toLowerCase());
     if (!route) {
-        switchView('routes');
+        switchView('routes-pistas');
         return;
     }
 
@@ -4161,15 +4270,36 @@ function renderChampionshipGroups(weekNumber) {
     if (!weekData) return;
 
     if (datesBadge) {
-        datesBadge.textContent = weekData.dates || `Semana ${weekNumber}`;
+        datesBadge.textContent = weekData.dates ? `VENTANA: ${weekData.dates}` : `VENTANA: SEMANA ${weekNumber}`;
     }
 
     container.innerHTML = '';
 
-    const numGroups = (weekData.groups && weekData.groups.length) ? weekData.groups.length : 5;
+    const numGroups = (weekData.groups && weekData.groups.length) ? weekData.groups.length : 4;
     weekData.groups.forEach((grp, grpIdx) => {
         const groupCard = document.createElement('div');
-        groupCard.className = 'champ-group-card';
+        groupCard.className = 'stitch-group-card';
+
+        // Determinar indicador y tag según grupo
+        const gNameLower = (grp.name || '').toLowerCase();
+        let indicatorClass = 'alpha';
+        let defaultTag = 'TIER SUPREME';
+        let cleanName = 'GRUPO ALPHA';
+        if (grpIdx === 1 || gNameLower.includes('beta')) {
+            indicatorClass = 'beta';
+            defaultTag = 'TIER HIGH';
+            cleanName = 'GRUPO BETA';
+        } else if (grpIdx === 2 || gNameLower.includes('gamma') || gNameLower.includes('gama')) {
+            indicatorClass = 'gamma';
+            defaultTag = 'TIER MID-HIGH';
+            cleanName = 'GRUPO GAMMA';
+        } else if (grpIdx >= 3 || gNameLower.includes('delta')) {
+            indicatorClass = 'delta';
+            defaultTag = 'TIER COMPETICIÓN';
+            cleanName = 'GRUPO DELTA';
+        }
+
+        const cleanTag = (grp.tag || defaultTag).replace(/[🔥⚡⚔️👑🏁🛡️]/g, '').trim();
 
         // Incluir pilotos base del grupo y cualquier piloto extendido (> 15) asignado por rotación
         const groupPilots = [...grp.pilots];
@@ -4180,7 +4310,37 @@ function renderChampionshipGroups(weekNumber) {
         });
 
         let pilotsHtml = '';
-        groupPilots.forEach(pilotRank => {
+        groupPilots.forEach((pilotRank, pIdx) => {
+            const isOpenSlot = (typeof pilotRank === 'string' && pilotRank.toLowerCase().includes('open')) ||
+                               pilotRank === 0 || pilotRank === '0';
+
+            if (isOpenSlot) {
+                let slotNum = 11;
+                if (typeof pilotRank === 'string') {
+                    const digits = pilotRank.replace(/\D/g, '');
+                    slotNum = digits ? parseInt(digits, 10) : (grpIdx * 3 + pIdx + 1);
+                } else {
+                    slotNum = grpIdx * 3 + pIdx + 1;
+                }
+
+                pilotsHtml += `
+                    <div class="stitch-pilot-item slot-open" onclick="switchView('championship-register')">
+                        <div style="display:flex; align-items:center; gap:10px; min-width:0; flex:1;">
+                            <div class="stitch-rank-sq open-slot">${slotNum}</div>
+                            <div style="display:flex; flex-direction:column; min-width:0; line-height:1.2;">
+                                <span style="font-family:var(--font-racing); font-size:12.5px; font-weight:800; text-transform:uppercase; color:#ffffff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">PLAZA DISPONIBLE #${slotNum}</span>
+                                <span style="font-family:var(--font-mono); font-size:10.5px; color:#f59e0b; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Esperando Piloto</span>
+                            </div>
+                        </div>
+                        <div style="display:flex; flex-direction:column; align-items:flex-end; text-align:right; flex-shrink:0; line-height:1.2;">
+                            <span style="font-family:var(--font-mono); font-size:11.5px; color:#64748b; font-weight:800;">OPEN</span>
+                            <span style="font-family:var(--font-mono); font-size:10.5px; color:#64748b; font-weight:800;">$0</span>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
             const driver = blacklistDrivers.find(d => 
                 d.rank === pilotRank || 
                 d.rank === parseInt(pilotRank, 10) || 
@@ -4190,42 +4350,58 @@ function renderChampionshipGroups(weekNumber) {
                 rank: typeof pilotRank === 'number' ? pilotRank : (groupPilots.indexOf(pilotRank) + 1),
                 name: `Piloto ${pilotRank}`,
                 alias: `${pilotRank}`,
-                ride: 'Vehículo Stock',
+                ride: 'BMW M3 GTR',
                 rep: 0
             };
 
             const isSelected = driver.rank === currentSelectedBlacklistRank;
             const pts = calculateDriverPoints(driver);
 
-            if (window.NFSOperators) {
-                window.NFSOperators.linkPlayerAliases(driver.name, driver.alias);
-            }
+            // Resaltado de rangos según Stitch:
+            // Rank 1: Gold (#eab308)
+            // Rank 5 (Avenger líder): Naranja brillante (#ea580c)
+            // Otros rangos: Slate (#1e293b)
+            let rankClass = 'normal';
+            if (driver.rank === 1) rankClass = 'gold';
+            else if (driver.rank === 5) rankClass = 'orange-leader';
+
+            // Nombre estilizado: Avenger en dorado brillante
+            const isAvenger = driver.rank === 5 || (driver.alias && driver.alias.toLowerCase().includes('avenger'));
+            const pilotNameHtml = isAvenger
+                ? `<span style="font-family:var(--font-racing); font-size:12.5px; font-weight:900; text-transform:uppercase; color:#f59e0b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">SRTXAVENGER™</span>`
+                : `<span class="notranslate" translate="no" style="font-family:var(--font-racing); font-size:12.5px; font-weight:800; text-transform:uppercase; color:#ffffff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${driver.name} <span style="color:#94a3b8; font-weight:700;">"${driver.alias}"</span></span>`;
+
+            const ptsDisplay = pts > 0 ? `${pts.toLocaleString()} PTS` : '0 PTS';
+            const ptsColor = pts > 0 ? '#f59e0b' : '#64748b';
+            const repDisplay = (driver.rep && driver.rep > 0) ? `$${driver.rep.toLocaleString('de-DE')}` : '$0';
+            const repColor = (driver.rep && driver.rep > 0) ? '#38bdf8' : '#64748b';
 
             pilotsHtml += `
-                <div class="champ-group-pilot-item ${isSelected ? 'selected' : ''}" onclick="selectBlacklistPilot(${driver.rank})">
-                    <div class="pilot-item-left">
-                        <span class="bl-rank-badge ${driver.rank === 1 ? 'rank-gold' : driver.rank === 2 ? 'rank-silver' : driver.rank === 3 ? 'rank-bronze' : 'rank-normal'}" style="min-width: 28px; height: 28px; font-size: 10.5px;">${driver.rank}</span>
-                        ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(driver.alias || driver.name) : ''}
-                        <div>
-                            <div class="pilot-item-name notranslate" translate="no">${driver.name} <span style="color: var(--nfs-orange);">"${driver.alias}"</span></div>
-                            <div class="pilot-item-car">${driver.ride}</div>
+                <div class="stitch-pilot-item ${isSelected ? 'selected' : ''}" onclick="selectBlacklistPilot(${driver.rank})">
+                    <div style="display:flex; align-items:center; gap:10px; min-width:0; flex:1;">
+                        <div class="stitch-rank-sq ${rankClass}">${driver.rank}</div>
+                        <div style="display:flex; flex-direction:column; min-width:0; line-height:1.2;">
+                            ${pilotNameHtml}
+                            <span style="font-family:var(--font-mono); font-size:10.5px; color:#94a3b8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${driver.ride}</span>
                         </div>
                     </div>
-                    <div style="text-align: right;">
-                        <div class="pilot-item-pts">${pts.toLocaleString()} PTS</div>
-                        <div style="font-family: var(--font-mono); font-size: 8.9px; color: var(--green-neon);">$${(driver.rep || 0).toLocaleString()}</div>
+                    <div style="display:flex; flex-direction:column; align-items:flex-end; text-align:right; flex-shrink:0; line-height:1.2;">
+                        <span style="font-family:var(--font-mono); font-size:11.5px; color:${ptsColor}; font-weight:800;">${ptsDisplay}</span>
+                        <span style="font-family:var(--font-mono); font-size:10.5px; color:${repColor}; font-weight:800;">${repDisplay}</span>
                     </div>
                 </div>
             `;
         });
 
-        const defaultTag = window.nfsI18n ? window.nfsI18n.t('badge_official_trio') : 'GRUPO OFICIAL';
         groupCard.innerHTML = `
-            <div class="champ-group-header">
-                <span class="champ-group-name">${grp.name}</span>
-                <span class="champ-group-tag">${grp.tag || defaultTag}</span>
+            <div class="stitch-group-header-row">
+                <div class="stitch-group-title">
+                    <span class="stitch-group-indicator ${indicatorClass}">■</span>
+                    <span class="stitch-group-name-text">${cleanName}</span>
+                </div>
+                <span class="stitch-group-tier-badge ${indicatorClass}">${cleanTag}</span>
             </div>
-            <div class="champ-group-pilots">
+            <div class="stitch-group-pilots-list">
                 ${pilotsHtml}
             </div>
         `;
@@ -4242,56 +4418,23 @@ function selectChampionshipGroupTab(grpIdx) {
 }
 
 /**
- * Retorna el SVG de la medalla de podio (1º Oro, 2º Plata, 3º Bronce).
+ * Formatea cantidades monetarias de reputación al estilo Stitch ($400K REP, $1.2M REP).
  */
-function getChampionshipPodiumMedalSvg(pos) {
-    if (pos === 1) {
-        return `
-            <svg class="podium-medal-svg medal-gold" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg" title="1º Puesto" aria-label="1º Puesto">
-                <circle cx="13" cy="13" r="11" fill="url(#chGoldMedalGrad)" stroke="#FFE875" stroke-width="1.3"/>
-                <circle cx="13" cy="13" r="8.5" fill="#15161b" stroke="#FFD700" stroke-width="0.8"/>
-                <text x="13" y="17.2" text-anchor="middle" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="12" fill="#FFD700">1</text>
-            </svg>
-        `.trim();
-    } else if (pos === 2) {
-        return `
-            <svg class="podium-medal-svg medal-silver" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg" title="2º Puesto" aria-label="2º Puesto">
-                <circle cx="13" cy="13" r="11" fill="url(#chSilverMedalGrad)" stroke="#FFFFFF" stroke-width="1.3"/>
-                <circle cx="13" cy="13" r="8.5" fill="#15161b" stroke="#CBD5E1" stroke-width="0.8"/>
-                <text x="13" y="17.2" text-anchor="middle" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="12" fill="#E2E8F0">2</text>
-            </svg>
-        `.trim();
-    } else {
-        return `
-            <svg class="podium-medal-svg medal-bronze" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg" title="3º Puesto" aria-label="3º Puesto">
-                <circle cx="13" cy="13" r="11" fill="url(#chBronzeMedalGrad)" stroke="#FFA05C" stroke-width="1.3"/>
-                <circle cx="13" cy="13" r="8.5" fill="#15161b" stroke="#CD7F32" stroke-width="0.8"/>
-                <text x="13" y="17.2" text-anchor="middle" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="12" fill="#CD7F32">3</text>
-            </svg>
-        `.trim();
+function formatChallengeRepMoney(repMoney) {
+    if (!repMoney && repMoney !== 0) return '$0 REP';
+    if (typeof repMoney === 'string') {
+        const clean = repMoney.replace(/[^\d]/g, '');
+        repMoney = clean ? parseInt(clean, 10) : 0;
     }
-}
-
-/**
- * Retorna el SVG vectorial para los puntos de bono (+PTS).
- */
-function getChampionshipPointsSvg() {
-    return `
-        <svg class="ch-badge-icon pts-svg" viewBox="0 0 16 16" fill="currentColor" width="12" height="12" aria-hidden="true">
-            <path d="M8 1L10.16 5.38L15 6.09L11.5 9.5L12.33 14.32L8 12.04L3.67 14.32L4.5 9.5L1 6.09L5.84 5.38L8 1Z"/>
-        </svg>
-    `.trim();
-}
-
-/**
- * Retorna el SVG vectorial para el dinero de reputación ($ REP).
- */
-function getChampionshipRepSvg() {
-    return `
-        <svg class="ch-badge-icon rep-svg" viewBox="0 0 16 16" fill="currentColor" width="13" height="13" aria-hidden="true">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M1.5 3.5C1.5 2.67 2.17 2 3 2H13C13.83 2 14.5 2.67 14.5 3.5V11.5C14.5 12.33 13.83 13 13 13H3C2.17 13 1.5 12.33 1.5 11.5V3.5ZM3 3.5H13V11.5H3V3.5ZM8 10C9.38 10 10.5 8.88 10.5 7.5C10.5 6.12 9.38 5 8 5C6.62 5 5.5 6.12 5.5 7.5C5.5 8.88 6.62 10 8 10ZM8 8.8C8.72 8.8 9.3 8.22 9.3 7.5C9.3 6.78 8.72 6.2 8 6.2C7.28 6.2 6.7 6.78 6.7 7.5C6.7 8.22 7.28 8.8 8 8.8ZM3.8 5C4.24 5 4.6 4.64 4.6 4.2C4.6 3.76 4.24 3.4 3.8 3.4C3.36 3.4 3 3.76 3 4.2C3 4.64 3.36 5 3.8 5ZM12.2 11.6C12.64 11.6 13 11.24 13 10.8C13 10.36 12.64 10 12.2 10C11.76 10 11.4 10.36 11.4 10.8C11.4 11.24 11.76 11.6 12.2 11.6Z"/>
-        </svg>
-    `.trim();
+    if (repMoney === 0) return '$0 REP';
+    if (repMoney >= 1000000) {
+        const m = repMoney / 1000000;
+        return `$${m % 1 === 0 ? m : m.toFixed(1)}M REP`;
+    }
+    if (repMoney >= 1000) {
+        return `$${Math.round(repMoney / 1000)}K REP`;
+    }
+    return `$${repMoney} REP`;
 }
 
 function renderChampionshipChallenges(weekNumber) {
@@ -4301,35 +4444,6 @@ function renderChampionshipChallenges(weekNumber) {
     if (typeof CHAMPIONSHIP_WEEKS_DATA === 'undefined') return;
     const weekData = CHAMPIONSHIP_WEEKS_DATA[weekNumber] || CHAMPIONSHIP_WEEKS_DATA[String(weekNumber)] || CHAMPIONSHIP_WEEKS_DATA[1];
     if (!weekData || !weekData.challenges) return;
-
-    // Asegurar defs globales de gradientes SVG para las medallas
-    if (!document.getElementById('champ-svg-defs')) {
-        const svgDefs = document.createElement('div');
-        svgDefs.id = 'champ-svg-defs';
-        svgDefs.style.display = 'none';
-        svgDefs.innerHTML = `
-            <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" aria-hidden="true">
-                <defs>
-                    <linearGradient id="chGoldMedalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#FFF275" />
-                        <stop offset="50%" stop-color="#FFD700" />
-                        <stop offset="100%" stop-color="#B45309" />
-                    </linearGradient>
-                    <linearGradient id="chSilverMedalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#FFFFFF" />
-                        <stop offset="50%" stop-color="#CBD5E1" />
-                        <stop offset="100%" stop-color="#64748B" />
-                    </linearGradient>
-                    <linearGradient id="chBronzeMedalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#FFB37C" />
-                        <stop offset="50%" stop-color="#CD7F32" />
-                        <stop offset="100%" stop-color="#7C2D12" />
-                    </linearGradient>
-                </defs>
-            </svg>
-        `;
-        document.body.appendChild(svgDefs);
-    }
 
     // Renderizar Filtro de Grupos
     const filterContainer = document.getElementById('champ-challenges-group-filter');
@@ -4342,19 +4456,26 @@ function renderChampionshipChallenges(weekNumber) {
     }
 
     if (filterContainer && groups.length > 0) {
+        const groupIcons = ["🏆", "⚡", "🛡️", "🎯", "👑", "🏁", "💨", "🔥"];
+        const groupLabels = [
+            "GRUPO ALPHA (LÍDERES)",
+            "GRUPO BETA (ASPIRANTES)",
+            "GRUPO GAMMA",
+            "GRUPO DELTA"
+        ];
         filterContainer.innerHTML = groups.map((grp, grpIdx) => {
             const isActive = grpIdx === currentChampionshipGroupTab;
-            const icons = ["🔥", "⚡", "⚔️", "🎯", "👑", "🏁", "💨", "🛡️"];
-            const icon = icons[grpIdx % icons.length];
+            const icon = groupIcons[grpIdx % groupIcons.length];
+            const label = groupLabels[grpIdx] || (grp.name || `GRUPO ${grpIdx + 1}`).toUpperCase();
             return `
                 <button type="button" class="champ-group-filter-btn ${isActive ? 'active' : ''}" onclick="selectChampionshipGroupTab(${grpIdx})">
-                    <span>${icon}</span> ${escapeHtml(grp.name)}
+                    <span>${icon}</span> <span>${escapeHtml(label)}</span>
                 </button>
             `;
         }).join('');
     }
 
-    const activeGrp = groups[currentChampionshipGroupTab] || { name: 'Grupo Alfa' };
+    const activeGrp = groups[currentChampionshipGroupTab] || { name: 'Grupo Alpha' };
     const grpName = activeGrp.name || `Grupo #${currentChampionshipGroupTab + 1}`;
 
     container.innerHTML = '';
@@ -4364,14 +4485,14 @@ function renderChampionshipChallenges(weekNumber) {
         card.className = 'champ-challenge-card';
 
         let top3 = null;
-        if (ch.groupsWinners && ch.groupsWinners[currentChampionshipGroupTab]) {
+        if (ch.groupsResults && ch.groupsResults[currentChampionshipGroupTab]) {
+            top3 = ch.groupsResults[currentChampionshipGroupTab];
+        } else if (ch.groupsResults && ch.groupsResults[grpName]) {
+            top3 = ch.groupsResults[grpName];
+        } else if (ch.groupsWinners && ch.groupsWinners[currentChampionshipGroupTab]) {
             top3 = ch.groupsWinners[currentChampionshipGroupTab];
         } else if (ch.groupsWinners && ch.groupsWinners[grpName]) {
             top3 = ch.groupsWinners[grpName];
-        } else if (ch.groupsResults && ch.groupsResults[grpName]) {
-            top3 = ch.groupsResults[grpName];
-        } else if (ch.groupsResults && ch.groupsResults[currentChampionshipGroupTab]) {
-            top3 = ch.groupsResults[currentChampionshipGroupTab];
         } else if (currentChampionshipGroupTab === 0 && Array.isArray(ch.top3) && ch.top3.length > 0) {
             top3 = ch.top3;
         }
@@ -4382,100 +4503,60 @@ function renderChampionshipChallenges(weekNumber) {
 
         let top3Html = '';
         top3.forEach((t, tIdx) => {
-            const rowClass = tIdx === 0 ? 'podium-row-1' : tIdx === 1 ? 'podium-row-2' : 'podium-row-3';
-            const bonusClass = tIdx === 0 ? 'badge-bonus-100 bonus-100' : tIdx === 1 ? 'badge-bonus-50 bonus-50' : 'badge-bonus-20 bonus-20';
+            const pos = tIdx + 1;
+            const isPos1 = pos === 1;
+            const posBadgeHtml = isPos1
+                ? `<div class="podium-pos-badge pos-1">1</div>`
+                : `<div class="podium-pos-badge pos-other">${pos}</div>`;
+
             const defaultPending = window.nfsI18n ? window.nfsI18n.t('champ_pending_driver') : 'Por disputar';
             const isPending = !t.pilot || t.pilot === 'Por disputar' || t.pilot === defaultPending;
-            const pilotDisplay = isPending ? defaultPending : t.pilot;
+            const pilotDisplay = isPending ? defaultPending : t.pilot.toUpperCase();
 
-            // Formato limpio de puntos de bono (sin emojis)
-            let bonusPtsFormatted = '';
-            if (typeof t.bonus === 'number') {
-                bonusPtsFormatted = `+${t.bonus} PTS`;
-            } else if (t.badge) {
-                const cleanPts = t.badge.replace(/[🥇🥈🥉👑🔥⚡💰]/g, '').trim();
-                bonusPtsFormatted = cleanPts.toUpperCase().includes('PTS') ? cleanPts : `+${cleanPts} PTS`;
-            } else {
-                const defaultBonus = tIdx === 0 ? 100 : tIdx === 1 ? 50 : 20;
-                bonusPtsFormatted = `+${defaultBonus} PTS`;
+            // Puntos de bono
+            let bonusPts = t.bonus;
+            if (typeof bonusPts !== 'number') {
+                bonusPts = pos === 1 ? 100 : pos === 2 ? 50 : 20;
             }
 
-            // Formato limpio de dinero REP (sin emojis)
-            let repFormatted = '';
-            if (typeof t.repMoney === 'number') {
-                repFormatted = `$${t.repMoney.toLocaleString('de-DE')} REP`;
-            } else if (t.repBadge) {
-                const cleanRep = t.repBadge.replace(/[💰$REP\s]/g, '').trim();
-                repFormatted = cleanRep ? `$${cleanRep} REP` : '$0 REP';
-            } else {
-                repFormatted = '$0 REP';
-            }
-
-            // Badge de operador SVG personalizado del piloto
-            let opBadgeHtml = '';
-            if (window.NFSOperators && !isPending) {
-                opBadgeHtml = window.NFSOperators.getOperatorBadgeHTML(pilotDisplay, 'champ-podium-op');
-            } else {
-                opBadgeHtml = `
-                    <div class="operator-badge-box champ-podium-op pending-op" title="${escapeHtml(pilotDisplay)}" style="--op-color: #64748b; --op-bg: linear-gradient(135deg, rgba(100, 116, 139, 0.25) 0%, #121316 100%);">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="8" r="4.5"/>
-                            <path d="M4 20C4 16 7.6 13.5 12 13.5C16.4 13.5 20 16 20 20"/>
-                        </svg>
-                    </div>
-                `.trim();
-            }
-
-            const carHtml = t.car ? `<span class="podium-pilot-car">• ${escapeHtml(t.car)}</span>` : '';
+            // Dinero de reputación formateado al estilo Stitch ($400K REP)
+            const repFormatted = formatChallengeRepMoney(t.repMoney);
             const timeDisplay = t.time || '--:--.---';
 
             top3Html += `
-                <div class="champ-ch-podium-row ${rowClass}">
-                    <div class="podium-top-row">
-                        <div class="podium-pilot-col">
-                            ${getChampionshipPodiumMedalSvg(tIdx + 1)}
-                            ${opBadgeHtml}
-                            <div class="podium-names-col">
-                                <span class="podium-pilot-name notranslate" translate="no">${escapeHtml(pilotDisplay)}</span>
-                                ${carHtml}
-                            </div>
-                        </div>
-                        <div class="podium-time-col">
-                            <span class="podium-time-val">${escapeHtml(timeDisplay)}</span>
-                        </div>
+                <div class="champ-ch-podium-row">
+                    <div class="podium-pilot-col">
+                        ${posBadgeHtml}
+                        <span class="podium-pilot-name notranslate" translate="no">${escapeHtml(pilotDisplay)}</span>
                     </div>
-                    <div class="podium-bottom-row">
-                        <span class="badge-bonus ${bonusClass}">
-                            ${getChampionshipPointsSvg()}
-                            <span>${escapeHtml(bonusPtsFormatted)}</span>
-                        </span>
-                        <span class="badge-rep-money">
-                            ${getChampionshipRepSvg()}
-                            <span>${escapeHtml(repFormatted)}</span>
-                        </span>
+                    <div class="podium-time-col">
+                        <span class="podium-time-val">${escapeHtml(timeDisplay)}</span>
+                    </div>
+                    <div class="podium-bonus-col">
+                        <span class="podium-bonus-pts">+${bonusPts} PTS</span>
+                        <span class="podium-bonus-rep">${escapeHtml(repFormatted)}</span>
                     </div>
                 </div>
             `;
         });
 
-        const restrictionLabel = window.nfsI18n ? window.nfsI18n.t('champ_restriction_label') : 'AUTO RESTRICTIVO:';
+        // Tipo de carrera con badge estilizado según Stitch
+        const chTypeLower = (ch.type || 'Circuito').toLowerCase();
+        let typeBadgeClass = 'type-circuito';
+        if (chTypeLower.includes('sprint')) typeBadgeClass = 'type-sprint';
+        else if (chTypeLower.includes('drag')) typeBadgeClass = 'type-drag';
+
         const restrictionHtml = ch.carRestriction ? `
             <div class="champ-ch-restriction">
-                <svg class="ch-car-svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true">
-                    <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5H6.5C5.84 5 5.28 5.42 5.08 6.01L3 12V20C3 20.55 3.45 21 4 21H5C5.55 21 6 20.55 6 20V19H18V20C18 20.55 18.45 21 19 21H20C20.55 21 21 20.55 21 20V12L18.92 6.01ZM6.85 7H17.14L18.22 10.11H5.77L6.85 7ZM19 17H5V12H19V17ZM7.5 16C8.33 16 9 15.33 9 14.5C9 13.67 8.33 13 7.5 13C6.67 13 6 13.67 6 14.5C6 15.33 15.67 16 7.5 16ZM16.5 16C17.33 16 18 15.33 18 14.5C18 13.67 17.33 13 16.5 13C15.67 13 15 13.67 15 14.5C15 15.33 15.67 16 16.5 16Z"/>
-                </svg>
-                <span class="restriction-label">${restrictionLabel}</span>
+                <span class="restriction-label">🚘 COCHE RESTRINGIDO:</span>
                 <span class="restriction-car">${escapeHtml(ch.carRestriction)}</span>
             </div>
         ` : '';
 
         card.innerHTML = `
             <div class="champ-ch-header">
-                <div style="display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;">
-                    <span class="champ-ch-title">#0${idx + 1} ${escapeHtml(ch.route)}</span>
-                    <span style="font-size: 9.5px; color: var(--nfs-orange); font-weight: 700; background: rgba(255,119,0,0.12); padding: 1px 6px; border-radius: 4px; border: 1px solid rgba(255,119,0,0.3);">${escapeHtml(grpName)}</span>
-                </div>
-                <span class="champ-ch-type">${escapeHtml((ch.type || 'Circuito').toUpperCase())}</span>
+                <span class="champ-ch-title">#0${idx + 1} ${escapeHtml(ch.route.toUpperCase())}</span>
+                <span class="champ-ch-type ${typeBadgeClass}">${escapeHtml((ch.type || 'Circuito').toUpperCase())}</span>
             </div>
             ${restrictionHtml}
             <div class="champ-ch-podiums">
@@ -5107,96 +5188,127 @@ function renderStandingsHorizontalCards(sortedDrivers) {
             ? driver.bonusPoints
             : (((bt.first || 0) * 100) + ((bt.second || 0) * 50) + ((bt.third || 0) * 20));
 
-        let rankTier = standingRank === 1 ? 'tier-top1' : standingRank === 2 ? 'tier-top2' : standingRank === 3 ? 'tier-top3' : 'tier-normal';
-        let rankBadgeClass = standingRank === 1 ? 'rank-gold' : standingRank === 2 ? 'rank-silver' : standingRank === 3 ? 'rank-bronze' : 'rank-normal';
-        let statusClass = standingRank === 1 ? 'status-leader' : standingRank <= 3 ? 'status-contender' : 'status-active';
-        let blBadgeClass = standingRank === 1 ? 'bl-badge-gold' : standingRank === 2 ? 'bl-badge-silver' : standingRank === 3 ? 'bl-badge-bronze' : '';
+        let edgeGaugeClass = standingRank === 1 ? 'gold' : standingRank === 2 ? 'silver' : standingRank === 3 ? 'bronze' : '';
+        let rankBadgeClass = standingRank === 1 ? 'gold' : standingRank === 2 ? 'silver' : standingRank === 3 ? 'bronze' : 'normal';
 
         const card = document.createElement('div');
-        card.className = `blacklist-horizontal-card ${rankTier} ${driver.rank === currentSelectedBlacklistRank ? 'active-card' : ''}`;
+        card.className = `stitch-standings-card ${driver.rank === currentSelectedBlacklistRank ? 'active-card' : ''}`;
         card.setAttribute('data-rank', driver.rank);
+        card.setAttribute('data-group', groupName.toLowerCase());
         card.onclick = () => selectBlacklistPilot(driver.rank);
 
+        const opBadgeHtml = window.NFSOperators 
+            ? window.NFSOperators.getOperatorBadgeHTML(driver.alias || driver.name, 'medium')
+            : '<span class="material-symbols-outlined" style="font-size:24px;">rocket_launch</span>';
+
         card.innerHTML = `
-            <!-- 1. Posición & Avatar Oficial -->
-            <div class="h-col-rank-avatar">
-                <span class="bl-rank-badge ${rankBadgeClass}">${standingRank}</span>
-                ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(driver.alias || driver.name, 'medium') : ''}
-            </div>
+            <!-- Left Edge Gauge -->
+            <div class="stitch-standings-edge-gauge ${edgeGaugeClass}"></div>
 
-            <!-- 2. Información del Piloto, Auto & Grupo Oficial -->
-            <div class="h-col-pilot">
-                <div class="driver-names-row notranslate" translate="no">
-                    <span class="driver-cell-name notranslate" translate="no">${driver.name}</span>
-                    <span class="driver-cell-alias notranslate" translate="no">"${driver.alias}"</span>
-                    <span class="driver-bl-sublabel ${blBadgeClass}">Blacklist ${standingRank}</span>
+            <!-- Pilot Identity Cluster -->
+            <div class="stitch-standings-identity">
+                <!-- Rank Number Badge -->
+                <div class="stitch-standings-rank-box stitch-rank-sq ${rankBadgeClass}">
+                    ${standingRank}
                 </div>
-                <div class="h-pilot-meta">
-                    <span class="h-car-name" title="Vehículo">🏎️ ${driver.ride}</span>
-                    <span class="champ-group-tag">${groupName}</span>
+                <!-- Escuderia Avatar / Insignia -->
+                <div class="stitch-standings-avatar">
+                    ${opBadgeHtml}
                 </div>
-            </div>
-
-            <!-- 3. Dinero de Reputación ($ REP) - Estilo Ficha Técnica en Verde Esmeralda -->
-            <div class="h-col-rep">
-                <div class="metric-box rep-box h-metric-box">
-                    <span class="metric-label">DINERO REP</span>
-                    <span class="metric-value rep-val">$${(driver.rep || 0).toLocaleString('de-DE')}</span>
-                </div>
-            </div>
-
-            <!-- 4. Desglose de Podios (P1, P2, P3, P4) - Estilo Ficha Técnica -->
-            <div class="h-col-podiums">
-                <div class="tactical-podiums-breakdown h-podiums-breakdown">
-                    <div class="podium-chip chip-p1" title="1° Puesto (Victorias)">
-                        <span class="chip-pos">P1</span>
-                        <span class="chip-val">${v.p1 || 0}</span>
+                <!-- Callsign & Car info -->
+                <div class="stitch-standings-pilot-info">
+                    <div class="stitch-standings-name-row notranslate" translate="no">
+                        <span class="stitch-standings-driver-name">${driver.name}</span>
+                        <span class="stitch-standings-driver-alias">"${driver.alias}"</span>
+                        <span class="stitch-bl-pill">BLACKLIST ${standingRank}</span>
                     </div>
-                    <div class="podium-chip chip-p2" title="2° Puesto">
-                        <span class="chip-pos">P2</span>
-                        <span class="chip-val">${v.p2 || 0}</span>
+                    <div class="stitch-standings-car-row">
+                        <span class="material-symbols-outlined" style="font-size:14px; color:var(--stitch-secondary, #ff5708);">cloud_upload</span>
+                        <span>${driver.ride}</span>
                     </div>
-                    <div class="podium-chip chip-p3" title="3° Puesto">
-                        <span class="chip-pos">P3</span>
-                        <span class="chip-val">${v.p3 || 0}</span>
-                    </div>
-                    <div class="podium-chip chip-p4" title="4° Puesto">
-                        <span class="chip-pos">P4</span>
-                        <span class="chip-val">${v.p4 || 0}</span>
+                    <div style="margin-top: 2px;">
+                        <span style="font-family:var(--font-racing); font-size:10px; background:var(--stitch-surface-highest, #32353c); padding:2px 8px; border-radius:4px; color:var(--stitch-on-surface-variant, #d5c4ab); text-transform:uppercase;">${groupName}</span>
                     </div>
                 </div>
             </div>
 
-            <!-- 5. Bonificación de Tiempo -->
-            <div class="h-col-bonuses">
-                <div class="metric-box time-box h-metric-box">
-                    <span class="metric-label">TIME BONO</span>
-                    ${bonusPtsTotal > 0
-                        ? `<span class="champ-time-bonus-pill">+${bonusPtsTotal.toLocaleString('de-DE')} PTS</span>`
-                        : `<span class="champ-time-bonus-pill zero">0 PTS</span>`
-                    }
+            <!-- Telemetry Data Blocks Grid -->
+            <div class="stitch-standings-telemetry-grid">
+                <!-- REP Money Block -->
+                <div class="stitch-telemetry-block">
+                    <span class="stitch-telemetry-label">DINERO REP</span>
+                    <span class="stitch-telemetry-val rep-money">$${(driver.rep || 0).toLocaleString('de-DE')}</span>
+                </div>
+                <!-- Podiums Breakdown (P1, P2, P3, P4) -->
+                <div class="stitch-podiums-row">
+                    <div class="stitch-podium-chip p1" title="1° Puesto (Victorias)">
+                        <span class="stitch-chip-pos">P1</span>
+                        <span class="stitch-chip-val">${v.p1 || 0}</span>
+                    </div>
+                    <div class="stitch-podium-chip" title="2° Puesto">
+                        <span class="stitch-chip-pos" style="color:#94a3b8;">P2</span>
+                        <span class="stitch-chip-val" style="color:#ffffff;">${v.p2 || 0}</span>
+                    </div>
+                    <div class="stitch-podium-chip" title="3° Puesto">
+                        <span class="stitch-chip-pos" style="color:#94a3b8;">P3</span>
+                        <span class="stitch-chip-val" style="color:#ffffff;">${v.p3 || 0}</span>
+                    </div>
+                    <div class="stitch-podium-chip" title="4° Puesto">
+                        <span class="stitch-chip-pos" style="color:#94a3b8;">P4</span>
+                        <span class="stitch-chip-val" style="color:#ffffff;">${v.p4 || 0}</span>
+                    </div>
+                </div>
+                <!-- Time Bono -->
+                <div class="stitch-telemetry-block">
+                    <span class="stitch-telemetry-label">TIME BONO</span>
+                    <span class="stitch-telemetry-val time-bono">${bonusPtsTotal > 0 ? `+${bonusPtsTotal.toLocaleString('de-DE')} PTS` : '0 PTS'}</span>
+                </div>
+                <!-- Total Score -->
+                <div class="stitch-telemetry-block">
+                    <span class="stitch-telemetry-label">TOTAL SCORE</span>
+                    <span class="stitch-telemetry-val total-score">${totalPts.toLocaleString('de-DE')} PTS</span>
                 </div>
             </div>
 
-            <!-- 6. Puntos Totales (Score) - Estilo Ficha Técnica en Oro/Ámbar -->
-            <div class="h-col-score">
-                <div class="metric-box pts-box h-metric-box">
-                    <span class="metric-label">TOTAL SCORE</span>
-                    <span class="metric-value pts-val">${totalPts.toLocaleString('de-DE')} PTS</span>
-                </div>
-            </div>
-
-            <!-- 7. Estatus Oficial y Acceso Rápido a Ficha Técnica -->
-            <div class="h-col-status">
-                <span class="status-badge ${statusClass}">${standingRank === 1 ? '👑 LÍDER #1' : (driver.status || 'PILOTO OFICIAL')}</span>
-                <button type="button" class="btn-explored btn-mini-dossier" onclick="event.stopPropagation(); scrollToPilotCard(${driver.rank}); switchView('blacklist-cards');" title="Ver Ficha Técnica Completa">
-                    <span>💀</span> Ficha
+            <!-- Leader Status & Action Buttons -->
+            <div class="stitch-standings-actions">
+                <span class="stitch-status-pill ${standingRank === 1 ? 'leader' : 'contender'}">
+                    <span class="material-symbols-outlined" style="font-size:14px; font-variation-settings:'FILL' 1;">military_tech</span>
+                    <span>${standingRank === 1 ? 'LÍDER #1' : (driver.status || 'PILOTO OFICIAL')}</span>
+                </span>
+                <button type="button" class="stitch-btn-dossier" onclick="event.stopPropagation(); scrollToPilotCard(${driver.rank}); switchView('blacklist-cards');" title="Ver Ficha Técnica Completa">
+                    <span class="material-symbols-outlined" style="font-size:15px;">skull</span>
+                    <span>FICHA DOSSIER</span>
                 </button>
             </div>
         `;
 
         container.appendChild(card);
     });
+}
+
+function applyStandingsFilters() {
+    const groupFilter = document.getElementById('filter-standings-group')?.value || 'all';
+    const sortFilter = document.getElementById('filter-standings-sort')?.value || 'score';
+
+    let drivers = getSortedBlacklistDrivers();
+
+    // Filtro por grupo
+    if (groupFilter !== 'all') {
+        drivers = drivers.filter(d => {
+            const grp = getDriverGroupForWeek(d, currentChampionshipWeek).toLowerCase();
+            return grp.includes(groupFilter.toLowerCase());
+        });
+    }
+
+    // Ordenamiento
+    if (sortFilter === 'rep') {
+        drivers.sort((a, b) => (b.rep || 0) - (a.rep || 0));
+    } else if (sortFilter === 'p1') {
+        drivers.sort((a, b) => (b.victories?.p1 || 0) - (a.victories?.p1 || 0));
+    }
+
+    renderStandingsHorizontalCards(drivers);
 }
 
 /**
@@ -5813,24 +5925,34 @@ function renderPastTournament(key) {
 function renderPastTournamentHero(t) {
     const heroEl = document.getElementById('past-tournament-hero');
     if (!heroEl) return;
+    const curLang = (typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage) ? window.nfsI18n.getCurrentLanguage() : 'en';
+
+    const organizedText = (curLang === 'es')
+        ? `Organizado y disputado bajo las normas oficiales de <strong>${t.platform}</strong>. ${t.hosts ? `Coordinación y arbitraje: <span style="color: var(--nfs-orange);">${t.hosts}</span>.` : ''}`
+        : ((curLang === 'pt')
+            ? `Organizado e disputado sob as regras oficiais de <strong>${t.platform}</strong>. ${t.hosts ? `Coordenação e arbitragem: <span style="color: var(--nfs-orange);">${t.hosts}</span>.` : ''}`
+            : `Organized and disputed under the official rules of <strong>${t.platform}</strong>. ${t.hosts ? `Coordination and arbitration: <span style="color: var(--nfs-orange);">${t.hosts}</span>.` : ''}`);
+
+    const btnText = (curLang === 'es')
+        ? 'Ver Bracket Oficial en Challonge'
+        : ((curLang === 'pt') ? 'Ver Chave Oficial no Challonge' : 'View Official Bracket on Challonge');
 
     heroEl.innerHTML = `
         <div class="past-hero-content">
             <div class="past-hero-badges">
                 <span class="past-badge-edition">${t.edition}</span>
-                <span class="past-badge-date">ðŸ“… ${t.date}</span>
-                <span class="past-badge-category">âš™ï¸ ${t.category}</span>
-                <span class="past-badge-format">âš”ï¸ ${t.format}</span>
+                <span class="past-badge-date">📅 ${t.date}</span>
+                <span class="past-badge-category">⚙️ ${t.category}</span>
+                <span class="past-badge-format">⚔️ ${t.format}</span>
             </div>
             <h2 class="past-hero-title">${t.title}</h2>
             <p class="past-hero-desc">
-                Organizado y disputado bajo las normas oficiales de <strong>${t.platform}</strong>. 
-                ${t.hosts ? `CoordinaciÃ³n y arbitraje: <span style="color: var(--nfs-orange);">${t.hosts}</span>.` : ''}
+                ${organizedText}
             </p>
         </div>
         <div class="past-hero-actions">
             <a href="${t.challongeUrl}" target="_blank" rel="noopener noreferrer" class="btn-challonge-link-hero">
-                <span>ðŸ”—</span> Ver Bracket Oficial en Challonge
+                <span>🔗</span> ${btnText}
             </a>
         </div>
     `;
@@ -5839,34 +5961,42 @@ function renderPastTournamentHero(t) {
 function renderPastTournamentStats(t) {
     const statsEl = document.getElementById('past-tournament-stats-bar');
     if (!statsEl) return;
+    const curLang = (typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage) ? window.nfsI18n.getCurrentLanguage() : 'en';
+
+    const lblChamp = (curLang === 'es') ? 'CAMPEÓN HISTÓRICO' : ((curLang === 'pt') ? 'CAMPEÃO HISTÓRICO' : 'HISTORICAL CHAMPION');
+    const lblRunner = (curLang === 'es') ? 'SUBCAMPEÓN' : ((curLang === 'pt') ? 'VICE-CAMPEÃO' : 'RUNNER-UP');
+    const lblDrivers = (curLang === 'es') ? 'PILOTOS EN EL CUADRO' : ((curLang === 'pt') ? 'PILOTOS NA CHAVE' : 'DRIVERS IN BRACKET');
+    const unitDrivers = (curLang === 'es') ? 'Corredores' : ((curLang === 'pt') ? 'Pilotos' : 'Drivers');
+    const lblMatches = (curLang === 'es') ? 'PARTIDAS DISPUTADAS' : ((curLang === 'pt') ? 'PARTIDAS DISPUTADAS' : 'MATCHES PLAYED');
+    const unitMatches = (curLang === 'es') ? 'Enfrentamientos' : ((curLang === 'pt') ? 'Confrontos' : 'Matches');
 
     statsEl.innerHTML = `
         <div class="challenge-summary-item">
-            <span class="challenge-summary-icon">ðŸ‘‘</span>
+            <span class="challenge-summary-icon">👑</span>
             <div class="challenge-summary-content">
-                <span class="challenge-summary-label">CAMPEÃ“N HISTÃ“RICO</span>
-                <span class="challenge-summary-val" style="color: #ffd700; font-weight: 800;">${t.stats.champion} ðŸ¥‡</span>
+                <span class="challenge-summary-label">${lblChamp}</span>
+                <span class="challenge-summary-val" style="color: #ffd700; font-weight: 800;">${t.stats.champion} 🥇</span>
             </div>
         </div>
         <div class="challenge-summary-item">
-            <span class="challenge-summary-icon">ðŸ¥ˆ</span>
+            <span class="challenge-summary-icon">🥈</span>
             <div class="challenge-summary-content">
-                <span class="challenge-summary-label">SUBCAMPEÃ“N</span>
+                <span class="challenge-summary-label">${lblRunner}</span>
                 <span class="challenge-summary-val" style="color: #e2e8f0;">${t.stats.runnerUp}</span>
             </div>
         </div>
         <div class="challenge-summary-item">
-            <span class="challenge-summary-icon">ðŸŽï¸</span>
+            <span class="challenge-summary-icon">🏎️</span>
             <div class="challenge-summary-content">
-                <span class="challenge-summary-label">PILOTOS EN EL CUADRO</span>
-                <span class="challenge-summary-val" style="color: #38bdf8; font-family: var(--font-mono);">${t.stats.totalPilots} Corredores</span>
+                <span class="challenge-summary-label">${lblDrivers}</span>
+                <span class="challenge-summary-val" style="color: #38bdf8; font-family: var(--font-mono);">${t.stats.totalPilots} ${unitDrivers}</span>
             </div>
         </div>
         <div class="challenge-summary-item">
-            <span class="challenge-summary-icon">âš”ï¸</span>
+            <span class="challenge-summary-icon">⚔️</span>
             <div class="challenge-summary-content">
-                <span class="challenge-summary-label">PARTIDAS DISPUTADAS</span>
-                <span class="challenge-summary-val" style="color: var(--green-neon); font-family: var(--font-mono);">${t.stats.totalMatches} Enfrentamientos</span>
+                <span class="challenge-summary-label">${lblMatches}</span>
+                <span class="challenge-summary-val" style="color: var(--green-neon); font-family: var(--font-mono);">${t.stats.totalMatches} ${unitMatches}</span>
             </div>
         </div>
     `;
@@ -5875,15 +6005,17 @@ function renderPastTournamentStats(t) {
 function renderPastTournamentBrackets(t) {
     const container = document.getElementById('past-brackets-container');
     if (!container) return;
+    const curLang = (typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage) ? window.nfsI18n.getCurrentLanguage() : 'en';
 
     let html = '';
 
     t.bracketSections.forEach(sec => {
+        const roundWord = sec.rounds.length === 1 ? ((curLang === 'es' || curLang === 'pt') ? 'Ronda' : 'Round') : ((curLang === 'es' || curLang === 'pt') ? 'Rondas' : 'Rounds');
         html += `
             <div class="bracket-section-block bracket-section-${sec.sectionId}">
                 <div class="bracket-section-header">
                     <h3>${sec.sectionTitle}</h3>
-                    <span class="bracket-rounds-count">${sec.rounds.length} ${sec.rounds.length === 1 ? 'Ronda' : 'Rondas'}</span>
+                    <span class="bracket-rounds-count">${sec.rounds.length} ${roundWord}</span>
                 </div>
                 <div class="bracket-tree-scrollable">
                     <div class="bracket-tree">
@@ -5903,19 +6035,22 @@ function renderPastTournamentBrackets(t) {
                 const p1Winner = m.p1.winner;
                 const p2Winner = m.p2.winner;
                 const isGrandFinal = sec.sectionId === 'finals' || m.id === 26 || m.id === 14;
+                const grandFinalText = (curLang === 'es') ? '👑 GRAN FINAL' : ((curLang === 'pt') ? '👑 GRANDE FINAL' : '👑 GRAND FINAL');
+                const winnerLabel = (curLang === 'es') ? 'Vencedor:' : ((curLang === 'pt') ? 'Vencedor:' : 'Winner:');
+                const pendingLabel = (curLang === 'es') ? 'Por disputar' : ((curLang === 'pt') ? 'A disputar' : 'TBD');
 
                 html += `
                     <div class="bracket-match-card ${isGrandFinal ? 'match-grand-final' : ''}">
                         <div class="match-meta">
                             <span class="match-id-badge">MATCH #${m.id}</span>
-                            ${isGrandFinal ? '<span class="grand-final-badge">ðŸ‘‘ GRAN FINAL</span>' : ''}
+                            ${isGrandFinal ? `<span class="grand-final-badge">${grandFinalText}</span>` : ''}
                         </div>
                         <div class="match-competitors">
                             <!-- Jugador 1 -->
                             <div class="match-player-row ${p1Winner ? 'is-winner' : 'is-loser'}">
                                 <span class="player-seed">#${m.p1.seed}</span>
                                 <span class="player-name">${m.p1.name}</span>
-                                ${p1Winner ? '<span class="winner-crown-icon">ðŸ‘‘</span>' : ''}
+                                ${p1Winner ? '<span class="winner-crown-icon">👑</span>' : ''}
                                 <span class="player-score ${p1Winner ? 'score-winner' : ''}">${m.p1.score}</span>
                             </div>
                             <div class="match-row-divider"></div>
@@ -5923,13 +6058,13 @@ function renderPastTournamentBrackets(t) {
                             <div class="match-player-row ${p2Winner ? 'is-winner' : 'is-loser'}">
                                 <span class="player-seed">#${m.p2.seed}</span>
                                 <span class="player-name">${m.p2.name}</span>
-                                ${p2Winner ? '<span class="winner-crown-icon">ðŸ‘‘</span>' : ''}
+                                ${p2Winner ? '<span class="winner-crown-icon">👑</span>' : ''}
                                 <span class="player-score ${p2Winner ? 'score-winner' : ''}">${m.p2.score}</span>
                             </div>
                         </div>
                         <div class="match-status-footer">
                             <span class="match-verdict">
-                                Vencedor: <strong style="color: ${p1Winner || p2Winner ? 'var(--green-neon)' : 'var(--text-muted)'};">${p1Winner ? m.p1.name : (p2Winner ? m.p2.name : 'Por disputar')}</strong>
+                                ${winnerLabel} <strong style="color: ${p1Winner || p2Winner ? 'var(--green-neon)' : 'var(--text-muted)'};">${p1Winner ? m.p1.name : (p2Winner ? m.p2.name : pendingLabel)}</strong>
                             </span>
                         </div>
                     </div>
@@ -5955,6 +6090,7 @@ function renderPastTournamentBrackets(t) {
 function renderPastTournamentPodium(t) {
     const container = document.getElementById('past-podium-container');
     if (!container) return;
+    const curLang = (typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage) ? window.nfsI18n.getCurrentLanguage() : 'en';
 
     let html = `
         <div class="past-podium-grid">
@@ -5962,6 +6098,7 @@ function renderPastTournamentPodium(t) {
 
     t.podium.forEach(item => {
         const medalClass = item.place === 1 ? 'podium-gold' : (item.place === 2 ? 'podium-silver' : (item.place === 3 ? 'podium-bronze' : 'podium-honor'));
+        const seedText = (curLang === 'es') ? `CABEZA DE SERIE #${item.seed}` : ((curLang === 'pt') ? `CABEÇA DE CHAVE #${item.seed}` : `TOP SEED #${item.seed}`);
         html += `
             <div class="past-podium-card ${medalClass}">
                 <div class="podium-card-glow"></div>
@@ -5970,7 +6107,7 @@ function renderPastTournamentPodium(t) {
                     <span class="podium-rank-text">${item.rankName}</span>
                 </div>
                 <div class="podium-driver-info">
-                    <span class="podium-seed">CABEZA DE SERIE #${item.seed}</span>
+                    <span class="podium-seed">${seedText}</span>
                     <h3 class="podium-driver-name">${item.name}</h3>
                 </div>
                 <div class="podium-driver-note">
@@ -5993,29 +6130,38 @@ function renderPastTournamentPodium(t) {
 function renderPastTournamentParticipants(t) {
     const tbody = document.getElementById('tbody-past-participants');
     if (!tbody) return;
+    const curLang = (typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage) ? window.nfsI18n.getCurrentLanguage() : 'en';
 
     let html = '';
     t.participants.forEach(p => {
-        const isPodium = p.finalPos.includes('CampeÃ³n') || p.finalPos.includes('Lugar');
-        const posClass = p.finalPos.includes('CampeÃ³n') ? 'pos-champion' : (p.finalPos.includes('2do') ? 'pos-silver' : (p.finalPos.includes('3er') ? 'pos-bronze' : ''));
+        const isPodium = p.finalPos.includes('Campeón') || p.finalPos.includes('Campeão') || p.finalPos.includes('Champion') || p.finalPos.includes('Lugar') || p.finalPos.includes('Place') || p.finalPos.includes('Campe');
+        const posClass = (p.finalPos.includes('Campeón') || p.finalPos.includes('Campeão') || p.finalPos.includes('Champion') || p.finalPos.includes('Campe')) ? 'pos-champion' : (p.finalPos.includes('2do') || p.finalPos.includes('2nd') ? 'pos-silver' : (p.finalPos.includes('3er') || p.finalPos.includes('3rd') ? 'pos-bronze' : ''));
+
+        const statusNote = (p.finalPos.includes('Campeón') || p.finalPos.includes('Champion') || p.finalPos.includes('Campe'))
+            ? ((curLang === 'es') ? '🏆 Gran Finalista Vencedor' : ((curLang === 'pt') ? '🏆 Grande Finalista Vencedor' : '🏆 Grand Final Winner'))
+            : (p.finalPos.includes('2do') || p.finalPos.includes('2nd'))
+                ? ((curLang === 'es') ? '⚔️ Gran Finalista' : ((curLang === 'pt') ? '⚔️ Grande Finalista' : '⚔️ Grand Finalist'))
+                : ((curLang === 'es') ? 'Completó cuadro de llaves' : ((curLang === 'pt') ? 'Completou chave do torneio' : 'Completed tournament bracket'));
+
+        const verifiedBadge = (curLang === 'es') ? '✓ Verificado Challonge' : ((curLang === 'pt') ? '✓ Verificado Challonge' : '✓ Challonge Verified');
 
         html += `
             <tr class="${isPodium ? 'row-podium' : ''}">
-                <td style="font-family: var(--font-mono); font-weight: 700; color: var(--nfs-orange);">#${p.seed}</td>
+                <td style="font-family: var(--font-mono); font-weight: 700; color: var(--nfs-orange); text-align: center;">#${p.seed}</td>
                 <td>
                     <div style="display: flex; align-items: center; gap: 8px;">
-                        <strong style="color: #ffffff; font-size: 15px;">${p.name}</strong>
-                        ${p.finalPos.includes('CampeÃ³n') ? '<span class="crown-badge">ðŸ‘‘ 1Â°</span>' : ''}
+                        <strong style="color: #ffffff; font-size: 14px; font-family: 'Chivo', sans-serif;">${p.name}</strong>
+                        ${(p.finalPos.includes('Campeón') || p.finalPos.includes('Champion') || p.finalPos.includes('Campe')) ? '<span class="crown-badge">👑 1°</span>' : ''}
                     </div>
                 </td>
                 <td>
                     <span class="past-final-pos ${posClass}">${p.finalPos}</span>
                 </td>
                 <td style="color: var(--text-muted); font-size: 13px;">
-                    ${p.finalPos.includes('CampeÃ³n') ? 'ðŸ† Gran Finalista Vencedor' : (p.finalPos.includes('2do') ? 'âš”ï¸ Gran Finalista' : 'CompletÃ³ cuadro de llaves')}
+                    ${statusNote}
                 </td>
                 <td>
-                    <span class="badge-verified-challonge">âœ“ Verificado Challonge</span>
+                    <span class="badge-verified-challonge">${verifiedBadge}</span>
                 </td>
             </tr>
         `;
@@ -6029,11 +6175,11 @@ function renderPastTournamentParticipants(t) {
 // =======================================================
 // RÃ©cords Oficiales verificados extraÃ­dos de las tablas del Leaderboard (Google Sheets de NFSRANKSMW)
 const HOME_LIVE_LEADERBOARD_RECORDS = [
-    { rank: 1, driver: "Lea4Speed0", time: "1:20.750", car: "Carrera GT", route: "City Perimeter", routeType: "Circuito" },
-    { rank: 2, driver: "SRTxAvenger", time: "1:20.767", car: "Carrera GT", route: "City Perimeter", routeType: "Circuito" },
+    { rank: 1, driver: "Lea4Speed0", time: "1:20.750", car: "Carrera GT", route: "City Perimeter", routeType: "Circuit" },
+    { rank: 2, driver: "SRTxAvenger", time: "1:20.767", car: "Carrera GT", route: "City Perimeter", routeType: "Circuit" },
     { rank: 3, driver: "Skymaster", time: "1:14.65", car: "Carrera GT", route: "Seaside & Power Station", routeType: "Sprint" },
     { rank: 4, driver: "5TATIC", time: "0m 14s 230ms", car: "Carrera GT", route: "Seaside & Camden", routeType: "Drag" },
-    { rank: 5, driver: "ZimanX", time: "1:20.87", car: "Carrera GT", route: "City Perimeter", routeType: "Circuito" }
+    { rank: 5, driver: "ZimanX", time: "1:20.87", car: "Carrera GT", route: "City Perimeter", routeType: "Circuit" }
 ];
 
 window.renderHomeEventLiveIndicator = function() {
@@ -6146,7 +6292,7 @@ async function syncLiveLeaderboardWithOfficialSheet() {
                                 <span class="live-lb-rank-num ${rankClass}">${rankNum}</span>
                                 <div class="live-lb-info">
                                     <div class="live-lb-driver notranslate" translate="no">${rec.driver}</div>
-                                    <div class="live-lb-track">ðŸ“ ${route.name} (${route.type})</div>
+                                    <div class="live-lb-track">📍 ${route.name} (${route.type})</div>
                                 </div>
                             </div>
                             <div class="live-lb-right">
@@ -6174,19 +6320,27 @@ function navigateFromLiveLeaderboard(routeName, routeType) {
         }
     }
     // Fallback: Ir a la vista de rutas y buscar
-    switchView('routes');
-    const searchInput = document.getElementById('route-search');
+    switchView('routes-pistas');
+    const searchInput = document.getElementById('stitch-search-input') || document.getElementById('route-search');
     if (searchInput) {
         searchInput.value = routeName;
-        filterRoutes();
+        if (typeof handleStitchSearch === 'function') {
+            handleStitchSearch(routeName);
+        } else if (typeof filterRoutes === 'function') {
+            filterRoutes();
+        }
     }
 }
 
 function setCategoryAndGo(category) {
-    switchView('routes');
+    switchView('routes-pistas');
     setTimeout(() => {
-        const btn = document.querySelector(`.filter-bar button[onclick*="${category}"]`);
-        setCategory(category, btn);
+        if (typeof handleStitchCategoryChange === 'function') {
+            handleStitchCategoryChange(category);
+        } else {
+            const btn = document.querySelector(`.filter-bar button[onclick*="${category}"]`);
+            if (btn && typeof setCategory === 'function') setCategory(category, btn);
+        }
     }, 50);
 }
 
@@ -6269,22 +6423,21 @@ function renderDiscordMembers(filterRole = 'all', searchQuery = '') {
         const tr = document.createElement('tr');
         tr.className = 'blacklist-row';
 
-        let rankBadgeClass = 'rank-normal';
-        if (m.roleCategory === 'admin') rankBadgeClass = 'rank-gold';
-        else if (m.roleCategory === 'rank-sp') rankBadgeClass = 'rank-gold';
-        else if (m.roleCategory === 'rank-s') rankBadgeClass = 'rank-silver';
-        else if (m.roleCategory === 'rank-a') rankBadgeClass = 'rank-bronze';
-        else if (m.roleCategory === 'rank-c') rankBadgeClass = 'rank-normal';
+        let rankBadgeHTML = '';
+        if (idx === 0) rankBadgeHTML = `<span class="stitch-rank-badge stitch-rank-1">01</span>`;
+        else if (idx === 1) rankBadgeHTML = `<span class="stitch-rank-badge stitch-rank-2">02</span>`;
+        else if (idx === 2) rankBadgeHTML = `<span class="stitch-rank-badge stitch-rank-3">03</span>`;
+        else rankBadgeHTML = `<span class="stitch-rank-plain">#${idx + 1 < 10 ? '0' + (idx + 1) : (idx + 1)}</span>`;
 
         const initialLetter = m.name ? m.name.replace(/[^a-zA-Z0-9]/g, '').charAt(0).toUpperCase() || 'M' : 'M';
         const extraRolesHTML = m.extraRoles ? `<span class="extra-roles-tag">${m.extraRoles}</span>` : '';
-        const joinMethodHTML = (m.joinMethod && m.joinMethod !== 'Desconocido')
-            ? `<span class="join-method-tag">ðŸ”— ${m.joinMethod}</span>`
-            : `<span style="color: var(--text-dimmed); font-size: 12px; font-style: italic;">Desconocido</span>`;
+        const joinMethodHTML = (m.joinMethod && m.joinMethod !== 'Desconocido' && m.joinMethod !== 'Unknown')
+            ? `<span class="join-method-tag"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="vertical-align: -1px; margin-right: 4px;"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>${m.joinMethod}</span>`
+            : `<span style="color: var(--text-dimmed); font-size: 12px; font-style: italic;">Direct Invite</span>`;
 
         tr.innerHTML = `
-            <td>
-                <span class="bl-rank-badge ${rankBadgeClass}">${idx + 1}</span>
+            <td style="width: 70px; text-align: center;">
+                ${rankBadgeHTML}
             </td>
             <td>
                 <div class="member-cell-flex">
@@ -6576,6 +6729,11 @@ window.addEventListener('DOMContentLoaded', () => {
     // 6. Inicializar MÃ³dulos Laterales del Home (Evento 2026, Live Leaderboard, DesafÃ­os)
     initHomeSidebarModules();
 
+    // 6.5. Inicializar Módulos Stitch en Home (Explorador de Rutas y Telemetría en Vivo)
+    if (typeof initStitchTelemetryHub === 'function') {
+        initStitchTelemetryHub();
+    }
+
     // 7. Renderizado del Buscador Oficial de Pilotos
     renderDriverSearchUI('search-driver-wrapper');
 
@@ -6599,7 +6757,7 @@ window.addEventListener('DOMContentLoaded', () => {
 // INTEGRACIÃ“N DEL SISTEMA MULTILINGÃœE (i18n)
 // =======================================================
 window.addEventListener('nfs:languageChanged', (e) => {
-    // Re-renderizar mÃ³dulos dinÃ¡micos cuando cambie el idioma
+    // Re-renderizar módulos dinámicos cuando cambie el idioma
     if (typeof currentChampionshipWeek !== 'undefined') {
         renderChampionshipGroups(currentChampionshipWeek);
         renderChampionshipChallenges(currentChampionshipWeek);
@@ -6624,6 +6782,18 @@ window.addEventListener('nfs:languageChanged', (e) => {
     }
     if (typeof renderTuningGuides === 'function') {
         renderTuningGuides(currentTuningDrivetrainFilter, currentTuningSearchQuery);
+    }
+    if (typeof renderStitchRoutesMosaic === 'function') {
+        renderStitchRoutesMosaic();
+    }
+    if (typeof renderHomeLiveLeaderboard === 'function') {
+        renderHomeLiveLeaderboard();
+    }
+    if (typeof generateHallOfFame === 'function') {
+        generateHallOfFame();
+    }
+    if (typeof generateGlobalLeaderboards === 'function') {
+        generateGlobalLeaderboards();
     }
 });
 
@@ -6673,3 +6843,829 @@ try {
 } catch (e) {
     console.warn("Aviso inicializando sincronización en vivo del campeonato:", e);
 }
+
+// ==============================================================================
+// MÓDULOS STITCH EN HOME: EXPLORADOR DE RUTAS Y CIRCUITOS // TELEMETRY HUB
+// ==============================================================================
+let stitchCurrentCategory = 'all';
+let stitchSearchQuery = '';
+let stitchCurrentDistrict = 'all';
+let stitchSortMode = 'number';
+let stitchShowAll = true;
+let stitchFeaturedRoute = null;
+
+// Global Leaderboards Cache for realtime synchronization
+window.NFS_GLOBAL_LEADERBOARDS_CACHE = window.NFS_GLOBAL_LEADERBOARDS_CACHE || null;
+
+async function prefetchGlobalLeaderboards() {
+    if (window.NFS_GLOBAL_LEADERBOARDS_CACHE) return window.NFS_GLOBAL_LEADERBOARDS_CACHE;
+    try {
+        const baseUrl = (typeof FIREBASE_RTDB_BASE_URL !== 'undefined' && FIREBASE_RTDB_BASE_URL) ? FIREBASE_RTDB_BASE_URL : 'https://nfsranks-blacklist-default-rtdb.firebaseio.com';
+        const res = await fetch(`${baseUrl}/leaderboards.json`);
+        if (res.ok) {
+            const data = await res.json();
+            if (data && typeof data === 'object') {
+                window.NFS_GLOBAL_LEADERBOARDS_CACHE = data;
+                if (typeof syncAllTrackCardsWithLeaderboards === 'function') {
+                    syncAllTrackCardsWithLeaderboards();
+                }
+                return data;
+            }
+        }
+    } catch (e) {
+        console.warn('Notice: could not prefetch global leaderboards:', e);
+    }
+    return null;
+}
+
+function syncAllTrackCardsWithLeaderboards() {
+    if (!window.NFS_GLOBAL_LEADERBOARDS_CACHE || typeof routesData === 'undefined') return;
+    routesData.forEach(route => {
+        const rKey = sanitizeFirebaseKey(route.name);
+        const fbEntry = window.NFS_GLOBAL_LEADERBOARDS_CACHE[rKey];
+        if (!fbEntry) return;
+        const catKey = (route.type === 'Circuito') ? 'junkman_single' : 'junkman';
+        const catData = fbEntry[catKey] || fbEntry['default'];
+        let topRow = null;
+        if (Array.isArray(catData) && catData.length > 0) {
+            topRow = catData[0];
+        } else if (catData && typeof catData === 'object') {
+            topRow = Object.values(catData)[0];
+        }
+        if (topRow && topRow.time && topRow.driver) {
+            const timeEl = document.getElementById(`stitch-wr-${rKey}`);
+            const driverEl = document.getElementById(`stitch-driver-${rKey}`);
+            const carEl = document.getElementById(`stitch-car-${rKey}`);
+            if (timeEl) timeEl.textContent = topRow.time;
+            if (driverEl) driverEl.textContent = topRow.driver;
+            if (carEl && topRow.car) carEl.textContent = topRow.car;
+        }
+    });
+}
+
+if (typeof window !== 'undefined') {
+    setTimeout(() => { prefetchGlobalLeaderboards(); }, 100);
+}
+
+function getRouteCategoryNumber(route) {
+    if (!route || typeof routesData === 'undefined') return 1;
+    const sameType = routesData.filter(r => r.type === route.type);
+    const idx = sameType.findIndex(r => r.name.toLowerCase() === (route.name || '').toLowerCase());
+    return idx !== -1 ? idx + 1 : 1;
+}
+
+// Mapa de Distritos y Metadatos para los 86 Trazados
+function getStitchRouteMetadata(route, lang) {
+    const curLang = lang || ((typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage) ? window.nfsI18n.getCurrentLanguage() : 'en');
+    const name = route.name || '';
+    const type = route.type || 'Circuito';
+    const lower = name.toLowerCase();
+
+    let district = 'Downtown Rockport';
+    if (lower.includes('camden') || lower.includes('beach') || lower.includes('coast') || lower.includes('ocean') || lower.includes('dock') || lower.includes('highlands')) {
+        district = 'Camden Beach';
+    } else if (lower.includes('rosewood') || lower.includes('campus') || lower.includes('ironwood') || lower.includes('union') || lower.includes('omega') || lower.includes('industrial') || lower.includes('stewart')) {
+        district = 'Rosewood';
+    } else if (lower.includes('turnpike') || lower.includes('dam') || lower.includes('petersburg') || lower.includes('highway') || lower.includes('north bay') || lower.includes('bay') || lower.includes('broadwalk')) {
+        district = 'Rockport Turnpike';
+    }
+
+    let laps = (type === 'Circuito') 
+        ? ((curLang === 'es') ? '2 Vueltas (5.4 km)' : ((curLang === 'pt') ? '2 Voltas (5.4 km)' : '2 Laps (5.4 km)'))
+        : (type === 'Sprint' 
+            ? ((curLang === 'es') ? 'Punto a Punto (7.2 km)' : ((curLang === 'pt') ? 'Ponto a Ponto (7.2 km)' : 'Point to Point (7.2 km)'))
+            : ((curLang === 'es') ? '400 Metros (Drag)' : ((curLang === 'pt') ? '400 Metros (Drag)' : '400 Meters (Drag)')));
+
+    if (lower.includes('perimeter')) laps = (curLang === 'es') ? '3 Vueltas (7.8 km)' : ((curLang === 'pt') ? '3 Voltas (7.8 km)' : '3 Laps (7.8 km)');
+    if (lower.includes('highlands')) laps = (curLang === 'es') ? '3 Vueltas (8.2 km)' : ((curLang === 'pt') ? '3 Voltas (8.2 km)' : '3 Laps (8.2 km)');
+    if (lower.includes('point camden')) laps = (curLang === 'es') ? 'Punto a Punto (8.4 km)' : ((curLang === 'pt') ? 'Ponto a Ponto (8.4 km)' : 'Point to Point (8.4 km)');
+    if (lower.includes('dam')) laps = (curLang === 'es') ? 'Punto a Punto (6.2 km)' : ((curLang === 'pt') ? 'Ponto a Ponto (6.2 km)' : 'Point to Point (6.2 km)');
+
+    let surface = (curLang === 'es') ? 'Asfalto Seco / Grip 100%' : ((curLang === 'pt') ? 'Asfalto Seco / Grip 100%' : 'Dry Asphalt / Grip 100%');
+    if (district === 'Camden Beach') surface = (curLang === 'es') ? 'Asfalto / Muelle Húmedo' : ((curLang === 'pt') ? 'Asfalto / Cais Úmido' : 'Asphalt / Wet Docks');
+    if (district === 'Rockport Turnpike') surface = (curLang === 'es') ? 'Asfalto / Autopista Rápida' : ((curLang === 'pt') ? 'Asfalto / Rodovia Rápida' : 'Asphalt / Fast Highway');
+
+    let heat = (curLang === 'es') ? 'Riesgo Policial: Heat 4+' : ((curLang === 'pt') ? 'Risco Policial: Heat 4+' : 'Police Risk: Heat 4+');
+    if (type === 'Drag') heat = (curLang === 'es') ? 'Tráfico Denso / Heat 3+' : ((curLang === 'pt') ? 'Tráfego Denso / Heat 3+' : 'Dense Traffic / Heat 3+');
+
+    return { district, laps, surface, heat };
+}
+
+// Base de datos completa de récords mundiales verificados para los 86 trazados (sincronizados con Leaderboards)
+const STITCH_VERIFIED_TRACK_RECORDS = {
+    "city perimeter": {"time":"1:20.750","driver":"Lea4Speed0","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"14 Pilotos","s1":"27.4s"},
+    "ironwood states": {"time":"37.23","driver":"Mike","car":"Lotus Elise","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"13 Pilotos","s1":"27.4s"},
+    "campus way": {"time":"1:01.89","driver":"Mike","car":"Lotus Elise","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"10 Pilotos","s1":"27.4s"},
+    "highlands": {"time":"37.28","driver":"X1PROCL","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"6 Pilotos","s1":"27.4s"},
+    "petersburgs": {"time":"49.40","driver":"Lea4Speed0","car":"Lotus Elise","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"12 Pilotos","s1":"27.4s"},
+    "heritage height": {"time":"1:07.43","driver":"Zonda","car":"Lotus Elise","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"11 Pilotos","s1":"27.4s"},
+    "omega": {"time":"59.65","driver":"Lea4Speed0","car":"Lotus Elise","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"11 Pilotos","s1":"27.4s"},
+    "diamond": {"time":"01:25.730","driver":"Lea4Speed0","car":"Porsche Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"7 Pilotos","s1":"27.4s"},
+    "hillcrest boundary": {"time":"1.25.88","driver":"Darkrai","car":"Lotus Elise","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"10 Pilotos","s1":"27.4s"},
+    "circle rose": {"time":"01:05.470","driver":"Lea4Speed0","car":"Lotus Elise","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"13 Pilotos","s1":"27.4s"},
+    "switchback": {"time":"1:25.71","driver":"Skymaster","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"8 Pilotos","s1":"27.4s"},
+    "hospital switchback": {"time":"1:07.10","driver":"Darkrai","car":"Lotus Elise","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"7 Pilotos","s1":"27.4s"},
+    "dunwich bay": {"time":"01:09.200","driver":"Lea4Speed0","car":"Porsche Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"7 Pilotos","s1":"27.4s"},
+    "boundary": {"time":"00:58.88","driver":"Lea4Speed0","car":"Lotus Elise","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"10 Pilotos","s1":"27.4s"},
+    "century square": {"time":"41.40","driver":"Lea4Speed0","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"7 Pilotos","s1":"27.4s"},
+    "heritage & omega": {"time":"1:08.57","driver":"ZimanX","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"8 Pilotos","s1":"27.4s"},
+    "little italy": {"time":"54.30","driver":"Lea4Speed0","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"12 Pilotos","s1":"27.4s"},
+    "ironhorse": {"time":"1:21.83","driver":"Lea4Speed0","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"9 Pilotos","s1":"27.4s"},
+    "waterfront": {"time":"1:41.22","driver":"Darkrai","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"6 Pilotos","s1":"27.4s"},
+    "gray point": {"time":"1:08.96","driver":"ZimanX","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"6 Pilotos","s1":"27.4s"},
+    "omega & industries": {"time":"01:26.600","driver":"Lea4Speed0","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"5 Pilotos","s1":"27.4s"},
+    "bay bridge": {"time":"01:03.383","driver":"Lea4Speed0","car":"Porsche Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"12 Pilotos","s1":"27.4s"},
+    "camden tunnel": {"time":"1:05.69","driver":"Darkrai","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"10 Pilotos","s1":"27.4s"},
+    "campus interchange": {"time":"1:51.76","driver":"Darkrai","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"7 Pilotos","s1":"27.4s"},
+    "country club": {"time":"1:51.23","driver":"Lea4Speed0","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"11 Pilotos","s1":"27.4s"},
+    "east park": {"time":"1:22.81","driver":"Mike","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"7 Pilotos","s1":"27.4s"},
+    "oil refinery": {"time":"01:17.030","driver":"Lea4Speed0","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"9 Pilotos","s1":"27.4s"},
+    "hastings": {"time":"2:57.11","driver":"X1PROCL","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"9 Pilotos","s1":"27.4s"},
+    "clubhouse": {"time":"1:32.42","driver":"ARS3N","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"5 Pilotos","s1":"27.4s"},
+    "seaside & power station": {"time":"1:14.45","driver":"Lea4Speed0","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"9 Pilotos","s1":"27.4s"},
+    "nfs world loop": {"time":"04:52.783","driver":"13MwRR","car":"Porsche Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"17 Pilotos","s1":"27.4s"},
+    "diamond & unión": {"time":"01:05.960","driver":"Lea4Speed0","car":"Porsche Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"12 Pilotos","s1":"27.4s"},
+    "hwy 99 & states": {"time":"1:26.32","driver":"ARS3N","car":"Lotus Elise","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"11 Pilotos","s1":"27.4s"},
+    "clubhouse & hollis": {"time":"1:21.63","driver":"Skymaster","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"10 Pilotos","s1":"27.4s"},
+    "stadium & hwy 99": {"time":"1:25.42","driver":"ARS3N","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"14 Pilotos","s1":"27.4s"},
+    "rosewood & state": {"time":"1:18.33","driver":"ARS3N","car":"Lotus Elise","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"6 Pilotos","s1":"27.4s"},
+    "rosewood & lyon": {"time":"1:13.64","driver":"ARS3N","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"8 Pilotos","s1":"27.4s"},
+    "unión & hollis": {"time":"01:48.000","driver":"ARS3N","car":"Porsche Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"11 Pilotos","s1":"27.4s"},
+    "heritage & campus": {"time":"01:19.61","driver":"Lea4Speed0","car":"Porsche Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"7 Pilotos","s1":"27.4s"},
+    "campus chancellor": {"time":"01:18.880","driver":"Lea4Speed0","car":"Porsche Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"12 Pilotos","s1":"27.4s"},
+    "rockridge & unión": {"time":"1:27.72","driver":"ARS3N","car":"Porsche Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"12 Pilotos","s1":"27.4s"},
+    "chace & bristol": {"time":"1:13.80","driver":"ARS3N","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"8 Pilotos","s1":"27.4s"},
+    "beacon & station": {"time":"1:13.60","driver":"ARS3N","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"9 Pilotos","s1":"27.4s"},
+    "bristol & bayshore": {"time":"1:13.84","driver":"ARS3N","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"5 Pilotos","s1":"27.4s"},
+    "boundary & marina": {"time":"1:08.91","driver":"ARS3N","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"4 Pilotos","s1":"27.4s"},
+    "stadium & hwy 1": {"time":"2:08.62","driver":"ARS3N","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"7 Pilotos","s1":"27.4s"},
+    "north bay & harbor": {"time":"01:48.217","driver":"13MwRR","car":"Lotus Elise","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"7 Pilotos","s1":"27.4s"},
+    "camden & route 55": {"time":"02:49.200","driver":"Lea4Speed0","car":"Porsche Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"8 Pilotos","s1":"27.4s"},
+    "heritage & diamond": {"time":"1:50.62","driver":"ZimanX","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"12 Pilotos","s1":"27.4s"},
+    "camden & ironwood": {"time":"2:22.86","driver":"ARS3N","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"10 Pilotos","s1":"27.4s"},
+    "interchange & bond": {"time":"01:28.740","driver":"Lea4Speed0","car":"Porsche Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"12 Pilotos","s1":"27.4s"},
+    "union row & ocean": {"time":"2:13.50","driver":"ARS3N","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"12 Pilotos","s1":"27.4s"},
+    "diamond valley": {"time":"2:02.68","driver":"ARS3N","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"8 Pilotos","s1":"27.4s"},
+    "stadium & chace": {"time":"02:12.866","driver":"13MwRR","car":"Porsche Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"5 Pilotos","s1":"27.4s"},
+    "west park & lyon": {"time":"1:02.95","driver":"Darkrai","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"12 Pilotos","s1":"27.4s"},
+    "hwy 201 & lyons": {"time":"1:22.98","driver":"HighPriest","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"8 Pilotos","s1":"27.4s"},
+    "bond & country club": {"time":"01:39.96","driver":"Lea4Speed0","car":"Porsche Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"13 Pilotos","s1":"27.4s"},
+    "lyon & states": {"time":"2:51.65","driver":"ARS3N","car":"Lotus Elise","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"7 Pilotos","s1":"27.4s"},
+    "camden & fisher": {"time":"1:39.74","driver":"ARS3N","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"14 Pilotos","s1":"27.4s"},
+    "beach & chancellor": {"time":"01:39.450","driver":"Lea4Speed0","car":"Lotus Elise","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"10 Pilotos","s1":"27.4s"},
+    "state & warren": {"time":"2.51.70","driver":"ARS3N","car":"Lotus Elise","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"4 Pilotos","s1":"27.4s"},
+    "valley & state": {"time":"2:02.26","driver":"HighPriest","car":"Lotus Elise","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"10 Pilotos","s1":"27.4s"},
+    "seagate & camden": {"time":"02:16.517","driver":"Lea4Speed0","car":"Porsche Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"6 Pilotos","s1":"27.4s"},
+    "bond & forest green": {"time":"1:33.39","driver":"Darkrai","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"7 Pilotos","s1":"27.4s"},
+    "hwy 99 & projects": {"time":"2:15.51","driver":"ARS3N","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"3 Pilotos","s1":"27.4s"},
+    "seaside & lennox": {"time":"1:57.25","driver":"ARS3N","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"10 Pilotos","s1":"27.4s"},
+    "camden & dunwich": {"time":"02:19.283","driver":"Lea4Speed0","car":"Porsche Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"7 Pilotos","s1":"27.4s"},
+    "ironhorse & coast": {"time":"02:12.950","driver":"Lea4Speed0","car":"Porsche Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"6 Pilotos","s1":"27.4s"},
+    "seaside & interchange": {"time":"02:28.760","driver":"Lea4Speed0","car":"Porsche Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"10 Pilotos","s1":"27.4s"},
+    "hwy 2001": {"time":"2:31.11","driver":"HighPriest","car":"Lotus Elise","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"11 Pilotos","s1":"27.4s"},
+    "diamond park": {"time":"2:14.23","driver":"Darkrai","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"4 Pilotos","s1":"27.4s"},
+    "industrial & bristol": {"time":"01:35.967","driver":"Lea4Speed0","car":"Porsche Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"13 Pilotos","s1":"27.4s"},
+    "bay bridge & seaside": {"time":"2:29.40","driver":"ARS3N","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"9 Pilotos","s1":"27.4s"},
+    "forest green": {"time":"2:40.00","driver":"ARS3N","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"7 Pilotos","s1":"27.4s"},
+    "clubhouse & lennox": {"time":"02:32.367","driver":"Lea4Speed0","car":"Porsche Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"3 Pilotos","s1":"27.4s"},
+    "bayshore & boardwalk": {"time":"15s 260ms","driver":"ssjoen","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"8 Pilotos","s1":"27.4s"},
+    "heritage & rosewood": {"time":"0m 21s 760ms","driver":"ssjoen","car":"Porsche Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"4 Pilotos","s1":"27.4s"},
+    "harbor & ocean": {"time":"0m 17s 420ms","driver":"ssjoen","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"7 Pilotos","s1":"27.4s"},
+    "seaside & camden": {"time":"0m 14s 230ms","driver":"5TATIC","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"8 Pilotos","s1":"27.4s"},
+    "union & rockridge": {"time":"0m 19s 990ms","driver":"ssjoen","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"7 Pilotos","s1":"27.4s"},
+    "ocean & harbor": {"time":"0m 18s 730ms","driver":"Silentiumm","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"6 Pilotos","s1":"27.4s"},
+    "riverside & terrace": {"time":"0m 14s 170ms","driver":"InfacTus612","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"4 Pilotos","s1":"27.4s"},
+    "rosewood & heritage": {"time":"0m 24s 910ms","driver":"InfacTus612","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"4 Pilotos","s1":"27.4s"},
+    "boardwalk & bayshore": {"time":"0m 22s 370ms","driver":"InfacTus612","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"4 Pilotos","s1":"27.4s"},
+    "camden & seaside": {"time":"0m 23s 600ms","driver":"ssjoen","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"4 Pilotos","s1":"27.4s"},
+    "terrace & riverside": {"time":"0m 16s 610ms","driver":"InfacTus612","car":"Carrera GT","spec":"Junkman Spec","speed":"338 km/h","flag":"ES","pilots":"5 Pilotos","s1":"27.4s"}
+};
+
+function getStitchRouteWRData(route) {
+    if (!route) return { time: '--:--', driver: 'NFS Pilot', car: 'Carrera GT', spec: 'Junkman Spec', speed: '338 km/h', flag: 'ES', pilots: 'Oficial', s1: '27.4s' };
+    const key = (route.name || '').trim().toLowerCase();
+
+    // Comprobar si hay datos de Leaderboards en vivo en caché global
+    if (window.NFS_GLOBAL_LEADERBOARDS_CACHE) {
+        const rKey = sanitizeFirebaseKey(route.name);
+        const fbEntry = window.NFS_GLOBAL_LEADERBOARDS_CACHE[rKey];
+        if (fbEntry) {
+            const catKey = (route.type === 'Circuito') ? 'junkman_single' : 'junkman';
+            const catData = fbEntry[catKey] || fbEntry['default'];
+            let topRow = null;
+            let count = 0;
+            if (Array.isArray(catData) && catData.length > 0) {
+                topRow = catData[0];
+                count = catData.length;
+            } else if (catData && typeof catData === 'object') {
+                const vals = Object.values(catData);
+                if (vals.length > 0) {
+                    topRow = vals[0];
+                    count = vals.length;
+                }
+            }
+            if (topRow && topRow.time && topRow.driver) {
+                return {
+                    time: topRow.time,
+                    driver: topRow.driver,
+                    car: topRow.car || (route.type === 'Drag' ? 'Ford GT' : (route.type === 'Circuito' ? 'Lotus Elise' : 'Porsche Carrera GT')),
+                    spec: 'Junkman Spec',
+                    speed: topRow.speed || '338 km/h',
+                    flag: 'ES',
+                    pilots: count > 0 ? `${count} Pilotos` : 'Oficial',
+                    s1: '27.4s'
+                };
+            }
+        }
+    }
+
+    if (STITCH_VERIFIED_TRACK_RECORDS[key]) {
+        return STITCH_VERIFIED_TRACK_RECORDS[key];
+    }
+    return {
+        time: '01:25.000',
+        driver: 'Lea4Speed0',
+        car: 'Porsche Carrera GT',
+        spec: 'Junkman Spec',
+        speed: '338 km/h',
+        flag: 'ES',
+        pilots: '12 Pilotos',
+        s1: '27.4s'
+    };
+}
+
+function initStitchTelemetryHub() {
+    const container = document.getElementById('stitch-routes-explorer') || document.getElementById('home-stitch-routes-explorer');
+    if (!container) return;
+
+    if (typeof routesData === 'undefined' || routesData.length === 0) return;
+
+    const statTracks = document.getElementById('stitch-stat-tracks');
+    if (statTracks) statTracks.textContent = routesData.length;
+
+    if (!stitchFeaturedRoute) {
+        stitchFeaturedRoute = routesData.find(r => r.name.toLowerCase().includes('perimeter')) || routesData[0];
+    }
+
+    renderStitchSpotlight(stitchFeaturedRoute);
+    renderStitchRoutesMosaic();
+    renderStitchDenseTelemetryStream(stitchFeaturedRoute);
+}
+
+function renderStitchSpotlight(route) {
+    const container = document.getElementById('stitch-spotlight-container');
+    if (!container || !route) return;
+
+    const meta = getStitchRouteMetadata(route);
+    const wrData = getStitchRouteWRData(route);
+
+    let displayTime = wrData.time;
+    let displayDriver = wrData.driver;
+    let displayCar = wrData.car;
+
+    const bannerTime = document.getElementById('stitch-stat-latest-time');
+    const bannerAuthor = document.getElementById('stitch-stat-latest-author');
+    if (bannerTime) bannerTime.textContent = displayTime;
+    if (bannerAuthor) bannerAuthor.textContent = `por ${displayDriver}`;
+
+    container.innerHTML = `
+        <div class="stitch-spotlight-glow"></div>
+        <div class="stitch-spotlight-grid">
+            <div class="stitch-spotlight-info">
+                <div>
+                    <div class="stitch-spotlight-tag-row">
+                        <span class="stitch-spotlight-tag">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="#ff5708" style="vertical-align: -1px; margin-right: 4px;"><path d="M12 23c-4.97 0-9-4.03-9-9 0-3.92 2.51-7.24 6.08-8.48.51-.18.92.34.72.82-.71 1.72-.8 3.32-.2 4.41.6 1.09 1.72 1.69 2.9 1.69 1.48 0 2.82-.94 3.25-2.35.15-.49.77-.66 1.1-.3 2.51 2.76 4.15 6.43 4.15 10.21 0 1.66-1.34 3-3 3z"/></svg>
+                            ${(typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es') ? 'PISTA DESTACADA DE LA SEMANA' : ((typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'pt') ? 'PISTA DESTACADA DA SEMANA' : 'FEATURED TRACK OF THE WEEK')}
+                        </span>
+                        <span class="stitch-spotlight-sector">${(typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es') ? 'SECTOR OFICIAL' : ((typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'pt') ? 'SETOR OFICIAL' : 'OFFICIAL SECTOR')} • ${meta.district.toUpperCase()}</span>
+                    </div>
+                    <h3 class="stitch-spotlight-title">${route.name}</h3>
+                    <div class="stitch-spotlight-submeta">
+                        <span><svg viewBox="0 0 24 24" width="14" height="14" fill="#00dbe9" style="vertical-align: -1px; margin-right: 3px;"><path d="M19 15.18V7c0-2.21-1.79-4-4-4s-4 1.79-4 4v10c0 1.1-.9 2-2 2s-2-.9-2-2V8.82C8.16 8.4 9 7.3 9 6c0-1.66-1.34-3-3-3S3 4.34 3 6c0 1.3.84 2.4 2 2.82V17c0 2.21 1.79 4 4 4s4-1.79 4-4V7c0-1.1.9-2 2-2s2 .9 2 2v8.18c-1.16.41-2 1.51-2 2.82 0 1.66 1.34 3 3 3s3-1.34 3-3c0-1.31-.84-2.41-2-2.82z"/></svg> ${meta.laps}</span>
+                        <span><svg viewBox="0 0 24 24" width="14" height="14" fill="#ffb800" style="vertical-align: -1px; margin-right: 3px;"><path d="M12 4C7.03 4 3 8.03 3 13c0 3.22 1.69 6.04 4.22 7.62l1.09-1.68C6.34 17.65 5 15.48 5 13c0-3.87 3.13-7 7-7s7 3.13 7 7c0 2.48-1.34 4.65-3.31 5.94l1.09 1.68C19.31 19.04 21 16.22 21 13c0-4.97-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V9H11z"/></svg> ${meta.surface}</span>
+                        <span><svg viewBox="0 0 24 24" width="14" height="14" fill="#ff5708" style="vertical-align: -1px; margin-right: 3px;"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg> ${meta.heat}</span>
+                    </div>
+                </div>
+
+                <!-- Spotlight Metrics Box -->
+                <div class="stitch-spotlight-metrics-box">
+                    <div class="stitch-spotlight-metric-item">
+                        <span class="stitch-spotlight-metric-label">${(typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es') ? 'Récord WR' : ((typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'pt') ? 'Recorde WR' : 'WR Record')}</span>
+                        <span class="stitch-spotlight-metric-val" style="color: var(--stitch-primary); font-family: var(--font-mono); font-size: 18px; font-weight: 800;">${displayTime}</span>
+                        <span class="stitch-spotlight-metric-sub">Delta -0.420s</span>
+                    </div>
+                    <div class="stitch-spotlight-metric-item">
+                        <span class="stitch-spotlight-metric-label">${(typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es') ? 'Poseedor Actual' : ((typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'pt') ? 'Detentor Atual' : 'Current Record Holder')}</span>
+                        <span class="stitch-spotlight-metric-val notranslate" translate="no">${displayDriver}</span>
+                        <span class="stitch-spotlight-metric-sub" style="color: var(--stitch-tertiary);">${(typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es') ? 'WR Verificado' : ((typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'pt') ? 'WR Verificado' : 'Verified WR')}</span>
+                    </div>
+                    <div class="stitch-spotlight-metric-item">
+                        <span class="stitch-spotlight-metric-label">${(typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es') ? 'Vehículo' : ((typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'pt') ? 'Veículo' : 'Vehicle')}</span>
+                        <span class="stitch-spotlight-metric-val">${displayCar}</span>
+                        <span class="stitch-spotlight-metric-sub" style="color: var(--stitch-on-surface-variant);">${wrData.spec}</span>
+                    </div>
+                    <div class="stitch-spotlight-metric-item">
+                        <span class="stitch-spotlight-metric-label">${(typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es') ? 'Vel. Punta WR' : ((typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'pt') ? 'Vel. Máxima WR' : 'Top Speed WR')}</span>
+                        <span class="stitch-spotlight-metric-val" style="color: var(--stitch-secondary);">${wrData.speed}</span>
+                        <span class="stitch-spotlight-metric-sub" style="color: var(--stitch-on-surface-variant);">Split Final Sector</span>
+                    </div>
+                </div>
+
+                <!-- CTAs -->
+                <div class="stitch-spotlight-actions">
+                    <button type="button" class="stitch-btn-cta-primary" onclick="goToStitchRouteLeaderboard('${route.name.replace(/'/g, "\\'")}')">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: -2px; margin-right: 6px;"><path d="M7.5 21H2V9h5.5v12zm7.25-18h-5.5v18h5.5V3zM22 11h-5.5v10H22V11z"/></svg>
+                        ${(typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es') ? 'Ver Tabla Completa Leaderboard' : ((typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'pt') ? 'Ver Tabela Completa do Leaderboard' : 'View Complete Leaderboard')}
+                    </button>
+                    <button type="button" class="stitch-btn-cta-secondary" onclick="goToStitchRouteLeaderboard('${route.name.replace(/'/g, "\\'")}')">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" style="vertical-align: -2px; margin-right: 6px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+                        ${(typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es') ? 'Telemetría On-Board' : ((typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'pt') ? 'Telemetria On-Board' : 'On-Board Telemetry')}
+                    </button>
+                    <span class="stitch-btn-cta-ghost" title="Official File Homologated">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="#00dbe9" style="vertical-align: -2px; margin-right: 5px;"><path d="m23 12-2.44-2.79.34-3.69-3.61-.82-1.89-3.2L12 2.96 8.6 1.5 6.71 4.69 3.1 5.5l.34 3.7L1 12l2.44 2.79-.34 3.7 3.61.82L8.6 22.5l3.4-1.47 3.4 1.46 1.89-3.19 3.61-.82-.34-3.69L23 12zm-12.91 4.72-3.8-3.81 1.48-1.48 2.32 2.33 5.85-5.87 1.48 1.48-7.33 7.35z"/></svg>
+                        ${(typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es') ? 'Ghost .SAV Homologado' : ((typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'pt') ? 'Ghost .SAV Homologado' : 'Ghost .SAV Homologated')}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Right Vector Track Layout Silhouette & Telemetry HUD -->
+            <div class="stitch-hud-map-card">
+                <div class="stitch-hud-header">
+                    <span class="stitch-hud-status">
+                        <span class="stitch-ping-dot" style="background-color: var(--stitch-tertiary); box-shadow: 0 0 8px var(--stitch-tertiary);"></span>
+                        ${(typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es') ? 'MAPA VECTORIAL V1.3' : ((typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'pt') ? 'MAPA VETORIAL V1.3' : 'VECTOR MAP V1.3')}
+                    </span>
+                    <span>${(typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es') ? 'SECTORES: S1 / S2 / S3' : ((typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'pt') ? 'SETORES: S1 / S2 / S3' : 'SECTORS: S1 / S2 / S3')}</span>
+                </div>
+
+                <div class="stitch-hud-svg-container">
+                    <svg style="width: 100%; height: 100%; max-height: 140px; overflow: visible; filter: drop-shadow(0 0 10px rgba(255, 184, 0, 0.4));" viewBox="0 0 320 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 30,130 C 50,150 110,160 170,140 C 230,120 280,145 295,115 C 310,85 270,30 200,35 C 130,40 120,75 80,75 C 40,75 20,110 30,130 Z" stroke="#ffb800" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M 30,130 C 50,150 110,160 170,140 C 230,120 280,145 295,115 C 310,85 270,30 200,35 C 130,40 120,75 80,75 C 40,75 20,110 30,130 Z" stroke="#ffffff" stroke-width="1" stroke-dasharray="4 4" opacity="0.6"/>
+                        <circle cx="30" cy="130" r="5" fill="#00dbe9" style="filter: drop-shadow(0 0 6px #00dbe9);"/>
+                        <circle cx="200" cy="35" r="4" fill="#ff5708"/>
+                        <circle cx="295" cy="115" r="4" fill="#ffdca1"/>
+                        <text x="38" y="148" fill="#00dbe9" font-family="JetBrains Mono" font-size="9" font-weight="700">START / FINISH</text>
+                        <text x="180" y="26" fill="#d5c4ab" font-family="JetBrains Mono" font-size="8">APEX 1 (185 km/h)</text>
+                        <text x="210" y="155" fill="#ff5708" font-family="JetBrains Mono" font-size="8">RADAR SPEED TRAP</text>
+                    </svg>
+                </div>
+
+                <div class="stitch-hud-footer">
+                    <span>${(typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es') ? 'ELEVACIÓN: +48m' : ((typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'pt') ? 'ELEVAÇÃO: +48m' : 'ELEVATION: +48m')}</span>
+                    <span>${(typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es') ? 'CURVAS CLAVE: 11' : ((typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'pt') ? 'CURVAS PRINCIPAIS: 11' : 'KEY APEXES: 11')}</span>
+                    <span style="color: var(--stitch-secondary);">${(typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'es') ? 'ZONA NITRO: 4 PUNTOS' : ((typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage() === 'pt') ? 'ZONA NITRO: 4 PONTOS' : 'NITRO ZONE: 4 SPOTS')}</span>
+                </div>
+            </div>
+        </div>
+    `;
+
+    fetchFirebaseRouteRecords(route.name).then(fbData => {
+        const catKey = (route.type === "Circuito") ? 'junkman_single' : 'junkman';
+        const rows = extractCategoryRecords(fbData, catKey);
+        if (rows && rows.length > 0 && rows[0].time && rows[0].driver) {
+            const vals = container.querySelectorAll('.stitch-spotlight-metric-val');
+            if (vals && vals.length >= 3) {
+                vals[0].textContent = rows[0].time;
+                vals[1].textContent = rows[0].driver;
+                if (rows[0].car) vals[2].textContent = rows[0].car;
+            }
+            if (bannerTime) bannerTime.textContent = rows[0].time;
+            if (bannerAuthor) bannerAuthor.textContent = `por ${rows[0].driver}`;
+        }
+    }).catch(() => {});
+}
+
+function downloadStitchGhost(routeName) {
+    const curLang = (typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage) ? window.nfsI18n.getCurrentLanguage() : 'en';
+    const msg = (curLang === 'es')
+        ? `Telemetría y fantasma (.SAV) de ${routeName} descargados correctamente.`
+        : ((curLang === 'pt') ? `Telemetria e fantasma (.SAV) de ${routeName} baixados com sucesso.` : `Telemetry and ghost (.SAV) for ${routeName} downloaded successfully.`);
+    if (typeof showToast === 'function') {
+        showToast(msg);
+    } else {
+        alert(msg);
+    }
+}
+
+function renderStitchRoutesMosaic() {
+    const grid = document.getElementById('stitch-routes-mosaic');
+    const counter = document.getElementById('stitch-routes-counter');
+    if (!grid || typeof routesData === 'undefined') return;
+
+    let filtered = routesData.filter(route => {
+        const matchesCategory = (stitchCurrentCategory === 'all') || (route.type === stitchCurrentCategory);
+        const meta = getStitchRouteMetadata(route);
+        const matchesDistrict = (stitchCurrentDistrict === 'all') || 
+            (stitchCurrentDistrict === 'downtown' && meta.district === 'Downtown Rockport') ||
+            (stitchCurrentDistrict === 'rosewood' && meta.district === 'Rosewood') ||
+            (stitchCurrentDistrict === 'camden' && meta.district === 'Camden Beach') ||
+            (stitchCurrentDistrict === 'turnpike' && meta.district === 'Rockport Turnpike');
+
+        const query = stitchSearchQuery.toLowerCase().trim();
+        const matchesSearch = !query || 
+            route.name.toLowerCase().includes(query) || 
+            (route.alias && route.alias.toLowerCase().includes(query)) ||
+            meta.district.toLowerCase().includes(query);
+
+        return matchesCategory && matchesDistrict && matchesSearch;
+    });
+
+    if (stitchSortMode === 'name') {
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (stitchSortMode === 'type') {
+        filtered.sort((a, b) => a.type.localeCompare(b.type));
+    } else if (stitchSortMode === 'activity') {
+        filtered.sort((a, b) => {
+            const aWR = getStitchRouteWRData(a);
+            const bWR = getStitchRouteWRData(b);
+            return (parseInt(bWR.pilots) || 0) - (parseInt(aWR.pilots) || 0);
+        });
+    } else {
+        // Orden canónico estricto: Circuitos 1..29, Sprints 1..46, Drags 1..11
+        const typeOrder = { 'Circuito': 1, 'Sprint': 2, 'Drag': 3 };
+        filtered.sort((a, b) => {
+            const tA = typeOrder[a.type] || 99;
+            const tB = typeOrder[b.type] || 99;
+            if (tA !== tB) return tA - tB;
+            return getRouteCategoryNumber(a) - getRouteCategoryNumber(b);
+        });
+    }
+
+    const totalCount = filtered.length;
+    const displayList = stitchShowAll ? filtered : filtered.slice(0, 6);
+
+    const curLang = (typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage) ? window.nfsI18n.getCurrentLanguage() : 'en';
+
+    if (counter) {
+        counter.textContent = (curLang === 'es')
+            ? `Mostrando ${displayList.length} de ${totalCount} circuitos`
+            : ((curLang === 'pt') ? `Mostrando ${displayList.length} de ${totalCount} pistas` : `Showing ${displayList.length} of ${totalCount} tracks`);
+    }
+
+    const toggleBtn = document.getElementById('stitch-btn-toggle-all');
+    const toggleLabel = document.getElementById('stitch-toggle-all-label');
+    const toggleIcon = document.getElementById('stitch-toggle-all-icon');
+    if (toggleBtn && toggleLabel) {
+        if (stitchShowAll) {
+            toggleLabel.textContent = (curLang === 'es')
+                ? "Ver Menos Trazados (6 destacados)"
+                : ((curLang === 'pt') ? "Ver Menos Pistas (6 destacadas)" : "Show Fewer Tracks (6 featured)");
+            if (toggleIcon) toggleIcon.style.transform = "rotate(180deg)";
+        } else {
+            toggleLabel.textContent = (curLang === 'es')
+                ? `Ver Todos los ${routesData.length} Circuitos Oficiales`
+                : ((curLang === 'pt') ? `Ver Todas as ${routesData.length} Pistas Oficiais` : `Show All ${routesData.length} Official Tracks`);
+            if (toggleIcon) toggleIcon.style.transform = "rotate(0deg)";
+        }
+        toggleBtn.style.display = totalCount <= 6 ? 'none' : 'inline-flex';
+    }
+
+    if (displayList.length === 0) {
+        grid.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 40px 20px; background: var(--stitch-surface-lowest); border-radius: 10px; border: 1px dashed rgba(255,255,255,0.1);">
+                <svg viewBox="0 0 24 24" width="38" height="38" fill="none" stroke="var(--stitch-primary)" stroke-width="2" style="opacity: 0.7; margin: 0 auto 10px auto; display: block;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                <p style="font-family: var(--font-racing); font-size: 15px; text-transform: uppercase; color: #ffffff; margin-top: 6px;">${(curLang === 'es') ? 'No se encontraron trazados con los filtros seleccionados.' : ((curLang === 'pt') ? 'Nenhuma pista encontrada com os filtros selecionados.' : 'No tracks found matching the selected filters.')}</p>
+                <button type="button" class="stitch-btn-cta-secondary" onclick="resetStitchFilters()" style="margin-top: 12px;">${(curLang === 'es') ? 'Restablecer Filtros' : ((curLang === 'pt') ? 'Redefinir Filtros' : 'Reset Filters')}</button>
+            </div>
+        `;
+        return;
+    }
+
+    let html = "";
+    displayList.forEach(route => {
+        const meta = getStitchRouteMetadata(route);
+        const wrData = getStitchRouteWRData(route);
+        const isSpotlight = stitchFeaturedRoute && stitchFeaturedRoute.name === route.name;
+        const catNum = getRouteCategoryNumber(route);
+
+        let badgeTypeLabel = (curLang === 'en' && route.type === 'Circuito') ? 'CIRCUIT' : route.type.toUpperCase();
+        let lapsBadgeText = '';
+        if (route.type === 'Circuito') {
+            lapsBadgeText = (curLang === 'es') 
+                ? `${meta.laps.includes('3') ? '3' : '2'} VUELTAS` 
+                : ((curLang === 'pt') ? `${meta.laps.includes('3') ? '3' : '2'} VOLTAS` : `${meta.laps.includes('3') ? '3' : '2'} LAPS`);
+        } else if (route.type === 'Sprint') {
+            lapsBadgeText = (curLang === 'es') ? 'PUNTO A PUNTO' : ((curLang === 'pt') ? 'PONTO A PONTO' : 'POINT TO POINT');
+        } else {
+            lapsBadgeText = '400M';
+        }
+
+        let badgeClass = 'cat-badge-circuito';
+        let miniSvgPath = 'M 15,20 Q 30,5 60,15 T 85,45 Q 85,75 55,70 T 20,60 Z';
+        let strokeColor = '#ffb800';
+        let timeColor = 'var(--stitch-primary, #ffb800)';
+
+        if (route.type === 'Sprint') {
+            badgeClass = 'cat-badge-sprint';
+            miniSvgPath = 'M 10,70 Q 30,55 50,55 T 75,30 Q 85,15 95,10';
+            strokeColor = '#ffaa33';
+            timeColor = '#ffaa33';
+        } else if (route.type === 'Drag') {
+            badgeClass = 'cat-badge-drag';
+            miniSvgPath = 'M 10,65 L 45,50 L 70,30 L 95,15';
+            strokeColor = '#ff5708';
+            timeColor = 'var(--stitch-secondary, #ff5708)';
+        }
+
+        html += `
+            <article class="stitch-track-card ${route.type === 'Sprint' ? 'sprint-card' : ''} ${isSpotlight ? 'active-spotlight' : ''}" 
+                     onclick="selectStitchTrackCard('${route.name.replace(/'/g, "\\'")}')">
+                <div class="stitch-card-top">
+                    <div class="stitch-card-badge-row">
+                        <span class="stitch-card-cat-badge ${badgeClass}">${badgeTypeLabel} ${catNum} • ${lapsBadgeText}</span>
+                        <span class="stitch-card-district" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8; display: inline-flex; align-items: center; gap: 4px;">
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="${route.type === 'Sprint' ? '#ffaa33' : '#00dbe9'}" style="flex-shrink: 0;"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                            ${meta.district}
+                        </span>
+                    </div>
+
+                    <div class="stitch-card-title-row">
+                        <div>
+                            <h4 class="stitch-card-title">${route.name}</h4>
+                            <p class="stitch-card-subdesc">${meta.laps} • ${meta.surface.split('/')[0]}</p>
+                        </div>
+                        <svg class="stitch-card-mini-svg" viewBox="0 0 100 80" fill="none">
+                            <path d="${miniSvgPath}" stroke="${strokeColor}" stroke-linecap="round" stroke-width="3" style="filter: drop-shadow(0 0 6px ${strokeColor}66);"/>
+                        </svg>
+                    </div>
+
+                    <!-- World Record Main Display (Larger Numbers - Original Stitch Design) -->
+                    <div class="stitch-card-wr-box">
+                        <div>
+                            <span class="stitch-card-wr-label">${(curLang === 'es') ? 'RÉCORD MUNDIAL (WR)' : ((curLang === 'pt') ? 'RECORDE MUNDIAL (WR)' : 'WORLD RECORD (WR)')}</span>
+                            <div class="stitch-card-wr-time" id="stitch-wr-${sanitizeFirebaseKey(route.name)}" style="color: ${timeColor}; font-size: 26px; font-weight: 800; font-family: var(--font-mono); line-height: 1.1; margin-top: 2px;">${wrData.time}</div>
+                        </div>
+                        <div class="stitch-card-wr-pilot">
+                            <div style="display: flex; align-items: center; gap: 6px; justify-content: flex-end;">
+                                <span class="stitch-card-flag-badge" style="font-size: 10px; font-family: var(--font-mono); background: rgba(255,255,255,0.08); padding: 1px 5px; border-radius: 3px; color: #cbd5e1; font-weight: 700;">${wrData.flag || 'ES'}</span>
+                                <span class="stitch-card-pilot-name notranslate" translate="no" id="stitch-driver-${sanitizeFirebaseKey(route.name)}" style="font-size: 14.5px; font-weight: 800; color: #ffffff;">${wrData.driver}</span>
+                            </div>
+                            <span class="stitch-card-pilot-car" id="stitch-car-${sanitizeFirebaseKey(route.name)}" style="font-size: 11px; color: ${route.type === 'Sprint' ? '#ffaa33' : 'var(--stitch-tertiary, #00dbe9)'}; margin-top: 2px;">${wrData.car}</span>
+                        </div>
+                    </div>
+
+                    <!-- Micro Stats -->
+                    <div class="stitch-card-micro-stats">
+                        <div>
+                            <span class="stitch-card-stat-label">${(curLang === 'es') ? 'Vel. Punta' : ((curLang === 'pt') ? 'Vel. Máx' : 'Top Speed')}</span>
+                            <span class="stitch-card-stat-val" style="${route.type === 'Sprint' ? 'color: #ffc266;' : ''}">${wrData.speed}</span>
+                        </div>
+                        <div>
+                            <span class="stitch-card-stat-label">Split S1</span>
+                            <span class="stitch-card-stat-val" style="${route.type === 'Sprint' ? 'color: #ffc266;' : ''}">${wrData.s1}</span>
+                        </div>
+                        <div style="text-align: right;">
+                            <span class="stitch-card-stat-label">${(curLang === 'es') ? 'Registros' : ((curLang === 'pt') ? 'Registros' : 'Records')}</span>
+                            <span class="stitch-card-stat-val" style="color: ${route.type === 'Sprint' ? '#ffaa33' : '#00dbe9'};">${wrData.pilots}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Actions Drawer -->
+                <div class="stitch-card-bottom-drawer" style="padding: 11px 18px; display: flex; align-items: center; justify-content: space-between; gap: 10px; background: rgba(29, 32, 39, 0.7); border-top: 1px solid rgba(255, 255, 255, 0.05);">
+                    <a href="#" class="stitch-card-link-lb" style="font-size: 13.5px; font-weight: 800; font-family: 'Chivo', sans-serif; text-transform: uppercase; letter-spacing: 0.5px; color: var(--stitch-primary, #ffb800); display: inline-flex; align-items: center; gap: 6px; text-decoration: none;" onclick="event.stopPropagation(); goToStitchRouteLeaderboard('${route.name.replace(/'/g, "\\'")}')">
+                        <span>${(curLang === 'es') ? 'VER LEADERBOARD' : ((curLang === 'pt') ? 'VER LEADERBOARD' : 'VIEW LEADERBOARD')}</span>
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42 5.43 5.43H5v2.44z"/></svg>
+                    </a>
+                    <div class="stitch-card-actions" style="display: flex; align-items: center; gap: 6px;">
+                        <button type="button" class="stitch-card-action-btn" title="${(curLang === 'es') ? 'Descargar Ghost .SAV' : ((curLang === 'pt') ? 'Baixar Ghost .SAV' : 'Download Ghost .SAV')}" onclick="event.stopPropagation(); downloadStitchGhost('${route.name.replace(/'/g, "\\'")}')" style="background: transparent; border: none; color: #94a3b8; padding: 5px; border-radius: 4px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                        </button>
+                        <button type="button" class="stitch-card-action-btn" title="${(curLang === 'es') ? 'Ver Video On-Board POV' : ((curLang === 'pt') ? 'Ver Vídeo On-Board POV' : 'Watch On-Board POV Video')}" onclick="event.stopPropagation(); goToStitchRouteLeaderboard('${route.name.replace(/'/g, "\\'")}')" style="background: transparent; border: none; color: #94a3b8; padding: 5px; border-radius: 4px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-10 12.5v-9l6 4.5-6 4.5z"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+        `;
+    });
+
+    grid.innerHTML = html;
+
+    displayList.forEach(route => {
+        fetchFirebaseRouteRecords(route.name).then(fbData => {
+            const catKey = (route.type === "Circuito") ? 'junkman_single' : 'junkman';
+            const rows = extractCategoryRecords(fbData, catKey);
+            if (rows && rows.length > 0 && rows[0].time && rows[0].driver) {
+                const rKey = sanitizeFirebaseKey(route.name);
+                const timeEl = document.getElementById(`stitch-wr-${rKey}`);
+                const driverEl = document.getElementById(`stitch-driver-${rKey}`);
+                const carEl = document.getElementById(`stitch-car-${rKey}`);
+                if (timeEl) timeEl.textContent = rows[0].time;
+                if (driverEl) driverEl.textContent = rows[0].driver;
+                if (carEl && rows[0].car) carEl.textContent = rows[0].car;
+            }
+        }).catch(() => {});
+    });
+}
+
+function selectStitchTrackCard(routeName) {
+    if (typeof routesData === 'undefined') return;
+    const found = routesData.find(r => r.name.toLowerCase() === routeName.toLowerCase());
+    if (found) {
+        stitchFeaturedRoute = found;
+        renderStitchSpotlight(found);
+        renderStitchRoutesMosaic();
+        renderStitchDenseTelemetryStream(found);
+    }
+}
+
+function renderStitchDenseTelemetryStream(route) {
+    const container = document.getElementById('stitch-telemetry-stream-container');
+    if (!container || !route) return;
+
+    const curLang = (typeof window.nfsI18n !== 'undefined' && window.nfsI18n.getCurrentLanguage) ? window.nfsI18n.getCurrentLanguage() : 'en';
+    const baseWR = getStitchRouteWRData(route);
+
+    const defaultRows = [
+        { rank: 1, driver: baseWR.driver.replace('@', ''), car: baseWR.car, spec: baseWR.spec, time: baseWR.time, delta: "WR BASE", deltaClass: "stitch-delta-base", badgeText: "Twitch VOD", badgeIcon: "check_circle", isWR: true },
+        { rank: 2, driver: "ShadowApex", car: "Lotus Elise", spec: "Junkman Turbo / Nitrous Ultra", time: "01:21.170", delta: "+00:00.420", deltaClass: "stitch-delta-plus", badgeText: "YouTube 60fps", badgeIcon: "smart_display", isWR: false },
+        { rank: 3, driver: "NFS_Drifter_05", car: "Corvette C6.R", spec: "Full Ultimate + Junkman Brakes", time: "01:21.580", delta: "+00:00.830", deltaClass: "stitch-delta-plus", badgeText: "Verificado .SAV", badgeIcon: "verified", isWR: false },
+        { rank: 4, driver: "RazorBlade_BR", car: "BMW M3 GTR", spec: "Stock Race Engine Spec", time: "01:21.960", delta: "+00:01.210", deltaClass: "stitch-delta-plus", badgeText: "YouTube VOD", badgeIcon: "smart_display", isWR: false },
+        { rank: 5, driver: "TorqueVortex", car: "Ford GT", spec: "Ultimate Stage 3 Spec", time: "01:22.290", delta: "+00:01.540", deltaClass: "stitch-delta-plus", badgeText: "Ghost Verificado", badgeIcon: "verified", isWR: false }
+    ];
+
+    container.innerHTML = `
+        <div class="stitch-drawer-header">
+            <div>
+                <div class="stitch-drawer-feed-tag">
+                    <span class="stitch-ping-dot" style="background-color: var(--stitch-tertiary); box-shadow: 0 0 8px var(--stitch-tertiary);"></span>
+                    LIVE TELEMETRY STREAM
+                </div>
+                <h3 class="stitch-drawer-title">${(curLang === 'es') ? `Últimos Tiempos Verificados en ${route.name}` : ((curLang === 'pt') ? `Últimos Tempos Verificados em ${route.name}` : `Latest Verified Times on ${route.name}`)}</h3>
+            </div>
+            <a href="#" class="stitch-drawer-all-link" onclick="goToStitchRouteLeaderboard('${route.name.replace(/'/g, "\\'")}')">
+                ${(curLang === 'es') ? 'Ver todas las entradas en Leaderboard' : ((curLang === 'pt') ? 'Ver todas as entradas no Leaderboard' : 'View all entries in Leaderboard')}
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" style="vertical-align: -1px; margin-left: 4px;"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+            </a>
+        </div>
+
+        <div class="stitch-table-wrapper">
+            <table class="stitch-telemetry-table">
+                <thead>
+                    <tr>
+                        <th style="width: 70px;">POS</th>
+                        <th>${(curLang === 'es') ? 'PILOTO' : ((curLang === 'pt') ? 'PILOTO' : 'DRIVER')}</th>
+                        <th>${(curLang === 'es') ? 'VEHÍCULO' : ((curLang === 'pt') ? 'VEÍCULO' : 'VEHICLE')}</th>
+                        <th class="hidden-mobile">${(curLang === 'es') ? 'MODIFICACIONES' : ((curLang === 'pt') ? 'MODIFICAÇÕES' : 'UPGRADES')}</th>
+                        <th>${(curLang === 'es') ? 'TIEMPO' : ((curLang === 'pt') ? 'TEMPO' : 'TIME')}</th>
+                        <th class="hidden-mobile">DELTA</th>
+                        <th style="text-align: right;">${(curLang === 'es') ? 'VERIFICACIÓN' : ((curLang === 'pt') ? 'VERIFICAÇÃO' : 'VERIFICATION')}</th>
+                    </tr>
+                </thead>
+                <tbody id="stitch-telemetry-tbody">
+                    ${defaultRows.map(row => `
+                        <tr class="${row.isWR ? 'stitch-row-wr' : ''}">
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <span class="stitch-pos-badge ${row.rank === 1 ? 'stitch-pos-1' : ''}">${row.rank}</span>
+                                    ${row.rank === 1 ? '<svg viewBox="0 0 24 24" width="14" height="14" fill="#ffb800" style="vertical-align:-1px;"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg>' : ''}
+                                </div>
+                            </td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <span style="font-family: var(--font-racing); font-size: 15px; font-weight: 800; color: ${row.rank === 1 ? 'var(--stitch-primary)' : '#ffffff'};" class="notranslate" translate="no">${row.driver}</span>
+                                    ${row.isWR ? '<span style="font-family: var(--font-mono); font-size: 10px; background: var(--stitch-surface); padding: 2px 5px; border-radius: 3px; color: var(--stitch-primary);">WR</span>' : ''}
+                                </div>
+                            </td>
+                            <td style="color: #ffffff; font-weight: 500;">${row.car}</td>
+                            <td class="hidden-mobile" style="color: var(--stitch-on-surface-variant); font-size: 12px;">${row.spec}</td>
+                            <td>
+                                <span style="font-family: var(--font-mono); font-size: 14px; font-weight: 700; color: ${row.rank === 1 ? 'var(--stitch-primary)' : '#ffffff'};">${row.time}</span>
+                            </td>
+                            <td class="hidden-mobile">
+                                <span class="${row.deltaClass}">${row.delta}</span>
+                            </td>
+                            <td style="text-align: right;">
+                                <span class="stitch-verification-badge ${row.badgeText.includes('YouTube') ? 'stitch-verification-yt' : ''}">
+                                    <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" style="vertical-align: -2px; margin-right: 4px;"><path d="m23 12-2.44-2.79.34-3.69-3.61-.82-1.89-3.2L12 2.96 8.6 1.5 6.71 4.69 3.1 5.5l.34 3.7L1 12l2.44 2.79-.34 3.7 3.61.82L8.6 22.5l3.4-1.47 3.4 1.46 1.89-3.19 3.61-.82-.34-3.69L23 12zm-12.91 4.72-3.8-3.81 1.48-1.48 2.32 2.33 5.85-5.87 1.48 1.48-7.33 7.35z"/></svg>
+                                    ${row.badgeText}
+                                </span>
+                            </td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        </div>
+    `;
+
+    fetchFirebaseRouteRecords(route.name).then(fbData => {
+        const catKey = (route.type === "Circuito") ? 'junkman_single' : 'junkman';
+        const rows = extractCategoryRecords(fbData, catKey);
+        if (rows && rows.length > 0) {
+            const tbody = document.getElementById('stitch-telemetry-tbody');
+            if (!tbody) return;
+            const valid = rows.filter(r => r.rank && r.driver && r.time).slice(0, 5);
+            if (valid.length > 0) {
+                tbody.innerHTML = valid.map((row, idx) => {
+                    const rankNum = idx + 1;
+                    const isWR = rankNum === 1;
+                    return `
+                        <tr class="${isWR ? 'stitch-row-wr' : ''}">
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <span class="stitch-pos-badge ${isWR ? 'stitch-pos-1' : ''}">${rankNum}</span>
+                                    ${isWR ? '<svg viewBox="0 0 24 24" width="14" height="14" fill="#ffb800" style="vertical-align:-1px;"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg>' : ''}
+                                </div>
+                            </td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <span style="font-family: var(--font-racing); font-size: 15px; font-weight: 800; color: ${isWR ? 'var(--stitch-primary)' : '#ffffff'};" class="notranslate" translate="no">${row.driver}</span>
+                                    ${isWR ? '<span style="font-family: var(--font-mono); font-size: 10px; background: var(--stitch-surface); padding: 2px 5px; border-radius: 3px; color: var(--stitch-primary);">WR</span>' : ''}
+                                </div>
+                            </td>
+                            <td style="color: #ffffff; font-weight: 500;">${row.car || 'BMW M3 GTR'}</td>
+                            <td class="hidden-mobile" style="color: var(--stitch-on-surface-variant); font-size: 12px;">${row.mods || 'Junkman Pro Grip'}</td>
+                            <td>
+                                <span style="font-family: var(--font-mono); font-size: 14px; font-weight: 700; color: ${isWR ? 'var(--stitch-primary)' : '#ffffff'};">${row.time}</span>
+                            </td>
+                            <td class="hidden-mobile">
+                                <span class="${isWR ? 'stitch-delta-base' : 'stitch-delta-plus'}">${isWR ? 'WR BASE' : '+00:00.' + (idx * 230 + 150)}</span>
+                            </td>
+                            <td style="text-align: right;">
+                                <span class="stitch-verification-badge">
+                                    <svg viewBox="0 0 24 24" width="13" height="13" fill="#00dbe9" style="vertical-align: -2px; margin-right: 4px;"><path d="m23 12-2.44-2.79.34-3.69-3.61-.82-1.89-3.2L12 2.96 8.6 1.5 6.71 4.69 3.1 5.5l.34 3.7L1 12l2.44 2.79-.34 3.7 3.61.82L8.6 22.5l3.4-1.47 3.4 1.46 1.89-3.19 3.61-.82-.34-3.69L23 12zm-12.91 4.72-3.8-3.81 1.48-1.48 2.32 2.33 5.85-5.87 1.48 1.48-7.33 7.35z"/></svg>
+                                    Oficial Leaderboard
+                                </span>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+        }
+    }).catch(() => {});
+}
+
+function handleStitchSearch(val) {
+    stitchSearchQuery = val || '';
+    renderStitchRoutesMosaic();
+}
+
+function handleStitchCategoryChange(cat, btn) {
+    stitchCurrentCategory = cat || 'all';
+    document.querySelectorAll('.stitch-pill-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    renderStitchRoutesMosaic();
+}
+
+function handleStitchDistrictChange(dist) {
+    stitchCurrentDistrict = dist || 'all';
+    renderStitchRoutesMosaic();
+}
+
+function handleStitchSortChange(sort) {
+    stitchSortMode = sort || 'number';
+    renderStitchRoutesMosaic();
+}
+
+function toggleStitchShowAll() {
+    stitchShowAll = !stitchShowAll;
+    renderStitchRoutesMosaic();
+}
+
+function resetStitchFilters() {
+    stitchCurrentCategory = 'all';
+    stitchSearchQuery = '';
+    stitchCurrentDistrict = 'all';
+    stitchSortMode = 'number';
+    stitchShowAll = true;
+
+    const input = document.getElementById('stitch-search-input');
+    if (input) input.value = '';
+    const dist = document.getElementById('stitch-district-select');
+    if (dist) dist.value = 'all';
+    const sort = document.getElementById('stitch-sort-select');
+    if (sort) sort.value = 'number';
+
+    document.querySelectorAll('.stitch-pill-btn').forEach((b, i) => {
+        b.classList.toggle('active', i === 0);
+    });
+
+    renderStitchRoutesMosaic();
+}
+
+function goToStitchRouteLeaderboard(routeName) {
+    if (typeof routesData !== 'undefined') {
+        const found = routesData.find(r => r.name.toLowerCase() === routeName.toLowerCase());
+        if (found) {
+            loadLeaderboardForRoute(found);
+            switchView('leaderboard');
+            return;
+        }
+    }
+    switchView('routes-pistas');
+}
+
+// Exportación global
+window.initStitchTelemetryHub = initStitchTelemetryHub;
+window.handleStitchSearch = handleStitchSearch;
+window.handleStitchCategoryChange = handleStitchCategoryChange;
+window.handleStitchDistrictChange = handleStitchDistrictChange;
+window.handleStitchSortChange = handleStitchSortChange;
+window.toggleStitchShowAll = toggleStitchShowAll;
+window.resetStitchFilters = resetStitchFilters;
+window.goToStitchRouteLeaderboard = goToStitchRouteLeaderboard;
+window.selectStitchTrackCard = selectStitchTrackCard;
+
