@@ -2321,7 +2321,8 @@ async function loadChampionshipAdmin() {
         if (data && typeof data === 'object') {
             cachedChampWeeksData = data;
             localStorage.removeItem('nfs_championship_weeks_data_v1');
-            localStorage.setItem('nfs_championship_weeks_data_v2', JSON.stringify(data));
+            localStorage.removeItem('nfs_championship_weeks_data_v2');
+            localStorage.setItem('nfs_championship_weeks_data_v3', JSON.stringify(data));
             if (typeof window !== 'undefined' && window.CHAMPIONSHIP_WEEKS_DATA) {
                 Object.assign(window.CHAMPIONSHIP_WEEKS_DATA, data);
             }
@@ -2435,7 +2436,8 @@ async function persistChampionshipWeeksData(data) {
     // 1. Respaldo local instantáneo (0ms) en localStorage
     try {
         localStorage.removeItem('nfs_championship_weeks_data_v1');
-        localStorage.setItem('nfs_championship_weeks_data_v2', JSON.stringify(data));
+        localStorage.removeItem('nfs_championship_weeks_data_v2');
+        localStorage.setItem('nfs_championship_weeks_data_v3', JSON.stringify(data));
     } catch (e) {
         console.warn("Error guardando nfs_championship_weeks_data_v2 en localStorage:", e);
     }
@@ -2485,6 +2487,13 @@ async function persistChampionshipWeeksData(data) {
 
     const statusBadge = document.getElementById('champ-admin-status-badge');
     if (statusBadge) statusBadge.textContent = "🟢 Sincronizado en Nube & Web";
+
+    // 5. Sincronizar automáticamente clasificaciones y reputación de pilotos
+    try {
+        if (typeof syncChampionshipWinnersInternal === 'function') {
+            syncChampionshipWinnersInternal();
+        }
+    } catch (eSync) {}
 
     return ok;
 }
@@ -2990,18 +2999,10 @@ async function saveChampionshipAdmin() {
     }
 }
 
-async function syncChampionshipWinnersWithStandings() {
-    await saveChampionshipAdmin();
-
-    if (!confirm("¿Deseas sincronizar los ganadores de los desafíos configurados con la Clasificación General del Campeonato?")) {
-        return;
-    }
-
-    showToast("Sincronizando puntos y victorias de pilotos...", "info");
+async function syncChampionshipWinnersInternal() {
     const baseUrl = (window.NFS_FIREBASE && window.NFS_FIREBASE.RTDB_URL) ? window.NFS_FIREBASE.RTDB_URL : "https://nfsranks-blacklist-default-rtdb.firebaseio.com";
 
     try {
-        // Cargar pilotos base de la Blacklist
         let drivers = getChampionshipDefaultDrivers();
         if (drivers && drivers.length > 0) {
             drivers = JSON.parse(JSON.stringify(drivers));
@@ -3009,20 +3010,39 @@ async function syncChampionshipWinnersWithStandings() {
             drivers = [];
         }
 
-        // Leer si hay pilotos guardados previamente
-        try {
-            const drRes = await fetch(`${baseUrl}/championship/blacklist_drivers.json`);
-            if (drRes.ok) {
-                const data = await drRes.json();
-                if (Array.isArray(data) && data.length > 0) drivers = data;
-            }
-        } catch (err) {}
+        // Cargar participantes si existen para sincronizar sus nombres y alias en la lista
+        const participants = getChampionshipParticipantsList();
+        if (Array.isArray(participants) && participants.length > 0) {
+            participants.forEach((p, idx) => {
+                if (idx < 15 && drivers[idx]) {
+                    drivers[idx].name = p.name;
+                    drivers[idx].alias = p.alias || p.name;
+                    drivers[idx].ride = p.ride || drivers[idx].ride;
+                }
+            });
+        }
 
-        // Reinicializar contadores de victorias de campeonato
+        // Reinicializar contadores de victorias, tiempos y reputación
         drivers.forEach(d => {
             d.victories = { p1: 0, p2: 0, p3: 0, p4: 0 };
             d.bestTimes = { first: 0, second: 0, third: 0 };
+            d.rep = 0;
         });
+
+        // Helper para resolver piloto
+        const matchDriver = (pilotStr) => {
+            if (!pilotStr || pilotStr === 'Por disputar' || pilotStr === 'En espera') return null;
+            const clean = String(pilotStr).trim().toLowerCase();
+            const num = parseInt(clean, 10);
+            if (!isNaN(num) && String(num) === clean) {
+                return drivers.find(d => d.rank === num);
+            }
+            return drivers.find(d => 
+                (d.alias && d.alias.toLowerCase() === clean) ||
+                (d.name && d.name.toLowerCase() === clean) ||
+                (d.alias && (clean.includes(d.alias.toLowerCase()) || d.alias.toLowerCase().includes(clean)))
+            );
+        };
 
         // Iterar todas las semanas del campeonato para computar ganadores
         const weeksSource = cachedChampWeeksData || getChampionshipDefaultWeeksData() || {};
@@ -3034,53 +3054,68 @@ async function syncChampionshipWinnersWithStandings() {
                 if (!ch.top3 || !Array.isArray(ch.top3)) return;
 
                 // 1° Oro
-                if (ch.top3[0] && ch.top3[0].pilot && ch.top3[0].pilot !== 'Por disputar') {
-                    const pName = ch.top3[0].pilot.trim().toLowerCase();
-                    const d = drivers.find(x => (x.alias && x.alias.toLowerCase() === pName) || (x.name && x.name.toLowerCase() === pName) || String(x.rank) === pName);
+                if (ch.top3[0] && ch.top3[0].pilot) {
+                    const d = matchDriver(ch.top3[0].pilot);
                     if (d) {
-                        d.victories.p1++;
-                        d.bestTimes.first++;
-                        d.rep = (d.rep || 0) + (ch.top3[0].repMoney || 400000);
+                        d.victories.p1 = (d.victories.p1 || 0) + 1;
+                        d.bestTimes.first = (d.bestTimes.first || 0) + 1;
+                        d.rep = (d.rep || 0) + (parseInt(ch.top3[0].repMoney, 10) || 400000);
                     }
                 }
                 // 2° Silver
-                if (ch.top3[1] && ch.top3[1].pilot && ch.top3[1].pilot !== 'Por disputar') {
-                    const pName = ch.top3[1].pilot.trim().toLowerCase();
-                    const d = drivers.find(x => (x.alias && x.alias.toLowerCase() === pName) || (x.name && x.name.toLowerCase() === pName) || String(x.rank) === pName);
+                if (ch.top3[1] && ch.top3[1].pilot) {
+                    const d = matchDriver(ch.top3[1].pilot);
                     if (d) {
-                        d.victories.p2++;
-                        d.bestTimes.second++;
-                        d.rep = (d.rep || 0) + (ch.top3[1].repMoney || 250000);
+                        d.victories.p2 = (d.victories.p2 || 0) + 1;
+                        d.bestTimes.second = (d.bestTimes.second || 0) + 1;
+                        d.rep = (d.rep || 0) + (parseInt(ch.top3[1].repMoney, 10) || 250000);
                     }
                 }
                 // 3° Bronce
-                if (ch.top3[2] && ch.top3[2].pilot && ch.top3[2].pilot !== 'Por disputar') {
-                    const pName = ch.top3[2].pilot.trim().toLowerCase();
-                    const d = drivers.find(x => (x.alias && x.alias.toLowerCase() === pName) || (x.name && x.name.toLowerCase() === pName) || String(x.rank) === pName);
+                if (ch.top3[2] && ch.top3[2].pilot) {
+                    const d = matchDriver(ch.top3[2].pilot);
                     if (d) {
-                        d.victories.p3++;
-                        d.bestTimes.third++;
-                        d.rep = (d.rep || 0) + (ch.top3[2].repMoney || 120000);
+                        d.victories.p3 = (d.victories.p3 || 0) + 1;
+                        d.bestTimes.third = (d.bestTimes.third || 0) + 1;
+                        d.rep = (d.rep || 0) + (parseInt(ch.top3[2].repMoney, 10) || 120000);
                     }
                 }
             });
         });
 
-        // Guardar pilotos actualizados
+        // Guardar pilotos actualizados en localStorage (v5 y v4 para retrocompatibilidad)
+        localStorage.setItem('nfs_blacklist_championship_2026_v5', JSON.stringify(drivers));
         localStorage.setItem('nfs_blacklist_championship_2026_v4', JSON.stringify(drivers));
+
         try {
+            await fetch(`${baseUrl}/records/blacklist_championship_2026.json`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(drivers)
+            });
             await fetch(`${baseUrl}/championship/blacklist_drivers.json`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(drivers)
             });
-            showToast("⚡ ¡Clasificación General sincronizada con éxito en Firebase RTDB!", "success");
-        } catch (eCloud) {
-            showToast("⚡ Sincronizado en caché local (sin conexión a Firebase RTDB)", "warning");
-        }
+        } catch (eCloud) {}
+
+        return true;
     } catch (e) {
         console.error("Error sincronizando clasificación general:", e);
-        showToast(`❌ Error al sincronizar: ${e.message}`, "error");
+        return false;
+    }
+}
+
+async function syncChampionshipWinnersWithStandings() {
+    await saveChampionshipAdmin();
+
+    showToast("⚡ Sincronizando puntos y victorias con la Clasificación General...", "info");
+    const ok = await syncChampionshipWinnersInternal();
+    if (ok) {
+        showToast("⚡ ¡Clasificación General sincronizada con éxito en Firebase RTDB y Web!", "success");
+    } else {
+        showToast("⚡ Sincronizado en caché local", "warning");
     }
 }
 
@@ -3435,5 +3470,8 @@ window.getChampionshipGroupsFromUI = getChampionshipGroupsFromUI;
 window.saveChampionshipSingleGroup = saveChampionshipSingleGroup;
 window.saveChampionshipAdminGroupsOnly = saveChampionshipAdminGroupsOnly;
 window.saveChampionshipGroupsToAllWeeks = saveChampionshipGroupsToAllWeeks;
+window.saveChampionshipSingleChallenge = saveChampionshipSingleChallenge;
+window.saveChampionshipAllChallenges = saveChampionshipAllChallenges;
+window.syncChampionshipWinnersInternal = syncChampionshipWinnersInternal;
 
 

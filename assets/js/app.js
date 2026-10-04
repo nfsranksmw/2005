@@ -3013,7 +3013,7 @@ function updateSeasonWeekPills() {
 }
 
 /**
- * Alternar entre vista de Fichas de DesafÃ­os y Tabla de ClasificaciÃ³n de Temporada
+ * Alternar entre vista de Fichas de Desafíos y Tabla de Clasificación de Temporada
  */
 function setChallengesViewMode(mode) {
     currentChallengesMode = mode;
@@ -3058,14 +3058,14 @@ function renderChallengesUI() {
     const challenges = currentWeekData ? currentWeekData.challenges : [];
     const completedList = getCompletedChallenges();
 
-    // ActualizaciÃ³n de barras de informaciÃ³n de cabecera
+    // Actualización de barras de información de cabecera
     const dateRangeEl = document.getElementById('challenge-week-daterange');
     const weekInfoLabel = document.getElementById('season-week-info-label');
     const totalCountEl = document.getElementById('challenge-total-count');
     const rewardPotEl = document.getElementById('challenge-reward-pot');
 
     if (dateRangeEl) dateRangeEl.textContent = currentWeekData.dateRange || '01 Nov - 28 Nov 2026';
-    if (weekInfoLabel) weekInfoLabel.textContent = `${season.name} â€¢ ${currentWeekData.title}`;
+    if (weekInfoLabel) weekInfoLabel.textContent = `${season.name} • ${currentWeekData.title}`;
     if (totalCountEl) totalCountEl.textContent = `${challenges.length} Retos Oficiales`;
 
     // Calcular bolsa total de la semana
@@ -3091,7 +3091,7 @@ function renderChallengesUI() {
         const catBadgeClass = isBMW ? 'cat-bmw' : 'cat-junkman';
 const catBadgeText = isBMW ? 'BMW M3 GTR REGLAMENTARIO' : 'JUNKMAN (CUALQUIER AUTO)';
 const catIcon = '';
-        const rewardDesc = ch.reward ? ch.reward.desc : '300 PTS Blacklist â€¢ $500.000 Bounty';
+        const rewardDesc = ch.reward ? ch.reward.desc : '300 PTS Blacklist • $500.000 Bounty';
 
         const carImg = isBMW
             ? 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=700&q=80'
@@ -3116,7 +3116,7 @@ const catIcon = '';
                                 ${catIcon} ${catBadgeText}
                             </span>
                             <span class="challenge-tier-pill" style="font-size: 11px;">
-${ch.type} ${isCircuit && ch.lapType ? 'â€¢ ' + ch.lapType : ''}
+                                ${ch.type} ${isCircuit && ch.lapType ? '• ' + ch.lapType : ''}
                             </span>
                         </div>
                     </div>
@@ -3208,14 +3208,14 @@ ${ch.type} ${isCircuit && ch.lapType ? 'â€¢ ' + ch.lapType : ''}
                     </div>
                 </div>
 
-                <!-- Botones de AcciÃ³n -->
+                <!-- Botones de Acción -->
                 <div class="challenge-actions-row" style="padding: 12px 16px; background: rgba(0,0,0,0.25); border-top: 1px solid rgba(255,255,255,0.06); gap: 10px;">
                     <button type="button" class="btn-toggle-complete ${isDone ? 'completed' : 'incomplete'}" onclick="toggleChallengeComplete('${ch.id}')" style="flex: 1; padding: 10px; font-size: 11.5px;">
 ${isDone ? 'COMPLETADO' : 'MARCAR HECHO'}
                     </button>
                     
                     <button type="button" class="btn-challenge-submit" onclick="startSeasonChallengeSubmission('${season.id}', ${currentWeekData.weekNum}, '${ch.id}', '${escapeHtml(ch.track)}', '${escapeHtml(ch.category)}', '${escapeHtml(ch.car)}', '${escapeHtml(rewardDesc)}')" style="flex: 1.4; padding: 10px; font-size: 12px;">
-Enviar RÃ©cord
+                        Enviar Récord
                     </button>
                 </div>
             </div>
@@ -3226,7 +3226,7 @@ Enviar RÃ©cord
 }
 
 /**
- * Cargar y renderizar en vivo la clasificaciÃ³n de temporada desde Firebase RTDB
+ * Cargar y renderizar en vivo la clasificación de temporada desde Firebase RTDB
  */
 async function loadSeasonStandingsLive(forceRefresh = false) {
     const tbody = document.getElementById('tbody-season-standings-live');
@@ -3240,15 +3240,15 @@ async function loadSeasonStandingsLive(forceRefresh = false) {
     const seasonPeriod = season ? season.period : '2026';
 
     if (titleEl) {
-        titleEl.textContent = `ðŸ† CLASIFICACIÃ“N OFICIAL: ${seasonName.toUpperCase()} (${seasonPeriod.toUpperCase()})`;
+        titleEl.textContent = `🏆 CLASIFICACIÓN OFICIAL: ${seasonName.toUpperCase()} (${seasonPeriod.toUpperCase()})`;
     }
 
     if (tbody && (!cachedSeasonStandings[currentSeasonId] || forceRefresh)) {
         tbody.innerHTML = `
             <tr>
                 <td colspan="9" style="text-align: center; color: var(--cyan-neon); padding: 40px; font-family: var(--font-racing); font-size: 13.5px;">
-                    <div style="display: inline-block; animation: spin 1s linear infinite; margin-right: 8px;">ðŸ”„</div>
-                    Consultando tabla de clasificaciÃ³n de ${seasonName} desde Firebase RTDB...
+                    <div style="display: inline-block; animation: spin 1s linear infinite; margin-right: 8px;">🔄</div>
+                    Consultando tabla de clasificación de ${seasonName} desde Firebase RTDB...
                 </td>
             </tr>
         `;
@@ -3264,10 +3264,17 @@ async function loadSeasonStandingsLive(forceRefresh = false) {
         : "https://nfsranks-blacklist-default-rtdb.firebaseio.com";
 
     try {
-        const res = await fetch(`${baseUrl}/seasons/${currentSeasonId}/standings.json`);
         let standings = null;
-        if (res.ok) {
-            standings = await res.json();
+        try {
+            const res = await fetch(`${baseUrl}/records/seasons_${currentSeasonId}_standings.json`);
+            if (res.ok) standings = await res.json();
+        } catch (e) {}
+
+        if (!standings) {
+            try {
+                const res = await fetch(`${baseUrl}/seasons/${currentSeasonId}/standings.json`);
+                if (res.ok) standings = await res.json();
+            } catch (e) {}
         }
 
         let list = [];
@@ -3277,27 +3284,46 @@ async function loadSeasonStandingsLive(forceRefresh = false) {
             list = Object.values(standings).filter(Boolean);
         }
 
-        // Si aÃºn no hay registros publicados, proveer un preview elegante de pilotos aspirantes
+        // Si aún no hay registros publicados, proveer un preview elegante con los 10 pilotos oficiales inscritos
         if (list.length === 0) {
-            list = [
-                { rank: "#1", driver: "Razor", s1: 100, s2: 85, s3: 90, s4: 95, totalPts: 370, totalBounty: "$7.400.000", badgeTitle: "Rey de Rockport City", rewardMedals: "Oro & Trofeo Legend" },
-                { rank: "#2", driver: "Bull", s1: 80, s2: 75, s3: 82, s4: 88, totalPts: 325, totalBounty: "$6.500.000", badgeTitle: "Ã‰lite Blacklist #1", rewardMedals: "Plata de Temporada" },
-                { rank: "#3", driver: "Ronnie", s1: 70, s2: 68, s3: 75, s4: 72, totalPts: 285, totalBounty: "$5.700.000", badgeTitle: "Ã‰lite Blacklist #1", rewardMedals: "Plata de Temporada" },
-                { rank: "#4", driver: "Torque", s1: 50, s2: 55, s3: 60, s4: 58, totalPts: 223, totalBounty: "$4.460.000", badgeTitle: "Veterano Oficial", rewardMedals: "Plata de Temporada" },
-                { rank: "#5", driver: "Ming", s1: 45, s2: 48, s3: 52, s4: 50, totalPts: 195, totalBounty: "$3.900.000", badgeTitle: "Veterano Oficial", rewardMedals: "Plata de Temporada" },
-                { rank: "#6", driver: "Webster", s1: 35, s2: 40, s3: 42, s4: 45, totalPts: 162, totalBounty: "$3.240.000", badgeTitle: "Veterano Oficial", rewardMedals: "Completador Oficial" }
-            ];
+            if (currentSeasonId === 'season_2') {
+                list = [
+                    { rank: "#1", driver: "ZimanX", s1: 0, s2: 0, s3: 0, s4: 0, totalPts: 0, totalBounty: "$0", badgeTitle: "Líder Blacklist #1", rewardMedals: "Aspirante Corona" },
+                    { rank: "#2", driver: "Mystic", s1: 0, s2: 0, s3: 0, s4: 0, totalPts: 0, totalBounty: "$0", badgeTitle: "Élite Blacklist #2", rewardMedals: "Aspirante Plata" },
+                    { rank: "#3", driver: "Nebula", s1: 0, s2: 0, s3: 0, s4: 0, totalPts: 0, totalBounty: "$0", badgeTitle: "Élite Blacklist #3", rewardMedals: "Aspirante Bronce" },
+                    { rank: "#4", driver: "xLeMondx", s1: 0, s2: 0, s3: 0, s4: 0, totalPts: 0, totalBounty: "$0", badgeTitle: "Piloto Oficial", rewardMedals: "Parrilla Oficial" },
+                    { rank: "#5", driver: "Avenger", s1: 0, s2: 0, s3: 0, s4: 0, totalPts: 0, totalBounty: "$0", badgeTitle: "Piloto Oficial", rewardMedals: "Parrilla Oficial" },
+                    { rank: "#6", driver: "DarkShido", s1: 0, s2: 0, s3: 0, s4: 0, totalPts: 0, totalBounty: "$0", badgeTitle: "Piloto Oficial", rewardMedals: "Parrilla Oficial" },
+                    { rank: "#7", driver: "DannyLove", s1: 0, s2: 0, s3: 0, s4: 0, totalPts: 0, totalBounty: "$0", badgeTitle: "Piloto Oficial", rewardMedals: "Parrilla Oficial" },
+                    { rank: "#8", driver: "Lea4Speed0", s1: 0, s2: 0, s3: 0, s4: 0, totalPts: 0, totalBounty: "$0", badgeTitle: "Piloto Oficial", rewardMedals: "Parrilla Oficial" },
+                    { rank: "#9", driver: "ellafreyafan", s1: 0, s2: 0, s3: 0, s4: 0, totalPts: 0, totalBounty: "$0", badgeTitle: "Piloto Oficial", rewardMedals: "Parrilla Oficial" },
+                    { rank: "#10", driver: "N6 xBourne", s1: 0, s2: 0, s3: 0, s4: 0, totalPts: 0, totalBounty: "$0", badgeTitle: "Piloto Oficial", rewardMedals: "Parrilla Oficial" }
+                ];
+            } else {
+                list = [
+                    { rank: "#1", driver: "ZimanX", s1: 100, s2: 85, s3: 90, s4: 95, totalPts: 370, totalBounty: "$7.400.000", badgeTitle: "Líder Blacklist #1", rewardMedals: "Oro & Trofeo Legend" },
+                    { rank: "#2", driver: "Mystic", s1: 80, s2: 75, s3: 82, s4: 88, totalPts: 325, totalBounty: "$6.500.000", badgeTitle: "Élite Blacklist #2", rewardMedals: "Plata de Temporada" },
+                    { rank: "#3", driver: "Nebula", s1: 70, s2: 68, s3: 75, s4: 72, totalPts: 285, totalBounty: "$5.700.000", badgeTitle: "Élite Blacklist #3", rewardMedals: "Bronce de Temporada" },
+                    { rank: "#4", driver: "xLeMondx", s1: 50, s2: 55, s3: 60, s4: 58, totalPts: 223, totalBounty: "$4.460.000", badgeTitle: "Piloto Oficial", rewardMedals: "Top 4 Temporada" },
+                    { rank: "#5", driver: "Avenger", s1: 45, s2: 48, s3: 52, s4: 50, totalPts: 195, totalBounty: "$3.900.000", badgeTitle: "Piloto Oficial", rewardMedals: "Top 5 Temporada" },
+                    { rank: "#6", driver: "DarkShido", s1: 35, s2: 40, s3: 42, s4: 45, totalPts: 162, totalBounty: "$3.240.000", badgeTitle: "Piloto Oficial", rewardMedals: "Top 6 Temporada" },
+                    { rank: "#7", driver: "DannyLove", s1: 30, s2: 35, s3: 38, s4: 40, totalPts: 143, totalBounty: "$2.860.000", badgeTitle: "Piloto Oficial", rewardMedals: "Top 7 Temporada" },
+                    { rank: "#8", driver: "Lea4Speed0", s1: 25, s2: 30, s3: 32, s4: 35, totalPts: 122, totalBounty: "$2.440.000", badgeTitle: "Piloto Oficial", rewardMedals: "Top 8 Temporada" },
+                    { rank: "#9", driver: "ellafreyafan", s1: 20, s2: 25, s3: 28, s4: 30, totalPts: 103, totalBounty: "$2.060.000", badgeTitle: "Piloto Oficial", rewardMedals: "Top 9 Temporada" },
+                    { rank: "#10", driver: "N6 xBourne", s1: 15, s2: 20, s3: 25, s4: 28, totalPts: 88, totalBounty: "$1.760.000", badgeTitle: "Piloto Oficial", rewardMedals: "Top 10 Temporada" }
+                ];
+            }
         }
 
         cachedSeasonStandings[currentSeasonId] = list;
         renderSeasonStandingsLive(list);
     } catch (e) {
-        console.warn("Error cargando clasificaciÃ³n de temporada:", e);
+        console.warn("Error cargando clasificación de temporada:", e);
         if (tbody) {
             tbody.innerHTML = `
                 <tr>
                     <td colspan="9" style="text-align: center; color: var(--f1-red); padding: 30px; font-family: var(--font-racing);">
-                        âŒ No se pudo conectar con Firebase RTDB. Verifica tu conexiÃ³n a internet o intenta nuevamente.
+                        ❌ No se pudo conectar con Firebase RTDB. Verifica tu conexión a internet o intenta nuevamente.
                     </td>
                 </tr>
             `;
@@ -3314,7 +3340,7 @@ function renderSeasonStandingsLive(list) {
         tbody.innerHTML = `
             <tr>
                 <td colspan="9" style="text-align: center; color: var(--text-muted); padding: 40px; font-family: var(--font-racing);">
-                    No hay tiempos puntuados aÃºn para esta temporada. Â¡SÃ© el primero en enviar tu rÃ©cord!
+                    No hay tiempos puntuados aún para esta temporada. ¡Sé el primero en enviar tu récord!
                 </td>
             </tr>
         `;
@@ -3325,7 +3351,7 @@ function renderSeasonStandingsLive(list) {
     // Render podium Top 3
     if (podiumContainer) {
         const top3 = list.slice(0, 3);
-        const medals = ['ðŸ¥‡', 'ðŸ¥ˆ', 'ðŸ¥‰'];
+        const medals = ['🥇', '🥈', '🥉'];
         const rankClasses = ['rank-1', 'rank-2', 'rank-3'];
 
         podiumContainer.innerHTML = top3.map((p, idx) => {
@@ -3334,7 +3360,7 @@ function renderSeasonStandingsLive(list) {
                 <div class="season-podium-card ${rankClasses[idx]}">
                     <span class="season-podium-medal">${medals[idx]}</span>
                     <div style="width: 44px; height: 44px; border-radius: 50%; overflow: hidden; background: rgba(0,0,0,0.4); flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
-                        ${avatarSvg || 'ðŸŽï¸'}
+                        ${avatarSvg || '🏎️'}
                     </div>
                     <div style="flex: 1; min-width: 0;">
                         <div class="season-podium-driver notranslate" translate="no" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
@@ -3344,7 +3370,7 @@ function renderSeasonStandingsLive(list) {
                             ${p.totalPts || 0} PTS BLACKLIST
                         </div>
                         <div class="season-podium-bounty">
-                            ðŸ’° ${p.totalBounty || '$0'}
+                            💰 ${p.totalBounty || '$0'}
                         </div>
                     </div>
                 </div>
@@ -3355,7 +3381,7 @@ function renderSeasonStandingsLive(list) {
     // Render table rows
     tbody.innerHTML = list.map((p, idx) => {
         const rankNum = idx + 1;
-        const rankBadge = rankNum === 1 ? 'ðŸ¥‡ #1' : (rankNum === 2 ? 'ðŸ¥ˆ #2' : (rankNum === 3 ? 'ðŸ¥‰ #3' : `#${rankNum}`));
+        const rankBadge = rankNum === 1 ? '🥇 #1' : (rankNum === 2 ? '🥈 #2' : (rankNum === 3 ? '🥉 #3' : `#${rankNum}`));
         const avatarSvg = (typeof OPERATOR_ICONS !== 'undefined') ? OPERATOR_ICONS.getAvatar(p.driver, 24) : '';
 
         return `
@@ -3385,7 +3411,7 @@ function renderSeasonStandingsLive(list) {
                 </td>
                 <td>
                     <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10.5px; font-weight: 700; background: rgba(6, 182, 212, 0.15); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.3);">
-                        ${p.badgeTitle || 'Aspirante Blacklist'}
+                        ${escapeHtml(p.badgeTitle || 'Aspirante Blacklist')}
                     </span>
                 </td>
             </tr>
@@ -3443,7 +3469,8 @@ async function loadRemoteChampionshipWeeksData() {
     // 1. Cargar inmediatamente desde localStorage para renderizado en 0ms
     try {
         localStorage.removeItem('nfs_championship_weeks_data_v1');
-        const local = localStorage.getItem('nfs_championship_weeks_data_v2');
+        localStorage.removeItem('nfs_championship_weeks_data_v2');
+        const local = localStorage.getItem('nfs_championship_weeks_data_v3');
         if (local && typeof CHAMPIONSHIP_WEEKS_DATA !== 'undefined') {
             const parsed = JSON.parse(local);
             if (Array.isArray(parsed)) {
@@ -3467,6 +3494,9 @@ async function loadRemoteChampionshipWeeksData() {
             }
             if (typeof renderChampionshipChallenges === 'function') {
                 renderChampionshipChallenges(currentChampionshipWeek);
+            }
+            if (typeof syncBlacklistWithRotationsAndStandings === 'function') {
+                syncBlacklistWithRotationsAndStandings();
             }
         }
     } catch(e) {}
@@ -3500,7 +3530,7 @@ async function loadRemoteChampionshipWeeksData() {
         }
 
         if (data && typeof data === 'object' && typeof CHAMPIONSHIP_WEEKS_DATA !== 'undefined') {
-            localStorage.setItem('nfs_championship_weeks_data_v2', JSON.stringify(data));
+            localStorage.setItem('nfs_championship_weeks_data_v3', JSON.stringify(data));
             if (Array.isArray(data)) {
                 data.forEach((w, idx) => {
                     if (w && idx > 0) {
@@ -3523,9 +3553,49 @@ async function loadRemoteChampionshipWeeksData() {
             if (typeof renderChampionshipChallenges === 'function') {
                 renderChampionshipChallenges(currentChampionshipWeek);
             }
+            if (typeof syncBlacklistWithRotationsAndStandings === 'function') {
+                syncBlacklistWithRotationsAndStandings();
+            }
+        }
+
+        // Listener en tiempo real vía Firebase Database SDK si está inicializado
+        if (typeof firebase !== 'undefined' && typeof firebase.database === 'function') {
+            try {
+                const db = firebase.database();
+                db.ref('records/championship_weeks_data').on('value', (snap) => {
+                    if (snap.exists()) {
+                        const val = snap.val();
+                        if (val && typeof val === 'object' && typeof CHAMPIONSHIP_WEEKS_DATA !== 'undefined') {
+                            if (Array.isArray(val)) {
+                                val.forEach((w, idx) => {
+                                    if (w && idx > 0) {
+                                        CHAMPIONSHIP_WEEKS_DATA[idx] = w;
+                                        CHAMPIONSHIP_WEEKS_DATA[String(idx)] = w;
+                                    }
+                                });
+                            } else {
+                                Object.keys(val).forEach(k => {
+                                    if (val[k]) {
+                                        CHAMPIONSHIP_WEEKS_DATA[k] = val[k];
+                                        const n = parseInt(k, 10);
+                                        if (!isNaN(n)) CHAMPIONSHIP_WEEKS_DATA[n] = val[k];
+                                    }
+                                });
+                            }
+                            localStorage.setItem('nfs_championship_weeks_data_v3', JSON.stringify(val));
+                            if (typeof syncBlacklistWithRotationsAndStandings === 'function') {
+                                syncBlacklistWithRotationsAndStandings();
+                            }
+                        }
+                    }
+                });
+            } catch (fbErr) {}
         }
     } catch (e) {
         console.info("Championship weeks data loaded from local cache");
+        if (typeof syncBlacklistWithRotationsAndStandings === 'function') {
+            syncBlacklistWithRotationsAndStandings();
+        }
     }
 }
 
@@ -3614,18 +3684,92 @@ function calculateDriverPoints(driver) {
     return p1Pts + p2Pts + p3Pts + p4Pts + bonusPts + repPts;
 }
 
-function getDriverGroupForWeek(rank, weekNum) {
-    if (typeof CHAMPIONSHIP_WEEKS_DATA === 'undefined') return 'Grupo Alpha';
-    const weekData = CHAMPIONSHIP_WEEKS_DATA[weekNum] || CHAMPIONSHIP_WEEKS_DATA[1];
-    if (!weekData || !weekData.groups) return 'Grupo Alpha';
-    for (const grp of weekData.groups) {
-        if (grp.pilots && grp.pilots.includes(rank)) {
-            return grp.name;
+/**
+ * Busca de forma ultra-robusta un piloto en blacklistDrivers por:
+ * 1. Objeto driver o propiedad rank directa
+ * 2. Rango numérico (#1 - #15+)
+ * 3. Alias o Nick exacto (case-insensitive)
+ * 4. Nombre real exacto (case-insensitive)
+ * 5. Subcadena normalizada o tokens sin prefijos de clan
+ */
+function findBlacklistDriver(pilotIdentifier) {
+    if (!pilotIdentifier || !Array.isArray(blacklistDrivers) || blacklistDrivers.length === 0) return null;
+
+    if (typeof pilotIdentifier === 'object' && pilotIdentifier !== null) {
+        if (pilotIdentifier.rank) {
+            const found = blacklistDrivers.find(d => d.rank === pilotIdentifier.rank);
+            if (found) return found;
+        }
+        if (pilotIdentifier.alias || pilotIdentifier.name) {
+            pilotIdentifier = pilotIdentifier.alias || pilotIdentifier.name;
         }
     }
-    // Asignar en rotación a los grupos para pilotos de parrilla extendida
+
+    const rawStr = String(pilotIdentifier).trim();
+    if (!rawStr || rawStr === 'Por disputar' || rawStr === 'En espera' || rawStr === '--:--.---' || rawStr === '--' || rawStr === 'TBD') {
+        return null;
+    }
+
+    const num = parseInt(rawStr, 10);
+    if (!isNaN(num) && String(num) === rawStr) {
+        const byRank = blacklistDrivers.find(d => d.rank === num);
+        if (byRank) return byRank;
+    }
+
+    const clean = rawStr.toLowerCase();
+
+    // 1. Coincidencia exacta de alias o nombre
+    let found = blacklistDrivers.find(d => 
+        (d.alias && d.alias.trim().toLowerCase() === clean) ||
+        (d.name && d.name.trim().toLowerCase() === clean)
+    );
+    if (found) return found;
+
+    // 2. Coincidencia sin prefijos de clan o números (ej: "N6 xBourne" -> "xBourne")
+    found = blacklistDrivers.find(d => {
+        const dAlias = (d.alias || '').trim().toLowerCase();
+        const dName = (d.name || '').trim().toLowerCase();
+        if (dAlias && (clean.includes(dAlias) || dAlias.includes(clean))) return true;
+        if (dName && (clean.includes(dName) || dName.includes(clean))) return true;
+        return false;
+    });
+
+    return found || null;
+}
+
+function getDriverGroupForWeek(pilotIdentifier, weekNum) {
+    if (typeof CHAMPIONSHIP_WEEKS_DATA === 'undefined') return 'Grupo Alpha';
+    const wNum = weekNum || currentChampionshipWeek || 1;
+    const weekData = CHAMPIONSHIP_WEEKS_DATA[wNum] || CHAMPIONSHIP_WEEKS_DATA[String(wNum)] || CHAMPIONSHIP_WEEKS_DATA[1];
+    if (!weekData || !weekData.groups || !Array.isArray(weekData.groups) || weekData.groups.length === 0) return 'Grupo Alpha';
+
+    const driver = findBlacklistDriver(pilotIdentifier);
+    const rank = driver ? driver.rank : parseInt(pilotIdentifier, 10);
+    const alias = driver ? (driver.alias || '').trim().toLowerCase() : String(pilotIdentifier || '').trim().toLowerCase();
+    const name = driver ? (driver.name || '').trim().toLowerCase() : '';
+
+    for (const grp of weekData.groups) {
+        if (!grp.pilots || !Array.isArray(grp.pilots)) continue;
+        for (const p of grp.pilots) {
+            if (!isNaN(rank) && (p === rank || parseInt(p, 10) === rank)) {
+                return grp.name;
+            }
+            if (typeof p === 'string') {
+                const pClean = p.trim().toLowerCase();
+                if (pClean === alias || (name && pClean === name)) {
+                    return grp.name;
+                }
+            }
+            const pDriver = findBlacklistDriver(p);
+            if (pDriver && driver && pDriver.rank === driver.rank) {
+                return grp.name;
+            }
+        }
+    }
+    // Asignar en rotación a los grupos para pilotos de parrilla extendida si no están en grp.pilots
     const numGroups = weekData.groups.length || 4;
-    const groupIdx = (rank - 1) % numGroups;
+    const safeRank = (!isNaN(rank) && rank > 0) ? rank : 1;
+    const groupIdx = (safeRank - 1) % numGroups;
     if (weekData.groups[groupIdx] && weekData.groups[groupIdx].name) {
         return `${weekData.groups[groupIdx].name} [Ext]`;
     }
@@ -3833,45 +3977,86 @@ function getSortedBlacklistDrivers() {
 }
 
 /**
- * Sincroniza e indexa las Fichas TÃ©cnicas y la ClasificaciÃ³n General con los ganadores de los desafÃ­os
- * de las rotaciones semanales (CHAMPIONSHIP_WEEKS_DATA) o datos en vivo de competiciÃ³n.
+ * Sincroniza e indexa las Fichas Técnicas y la Clasificación General con los ganadores de los desafíos
+ * de las rotaciones semanales (CHAMPIONSHIP_WEEKS_DATA) o datos en vivo de competición guardados en admin.html.
  */
 function syncBlacklistWithRotationsAndStandings() {
-    if (typeof CHAMPIONSHIP_WEEKS_DATA === 'undefined') return;
+    if (typeof CHAMPIONSHIP_WEEKS_DATA === 'undefined' || !Array.isArray(blacklistDrivers) || blacklistDrivers.length === 0) return;
 
-    Object.keys(CHAMPIONSHIP_WEEKS_DATA).forEach(weekKey => {
+    // 1. Resetear estadísticas de campeonato para calcular desde cero con los datos consolidados
+    blacklistDrivers.forEach(d => {
+        d.victories = { p1: 0, p2: 0, p3: 0, p4: 0 };
+        d.bestTimes = { first: 0, second: 0, third: 0 };
+        d.rep = 0;
+        d.lastChallengeId = null;
+    });
+
+    // 2. Recorrer todas las semanas (1 a 4) y todos sus desafíos
+    const weekKeys = Object.keys(CHAMPIONSHIP_WEEKS_DATA).sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
+    weekKeys.forEach(weekKey => {
         const weekData = CHAMPIONSHIP_WEEKS_DATA[weekKey];
-        if (!weekData || !weekData.challenges) return;
+        if (!weekData || !Array.isArray(weekData.challenges)) return;
 
         weekData.challenges.forEach(ch => {
             if (!ch.top3 || !Array.isArray(ch.top3)) return;
-            ch.top3.forEach(t => {
-                if (!t.pilot || t.pilot === 'Por disputar' || t.pilot === 'En espera') return;
-                const driver = blacklistDrivers.find(d => d.rank === t.rank || (d.alias && t.pilot && d.alias.toLowerCase() === t.pilot.toLowerCase()));
-                if (driver) {
-                    driver.lastChallengeId = ch.id;
+
+            ch.top3.forEach((t, posIdx) => {
+                if (!t || !t.pilot || t.pilot === 'Por disputar' || t.pilot === 'En espera') return;
+                const driver = findBlacklistDriver(t.pilot);
+                if (!driver) return;
+
+                driver.lastChallengeId = ch.id;
+
+                // Recompensa en Dinero ($ REP)
+                const repMoney = parseInt(t.repMoney, 10) || 0;
+                if (repMoney > 0) {
+                    driver.rep = (driver.rep || 0) + repMoney;
+                }
+
+                // Posiciones y Victorias (P1=25, P2=18, P3=15, P4=12)
+                // y Bonos de Mejor Tiempo (1°=100, 2°=50, 3°=20)
+                const bonusVal = parseInt(t.bonus, 10);
+
+                if (posIdx === 0) {
+                    driver.victories.p1 = (driver.victories.p1 || 0) + 1;
+                    if (bonusVal >= 100 || isNaN(bonusVal)) {
+                        driver.bestTimes.first = (driver.bestTimes.first || 0) + 1;
+                    }
+                } else if (posIdx === 1) {
+                    driver.victories.p2 = (driver.victories.p2 || 0) + 1;
+                    if (bonusVal >= 50 || isNaN(bonusVal)) {
+                        driver.bestTimes.second = (driver.bestTimes.second || 0) + 1;
+                    }
+                } else if (posIdx === 2) {
+                    driver.victories.p3 = (driver.victories.p3 || 0) + 1;
+                    if (bonusVal >= 20 || isNaN(bonusVal)) {
+                        driver.bestTimes.third = (driver.bestTimes.third || 0) + 1;
+                    }
+                } else if (posIdx === 3) {
+                    driver.victories.p4 = (driver.victories.p4 || 0) + 1;
                 }
             });
         });
     });
 
+    saveBlacklistData();
     renderBlacklistUI();
+    if (typeof renderChampionshipGroups === 'function') {
+        renderChampionshipGroups(currentChampionshipWeek);
+    }
     renderAllTacticalCards();
     updateBlacklistTacticalCard();
-    renderPilotQuickJumpPills();
-    saveBlacklistData();
+    if (typeof renderPilotQuickJumpPills === 'function') {
+        renderPilotQuickJumpPills();
+    }
 }
 
 /**
- * Permite registrar o actualizar en tiempo real el resultado de un piloto en un desafÃ­o,
- * recalculando automÃ¡ticamente la ClasificaciÃ³n General y re-indexando las Fichas TÃ©cnicas.
+ * Permite registrar o actualizar en tiempo real el resultado de un piloto en un desafío,
+ * recalculando automáticamente la Clasificación General y re-indexando las Fichas Técnicas.
  */
 function updatePilotScoreFromChallenge(pilotIdentifier, placement, bonusPts = 0, repMoney = 0) {
-    const driver = blacklistDrivers.find(d => 
-        d.rank === pilotIdentifier || 
-        (d.alias && typeof pilotIdentifier === 'string' && d.alias.toLowerCase() === pilotIdentifier.toLowerCase()) ||
-        (d.name && typeof pilotIdentifier === 'string' && d.name.toLowerCase() === pilotIdentifier.toLowerCase())
-    );
+    const driver = findBlacklistDriver(pilotIdentifier);
 
     if (!driver) {
         console.warn(`[NFSRANKSMW] Piloto no encontrado para actualizar puntaje: ${pilotIdentifier}`);
@@ -3900,9 +4085,14 @@ function updatePilotScoreFromChallenge(pilotIdentifier, placement, bonusPts = 0,
 
     saveBlacklistData();
     renderBlacklistUI();
+    if (typeof renderChampionshipGroups === 'function') {
+        renderChampionshipGroups(currentChampionshipWeek);
+    }
     renderAllTacticalCards();
     updateBlacklistTacticalCard();
-    renderPilotQuickJumpPills();
+    if (typeof renderPilotQuickJumpPills === 'function') {
+        renderPilotQuickJumpPills();
+    }
 
     return true;
 }
@@ -3911,10 +4101,10 @@ function renderBlacklistUI() {
     const tbody = document.getElementById('tbody-blacklist-roster');
     if (!tbody) return;
 
-    // Ordenar dinÃ¡micamente segÃºn la ClasificaciÃ³n General del Campeonato (Puntos y Desempates)
+    // Ordenar dinámicamente según la Clasificación General del Campeonato (Puntos y Desempates)
     const sortedDrivers = getSortedBlacklistDrivers();
 
-    // Actualizar barra de resumen con el lÃ­der real actual
+    // Actualizar barra de resumen con el líder real actual
     const leader = sortedDrivers[0] || { name: 'Razor', alias: 'Razor', ride: 'BMW M3 GTR' };
     const leaderEl = document.getElementById('bl-summary-leader');
     if (leaderEl) {
@@ -3934,6 +4124,10 @@ function renderBlacklistUI() {
     if (repStandingsEl) {
         repStandingsEl.textContent = `$${totalRep.toLocaleString()}`;
     }
+    const pilotsCountEl = document.getElementById('bl-standings-pilots-count');
+    if (pilotsCountEl) {
+        pilotsCountEl.textContent = `${sortedDrivers.length} Racers`;
+    }
 
     tbody.innerHTML = '';
 
@@ -3944,6 +4138,7 @@ function renderBlacklistUI() {
         const standingRank = idx + 1;
         const tr = document.createElement('tr');
         tr.className = `blacklist-row ${driver.rank === currentSelectedBlacklistRank ? 'active-row' : ''}`;
+        tr.setAttribute('data-rank', driver.rank);
         tr.onclick = () => selectBlacklistPilot(driver.rank);
 
         let rankBadgeClass = 'rank-normal';
@@ -3956,7 +4151,7 @@ function renderBlacklistUI() {
         else if (standingRank <= 3) statusClass = 'status-contender';
 
         const totalPts = calculateDriverPoints(driver);
-        const groupName = getDriverGroupForWeek(driver.rank, currentChampionshipWeek);
+        const groupName = getDriverGroupForWeek(driver, currentChampionshipWeek);
         const bt = driver.bestTimes || { first: 0, second: 0, third: 0 };
         const blBadgeClass = standingRank === 1 ? 'bl-badge-gold' : standingRank === 2 ? 'bl-badge-silver' : standingRank === 3 ? 'bl-badge-bronze' : '';
 
@@ -3990,9 +4185,9 @@ function renderBlacklistUI() {
             <td style="color: #38bdf8; font-weight: 800; font-family: var(--font-mono);">${driver.victories?.p4 || 0}</td>
             <td>
                 <div class="bonus-summary-cell">
-                    <span class="mini-bonus-pill badge-bonus-100" title="1Â° Mejor Tiempo (+100 PTS)">ðŸ¥‡ ${bt.first || 0}</span>
-                    <span class="mini-bonus-pill badge-bonus-50" title="2Â° Mejor Tiempo (+50 PTS)">ðŸ¥ˆ ${bt.second || 0}</span>
-                    <span class="mini-bonus-pill badge-bonus-20" title="3Â° Mejor Tiempo (+20 PTS)">ðŸ¥‰ ${bt.third || 0}</span>
+                    <span class="mini-bonus-pill badge-bonus-100" title="1° Mejor Tiempo (+100 PTS)">🥇 ${bt.first || 0}</span>
+                    <span class="mini-bonus-pill badge-bonus-50" title="2° Mejor Tiempo (+50 PTS)">🥈 ${bt.second || 0}</span>
+                    <span class="mini-bonus-pill badge-bonus-20" title="3° Mejor Tiempo (+20 PTS)">🥉 ${bt.third || 0}</span>
                 </div>
             </td>
             <td>
@@ -4002,14 +4197,14 @@ function renderBlacklistUI() {
                 <span class="champ-group-tag">${groupName}</span>
             </td>
             <td>
-                <span class="status-badge ${statusClass}">${standingRank === 1 ? 'ðŸ‘ LÃDER #1' : driver.status || 'ACTIVO'}</span>
+                <span class="status-badge ${statusClass}">${standingRank === 1 ? '👑 LÍDER #1' : (driver.status || 'PILOTO OFICIAL')}</span>
             </td>
         `;
 
         tbody.appendChild(tr);
     });
 
-    // Actualizar la Ficha TÃ¡ctica seleccionada
+    // Actualizar la Ficha Táctica seleccionada
     updateBlacklistTacticalCard();
 }
 
@@ -4017,14 +4212,11 @@ function selectBlacklistPilot(rank) {
     currentSelectedBlacklistRank = rank;
     updateBlacklistTacticalCard();
 
-    // Actualizar fila activa en la tabla
+    // Actualizar fila activa en la tabla usando data-rank
     const rows = document.querySelectorAll('.blacklist-row');
-    rows.forEach((r, idx) => {
-        if (blacklistDrivers[idx] && blacklistDrivers[idx].rank === rank) {
-            r.classList.add('active-row');
-        } else {
-            r.classList.remove('active-row');
-        }
+    rows.forEach(r => {
+        const rRank = parseInt(r.getAttribute('data-rank'), 10);
+        r.classList.toggle('active-row', rRank === rank);
     });
 
     // Actualizar selecciÃ³n en grupos de carrera
@@ -4629,10 +4821,10 @@ function mergeRegisteredParticipantsWithBlacklist() {
             slot.name = p.name;
             slot.alias = p.alias || p.name;
             slot.ride = p.ride;
-            slot.strength = `${p.ride} â€¢ ${p.schedule || 'CompeticiÃ³n en Vivo'}`;
-            slot.bio = `Piloto Oficial Inscrito en el Campeonato 2026. Disponibilidad: ${p.schedule || 'Horario Flexible'}.${p.contact ? ` Contacto: ${p.contact}.` : ''} Compite en Rockport City bajo verificaciÃ³n de juego limpio.`;
+            slot.strength = `${p.ride} • ${p.schedule || 'Competición en Vivo'}`;
+            slot.bio = `Piloto Oficial Inscrito en el Campeonato 2026. Disponibilidad: ${p.schedule || 'Horario Flexible'}.${p.contact ? ` Contacto: ${p.contact}.` : ''} Compite en Rockport City bajo verificación de juego limpio.`;
             slot.signature = (p.alias || p.name).toUpperCase();
-            slot.status = idx === 0 ? "ðŸ‘ LÃDER BLACKLIST #1 (OFICIAL)" : `PILOTO OFICIAL #${idx + 1}`;
+            slot.status = idx === 0 ? "👑 LÍDER BLACKLIST #1 (OFICIAL)" : `PILOTO OFICIAL #${idx + 1}`;
             slot.youtube = p.youtube || '';
             slot.isRealUser = true;
             slot.schedule = p.schedule || '';
@@ -4648,11 +4840,11 @@ function mergeRegisteredParticipantsWithBlacklist() {
                 name: p.name,
                 alias: p.alias || p.name,
                 ride: p.ride,
-                strength: `${p.ride} â€¢ ${p.schedule || 'Parrilla Extendida'}`,
+                strength: `${p.ride} • ${p.schedule || 'Parrilla Extendida'}`,
                 rep: 0,
                 victories: { p1: 0, p2: 0, p3: 0, p4: 0 },
                 bestTimes: { first: 0, second: 0, third: 0 },
-                bio: `Piloto Oficial Inscrito en el Campeonato 2026 (Parrilla Extendida). Disponibilidad: ${p.schedule || 'Horario Flexible'}.${p.contact ? ` Contacto: ${p.contact}.` : ''} Compite en Rockport City bajo verificaciÃ³n de juego limpio.`,
+                bio: `Piloto Oficial Inscrito en el Campeonato 2026 (Parrilla Extendida). Disponibilidad: ${p.schedule || 'Horario Flexible'}.${p.contact ? ` Contacto: ${p.contact}.` : ''} Compite en Rockport City bajo verificación de juego limpio.`,
                 signature: (p.alias || p.name).toUpperCase(),
                 status: `PILOTO OFICIAL #${rankNum}`,
                 avatar: "assets/img/nfsranksmwlogo.png",
@@ -4667,13 +4859,8 @@ function mergeRegisteredParticipantsWithBlacklist() {
         }
     });
 
-    saveBlacklistData();
-
-    // Actualizar todas las vistas dependientes del torneo
-    renderBlacklistUI();
-    renderChampionshipGroups(currentChampionshipWeek);
-    renderAllTacticalCards();
-    updateBlacklistTacticalCard();
+    // Calcular estadísticas acumuladas desde CHAMPIONSHIP_WEEKS_DATA y renderizar
+    syncBlacklistWithRotationsAndStandings();
     updateChampionshipRosterLabels();
 }
 
@@ -4755,7 +4942,17 @@ function initBlacklistSystem() {
     loadChampionshipParticipants();
     switchChampionshipWeek(1);
     renderAllTacticalCards();
+    syncBlacklistWithRotationsAndStandings();
 }
+
+// Exportación global a window para eventos HTML y sincronización
+window.findBlacklistDriver = findBlacklistDriver;
+window.getSortedBlacklistDrivers = getSortedBlacklistDrivers;
+window.syncBlacklistWithRotationsAndStandings = syncBlacklistWithRotationsAndStandings;
+window.renderBlacklistUI = renderBlacklistUI;
+window.selectBlacklistPilot = selectBlacklistPilot;
+window.switchChampionshipWeek = switchChampionshipWeek;
+window.initBlacklistSystem = initBlacklistSystem;
 
 // =======================================================
 // SALÃ“N HISTÃ“RICO DE TORNEOS (CHALLONGE HISTORIAL)
@@ -5631,22 +5828,16 @@ try {
                         }
                     });
                 }
-                const activeW = (typeof currentChampionshipWeek !== 'undefined') ? currentChampionshipWeek : 1;
-                if (typeof renderChampionshipGroups === 'function') {
-                    renderChampionshipGroups(activeW);
-                }
-                if (typeof renderChampionshipChallenges === 'function') {
-                    renderChampionshipChallenges(activeW);
-                }
-                if (typeof renderBlacklistUI === 'function') {
-                    renderBlacklistUI();
+                localStorage.setItem('nfs_championship_weeks_data_v3', JSON.stringify(data));
+                if (typeof syncBlacklistWithRotationsAndStandings === 'function') {
+                    syncBlacklistWithRotationsAndStandings();
                 }
             }
         };
     }
 
     window.addEventListener('storage', (e) => {
-        if (e.key === 'nfs_championship_weeks_data_v1' && e.newValue) {
+        if ((e.key === 'nfs_championship_weeks_data_v3' || e.key === 'nfs_championship_weeks_data_v2' || e.key === 'nfs_championship_weeks_data_v1') && e.newValue) {
             try {
                 const data = JSON.parse(e.newValue);
                 if (data && typeof CHAMPIONSHIP_WEEKS_DATA !== 'undefined') {
@@ -5666,18 +5857,17 @@ try {
                             }
                         });
                     }
-                    const activeW = (typeof currentChampionshipWeek !== 'undefined') ? currentChampionshipWeek : 1;
-                    if (typeof renderChampionshipGroups === 'function') {
-                        renderChampionshipGroups(activeW);
-                    }
-                    if (typeof renderChampionshipChallenges === 'function') {
-                        renderChampionshipChallenges(activeW);
-                    }
-                    if (typeof renderBlacklistUI === 'function') {
-                        renderBlacklistUI();
+                    if (typeof syncBlacklistWithRotationsAndStandings === 'function') {
+                        syncBlacklistWithRotationsAndStandings();
                     }
                 }
             } catch (err) {}
+        }
+    });
+
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && typeof loadRemoteChampionshipWeeksData === 'function') {
+            loadRemoteChampionshipWeeksData();
         }
     });
 } catch (e) {
