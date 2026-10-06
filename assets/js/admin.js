@@ -2241,7 +2241,14 @@ function getBlacklistDriverSelectOptionsHTML(selectedRankOrName) {
     const cleanSelected = String(selectedRankOrName || '').toLowerCase().trim();
     const selRank = parseInt(selectedRankOrName, 10);
 
-    // 1. Plazas Disponibles (Esperando Piloto)
+    // 1. Inscribir Nuevo Piloto (Manual)
+    const registerNewOption = `
+        <optgroup label="➕ NUEVO PILOTO (INSCRIBIR)">
+            <option value="__register_new__">➕ Inscribir Nuevo Piloto (Escribir Nombre)...</option>
+        </optgroup>
+    `;
+
+    // 2. Plazas Disponibles (Esperando Piloto)
     const openSlotsHTML = `
         <optgroup label="🟢 PLAZAS DISPONIBLES (ESPERANDO PILOTO)">
             <option value="open_11" ${cleanSelected === 'open_11' ? 'selected' : ''}>🟢 Plaza Disponible #11 (Esperando Piloto)</option>
@@ -2250,7 +2257,7 @@ function getBlacklistDriverSelectOptionsHTML(selectedRankOrName) {
         </optgroup>
     `;
 
-    // 2. Pilotos Inscritos en el Torneo
+    // 3. Pilotos Inscritos en el Torneo
     const participantsOptions = participants.map((p, idx) => {
         const rank = p.rank || (idx + 1);
         const name = p.name || `Piloto ${rank}`;
@@ -2266,7 +2273,7 @@ function getBlacklistDriverSelectOptionsHTML(selectedRankOrName) {
         return `<option value="${rank}" ${isSel ? 'selected' : ''}>🏆 #${rank} ${escapeHtml(displayLabel)} [${escapeHtml(ride)}]</option>`;
     }).join('');
 
-    // 3. Pilotos Oficiales Blacklist (Rivales)
+    // 4. Pilotos Oficiales Blacklist (Rivales)
     const blacklistOptions = blDrivers.map(d => {
         const isSel = (!cleanSelected.startsWith('open')) && (
             (!isNaN(selRank) && selRank === d.rank) ||
@@ -2276,6 +2283,7 @@ function getBlacklistDriverSelectOptionsHTML(selectedRankOrName) {
     }).join('');
 
     return `
+        ${registerNewOption}
         ${openSlotsHTML}
         <optgroup label="🏆 PILOTOS INSCRITOS EN EL TORNEO 2026">
             ${participantsOptions}
@@ -2427,18 +2435,35 @@ function getGroupIcon(idx) {
 }
 
 function getChampionshipDriverByRank(rank) {
+    if (rank === undefined || rank === null || rank === '') {
+        return { rank: null, alias: 'Por Definir', name: 'Por Definir', ride: 'Vehículo Oficial' };
+    }
+    if (typeof rank === 'string' && rank.startsWith('open')) {
+        const label = rank === 'open_11' ? 'Plaza #11 (Disponible)' : rank === 'open_12' ? 'Plaza #12 (Disponible)' : 'Plaza Disponible';
+        return { rank: rank, alias: label, name: label, ride: 'Esperando Piloto' };
+    }
     const num = parseInt(rank, 10);
+    const strLower = String(rank).toLowerCase().trim();
     const participants = getChampionshipParticipantsList();
     if (participants && Array.isArray(participants)) {
-        const p = participants.find((x, i) => (x.rank === num) || (i + 1 === num));
-        if (p) return { rank: num, alias: p.alias || p.name, name: p.name, ride: p.ride || 'Vehículo Oficial' };
+        const p = participants.find((x, i) => 
+            (!isNaN(num) && (x.rank === num || i + 1 === num)) ||
+            (x.alias && x.alias.toLowerCase() === strLower) ||
+            (x.name && x.name.toLowerCase() === strLower)
+        );
+        if (p) return { rank: p.rank || num || (participants.indexOf(p) + 1), alias: p.alias || p.name, name: p.name, ride: p.ride || 'Vehículo Oficial' };
     }
     const blDrivers = getChampionshipDefaultDrivers();
     if (blDrivers && Array.isArray(blDrivers)) {
-        const d = blDrivers.find(x => x.rank === num);
-        if (d) return { rank: num, alias: d.alias || d.name, name: d.name, ride: d.ride || 'Vehículo Oficial' };
+        const d = blDrivers.find(x => 
+            (!isNaN(num) && x.rank === num) ||
+            (x.alias && x.alias.toLowerCase() === strLower) ||
+            (x.name && x.name.toLowerCase() === strLower)
+        );
+        if (d) return { rank: d.rank || num, alias: d.alias || d.name, name: d.name, ride: d.ride || 'Vehículo Oficial' };
     }
-    return { rank: num, alias: `Piloto #${num}`, name: `Piloto #${num}`, ride: 'Vehículo Oficial' };
+    const fallbackLabel = (!isNaN(num)) ? `Piloto #${num}` : String(rank);
+    return { rank: !isNaN(num) ? num : rank, alias: fallbackLabel, name: fallbackLabel, ride: 'Vehículo Oficial' };
 }
 
 function quickAssignPilotToWinner(chIdx, posIdx, pilotName, pilotRide) {
@@ -2576,7 +2601,7 @@ function renderChampionshipAdminGroups() {
                         return `
                             <div class="admin-group-pilot-row" style="display: flex; align-items: center; gap: 8px; ${isOpen ? 'background: rgba(16,185,129,0.08); border: 1px dashed rgba(16,185,129,0.35); border-radius: 6px; padding: 4px 8px;' : ''}">
                                 <span style="font-size:11px; color:${isOpen ? '#34d399' : 'var(--nfs-orange)'}; font-weight:800; min-width:24px;">#${slotIdx + 1}</span>
-                                <select id="grp-p${slotIdx}-${grpIdx}" class="admin-form-input" style="padding:6px 10px; font-size:12px; font-weight:600; cursor:pointer; flex: 1; ${isOpen ? 'border-color: rgba(16,185,129,0.5); color: #6ee7b7;' : ''}">
+                                <select id="grp-p${slotIdx}-${grpIdx}" class="admin-form-input" onchange="onGroupPilotSelectChanged(this, ${grpIdx}, ${slotIdx})" style="padding:6px 10px; font-size:12px; font-weight:600; cursor:pointer; flex: 1; ${isOpen ? 'border-color: rgba(16,185,129,0.5); color: #6ee7b7;' : ''}">
                                     ${getBlacklistDriverSelectOptionsHTML(pRank)}
                                 </select>
                                 ${isOpen ? `
@@ -2948,12 +2973,132 @@ async function deleteChampionshipAdminGroup(grpIdx) {
     showToast(`✓ Grupo "${grpName}" eliminado correctamente y sincronizado con la web.`, "success");
 }
 
+let assignSlotPilotMode = 'existing'; // 'existing' | 'new'
+
+function toggleAssignSlotPilotMode() {
+    const btn = document.getElementById('btn-toggle-assign-new-pilot');
+    const existingWrap = document.getElementById('assign-slot-existing-wrap');
+    const newWrap = document.getElementById('assign-slot-new-wrap');
+    if (!existingWrap || !newWrap) return;
+
+    if (assignSlotPilotMode === 'existing') {
+        assignSlotPilotMode = 'new';
+        existingWrap.style.display = 'none';
+        newWrap.style.display = 'flex';
+        if (btn) btn.innerHTML = '📋 Seleccionar de la Lista';
+        const nameInput = document.getElementById('assign-slot-new-pilot-name');
+        if (nameInput) setTimeout(() => nameInput.focus(), 60);
+    } else {
+        assignSlotPilotMode = 'existing';
+        existingWrap.style.display = 'block';
+        newWrap.style.display = 'none';
+        if (btn) btn.innerHTML = '✍️ Inscribir Nuevo Piloto';
+    }
+}
+
 /**
- * Abre el modal para asignar un piloto oficial o registrado a una plaza disponible en la Blacklist Event.
+ * Registra un nuevo participante en memoria local, localStorage y Firebase RTDB.
+ */
+async function registerNewChampionshipParticipant(participantData) {
+    if (!registeredChampionshipParticipants || !Array.isArray(registeredChampionshipParticipants) || registeredChampionshipParticipants.length === 0) {
+        registeredChampionshipParticipants = JSON.parse(JSON.stringify(FALLBACK_TOURNAMENT_PARTICIPANTS));
+    }
+
+    if (!participantData.id) {
+        participantData.id = "reg_" + Date.now() + "_" + Math.random().toString(36).substr(2, 5);
+    }
+    if (!participantData.registeredAt) {
+        participantData.registeredAt = new Date().toISOString();
+    }
+    participantData.isRealUser = true;
+
+    // Calcular próximo rango secuencial
+    let maxRank = 0;
+    registeredChampionshipParticipants.forEach((p, idx) => {
+        const r = p.rank || (idx + 1);
+        if (typeof r === 'number' && r > maxRank) maxRank = r;
+    });
+    const nextRank = Math.max(maxRank + 1, registeredChampionshipParticipants.length + 1);
+    participantData.rank = participantData.rank || nextRank;
+
+    registeredChampionshipParticipants.push(participantData);
+
+    // 1. Persistir en localStorage
+    try {
+        localStorage.setItem('nfs_championship_participants_v2', JSON.stringify(registeredChampionshipParticipants));
+    } catch (e) {
+        console.warn("Aviso al guardar participantes en localStorage:", e);
+    }
+
+    // 2. Extender también DEFAULT_BLACKLIST_DRIVERS si está presente
+    if (typeof window !== 'undefined' && window.DEFAULT_BLACKLIST_DRIVERS) {
+        const exists = window.DEFAULT_BLACKLIST_DRIVERS.some(d => (d.alias && d.alias.toLowerCase() === participantData.alias.toLowerCase()) || (d.name && d.name.toLowerCase() === participantData.name.toLowerCase()));
+        if (!exists) {
+            window.DEFAULT_BLACKLIST_DRIVERS.push({
+                rank: participantData.rank,
+                name: participantData.name,
+                alias: participantData.alias || participantData.name,
+                ride: participantData.ride || 'Vehículo Oficial',
+                strength: `${participantData.ride || 'Vehículo Oficial'} • Parrilla Extendida`,
+                rep: 0,
+                victories: { p1: 0, p2: 0, p3: 0, p4: 0 },
+                bestTimes: { first: 0, second: 0, third: 0 },
+                bio: `Piloto Oficial Inscrito en el Campeonato 2026. Registrado desde Administración.`,
+                signature: (participantData.alias || participantData.name).toUpperCase(),
+                status: `PILOTO OFICIAL #${participantData.rank}`,
+                avatar: "assets/img/nfsranksmwlogo.png",
+                color: "#ff7700",
+                badge: `PLAZA #${participantData.rank}`,
+                youtube: participantData.youtube || '',
+                isRealUser: true,
+                schedule: participantData.schedule || 'Horario Flexible',
+                contact: participantData.contact || ''
+            });
+        }
+    }
+
+    // 3. Actualizar datalist para autocompletar desafíos
+    populateBlacklistPilotsDatalist();
+
+    // 4. Guardar en Firebase RTDB
+    try {
+        const baseUrl = (window.NFS_FIREBASE && window.NFS_FIREBASE.RTDB_URL) 
+            ? window.NFS_FIREBASE.RTDB_URL 
+            : "https://nfsranks-blacklist-default-rtdb.firebaseio.com";
+        await fetch(`${baseUrl}/championship_participants.json`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(participantData)
+        });
+    } catch (e) {
+        console.info("Aviso al guardar participante en Firebase RTDB:", e.message);
+    }
+
+    return participantData;
+}
+
+/**
+ * Abre el modal para asignar un piloto oficial o registrar uno nuevo a una plaza disponible.
  */
 function openAssignPilotToSlotModal(targetGrpIdx, targetSlotIdx) {
     const modal = document.getElementById('modal-assign-slot');
     if (!modal) return;
+
+    // Resetear a modo existente
+    assignSlotPilotMode = 'existing';
+    const btnToggle = document.getElementById('btn-toggle-assign-new-pilot');
+    const existingWrap = document.getElementById('assign-slot-existing-wrap');
+    const newWrap = document.getElementById('assign-slot-new-wrap');
+    if (btnToggle) btnToggle.innerHTML = '✍️ Inscribir Nuevo Piloto';
+    if (existingWrap) existingWrap.style.display = 'block';
+    if (newWrap) newWrap.style.display = 'none';
+
+    const newNameInput = document.getElementById('assign-slot-new-pilot-name');
+    const newCarInput = document.getElementById('assign-slot-new-pilot-car');
+    const newContactInput = document.getElementById('assign-slot-new-pilot-contact');
+    if (newNameInput) newNameInput.value = '';
+    if (newCarInput) newCarInput.value = 'BMW M3 GTR';
+    if (newContactInput) newContactInput.value = '';
 
     const weekData = getActiveChampWeekData(currentChampAdminWeek);
     const groups = (weekData && Array.isArray(weekData.groups) && weekData.groups.length > 0)
@@ -2971,7 +3116,6 @@ function openAssignPilotToSlotModal(targetGrpIdx, targetSlotIdx) {
         if (targetGrpIdx !== undefined && targetGrpIdx !== null && targetGrpIdx >= 0 && targetGrpIdx < groups.length) {
             grpSelect.value = String(targetGrpIdx);
         } else {
-            // Seleccionar por defecto el primer grupo con plaza libre
             const firstOpenGrpIdx = groups.findIndex(g => Array.isArray(g.pilots) && g.pilots.some(p => String(p).startsWith('open')));
             if (firstOpenGrpIdx >= 0) {
                 grpSelect.value = String(firstOpenGrpIdx);
@@ -3041,17 +3185,54 @@ function onAssignModalGroupChanged(preferredSlotIdx) {
 async function confirmAssignPilotToSlot() {
     const grpSelect = document.getElementById('assign-slot-group-select');
     const slotSelect = document.getElementById('assign-slot-number-select');
-    const pilotSelect = document.getElementById('assign-slot-pilot-select');
 
-    if (!grpSelect || !slotSelect || !pilotSelect) return;
+    if (!grpSelect || !slotSelect) return;
 
     const grpIdx = parseInt(grpSelect.value, 10);
     const slotIdx = parseInt(slotSelect.value, 10);
-    const chosenPilotVal = pilotSelect.value;
 
-    if (isNaN(grpIdx) || isNaN(slotIdx) || !chosenPilotVal) {
-        alert("Por favor selecciona grupo, casilla y piloto.");
+    if (isNaN(grpIdx) || isNaN(slotIdx)) {
+        alert("Por favor selecciona grupo y casilla.");
         return;
+    }
+
+    let chosenPilotVal = '';
+
+    if (assignSlotPilotMode === 'new') {
+        const nameInput = document.getElementById('assign-slot-new-pilot-name');
+        const carInput = document.getElementById('assign-slot-new-pilot-car');
+        const contactInput = document.getElementById('assign-slot-new-pilot-contact');
+
+        const newName = nameInput ? nameInput.value.trim() : '';
+        if (!newName) {
+            alert("Por favor escribe el nombre del nuevo piloto a inscribir.");
+            if (nameInput) nameInput.focus();
+            return;
+        }
+
+        const newCar = carInput ? carInput.value.trim() : 'BMW M3 GTR';
+        const newContact = contactInput ? contactInput.value.trim() : '';
+
+        // Registrar nuevo participante
+        const createdParticipant = await registerNewChampionshipParticipant({
+            name: newName,
+            alias: newName,
+            ride: newCar || 'BMW M3 GTR',
+            contact: newContact || 'Registrado por Comisaría (Admin)',
+            schedule: 'Horario Flexible',
+            youtube: '',
+            registeredAt: new Date().toISOString(),
+            isRealUser: true
+        });
+
+        chosenPilotVal = String(createdParticipant.rank);
+    } else {
+        const pilotSelect = document.getElementById('assign-slot-pilot-select');
+        if (!pilotSelect || !pilotSelect.value) {
+            alert("Por favor selecciona un piloto de la lista.");
+            return;
+        }
+        chosenPilotVal = pilotSelect.value;
     }
 
     // Actualizar valor en UI inmediata
@@ -3081,6 +3262,231 @@ async function confirmAssignPilotToSlot() {
     closeAssignPilotToSlotModal();
 
     showToast(`✓ ¡Piloto asignado exitosamente a la Casilla #${slotIdx + 1} de ${weekData?.groups[grpIdx]?.name || `Grupo #${grpIdx + 1}`}!`, "success");
+}
+
+/**
+ * Abre el modal dedicado para registrar un nuevo piloto al torneo.
+ */
+function openRegisterNewChampPilotModal(targetGrpIdx, targetSlotIdx) {
+    const modal = document.getElementById('modal-register-new-champ-pilot');
+    if (!modal) return;
+
+    // Limpiar campos
+    const nameInput = document.getElementById('reg-new-champ-pilot-name');
+    const aliasInput = document.getElementById('reg-new-champ-pilot-alias');
+    const carInput = document.getElementById('reg-new-champ-pilot-car');
+    const contactInput = document.getElementById('reg-new-champ-pilot-contact');
+    const applyAllCheck = document.getElementById('reg-new-champ-pilot-apply-all-weeks');
+
+    if (nameInput) nameInput.value = '';
+    if (aliasInput) aliasInput.value = '';
+    if (carInput) carInput.value = 'BMW M3 GTR';
+    if (contactInput) contactInput.value = '';
+    if (applyAllCheck) applyAllCheck.checked = false;
+
+    // Llenar select de grupos
+    const grpSelect = document.getElementById('reg-new-champ-pilot-group-select');
+    const weekData = getActiveChampWeekData(currentChampAdminWeek);
+    const groups = (weekData && Array.isArray(weekData.groups) && weekData.groups.length > 0)
+        ? weekData.groups
+        : getDefaultChampionshipGroups(currentChampAdminWeek);
+
+    if (grpSelect) {
+        let opts = `<option value="-1">-- No asignar aún (Solo registrar en lista de pilotos) --</option>`;
+        groups.forEach((g, idx) => {
+            const hasOpen = Array.isArray(g.pilots) && g.pilots.some(p => String(p).startsWith('open'));
+            opts += `<option value="${idx}">${escapeHtml(g.name || `Grupo #${idx + 1}`)} ${hasOpen ? '🟢 [Plaza Libre]' : ''}</option>`;
+        });
+        grpSelect.innerHTML = opts;
+
+        if (targetGrpIdx !== undefined && targetGrpIdx !== null && targetGrpIdx >= 0 && targetGrpIdx < groups.length) {
+            grpSelect.value = String(targetGrpIdx);
+        } else {
+            grpSelect.value = "-1";
+        }
+    }
+
+    onRegisterNewPilotGroupChanged(targetSlotIdx);
+
+    modal.style.display = 'flex';
+    if (nameInput) setTimeout(() => nameInput.focus(), 60);
+}
+
+function closeRegisterNewChampPilotModal() {
+    const modal = document.getElementById('modal-register-new-champ-pilot');
+    if (modal) modal.style.display = 'none';
+}
+
+function onRegisterNewPilotGroupChanged(preferredSlotIdx) {
+    const grpSelect = document.getElementById('reg-new-champ-pilot-group-select');
+    const slotSelect = document.getElementById('reg-new-champ-pilot-slot-select');
+    if (!grpSelect || !slotSelect) return;
+
+    const grpIdx = parseInt(grpSelect.value, 10);
+    if (grpIdx < 0 || isNaN(grpIdx)) {
+        slotSelect.disabled = true;
+        slotSelect.innerHTML = `
+            <option value="0">Casilla #1</option>
+            <option value="1">Casilla #2</option>
+            <option value="2">Casilla #3</option>
+        `;
+        return;
+    }
+
+    slotSelect.disabled = false;
+    const weekData = getActiveChampWeekData(currentChampAdminWeek);
+    const groups = (weekData && Array.isArray(weekData.groups) && weekData.groups.length > 0)
+        ? weekData.groups
+        : getDefaultChampionshipGroups(currentChampAdminWeek);
+    const grp = groups[grpIdx] || { pilots: [1, 2, 3] };
+    const pilots = Array.isArray(grp.pilots) ? grp.pilots : [1, 2, 3];
+    const participants = getChampionshipParticipantsList();
+    const blDrivers = getChampionshipDefaultDrivers();
+
+    slotSelect.innerHTML = [0, 1, 2].map(sIdx => {
+        const val = pilots[sIdx];
+        const isOpen = String(val).startsWith('open');
+        let label = `Casilla #${sIdx + 1}: `;
+        if (isOpen) {
+            label += `🟢 DISPONIBLE (${val === 'open_11' ? 'Plaza #11' : val === 'open_12' ? 'Plaza #12' : 'Vacante Libre'})`;
+        } else {
+            const num = parseInt(val, 10);
+            const pInfo = (!isNaN(num)) ? (participants.find(p => p.rank === num) || blDrivers.find(d => d.rank === num)) : null;
+            const pName = pInfo ? (pInfo.alias || pInfo.name) : `#${val}`;
+            label += `Reemplazar a ${pName}`;
+        }
+        return `<option value="${sIdx}">${label}</option>`;
+    }).join('');
+
+    if (preferredSlotIdx !== undefined && preferredSlotIdx !== null && preferredSlotIdx >= 0) {
+        slotSelect.value = String(preferredSlotIdx);
+    } else {
+        const openIdx = pilots.findIndex(p => String(p).startsWith('open'));
+        if (openIdx >= 0) {
+            slotSelect.value = String(openIdx);
+        }
+    }
+}
+
+async function confirmRegisterNewChampPilot() {
+    const nameInput = document.getElementById('reg-new-champ-pilot-name');
+    const aliasInput = document.getElementById('reg-new-champ-pilot-alias');
+    const carInput = document.getElementById('reg-new-champ-pilot-car');
+    const contactInput = document.getElementById('reg-new-champ-pilot-contact');
+    const grpSelect = document.getElementById('reg-new-champ-pilot-group-select');
+    const slotSelect = document.getElementById('reg-new-champ-pilot-slot-select');
+    const applyAllCheck = document.getElementById('reg-new-champ-pilot-apply-all-weeks');
+
+    const name = nameInput ? nameInput.value.trim() : '';
+    if (!name) {
+        alert("Por favor escribe el nombre o nick del piloto a inscribir.");
+        if (nameInput) nameInput.focus();
+        return;
+    }
+
+    const alias = (aliasInput && aliasInput.value.trim()) ? aliasInput.value.trim() : name;
+    const ride = (carInput && carInput.value.trim()) ? carInput.value.trim() : 'BMW M3 GTR';
+    const contact = contactInput ? contactInput.value.trim() : '';
+    const grpIdx = grpSelect ? parseInt(grpSelect.value, 10) : -1;
+    const slotIdx = slotSelect ? parseInt(slotSelect.value, 10) : 0;
+    const applyAll = applyAllCheck ? applyAllCheck.checked : false;
+
+    // Verificar si ya existe un piloto con el mismo nombre
+    const participants = getChampionshipParticipantsList();
+    const exists = participants.some(p => 
+        (p.name && p.name.toLowerCase() === name.toLowerCase()) || 
+        (p.alias && p.alias.toLowerCase() === name.toLowerCase())
+    );
+    if (exists) {
+        if (!confirm(`Ya existe un participante registrado con el nombre o alias "${name}". ¿Deseas inscribirlo de todos modos como nuevo registro?`)) {
+            return;
+        }
+    }
+
+    // 1. Inscribir piloto en la base de datos
+    const newParticipant = await registerNewChampionshipParticipant({
+        name: name,
+        alias: alias,
+        ride: ride,
+        contact: contact || 'Registrado por Comisaría (Admin)',
+        schedule: 'Horario Flexible',
+        youtube: '',
+        registeredAt: new Date().toISOString(),
+        isRealUser: true
+    });
+
+    // 2. Si se eligió un grupo, asignarlo de inmediato
+    if (grpIdx >= 0 && !isNaN(grpIdx)) {
+        const weekData = getActiveChampWeekData(currentChampAdminWeek);
+        if (weekData && Array.isArray(weekData.groups) && weekData.groups[grpIdx]) {
+            if (!Array.isArray(weekData.groups[grpIdx].pilots)) {
+                weekData.groups[grpIdx].pilots = [1, 2, 3];
+            }
+            weekData.groups[grpIdx].pilots[slotIdx] = newParticipant.rank;
+        }
+
+        if (applyAll) {
+            for (let w = 1; w <= 4; w++) {
+                const wData = getActiveChampWeekData(w);
+                if (wData && Array.isArray(wData.groups) && wData.groups[grpIdx]) {
+                    if (!Array.isArray(wData.groups[grpIdx].pilots)) {
+                        wData.groups[grpIdx].pilots = [1, 2, 3];
+                    }
+                    wData.groups[grpIdx].pilots[slotIdx] = newParticipant.rank;
+                }
+            }
+        }
+
+        await persistChampionshipWeeksData(cachedChampWeeksData);
+    }
+
+    // 3. Refrescar interfaces
+    renderChampionshipAdminGroups();
+    renderChampionshipAdminGroupPills();
+    renderChampionshipAdminChallenges();
+    populateBlacklistPilotsDatalist();
+
+    closeRegisterNewChampPilotModal();
+
+    const assignedMsg = grpIdx >= 0 
+        ? ` e integrado a la Casilla #${slotIdx + 1} del Grupo #${grpIdx + 1}` 
+        : ` (disponible en la parrilla para grupos y desafíos)`;
+    showToast(`✓ ¡Piloto "${newParticipant.alias}" inscrito exitosamente en el campeonato${assignedMsg}!`, "success");
+}
+
+function onGroupPilotSelectChanged(selectEl, grpIdx, slotIdx) {
+    if (!selectEl) return;
+    if (selectEl.value === '__register_new__') {
+        openRegisterNewChampPilotModal(grpIdx, slotIdx);
+        // Restaurar el select al piloto previo mientras se abre el modal
+        const weekData = getActiveChampWeekData(currentChampAdminWeek);
+        const grp = weekData?.groups?.[grpIdx];
+        const currentP = grp?.pilots?.[slotIdx] !== undefined ? grp.pilots[slotIdx] : (grpIdx * 3 + slotIdx + 1);
+        selectEl.value = String(currentP);
+    }
+}
+
+function ensurePilotRegisteredByName(pilotName, car) {
+    if (!pilotName || pilotName === 'Por disputar' || pilotName === '--:--.---') return;
+    const clean = pilotName.trim();
+    if (!clean) return;
+    const participants = getChampionshipParticipantsList();
+    const exists = participants.some(p => 
+        (p.alias && p.alias.toLowerCase() === clean.toLowerCase()) || 
+        (p.name && p.name.toLowerCase() === clean.toLowerCase())
+    );
+    if (!exists) {
+        registerNewChampionshipParticipant({
+            name: clean,
+            alias: clean,
+            ride: (car && car.trim()) ? car.trim() : "BMW M3 GTR",
+            schedule: "Desafíos Semanales",
+            contact: "Comisaría / Desafíos",
+            youtube: "",
+            registeredAt: new Date().toISOString(),
+            isRealUser: true
+        });
+    }
 }
 
 async function generateChampionshipRotations() {
@@ -3494,6 +3900,11 @@ function getChampionshipChallengeFromUI(idx) {
 
 async function saveChampionshipSingleChallenge(idx) {
     const chData = getChampionshipChallengeFromUI(idx);
+    if (chData.top3 && Array.isArray(chData.top3)) {
+        chData.top3.forEach(t => {
+            if (t && t.pilot) ensurePilotRegisteredByName(t.pilot, t.car);
+        });
+    }
     const defaults = getChampionshipDefaultWeeksData();
     if (!cachedChampWeeksData) {
         cachedChampWeeksData = defaults ? JSON.parse(JSON.stringify(defaults)) : {};
@@ -3565,6 +3976,11 @@ async function saveChampionshipAllChallenges() {
 
     for (let idx = 0; idx < 8; idx++) {
         const chData = getChampionshipChallengeFromUI(idx);
+        if (chData.top3 && Array.isArray(chData.top3)) {
+            chData.top3.forEach(t => {
+                if (t && t.pilot) ensurePilotRegisteredByName(t.pilot, t.car);
+            });
+        }
         if (!weekData.challenges[idx]) {
             weekData.challenges[idx] = {
                 id: `w${currentChampAdminWeek}-ch${idx + 1}`,
@@ -4300,5 +4716,13 @@ window.openAssignPilotToSlotModal = openAssignPilotToSlotModal;
 window.closeAssignPilotToSlotModal = closeAssignPilotToSlotModal;
 window.onAssignModalGroupChanged = onAssignModalGroupChanged;
 window.confirmAssignPilotToSlot = confirmAssignPilotToSlot;
+window.toggleAssignSlotPilotMode = toggleAssignSlotPilotMode;
+window.registerNewChampionshipParticipant = registerNewChampionshipParticipant;
+window.openRegisterNewChampPilotModal = openRegisterNewChampPilotModal;
+window.closeRegisterNewChampPilotModal = closeRegisterNewChampPilotModal;
+window.onRegisterNewPilotGroupChanged = onRegisterNewPilotGroupChanged;
+window.confirmRegisterNewChampPilot = confirmRegisterNewChampPilot;
+window.onGroupPilotSelectChanged = onGroupPilotSelectChanged;
+window.ensurePilotRegisteredByName = ensurePilotRegisteredByName;
 
 

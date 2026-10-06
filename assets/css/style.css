@@ -9670,17 +9670,17 @@ footer strong {
 }
 
 .operator-badge-box {
-    width: 42px;
-    height: 42px;
-    min-width: 42px;
-    min-height: 42px;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    min-height: 38px;
     border-radius: 8px;
-    border: 2px solid var(--op-color, #ff4612);
-    background: var(--op-bg, linear-gradient(135deg, rgba(255, 70, 18, 0.25) 0%, #121316 100%));
+    border: 2px solid var(--op-color, #00dbe9);
+    background: #111622;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), 0 0 8px var(--op-color, rgba(0, 219, 233, 0.35));
     overflow: hidden;
     position: relative;
     flex-shrink: 0;
@@ -9690,15 +9690,15 @@ footer strong {
 
 .operator-badge-box:hover {
     transform: scale(1.08);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.8), 0 0 14px var(--op-color, #ff4612);
+    box-shadow: 0 0 14px var(--op-color, #00dbe9);
     z-index: 2;
 }
 
 .operator-badge-box svg {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
     display: block;
-    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.85));
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.7));
     transition: transform 0.2s ease;
 }
 
@@ -10452,38 +10452,42 @@ table td[class*="rank-"],
     text-align: center;
 }
 
-/* SECCIÓN POWERED BY */
+/* SECCIÓN POWERED BY (ESTILO MODERNO // INFRASTRUCTURE & SERVICES) */
 .powered-by-section {
-    max-width: 1200px;
-    margin: 0 auto 42px auto;
+    max-width: 1360px;
+    margin: 0 auto 40px auto;
     text-align: center;
+    box-sizing: border-box;
+    width: 100%;
 }
 
 .powered-by-header {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 18px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .powered-by-title {
-    font-family: var(--font-racing), 'Rajdhani', sans-serif;
-    font-size: 15px;
+    font-family: 'Chivo', var(--font-racing), 'Rajdhani', sans-serif;
+    font-size: 14.5px;
     font-weight: 900;
-    letter-spacing: 3px;
+    letter-spacing: 2.5px;
     color: #ffffff;
     margin: 0;
     text-transform: uppercase;
 }
 
 .powered-by-subtitle {
-    font-family: var(--font-ui), 'Inter', sans-serif;
-    font-size: 12px;
-    color: var(--text-muted);
+    font-family: 'Hanken Grotesk', var(--font-ui), 'Inter', sans-serif;
+    font-size: 12.5px;
+    color: #94a3b8;
     margin: 0;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.02em;
 }
 
 .powered-by-grid {
@@ -10492,81 +10496,92 @@ table td[class*="rank-"],
     gap: 16px;
 }
 
+@media (max-width: 900px) {
+    .powered-by-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .powered-by-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 .powered-by-card {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: #0E121A;
+    background: rgba(14, 18, 26, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
-    padding: 22px 16px;
+    padding: 24px 16px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     cursor: pointer;
+    position: relative;
+    overflow: hidden;
 }
 
 .powered-by-card:hover {
-    transform: translateY(-3px);
-    background: rgba(255, 255, 255, 0.045);
-    border-color: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    transform: translateY(-2px);
+    background: #151B27;
+    border-color: rgba(56, 189, 248, 0.35);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 0 15px rgba(56, 189, 248, 0.1);
 }
 
 .powered-by-icon-box {
     width: 100%;
-    max-width: 140px;
-    height: 52px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 12px;
     color: #ffffff;
-    transition: transform 0.25s ease;
+    transition: transform 0.2s ease;
 }
 
 .powered-by-img {
-    max-height: 38px;
+    max-height: 36px;
     max-width: 130px;
     width: auto;
     height: auto;
     object-fit: contain;
     display: block;
     filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
-    transition: transform 0.25s ease, filter 0.25s ease;
+    transition: transform 0.2s ease, filter 0.2s ease;
 }
 
-/* Logo de Firebase con tamaño 10% mayor en pie de página */
+/* Logo de Firebase con tamaño optimizado y brillante */
 .powered-by-img[src*="firebase-logo"],
 .powered-by-img.firebase-logo {
-    max-height: 42px; /* 38px * 1.10 = 41.8px (10% más grande) */
-    transform: scale(1.10);
+    max-height: 38px;
     transform-origin: center center;
 }
 
 .powered-by-card:hover .powered-by-icon-box {
-    transform: scale(1.08);
-}
-
-.powered-by-card:hover .powered-by-img {
-    filter: drop-shadow(0 4px 12px rgba(255, 119, 0, 0.35));
+    transform: scale(1.06);
 }
 
 .powered-by-name {
-    font-family: var(--font-racing), 'Rajdhani', sans-serif;
-    font-size: 14px;
+    font-family: 'Chivo', var(--font-racing), 'Rajdhani', sans-serif;
+    font-size: 13.5px;
     font-weight: 800;
     letter-spacing: 1.5px;
     color: #ffffff;
-    margin-bottom: 2px;
+    margin-bottom: 3px;
     text-transform: uppercase;
+    line-height: 1.2;
 }
 
 .powered-by-role {
-    font-family: var(--font-ui), 'Inter', sans-serif;
-    font-size: 11px;
-    color: var(--text-muted);
-    letter-spacing: 0.5px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #94A3B8;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
 }
 
@@ -11941,24 +11956,38 @@ body > .skiptranslate {
     vertical-align: middle !important;
 }
 
-#view-leaderboard .operator-badge-box {
+#view-leaderboard .operator-badge-box,
+.stitch-operator-badge {
     width: 38px !important;
     height: 38px !important;
     min-width: 38px !important;
     min-height: 38px !important;
-    border-radius: 7px !important;
-    border: 2px solid var(--op-color, #ff4612) !important;
-    background: var(--op-bg, #121316) !important;
+    border-radius: 8px !important;
+    border: 2px solid var(--op-color, #00dbe9) !important;
+    background: #111622 !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5) !important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), 0 0 8px var(--op-color, rgba(0, 219, 233, 0.35)) !important;
+    overflow: hidden !important;
+    position: relative !important;
     flex-shrink: 0 !important;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease !important;
 }
 
-#view-leaderboard .operator-badge-box svg {
+#view-leaderboard .operator-badge-box:hover,
+.stitch-operator-badge:hover {
+    transform: scale(1.08) !important;
+    box-shadow: 0 0 14px var(--op-color, #00dbe9) !important;
+    z-index: 2 !important;
+}
+
+#view-leaderboard .operator-badge-box svg,
+.stitch-operator-badge svg {
     width: 24px !important;
     height: 24px !important;
+    display: block !important;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.7)) !important;
 }
 
 #view-leaderboard .driver-cell-flex {
@@ -12111,26 +12140,31 @@ body > .skiptranslate {
 }
 
 #view-leaderboard .leaderboard-device-pill,
-#view-leaderboard .hw-public-tag {
+#view-leaderboard .hw-public-tag,
+#view-leaderboard .stitch-device-pill {
     display: inline-flex !important;
     align-items: center !important;
-    gap: 6px !important;
-    background: rgba(20, 24, 33, 0.9) !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    border-radius: 6px !important;
+    gap: 7px !important;
+    background: #1d2027 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 4px !important;
     padding: 4px 10px !important;
+    font-family: 'JetBrains Mono', monospace !important;
     font-size: 11px !important;
-    font-weight: 600 !important;
-    color: #e2e8f0 !important;
+    font-weight: 500 !important;
+    color: #e0e2ec !important;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35) !important;
     white-space: nowrap !important;
 }
 
 #view-leaderboard .leaderboard-device-pill svg,
-#view-leaderboard .hw-public-tag svg {
-    width: 14px !important;
-    height: 14px !important;
-    fill: #cbd5e1 !important;
+#view-leaderboard .hw-public-tag svg,
+#view-leaderboard .stitch-device-pill svg,
+.hw-svg-icon {
+    width: 13px !important;
+    height: 13px !important;
+    fill: #ffdca1 !important;
+    color: #ffdca1 !important;
     display: inline-block !important;
     vertical-align: middle !important;
     flex-shrink: 0 !important;
@@ -13966,11 +14000,12 @@ header {
 }
 
 .stitch-track-card.sprint-card .stitch-card-wr-time {
-    color: #ffaa33 !important;
+    color: #00dbe9 !important;
+    text-shadow: 0 0 12px rgba(0, 219, 233, 0.5) !important;
 }
 
 .stitch-track-card.sprint-card .stitch-card-stat-val {
-    color: #ffc266;
+    color: #6ef3ff;
 }
 
 .cat-badge-drag {
@@ -15091,7 +15126,30 @@ header {
     color: #94a3b8;
 }
 
-/* Fast WR Display Badge in Cockpit */
+/* Fast WR Display Badge & Radar Indicator in Cockpit */
+.stitch-lb-cockpit-side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+.stitch-lb-radar-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 87, 8, 0.12);
+    border: 1px solid rgba(255, 87, 8, 0.35);
+    color: #ff5708;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
 .stitch-lb-wr-badge {
     background: rgba(11, 14, 21, 0.88);
     border: 1px solid rgba(255, 184, 0, 0.4);
@@ -15194,6 +15252,25 @@ header {
     gap: 8px;
 }
 
+.stitch-tab-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #ff5708;
+    color: #ffffff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 1px 6px;
+    border-radius: 10px;
+    line-height: 1.3;
+}
+
+.stitch-tab-btn:not(.active) .stitch-tab-count {
+    background: #272a31;
+    color: #94a3b8;
+}
+
 .stitch-tab-btn:hover {
     color: #ffffff;
     background: #191c23;
@@ -15277,6 +15354,66 @@ header {
     color: #ffffff;
 }
 
+/* Checkbox Solo Vídeo Verificado */
+.stitch-chk-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+    font-family: 'Chivo', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: #ffdca1;
+    background: #1d2027;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    padding: 6px 12px;
+    transition: all 0.15s ease;
+}
+
+.stitch-chk-wrapper:hover {
+    border-color: rgba(255, 184, 0, 0.4);
+    background: #272a31;
+}
+
+.stitch-chk-wrapper input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.stitch-chk-wrapper .chk-box {
+    width: 15px;
+    height: 15px;
+    border-radius: 3px;
+    border: 1px solid #94a3b8;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #10131a;
+    transition: all 0.15s ease;
+}
+
+.stitch-chk-wrapper .chk-box svg {
+    display: none;
+    color: #10131a;
+}
+
+.stitch-chk-wrapper input[type="checkbox"]:checked ~ .chk-box {
+    background: #ffb800;
+    border-color: #ffb800;
+}
+
+.stitch-chk-wrapper input[type="checkbox"]:checked ~ .chk-box svg {
+    display: block;
+}
+
+.stitch-chk-wrapper input[type="checkbox"]:checked ~ .chk-text {
+    color: #ffb800;
+}
+
 /* Density Switch */
 .stitch-density-wrapper {
     display: flex;
@@ -15309,198 +15446,651 @@ header {
     color: #ffb800;
 }
 
-/* STITCH HIGH-FIDELITY LEADERBOARD TABLE */
+/* ==========================================================================
+   STITCH HIGH-FIDELITY LEADERBOARD TABLE (GOOGLE STITCH SPECIFICATION)
+   ========================================================================== */
+
+/* 1. Contenedor de la Tabla */
 .stitch-table-card {
-    background: #0b0e15;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 6px;
+    background: rgba(11, 14, 21, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
     overflow-x: auto;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.65);
     margin-bottom: 24px;
 }
 
 .stitch-table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 980px;
+    min-width: 960px;
     text-align: left;
 }
 
+/* 2. Encabezados de Columna (Thead) */
 .stitch-table th {
     background: #191c23;
-    padding: 12px 16px;
-    font-family: 'Chivo', sans-serif;
+    padding: 13px 18px;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
-    font-weight: 900;
-    letter-spacing: 0.12em;
-    color: #94a3b8;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #94A3B8;
     text-transform: uppercase;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    vertical-align: middle;
+}
+
+.stitch-table th.col-place {
+    width: 64px;
+    text-align: center;
+}
+
+.stitch-table th.col-video {
+    text-align: right;
+    width: 170px;
+}
+
+/* 3. Filas y Celdas (Tbody) */
+.stitch-table tr {
+    background: rgba(18, 20, 26, 0.85);
+    border-bottom: 1px solid rgba(38, 38, 38, 0.6);
+    transition: background 0.15s ease;
+}
+
+.stitch-table tr:nth-child(even) {
+    background: rgba(22, 25, 33, 0.85);
+}
+
+.stitch-table tr:hover {
+    background: rgba(31, 36, 45, 0.95) !important;
+}
+
+.stitch-table tr.active-row {
+    background: rgba(28, 31, 39, 0.95);
 }
 
 .stitch-table td {
-    padding: 14px 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(38, 38, 38, 0.6);
     vertical-align: middle;
-    font-family: 'Hanken Grotesk', var(--font-ui), sans-serif;
+    font-family: 'Hanken Grotesk', sans-serif;
     font-size: 13.5px;
 }
 
-.stitch-table tr:hover td {
-    background: #1d2027;
+.stitch-table.blacklist-table-compact td {
+    padding: 8px 14px;
 }
 
 .stitch-table.blacklist-table-compact th {
-    padding: 7px 12px;
+    padding: 8px 14px;
 }
 
-.stitch-table.blacklist-table-compact td {
-    padding: 8px 12px;
-    font-size: 12.5px;
+/* 4. Columna de Posición (# Rank) */
+.stitch-pos-container {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    min-width: 36px;
+    margin: 0 auto;
 }
 
-.stitch-table.blacklist-table-compact .stitch-rank-badge {
-    width: 26px;
-    height: 26px;
-    font-size: 12px;
+.stitch-pos-box {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: transform 0.15s ease;
 }
 
-.stitch-table.blacklist-table-compact .stitch-driver-avatar {
-    width: 30px;
-    height: 30px;
+/* Posición 1 (#1): Fondo rectangular sólido amarillo/ámbar (#F59E0B) con texto negro */
+.stitch-pos-box.stitch-pos-1 {
+    background: #F59E0B;
+    color: #0b0e15;
+    font-family: 'Chivo', sans-serif;
+    font-size: 16px;
+    font-weight: 900;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+    border: none;
 }
 
-/* Rank Badges */
-.stitch-rank-badge {
+.stitch-pos-micro-wr {
+    font-family: 'Chivo', sans-serif;
+    font-size: 9px;
+    font-weight: 900;
+    color: #F59E0B;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 4px;
+    display: block;
+}
+
+/* Posiciones 2 a 8: Marco compacto con fondo gris oscuro carbón (#1E2330), borde sutil 1px (#334155) */
+.stitch-pos-box.stitch-pos-steel {
+    background: #1E2330 !important;
+    color: #ffffff !important;
+    font-family: 'Chivo', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    border: 1px solid #334155 !important;
+    border-radius: 6px;
+}
+
+.stitch-pos-micro-sub {
+    font-family: 'Chivo', sans-serif;
+    font-size: 8.5px;
+    font-weight: 700;
+    color: #94A3B8 !important;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-top: 4px;
+    display: block;
+}
+
+/* Compatibilidad con clases previas (eliminando bordes cyan) */
+.stitch-pos-badge {
     width: 32px;
     height: 32px;
     border-radius: 6px;
     display: inline-flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     font-family: 'Chivo', sans-serif;
-    font-size: 14px;
-    font-weight: 900;
+    line-height: 1;
+    margin: 0 auto;
+    border: 1px solid #334155;
+    background: #1E2330;
+    color: #ffffff;
 }
 
-.stitch-rank-1 {
-    background: #ffb800;
-    color: #10131a;
-    box-shadow: 0 0 12px rgba(255, 184, 0, 0.5);
+.stitch-pos-badge .pos-num {
+    font-size: 15px;
+    font-weight: 800;
 }
 
-.stitch-rank-2 {
-    background: #32353c;
-    color: #e0e2ec;
-}
-
-.stitch-rank-3 {
-    background: #272a31;
-    color: #ff5708;
-    border: 1px solid rgba(255, 87, 8, 0.4);
-}
-
-.stitch-rank-plain {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 14px;
+.stitch-pos-badge .pos-lbl {
+    font-size: 8.5px;
     font-weight: 700;
-    color: #94a3b8;
+    letter-spacing: 0.04em;
+    margin-top: 2px;
+    text-transform: uppercase;
+    color: #94A3B8;
 }
 
-/* Driver Cell */
+.stitch-pos-badge.stitch-pos-1 {
+    background: #F59E0B;
+    color: #0b0e15;
+    border: none;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+}
+
+.stitch-pos-badge.stitch-pos-2,
+.stitch-pos-badge.stitch-pos-3,
+.stitch-pos-badge.stitch-pos-plain {
+    background: #1E2330;
+    border: 1px solid #334155;
+    color: #ffffff;
+}
+
+.stitch-pos-badge.stitch-pos-2 .pos-lbl,
+.stitch-pos-badge.stitch-pos-3 .pos-lbl {
+    color: #94A3B8;
+}
+
+/* 5. Avatar / Badge de Piloto (Estilo Automovilismo) */
 .stitch-driver-cell {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.stitch-driver-avatar {
+.stitch-driver-avatar-capsule {
     width: 38px;
     height: 38px;
-    border-radius: 4px;
-    background: #1d2027;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    background: #131722;
+    border: 1px solid #2A3245;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #ffb800;
+    flex-shrink: 0;
+    color: #94A3B8;
+    transition: border-color 0.15s ease;
 }
 
-.stitch-driver-name {
-    font-family: 'Chivo', sans-serif;
-    font-size: 15px;
-    font-weight: 800;
-    color: #ffffff;
+.stitch-driver-avatar-capsule.is-leader {
+    color: #EAB308;
+    border-color: rgba(234, 179, 8, 0.35);
+}
+
+.stitch-racing-icon {
+    display: block;
+}
+
+.stitch-driver-main {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.stitch-driver-header {
     display: flex;
     align-items: center;
     gap: 8px;
+    flex-wrap: wrap;
 }
 
-.stitch-badge-tag {
+.stitch-driver-name-text {
+    font-family: 'Chivo', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #FFFFFF !important;
+    letter-spacing: -0.01em;
+    transition: color 0.15s ease;
+}
+
+.stitch-table tr:hover .stitch-driver-name-text {
+    color: #FFFFFF !important;
+}
+
+/* Tags de Piloto */
+.stitch-tag-wr {
+    background: #EA580C !important;
+    color: #ffffff !important;
     font-family: 'Chivo', sans-serif;
     font-size: 9px;
     font-weight: 900;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.06em;
     padding: 2px 6px;
-    border-radius: 3px;
+    border-radius: 4px;
     text-transform: uppercase;
+    box-shadow: 0 0 8px rgba(234, 88, 12, 0.4);
 }
 
-.stitch-badge-wr {
-    background: #ff5708;
-    color: #ffffff;
+.stitch-tag-top1,
+.stitch-tag-topworld {
+    background: #1E2330 !important;
+    border: 1px solid #334155 !important;
+    color: #F1F5F9 !important;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
 }
 
-.stitch-badge-top {
-    background: #1d2027;
-    color: #00dbe9;
-    border: 1px solid rgba(0, 219, 233, 0.3);
+.stitch-tag-verified {
+    background: rgba(56, 189, 248, 0.12) !important;
+    border: 1px solid rgba(56, 189, 248, 0.3) !important;
+    color: #38BDF8 !important;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.08em !important;
+    padding: 2px 7px !important;
+    border-radius: 4px;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
 }
 
-.stitch-driver-meta {
+.stitch-driver-sub {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
-    color: #94a3b8;
+    color: #94A3B8 !important;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
     margin-top: 2px;
 }
 
-/* Time Cell */
+.stitch-driver-sub .country-code {
+    color: #94A3B8 !important;
+    display: inline-block !important;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.stitch-driver-sub .sub-sep {
+    color: #64748B !important;
+    font-size: 10px;
+    margin: 0 1px;
+}
+
+.stitch-driver-sub .team-name {
+    color: #CBD5E1 !important;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+}
+
+/* 6. Columna de Tiempo Homologado */
+.stitch-time-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
 .stitch-time-val {
     font-family: 'JetBrains Mono', monospace;
     font-size: 16px;
     font-weight: 700;
-    color: #ffffff;
+    color: #FFFFFF !important;
     letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
 }
 
 .stitch-time-delta {
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
     font-weight: 700;
-    margin-top: 2px;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
 }
 
-/* Video Button */
-.stitch-btn-video {
+.stitch-delta-leader {
+    color: #EAB308 !important;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.stitch-delta-gap,
+.stitch-delta-gap-muted {
+    color: #F97316 !important;
+    font-weight: 700;
+}
+
+/* 7. Vehículo & Setup */
+.stitch-car-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.stitch-car-name {
+    font-family: 'Chivo', 'Hanken Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #F1F5F9 !important;
+    line-height: 1.2;
+}
+
+.stitch-car-setup {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: #94A3B8 !important;
+    opacity: 1 !important;
+    line-height: 1.2;
+    margin-top: 1px;
+}
+
+/* 8. Dispositivo / Control */
+.stitch-device-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #131722 !important;
+    border: 1px solid #2A3245 !important;
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    color: #E2E8F0 !important;
+}
+
+.stitch-device-icon {
+    color: #94A3B8 !important;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.stitch-device-pill .device-name {
+    color: #E2E8F0 !important;
+    font-weight: 500;
+}
+
+/* 9. Caja de Cambios (Gearbox) */
+.stitch-gearbox-pill {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    background: #ff5708;
-    color: #ffffff;
-    font-family: 'Chivo', sans-serif;
-    font-size: 11px;
-    font-weight: 900;
-    letter-spacing: 0.08em;
-    padding: 6px 12px;
     border-radius: 4px;
-    text-decoration: none;
-    box-shadow: 0 2px 8px rgba(255, 87, 8, 0.35);
-    transition: transform 0.15s ease, filter 0.15s ease;
+    padding: 3px 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
 }
 
-.stitch-btn-video:hover {
-    filter: brightness(1.15);
+.stitch-gearbox-pill.manual {
+    background: rgba(56, 189, 248, 0.08) !important;
+    border: 1px solid rgba(56, 189, 248, 0.25) !important;
+    color: #38BDF8 !important;
+}
+
+.stitch-gearbox-pill.manual .material-symbols-outlined {
+    color: #38BDF8 !important;
+}
+
+.stitch-gearbox-pill.auto {
+    background: #131722 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    color: #94A3B8 !important;
+}
+
+.stitch-gearbox-pill.auto .material-symbols-outlined {
+    color: #94A3B8 !important;
+}
+
+/* 10. Fecha */
+.stitch-date-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #94A3B8 !important;
+}
+
+/* 11. Botones de Acción (Vídeo / Telemetría) */
+.stitch-actions-cell {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+/* Botón WR: Píldora naranja degradado #EA580C a #F97316 */
+.stitch-btn-video.btn-video-wr {
+    background: linear-gradient(135deg, #EA580C 0%, #F97316 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 9999px !important;
+    padding: 5px 12px !important;
+    font-family: 'Chivo', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 10px rgba(234, 88, 12, 0.4);
+    transition: all 0.15s ease;
+}
+
+.stitch-btn-video.btn-video-wr:hover {
+    background: linear-gradient(135deg, #F97316 0%, #FB923C 100%) !important;
+    box-shadow: 0 4px 16px rgba(249, 115, 22, 0.6);
     transform: translateY(-1px);
+}
+
+.stitch-fps-badge {
+    background: rgba(0, 0, 0, 0.45) !important;
+    color: #ffffff !important;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    margin-left: 2px;
+}
+
+/* Botón Ghost: Cápsula rectangular fondo oscuro #131722, borde 1px #2A3245 */
+.stitch-btn-video.btn-video-ghost {
+    background: #131722 !important;
+    border: 1px solid #2A3245 !important;
+    color: #CBD5E1 !important;
+    border-radius: 6px !important;
+    padding: 5px 10px !important;
+    font-family: 'Chivo', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s ease;
+}
+
+.stitch-btn-video.btn-video-ghost:hover {
+    background: #1E2330 !important;
+    border-color: #38BDF8 !important;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+}
+
+.stitch-btn-video.btn-video-ghost .btn-video-play-icon {
+    color: #F97316 !important;
+    font-size: 11px;
+}
+
+.stitch-btn-video.btn-video-ghost .btn-video-ext-icon {
+    color: #94A3B8 !important;
+    font-size: 13px;
+}
+
+/* Botón Descarga Telemetría */
+.stitch-btn-dl {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: #131722;
+    border: 1px solid #2A3245;
+    color: #38BDF8;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.stitch-btn-dl:hover {
+    background: #1E2330;
+    border-color: #38BDF8;
+    color: #7dd3fc;
+    transform: translateY(-1px);
+}
+
+/* Pagination Bar */
+.stitch-pagination-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 14px 20px;
+    background: #0b0e15;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    margin-bottom: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.page-nav-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-family: 'Chivo', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 3px;
+    transition: color 0.15s ease;
+}
+
+.page-nav-btn:hover:not(:disabled) {
+    color: #ffb800;
+}
+
+.page-nav-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.page-numbers-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.page-num-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    background: transparent;
+    border: 1px solid transparent;
+    color: #94a3b8;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+}
+
+.page-num-btn:hover {
+    color: #ffffff;
+    background: #1d2027;
+}
+
+.page-num-btn.active {
+    background: #ffb800;
+    color: #10131a;
+    font-weight: 900;
+    box-shadow: 0 0 10px rgba(255, 184, 0, 0.4);
+}
+
+.page-num-dots {
+    color: #64748b;
+    padding: 0 4px;
 }
 
 /* COMPLEMENTARY TELEMETRY CARDS (BELOW TABLE) */
@@ -16955,482 +17545,3217 @@ header {
 
 
 /* ==============================================================================
-   STITCH MCP REDESIGN: RACING GROUPS & WEEKLY CHAMPIONSHIP CHALLENGES
+   GOOGLE STITCH MCP // BLACKLIST EVENT 2026 PIXEL-PERFECT TELEMETRY THEME
    ============================================================================== */
 
-/* Section A: Racing Groups Grid */
-.championship-groups-grid.stitch-groups-grid {
-    display: grid !important;
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 14px !important;
-    width: 100% !important;
+/* View Wrapper & Global Background */
+#view-blacklist {
+    background-color: #0b0d12 !important;
+    color: #e0e2ec;
+    font-family: 'Hanken Grotesk', system-ui, sans-serif;
+    min-height: 100vh;
 }
 
-@media (max-width: 1200px) {
-    .championship-groups-grid.stitch-groups-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
+#view-blacklist .stitch-ambient-glows {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+#view-blacklist .stitch-glow-secondary {
+    position: absolute;
+    top: -6rem;
+    left: 25%;
+    width: 24rem;
+    height: 24rem;
+    background: radial-gradient(circle, rgba(255, 87, 8, 0.15) 0%, transparent 70%);
+    filter: blur(48px);
+}
+
+#view-blacklist .stitch-glow-primary {
+    position: absolute;
+    top: 50%;
+    right: 2.5rem;
+    width: 20rem;
+    height: 20rem;
+    background: radial-gradient(circle, rgba(255, 184, 0, 0.1) 0%, transparent 70%);
+    filter: blur(48px);
+}
+
+/* 1. HERO SECTION & ACTION HUBS */
+#view-blacklist .bl-hero-card {
+    position: relative;
+    background: #10141d;
+    border: 1px solid #1e2330;
+    border-radius: 12px;
+    padding: 24px 28px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+    overflow: hidden;
+}
+
+#view-blacklist .bl-btn-primary-register {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    background: #ffb800;
+    color: #000000;
+    font-family: 'Chivo', sans-serif;
+    font-size: 14px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(255, 184, 0, 0.25);
+    cursor: pointer;
+    transition: all 0.18s ease;
+    border: none;
+    text-decoration: none;
+}
+
+#view-blacklist .bl-btn-primary-register:hover {
+    background: #ffba20;
+    transform: scale(1.02);
+    box-shadow: 0 6px 20px rgba(255, 184, 0, 0.4);
+}
+
+#view-blacklist .bl-btn-secondary-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: #1c2230;
+    color: #e0e2ec;
+    font-family: 'Chivo', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    border-radius: 8px;
+    border: 1px solid #262e40;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    text-decoration: none;
+}
+
+#view-blacklist .bl-btn-secondary-ghost:hover {
+    background: #272a31;
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+#view-blacklist .bl-btn-standings-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: #131720;
+    color: #94a3b8;
+    font-family: 'Chivo', sans-serif;
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-radius: 8px;
+    border: 1px solid #1e2330;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    text-decoration: none;
+}
+
+#view-blacklist .bl-btn-standings-link:hover {
+    background: #1c2230;
+    color: #ffffff;
+}
+
+/* 4 KPIs Cockpit Grid */
+#view-blacklist .bl-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+@media (max-width: 1024px) {
+    #view-blacklist .bl-kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 640px) {
-    .championship-groups-grid.stitch-groups-grid {
-        grid-template-columns: 1fr !important;
+    #view-blacklist .bl-kpi-grid {
+        grid-template-columns: 1fr;
     }
 }
 
-.stitch-group-card {
-    background: #0f172a !important;
-    border: 1px solid #1e293b !important;
-    border-radius: 10px !important;
-    padding: 14px 12px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 10px !important;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
-    transition: transform 0.18s ease, border-color 0.18s ease !important;
+#view-blacklist .bl-kpi-card {
+    background: #10141d;
+    border: 1px solid #1e2330;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    transition: transform 0.18s ease, background 0.18s ease;
 }
 
-.stitch-group-card:hover {
-    transform: translateY(-2px) !important;
-    border-color: rgba(255, 255, 255, 0.15) !important;
+#view-blacklist .bl-kpi-card:hover {
+    background: #131720;
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.12);
 }
 
-.stitch-group-header-row {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    gap: 8px !important;
-    padding-bottom: 2px !important;
+/* 2. NAVIGATION TABS & TIMELINE */
+#view-blacklist .bl-week-pills-bar {
+    background: #0b0e15;
+    padding: 8px 12px;
+    border-radius: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    border: 1px solid #1e2330;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-.stitch-group-title {
-    display: flex !important;
-    align-items: center !important;
-    gap: 8px !important;
+#view-blacklist .bl-week-btn {
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-family: 'Chivo', sans-serif;
+    font-size: 11.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    border: 1px solid transparent;
 }
 
-.stitch-group-indicator {
-    font-size: 11px !important;
-    line-height: 1 !important;
-    font-weight: 900 !important;
-    width: auto !important;
-    height: auto !important;
-    border-radius: 0 !important;
+#view-blacklist .bl-week-btn.active {
+    background: #1c2230;
+    color: #ffb800;
+    border-color: rgba(255, 184, 0, 0.35);
+    box-shadow: 0 0 12px rgba(255, 184, 0, 0.25);
 }
 
-.stitch-group-indicator.alpha { color: #ea580c !important; }
-.stitch-group-indicator.beta { color: #eab308 !important; }
-.stitch-group-indicator.gamma { color: #06b6d4 !important; }
-.stitch-group-indicator.delta { color: #94a3b8 !important; }
-
-.stitch-group-name-text {
-    font-family: var(--font-racing), 'Cabinet Grotesk', system-ui, sans-serif !important;
-    font-size: 14px !important;
-    font-weight: 900 !important;
-    text-transform: uppercase !important;
-    color: #ffffff !important;
-    letter-spacing: 0.5px !important;
+#view-blacklist .bl-nav-subtabs-bar {
+    background: #10141d;
+    padding: 6px;
+    border-radius: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #1e2330;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
 }
 
-.stitch-group-tier-badge {
-    font-family: var(--font-racing), system-ui, sans-serif !important;
-    font-size: 9.5px !important;
-    font-weight: 900 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.6px !important;
-    padding: 2px 7px !important;
-    border-radius: 4px !important;
+#view-blacklist .bl-subtab-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-family: 'Chivo', sans-serif;
+    font-size: 12.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #94a3b8;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
 }
 
-.stitch-group-tier-badge.alpha {
-    background: rgba(234, 88, 12, 0.15) !important;
-    color: #f97316 !important;
-    border: 1px solid rgba(234, 88, 12, 0.35) !important;
+#view-blacklist .bl-subtab-btn:hover {
+    background: #1c2230;
+    color: #ffffff;
 }
 
-.stitch-group-tier-badge.beta {
-    background: rgba(234, 179, 8, 0.15) !important;
-    color: #eab308 !important;
-    border: 1px solid rgba(234, 179, 8, 0.35) !important;
+#view-blacklist .bl-subtab-btn.active {
+    background: #1c2230;
+    color: #ffb800;
+    font-weight: 900;
+    border: 1px solid rgba(255, 184, 0, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 
-.stitch-group-tier-badge.gamma {
-    background: rgba(6, 182, 212, 0.15) !important;
-    color: #06b6d4 !important;
-    border: 1px solid rgba(6, 182, 212, 0.35) !important;
+/* 3. SECTION RACING GROUPS */
+#view-blacklist .bl-groups-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    width: 100%;
 }
 
-.stitch-group-tier-badge.delta {
-    background: rgba(148, 163, 184, 0.15) !important;
-    color: #cbd5e1 !important;
-    border: 1px solid rgba(148, 163, 184, 0.35) !important;
+@media (max-width: 1200px) {
+    #view-blacklist .bl-groups-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
-.stitch-group-pilots-list {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 7px !important;
+@media (max-width: 640px) {
+    #view-blacklist .bl-groups-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
-.stitch-pilot-item {
-    background: #090e17 !important;
-    border-radius: 6px !important;
-    padding: 8px 10px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    gap: 8px !important;
-    cursor: pointer !important;
-    transition: all 0.15s ease !important;
-    border: 1px solid #1e293b !important;
+#view-blacklist .bl-group-card {
+    background: #131720 !important;
+    border: 1px solid #1e2330 !important;
+    border-radius: 12px;
+    padding: 16px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    transition: transform 0.18s ease, border-color 0.18s ease;
 }
 
-.stitch-pilot-item:hover {
-    background: #131c2e !important;
-    border-color: rgba(255, 255, 255, 0.15) !important;
+#view-blacklist .bl-group-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.16);
 }
 
-.stitch-pilot-item.selected {
-    background: #172338 !important;
-    border-color: #eab308 !important;
-    box-shadow: 0 0 10px rgba(234, 179, 8, 0.2) !important;
+#view-blacklist .bl-group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding-bottom: 2px;
 }
 
-.stitch-pilot-item.slot-open {
-    background: rgba(15, 23, 42, 0.5) !important;
-    border: 1px dashed rgba(255, 255, 255, 0.12) !important;
+#view-blacklist .bl-group-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.stitch-pilot-item.slot-open:hover {
-    border-color: rgba(234, 179, 8, 0.4) !important;
-    background: rgba(15, 23, 42, 0.8) !important;
+#view-blacklist .bl-group-sq-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    display: inline-block;
 }
 
-.stitch-rank-sq {
-    width: 26px !important;
-    height: 26px !important;
-    border-radius: 4px !important;
-    font-family: var(--font-racing), sans-serif !important;
-    font-size: 13px !important;
-    font-weight: 900 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    flex-shrink: 0 !important;
+#view-blacklist .bl-group-sq-indicator.alpha { background: #ff5708; }
+#view-blacklist .bl-group-sq-indicator.beta { background: #ffb800; }
+#view-blacklist .bl-group-sq-indicator.gamma { background: #38bdf8; }
+#view-blacklist .bl-group-sq-indicator.delta { background: #94a3b8; }
+
+#view-blacklist .bl-group-name {
+    font-family: 'Chivo', sans-serif;
+    font-size: 15px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #ffffff;
+    letter-spacing: 0.5px;
 }
 
-.stitch-rank-sq.gold {
-    background: #eab308 !important;
-    color: #000000 !important;
-    box-shadow: 0 2px 6px rgba(234, 179, 8, 0.35) !important;
+#view-blacklist .bl-tier-badge {
+    font-family: 'Chivo', sans-serif;
+    font-size: 9.5px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 2px 7px;
+    border-radius: 4px;
 }
 
-.stitch-rank-sq.orange-leader {
-    background: #ea580c !important;
-    color: #ffffff !important;
-    box-shadow: 0 2px 6px rgba(234, 88, 12, 0.4) !important;
+#view-blacklist .bl-tier-badge.alpha {
+    background: rgba(255, 87, 8, 0.15);
+    color: #ffb59c;
 }
 
-.stitch-rank-sq.silver {
-    background: #cbd5e1 !important;
-    color: #1e293b !important;
+#view-blacklist .bl-tier-badge.beta {
+    background: rgba(255, 184, 0, 0.15);
+    color: #ffb800;
 }
 
-.stitch-rank-sq.bronze {
-    background: #f97316 !important;
-    color: #ffffff !important;
+#view-blacklist .bl-tier-badge.gamma {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
 }
 
-.stitch-rank-sq.normal {
-    background: #1e293b !important;
-    color: #cbd5e1 !important;
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+#view-blacklist .bl-tier-badge.delta {
+    background: rgba(148, 163, 184, 0.15);
+    color: #cbd5e1;
 }
 
-.stitch-rank-sq.open-slot {
-    background: #1e293b !important;
-    color: #94a3b8 !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+#view-blacklist .bl-pilot-item {
+    background: #171b26;
+    border-radius: 8px;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border: 1px solid #1e2330;
 }
 
-/* Section B: Weekly Championship Challenges Filter Bar */
-.champ-challenges-group-filter {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: 8px !important;
-    padding-top: 4px !important;
+#view-blacklist .bl-pilot-item:hover {
+    background: #1c2230;
+    border-color: rgba(255, 255, 255, 0.14);
 }
 
-.champ-group-filter-btn {
-    background: #0f172a !important;
-    color: #94a3b8 !important;
-    border: 1px solid #1e293b !important;
-    border-radius: 6px !important;
-    padding: 8px 16px !important;
-    font-family: var(--font-racing), sans-serif !important;
-    font-size: 12px !important;
-    font-weight: 700 !important;
-    cursor: pointer !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-    transition: all 0.15s ease !important;
+#view-blacklist .bl-pilot-item.selected-highlight {
+    background: #1c2230;
+    border-color: rgba(255, 184, 0, 0.4);
+    box-shadow: 0 0 10px rgba(255, 184, 0, 0.15);
 }
 
-.champ-group-filter-btn:hover {
-    background: #1e293b !important;
-    color: #ffffff !important;
-    border-color: rgba(255, 255, 255, 0.2) !important;
+#view-blacklist .bl-pilot-item.slot-open {
+    background: rgba(23, 27, 38, 0.5);
+    border: 1px dashed #334155;
 }
 
-.champ-group-filter-btn.active {
-    background: #eab308 !important;
+#view-blacklist .bl-pilot-item.slot-open:hover {
+    border-color: rgba(255, 184, 0, 0.4);
+    background: rgba(23, 27, 38, 0.8);
+}
+
+#view-blacklist .bl-rank-box {
+    width: 26px;
+    height: 26px;
+    border-radius: 4px;
+    font-family: 'Chivo', sans-serif;
+    font-size: 13px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+#view-blacklist .bl-rank-box.yellow-1 {
+    background: #ffb800;
+    color: #000000;
+    box-shadow: 0 2px 6px rgba(255, 184, 0, 0.35);
+}
+
+#view-blacklist .bl-rank-box.orange-5 {
+    background: #ff5708;
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(255, 87, 8, 0.35);
+}
+
+#view-blacklist .bl-rank-box.neutral-rank {
+    background: #262e40;
+    color: #ffffff;
+}
+
+#view-blacklist .bl-rank-box.open-slot {
+    background: #0b0e15;
+    color: #94a3b8;
+    border: 1px solid #1e2330;
+}
+
+/* 4. SECTION WEEKLY CHAMPIONSHIP CHALLENGES */
+#view-blacklist .bl-challenges-group-filter-btn {
+    background: #131720;
+    color: #94a3b8;
+    border: 1px solid #1e2330;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-family: 'Chivo', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s ease;
+}
+
+#view-blacklist .bl-challenges-group-filter-btn:hover {
+    background: #1c2230;
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+#view-blacklist .bl-challenges-group-filter-btn.active {
+    background: #ffb800 !important;
     color: #000000 !important;
     font-weight: 900 !important;
     border: none !important;
-    box-shadow: 0 2px 10px rgba(234, 179, 8, 0.35) !important;
+    box-shadow: 0 2px 10px rgba(255, 184, 0, 0.35) !important;
 }
 
-.champ-legend-bonuses {
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 10px !important;
-    background: #0b1120 !important;
-    padding: 6px 14px !important;
-    border-radius: 20px !important;
-    border: 1px solid #1e293b !important;
-    font-family: var(--font-mono) !important;
-    font-size: 11.5px !important;
-    font-weight: 800 !important;
-}
-
-/* Section B: Challenges Grid (3 columns) */
-.champ-challenges-grid {
-    display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important;
-    gap: 16px !important;
-    width: 100% !important;
+#view-blacklist .bl-challenges-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    width: 100%;
 }
 
 @media (max-width: 1100px) {
-    .champ-challenges-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
+    #view-blacklist .bl-challenges-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 700px) {
-    .champ-challenges-grid {
-        grid-template-columns: 1fr !important;
+    #view-blacklist .bl-challenges-grid {
+        grid-template-columns: 1fr;
     }
 }
 
-.champ-challenge-card {
-    background: #0b1120 !important;
-    border: 1px solid #1e293b !important;
-    border-radius: 10px !important;
-    padding: 14px 16px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 10px !important;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
-    transition: transform 0.18s ease, border-color 0.18s ease !important;
+#view-blacklist .bl-challenge-card {
+    background: #10141d;
+    border: 1px solid #1e2330;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    transition: transform 0.18s ease, border-color 0.18s ease;
 }
 
-.champ-challenge-card:hover {
-    transform: translateY(-2px) !important;
-    border-color: rgba(255, 255, 255, 0.18) !important;
+#view-blacklist .bl-challenge-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.16);
 }
 
-.champ-ch-header {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    border-bottom: none !important;
-    padding-bottom: 0 !important;
-    margin-bottom: 2px !important;
-    gap: 8px !important;
+#view-blacklist .bl-ch-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
 }
 
-.champ-ch-title {
-    font-family: 'Cabinet Grotesk', var(--font-racing), sans-serif !important;
-    font-size: 15px !important;
-    font-weight: 900 !important;
-    color: #f59e0b !important;
-    letter-spacing: 0.5px !important;
-    text-transform: uppercase !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
+#view-blacklist .bl-ch-num {
+    color: #ffb800;
+    font-family: 'Chivo', sans-serif;
+    font-size: 16px;
+    font-weight: 900;
 }
 
-.champ-ch-type {
-    font-family: var(--font-mono) !important;
-    font-size: 10px !important;
-    font-weight: 800 !important;
-    padding: 2px 8px !important;
-    border-radius: 4px !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
-    flex-shrink: 0 !important;
+#view-blacklist .bl-ch-title {
+    font-family: 'Chivo', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    color: #ffffff;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.champ-ch-type.type-circuito {
-    background: rgba(30, 41, 59, 0.7) !important;
-    color: #94a3b8 !important;
-    border: 1px solid #334155 !important;
+#view-blacklist .bl-ch-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
 }
 
-.champ-ch-type.type-sprint {
-    background: rgba(234, 88, 12, 0.15) !important;
-    color: #f97316 !important;
-    border: 1px solid rgba(234, 88, 12, 0.4) !important;
+#view-blacklist .bl-ch-tag.circuito {
+    background: #1e2330;
+    color: #94a3b8;
+    border: 1px solid #262e40;
 }
 
-.champ-ch-type.type-drag {
-    background: rgba(6, 182, 212, 0.15) !important;
-    color: #06b6d4 !important;
-    border: 1px solid rgba(6, 182, 212, 0.4) !important;
+#view-blacklist .bl-ch-tag.sprint {
+    background: rgba(255, 87, 8, 0.15);
+    color: #ff5708;
+    border: 1px solid rgba(255, 87, 8, 0.35);
 }
 
-.champ-ch-restriction {
-    background: rgba(15, 23, 42, 0.7) !important;
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
-    border-radius: 6px !important;
-    padding: 6px 10px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    gap: 8px !important;
-    font-size: 11px !important;
-    margin-bottom: 2px !important;
+#view-blacklist .bl-ch-tag.drag {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+    border: 1px solid rgba(56, 189, 248, 0.35);
 }
 
-.champ-ch-restriction .restriction-label {
-    color: #94a3b8 !important;
-    font-family: var(--font-mono) !important;
-    font-weight: 800 !important;
-    font-size: 10.5px !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.4px !important;
-    white-space: nowrap !important;
-    flex-shrink: 0 !important;
+#view-blacklist .bl-restriction-row {
+    background: #0b0e15;
+    border: 1px solid #1e2330;
+    border-radius: 6px;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
 }
 
-.champ-ch-restriction .restriction-car {
-    color: #ffffff !important;
-    font-weight: 700 !important;
-    font-size: 11px !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    text-align: right !important;
+#view-blacklist .bl-podium-row {
+    border-radius: 8px;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    transition: background 0.15s ease;
 }
 
-.champ-ch-podiums {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 6px !important;
+#view-blacklist .bl-podium-row.pos-1 {
+    background: #1c2230;
+    border: 1px solid #262e40;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
-.champ-ch-podium-row {
-    background: #0f172a !important;
-    border: 1px solid #1e293b !important;
-    border-radius: 6px !important;
-    padding: 7px 10px !important;
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    gap: 8px !important;
-    border-left: none !important;
-    transition: background 0.15s ease, border-color 0.15s ease !important;
+#view-blacklist .bl-podium-row.pos-other {
+    background: #131720;
+    border: 1px solid #1e2330;
 }
 
-.champ-ch-podium-row:hover {
-    background: #172338 !important;
-    border-color: rgba(255, 255, 255, 0.15) !important;
+#view-blacklist .bl-circle-pos {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    font-family: 'Chivo', sans-serif;
+    font-size: 11px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
-.podium-pos-badge {
-    width: 20px !important;
-    height: 20px !important;
-    border-radius: 50% !important;
-    font-family: var(--font-racing), sans-serif !important;
-    font-size: 11px !important;
-    font-weight: 900 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    flex-shrink: 0 !important;
+#view-blacklist .bl-circle-pos.yellow-1 {
+    background: #ffb800;
+    color: #000000;
+    box-shadow: 0 0 8px rgba(255, 184, 0, 0.4);
 }
 
-.podium-pos-badge.pos-1 {
-    background: #eab308 !important;
-    color: #000000 !important;
-    box-shadow: 0 0 8px rgba(234, 179, 8, 0.4) !important;
+#view-blacklist .bl-circle-pos.dark-pos {
+    background: #262e40;
+    color: #94a3b8;
 }
 
-.podium-pos-badge.pos-other {
-    background: #1e293b !important;
-    color: #94a3b8 !important;
-    border: 1px solid #334155 !important;
+#view-blacklist .bl-podium-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    line-height: 1;
 }
 
-.podium-pilot-col {
-    display: flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-    min-width: 0 !important;
-    flex: 1 !important;
+#view-blacklist .bl-podium-time.cyan-best {
+    color: #38bdf8;
 }
 
-.podium-pilot-name {
-    font-family: var(--font-racing), sans-serif !important;
-    font-size: 12.5px !important;
-    font-weight: 800 !important;
-    text-transform: uppercase !important;
-    color: #ffffff !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    line-height: 1.2 !important;
+#view-blacklist .bl-podium-time.white-time {
+    color: #ffffff;
 }
 
-.podium-time-col {
-    min-width: 90px !important;
-    text-align: center !important;
-    flex-shrink: 0 !important;
+#view-blacklist .bl-podium-time.gray-time {
+    color: #94a3b8;
 }
 
-.podium-time-val {
-    font-family: 'JetBrains Mono', monospace !important;
-    font-size: 15px !important;
-    font-weight: 800 !important;
-    color: #38bdf8 !important;
-    letter-spacing: 0.5px !important;
-    line-height: 1 !important;
+/* 5. PROTOCOLO DE HOMOLOGACIÓN BANNER */
+#view-blacklist .bl-protocol-banner {
+    background: #10141d;
+    border: 1px solid #1e2330;
+    border-radius: 12px;
+    padding: 24px 28px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-.podium-bonus-col {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-end !important;
-    justify-content: center !important;
-    flex-shrink: 0 !important;
-    min-width: 60px !important;
-    line-height: 1.15 !important;
+@media (min-width: 1024px) {
+    #view-blacklist .bl-protocol-banner {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
 }
 
-.podium-bonus-pts {
-    font-family: var(--font-mono) !important;
-    font-size: 10.5px !important;
-    font-weight: 800 !important;
-    color: #f59e0b !important;
+#view-blacklist .bl-btn-submit-time {
+    padding: 14px 24px;
+    background: #ff5708;
+    color: #ffffff;
+    font-family: 'Chivo', sans-serif;
+    font-size: 14px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 4px 16px rgba(255, 87, 8, 0.35);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    text-decoration: none;
 }
 
-.podium-bonus-rep {
-    font-family: var(--font-mono) !important;
-    font-size: 9.5px !important;
-    font-weight: 800 !important;
-    color: #38bdf8 !important;
+#view-blacklist .bl-btn-submit-time:hover {
+    background: #ff7030;
+    transform: scale(1.02);
+    box-shadow: 0 6px 20px rgba(255, 87, 8, 0.5);
 }
+
+#view-blacklist .bl-btn-download-savegame {
+    padding: 10px 20px;
+    background: #1c2230;
+    color: #e0e2ec;
+    font-family: 'Chivo', sans-serif;
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-radius: 8px;
+    border: 1px solid #262e40;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    text-decoration: none;
+}
+
+#view-blacklist .bl-btn-download-savegame:hover {
+    background: #272a31;
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+/* ==========================================================================
+   GOOGLE STITCH - VISIBILIDAD DE PAÍS / ESCUDERÍA EN LEADERBOARD
+   ========================================================================== */
+.stitch-driver-sub .country-code,
+.stitch-driver-sub .driver-country-code,
+.stitch-driver-sub .player-country,
+.stitch-driver-sub .driver-country {
+    display: inline-block !important;
+    color: #94A3B8 !important;
+}
+
+/* ==========================================================================
+   ROUTE TRACK - ESPECIALIDAD SPRINT: TIEMPOS EN COLOR AZUL / CIAN DEL DISEÑO
+   ========================================================================== */
+.route-card.type-sprint .route-time-display,
+.route-card.type-sprint .route-time-val,
+.route-card.type-sprint [class*="time-display"] {
+    color: #00dbe9 !important;
+    text-shadow: 0 0 10px rgba(0, 219, 233, 0.6) !important;
+}
+
+.route-card.type-sprint .route-time-display svg,
+.route-card.type-sprint .route-time-val svg {
+    color: #00dbe9 !important;
+    fill: #00dbe9 !important;
+}
+
+.route-card.type-sprint:hover .route-time-display {
+    color: #6ef3ff !important;
+    text-shadow: 0 0 14px rgba(110, 243, 255, 0.8) !important;
+}
+
+/* ==========================================================================
+   GOOGLE STITCH SCREEN 6 - HALL OF FAME / TOP GLOBAL / TOP RUTAS DESIGN SYSTEM
+   ========================================================================== */
+.stitch-screen6-view {
+    width: 100%;
+    min-height: 100vh;
+    background: #0b0e15;
+    color: #e0e2ec;
+    font-family: 'Hanken Grotesk', sans-serif;
+    padding-bottom: 60px;
+}
+
+/* 1. Hero Header Atmosférico */
+.stitch-screen6-hero {
+    position: relative;
+    width: 100%;
+    padding: 36px 20px 28px 20px;
+    background: radial-gradient(ellipse at top, rgba(255, 184, 0, 0.15) 0%, rgba(255, 87, 8, 0.05) 45%, #0b0e15 80%);
+    border-bottom: 1px solid #1d2027;
+    overflow: hidden;
+    text-align: center;
+}
+
+.stitch-screen6-hero::before {
+    content: '';
+    position: absolute;
+    top: -80px;
+    right: 5%;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    background: rgba(0, 219, 233, 0.06);
+    filter: blur(80px);
+    pointer-events: none;
+}
+
+.stitch-screen6-hero-inner {
+    max-w: 1280px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Crown / Trophy Overline Pill */
+.stitch-screen6-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 16px;
+    background: #1d2027;
+    border: 1px solid rgba(255, 184, 0, 0.35);
+    border-radius: 9999px;
+    font-family: 'Chivo', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #ffdca1;
+    box-shadow: 0 0 20px rgba(255, 184, 0, 0.18);
+    margin-bottom: 14px;
+}
+
+.stitch-screen6-pill .pill-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #ff5708;
+    box-shadow: 0 0 8px #ff5708;
+}
+
+.stitch-screen6-pill svg {
+    color: #ffb800;
+    fill: #ffb800;
+    width: 15px;
+    height: 15px;
+}
+
+.stitch-screen6-pill .pill-sub {
+    color: #6ef3ff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+}
+
+/* Main Display Title */
+.stitch-screen6-title {
+    font-family: 'Chivo', sans-serif;
+    font-size: clamp(28px, 4.5vw, 46px);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    margin: 0 0 10px 0;
+    line-height: 1.1;
+}
+
+.stitch-screen6-title .accent-gradient {
+    background: linear-gradient(90deg, #ffb800 0%, #ff5708 50%, #ffdca1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.stitch-screen6-desc {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 15px;
+    color: #94a3b8;
+    max-width: 700px;
+    margin: 0 auto 28px auto;
+    line-height: 1.5;
+}
+
+/* Quick Metrics Strip */
+.stitch-screen6-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+    .stitch-screen6-metrics-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+    }
+}
+
+.stitch-screen6-metric-card {
+    background: #191c23;
+    border: 1px solid #272a31;
+    border-radius: 6px;
+    padding: 14px 16px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.stitch-screen6-metric-card:hover {
+    border-color: rgba(255, 184, 0, 0.45);
+    transform: translateY(-2px);
+}
+
+.stitch-screen6-metric-card .metric-hud-label {
+    font-family: 'Chivo', sans-serif;
+    font-size: 10.5px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #9e8f78;
+    margin-bottom: 4px;
+}
+
+.stitch-screen6-metric-card .metric-val-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.stitch-screen6-metric-card .metric-val {
+    font-family: 'Chivo', sans-serif;
+    font-size: 26px;
+    font-weight: 900;
+    line-height: 1.1;
+    color: #ffdca1;
+}
+
+.stitch-screen6-metric-card .metric-val.amber {
+    color: #ffb800;
+}
+
+.stitch-screen6-metric-card .metric-val.white {
+    color: #ffffff;
+}
+
+.stitch-screen6-metric-card .metric-val.cyan {
+    color: #00dbe9;
+}
+
+.stitch-screen6-metric-card .metric-unit {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    color: #94a3b8;
+}
+
+.stitch-screen6-metric-card .metric-sub-data {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 500;
+    color: #6ef3ff;
+    margin-top: 4px;
+}
+
+/* 2. Top 3 Podium Showcase (Estilo Google Stitch Screen 6) */
+.stitch-screen6-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 24px 20px;
+}
+
+.stitch-podium-showcase {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    align-items: end;
+    margin-bottom: 28px;
+}
+
+@media (min-width: 992px) {
+    .stitch-podium-showcase {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+    .stitch-podium-slot-2 { order: 1; }
+    .stitch-podium-slot-1 { order: 2; transform: translateY(-16px); }
+    .stitch-podium-slot-3 { order: 3; }
+}
+
+.stitch-podium-box {
+    background: #1d2027;
+    border: 1px solid #272a31;
+    border-radius: 8px;
+    padding: 18px 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.stitch-podium-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+}
+
+.stitch-podium-box.rank-1 {
+    background: #272a31;
+    border: 1px solid rgba(255, 184, 0, 0.4);
+    box-shadow: 0 0 36px rgba(255, 184, 0, 0.22), 0 14px 42px rgba(0, 0, 0, 0.6);
+}
+
+.stitch-podium-box.rank-1:hover {
+    transform: translateY(-20px);
+    box-shadow: 0 0 44px rgba(255, 184, 0, 0.32), 0 18px 50px rgba(0, 0, 0, 0.7);
+}
+
+/* Rayas superiores de categoría de podio */
+.stitch-podium-box.rank-1::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #ffb800 0%, #ffdca1 50%, #ff5708 100%);
+}
+
+.stitch-podium-box.rank-2::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #94a3b8 0%, #e2e8f0 50%, #cbd5e1 100%);
+}
+
+.stitch-podium-box.rank-3::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #ff7a00 0%, #ffb59c 50%, #d97706 100%);
+}
+
+/* Header del card de podio */
+.stitch-podium-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.stitch-podium-pilot-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.stitch-podium-rank-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Chivo', sans-serif;
+    font-size: 19px;
+    font-weight: 900;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.stitch-podium-box.rank-1 .stitch-podium-rank-circle {
+    background: #ffb800;
+    color: #0b0e15;
+}
+
+.stitch-podium-box.rank-2 .stitch-podium-rank-circle {
+    background: #111622;
+    color: #ffffff;
+    border: 1px solid #334155;
+}
+
+.stitch-podium-box.rank-3 .stitch-podium-rank-circle {
+    background: #111622;
+    color: #ff7a00;
+    border: 1px solid rgba(255, 122, 0, 0.4);
+}
+
+.stitch-podium-pilot-meta {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.stitch-podium-name-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+}
+
+.stitch-podium-name {
+    font-family: 'Chivo', sans-serif;
+    font-size: 18px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: -0.01em;
+}
+
+.stitch-podium-box.rank-1 .stitch-podium-name {
+    font-size: 20px;
+    color: #ffdca1;
+}
+
+.stitch-podium-badge-tag {
+    display: inline-block;
+    align-self: flex-start;
+    padding: 2px 7px;
+    background: #ffb800;
+    color: #0b0e15;
+    font-family: 'Chivo', sans-serif;
+    font-size: 9.5px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    border-radius: 3px;
+    margin-top: 4px;
+}
+
+.stitch-podium-badge-tag.silver {
+    background: #111622;
+    color: #cbd5e1;
+    border: 1px solid #475569;
+}
+
+.stitch-podium-badge-tag.bronze {
+    background: #111622;
+    color: #ff7a00;
+    border: 1px solid rgba(255, 122, 0, 0.35);
+}
+
+.stitch-podium-watermark {
+    font-family: 'Chivo', sans-serif;
+    font-size: 48px;
+    font-weight: 900;
+    line-height: 1;
+    color: #363941;
+    user-select: none;
+    pointer-events: none;
+}
+
+.stitch-podium-box.rank-1 .stitch-podium-watermark {
+    color: rgba(255, 184, 0, 0.25);
+}
+
+/* Highlights Box del Podio (Tiempos / WRs) */
+.stitch-podium-stats-box {
+    background: #0b0e15;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin: 16px 0 12px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.stitch-podium-stats-box .stat-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.stitch-podium-stats-box .stat-title {
+    font-family: 'Chivo', sans-serif;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #9e8f78;
+}
+
+.stitch-podium-box.rank-1 .stitch-podium-stats-box .stat-title {
+    color: #ffb800;
+}
+
+.stitch-podium-stats-box .stat-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #6ef3ff;
+    margin-top: 2px;
+}
+
+.stitch-podium-stats-box .stat-sub.amber {
+    color: #ffdca1;
+}
+
+.stitch-podium-stats-box .stat-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 1;
+    color: #6ef3ff;
+}
+
+.stitch-podium-box.rank-1 .stitch-podium-stats-box .stat-num {
+    font-size: 38px;
+    color: #ffb800;
+}
+
+.stitch-podium-box.rank-3 .stitch-podium-stats-box .stat-num {
+    color: #ff7a00;
+}
+
+/* Footer del Card de Podio */
+.stitch-podium-footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+.stitch-podium-footer .footer-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.stitch-podium-footer .footer-item svg {
+    flex-shrink: 0;
+    color: #ffdca1;
+    fill: #ffdca1;
+}
+
+.stitch-podium-footer .footer-item.right {
+    justify-content: flex-end;
+    color: #ffdca1;
+}
+
+/* 3. Barra Táctica de Filtros y Búsqueda (Screen 6) */
+.stitch-screen6-filters-bar {
+    background: #1d2027;
+    border: 1px solid #272a31;
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.stitch-screen6-tabs-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #0b0e15;
+    padding: 4px;
+    border-radius: 6px;
+    overflow-x: auto;
+}
+
+.stitch-screen6-tab-btn {
+    padding: 6px 14px;
+    font-family: 'Chivo', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #9e8f78;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.stitch-screen6-tab-btn:hover {
+    color: #ffffff;
+    background: #1d2027;
+}
+
+.stitch-screen6-tab-btn.active {
+    background: #ffb800;
+    color: #0b0e15;
+    font-weight: 900;
+    box-shadow: 0 0 12px rgba(255, 184, 0, 0.4);
+}
+
+.stitch-screen6-filter-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    flex-grow: 1;
+    justify-content: flex-end;
+}
+
+.stitch-screen6-search-wrap {
+    position: relative;
+    min-width: 240px;
+    flex-grow: 1;
+    max-width: 380px;
+}
+
+.stitch-screen6-search-wrap svg {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9e8f78;
+    pointer-events: none;
+}
+
+.stitch-screen6-search-input {
+    width: 100%;
+    background: #0b0e15;
+    border: 1px solid #272a31;
+    border-radius: 4px;
+    padding: 7px 12px 7px 34px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #e0e2ec;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.stitch-screen6-search-input:focus {
+    border-color: #ffb800;
+    box-shadow: 0 0 10px rgba(255, 184, 0, 0.2);
+}
+
+.stitch-screen6-select {
+    background: #0b0e15;
+    border: 1px solid #272a31;
+    border-radius: 4px;
+    padding: 7px 28px 7px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    color: #e0e2ec;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.stitch-screen6-select:focus {
+    border-color: #ffb800;
+}
+
+/* 4. Tabla de Clasificación Completa (Screen 6) */
+.stitch-screen6-table-card {
+    background: #1d2027;
+    border: 1px solid #272a31;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+    margin-bottom: 32px;
+}
+
+.stitch-screen6-table-top {
+    background: #191c23;
+    padding: 12px 18px;
+    border-bottom: 1px solid #272a31;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.stitch-screen6-table-title {
+    font-family: 'Chivo', sans-serif;
+    font-size: 14px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #ffffff;
+}
+
+.stitch-screen6-table-count {
+    padding: 3px 8px;
+    background: #32353c;
+    color: #ffdca1;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 4px;
+    margin-left: 8px;
+}
+
+.stitch-screen6-legend-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+.stitch-screen6-legend-row .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.stitch-screen6-legend-row .legend-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+}
+
+.stitch-screen6-legend-row .legend-dot.gold { background: #ffb800; box-shadow: 0 0 6px #ffb800; }
+.stitch-screen6-legend-row .legend-dot.silver { background: #e2e8f0; }
+.stitch-screen6-legend-row .legend-dot.bronze { background: #ff7a00; }
+
+.stitch-screen6-table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.stitch-screen6-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px;
+    text-align: left;
+}
+
+.stitch-screen6-table thead tr {
+    background: #0b0e15;
+    border-bottom: 1px solid #272a31;
+}
+
+.stitch-screen6-table thead th {
+    padding: 12px 16px;
+    font-family: 'Chivo', sans-serif;
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #9e8f78;
+    white-space: nowrap;
+}
+
+.stitch-screen6-table tbody tr {
+    background: #191c23;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    transition: background 0.15s ease;
+}
+
+.stitch-screen6-table tbody tr:nth-child(even) {
+    background: #1d2027;
+}
+
+.stitch-screen6-table tbody tr:hover {
+    background: #272a31;
+}
+
+.stitch-screen6-table tbody td {
+    padding: 12px 16px;
+    vertical-align: middle;
+}
+
+/* Celdas específicas de tabla Screen 6 */
+.stitch-screen6-rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 28px;
+    border-radius: 5px;
+    font-family: 'Chivo', sans-serif;
+    font-size: 14px;
+    font-weight: 900;
+}
+
+.stitch-screen6-rank-badge.rank-1 {
+    background: #ffb800;
+    color: #0b0e15;
+    box-shadow: 0 0 10px rgba(255, 184, 0, 0.4);
+}
+
+.stitch-screen6-rank-badge.rank-2 {
+    background: #32353c;
+    color: #ffffff;
+    border: 1px solid #475569;
+}
+
+.stitch-screen6-rank-badge.rank-3 {
+    background: #111622;
+    color: #ff7a00;
+    border: 1px solid rgba(255, 122, 0, 0.4);
+}
+
+.stitch-screen6-rank-plain {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: #94a3b8;
+}
+
+/* Celda de Piloto */
+.stitch-screen6-driver-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.stitch-screen6-driver-meta {
+    display: flex;
+    flex-direction: column;
+}
+
+.stitch-screen6-driver-meta .name-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.stitch-screen6-driver-meta .name-row .driver-name-text {
+    font-family: 'Chivo', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 0.02em;
+    transition: color 0.15s ease;
+}
+
+.stitch-screen6-table tbody tr:hover .driver-name-text {
+    color: #ffb800;
+}
+
+.stitch-screen6-driver-meta .team-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: #94a3b8;
+    text-transform: uppercase;
+    margin-top: 1px;
+}
+
+/* Celda de Métrica y Barra Proporcional */
+.stitch-screen6-metric-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.stitch-screen6-metric-cell .num-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    font-weight: 900;
+    color: #ffb800;
+    min-width: 32px;
+}
+
+.stitch-screen6-metric-cell .metric-bar-bg {
+    width: 60px;
+    height: 5px;
+    background: #0b0e15;
+    border-radius: 9999px;
+    overflow: hidden;
+    display: none;
+}
+
+@media (min-width: 1200px) {
+    .stitch-screen6-metric-cell .metric-bar-bg {
+        display: block;
+    }
+}
+
+.stitch-screen6-metric-cell .metric-bar-fill {
+    height: 100%;
+    background: #ffb800;
+    border-radius: 9999px;
+}
+
+/* Píldoras de Rango de Honor */
+.stitch-screen6-honor-pill {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-family: 'Chivo', sans-serif;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+}
+
+.stitch-screen6-honor-pill.legend {
+    background: rgba(255, 184, 0, 0.15);
+    color: #ffb800;
+    border: 1px solid rgba(255, 184, 0, 0.35);
+    box-shadow: 0 0 10px rgba(255, 184, 0, 0.2);
+}
+
+.stitch-screen6-honor-pill.elite {
+    background: #111622;
+    color: #e2e8f0;
+    border: 1px solid #475569;
+}
+
+.stitch-screen6-honor-pill.contender {
+    background: rgba(255, 87, 8, 0.15);
+    color: #ff7a00;
+    border: 1px solid rgba(255, 87, 8, 0.35);
+}
+
+/* Botón de Auditoría */
+.stitch-screen6-audit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    background: #0b0e15;
+    color: #00dbe9;
+    border: 1px solid #272a31;
+    border-radius: 4px;
+    font-family: 'Chivo', sans-serif;
+    font-size: 10.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.stitch-screen6-audit-btn:hover {
+    background: #ffb800;
+    color: #0b0e15;
+    border-color: #ffb800;
+    box-shadow: 0 0 10px rgba(255, 184, 0, 0.4);
+}
+
+/* ==========================================================================
+   GOOGLE STITCH TACTICAL DOSSIER & WORKSTATION COCKPIT (MASTER-DETAIL LAYOUT)
+   ========================================================================== */
+
+/* Carbon Background Pattern Overlay */
+.bg-carbon-pattern {
+    background-color: #0b0e15;
+    background-image: 
+        radial-gradient(circle at 60% -10%, rgba(255, 85, 0, 0.08) 0%, transparent 55%),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 100% 100%, 32px 32px, 32px 32px;
+}
+
+/* Driver Signature 3D Text Emulation */
+.driver-tag-emboss {
+    font-family: 'Teko', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: linear-gradient(180deg, #ffffff 10%, #ffc107 40%, #ff5500 85%, #941e00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 8px rgba(255, 85, 0, 0.65)) drop-shadow(0 0 1px #000000);
+    transform: skew(-8deg);
+    display: inline-block;
+}
+
+/* Gauge Grid Texture */
+.gauge-grid {
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+    background-size: 12px 12px;
+}
+
+/* Atmospheric Glow & Shadow Tokens */
+.shadow-glow-amber {
+    box-shadow: 0 0 25px -4px rgba(255, 184, 0, 0.35);
+}
+.shadow-glow-nitro {
+    box-shadow: 0 0 25px -4px rgba(255, 85, 0, 0.45);
+}
+.shadow-glow-cyan {
+    box-shadow: 0 0 25px -4px rgba(0, 208, 255, 0.3);
+}
+
+/* Compact Tactical Sub-Bar */
+.stitch-cockpit-subbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 18px;
+    background: #07090e;
+    border: 1px solid #1c2230;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+}
+
+.stitch-cockpit-subbar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.cockpit-badge-hud {
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(255, 184, 0, 0.15);
+    color: #ffb800;
+    border: 1px solid rgba(255, 184, 0, 0.4);
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    font-size: 10px;
+}
+
+.cockpit-subbar-title {
+    color: #94a3b8;
+    letter-spacing: 0.08em;
+}
+
+.stitch-cockpit-subbar-links {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cockpit-subbar-btn {
+    padding: 5px 12px;
+    border-radius: 6px;
+    background: #151923;
+    border: 1px solid #202636;
+    color: #cbd5e1;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.cockpit-subbar-btn:hover {
+    background: #1c2230;
+    color: #fff;
+    border-color: #475569;
+}
+
+.cockpit-subbar-btn.active {
+    background: #ffb800;
+    color: #000;
+    font-weight: 900;
+    border-color: #ffb800;
+    box-shadow: 0 0 15px rgba(255, 184, 0, 0.4);
+}
+
+/* Split Layout Architecture */
+.stitch-cockpit-layout {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    width: 100%;
+}
+
+@media (max-width: 1024px) {
+    .stitch-cockpit-layout {
+        flex-direction: column;
+    }
+}
+
+/* ==========================================================================
+   LEFT SIDEBAR: BLACKLIST ROSTER (1 - 15)
+   ========================================================================== */
+.stitch-roster-sidebar {
+    width: 350px;
+    flex-shrink: 0;
+    background: #0b0e15;
+    border: 1px solid #202636;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 120px);
+    position: sticky;
+    top: 80px;
+}
+
+@media (max-width: 1024px) {
+    .stitch-roster-sidebar {
+        width: 100%;
+        max-height: 520px;
+        position: static;
+    }
+}
+
+.roster-header-block {
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.roster-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.roster-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pulse-dot-orange {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ff5500;
+    box-shadow: 0 0 8px #ff5500;
+    display: inline-block;
+    animation: pulse 1.8s infinite;
+}
+
+.roster-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    color: #e2e8f0;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.roster-active-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: #151923;
+    color: #ffb800;
+    border: 1px solid #202636;
+    font-weight: 700;
+}
+
+.roster-search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.roster-search-box .search-icon {
+    position: absolute;
+    left: 10px;
+    font-size: 16px;
+    color: #64748b;
+    pointer-events: none;
+}
+
+.roster-search-input {
+    width: 100%;
+    background: #07090e;
+    border: 1px solid #202636;
+    border-radius: 6px;
+    padding: 7px 48px 7px 32px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #e2e8f0;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.roster-search-input:focus {
+    border-color: #ffb800;
+    box-shadow: 0 0 10px rgba(255, 184, 0, 0.25);
+}
+
+.roster-search-kbd {
+    position: absolute;
+    right: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: #64748b;
+    background: #151923;
+    padding: 2px 5px;
+    border-radius: 3px;
+    border: 1px solid #202636;
+}
+
+.roster-filter-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+}
+
+.roster-filter-chip {
+    padding: 4px 6px;
+    border-radius: 4px;
+    background: #151923;
+    border: 1px solid #202636;
+    color: #94a3b8;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.roster-filter-chip:hover {
+    color: #fff;
+    border-color: #475569;
+}
+
+.roster-filter-chip.active {
+    background: #ffb800;
+    color: #000;
+    font-weight: 900;
+    border-color: #ffb800;
+}
+
+.roster-items-container {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-right: 4px;
+}
+
+.roster-items-container::-webkit-scrollbar {
+    width: 4px;
+}
+.roster-items-container::-webkit-scrollbar-thumb {
+    background: #202636;
+    border-radius: 2px;
+}
+
+/* Driver Item */
+.roster-driver-item {
+    background: #10131a;
+    border: 1px solid #1c2230;
+    border-radius: 8px;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.roster-driver-item:hover:not(.active) {
+    border-color: rgba(255, 184, 0, 0.4);
+    background: #151923;
+}
+
+.roster-driver-item.active {
+    background: #10131a;
+    border: 2px solid #ffb800;
+    box-shadow: 0 0 25px -4px rgba(255, 184, 0, 0.35);
+}
+
+.roster-item-watermark {
+    position: absolute;
+    right: -4px;
+    bottom: -6px;
+    font-size: 28px;
+    font-weight: 900;
+    color: rgba(255, 184, 0, 0.08);
+    font-family: 'JetBrains Mono', monospace;
+    pointer-events: none;
+    user-select: none;
+}
+
+.roster-item-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.roster-item-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.roster-rank-pill {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    background: #151923;
+    border: 1px solid #202636;
+    color: #cbd5e1;
+    flex-shrink: 0;
+}
+
+.roster-rank-pill.rank-leader {
+    background: #ffb800;
+    color: #000;
+    border: none;
+    box-shadow: 0 2px 8px rgba(255, 184, 0, 0.4);
+}
+
+.roster-pilot-meta {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.roster-pilot-name-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.roster-pilot-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+}
+
+.driver-status-dot.active {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #00ff88;
+    display: inline-block;
+}
+
+.roster-pilot-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    color: #64748b;
+    letter-spacing: 0.02em;
+}
+
+.roster-item-right {
+    text-align: right;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.roster-bounty-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    font-weight: 900;
+    color: #00ff88;
+}
+
+.roster-score-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    font-weight: 700;
+    color: #ffb800;
+}
+
+.roster-item-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 5px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+}
+
+.roster-car-name {
+    color: #94a3b8;
+    max-width: 180px;
+}
+
+.roster-group-tag {
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.tag-alpha {
+    background: rgba(255, 184, 0, 0.15);
+    color: #ffb800;
+    border: 1px solid rgba(255, 184, 0, 0.3);
+}
+
+.tag-beta {
+    background: rgba(255, 85, 0, 0.2);
+    color: #ff5500;
+    border: 1px solid rgba(255, 85, 0, 0.4);
+}
+
+.tag-gamma {
+    background: rgba(0, 208, 255, 0.15);
+    color: #00d0ff;
+    border: 1px solid rgba(0, 208, 255, 0.3);
+}
+
+.tag-delta {
+    background: rgba(148, 163, 184, 0.15);
+    color: #94a3b8;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.roster-item-compact {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.roster-status-chip {
+    font-size: 9px;
+    color: #64748b;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.roster-slot-open {
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: rgba(7, 9, 14, 0.6);
+    border: 1px dashed #1c2230;
+    font-size: 10.5px;
+    font-family: 'JetBrains Mono', monospace;
+    color: #475569;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.slot-open-tag {
+    font-size: 8.5px;
+    text-transform: uppercase;
+    color: #64748b;
+    font-weight: 700;
+}
+
+.roster-footer {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #1c2230;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    color: #64748b;
+}
+
+.roster-sync-ok {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #00ff88;
+    font-weight: 700;
+}
+
+.sync-dot-green {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #00ff88;
+    box-shadow: 0 0 6px #00ff88;
+}
+
+/* ==========================================================================
+   RIGHT STAGE: DEEP-DIVE TACTICAL DOSSIER
+   ========================================================================== */
+.stitch-cockpit-stage {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Hero Header */
+.cockpit-hero-header {
+    position: relative;
+    background: linear-gradient(135deg, #0b0e15 0%, #10131a 50%, #0b0e15 100%);
+    border: 2px solid rgba(255, 184, 0, 0.8);
+    border-radius: 12px;
+    padding: 24px 28px;
+    overflow: hidden;
+    box-shadow: 0 0 25px -4px rgba(255, 184, 0, 0.35);
+}
+
+.cockpit-glow-amber {
+    position: absolute;
+    right: -60px;
+    top: -60px;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255, 184, 0, 0.15) 0%, transparent 70%);
+    filter: blur(40px);
+    pointer-events: none;
+}
+
+.cockpit-glow-nitro {
+    position: absolute;
+    right: 30%;
+    bottom: -60px;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255, 85, 0, 0.15) 0%, transparent 70%);
+    filter: blur(40px);
+    pointer-events: none;
+}
+
+.cockpit-hero-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.cockpit-profile-main {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    flex: 1;
+    min-width: 280px;
+}
+
+.cockpit-avatar-container {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.cockpit-avatar-box {
+    width: 86px;
+    height: 86px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #151923, #07090e);
+    border: 2px solid #ffb800;
+    box-shadow: 0 0 25px -4px rgba(255, 184, 0, 0.35);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transform: skew(-3deg);
+}
+
+.cockpit-crown-icon {
+    font-size: 32px;
+    line-height: 1;
+}
+
+.cockpit-avatar-rank {
+    font-size: 12px;
+    font-weight: 900;
+    color: #fff;
+    background: rgba(255, 184, 0, 0.2);
+    border: 1px solid rgba(255, 184, 0, 0.5);
+    padding: 1px 6px;
+    border-radius: 4px;
+    margin-top: 4px;
+}
+
+.cockpit-heat-tag {
+    position: absolute;
+    bottom: -6px;
+    right: -6px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: #ff5500;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.cockpit-profile-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.cockpit-tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 2px;
+}
+
+.cockpit-tag-leader {
+    padding: 3px 10px;
+    border-radius: 4px;
+    background: #ff5500;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    box-shadow: 0 2px 6px rgba(255, 85, 0, 0.4);
+}
+
+.cockpit-tag-verified {
+    padding: 3px 10px;
+    border-radius: 4px;
+    background: rgba(0, 230, 118, 0.15);
+    border: 1px solid rgba(0, 230, 118, 0.4);
+    color: #00ff88;
+    font-size: 10px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.pulse-dot-green {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #00ff88;
+    animation: pulse 1.5s infinite;
+}
+
+.cockpit-tag-id {
+    font-size: 11px;
+    color: #64748b;
+}
+
+.cockpit-pilot-title {
+    font-family: 'Chivo', sans-serif;
+    font-size: 38px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #fff;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin: 4px 0 6px 0;
+}
+
+.cockpit-pilot-title .text-gold {
+    color: #ffb800;
+}
+
+.cockpit-pilot-bio {
+    font-size: 12.5px;
+    color: #cbd5e1;
+    max-width: 640px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.cockpit-hero-cta-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 220px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 1200px) {
+    .cockpit-hero-cta-col {
+        width: 100%;
+        flex-direction: row;
+    }
+}
+
+.cockpit-btn-youtube {
+    padding: 10px 16px;
+    border-radius: 6px;
+    background: rgba(69, 10, 10, 0.6);
+    border: 1px solid rgba(220, 38, 38, 0.7);
+    color: #fca5a5;
+    font-size: 11px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.cockpit-btn-youtube:hover {
+    background: rgba(127, 29, 29, 0.8);
+    color: #fff;
+    border-color: #ef4444;
+}
+
+.cockpit-btn-youtube .yt-icon {
+    width: 16px;
+    height: 16px;
+    fill: #ef4444;
+}
+
+.cockpit-btn-standings {
+    padding: 10px 16px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #ffb800, #ff5500);
+    color: #000;
+    font-size: 11px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    box-shadow: 0 0 25px -4px rgba(255, 184, 0, 0.35);
+    transition: all 0.2s ease;
+}
+
+.cockpit-btn-standings:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+}
+
+.cockpit-watermark-overlay {
+    position: absolute;
+    right: 16px;
+    bottom: -4px;
+    pointer-events: none;
+    user-select: none;
+    opacity: 0.12;
+}
+
+.cockpit-watermark-overlay .driver-tag-emboss {
+    font-size: 72px;
+}
+
+/* ==========================================================================
+   4 OVERSIZED KPI METRICS GRID
+   ========================================================================== */
+.cockpit-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+@media (max-width: 1200px) {
+    .cockpit-kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 640px) {
+    .cockpit-kpi-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.cockpit-kpi-card {
+    background: #0b0e15;
+    border: 1px solid #202636;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 110px;
+    position: relative;
+    overflow: hidden;
+}
+
+.cockpit-kpi-card.bounty-card {
+    border-color: rgba(0, 255, 136, 0.4);
+}
+
+.cockpit-kpi-card.score-card {
+    border-color: rgba(255, 184, 0, 0.5);
+    box-shadow: 0 0 25px -4px rgba(255, 184, 0, 0.35);
+}
+
+.cockpit-kpi-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.cockpit-kpi-lbl {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #94a3b8;
+}
+
+.cockpit-kpi-lbl.text-gold {
+    color: #ffb800;
+}
+
+.cockpit-kpi-emoji {
+    font-size: 15px;
+}
+
+.cockpit-pill-badge {
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: rgba(255, 184, 0, 0.15);
+    color: #ffb800;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.cockpit-kpi-val {
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+}
+
+.cockpit-kpi-val.text-green {
+    color: #00ff88;
+}
+
+.cockpit-kpi-val.text-gold {
+    color: #ffb800;
+}
+
+.cockpit-kpi-val.text-white {
+    color: #fff;
+}
+
+.val-unit {
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffb800;
+}
+
+.val-sub {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.val-sub.text-green {
+    color: #00ff88;
+}
+
+.cockpit-kpi-foot {
+    margin-top: 8px;
+    font-size: 10px;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.cockpit-kpi-foot.text-green {
+    color: #00ff88;
+}
+
+.cockpit-kpi-foot.flex-between {
+    justify-content: space-between;
+}
+
+.cockpit-bar-track {
+    width: 100%;
+    height: 5px;
+    background: #07090e;
+    border-radius: 9999px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.cockpit-bar-fill-gold {
+    height: 100%;
+    background: #ffb800;
+    border-radius: 9999px;
+}
+
+/* ==========================================================================
+   CENTRAL WORKSTATION (2 COLUMNS: 7 / 5)
+   ========================================================================== */
+.cockpit-workstation-grid {
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    gap: 20px;
+}
+
+@media (max-width: 1100px) {
+    .cockpit-workstation-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.cockpit-panel-card {
+    background: #0b0e15;
+    border: 1px solid #202636;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.cockpit-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #1c2230;
+}
+
+.panel-header-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.panel-icon {
+    font-size: 16px;
+}
+
+.panel-title {
+    font-size: 12.5px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #fff;
+    margin: 0;
+}
+
+.panel-ver-badge {
+    font-size: 10px;
+    color: #94a3b8;
+    background: #151923;
+    padding: 2px 7px;
+    border-radius: 4px;
+    border: 1px solid #202636;
+}
+
+.panel-ver-badge.text-green {
+    color: #00ff88;
+    background: rgba(0, 255, 136, 0.1);
+    border-color: rgba(0, 255, 136, 0.3);
+}
+
+.cockpit-spec-box-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+@media (max-width: 640px) {
+    .cockpit-spec-box-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.spec-box {
+    background: #07090e;
+    border: 1px solid #1c2230;
+    border-radius: 8px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.spec-box.span-2 {
+    grid-column: span 2;
+}
+
+@media (max-width: 640px) {
+    .spec-box.span-2 {
+        grid-column: span 1;
+    }
+}
+
+.spec-box-lbl {
+    font-size: 9.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #64748b;
+    letter-spacing: 0.04em;
+}
+
+.spec-box-val {
+    font-size: 13px;
+    letter-spacing: -0.01em;
+}
+
+.spec-box-sub {
+    font-size: 10.5px;
+}
+
+.spec-box-desc {
+    font-size: 11.5px;
+    line-height: 1.5;
+    color: #cbd5e1;
+}
+
+/* 128Hz Gauges */
+.cockpit-telemetry-benchmarks {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.benchmarks-title {
+    font-size: 10.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #94a3b8;
+}
+
+.gauge-bar-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.gauge-bar-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+}
+
+.gauge-name {
+    color: #94a3b8;
+    font-weight: 600;
+}
+
+.gauge-track {
+    width: 100%;
+    height: 8px;
+    background: #07090e;
+    border: 1px solid #1c2230;
+    border-radius: 4px;
+    padding: 1px;
+}
+
+.gauge-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.4s ease;
+}
+
+.fill-gradient-speed {
+    background: linear-gradient(90deg, #ffb800 0%, #ff5500 50%, #ffb800 100%);
+}
+
+.fill-gradient-accel {
+    background: linear-gradient(90deg, #00ff88 0%, #00d0ff 100%);
+}
+
+.fill-gradient-handling {
+    background: linear-gradient(90deg, #00d0ff 0%, #ff5500 100%);
+}
+
+/* Dyno Curve Widget */
+.cockpit-dyno-widget {
+    margin-top: 8px;
+    padding: 12px 14px;
+    background: #07090e;
+    border: 1px solid #1c2230;
+    border-radius: 8px;
+    position: relative;
+}
+
+.dyno-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10px;
+    margin-bottom: 6px;
+}
+
+.dyno-title {
+    color: #64748b;
+    font-weight: 700;
+}
+
+.dyno-peak {
+    font-weight: 800;
+}
+
+.dyno-svg {
+    width: 100%;
+    height: 64px;
+    display: block;
+}
+
+.dyno-ticks {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    color: #475569;
+    margin-top: 4px;
+}
+
+/* Expediente Oficial Box */
+.cockpit-expediente-box {
+    margin-top: 16px;
+    padding: 12px 14px;
+    background: rgba(7, 9, 14, 0.7);
+    border: 1px solid #ef4444;
+    border-radius: 8px;
+}
+
+.expediente-lbl {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.expediente-text {
+    font-size: 11px;
+    color: #cbd5e1;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Performance Matrix (Right Column) */
+.sub-section-lbl {
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    color: #94a3b8;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.cockpit-podium-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.podium-col-card {
+    background: #07090e;
+    border: 1px solid #1c2230;
+    border-radius: 8px;
+    padding: 10px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.podium-col-card.p1-card {
+    background: rgba(255, 184, 0, 0.12);
+    border: 2px solid #ffb800;
+    box-shadow: 0 0 15px rgba(255, 184, 0, 0.25);
+}
+
+.podium-col-card.p4-card {
+    background: rgba(0, 208, 255, 0.08);
+    border-color: rgba(0, 208, 255, 0.3);
+}
+
+.p-title {
+    font-size: 10px;
+    color: #64748b;
+    font-weight: 700;
+}
+
+.p-val {
+    font-size: 24px;
+    line-height: 1.1;
+}
+
+.p-pct {
+    font-size: 9px;
+    color: #64748b;
+}
+
+/* Bonus Breakdown Rows */
+.cockpit-bonus-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 18px;
+}
+
+.bonus-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: rgba(7, 9, 14, 0.7);
+    border: 1px solid #1c2230;
+    border-radius: 6px;
+    font-size: 11px;
+}
+
+.bonus-row.active-bonus {
+    border-color: rgba(255, 184, 0, 0.4);
+    background: #07090e;
+}
+
+.bonus-row-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #94a3b8;
+}
+
+.dot-gold {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ffb800;
+}
+
+.dot-gray {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #475569;
+}
+
+.bonus-row-val {
+    color: #cbd5e1;
+    font-weight: 700;
+}
+
+/* Head-to-Head Widget */
+.cockpit-h2h-widget {
+    background: #07090e;
+    border: 1px solid #1c2230;
+    border-radius: 10px;
+    padding: 14px;
+}
+
+.h2h-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #1c2230;
+}
+
+.h2h-title {
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+}
+
+.h2h-sub {
+    font-size: 10px;
+    color: #64748b;
+}
+
+.h2h-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.h2h-box {
+    background: #0b0e15;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.h2h-box.leader-box {
+    border: 1px solid rgba(255, 184, 0, 0.5);
+}
+
+.h2h-box.challenger-box {
+    border: 1px solid #1c2230;
+}
+
+.h2h-pilot-head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.h2h-pilot-name {
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.h2h-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding-top: 6px;
+    border-top: 1px solid #1c2230;
+    font-size: 11px;
+}
+
+.stat-line {
+    display: flex;
+    justify-content: space-between;
+}
+
+.h2h-footer {
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px solid #1c2230;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10px;
+}
+
+/* ==========================================================================
+   QUICK SWITCH COCKPIT: SELECT DOSSIER (1 - 10)
+   ========================================================================== */
+.cockpit-quick-switch-section {
+    background: #0b0e15;
+    border: 1px solid #1c2230;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.quick-switch-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.qs-title {
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+}
+
+.qs-sub {
+    font-size: 10px;
+    color: #64748b;
+}
+
+.quick-switch-pills-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+}
+
+.quick-switch-pills-row::-webkit-scrollbar {
+    height: 4px;
+}
+.quick-switch-pills-row::-webkit-scrollbar-thumb {
+    background: #202636;
+    border-radius: 2px;
+}
+
+.qs-pill {
+    padding: 7px 12px;
+    border-radius: 6px;
+    background: #10131a;
+    border: 1px solid #202636;
+    color: #cbd5e1;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.qs-pill:hover:not(.active) {
+    background: #151923;
+    color: #fff;
+    border-color: rgba(255, 184, 0, 0.4);
+}
+
+.qs-pill.active {
+    background: #ffb800;
+    color: #000;
+    font-weight: 900;
+    border-color: #ffb800;
+    box-shadow: 0 0 15px rgba(255, 184, 0, 0.4);
+}
+
+/* ==========================================================================
+   PROTOCOLO DE INTEGRIDAD & DISPONIBILIDAD BANNER
+   ========================================================================== */
+.cockpit-integrity-section {
+    background: #0b0e15;
+    border: 1px solid #202636;
+    border-radius: 12px;
+    padding: 20px 24px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    margin-top: 4px;
+}
+
+.integrity-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.integrity-info-col {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    min-width: 280px;
+}
+
+.integrity-sup {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+}
+
+.integrity-title {
+    font-size: 18px;
+    font-weight: 900;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    margin: 0;
+}
+
+.integrity-desc {
+    font-size: 12px;
+    color: #94a3b8;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.integrity-desc strong {
+    color: #fff;
+}
+
+.integrity-desc code {
+    color: #ffb800;
+}
+
+.integrity-checks-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+.check-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #cbd5e1;
+}
+
+.check-dot-green {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #00ff88;
+}
+
+.integrity-seal-col {
+    width: 250px;
+    background: #07090e;
+    border: 1px solid rgba(255, 184, 0, 0.4);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+    .integrity-seal-col {
+        width: 100%;
+    }
+}
+
+.seal-icon {
+    font-size: 24px;
+    margin-bottom: 4px;
+}
+
+.seal-title {
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.seal-sub {
+    font-size: 10px;
+    color: #94a3b8;
+    margin-bottom: 8px;
+}
+
+.seal-tag {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: rgba(0, 255, 136, 0.1);
+    border: 1px solid rgba(0, 255, 136, 0.35);
+    color: #00ff88;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   OPTIMIZACIONES DE RENDIMIENTO DE CARGA Y RENDERIZADO (CORE WEB VITALS)
+   ========================================================================== */
+/* 1. Omitir cálculo de layout para vistas inactivas */
+.view-container:not(.active),
+.circuit-section:not(.active),
+.sprintdrag-section:not(.active) {
+    content-visibility: hidden;
+}
+
+/* 2. Carga y renderizado diferido para el footer y componentes fuera de pantalla */
+.stitch-site-footer,
+.powered-by-section {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 320px;
+}
+
+/* 3. Aceleración por hardware para transiciones suaves */
+.powered-by-card,
+.stitch-btn-video,
+.stitch-table tr {
+    transform: translateZ(0);
+}
+

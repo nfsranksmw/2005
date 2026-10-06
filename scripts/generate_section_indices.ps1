@@ -65,7 +65,7 @@ foreach ($sec in $sections) {
 
     # 4. Activar la sección correspondiente por defecto
     $mod = $mod -replace 'id="view-home" class="view-section active"', 'id="view-home" class="view-section"'
-    $mod = $mod -replace "id=""view-$viewId"" class=""view-section""", "id=""view-$viewId"" class=""view-section active"""
+    $mod = $mod -replace "id=""view-$viewId"" class=""view-section([^""]*)""", "id=""view-$viewId"" class=""view-section`$1 active"""
 
     # 5. Ocultar el banner flotante de Discord si no es la home
     if ($viewId -ne 'home') {

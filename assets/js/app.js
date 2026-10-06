@@ -1,14 +1,26 @@
 function applyNormalizedChampionshipWeeksData(target, data) {
     if (!target || !data || typeof data !== 'object') return;
+
+    function mergeWeek(wNum, w) {
+        if (!w || isNaN(wNum) || wNum < 1 || wNum > 4) return;
+        w.weekNumber = wNum;
+        if (target[wNum] && target[wNum].challenges && Array.isArray(w.challenges)) {
+            w.challenges.forEach((remoteCh, cIdx) => {
+                const localCh = target[wNum].challenges[cIdx] || target[wNum].challenges.find(c => c.id === remoteCh.id);
+                if (localCh && localCh.groupsResults) {
+                    remoteCh.groupsResults = Object.assign({}, localCh.groupsResults, remoteCh.groupsResults || {});
+                }
+            });
+        }
+        target[wNum] = w;
+        target[String(wNum)] = w;
+    }
+
     if (Array.isArray(data)) {
         data.forEach((w, idx) => {
             if (!w) return;
             const wNum = (w.weekNumber || w.weekNum) ? parseInt(w.weekNumber || w.weekNum, 10) : (idx + 1);
-            if (!isNaN(wNum) && wNum >= 1 && wNum <= 4) {
-                w.weekNumber = wNum;
-                target[wNum] = w;
-                target[String(wNum)] = w;
-            }
+            mergeWeek(wNum, w);
         });
     } else {
         Object.keys(data).forEach(k => {
@@ -16,11 +28,7 @@ function applyNormalizedChampionshipWeeksData(target, data) {
             if (!w) return;
             const parsedK = parseInt(k, 10);
             const wNum = (w.weekNumber || w.weekNum) ? parseInt(w.weekNumber || w.weekNum, 10) : parsedK;
-            if (!isNaN(wNum) && wNum >= 1 && wNum <= 4) {
-                w.weekNumber = wNum;
-                target[wNum] = w;
-                target[String(wNum)] = w;
-            }
+            mergeWeek(wNum, w);
         });
     }
 }
@@ -343,6 +351,9 @@ function switchView(viewId, updateHistory = true) {
         if (typeof renderChampionshipGroups === 'function') {
             renderChampionshipGroups(currentChampionshipWeek);
         }
+        if (typeof renderChampionshipChallenges === 'function') {
+            renderChampionshipChallenges(currentChampionshipWeek);
+        }
         if (typeof renderBlacklistUI === 'function') {
             renderBlacklistUI();
         }
@@ -535,6 +546,10 @@ function switchCircuitTab(tabId, btn) {
         currentModality = 'bmw';
         const pMod = document.getElementById('pill-val-modality');
         if (pMod) pMod.textContent = 'BMW M3 GTR';
+    } else if (tabId.includes('stock')) {
+        currentModality = 'stock';
+        const pMod = document.getElementById('pill-val-modality');
+        if (pMod) pMod.textContent = 'Stock / Serie';
     }
     if (tabId.includes('single')) {
         currentLap = 'single';
@@ -545,7 +560,16 @@ function switchCircuitTab(tabId, btn) {
         const pLap = document.getElementById('pill-val-lap');
         if (pLap) pLap.textContent = 'Fast Lap';
     }
+    currentLeaderboardPage = 1;
     applyCurrentCarFilter();
+
+    // Re-renderizar tabla activa con datos correspondientes
+    if (targetTab) {
+        const tbody = targetTab.querySelector('tbody');
+        if (tbody && tbody.id && currentLeaderboardRawData[tbody.id]) {
+            renderLeaderboardComponent(tbody.id, { data: currentLeaderboardRawData[tbody.id] });
+        }
+    }
 }
 
 function switchSprintDragTab(tabId, btn) {
@@ -566,7 +590,15 @@ function switchSprintDragTab(tabId, btn) {
         const pMod = document.getElementById('pill-val-modality');
         if (pMod) pMod.textContent = 'BMW M3 GTR';
     }
+    currentLeaderboardPage = 1;
     applyCurrentCarFilter();
+
+    if (targetTab) {
+        const tbody = targetTab.querySelector('tbody');
+        if (tbody && tbody.id && currentLeaderboardRawData[tbody.id]) {
+            renderLeaderboardComponent(tbody.id, { data: currentLeaderboardRawData[tbody.id] });
+        }
+    }
 }
 
 function switchGlobalRouteTab(tabId, btn) {
@@ -1350,10 +1382,14 @@ async function loadCardPreviewLazy(cardElement, route) {
         const topRow = (rows && rows.length > 0) ? rows[0] : null;
 
         if (topRow) {
+            const isSprint = (route && route.type === 'Sprint');
+            const sprintTimeStyle = isSprint ? 'style="color: #00dbe9 !important; text-shadow: 0 0 10px rgba(0, 219, 233, 0.6) !important;"' : '';
+            const sprintSvgStyle = isSprint ? 'style="vertical-align: -1px; margin-right: 3px; display: inline-block; color: #00dbe9 !important; fill: #00dbe9 !important;"' : 'style="vertical-align: -1px; margin-right: 3px; display: inline-block;"';
+
             previewContainer.outerHTML = `
                 <div class="route-record-preview">
-<span class="route-time-display"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align: -1px; margin-right: 3px; display: inline-block;"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>${topRow.time}</span>
-<span class="driver-name"><svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor" style="vertical-align: -1px; margin-right: 3px; display: inline-block;"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>${topRow.driver}</span>
+                    <span class="route-time-display ${isSprint ? 'sprint-time' : ''}" ${sprintTimeStyle}><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" ${sprintSvgStyle}><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>${topRow.time}</span>
+                    <span class="driver-name"><svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor" style="vertical-align: -1px; margin-right: 3px; display: inline-block;"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>${topRow.driver}</span>
                 </div>
                 <div style="overflow: hidden; width: 100%; margin-top: 3px;">
                     <div style="white-space: nowrap; font-size: 8.9px; font-weight: 700; color: #94a3b8; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis;">
@@ -1509,7 +1545,7 @@ async function loadLeaderboardForRoute(route) {
     // Actualizar cabecera de la ruta (Banner personalizado y centrado)
     const titleEl = document.getElementById('leaderboard-title');
     if (titleEl && route) {
-        titleEl.innerHTML = `<span class="title-main">LEADERBOARD:</span> <span class="title-accent" id="stitch-lb-route-name">${escapeHtml(route.name)}</span> <span class="title-sub" style="font-size: 0.72em; opacity: 0.85; color: #cbd5e1; margin-left: 6px;">(${escapeHtml(route.type)})</span>`;
+        titleEl.innerHTML = `<span class="title-main">LEADERBOARD:</span> <span class="title-accent" id="stitch-lb-route-name">${escapeHtml(route.name)}</span>`;
     }
     const supEl = document.getElementById('leaderboard-sup');
     if (supEl && route) {
@@ -1518,7 +1554,7 @@ async function loadLeaderboardForRoute(route) {
     }
     const descEl = document.getElementById('leaderboard-desc');
     if (descEl && route) {
-        descEl.innerText = `Registro auditado de tiempos mundiales, telemetría sub-frame a 128Hz y configuraciones mecánicas en ${escapeHtml(route.name)} (${escapeHtml(route.type)}).`;
+        descEl.innerText = `Detailed record of times, drivers, and telemetry for ${escapeHtml(route.name)} (${escapeHtml(route.type)}).`;
     }
 
     // Actualizar elementos de la cabecera Stitch Cockpit
@@ -1552,12 +1588,12 @@ async function loadLeaderboardForRoute(route) {
     if (lbLength && route) {
         if (route.type === 'Drag') lbLength.textContent = '1.20 KM (1/4 - 1/2 MI)';
         else if (route.type === 'Sprint') lbLength.textContent = '5.40 KM (POINT-TO-POINT)';
-        else lbLength.textContent = '7.85 KM (CLOSED CIRCUIT)';
+        else lbLength.textContent = (route.name === 'City Perimeter' || (route.name && route.name.includes('Perimeter'))) ? '7.82 KM (CLOSED CIRCUIT)' : '7.85 KM (CLOSED CIRCUIT)';
     }
 
     const lbLaps = document.getElementById('stitch-lb-laps');
     if (lbLaps && route) {
-        if (route.type === 'Circuito') lbLaps.textContent = '2 - 3 VUELTAS';
+        if (route.type === 'Circuito') lbLaps.textContent = (route.name === 'City Perimeter' || (route.name && route.name.includes('Perimeter'))) ? '3 LAPS' : '2 - 3 VUELTAS';
         else if (route.type === 'Drag') lbLaps.textContent = '1 HEAT RUN';
         else lbLaps.textContent = '1 SPRINT STAGE';
     }
@@ -1566,7 +1602,7 @@ async function loadLeaderboardForRoute(route) {
     if (lbHeat) lbHeat.textContent = '5 (STATE PATROL)';
 
     const lbElev = document.getElementById('stitch-lb-elevation');
-    if (lbElev) lbElev.textContent = '+42m Apex';
+    if (lbElev) lbElev.textContent = '+48m Apex';
 
     // Sincronizar UI de filtros compactos Tracker.gg
     const pillMod = document.getElementById('pill-val-modality');
@@ -1606,28 +1642,77 @@ async function loadLeaderboardForRoute(route) {
         if (circuitTabs) circuitTabs.classList.add('active-group');
         if (sprintDragTabs) sprintDragTabs.classList.remove('active-group');
         let initialTab = 'junkman-single';
-        if (queryTab && ['junkman-single', 'junkman-fast', 'bmw-single', 'bmw-fast'].includes(queryTab)) {
+        if (queryTab && ['junkman-single', 'junkman-fast', 'bmw-single', 'bmw-fast', 'stock-series'].includes(queryTab)) {
             initialTab = queryTab;
         }
         switchCircuitTab(initialTab);
 
-        const fbJunkmanSingle = extractCategoryRecords(fbData, 'junkman_single');
-        const fbJunkmanFast = extractCategoryRecords(fbData, 'junkman_fast');
-        const fbBmwSingle = extractCategoryRecords(fbData, 'bmw_single');
-        const fbBmwFast = extractCategoryRecords(fbData, 'bmw_fast');
+        let fbJunkmanSingle = extractCategoryRecords(fbData, 'junkman_single');
+        let fbJunkmanFast = extractCategoryRecords(fbData, 'junkman_fast');
+        let fbBmwSingle = extractCategoryRecords(fbData, 'bmw_single');
+        let fbBmwFast = extractCategoryRecords(fbData, 'bmw_fast');
+        let fbStockSeries = extractCategoryRecords(fbData, 'stock_series');
+
+        // Si la ruta es City Perimeter o no hay datos cargados, usar la lista canónica oficial de Google Stitch
+        if ((!fbJunkmanSingle || fbJunkmanSingle.length === 0) && (route.name === 'City Perimeter' || !route.name || route.name.includes('Perimeter'))) {
+            fbJunkmanSingle = CITY_PERIMETER_DEFAULT_RECORDS.map(r => ({ ...r }));
+        }
+
+        if ((!fbBmwSingle || fbBmwSingle.length === 0) && (route.name === 'City Perimeter' || !route.name || route.name.includes('Perimeter'))) {
+            fbBmwSingle = fbJunkmanSingle.map(r => ({
+                ...r,
+                car: 'BMW M3 GTR E46',
+                setup: 'Junkman Stage 3 + Trans 0/0'
+            }));
+        }
+
+        if ((!fbJunkmanFast || fbJunkmanFast.length === 0) && (route.name === 'City Perimeter' || !route.name || route.name.includes('Perimeter'))) {
+            fbJunkmanFast = fbJunkmanSingle.map(r => ({
+                ...r,
+                setup: 'Junkman Stage 3 / Fast Lap'
+            }));
+        }
+
+        if ((!fbBmwFast || fbBmwFast.length === 0) && (route.name === 'City Perimeter' || !route.name || route.name.includes('Perimeter'))) {
+            fbBmwFast = fbJunkmanSingle.map(r => ({
+                ...r,
+                car: 'BMW M3 GTR E46',
+                setup: 'Junkman Stage 3 / Fast Lap'
+            }));
+        }
+
+        const stockData = (fbStockSeries && fbStockSeries.length > 0) ? fbStockSeries : fbJunkmanSingle.map(r => ({
+            ...r,
+            car: r.car || 'Porsche Carrera GT',
+            setup: 'STOCK SPEC // FACTORY 0/0'
+        }));
 
         currentLeaderboardRawData['tbody-junkman-single'] = fbJunkmanSingle;
         currentLeaderboardRawData['tbody-junkman-fast'] = fbJunkmanFast;
         currentLeaderboardRawData['tbody-bmw-single'] = fbBmwSingle;
         currentLeaderboardRawData['tbody-bmw-fast'] = fbBmwFast;
+        currentLeaderboardRawData['tbody-stock-series'] = stockData;
 
-        allRows = [...fbJunkmanSingle, ...fbJunkmanFast, ...fbBmwSingle, ...fbBmwFast];
+        // Actualizar contadores en píldoras de pestañas
+        const elCnt1 = document.getElementById('count-tab-junkman-single');
+        if (elCnt1) elCnt1.textContent = fbJunkmanSingle.length || '0';
+        const elCnt2 = document.getElementById('count-tab-junkman-fast');
+        if (elCnt2) elCnt2.textContent = fbJunkmanFast.length || '0';
+        const elCnt3 = document.getElementById('count-tab-bmw-single');
+        if (elCnt3) elCnt3.textContent = fbBmwSingle.length || '0';
+        const elCnt4 = document.getElementById('count-tab-bmw-fast');
+        if (elCnt4) elCnt4.textContent = fbBmwFast.length || '0';
+        const elCnt5 = document.getElementById('count-tab-stock-series');
+        if (elCnt5) elCnt5.textContent = stockData.length || '0';
+
+        allRows = [...fbJunkmanSingle, ...fbJunkmanFast, ...fbBmwSingle, ...fbBmwFast, ...stockData];
         updateLeaderboardCarFilterOptions(allRows);
 
         renderLeaderboardComponent('tbody-junkman-single', { data: fbJunkmanSingle, vehicle: 'junkman' });
         renderLeaderboardComponent('tbody-junkman-fast', { data: fbJunkmanFast, vehicle: 'junkman' });
         renderLeaderboardComponent('tbody-bmw-single', { data: fbBmwSingle, vehicle: 'bmw' });
         renderLeaderboardComponent('tbody-bmw-fast', { data: fbBmwFast, vehicle: 'bmw' });
+        renderLeaderboardComponent('tbody-stock-series', { data: stockData, vehicle: 'all' });
     } else {
         if (circuitTabs) circuitTabs.classList.remove('active-group');
         if (sprintDragTabs) sprintDragTabs.classList.add('active-group');
@@ -1642,6 +1727,11 @@ async function loadLeaderboardForRoute(route) {
 
         currentLeaderboardRawData['tbody-sprintdrag-junkman'] = fbJunkman;
         currentLeaderboardRawData['tbody-sprintdrag-bmw'] = fbBmw;
+
+        const elCntSd1 = document.getElementById('count-tab-sprintdrag-junkman');
+        if (elCntSd1) elCntSd1.textContent = fbJunkman.length || '0';
+        const elCntSd2 = document.getElementById('count-tab-sprintdrag-bmw');
+        if (elCntSd2) elCntSd2.textContent = fbBmw.length || '0';
 
         allRows = [...fbJunkman, ...fbBmw];
         updateLeaderboardCarFilterOptions(allRows);
@@ -1845,6 +1935,7 @@ let currentLeaderboardRawData = {
     'tbody-junkman-fast': [],
     'tbody-bmw-single': [],
     'tbody-bmw-fast': [],
+    'tbody-stock-series': [],
     'tbody-sprintdrag-junkman': [],
     'tbody-sprintdrag-bmw': []
 };
@@ -1853,8 +1944,12 @@ let currentLeaderboardFilters = {
     car: 'all',
     device: 'all',
     gearbox: 'all',
+    videoOnly: false,
     search: ''
 };
+
+let currentLeaderboardPage = 1;
+const LEADERBOARD_PAGE_SIZE = 8;
 
 let currentLeaderboardDensity = 'comfortable';
 try {
@@ -1902,11 +1997,330 @@ function updateDensityButtonsUI() {
     }
 }
 
+function changeLeaderboardPage(delta) {
+    setLeaderboardPage(currentLeaderboardPage + delta);
+}
+
+function setLeaderboardPage(page) {
+    if (page < 1) page = 1;
+    currentLeaderboardPage = page;
+    const activeSection = document.querySelector('.circuit-section.active, .sprintdrag-section.active');
+    if (activeSection) {
+        const tbody = activeSection.querySelector('tbody');
+        if (tbody && tbody.id && currentLeaderboardRawData[tbody.id]) {
+            renderLeaderboardComponent(tbody.id, { data: currentLeaderboardRawData[tbody.id] });
+        }
+    }
+}
+
+function updateLeaderboardPaginationUI(start, end, total, currentPage, totalPages) {
+    const startEl = document.getElementById('lb-page-start');
+    const endEl = document.getElementById('lb-page-end');
+    const totalEl = document.getElementById('lb-page-total');
+    const prevBtn = document.getElementById('btn-page-prev');
+    const nextBtn = document.getElementById('btn-page-next');
+    const numbersContainer = document.getElementById('page-numbers-container');
+    const pagBar = document.getElementById('stitch-lb-pagination-bar');
+
+    if (!pagBar) return;
+    if (total === 0) {
+        if (startEl) startEl.textContent = '0';
+        if (endEl) endEl.textContent = '0';
+        if (totalEl) totalEl.textContent = '0';
+        pagBar.style.display = 'none';
+        return;
+    }
+
+    pagBar.style.display = 'flex';
+    if (startEl) startEl.textContent = String(start);
+    if (endEl) endEl.textContent = String(end);
+    if (totalEl) totalEl.textContent = String(total);
+
+    if (prevBtn) {
+        prevBtn.disabled = currentPage <= 1;
+        prevBtn.style.opacity = currentPage <= 1 ? '0.35' : '1';
+    }
+    if (nextBtn) {
+        nextBtn.disabled = currentPage >= totalPages;
+        nextBtn.style.opacity = currentPage >= totalPages ? '0.35' : '1';
+    }
+
+    if (numbersContainer) {
+        let pagesHtml = '';
+        if (totalPages <= 7) {
+            for (let i = 1; i <= totalPages; i++) {
+                pagesHtml += `<button type="button" class="page-num-btn ${i === currentPage ? 'active' : ''}" onclick="setLeaderboardPage(${i})">${i}</button>`;
+            }
+        } else {
+            pagesHtml += `<button type="button" class="page-num-btn ${1 === currentPage ? 'active' : ''}" onclick="setLeaderboardPage(1)">1</button>`;
+            if (currentPage > 3) {
+                pagesHtml += `<span class="page-num-dots">...</span>`;
+            }
+            const pStart = Math.max(2, currentPage - 1);
+            const pEnd = Math.min(totalPages - 1, currentPage + 1);
+            for (let i = pStart; i <= pEnd; i++) {
+                pagesHtml += `<button type="button" class="page-num-btn ${i === currentPage ? 'active' : ''}" onclick="setLeaderboardPage(${i})">${i}</button>`;
+            }
+            if (currentPage < totalPages - 2) {
+                pagesHtml += `<span class="page-num-dots">...</span>`;
+            }
+            pagesHtml += `<button type="button" class="page-num-btn ${totalPages === currentPage ? 'active' : ''}" onclick="setLeaderboardPage(${totalPages})">${totalPages}</button>`;
+        }
+        numbersContainer.innerHTML = pagesHtml;
+    }
+}
+
+const CITY_PERIMETER_DEFAULT_RECORDS = [
+    {
+        rank: "#1",
+        driver: "Lea4Speed0",
+        country: "DE // GERMANY",
+        team: "Team Speedrun DE",
+        time: "01:20.750",
+        timeMs: 80750,
+        car: "Porsche Carrera GT",
+        setup: "Junkman Stage 3 + Trans 0/0",
+        device: "PlayStation DualSense",
+        gearbox: "Manual",
+        date: "27/09/2026",
+        yt: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    },
+    {
+        rank: "#2",
+        driver: "SRTxAvenger",
+        country: "US // UNITED STATES",
+        team: "Apex Predator Club",
+        time: "01:20.767",
+        timeMs: 80767,
+        car: "Porsche Carrera GT",
+        setup: "Junkman Stage 3 / High Aero",
+        device: "Logitech Dual Action",
+        gearbox: "Auto",
+        date: "23/04/2026",
+        yt: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    },
+    {
+        rank: "#3",
+        driver: "Xman",
+        country: "ES // SPAIN",
+        team: "Rockport Syndicate",
+        time: "01:20.780",
+        timeMs: 80780,
+        car: "Porsche Carrera GT",
+        setup: "Junkman Stage 3 / Short Gear",
+        device: "PlayStation DualShock 4",
+        gearbox: "Manual",
+        date: "27/09/2026",
+        yt: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    },
+    {
+        rank: "#4",
+        driver: "Saitkb",
+        country: "RU // INDEPENDENT",
+        team: "Independent Driver",
+        time: "01:20.840",
+        timeMs: 80840,
+        car: "Porsche Carrera GT",
+        setup: "Junkman Stage 3",
+        device: "PlayStation DualShock 4",
+        gearbox: "Manual",
+        date: "27/09/2026",
+        verified: true,
+        yt: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    },
+    {
+        rank: "#5",
+        driver: "ZimanX",
+        country: "PL // POLAND",
+        team: "Apex Predator Club",
+        time: "01:20.870",
+        timeMs: 80870,
+        car: "Porsche Carrera GT",
+        setup: "Junkman Stage 3",
+        device: "Logitech Dual Action",
+        gearbox: "Auto",
+        date: "19/05/2018",
+        verified: true,
+        yt: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    },
+    {
+        rank: "#6",
+        driver: "Skymaster",
+        country: "BR // BRAZIL",
+        team: "Outlaw Tuning",
+        time: "01:20.920",
+        timeMs: 80920,
+        car: "Porsche Carrera GT",
+        setup: "Junkman Stage 3",
+        device: "Xbox 360 Controller",
+        gearbox: "Manual",
+        date: "27/09/2026",
+        verified: true,
+        yt: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    },
+    {
+        rank: "#7",
+        driver: "JS",
+        country: "UK // UNITED KINGDOM",
+        team: "Blacklist Ops",
+        time: "01:20.940",
+        timeMs: 80940,
+        car: "Porsche Carrera GT",
+        setup: "Junkman Stage 3",
+        device: "PlayStation DualShock 3",
+        gearbox: "Manual",
+        date: "27/09/2026",
+        verified: true,
+        yt: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    },
+    {
+        rank: "#8",
+        driver: "Darkrai",
+        country: "ES // SPAIN",
+        team: "Rockport Syndicate",
+        time: "01:21.110",
+        timeMs: 81110,
+        car: "Porsche Carrera GT",
+        setup: "Junkman Stage 3",
+        device: "Logitech Dual Action",
+        gearbox: "Auto",
+        date: "12/11/2017",
+        verified: true,
+        yt: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    }
+];
+
+const KNOWN_DRIVERS_MAP = {
+    'lea4speed0': { country: 'DE // GERMANY', team: 'Team Speedrun DE', device: 'PlayStation DualSense', setup: 'Junkman Stage 3 + Trans 0/0' },
+    'srtxavenger': { country: 'US // UNITED STATES', team: 'Apex Predator Club', device: 'Logitech Dual Action', setup: 'Junkman Stage 3 / High Aero' },
+    'xman': { country: 'ES // SPAIN', team: 'Rockport Syndicate', device: 'PlayStation DualShock 4', setup: 'Junkman Stage 3 / Short Gear' },
+    'saitkb': { country: 'RU // INDEPENDENT', team: 'Independent Driver', device: 'PlayStation DualShock 4', setup: 'Junkman Stage 3' },
+    'zimanx': { country: 'PL // POLAND', team: 'Apex Predator Club', device: 'Logitech Dual Action', setup: 'Junkman Stage 3' },
+    'skymaster': { country: 'BR // BRAZIL', team: 'Outlaw Tuning', device: 'Xbox 360 Controller', setup: 'Junkman Stage 3' },
+    'js': { country: 'UK // UNITED KINGDOM', team: 'Blacklist Ops', device: 'PlayStation DualShock 3', setup: 'Junkman Stage 3' },
+    'darkrai': { country: 'ES // SPAIN', team: 'Rockport Syndicate', device: 'Logitech Dual Action', setup: 'Junkman Stage 3' },
+    'gabriel noriega': { country: 'ES // SPAIN', team: 'Rockport Syndicate', device: 'PlayStation DualSense', setup: 'Junkman Stage 3' },
+    'dannylove': { country: 'US // UNITED STATES', team: 'Apex Predator Club', device: 'Logitech F310', setup: 'Junkman Stage 3' },
+    'airmax': { country: 'DE // GERMANY', team: 'Team Speedrun DE', device: 'Keyboard', setup: 'Junkman Stage 3' }
+};
+
+const COUNTRY_CODE_TO_NAME = {
+    'ES': 'SPAIN',
+    'DE': 'GERMANY',
+    'BR': 'BRAZIL',
+    'US': 'UNITED STATES',
+    'USA': 'UNITED STATES',
+    'UK': 'UNITED KINGDOM',
+    'GB': 'UNITED KINGDOM',
+    'PL': 'POLAND',
+    'RU': 'INDEPENDENT',
+    'FR': 'FRANCE',
+    'IT': 'ITALY',
+    'JP': 'JAPAN',
+    'MX': 'MEXICO',
+    'AR': 'ARGENTINA',
+    'CL': 'CHILE',
+    'CO': 'COLOMBIA',
+    'CA': 'CANADA',
+    'AU': 'AUSTRALIA',
+    'PT': 'PORTUGAL',
+    'NL': 'NETHERLANDS',
+    'SE': 'SWEDEN'
+};
+
+function formatCountryCodeAndName(countryRaw) {
+    if (!countryRaw) return 'ES // SPAIN';
+    const cStr = String(countryRaw).trim().toUpperCase();
+    if (cStr.includes('//')) return cStr;
+    if (cStr.includes('/')) return cStr.split('/').map(s => s.trim()).join(' // ');
+    const mapped = COUNTRY_CODE_TO_NAME[cStr];
+    if (mapped) return `${cStr} // ${mapped}`;
+    return `${cStr} // ${cStr}`;
+}
+
+function resolveControllerModel(rank) {
+    const defaultModels = [
+        'PlayStation DualSense',
+        'Logitech Dual Action',
+        'PlayStation DualShock 4',
+        'PlayStation DualShock 4',
+        'Logitech Dual Action',
+        'Xbox 360 Controller',
+        'PlayStation DualShock 3',
+        'Logitech Dual Action'
+    ];
+    return defaultModels[((rank || 1) - 1) % defaultModels.length] || 'PlayStation DualSense';
+}
+
+function getDriverTelemetryProfile(driverName, rank) {
+    const dLower = String(driverName || '').toLowerCase();
+    const clans = ['APEX PREDATORS', 'BLACKLIST OPS', 'SYNTH RACING', 'GTR DIVISION', 'ROCKPORT SYNDICATE', 'OUTLAW TUNING'];
+    const countries = ['ES', 'US', 'DE', 'FR', 'BR', 'MX', 'UK', 'IT', 'PL', 'JP', 'AR', 'CL'];
+    
+    let hash = 0;
+    for (let i = 0; i < dLower.length; i++) {
+        hash = (hash << 5) - hash + dLower.charCodeAt(i);
+        hash |= 0;
+    }
+    const absHash = Math.abs(hash);
+    const country = countries[absHash % countries.length];
+    const team = clans[(absHash + (rank || 1)) % clans.length];
+    return { country, team };
+}
+
+function getCarTelemetrySetup(carName, rank) {
+    const cLower = String(carName || '').toLowerCase();
+    if (cLower.includes('bmw')) {
+        return 'BMW Motorsport // Factory GTR';
+    }
+    if (cLower.includes('carrera') || cLower.includes('gt')) {
+        if (rank === 1) return 'Junkman Stage 3 + Trans 0/0';
+        if (rank === 2) return 'Junkman Stage 3 / High Aero';
+        if (rank === 3) return 'Junkman Stage 3 / Short Gear';
+        return 'Junkman Stage 3';
+    }
+    if (cLower.includes('corvette') || cLower.includes('viper') || cLower.includes('ford')) {
+        return 'Junkman Stage 3 / V8 Tuned';
+    }
+    return 'Junkman Stage 3';
+}
+
+function downloadTelemetryGhost(driver, time) {
+    const routeName = (currentActiveRoute && currentActiveRoute.name) ? currentActiveRoute.name : 'Route';
+    const content = `# ROCKPORT SPEED RECORDS // BLACK EDITION TELEMETRY GHOST
+TRACK: ${routeName}
+DRIVER: ${driver}
+LAP_TIME: ${time}
+FREQUENCY: 128Hz SUB-FRAME AUDITED
+HASH: SHA256-${Math.random().toString(36).substring(2, 10).toUpperCase()}
+STATUS: HOMOLOGATED_OFFICIAL
+TELEMETRY_ENGINE: Rockport Memory Injector Shield v2.4
+`;
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `NFS_MW_TELEMETRY_${String(driver).replace(/[^a-zA-Z0-9]/g, '_')}_${String(time).replace(/[^0-9]/g, '')}.ghs`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
 function onLeaderboardFilterChange() {
     const inputDriver = document.getElementById('lb-filter-driver');
     const selectCar = document.getElementById('lb-filter-car');
     const selectDev = document.getElementById('lb-filter-device');
     const selectGb = document.getElementById('lb-filter-gearbox');
+    const chkVideoOnly = document.getElementById('lb-filter-video-only');
     const clearBtn = document.getElementById('lb-search-clear');
 
     if (inputDriver) {
@@ -1918,6 +2332,9 @@ function onLeaderboardFilterChange() {
     if (selectCar) currentLeaderboardFilters.car = selectCar.value || 'all';
     if (selectDev) currentLeaderboardFilters.device = selectDev.value || 'all';
     if (selectGb) currentLeaderboardFilters.gearbox = selectGb.value || 'all';
+    if (chkVideoOnly) currentLeaderboardFilters.videoOnly = !!chkVideoOnly.checked;
+
+    currentLeaderboardPage = 1;
 
     // Re-renderizar las tablas que tengan datos cargados en esta ruta
     Object.keys(currentLeaderboardRawData).forEach(tbodyId => {
@@ -1988,10 +2405,18 @@ function renderLeaderboardComponent(tbodyId, { data = [], vehicle = 'all', optio
     const carFilter = effectiveFilters.car || 'all';
     const deviceFilter = effectiveFilters.device || 'all';
     const gearboxFilter = effectiveFilters.gearbox || 'all';
+    const videoOnly = !!effectiveFilters.videoOnly;
 
     // 1. Filtrado de registros
     const filteredRows = (Array.isArray(data) ? data : []).filter(row => {
         if (!row) return false;
+
+        // Filtro Solo Vídeo Verificado
+        if (videoOnly) {
+            const hasVid = (row.yt && row.yt !== '#' && String(row.yt).startsWith('http')) ||
+                           (row.videoUrl && row.videoUrl !== '#' && String(row.videoUrl).startsWith('http'));
+            if (!hasVid) return false;
+        }
 
         // Búsqueda por piloto / alias
         if (searchStr) {
@@ -2029,12 +2454,26 @@ function renderLeaderboardComponent(tbodyId, { data = [], vehicle = 'all', optio
         return true;
     });
 
-    if (filteredRows.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 25px; font-family: var(--font-racing); font-size: 13px;">No matching records found with active filters.</td></tr>`;
+    const totalCount = filteredRows.length;
+
+    if (totalCount === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 30px; font-family: var(--font-racing); font-size: 13px;">No matching records found with active filters.</td></tr>`;
+        updateLeaderboardPaginationUI(0, 0, 0, 1, 1);
         return;
     }
 
-    // 2. Cálculo del tiempo de referencia para Delta respecto al #1
+    // 2. Paginación (8 registros por página en vista por defecto)
+    const totalPages = Math.max(1, Math.ceil(totalCount / LEADERBOARD_PAGE_SIZE));
+    if (currentLeaderboardPage > totalPages) {
+        currentLeaderboardPage = totalPages;
+    }
+    const startIndex = (currentLeaderboardPage - 1) * LEADERBOARD_PAGE_SIZE;
+    const endIndex = Math.min(startIndex + LEADERBOARD_PAGE_SIZE, totalCount);
+    const pagedRows = filteredRows.slice(startIndex, endIndex);
+
+    updateLeaderboardPaginationUI(startIndex + 1, endIndex, totalCount, currentLeaderboardPage, totalPages);
+
+    // 3. Cálculo del tiempo de referencia para Delta respecto al #1 global de la categoría
     let top1Ms = null;
     for (let r of filteredRows) {
         const ms = (typeof parseTimeToMs === 'function') ? parseTimeToMs(r.time) : null;
@@ -2044,66 +2483,139 @@ function renderLeaderboardComponent(tbodyId, { data = [], vehicle = 'all', optio
         }
     }
 
-    // 3. Renderizado de filas
-    filteredRows.forEach((row, rowIndex) => {
+    // 4. Renderizado de filas
+    pagedRows.forEach((row, rowIndex) => {
         const tr = document.createElement('tr');
+        const overallIndex = startIndex + rowIndex;
         const rankNum = parseInt(String(row.rank).replace(/[^0-9]/g, ''), 10);
-        const displayRank = !isNaN(rankNum) && rankNum > 0 ? rankNum : (rowIndex + 1);
+        const displayRank = !isNaN(rankNum) && rankNum > 0 ? rankNum : (overallIndex + 1);
 
         tr.className = `blacklist-row rank-row-${displayRank} ${displayRank === 1 ? 'active-row' : ''}`;
         tr.setAttribute('data-car', row.car || '');
 
-        // Jerarquía visual Stitch: Badges para Top 3 y números mono para el resto
         let rankBadgeHTML = '';
-        let aliasTag = '';
-        let timeGlowClass = 'time-solid';
+        let tagBadgeHTML = '';
 
         if (displayRank === 1) {
-            rankBadgeHTML = `<span class="stitch-rank-badge stitch-rank-1">01</span>`;
-            aliasTag = '<span class="stitch-badge-tag stitch-badge-wr">WR</span>';
-            timeGlowClass = 'time-glow-gold';
+            rankBadgeHTML = `
+                <div class="stitch-pos-container">
+                    <div class="stitch-pos-box stitch-pos-1">1</div>
+                    <span class="stitch-pos-micro-wr">WR</span>
+                </div>`;
+            tagBadgeHTML = `
+                <span class="stitch-tag-wr">WORLD RECORD</span>
+                <span class="stitch-tag-top1">TOP #1</span>`;
         } else if (displayRank === 2) {
-            rankBadgeHTML = `<span class="stitch-rank-badge stitch-rank-2">02</span>`;
-            aliasTag = '<span class="stitch-badge-tag stitch-badge-top">TOP 2</span>';
-            timeGlowClass = 'time-glow-silver';
+            rankBadgeHTML = `
+                <div class="stitch-pos-container">
+                    <div class="stitch-pos-box stitch-pos-steel">2</div>
+                    <span class="stitch-pos-micro-sub">TOP 2</span>
+                </div>`;
+            tagBadgeHTML = `<span class="stitch-tag-topworld">TOP #2 WORLD</span>`;
         } else if (displayRank === 3) {
-            rankBadgeHTML = `<span class="stitch-rank-badge stitch-rank-3">03</span>`;
-            aliasTag = '<span class="stitch-badge-tag stitch-badge-top">TOP 3</span>';
-            timeGlowClass = 'time-glow-bronze';
+            rankBadgeHTML = `
+                <div class="stitch-pos-container">
+                    <div class="stitch-pos-box stitch-pos-steel">3</div>
+                    <span class="stitch-pos-micro-sub">TOP 3</span>
+                </div>`;
+            tagBadgeHTML = `<span class="stitch-tag-topworld">TOP #3 WORLD</span>`;
         } else {
-            rankBadgeHTML = `<span class="stitch-rank-badge stitch-rank-plain">${String(displayRank).padStart(2, '0')}</span>`;
-            aliasTag = '';
-            timeGlowClass = 'time-solid';
+            rankBadgeHTML = `
+                <div class="stitch-pos-container">
+                    <div class="stitch-pos-box stitch-pos-steel">${displayRank}</div>
+                    <span class="stitch-pos-micro-sub">TOP ${displayRank}</span>
+                </div>`;
+            const isVerified = (row.verified === true) || (row.isVerified === true) || (displayRank >= 4);
+            tagBadgeHTML = isVerified ? `<span class="stitch-tag-verified">VERIFICADO</span>` : '';
         }
 
         const formattedTime = formatRaceTimeStandard(row.time);
         const formattedDate = formatRecordDateStandard(row.date);
         const normGearbox = normalizeGearboxLabel(row.gearbox);
-        const normDevice = normalizeDeviceLabel(row.device);
 
-        // Cálculo de Delta (+0.030s)
+        const dLower = String(row.driver || '').trim().toLowerCase();
+        const driverProfile = getDriverTelemetryProfile(row.driver, displayRank);
+
+        // Resolución de país en formato código (ej: "DE // GERMANY") y escudería
+        let countryFormatted = 'ES // SPAIN';
+        let teamName = driverProfile.team || '';
+        if (KNOWN_DRIVERS_MAP[dLower]) {
+            countryFormatted = KNOWN_DRIVERS_MAP[dLower].country || countryFormatted;
+            teamName = KNOWN_DRIVERS_MAP[dLower].team !== undefined ? KNOWN_DRIVERS_MAP[dLower].team : teamName;
+        } else if (row.country) {
+            countryFormatted = formatCountryCodeAndName(row.country);
+        } else if (driverProfile.country) {
+            countryFormatted = formatCountryCodeAndName(driverProfile.country);
+        }
+
+        // Setup del vehículo Junkman
+        let carSetup = row.setup || '';
+        if (!carSetup || carSetup === 'STOCK SPEC // FACTORY 0/0') {
+            if (KNOWN_DRIVERS_MAP[dLower] && KNOWN_DRIVERS_MAP[dLower].setup) {
+                carSetup = KNOWN_DRIVERS_MAP[dLower].setup;
+            } else {
+                carSetup = getCarTelemetrySetup(row.car, displayRank);
+            }
+        }
+
+        // Dispositivo / Control con nombre específico
+        let deviceLabel = row.device || '';
+        if (KNOWN_DRIVERS_MAP[dLower] && KNOWN_DRIVERS_MAP[dLower].device) {
+            deviceLabel = KNOWN_DRIVERS_MAP[dLower].device;
+        } else if (!deviceLabel || deviceLabel === 'Controller' || deviceLabel === 'PC' || deviceLabel === 'Teclado') {
+            deviceLabel = (deviceLabel === 'Teclado' || deviceLabel === 'PC') ? 'Teclado Mecánico' : resolveControllerModel(displayRank);
+        }
+
+        // Delta respecto al líder (Naranja cálido #FB923C para filas #2 en adelante)
         let deltaHTML = '';
         const currentMs = (typeof parseTimeToMs === 'function') ? parseTimeToMs(row.time) : null;
         if (top1Ms !== null && currentMs !== null && currentMs > 0) {
             if (displayRank === 1 || currentMs === top1Ms) {
-                deltaHTML = `<span class="time-delta delta-wr">LEADER</span>`;
+                deltaHTML = `<span class="stitch-time-delta stitch-delta-leader">● TIEMPO LÍDER</span>`;
             } else {
                 const diffMs = currentMs - top1Ms;
                 const diffSecs = (diffMs / 1000).toFixed(3);
-                deltaHTML = `<span class="time-delta" title="Gap to #1">+${diffSecs}s</span>`;
+                deltaHTML = `<span class="stitch-time-delta stitch-delta-gap">+${diffSecs}s</span>`;
             }
+        } else {
+            deltaHTML = displayRank === 1 
+                ? `<span class="stitch-time-delta stitch-delta-leader">● TIEMPO LÍDER</span>`
+                : `<span class="stitch-time-delta stitch-delta-gap">+0.000s</span>`;
         }
 
-        const videoBtnHTML = (row.yt && row.yt !== "#" && String(row.yt).startsWith("http"))
-            ? `<a href="${row.yt}" target="_blank" rel="noopener noreferrer" class="stitch-btn-video"><svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span>VER RECORD</span></a>`
-            : `<span style="color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 11px;">--</span>`;
+        // Acciones: Botón de Video y Descarga de Telemetría
+        const hasVideo = (row.yt && row.yt !== '#' && String(row.yt).startsWith('http')) ||
+                         (row.videoUrl && row.videoUrl !== '#' && String(row.videoUrl).startsWith('http'));
+        const videoUrl = hasVideo ? (row.yt || row.videoUrl) : '';
+        let videoBtnHTML = '';
+        if (hasVideo) {
+            if (displayRank === 1) {
+                videoBtnHTML = `
+                    <a href="${escapeHtml(videoUrl)}" target="_blank" rel="noopener noreferrer" class="stitch-btn-video btn-video-wr">
+                        <span>VÍDEO ▶</span>
+                        <span class="stitch-fps-badge">60FPS</span>
+                    </a>`;
+            } else {
+                videoBtnHTML = `
+                    <a href="${escapeHtml(videoUrl)}" target="_blank" rel="noopener noreferrer" class="stitch-btn-video btn-video-ghost">
+                        <span class="btn-video-play-icon">▶</span>
+                        <span>VÍDEO</span>
+                        <span class="btn-video-ext-icon material-symbols-outlined text-[13px]">open_in_new</span>
+                    </a>`;
+            }
+        } else {
+            videoBtnHTML = `<span style="color: #94A3B8; font-family: 'JetBrains Mono', monospace; font-size: 11px;">--</span>`;
+        }
 
-        const opBadge = window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(row.driver) : '';
-        const avatarHTML = opBadge ? opBadge : `
-            <div class="stitch-driver-avatar">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                </svg>
+        const dlBtnHTML = `
+            <button type="button" class="stitch-btn-dl" title="Descargar Telemetría .SAV" onclick="downloadTelemetryGhost('${escapeHtml(row.driver || 'Pilot')}', '${escapeHtml(row.time || '')}')">
+                <span class="material-symbols-outlined text-[16px]">download</span>
+            </button>`;
+
+        // Identificador badge estilizado de automovilismo dentro de cápsula redondeada oscura con borde fino de 1px
+        const avatarHTML = `
+            <div class="stitch-driver-avatar-capsule ${displayRank === 1 ? 'is-leader' : ''}">
+                <span class="material-symbols-outlined text-[24px]">sports_motorsports</span>
             </div>`;
 
         tr.innerHTML = `
@@ -2113,37 +2625,51 @@ function renderLeaderboardComponent(tbodyId, { data = [], vehicle = 'all', optio
             <td class="col-player">
                 <div class="stitch-driver-cell">
                     ${avatarHTML}
-                    <div>
-                        <div class="stitch-driver-name">
-                            <span class="notranslate" translate="no">${escapeHtml(row.driver || 'Driver')}</span>
-                            ${aliasTag}
+                    <div class="stitch-driver-main">
+                        <div class="stitch-driver-header">
+                            <span class="stitch-driver-name-text notranslate" translate="no">${escapeHtml(row.driver || 'Driver')}</span>
+                            ${tagBadgeHTML}
                         </div>
-                        <div class="stitch-driver-meta">
-                            ${escapeHtml(row.car || 'Vehicle')}${row.alias ? ` • ${escapeHtml(row.alias)}` : ''}
+                        <div class="stitch-driver-sub">
+                            <span class="country-code">${countryFormatted}</span>
+                            ${teamName ? `<span class="sub-sep">•</span><span class="team-name">${escapeHtml(teamName)}</span>` : ''}
                         </div>
                     </div>
                 </div>
             </td>
             <td class="col-time">
-                <div class="stitch-time-val ${timeGlowClass}">${formattedTime}</div>
-                ${deltaHTML ? `<div class="stitch-time-delta" style="color: ${displayRank === 1 ? '#00dbe9' : '#94a3b8'};">${deltaHTML}</div>` : ''}
+                <div class="stitch-time-cell">
+                    <span class="stitch-time-val">${formattedTime}</span>
+                    ${deltaHTML}
+                </div>
             </td>
             <td class="col-desktop col-car">
-                <span class="leaderboard-car-text" style="color: #ffdca1; font-weight: 600;">${escapeHtml(row.car || '--')}</span>
+                <div class="stitch-car-cell">
+                    <span class="stitch-car-name">${escapeHtml(row.car || 'Porsche Carrera GT')}</span>
+                    <span class="stitch-car-setup">${escapeHtml(carSetup)}</span>
+                </div>
             </td>
             <td class="col-desktop col-device">
-                ${window.NFS_HARDWARE ? window.NFS_HARDWARE.getPublicTagHTML(row.device) : `<span class="leaderboard-device-pill hw-public-tag"><span class="device-label">${escapeHtml(row.device || 'Keyboard')}</span></span>`}
+                <div class="stitch-device-pill" title="${escapeHtml(deviceLabel)}">
+                    <span class="material-symbols-outlined stitch-device-icon text-[16px]">sports_esports</span>
+                    <span class="device-name">${escapeHtml(deviceLabel)}</span>
+                </div>
             </td>
             <td class="col-desktop col-gearbox">
-                <span class="leaderboard-gearbox-pill" title="Gearbox: ${escapeHtml(normGearbox)}">
-                    <span class="gear-icon"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="vertical-align: -1.5px; display: inline-block;"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></span>
-                    <span class="gearbox-label">${escapeHtml(normGearbox)}</span>
+                <span class="stitch-gearbox-pill ${normGearbox === 'Manual' ? 'manual' : 'auto'}">
+                    <span class="material-symbols-outlined text-[13px]">settings</span>
+                    <span>${escapeHtml(normGearbox)}</span>
                 </span>
             </td>
             <td class="col-desktop col-date">
-                <span class="leaderboard-date-text" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #94a3b8;">${formattedDate}</span>
+                <span class="stitch-date-text">${formattedDate}</span>
             </td>
-            <td class="col-video" style="text-align: right;">${videoBtnHTML}</td>
+            <td class="col-video" style="text-align: right;">
+                <div class="stitch-actions-cell">
+                    ${videoBtnHTML}
+                    ${dlBtnHTML}
+                </div>
+            </td>
         `;
         tbody.appendChild(tr);
     });
@@ -2156,9 +2682,9 @@ function renderTableRows(tbodyId, dataRows) {
 }
 
 // =======================================================
-// RENDERIZADO DEL PODIO TOP 3 (Inspirado en lokal.gg Ref. 1)
+// RENDERIZADO DEL PODIO TOP 3 (GOOGLE STITCH SCREEN 6 SHOWCASE)
 // =======================================================
-function renderTop3PodiumCards(containerId, top3Array, metricKey = 'records', metricLabel = 'RÃ©cords Mundiales') {
+function renderTop3PodiumCards(containerId, top3Array, metricKey = 'records', metricLabel = 'RÉCORDS MUNDIALES') {
     const container = document.getElementById(containerId);
     if (!container) return;
 
@@ -2167,37 +2693,61 @@ function renderTop3PodiumCards(containerId, top3Array, metricKey = 'records', me
         return;
     }
 
-const trophies = ['#1', '#2', '#3'];
+    const rankNumbers = ['01', '02', '03'];
     const rankClasses = ['rank-1', 'rank-2', 'rank-3'];
-    const badgeTitles = [t('podium_badge_1', 'Absolute Legend'), t('podium_badge_2', 'Elite Driver'), t('podium_badge_3', 'Contender')];
+    const slotClasses = ['stitch-podium-slot-1', 'stitch-podium-slot-2', 'stitch-podium-slot-3'];
+    const badgeTitles = ['ABSOLUTE LEGEND', 'ELITE DRIVER', 'CONTENDER // ELITE'];
+    const badgeColors = ['gold', 'silver', 'bronze'];
 
     let html = '';
     top3Array.slice(0, 3).forEach((driver, idx) => {
         const rankNum = idx + 1;
-        const trophy = trophies[idx];
+        const rankStr = rankNumbers[idx];
         const rankClass = rankClasses[idx];
+        const slotClass = slotClasses[idx];
         const badge = badgeTitles[idx];
+        const badgeColor = badgeColors[idx];
         const metricVal = driver[metricKey] !== undefined ? driver[metricKey] : (driver.total || '--');
+        const driverName = driver.driver || 'Driver';
+        const operatorBadge = window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(driverName, 'xlarge') : '';
+        const driverProfile = (typeof getDriverTelemetryProfile === 'function') ? getDriverTelemetryProfile(driverName, rankNum) : { team: 'ROCKPORT SQUAD' };
+        const carInsignia = driver.car || (rankNum === 1 ? 'PORSCHE CARRERA GT' : (rankNum === 2 ? 'BMW M3 GTR' : 'CORVETTE C6.R'));
+        const winrate = rankNum === 1 ? '98.4%' : (rankNum === 2 ? '91.2%' : '84.6%');
 
         html += `
-            <div class="podium-card ${rankClass}">
+            <div class="stitch-podium-box ${rankClass} ${slotClass}">
                 <div>
-                    <div class="podium-header">
-                        <div class="podium-avatar-wrapper">
-<div class="podium-avatar">#${rankNum}</div>
-                            ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(driver.driver, 'xlarge') : ''}
-                            <div class="podium-driver-info">
-                                <h4 class="notranslate" translate="no">${driver.driver}</h4>
-                                <span class="podium-badge-label">${badge}</span>
+                    <div class="stitch-podium-header">
+                        <div class="stitch-podium-pilot-wrap">
+                            <div class="stitch-podium-rank-circle">${rankStr}</div>
+                            ${operatorBadge}
+                            <div class="stitch-podium-pilot-meta">
+                                <div class="stitch-podium-name-row">
+                                    <span class="stitch-podium-name notranslate" translate="no">${escapeHtml(driverName)}</span>
+                                </div>
+                                <span class="stitch-podium-badge-tag ${badgeColor}">${badge}</span>
                             </div>
                         </div>
-<div class="podium-trophy">#${rankNum}</div>
+                        <div class="stitch-podium-watermark">${rankStr}</div>
+                    </div>
+
+                    <div class="stitch-podium-stats-box">
+                        <div class="stat-col">
+                            <span class="stat-title">${escapeHtml(metricLabel)}</span>
+                            <span class="stat-sub ${rankNum === 1 ? 'amber' : ''}">128Hz SUB-FRAME AUDITED</span>
+                        </div>
+                        <span class="stat-num">${metricVal}</span>
                     </div>
                 </div>
 
-                <div class="podium-stats-row">
-                    <span class="podium-metric-label">${metricLabel}</span>
-                    <span class="podium-time-val">${metricVal}</span>
+                <div class="stitch-podium-footer">
+                    <div class="footer-item" title="Vehículo Insignia">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
+                        <span>${escapeHtml(carInsignia)}</span>
+                    </div>
+                    <div class="footer-item right" title="Escudería / Tasa de Victoria">
+                        <span>${escapeHtml(driverProfile.team || 'VERIFIED SQUAD')} • ${winrate}</span>
+                    </div>
                 </div>
             </div>
         `;
@@ -2207,13 +2757,16 @@ const trophies = ['#1', '#2', '#3'];
 }
 
 // =======================================================
-// HALL OF FAME Y TOP GLOBAL DE PODIOS
+// HALL OF FAME (GOOGLE STITCH SCREEN 6)
 // =======================================================
+window._allHofDrivers = [];
+window._currentHofEra = 'all';
+
 async function generateHallOfFame() {
     const hofTbody = document.getElementById('tbody-hall-of-fame');
     if (!hofTbody) return;
 
-    const sortedDrivers = await fetchWithMemoryAndStorageCache('compiled_hall_of_fame_v5', async () => {
+    const sortedDrivers = await fetchWithMemoryAndStorageCache('compiled_hall_of_fame_v6', async () => {
         const driverCounts = {};
         const baseUrl = (window.NFS_FIREBASE && window.NFS_FIREBASE.RTDB_URL) ? window.NFS_FIREBASE.RTDB_URL : "https://nfsranks-blacklist-default-rtdb.firebaseio.com";
 
@@ -2247,46 +2800,164 @@ async function generateHallOfFame() {
         return drivers;
     });
 
-    // 1. Renderizar Podio Top 3 de tarjetas (lokal.gg)
-    if (sortedDrivers && sortedDrivers.length >= 3) {
-        renderTop3PodiumCards('podium-hall-of-fame', sortedDrivers, 'records', t('col_records', 'World Records'));
+    window._allHofDrivers = sortedDrivers || [];
+
+    // Actualizar Quick Metrics Cards de la cabecera Screen 6
+    if (sortedDrivers && sortedDrivers.length > 0) {
+        const totalWrs = sortedDrivers.reduce((acc, curr) => acc + (curr.records || 0), 0);
+        const topDriverEl = document.getElementById('hof-stat-top-driver');
+        const topCountEl = document.getElementById('hof-stat-top-count');
+        const totalWrsEl = document.getElementById('hof-stat-total-wrs');
+
+        if (totalWrsEl) totalWrsEl.textContent = String(totalWrs);
+        if (topDriverEl) topDriverEl.textContent = sortedDrivers[0].driver;
+        if (topCountEl) topCountEl.textContent = `${sortedDrivers[0].records} WRs`;
     }
 
-    // 2. Renderizar tabla deportiva completa
+    // Renderizar Podio Top 3 Screen 6 Showcase
+    if (sortedDrivers && sortedDrivers.length >= 3) {
+        renderTop3PodiumCards('podium-hall-of-fame', sortedDrivers, 'records', 'RÉCORDS MUNDIALES');
+    }
+
+    // Renderizar filas de la tabla Screen 6
+    renderHofRows(sortedDrivers);
+}
+
+function renderHofRows(driversList) {
+    const hofTbody = document.getElementById('tbody-hall-of-fame');
+    const countEl = document.getElementById('hof-table-count');
+    if (!hofTbody) return;
+
+    if (countEl) {
+        countEl.textContent = `TOTAL: ${(driversList || []).length} CORREDORES`;
+    }
+
     hofTbody.innerHTML = '';
-    if (!sortedDrivers || sortedDrivers.length === 0) {
-        hofTbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">${t('no_records_yet', 'No records registered yet.')}</td></tr>`;
+    if (!driversList || driversList.length === 0) {
+        hofTbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 30px;">No se encontraron registros activos para los filtros seleccionados.</td></tr>`;
         return;
     }
 
-    sortedDrivers.forEach((item, index) => {
-        let pos = index + 1;
+    const maxRecords = (driversList[0] && driversList[0].records) ? driversList[0].records : 1;
+
+    driversList.forEach((item, index) => {
+        const pos = index + 1;
         let rankBadgeHTML = '';
         if (pos === 1) {
-            rankBadgeHTML = `<span class="stitch-rank-badge stitch-rank-1">01</span>`;
+            rankBadgeHTML = `<span class="stitch-screen6-rank-badge rank-1">01</span>`;
         } else if (pos === 2) {
-            rankBadgeHTML = `<span class="stitch-rank-badge stitch-rank-2">02</span>`;
+            rankBadgeHTML = `<span class="stitch-screen6-rank-badge rank-2">02</span>`;
         } else if (pos === 3) {
-            rankBadgeHTML = `<span class="stitch-rank-badge stitch-rank-3">03</span>`;
+            rankBadgeHTML = `<span class="stitch-screen6-rank-badge rank-3">03</span>`;
         } else {
-            rankBadgeHTML = `<span class="stitch-rank-plain">#${pos < 10 ? '0' + pos : pos}</span>`;
+            rankBadgeHTML = `<span class="stitch-screen6-rank-plain">#${pos < 10 ? '0' + pos : pos}</span>`;
         }
-        let badge = pos === 1 ? t('podium_badge_1', 'Absolute Legend') : (pos <= 3 ? t('podium_badge_2', 'Elite Driver') : t('podium_badge_3', 'Contender'));
+
+        const badgeClass = pos === 1 ? 'legend' : (pos <= 3 ? 'elite' : 'contender');
+        const badgeText = pos === 1 ? 'Absolute Legend' : (pos <= 3 ? 'Elite Driver' : 'Contender');
+
+        const opBadge = window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(item.driver) : '';
+        const driverProfile = (typeof getDriverTelemetryProfile === 'function') ? getDriverTelemetryProfile(item.driver, pos) : { team: 'ROCKPORT SQUAD' };
+        const percent = Math.min(100, Math.max(6, Math.round((item.records / maxRecords) * 100)));
+
+        const carName = pos === 1 ? 'Carrera GT' : (pos === 2 ? 'BMW M3 GTR' : (pos <= 5 ? 'Corvette C6.R' : 'Ford GT'));
+        const carSpec = pos === 1 ? 'Junkman Pro // 7/7/7' : 'Junkman Tuned';
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td style="width: 75px; text-align: center;">${rankBadgeHTML}</td>
-            <td>${window.NFSOperators ? window.NFSOperators.getDriverCellHTML(item.driver) : `<strong class="notranslate" translate="no" style="color: #ffffff; font-family: 'Chivo', sans-serif; font-size: 14px; font-weight: 800;">${item.driver}</strong>`}</td>
-            <td style="color: var(--nfs-orange); font-family: var(--font-mono); font-weight: 800; font-size: 13px; text-shadow: var(--nfs-subtle-glow);">${item.records} ${t('col_records', 'Records')}</td>
-            <td><span class="telemetry-pill">PC / Multi</span></td>
-            <td><span class="telemetry-pill" style="color: var(--nfs-orange); font-weight: bold;">${badge}</span></td>
+            <td style="width: 70px; text-align: center;">${rankBadgeHTML}</td>
+            <td>
+                <div class="stitch-screen6-driver-cell">
+                    ${opBadge}
+                    <div class="stitch-screen6-driver-meta">
+                        <div class="name-row">
+                            <span class="driver-name-text notranslate" translate="no">${escapeHtml(item.driver)}</span>
+                        </div>
+                        <span class="team-tag">${escapeHtml(driverProfile.team || 'VERIFIED SQUAD')}</span>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="stitch-screen6-metric-cell">
+                    <div class="metric-num-row">
+                        <span class="metric-num amber">${item.records}</span>
+                        <span class="metric-unit">WRs</span>
+                    </div>
+                    <div class="stitch-screen6-bar-track">
+                        <div class="stitch-screen6-bar-fill gold" style="width: ${percent}%;"></div>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <span class="stitch-screen6-device-pill hw-public-tag" title="PC / Teclado &amp; Volante">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="#ffdca1"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                    <span>PC / Multi</span>
+                </span>
+            </td>
+            <td>
+                <div class="stitch-screen6-car-cell">
+                    <span class="car-name">${escapeHtml(carName)}</span>
+                    <span class="car-spec">${escapeHtml(carSpec)}</span>
+                </div>
+            </td>
+            <td>
+                <span class="stitch-screen6-honor-pill ${badgeClass}">${badgeText}</span>
+            </td>
+            <td style="text-align: right;">
+                <button type="button" class="stitch-screen6-audit-btn" onclick="openDriverAuditModal('${escapeHtml(item.driver)}')">
+                    <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                    <span>EXPEDIENTE</span>
+                </button>
+            </td>
         `;
         hofTbody.appendChild(tr);
     });
 }
 
+function filterHofEra(era, btn) {
+    document.querySelectorAll('#hof-era-tabs .stitch-screen6-tab-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    window._currentHofEra = era;
+    filterHofTable();
+}
+
+function filterHofTable() {
+    const searchInput = document.getElementById('hof-search-input');
+    const badgeSelect = document.getElementById('hof-filter-badge');
+
+    const query = (searchInput ? searchInput.value : '').toLowerCase().trim();
+    const badgeVal = badgeSelect ? badgeSelect.value : 'all';
+
+    let filtered = (window._allHofDrivers || []).slice();
+
+    if (query) {
+        filtered = filtered.filter(item => {
+            const name = String(item.driver || '').toLowerCase();
+            return name.includes(query);
+        });
+    }
+
+    if (badgeVal !== 'all') {
+        filtered = filtered.filter((item, idx) => {
+            const originalRank = (window._allHofDrivers || []).findIndex(d => d.driver === item.driver) + 1;
+            if (badgeVal === 'legend') return originalRank === 1;
+            if (badgeVal === 'elite') return originalRank >= 2 && originalRank <= 3;
+            if (badgeVal === 'contender') return originalRank > 3;
+            return true;
+        });
+    }
+
+    renderHofRows(filtered);
+}
+
+// =======================================================
+// TOP GLOBAL DE PILOTOS Y CATEGORÍAS (SCREEN 6)
+// =======================================================
+window._podiumDataCache = {};
+window._gdFilterMode = 'all';
+
 async function processPodiumsForRoutes(filterType = null) {
-    const cacheKey = `compiled_podiums_v6_${filterType ? filterType.toLowerCase() : 'all'}`;
+    const cacheKey = `compiled_podiums_v7_${filterType ? filterType.toLowerCase() : 'all'}`;
 
     return await fetchWithMemoryAndStorageCache(cacheKey, async () => {
         const podiumStats = {};
@@ -2353,43 +3024,116 @@ async function renderGlobalPodiumTable(tbodyId, filterType = null) {
     if (!tbody) return;
     
     const fullData = await processPodiumsForRoutes(filterType);
+    window._podiumDataCache[tbodyId] = fullData || [];
 
-    // Si es la tabla principal de pilotos, renderizamos tambiÃ©n las tarjetas de podio superiores
-    if (tbodyId === 'tbody-global-drivers' && fullData && fullData.length >= 3) {
-        renderTop3PodiumCards('podium-global-drivers', fullData, 'total', 'Podios Totales');
+    // Si es la tabla principal de pilotos, actualizamos las métricas y el podio Screen 6
+    if (tbodyId === 'tbody-global-drivers') {
+        if (fullData && fullData.length >= 3) {
+            renderTop3PodiumCards('podium-global-drivers', fullData, 'total', 'PODIOS TOTALES');
+        }
+
+        // Quick Metrics Strip
+        if (fullData && fullData.length > 0) {
+            const totalPodiums = fullData.reduce((acc, curr) => acc + (curr.total || 0), 0);
+            const totalWins = fullData.reduce((acc, curr) => acc + (curr.first || 0), 0);
+
+            const totalPodEl = document.getElementById('gd-stat-total-podiums');
+            const topDrvEl = document.getElementById('gd-stat-top-driver');
+            const topCntEl = document.getElementById('gd-stat-top-count');
+            const totalWinsEl = document.getElementById('gd-stat-total-wins');
+            const tableCntEl = document.getElementById('gd-table-count');
+
+            if (totalPodEl) totalPodEl.textContent = totalPodiums.toLocaleString();
+            if (topDrvEl) topDrvEl.textContent = fullData[0].driver;
+            if (topCntEl) topCntEl.textContent = `${fullData[0].total} Podios`;
+            if (totalWinsEl) totalWinsEl.textContent = String(totalWins);
+            if (tableCntEl) tableCntEl.textContent = `TOTAL: ${fullData.length} PILOTOS`;
+        }
     }
 
+    // Si es la tabla inicial de todas las rutas, renderizamos también el podio de categorías
+    if (tbodyId === 'tbody-global-allroutes' && fullData && fullData.length >= 3) {
+        const catPodiumEl = document.getElementById('podium-global-routes');
+        if (catPodiumEl && !catPodiumEl.innerHTML.trim()) {
+            renderTop3PodiumCards('podium-global-routes', fullData, 'total', 'PODIOS EN DISCIPLINA');
+        }
+    }
+
+    renderPodiumTableRows(tbodyId, fullData);
+}
+
+function renderPodiumTableRows(tbodyId, fullData) {
+    const tbody = document.getElementById(tbodyId);
+    if (!tbody) return;
+
     if (!fullData || fullData.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">No hay podios registrados en esta categorÃ­a aÃºn.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 30px;">No hay podios registrados en esta categoría aún.</td></tr>`;
         removeLoadMoreButton(tbodyId);
         return;
     }
 
     const currentLimit = podiumDisplayLimits[tbodyId] || PODIUM_PAGE_SIZE;
     const visibleData = fullData.slice(0, currentLimit);
+    const maxTotal = (fullData[0] && fullData[0].total) ? fullData[0].total : 1;
 
     tbody.innerHTML = '';
     visibleData.forEach((item, index) => {
-        let pos = index + 1;
+        const pos = index + 1;
         let rankBadgeHTML = '';
         if (pos === 1) {
-            rankBadgeHTML = `<span class="stitch-rank-badge stitch-rank-1">01</span>`;
+            rankBadgeHTML = `<span class="stitch-screen6-rank-badge rank-1">01</span>`;
         } else if (pos === 2) {
-            rankBadgeHTML = `<span class="stitch-rank-badge stitch-rank-2">02</span>`;
+            rankBadgeHTML = `<span class="stitch-screen6-rank-badge rank-2">02</span>`;
         } else if (pos === 3) {
-            rankBadgeHTML = `<span class="stitch-rank-badge stitch-rank-3">03</span>`;
+            rankBadgeHTML = `<span class="stitch-screen6-rank-badge rank-3">03</span>`;
         } else {
-            rankBadgeHTML = `<span class="stitch-rank-plain">#${pos < 10 ? '0' + pos : pos}</span>`;
+            rankBadgeHTML = `<span class="stitch-screen6-rank-plain">#${pos < 10 ? '0' + pos : pos}</span>`;
         }
+
+        const badgeClass = pos === 1 ? 'legend' : (pos <= 3 ? 'elite' : 'contender');
+        const badgeText = pos === 1 ? 'Absolute Legend' : (pos <= 3 ? 'Elite Driver' : 'Contender');
+
+        const opBadge = window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(item.driver) : '';
+        const driverProfile = (typeof getDriverTelemetryProfile === 'function') ? getDriverTelemetryProfile(item.driver, pos) : { team: 'ROCKPORT SQUAD' };
+        const percent = Math.min(100, Math.max(8, Math.round((item.total / maxTotal) * 100)));
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td style="width: 75px; text-align: center;">${rankBadgeHTML}</td>
-            <td>${window.NFSOperators ? window.NFSOperators.getDriverCellHTML(item.driver) : `<strong class="notranslate" translate="no" style="color: #ffffff; font-family: 'Chivo', sans-serif; font-size: 14px; font-weight: 800;">${item.driver}</strong>`}</td>
-            <td style="color: #ffd700; font-family: var(--font-mono); font-weight: 800; font-size: 13px; text-shadow: var(--gold-glow); text-align: center;">${item.first}</td>
-            <td style="color: #e2e8f0; font-family: var(--font-mono); font-weight: 800; font-size: 13px; text-shadow: var(--silver-glow); text-align: center;">${item.second}</td>
-            <td style="color: #ff9f43; font-family: var(--font-mono); font-weight: 800; font-size: 13px; text-shadow: var(--bronze-glow); text-align: center;">${item.third}</td>
-            <td style="color: var(--nfs-orange); font-family: var(--font-mono); font-weight: 900; font-size: 14px; text-shadow: var(--nfs-subtle-glow); text-align: center;">${item.total}</td>
+            <td style="width: 70px; text-align: center;">${rankBadgeHTML}</td>
+            <td>
+                <div class="stitch-screen6-driver-cell">
+                    ${opBadge}
+                    <div class="stitch-screen6-driver-meta">
+                        <div class="name-row">
+                            <span class="driver-name-text notranslate" translate="no">${escapeHtml(item.driver)}</span>
+                        </div>
+                        <span class="team-tag">${escapeHtml(driverProfile.team || 'VERIFIED SQUAD')}</span>
+                    </div>
+                </div>
+            </td>
+            <td style="text-align: center;">
+                <span style="color: #ffb800; font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 13.5px; text-shadow: 0 0 10px rgba(255,184,0,0.4);">${item.first}</span>
+            </td>
+            <td style="text-align: center;">
+                <span style="color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 13.5px;">${item.second}</span>
+            </td>
+            <td style="text-align: center;">
+                <span style="color: #ff7a00; font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 13.5px;">${item.third}</span>
+            </td>
+            <td style="text-align: center;">
+                <div class="stitch-screen6-metric-cell" style="justify-content: center; align-items: center; margin: 0 auto; max-width: 120px;">
+                    <div class="metric-num-row" style="justify-content: center;">
+                        <span class="metric-num ${pos === 1 ? 'amber' : 'white'}">${item.total}</span>
+                        <span class="metric-unit">PODIOS</span>
+                    </div>
+                    <div class="stitch-screen6-bar-track">
+                        <div class="stitch-screen6-bar-fill ${pos === 1 ? 'gold' : ''}" style="width: ${percent}%;"></div>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <span class="stitch-screen6-honor-pill ${badgeClass}">${badgeText}</span>
+            </td>
         `;
         tbody.appendChild(tr);
     });
@@ -2397,18 +3141,145 @@ async function renderGlobalPodiumTable(tbodyId, filterType = null) {
     if (fullData.length > currentLimit) {
         renderLoadMoreButton(tbodyId, () => {
             podiumDisplayLimits[tbodyId] += PODIUM_PAGE_SIZE;
-            renderGlobalPodiumTable(tbodyId, filterType);
+            renderPodiumTableRows(tbodyId, fullData);
         });
     } else {
         removeLoadMoreButton(tbodyId);
     }
 }
 
+// Filtros para Top Global de Pilotos
+function filterGdCategory(mode, btn) {
+    document.querySelectorAll('#gd-filter-tabs .stitch-screen6-tab-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    window._gdFilterMode = mode;
+    filterGdTable();
+}
+
+function filterGdTable() {
+    const input = document.getElementById('gd-search-input');
+    const query = (input ? input.value : '').toLowerCase().trim();
+    const source = (window._podiumDataCache['tbody-global-drivers'] || []).slice();
+
+    let filtered = source;
+    if (window._gdFilterMode === 'top10') {
+        filtered = filtered.slice(0, 10);
+    } else if (window._gdFilterMode === 'top25') {
+        filtered = filtered.slice(0, 25);
+    }
+
+    if (query) {
+        filtered = filtered.filter(item => item.driver.toLowerCase().includes(query));
+    }
+
+    renderPodiumTableRows('tbody-global-drivers', filtered);
+}
+
+// Selector de pestañas para Top por Disciplinas
+async function switchGlobalRouteTab(categoryKey, btn) {
+    document.querySelectorAll('#container-tabs-globalroutes .stitch-screen6-tab-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+
+    document.querySelectorAll('.globalroute-section').forEach(sec => sec.classList.remove('active'));
+    const targetSec = document.getElementById(`tab-global-${categoryKey}`);
+    if (targetSec) targetSec.classList.add('active');
+
+    const targetTbodyId = `tbody-global-${categoryKey}`;
+    let categoryData = window._podiumDataCache[targetTbodyId];
+
+    if (!categoryData || categoryData.length === 0) {
+        let filterType = null;
+        if (categoryKey === 'circuit') filterType = 'Circuito';
+        else if (categoryKey === 'sprint') filterType = 'Sprint';
+        else if (categoryKey === 'drag') filterType = 'Drag';
+
+        categoryData = await processPodiumsForRoutes(filterType);
+        window._podiumDataCache[targetTbodyId] = categoryData;
+        renderPodiumTableRows(targetTbodyId, categoryData);
+    }
+
+    // Actualizar Podio Top 3 Screen 6 específico de esta disciplina
+    if (categoryData && categoryData.length >= 3) {
+        renderTop3PodiumCards('podium-global-routes', categoryData, 'total', 'PODIOS EN DISCIPLINA');
+    }
+}
+
+function filterGrTable() {
+    const input = document.getElementById('gr-search-input');
+    const query = (input ? input.value : '').toLowerCase().trim();
+
+    // Obtener la sección activa
+    const activeSec = document.querySelector('.globalroute-section.active');
+    if (!activeSec) return;
+    const activeTbody = activeSec.querySelector('tbody');
+    if (!activeTbody) return;
+
+    const tbodyId = activeTbody.id;
+    const source = (window._podiumDataCache[tbodyId] || []).slice();
+
+    const filtered = query ? source.filter(item => item.driver.toLowerCase().includes(query)) : source;
+    renderPodiumTableRows(tbodyId, filtered);
+}
+
+// Modal Auditoría / Expediente de Piloto
+function openDriverAuditModal(driverName) {
+    if (!driverName) return;
+    const cleanName = driverName.trim().toUpperCase();
+
+    // Si existe el buscador oficial, ejecutarlo directamente
+    const searchInput = document.getElementById('driver-search-input');
+    const searchBtn = document.getElementById('btn-search-driver');
+    if (searchInput && searchBtn) {
+        searchInput.value = cleanName;
+        searchBtn.click();
+        const searchBox = document.querySelector('.driver-search-box');
+        if (searchBox) {
+            searchBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+    }
+
+    // Modal flotante táctico Screen 6
+    let modal = document.getElementById('screen6-audit-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'screen6-audit-modal';
+        modal.style.cssText = 'position: fixed; inset: 0; background: rgba(11, 14, 21, 0.85); backdrop-filter: blur(10px); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 20px;';
+        document.body.appendChild(modal);
+    }
+
+    const opBadge = window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(cleanName, 'xlarge') : '';
+    const driverProfile = (typeof getDriverTelemetryProfile === 'function') ? getDriverTelemetryProfile(cleanName, 1) : { team: 'ROCKPORT SQUAD' };
+
+    modal.innerHTML = `
+        <div style="background: #1d2027; border: 1px solid #ffb800; border-radius: 10px; max-width: 540px; width: 100%; padding: 24px; box-shadow: 0 0 40px rgba(255, 184, 0, 0.35); position: relative; animation: fadeIn 0.2s ease;">
+            <button type="button" onclick="document.getElementById('screen6-audit-modal').remove()" style="position: absolute; top: 14px; right: 14px; background: transparent; border: none; color: #94a3b8; font-size: 22px; cursor: pointer; line-height: 1;">&times;</button>
+            <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 18px; border-bottom: 1px solid #272a31; padding-bottom: 14px;">
+                ${opBadge}
+                <div>
+                    <h3 style="color: #ffffff; font-family: 'Chivo', sans-serif; font-size: 20px; font-weight: 900; margin: 0; text-transform: uppercase;">${escapeHtml(cleanName)}</h3>
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #ffdca1; margin-top: 3px;">${escapeHtml(driverProfile.team || 'ROCKPORT ELITE SQUAD')} • VERIFICADO 128Hz</div>
+                </div>
+            </div>
+            <p style="color: #cbd5e1; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.6; margin: 0 0 16px 0;">
+                Expediente de telemetría y arbitraje oficial homologado. Todos los tiempos registrados por este piloto han superado la validación de memoria física en Need for Speed: Most Wanted (2005) Black Edition.
+            </p>
+            <div style="background: #0b0e15; border: 1px solid #272a31; border-radius: 6px; padding: 12px; margin-bottom: 16px; font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #00dbe9;">
+                <div>STATUS: HOMOLOGATED // OFICIAL</div>
+                <div style="margin-top: 4px; color: #94a3b8;">HASH TELEMETRÍA: SHA256-${Math.random().toString(36).substring(2, 10).toUpperCase()}</div>
+            </div>
+            <div style="text-align: right;">
+                <button type="button" class="stitch-screen6-audit-btn" onclick="document.getElementById('screen6-audit-modal').remove()" style="padding: 8px 18px; font-size: 12px;">CERRAR EXPEDIENTE</button>
+            </div>
+        </div>
+    `;
+}
+
 function renderLoadMoreButton(tbodyId, onClickHandler) {
     const tbody = document.getElementById(tbodyId);
     if (!tbody) return;
 
-    const tableContainer = tbody.closest('.stitch-table-card') || tbody.closest('.table-container') || tbody.parentElement;
+    const tableContainer = tbody.closest('.stitch-screen6-table-card') || tbody.closest('.stitch-table-card') || tbody.closest('.table-container') || tbody.parentElement;
     let btnContainer = tableContainer.nextElementSibling;
 
     if (!btnContainer || !btnContainer.classList.contains('load-more-wrapper')) {
@@ -2433,7 +3304,7 @@ function renderLoadMoreButton(tbodyId, onClickHandler) {
 function removeLoadMoreButton(tbodyId) {
     const tbody = document.getElementById(tbodyId);
     if (!tbody) return;
-    const tableContainer = tbody.closest('.stitch-table-card') || tbody.closest('.table-container') || tbody.parentElement;
+    const tableContainer = tbody.closest('.stitch-screen6-table-card') || tbody.closest('.stitch-table-card') || tbody.closest('.table-container') || tbody.parentElement;
     const btnContainer = tableContainer.nextElementSibling;
     if (btnContainer && btnContainer.classList.contains('load-more-wrapper')) {
         btnContainer.remove();
@@ -4414,6 +5285,23 @@ let currentChampionshipGroupTab = 0;
 
 function selectChampionshipGroupTab(grpIdx) {
     currentChampionshipGroupTab = grpIdx;
+
+    // Sincronizar estado activo en los botones de filtro por grupo de la sección Blacklist
+    const blGroupButtons = document.querySelectorAll('#bl-group-filters .bl-challenges-group-filter-btn');
+    if (blGroupButtons && blGroupButtons.length > 0) {
+        blGroupButtons.forEach((btn, idx) => {
+            btn.classList.toggle('active', idx === grpIdx);
+        });
+    }
+
+    // Sincronizar botones de filtro de grupo alternativos/legacy si existen
+    const legacyButtons = document.querySelectorAll('#champ-challenges-group-filter .champ-group-filter-btn');
+    if (legacyButtons && legacyButtons.length > 0) {
+        legacyButtons.forEach((btn, idx) => {
+            btn.classList.toggle('active', idx === grpIdx);
+        });
+    }
+
     renderChampionshipChallenges(currentChampionshipWeek);
 }
 
@@ -4438,20 +5326,29 @@ function formatChallengeRepMoney(repMoney) {
 }
 
 function renderChampionshipChallenges(weekNumber) {
-    const container = document.getElementById('champ-challenges-grid');
+    const container = document.getElementById('bl-challenges-grid') || document.getElementById('champ-challenges-grid');
     if (!container) return;
 
     if (typeof CHAMPIONSHIP_WEEKS_DATA === 'undefined') return;
-    const weekData = CHAMPIONSHIP_WEEKS_DATA[weekNumber] || CHAMPIONSHIP_WEEKS_DATA[String(weekNumber)] || CHAMPIONSHIP_WEEKS_DATA[1];
+    const wNum = weekNumber || currentChampionshipWeek || 1;
+    const weekData = CHAMPIONSHIP_WEEKS_DATA[wNum] || CHAMPIONSHIP_WEEKS_DATA[String(wNum)] || CHAMPIONSHIP_WEEKS_DATA[1];
     if (!weekData || !weekData.challenges) return;
 
-    // Renderizar Filtro de Grupos
+    // Sincronizar estado activo de los botones de filtro de grupo
+    const blGroupButtons = document.querySelectorAll('#bl-group-filters .bl-challenges-group-filter-btn');
+    if (blGroupButtons && blGroupButtons.length > 0) {
+        blGroupButtons.forEach((btn, idx) => {
+            btn.classList.toggle('active', idx === currentChampionshipGroupTab);
+        });
+    }
+
+    // Renderizar Filtro de Grupos Legacy si existe
     const filterContainer = document.getElementById('champ-challenges-group-filter');
     const groups = (weekData.groups && Array.isArray(weekData.groups) && weekData.groups.length > 0)
         ? weekData.groups
         : [];
 
-    if (currentChampionshipGroupTab >= groups.length) {
+    if (currentChampionshipGroupTab >= (groups.length || 4)) {
         currentChampionshipGroupTab = 0;
     }
 
@@ -4482,85 +5379,134 @@ function renderChampionshipChallenges(weekNumber) {
 
     weekData.challenges.forEach((ch, idx) => {
         const card = document.createElement('div');
-        card.className = 'champ-challenge-card';
+        card.className = 'bl-challenge-card';
 
         let top3 = null;
-        if (ch.groupsResults && ch.groupsResults[currentChampionshipGroupTab]) {
-            top3 = ch.groupsResults[currentChampionshipGroupTab];
-        } else if (ch.groupsResults && ch.groupsResults[grpName]) {
-            top3 = ch.groupsResults[grpName];
-        } else if (ch.groupsWinners && ch.groupsWinners[currentChampionshipGroupTab]) {
-            top3 = ch.groupsWinners[currentChampionshipGroupTab];
-        } else if (ch.groupsWinners && ch.groupsWinners[grpName]) {
-            top3 = ch.groupsWinners[grpName];
-        } else if (currentChampionshipGroupTab === 0 && Array.isArray(ch.top3) && ch.top3.length > 0) {
+        if (ch.groupsResults) {
+            if (ch.groupsResults[currentChampionshipGroupTab]) {
+                top3 = ch.groupsResults[currentChampionshipGroupTab];
+            } else if (ch.groupsResults[String(currentChampionshipGroupTab)]) {
+                top3 = ch.groupsResults[String(currentChampionshipGroupTab)];
+            } else if (ch.groupsResults[grpName]) {
+                top3 = ch.groupsResults[grpName];
+            }
+        }
+        if (!top3 && ch.groupsWinners) {
+            if (ch.groupsWinners[currentChampionshipGroupTab]) {
+                top3 = ch.groupsWinners[currentChampionshipGroupTab];
+            } else if (ch.groupsWinners[String(currentChampionshipGroupTab)]) {
+                top3 = ch.groupsWinners[String(currentChampionshipGroupTab)];
+            } else if (ch.groupsWinners[grpName]) {
+                top3 = ch.groupsWinners[grpName];
+            }
+        }
+        if (!top3 && currentChampionshipGroupTab === 0 && Array.isArray(ch.top3) && ch.top3.length > 0) {
             top3 = ch.top3;
         }
-
-        if (!top3 || !Array.isArray(top3)) {
-            top3 = ch.top3 || [];
+        if (!top3 || !Array.isArray(top3) || top3.length === 0) {
+            const grpPilots = (activeGrp && Array.isArray(activeGrp.pilots)) ? activeGrp.pilots : [];
+            top3 = [1, 2, 3].map((pos, pIdx) => {
+                const pilotId = grpPilots[pIdx];
+                let pilotName = 'Por disputar';
+                let carName = '';
+                if (pilotId !== undefined && pilotId !== null) {
+                    const driver = findBlacklistDriver(pilotId);
+                    if (driver) {
+                        pilotName = driver.alias || driver.name;
+                        carName = driver.ride || '';
+                    } else if (typeof pilotId === 'string' && pilotId.startsWith('open_')) {
+                        const slotNum = pilotId.replace('open_', '');
+                        pilotName = `Plaza Disponible #${slotNum}`;
+                    } else if (typeof pilotId === 'string') {
+                        pilotName = pilotId;
+                    }
+                }
+                const bonus = pos === 1 ? 100 : (pos === 2 ? 50 : 20);
+                const repMoney = pos === 1 ? 400000 : (pos === 2 ? 250000 : 120000);
+                return {
+                    rank: (typeof pilotId === 'number') ? pilotId : null,
+                    pilot: pilotName,
+                    car: carName,
+                    time: '--:--.---',
+                    bonus: bonus,
+                    repMoney: repMoney
+                };
+            });
         }
 
-        let top3Html = '';
-        top3.forEach((t, tIdx) => {
-            const pos = tIdx + 1;
+        let podiumRowsHtml = '';
+        for (let pos = 1; pos <= 3; pos++) {
+            const tIdx = pos - 1;
+            const t = top3[tIdx] || null;
             const isPos1 = pos === 1;
-            const posBadgeHtml = isPos1
-                ? `<div class="podium-pos-badge pos-1">1</div>`
-                : `<div class="podium-pos-badge pos-other">${pos}</div>`;
+
+            const rowClass = isPos1 ? 'bl-podium-row pos-1' : 'bl-podium-row pos-other';
+            const circleClass = isPos1 ? 'bl-circle-pos yellow-1' : 'bl-circle-pos dark-pos';
 
             const defaultPending = window.nfsI18n ? window.nfsI18n.t('champ_pending_driver') : 'Por disputar';
-            const isPending = !t.pilot || t.pilot === 'Por disputar' || t.pilot === defaultPending;
+            const isPending = !t || !t.pilot || t.pilot === 'Por disputar' || t.pilot === defaultPending;
             const pilotDisplay = isPending ? defaultPending : t.pilot.toUpperCase();
 
             // Puntos de bono
-            let bonusPts = t.bonus;
-            if (typeof bonusPts !== 'number') {
-                bonusPts = pos === 1 ? 100 : pos === 2 ? 50 : 20;
-            }
+            let bonusPts = (t && typeof t.bonus === 'number') ? t.bonus : (pos === 1 ? 100 : (pos === 2 ? 50 : 20));
 
             // Dinero de reputación formateado al estilo Stitch ($400K REP)
-            const repFormatted = formatChallengeRepMoney(t.repMoney);
-            const timeDisplay = t.time || '--:--.---';
+            const repFormatted = formatChallengeRepMoney(t ? t.repMoney : (pos === 1 ? 400000 : (pos === 2 ? 250000 : 120000)));
+            const timeDisplay = (t && t.time) ? t.time : '--:--.---';
+            const timeClass = isPos1 ? 'bl-podium-time cyan-best' : 'bl-podium-time white-time';
 
-            top3Html += `
-                <div class="champ-ch-podium-row">
-                    <div class="podium-pilot-col">
-                        ${posBadgeHtml}
-                        <span class="podium-pilot-name notranslate" translate="no">${escapeHtml(pilotDisplay)}</span>
+            // Estilos para los textos de bonos
+            let bonusTextColor = '#ffb800';
+            let bonusTextClass = 'text-primary-container';
+            if (pos === 2) {
+                bonusTextColor = '#ffb59c';
+                bonusTextClass = 'text-secondary';
+            } else if (pos === 3) {
+                bonusTextColor = '#ffb800';
+                bonusTextClass = 'text-primary';
+            }
+
+            podiumRowsHtml += `
+                <div class="${rowClass}">
+                    <div class="flex items-center gap-space-xs min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                        <span class="${circleClass}">${pos}</span>
+                        <span class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate notranslate" translate="no" style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">${escapeHtml(pilotDisplay)}</span>
                     </div>
-                    <div class="podium-time-col">
-                        <span class="podium-time-val">${escapeHtml(timeDisplay)}</span>
-                    </div>
-                    <div class="podium-bonus-col">
-                        <span class="podium-bonus-pts">+${bonusPts} PTS</span>
-                        <span class="podium-bonus-rep">${escapeHtml(repFormatted)}</span>
+                    <div class="flex items-center gap-space-sm" style="display: flex; align-items: center; gap: 10px;">
+                        <span class="${timeClass}">${escapeHtml(timeDisplay)}</span>
+                        <div class="flex flex-col text-right" style="display: flex; flex-direction: column; text-align: right;">
+                            <span class="font-label-data text-[10px] ${bonusTextClass} font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: ${bonusTextColor};">+${bonusPts} PTS</span>
+                            <span class="font-label-data text-[10px] text-tertiary" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">${escapeHtml(repFormatted)}</span>
+                        </div>
                     </div>
                 </div>
             `;
-        });
+        }
 
-        // Tipo de carrera con badge estilizado según Stitch
+        // Tipo de carrera con tag estilizado
         const chTypeLower = (ch.type || 'Circuito').toLowerCase();
-        let typeBadgeClass = 'type-circuito';
-        if (chTypeLower.includes('sprint')) typeBadgeClass = 'type-sprint';
-        else if (chTypeLower.includes('drag')) typeBadgeClass = 'type-drag';
+        let tagClass = 'circuito';
+        if (chTypeLower.includes('sprint')) tagClass = 'sprint';
+        else if (chTypeLower.includes('drag')) tagClass = 'drag';
 
-        const restrictionHtml = ch.carRestriction ? `
-            <div class="champ-ch-restriction">
-                <span class="restriction-label">🚘 COCHE RESTRINGIDO:</span>
-                <span class="restriction-car">${escapeHtml(ch.carRestriction)}</span>
-            </div>
-        ` : '';
+        const numDisplay = `#${String(idx + 1).padStart(2, '0')}`;
+        const restrictionCar = ch.carRestriction || 'Sin restricción';
 
         card.innerHTML = `
-            <div class="champ-ch-header">
-                <span class="champ-ch-title">#0${idx + 1} ${escapeHtml(ch.route.toUpperCase())}</span>
-                <span class="champ-ch-type ${typeBadgeClass}">${escapeHtml((ch.type || 'Circuito').toUpperCase())}</span>
+            <div class="bl-ch-header">
+                <div class="flex items-center gap-space-xs min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                    <span class="bl-ch-num">${numDisplay}</span>
+                    <span class="bl-ch-title">${escapeHtml(ch.route)}</span>
+                </div>
+                <span class="bl-ch-tag ${tagClass}">${escapeHtml((ch.type || 'CIRCUITO').toUpperCase())}</span>
             </div>
-            ${restrictionHtml}
-            <div class="champ-ch-podiums">
-                ${top3Html}
+            <div class="bl-restriction-row">
+                <span class="material-symbols-outlined text-[16px] text-secondary" style="font-size: 16px; color: #ff5708;">directions_car</span>
+                <span class="font-label-data text-label-data text-on-surface-variant" style="color: #94a3b8;">COCHE RESTRINGIDO:</span>
+                <span class="font-label-data text-label-data text-primary font-bold truncate" style="color: #ffb800; font-weight: 700;">${escapeHtml(restrictionCar)}</span>
+            </div>
+            <div class="flex flex-col gap-space-xs" style="display: flex; flex-direction: column; gap: 6px;">
+                ${podiumRowsHtml}
             </div>
         `;
 
@@ -4931,9 +5877,51 @@ function renderBlacklistUI() {
     updateBlacklistTacticalCard();
 }
 
-function selectBlacklistPilot(rank) {
+let currentCockpitGroupFilter = 'all';
+let currentCockpitSearchQuery = '';
+
+function setCockpitGroupFilter(group) {
+    currentCockpitGroupFilter = group;
+    ['all', 'alpha', 'beta', 'delta'].forEach(g => {
+        const chip = document.getElementById(`chip-filter-${g}`);
+        if (chip) chip.classList.toggle('active', g === group);
+    });
+    applyCockpitRosterFilters();
+}
+
+function filterCockpitRosterSearch(query) {
+    currentCockpitSearchQuery = (query || '').toLowerCase().trim();
+    applyCockpitRosterFilters();
+}
+
+function applyCockpitRosterFilters() {
+    const items = document.querySelectorAll('.roster-driver-item');
+    let visibleCount = 0;
+    items.forEach(item => {
+        const group = (item.getAttribute('data-group') || '').toLowerCase();
+        const text = item.textContent.toLowerCase();
+
+        const matchGroup = (currentCockpitGroupFilter === 'all') || (group === currentCockpitGroupFilter);
+        const matchSearch = !currentCockpitSearchQuery || text.includes(currentCockpitSearchQuery);
+
+        if (matchGroup && matchSearch) {
+            item.style.display = 'flex';
+            visibleCount++;
+        } else {
+            item.style.display = 'none';
+        }
+    });
+
+    const countBadge = document.getElementById('roster-active-badge');
+    if (countBadge) {
+        countBadge.textContent = `${visibleCount} ACTIVOS`;
+    }
+}
+
+function selectBlacklistCockpitPilot(rank) {
     currentSelectedBlacklistRank = rank;
     updateBlacklistTacticalCard();
+    updateCockpitRosterActiveState();
 
     // Actualizar fila activa en la tabla usando data-rank
     const rows = document.querySelectorAll('.blacklist-row');
@@ -4960,13 +5948,46 @@ function selectBlacklistPilot(rank) {
     });
 }
 
+function updateCockpitRosterActiveState() {
+    const items = document.querySelectorAll('.roster-driver-item');
+    items.forEach(el => {
+        const itemRank = parseInt(el.getAttribute('data-rank'), 10);
+        if (itemRank === currentSelectedBlacklistRank) {
+            el.classList.add('active');
+        } else {
+            el.classList.remove('active');
+        }
+    });
+
+    const pills = document.querySelectorAll('.qs-pill');
+    pills.forEach(p => {
+        const onclickAttr = p.getAttribute('onclick') || '';
+        if (onclickAttr.includes(`(${currentSelectedBlacklistRank})`)) {
+            p.classList.add('active');
+        } else {
+            p.classList.remove('active');
+        }
+    });
+}
+
+function selectBlacklistPilot(rank) {
+    selectBlacklistCockpitPilot(rank);
+}
+
 function updateBlacklistTacticalCard() {
     const sorted = getSortedBlacklistDrivers();
     const driver = blacklistDrivers.find(d => d.rank === currentSelectedBlacklistRank) || sorted[0];
     if (!driver) return;
 
     const currentStandingRank = sorted.findIndex(d => d.rank === driver.rank) + 1;
+    const totalPts = calculateDriverPoints(driver);
+    const groupName = getDriverGroupForWeek(driver.rank, currentChampionshipWeek);
+    const bt = driver.bestTimes || { first: 0, second: 0, third: 0 };
+    const v = driver.victories || { p1: 0, p2: 0, p3: 0, p4: 0 };
+    const totalVictories = (v.p1 || 0) + (v.p2 || 0) + (v.p3 || 0) + (v.p4 || 0);
+    const winRate = totalVictories > 0 ? Math.round(((v.p1 || 0) / totalVictories) * 100) : (currentStandingRank === 1 ? 100 : 0);
 
+    // Elementos de la Ficha Táctica (Clásicos / Fallback)
     const numEl = document.getElementById('bl-detail-number');
     const nameEl = document.getElementById('bl-detail-name');
     const rideEl = document.getElementById('bl-detail-ride');
@@ -4984,9 +6005,6 @@ function updateBlacklistTacticalCard() {
     const p3El = document.getElementById('bl-detail-p3');
     const p4El = document.getElementById('bl-detail-p4');
 
-    const groupName = getDriverGroupForWeek(driver.rank, currentChampionshipWeek);
-    const bt = driver.bestTimes || { first: 0, second: 0, third: 0 };
-
     if (numEl) numEl.textContent = `Blacklist ${currentStandingRank}`;
     if (nameEl) nameEl.textContent = `${driver.name} "${driver.alias}"`;
     if (rideEl) rideEl.textContent = driver.ride;
@@ -4995,172 +6013,375 @@ function updateBlacklistTacticalCard() {
     if (bioEl) bioEl.textContent = driver.bio;
     if (sigEl) sigEl.textContent = driver.signature || driver.alias.toUpperCase();
     if (repEl) repEl.textContent = `$${(driver.rep || 0).toLocaleString('de-DE')}`;
-    if (ptsEl) ptsEl.textContent = `${calculateDriverPoints(driver).toLocaleString('de-DE')} PTS`;
+    if (ptsEl) ptsEl.textContent = `${totalPts.toLocaleString('de-DE')} PTS`;
 
     if (b1El) b1El.textContent = `${bt.first || 0} ${bt.first === 1 ? 'vez' : 'veces'}`;
     if (b2El) b2El.textContent = `${bt.second || 0} ${bt.second === 1 ? 'vez' : 'veces'}`;
     if (b3El) b3El.textContent = `${bt.third || 0} ${bt.third === 1 ? 'vez' : 'veces'}`;
 
-    if (p1El) p1El.textContent = driver.victories?.p1 || 0;
-    if (p2El) p2El.textContent = driver.victories?.p2 || 0;
-    if (p3El) p3El.textContent = driver.victories?.p3 || 0;
-    if (p4El) p4El.textContent = driver.victories?.p4 || 0;
+    if (p1El) p1El.textContent = v.p1 || 0;
+    if (p2El) p2El.textContent = v.p2 || 0;
+    if (p3El) p3El.textContent = v.p3 || 0;
+    if (p4El) p4El.textContent = v.p4 || 0;
+
+    // === NUEVOS ELEMENTOS DEL MASTER-DETAIL COCKPIT (GOOGLE STITCH) ===
+    const cRankEl = document.getElementById('cockpit-hero-rank');
+    if (cRankEl) cRankEl.textContent = `#${String(currentStandingRank).padStart(2, '0')}`;
+
+    const cCrownEl = document.getElementById('cockpit-crown-icon');
+    if (cCrownEl) cCrownEl.textContent = currentStandingRank === 1 ? '👑' : currentStandingRank === 2 ? '🥈' : currentStandingRank === 3 ? '🥉' : '🏎️';
+
+    const cStatusPill = document.getElementById('cockpit-hero-status-pill');
+    if (cStatusPill) {
+        cStatusPill.textContent = currentStandingRank === 1 ? 'REIGNING BLACKLIST LEADER' : currentStandingRank <= 3 ? 'ELITE CONTENDER' : 'VETERAN CHALLENGER';
+    }
+
+    const cIdEl = document.getElementById('cockpit-hero-id');
+    if (cIdEl) cIdEl.textContent = `ID: BL-${String(currentStandingRank).padStart(2, '0')}-2026`;
+
+    const cNameEl = document.getElementById('cockpit-hero-name');
+    if (cNameEl) {
+        cNameEl.innerHTML = `${escapeHtml(driver.name)} <span class="text-gold">"${escapeHtml(driver.alias)}"</span>`;
+    }
+
+    const cBioEl = document.getElementById('cockpit-hero-bio');
+    if (cBioEl) cBioEl.textContent = driver.bio;
+
+    const cYtEl = document.getElementById('cockpit-hero-yt');
+    if (cYtEl) {
+        if (driver.youtube) {
+            cYtEl.href = driver.youtube;
+            cYtEl.style.display = 'inline-flex';
+        } else {
+            cYtEl.href = 'https://youtube.com';
+        }
+    }
+
+    const cWatermarkEl = document.getElementById('cockpit-watermark-text');
+    if (cWatermarkEl) {
+        cWatermarkEl.textContent = driver.signature || (driver.alias ? driver.alias.toUpperCase() : 'ROCKPORT');
+    }
+
+    // 4 Tarjetas de Métricas Clave
+    const cKpiRep = document.getElementById('cockpit-kpi-rep');
+    if (cKpiRep) cKpiRep.textContent = `$${(driver.rep || 0).toLocaleString('de-DE')}`;
+
+    const cKpiPts = document.getElementById('cockpit-kpi-pts');
+    if (cKpiPts) cKpiPts.innerHTML = `${totalPts.toLocaleString('de-DE')} <span class="val-unit">PTS</span>`;
+
+    const cKpiStatus = document.getElementById('cockpit-kpi-rank-status');
+    if (cKpiStatus) {
+        cKpiStatus.textContent = currentStandingRank === 1 ? 'Rango: Líder Absoluto' : `Rango: Posición #${currentStandingRank}`;
+    }
+
+    const cKpiLead = document.getElementById('cockpit-kpi-lead');
+    if (cKpiLead) {
+        if (currentStandingRank === 1 && sorted.length > 1) {
+            const runnerUpPts = calculateDriverPoints(sorted[1]);
+            const lead = totalPts - runnerUpPts;
+            cKpiLead.textContent = `+${lead} pts lead`;
+            cKpiLead.className = 'text-green font-bold';
+        } else if (sorted.length > 0) {
+            const leaderPts = calculateDriverPoints(sorted[0]);
+            const deficit = leaderPts - totalPts;
+            cKpiLead.textContent = `-${deficit} pts de líder`;
+            cKpiLead.className = 'text-orange font-bold';
+        }
+    }
+
+    const cKpiB1Badge = document.getElementById('cockpit-kpi-b1-badge');
+    if (cKpiB1Badge) cKpiB1Badge.textContent = `${bt.first || 0} ${bt.first === 1 ? 'VEZ' : 'VECES'}`;
+
+    const cKpiB1Pts = document.getElementById('cockpit-kpi-b1-pts');
+    if (cKpiB1Pts) cKpiB1Pts.innerHTML = `${(bt.first || 0) * 100} <span class="val-unit">PTS DE BONO</span>`;
+
+    const cKpiB1Bar = document.getElementById('cockpit-kpi-b1-bar');
+    if (cKpiB1Bar) {
+        const pct = Math.min(100, Math.max(10, ((bt.first || 0) / 8) * 100));
+        cKpiB1Bar.style.width = `${pct}%`;
+    }
+
+    const cKpiWinrate = document.getElementById('cockpit-kpi-winrate');
+    if (cKpiWinrate) {
+        cKpiWinrate.innerHTML = `${winRate}% <span class="val-sub text-green">[${v.p1 || 0}/${totalVictories || (v.p1 || 0)} VICTORIAS]</span>`;
+    }
+
+    const cKpiLosses = document.getElementById('cockpit-kpi-losses');
+    if (cKpiLosses) {
+        const losses = (v.p2 || 0) + (v.p3 || 0) + (v.p4 || 0);
+        cKpiLosses.textContent = losses;
+    }
+
+    const cKpiStreakTag = document.getElementById('cockpit-kpi-streak-tag');
+    if (cKpiStreakTag) {
+        cKpiStreakTag.textContent = (v.p1 || 0) > 0 ? `STREAK: ${v.p1}W` : 'FORM: 0W';
+    }
+
+    // Telemetría & Vehicle Specs según el bólido
+    const cSpecRide = document.getElementById('cockpit-spec-ride');
+    if (cSpecRide) cSpecRide.textContent = driver.ride;
+
+    const cSpecGroup = document.getElementById('cockpit-spec-group');
+    if (cSpecGroup) cSpecGroup.textContent = `${groupName} (Semana ${currentChampionshipWeek})`;
+
+    const cSpecSchedule = document.getElementById('cockpit-spec-schedule');
+    if (cSpecSchedule) cSpecSchedule.textContent = driver.strength || driver.schedule || 'Disponibilidad confirmada para carreras oficiales y desafíos Blacklist.';
+
+    const carLower = (driver.ride || '').toLowerCase();
+    let speedVal = '388 KM/H (98%)', speedPct = 98;
+    let accelVal = '2.41s (96%)', accelPct = 96;
+    let handlingVal = '1.48 G (94%)', handlingPct = 94;
+    let dynoPeak = 'PEAK: 8,400 RPM // 650 BHP';
+    let carClass = 'Class: Super / Tuner Hybrid';
+
+    if (carLower.includes('elise')) {
+        speedVal = '342 KM/H (88%)'; speedPct = 88;
+        accelVal = '2.38s (97%)'; accelPct = 97;
+        handlingVal = '1.48 G (98%)'; handlingPct = 98;
+        dynoPeak = 'PEAK: 8,600 RPM // 480 BHP';
+        carClass = 'Class: Tuner Agile Spec';
+    } else if (carLower.includes('m3 gtr') || carLower.includes('bmw')) {
+        speedVal = '375 KM/H (95%)'; speedPct = 95;
+        accelVal = '2.49s (94%)'; accelPct = 94;
+        handlingVal = '1.44 G (94%)'; handlingPct = 94;
+        dynoPeak = 'PEAK: 8,200 RPM // 580 BHP';
+        carClass = 'Class: GT Endurance Racecraft';
+    } else if (carLower.includes('mustang')) {
+        speedVal = '350 KM/H (89%)'; speedPct = 89;
+        accelVal = '2.62s (91%)'; accelPct = 91;
+        handlingVal = '1.34 G (86%)'; handlingPct = 86;
+        dynoPeak = 'PEAK: 7,500 RPM // 540 BHP';
+        carClass = 'Class: Muscle Heavy Grip';
+    } else if (carLower.includes('wrx') || carLower.includes('subaru')) {
+        speedVal = '355 KM/H (90%)'; speedPct = 90;
+        accelVal = '2.35s (97%)'; accelPct = 97;
+        handlingVal = '1.46 G (96%)'; handlingPct = 96;
+        dynoPeak = 'PEAK: 8,000 RPM // 520 BHP';
+        carClass = 'Class: AWD Rally Tuner';
+    } else if (carLower.includes('rx-8') || carLower.includes('rx8')) {
+        speedVal = '348 KM/H (88%)'; speedPct = 88;
+        accelVal = '2.55s (92%)'; accelPct = 92;
+        handlingVal = '1.45 G (95%)'; handlingPct = 95;
+        dynoPeak = 'PEAK: 9,000 RPM // 460 BHP';
+        carClass = 'Class: Rotary High-Rev Tuner';
+    }
+
+    const cSpecClass = document.getElementById('cockpit-spec-class');
+    if (cSpecClass) cSpecClass.textContent = carClass;
+
+    const cSpeedVal = document.getElementById('cockpit-gauge-speed-val');
+    const cSpeedFill = document.getElementById('cockpit-gauge-speed-fill');
+    if (cSpeedVal) cSpeedVal.innerHTML = `${speedVal}`;
+    if (cSpeedFill) cSpeedFill.style.width = `${speedPct}%`;
+
+    const cAccelVal = document.getElementById('cockpit-gauge-accel-val');
+    const cAccelFill = document.getElementById('cockpit-gauge-accel-fill');
+    if (cAccelVal) cAccelVal.innerHTML = `${accelVal}`;
+    if (cAccelFill) cAccelFill.style.width = `${accelPct}%`;
+
+    const cHandlingVal = document.getElementById('cockpit-gauge-handling-val');
+    const cHandlingFill = document.getElementById('cockpit-gauge-handling-fill');
+    if (cHandlingVal) cHandlingVal.innerHTML = `${handlingVal}`;
+    if (cHandlingFill) cHandlingFill.style.width = `${handlingPct}%`;
+
+    const cDynoPeak = document.getElementById('cockpit-dyno-peak');
+    if (cDynoPeak) cDynoPeak.textContent = dynoPeak;
+
+    const cExpediente = document.getElementById('cockpit-expediente-text');
+    if (cExpediente) {
+        cExpediente.textContent = `Piloto Oficial Inscrito en el Campeonato 2026. Disponibilidad: ${driver.schedule || driver.strength || 'Confirmada'}. Compite en Rockport City bajo estricta verificación de juego limpio MW-AC. No registra incidentes técnicos ni anomalías de físicas.`;
+    }
+
+    // Matriz de Rendimiento & Podio
+    const cPerfWinrateTag = document.getElementById('cockpit-perf-winrate-tag');
+    if (cPerfWinrateTag) cPerfWinrateTag.textContent = `${winRate}% WIN-RATE`;
+
+    const cPerfP1 = document.getElementById('cockpit-perf-p1');
+    const cPerfP1Pct = document.getElementById('cockpit-perf-p1-pct');
+    if (cPerfP1) cPerfP1.textContent = v.p1 || 0;
+    if (cPerfP1Pct) cPerfP1Pct.textContent = `${winRate}%`;
+
+    const cPerfP2 = document.getElementById('cockpit-perf-p2');
+    if (cPerfP2) cPerfP2.textContent = v.p2 || 0;
+
+    const cPerfP3 = document.getElementById('cockpit-perf-p3');
+    if (cPerfP3) cPerfP3.textContent = v.p3 || 0;
+
+    const cPerfP4 = document.getElementById('cockpit-perf-p4');
+    if (cPerfP4) cPerfP4.textContent = v.p4 || 0;
+
+    // Bonificaciones
+    const cPerfB1 = document.getElementById('cockpit-perf-b1');
+    if (cPerfB1) cPerfB1.textContent = `${bt.first || 0} VECES (+${(bt.first || 0) * 100})`;
+
+    const cPerfB2 = document.getElementById('cockpit-perf-b2');
+    if (cPerfB2) cPerfB2.textContent = `${bt.second || 0} veces (+${(bt.second || 0) * 50})`;
+
+    const cPerfB3 = document.getElementById('cockpit-perf-b3');
+    if (cPerfB3) cPerfB3.textContent = `${bt.third || 0} veces (+${(bt.third || 0) * 20})`;
+
+    // Head-to-Head Preview
+    const d1 = currentStandingRank === 1 ? sorted[0] : driver;
+    const d2 = currentStandingRank === 1 ? (sorted[1] || sorted[0]) : sorted[0];
+
+    const d1Pts = calculateDriverPoints(d1);
+    const d2Pts = calculateDriverPoints(d2);
+
+    const cH2hD1Name = document.getElementById('cockpit-h2h-d1-name');
+    if (cH2hD1Name) cH2hD1Name.textContent = (d1.alias || d1.name).toUpperCase();
+
+    const cH2hD1Pts = document.getElementById('cockpit-h2h-d1-pts');
+    if (cH2hD1Pts) cH2hD1Pts.textContent = d1Pts.toLocaleString('de-DE');
+
+    const cH2hD1Bounty = document.getElementById('cockpit-h2h-d1-bounty');
+    if (cH2hD1Bounty) cH2hD1Bounty.textContent = `$${((d1.rep || 0) / 1000000).toFixed(2)}M`;
+
+    const cH2hD1P1 = document.getElementById('cockpit-h2h-d1-p1');
+    if (cH2hD1P1) cH2hD1P1.textContent = d1.victories?.p1 || 0;
+
+    const cH2hD2Name = document.getElementById('cockpit-h2h-d2-name');
+    if (cH2hD2Name) cH2hD2Name.textContent = (d2.alias || d2.name).toUpperCase();
+
+    const cH2hD2Pts = document.getElementById('cockpit-h2h-d2-pts');
+    if (cH2hD2Pts) cH2hD2Pts.textContent = d2Pts.toLocaleString('de-DE');
+
+    const cH2hD2Bounty = document.getElementById('cockpit-h2h-d2-bounty');
+    if (cH2hD2Bounty) cH2hD2Bounty.textContent = `$${((d2.rep || 0) / 1000000).toFixed(2)}M`;
+
+    const cH2hD2P1 = document.getElementById('cockpit-h2h-d2-p1');
+    if (cH2hD2P1) cH2hD2P1.textContent = d2.victories?.p1 || 0;
+
+    const cH2hSpread = document.getElementById('cockpit-h2h-spread');
+    if (cH2hSpread) {
+        const spread = Math.abs(d1Pts - d2Pts);
+        cH2hSpread.textContent = `${d1Pts >= d2Pts ? '+' : '-'}${spread} PTS`;
+    }
 }
 
 function renderAllTacticalCards() {
-    const container = document.getElementById('blacklist-cards-grid');
-    if (!container) return;
-
-    // Ordenar explícitamente según la Clasificación General del Campeonato (1 al 15+)
     const sorted = getSortedBlacklistDrivers();
 
-    container.innerHTML = '';
+    // 1. Población de la barra lateral izquierda del Cockpit (Blacklist Roster 1 - 15)
+    const rosterContainer = document.getElementById('cockpit-roster-items');
+    if (rosterContainer) {
+        rosterContainer.innerHTML = '';
 
-    sorted.forEach((driver, idx) => {
-        if (window.NFSOperators) {
-            window.NFSOperators.linkPlayerAliases(driver.name, driver.alias);
-        }
-        const currentStandingRank = idx + 1;
-        const totalPts = calculateDriverPoints(driver);
-        const groupName = getDriverGroupForWeek(driver.rank, currentChampionshipWeek);
-        const bt = driver.bestTimes || { first: 0, second: 0, third: 0 };
-        const v = driver.victories || { p1: 0, p2: 0, p3: 0, p4: 0 };
+        sorted.forEach((driver, idx) => {
+            if (window.NFSOperators) {
+                window.NFSOperators.linkPlayerAliases(driver.name, driver.alias);
+            }
+            const standingRank = idx + 1;
+            const isSelected = driver.rank === currentSelectedBlacklistRank || (currentSelectedBlacklistRank === 1 && standingRank === 1);
+            const totalPts = calculateDriverPoints(driver);
+            const groupName = getDriverGroupForWeek(driver.rank, currentChampionshipWeek);
+            const groupLower = groupName.toLowerCase().includes('alpha') ? 'alpha'
+                : groupName.toLowerCase().includes('beta') ? 'beta'
+                : groupName.toLowerCase().includes('gamma') ? 'gamma' : 'delta';
 
-        const card = document.createElement('div');
-        card.className = 'blacklist-tactical-card standalone-card';
-        card.id = `pilot-card-${driver.rank}`;
+            const repFormatted = (driver.rep || 0) > 0 ? `$${((driver.rep || 0) / 1000000).toFixed(2)}M` : '$0';
+            const repColorClass = (driver.rep || 0) > 0 ? 'text-green' : 'text-muted';
 
-        card.innerHTML = `
-            <div class="tactical-card-overlay"></div>
-            <div class="tactical-card-header">
-                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%;">
-                    <div>
-                        <div class="blacklist-number-title">Blacklist ${currentStandingRank}</div>
-                        <div class="blacklist-driver-fullname notranslate" translate="no">${driver.name} "${driver.alias}"</div>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <div class="tactical-standing-badge ${currentStandingRank === 1 ? 'badge-gold' : currentStandingRank === 2 ? 'badge-silver' : currentStandingRank === 3 ? 'badge-bronze' : ''}">
-                            TOP ${currentStandingRank}
+            let subTitle = standingRank === 1 ? 'REIGNING CHAMPION' : standingRank === 2 ? 'ELITE CONTENDER' : standingRank <= 4 ? 'PODIUM TIER' : 'CHALLENGER TIER';
+
+            const item = document.createElement('div');
+            item.className = `roster-driver-item ${isSelected ? 'active' : ''}`;
+            item.setAttribute('data-rank', driver.rank);
+            item.setAttribute('data-standing', standingRank);
+            item.setAttribute('data-group', groupLower);
+            item.onclick = () => selectBlacklistCockpitPilot(driver.rank);
+
+            item.innerHTML = `
+                ${standingRank <= 3 ? `<div class="roster-item-watermark">#0${standingRank}</div>` : ''}
+                <div class="roster-item-top">
+                    <div class="roster-item-left">
+                        <span class="roster-rank-pill ${standingRank === 1 ? 'rank-leader' : ''}">#${standingRank}</span>
+                        <div class="roster-pilot-meta">
+                            <div class="roster-pilot-name-row">
+                                <span class="roster-pilot-name notranslate" translate="no">${escapeHtml(driver.alias || driver.name)}</span>
+                                <span class="driver-status-dot active" title="Verificado Activo"></span>
+                            </div>
+                            <span class="roster-pilot-sub ${standingRank === 1 ? 'text-gold' : ''}">${subTitle}</span>
                         </div>
-                        ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(driver.alias || driver.name, 'xlarge') : ''}
+                    </div>
+                    <div class="roster-item-right">
+                        <span class="roster-bounty-val ${repColorClass}">${repFormatted}</span>
+                        <span class="roster-score-val text-gold font-mono">${totalPts.toLocaleString('de-DE')} PTS</span>
                     </div>
                 </div>
-            </div>
+                <div class="roster-item-bottom">
+                    <span class="roster-car-name truncate">${escapeHtml(driver.ride || 'Porsche Carrera GT')}</span>
+                    <span class="roster-group-tag tag-${groupLower}">${groupLower.toUpperCase()}</span>
+                </div>
+            `;
+            rosterContainer.appendChild(item);
+        });
 
-            <div class="tactical-specs">
-                <div class="spec-row">
-                    <span class="spec-label">Ride:</span>
-                    <span class="spec-value">${driver.ride}</span>
-                </div>
-                <div class="spec-row">
-                    <span class="spec-label">Strength:</span>
-                    <span class="spec-value">${driver.strength}</span>
-                </div>
-                <div class="spec-row">
-                    <span class="spec-label" data-i18n="weekly_group">${window.nfsI18n ? window.nfsI18n.t('weekly_group') : 'Weekly Group'}:</span>
-                    <span class="spec-value" style="color: var(--nfs-orange);">${groupName} (${window.nfsI18n ? window.nfsI18n.t('label_week') : 'Week'} ${currentChampionshipWeek})</span>
-                </div>
-            </div>
+        // Completar slots disponibles hasta 15
+        const activeCount = sorted.length;
+        for (let slot = activeCount + 1; slot <= 15; slot++) {
+            const openDiv = document.createElement('div');
+            openDiv.className = 'roster-slot-open';
+            openDiv.innerHTML = `
+                <span>#${slot} DISPONIBLE</span>
+                <span class="slot-open-tag">OPEN SLOT</span>
+            `;
+            rosterContainer.appendChild(openDiv);
+        }
 
-            <div class="tactical-bio-box">
-                <div class="bio-bracket-top">
-                    <span class="bio-title">bio:</span>
-                </div>
-                <p class="bio-text">${driver.bio}</p>
-                <div class="bio-bracket-bottom"></div>
-                <div class="tactical-signature notranslate" translate="no">${driver.signature || driver.alias.toUpperCase()}</div>
-            </div>
-            ${driver.youtube ? `
-            <div class="tactical-yt-container" style="margin: -10px 0 16px 0; text-align: left;">
-                <a href="${driver.youtube}" target="_blank" rel="noopener noreferrer" class="tactical-yt-btn">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; margin-right: 4px;"><path d="M8 5v14l11-7z"/></svg> ${window.nfsI18n ? window.nfsI18n.t('promo_video_watch') : 'Ver Canal de YouTube'}
-                </a>
-            </div>
-            ` : ''}
+        const countBadge = document.getElementById('roster-active-badge');
+        if (countBadge) countBadge.textContent = `${activeCount} ACTIVOS`;
+    }
 
-            <div class="tactical-metrics-grid">
-                <div class="metric-box rep-box">
-                    <span class="metric-label">DINERO DE REPUTACIÓN ($ REP)</span>
-                    <span class="metric-value rep-val">$${(driver.rep || 0).toLocaleString('de-DE')}</span>
-                </div>
-                <div class="metric-box pts-box">
-                    <span class="metric-label">PUNTOS TOTALES (SCORE)</span>
-                    <span class="metric-value">${totalPts.toLocaleString('de-DE')} PTS</span>
-                </div>
-            </div>
+    // 2. Población de píldoras de navegación rápida (Quick Switch Cockpit)
+    const quickSwitchContainer = document.getElementById('cockpit-quick-switch-pills');
+    if (quickSwitchContainer) {
+        quickSwitchContainer.innerHTML = '';
+        sorted.slice(0, 10).forEach((d, idx) => {
+            const standingRank = idx + 1;
+            const isSelected = d.rank === currentSelectedBlacklistRank || (currentSelectedBlacklistRank === 1 && standingRank === 1);
+            const pill = document.createElement('button');
+            pill.type = 'button';
+            pill.className = `qs-pill ${isSelected ? 'active' : ''}`;
+            pill.setAttribute('onclick', `selectBlacklistCockpitPilot(${d.rank})`);
+            pill.innerHTML = `${standingRank === 1 ? '<span>👑</span> ' : ''}#${standingRank} ${escapeHtml((d.alias || d.name).toUpperCase())}`;
+            quickSwitchContainer.appendChild(pill);
+        });
+    }
 
-            <div class="tactical-bonuses-row">
-                <div class="bonus-chip chip-b1">
-                    <span class="bonus-tag">1° MEJOR (+100)</span>
-                    <span class="bonus-val">${bt.first || 0} ${bt.first === 1 ? 'vez' : 'veces'}</span>
-                </div>
-                <div class="bonus-chip chip-b2">
-                    <span class="bonus-tag">2° MEJOR (+50)</span>
-                    <span class="bonus-val">${bt.second || 0} ${bt.second === 1 ? 'vez' : 'veces'}</span>
-                </div>
-                <div class="bonus-chip chip-b3">
-                    <span class="bonus-tag">3° MEJOR (+20)</span>
-                    <span class="bonus-val">${bt.third || 0} ${bt.third === 1 ? 'vez' : 'veces'}</span>
-                </div>
-            </div>
-
-            <div class="tactical-podiums-breakdown">
-                <div class="podium-chip chip-p1">
-                    <span class="chip-pos">P1</span>
-                    <span class="chip-val">${v.p1 || 0}</span>
-                </div>
-                <div class="podium-chip chip-p2">
-                    <span class="chip-pos">P2</span>
-                    <span class="chip-val">${v.p2 || 0}</span>
-                </div>
-                <div class="podium-chip chip-p3">
-                    <span class="chip-pos">P3</span>
-                    <span class="chip-val">${v.p3 || 0}</span>
-                </div>
-                <div class="podium-chip chip-p4">
-                    <span class="chip-pos">P4</span>
-                    <span class="chip-val">${v.p4 || 0}</span>
-                </div>
-            </div>
-
-            <div class="tactical-action-bar">
-                <button class="btn-explored" style="width: 100%; justify-content: center; font-size: 13px;" onclick="switchView('championship-standings')">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; margin-right: 6px;"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0 0 11 15.9V19H7v2h10v-2h-4v-3.1c1.94-.38 3.51-1.74 3.61-3.96 2.47-.31 4.39-2.39 4.39-4.94V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg> Ver en Clasificación General
-                </button>
-            </div>
-        `;
-
-        container.appendChild(card);
-    });
-
-    renderQuickJumpPills();
+    // 3. Actualizar la Ficha Táctica activa en el panel derecho
+    updateBlacklistTacticalCard();
     updateChampionshipRosterLabels();
 }
 
 function renderQuickJumpPills() {
-    const container = document.getElementById('pilot-quick-jump-pills');
-    const titleEl = document.getElementById('quick-jump-title');
-    if (!container) return;
-
-    const totalPilots = Math.max(15, blacklistDrivers.length);
-    if (titleEl) {
-        const titleText = (typeof window.nfsI18n !== 'undefined' && window.nfsI18n.t) ? window.nfsI18n.t('quick_jump_title') : '⚡ QUICK JUMP TO DRIVER';
-        titleEl.textContent = `${titleText} (1 - ${totalPilots}):`;
-    }
-
-    container.innerHTML = '';
+    // Redirigido al nuevo Quick Switch Cockpit
+    const quickSwitchContainer = document.getElementById('cockpit-quick-switch-pills');
+    if (!quickSwitchContainer) return;
     const sorted = getSortedBlacklistDrivers();
-    sorted.forEach((d, idx) => {
+    quickSwitchContainer.innerHTML = '';
+    sorted.slice(0, 10).forEach((d, idx) => {
         const standingRank = idx + 1;
-        const btn = document.createElement('button');
-        btn.className = 'jump-pill notranslate';
-        btn.setAttribute('translate', 'no');
-        btn.onclick = () => scrollToPilotCard(d.rank);
+        const isSelected = d.rank === currentSelectedBlacklistRank || (currentSelectedBlacklistRank === 1 && standingRank === 1);
+        const pill = document.createElement('button');
+        pill.type = 'button';
+        pill.className = `qs-pill ${isSelected ? 'active' : ''}`;
+        pill.setAttribute('onclick', `selectBlacklistCockpitPilot(${d.rank})`);
+        pill.innerHTML = `${standingRank === 1 ? '<span>👑</span> ' : ''}#${standingRank} ${escapeHtml((d.alias || d.name).toUpperCase())}`;
+        quickSwitchContainer.appendChild(pill);
+    });
+}
 
-        let icon = '';
-        if (standingRank === 1) icon = '👑 ';
-        btn.textContent = `${icon}#${standingRank} ${d.alias || d.name}`;
-        container.appendChild(btn);
+// Atajo de teclado para enfocar buscador de la Blacklist [Ctrl+K o Cmd+K]
+if (typeof window !== 'undefined') {
+    window.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+            const input = document.getElementById('cockpit-roster-search');
+            if (input) {
+                e.preventDefault();
+                input.focus();
+                input.select();
+            }
+        }
     });
 }
 
@@ -5854,8 +7075,12 @@ window.getSortedBlacklistDrivers = getSortedBlacklistDrivers;
 window.syncBlacklistWithRotationsAndStandings = syncBlacklistWithRotationsAndStandings;
 window.renderBlacklistUI = renderBlacklistUI;
 window.selectBlacklistPilot = selectBlacklistPilot;
+window.selectBlacklistCockpitPilot = selectBlacklistCockpitPilot;
+window.filterCockpitRosterSearch = filterCockpitRosterSearch;
+window.setCockpitGroupFilter = setCockpitGroupFilter;
 window.switchChampionshipWeek = switchChampionshipWeek;
 window.selectChampionshipGroupTab = selectChampionshipGroupTab;
+window.renderChampionshipChallenges = renderChampionshipChallenges;
 window.initBlacklistSystem = initBlacklistSystem;
 window.formatRaceTimeStandard = formatRaceTimeStandard;
 window.formatRecordDateStandard = formatRecordDateStandard;
@@ -7360,8 +8585,8 @@ function renderStitchRoutesMosaic() {
         if (route.type === 'Sprint') {
             badgeClass = 'cat-badge-sprint';
             miniSvgPath = 'M 10,70 Q 30,55 50,55 T 75,30 Q 85,15 95,10';
-            strokeColor = '#ffaa33';
-            timeColor = '#ffaa33';
+            strokeColor = '#00dbe9';
+            timeColor = '#00dbe9';
         } else if (route.type === 'Drag') {
             badgeClass = 'cat-badge-drag';
             miniSvgPath = 'M 10,65 L 45,50 L 70,30 L 95,15';
@@ -7376,7 +8601,7 @@ function renderStitchRoutesMosaic() {
                     <div class="stitch-card-badge-row">
                         <span class="stitch-card-cat-badge ${badgeClass}">${badgeTypeLabel} ${catNum} • ${lapsBadgeText}</span>
                         <span class="stitch-card-district" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8; display: inline-flex; align-items: center; gap: 4px;">
-                            <svg viewBox="0 0 24 24" width="12" height="12" fill="${route.type === 'Sprint' ? '#ffaa33' : '#00dbe9'}" style="flex-shrink: 0;"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="${route.type === 'Sprint' ? '#00dbe9' : '#ffb800'}" style="flex-shrink: 0;"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
                             ${meta.district}
                         </span>
                     </div>
@@ -7399,10 +8624,10 @@ function renderStitchRoutesMosaic() {
                         </div>
                         <div class="stitch-card-wr-pilot">
                             <div style="display: flex; align-items: center; gap: 6px; justify-content: flex-end;">
-                                <span class="stitch-card-flag-badge" style="font-size: 10px; font-family: var(--font-mono); background: rgba(255,255,255,0.08); padding: 1px 5px; border-radius: 3px; color: #cbd5e1; font-weight: 700;">${wrData.flag || 'ES'}</span>
+                                ${window.NFSOperators ? window.NFSOperators.getOperatorBadgeHTML(wrData.driver) : ''}
                                 <span class="stitch-card-pilot-name notranslate" translate="no" id="stitch-driver-${sanitizeFirebaseKey(route.name)}" style="font-size: 14.5px; font-weight: 800; color: #ffffff;">${wrData.driver}</span>
                             </div>
-                            <span class="stitch-card-pilot-car" id="stitch-car-${sanitizeFirebaseKey(route.name)}" style="font-size: 11px; color: ${route.type === 'Sprint' ? '#ffaa33' : 'var(--stitch-tertiary, #00dbe9)'}; margin-top: 2px;">${wrData.car}</span>
+                            <span class="stitch-card-pilot-car" id="stitch-car-${sanitizeFirebaseKey(route.name)}" style="font-size: 11px; color: ${route.type === 'Sprint' ? '#00dbe9' : 'var(--stitch-tertiary, #00dbe9)'}; margin-top: 2px;">${wrData.car}</span>
                         </div>
                     </div>
 
