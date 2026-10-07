@@ -2841,52 +2841,84 @@
         </section>
 
         <!-- SECCIÓN: BLACKLIST EVENT // RANKS 2026 -->
-        <section id="view-blacklist" class="view-section stitch-tournament-wrapper active" style="padding: 24px 16px; background-color: #0b0d12; color: #e0e2ec;">
+        <section id="view-blacklist" class="view-section stitch-tournament-wrapper active"
+            style="padding: 24px 16px; background-color: #0b0d12; color: #e0e2ec;">
             <!-- Atmospheric Ambient Glows -->
             <div class="stitch-ambient-glows">
                 <div class="stitch-glow-secondary"></div>
                 <div class="stitch-glow-primary"></div>
             </div>
 
-            <div class="relative w-full max-w-7xl mx-auto flex flex-col gap-space-lg" style="max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px;">
+            <div class="relative w-full max-w-7xl mx-auto flex flex-col gap-space-lg"
+                style="max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px;">
                 <!-- 1. HERO SECTION & KPI METRICS -->
-                <div class="bl-hero-card relative bg-surface-container-low rounded-xl p-space-lg md:p-space-xl shadow-2xl overflow-hidden hover-card-lift">
+                <div
+                    class="bl-hero-card relative bg-surface-container-low rounded-xl p-space-lg md:p-space-xl shadow-2xl overflow-hidden hover-card-lift">
                     <!-- Top Status Bar & Discord Pill -->
-                    <div class="flex flex-wrap items-center justify-between gap-space-sm mb-space-md" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 16px;">
-                        <div class="flex items-center gap-space-xs bg-surface-container-lowest px-space-sm py-space-xs rounded-full shadow-inner" style="display: flex; align-items: center; gap: 6px; background: #0b0e15; padding: 4px 12px; border-radius: 9999px; border: 1px solid #1e2330;">
-                            <span class="w-2 h-2 rounded-full bg-secondary-container animate-pulse" style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #ff5708;"></span>
-                            <span class="font-label-hud text-label-hud uppercase text-secondary tracking-widest" style="font-family: 'Chivo', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 0.14em; color: #ffb59c; text-transform: uppercase;">OFFICIAL TOURNAMENT</span>
-                            <span class="text-outline-variant font-label-data text-label-data" style="color: #514532; margin: 0 4px;">//</span>
-                            <span class="font-label-hud text-label-hud uppercase text-on-surface-variant" style="font-family: 'Chivo', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 0.14em; color: #d5c4ab; text-transform: uppercase;">ROCKPORT CITY ELITE</span>
+                    <div class="flex flex-wrap items-center justify-between gap-space-sm mb-space-md"
+                        style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 16px;">
+                        <div class="flex items-center gap-space-xs bg-surface-container-lowest px-space-sm py-space-xs rounded-full shadow-inner"
+                            style="display: flex; align-items: center; gap: 6px; background: #0b0e15; padding: 4px 12px; border-radius: 9999px; border: 1px solid #1e2330;">
+                            <span class="w-2 h-2 rounded-full bg-secondary-container animate-pulse"
+                                style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #ff5708;"></span>
+                            <span class="font-label-hud text-label-hud uppercase text-secondary tracking-widest"
+                                style="font-family: 'Chivo', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 0.14em; color: #ffb59c; text-transform: uppercase;">OFFICIAL
+                                TOURNAMENT</span>
+                            <span class="text-outline-variant font-label-data text-label-data"
+                                style="color: #514532; margin: 0 4px;">//</span>
+                            <span class="font-label-hud text-label-hud uppercase text-on-surface-variant"
+                                style="font-family: 'Chivo', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 0.14em; color: #d5c4ab; text-transform: uppercase;">ROCKPORT
+                                CITY ELITE</span>
                         </div>
-                        <div class="flex items-center gap-space-xs bg-surface-container-highest/60 hover:bg-surface-container-highest transition-colors px-space-sm py-space-xs rounded text-primary cursor-pointer" onclick="switchView('championship-standings')" style="display: flex; align-items: center; gap: 6px; background: rgba(50, 53, 60, 0.6); padding: 4px 12px; border-radius: 6px; cursor: pointer;">
-                            <span class="material-symbols-outlined text-[18px]" style="font-size: 18px; color: #ffdca1;">sports_esports</span>
-                            <span class="font-label-data text-label-data uppercase tracking-wider text-on-surface" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; color: #e0e2ec; text-transform: uppercase; letter-spacing: 0.06em;">DISCORD DISPUTES ACTIVE</span>
+                        <div class="flex items-center gap-space-xs bg-surface-container-highest/60 hover:bg-surface-container-highest transition-colors px-space-sm py-space-xs rounded text-primary cursor-pointer"
+                            onclick="switchView('championship-standings')"
+                            style="display: flex; align-items: center; gap: 6px; background: rgba(50, 53, 60, 0.6); padding: 4px 12px; border-radius: 6px; cursor: pointer;">
+                            <span class="material-symbols-outlined text-[18px]"
+                                style="font-size: 18px; color: #ffdca1;">sports_esports</span>
+                            <span class="font-label-data text-label-data uppercase tracking-wider text-on-surface"
+                                style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; color: #e0e2ec; text-transform: uppercase; letter-spacing: 0.06em;">DISCORD
+                                DISPUTES ACTIVE</span>
                         </div>
                     </div>
                     <!-- Hero Headline -->
                     <div class="flex flex-col gap-space-xs" style="display: flex; flex-direction: column; gap: 6px;">
-                        <h1 class="font-headline-xl text-headline-xl uppercase tracking-tighter text-on-surface flex flex-wrap items-center gap-x-space-sm" style="font-family: 'Chivo', sans-serif; font-size: 38px; font-weight: 900; line-height: 1.1; letter-spacing: -0.03em; color: #e0e2ec; text-transform: uppercase; margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
+                        <h1 class="font-headline-xl text-headline-xl uppercase tracking-tighter text-on-surface flex flex-wrap items-center gap-x-space-sm"
+                            style="font-family: 'Chivo', sans-serif; font-size: 38px; font-weight: 900; line-height: 1.1; letter-spacing: -0.03em; color: #e0e2ec; text-transform: uppercase; margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
                             <span>BLACKLIST EVENT</span>
                             <span class="text-secondary font-headline-xl" style="color: #ff5708;">//</span>
-                            <span class="text-primary-container font-headline-xl" style="color: #FF9800; text-shadow: 0 0 20px rgba(255,152,0,0.35);">RANKS 2026</span>
+                            <span class="text-primary-container font-headline-xl"
+                                style="color: #FF9800; text-shadow: 0 0 20px rgba(255,152,0,0.35);">RANKS 2026</span>
                         </h1>
-                        <p class="font-body-lg text-body-lg text-on-surface-variant max-w-3xl" style="font-family: 'Hanken Grotesk', sans-serif; font-size: 16px; line-height: 24px; color: #94a3b8; max-width: 768px; margin: 0;">
-                            Campeonato Oficial de 4 Semanas: 15 Rivales legendarios, 8 Desafíos semanales por grupos rotativos y <span class="text-primary font-bold" style="color: #ffb800; font-weight: 700;">$23.5M REP</span> en premios acumulados con telemetría en vivo a 128Hz.
+                        <p class="font-body-lg text-body-lg text-on-surface-variant max-w-3xl"
+                            style="font-family: 'Hanken Grotesk', sans-serif; font-size: 16px; line-height: 24px; color: #94a3b8; max-width: 768px; margin: 0;">
+                            Campeonato Oficial de 4 Semanas: 15 Rivales legendarios, 8 Desafíos semanales por grupos
+                            rotativos y <span class="text-primary font-bold"
+                                style="color: #ffb800; font-weight: 700;">$23.5M REP</span> en premios acumulados con
+                            telemetría en vivo a 128Hz.
                         </p>
                     </div>
                     <!-- Action CTA Hub -->
-                    <div class="flex flex-wrap items-center gap-space-md mt-space-lg" style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 20px;">
-                        <button type="button" class="bl-btn-primary-register flex items-center gap-space-xs px-space-lg py-space-sm bg-primary-container text-on-primary-container font-headline-sm text-headline-sm uppercase tracking-wide rounded-lg shadow-xl" onclick="switchView('championship-register')">
-                            <span class="material-symbols-outlined text-[20px]" style="font-size: 20px;">arrow_forward</span>
+                    <div class="flex flex-wrap items-center gap-space-md mt-space-lg"
+                        style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 20px;">
+                        <button type="button"
+                            class="bl-btn-primary-register flex items-center gap-space-xs px-space-lg py-space-sm bg-primary-container text-on-primary-container font-headline-sm text-headline-sm uppercase tracking-wide rounded-lg shadow-xl"
+                            onclick="switchView('championship-register')">
+                            <span class="material-symbols-outlined text-[20px]"
+                                style="font-size: 20px;">arrow_forward</span>
                             <span>INSCRIBIRSE AL TORNEO 2026</span>
                         </button>
-                        <button type="button" class="bl-btn-secondary-ghost flex items-center gap-space-xs px-space-md py-space-sm bg-surface-container-high text-on-surface font-headline-sm text-headline-sm uppercase tracking-wider rounded-lg" onclick="switchView('tutorial')">
-                            <span class="material-symbols-outlined text-[18px] text-tertiary" style="font-size: 18px; color: #38bdf8;">menu_book</span>
+                        <button type="button"
+                            class="bl-btn-secondary-ghost flex items-center gap-space-xs px-space-md py-space-sm bg-surface-container-high text-on-surface font-headline-sm text-headline-sm uppercase tracking-wider rounded-lg"
+                            onclick="switchView('tutorial')">
+                            <span class="material-symbols-outlined text-[18px] text-tertiary"
+                                style="font-size: 18px; color: #38bdf8;">menu_book</span>
                             <span>CÓMO FUNCIONA EL TORNEO (REGLAMENTO)</span>
                         </button>
-                        <button type="button" class="bl-btn-standings-link flex items-center gap-space-xs px-space-md py-space-sm bg-surface-container text-on-surface-variant font-label-hud text-label-hud uppercase tracking-widest rounded-lg" onclick="switchView('championship-standings')">
-                            <span class="material-symbols-outlined text-[18px] text-secondary" style="font-size: 18px; color: #ff5708;">leaderboard</span>
+                        <button type="button"
+                            class="bl-btn-standings-link flex items-center gap-space-xs px-space-md py-space-sm bg-surface-container text-on-surface-variant font-label-hud text-label-hud uppercase tracking-widest rounded-lg"
+                            onclick="switchView('championship-standings')">
+                            <span class="material-symbols-outlined text-[18px] text-secondary"
+                                style="font-size: 18px; color: #ff5708;">leaderboard</span>
                             <span>VER TABLA GENERAL DE STANDINGS</span>
                         </button>
                     </div>
@@ -2895,51 +2927,89 @@
                 <!-- Live KPI 4-Card Cockpit Strip -->
                 <div class="bl-kpi-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
                     <!-- KPI 1: Leader -->
-                    <div class="bl-kpi-card bg-surface-container-low p-space-md rounded-xl shadow-lg flex items-center gap-space-md">
-                        <div class="w-12 h-12 rounded-lg bg-surface-container-lowest flex items-center justify-center text-primary-container shadow-md" style="width: 48px; height: 48px; min-width: 48px; border-radius: 8px; background: #0b0e15; display: flex; align-items: center; justify-content: center; color: #ffb800;">
-                            <span class="material-symbols-outlined text-[26px]" style="font-size: 26px;">workspace_premium</span>
+                    <div
+                        class="bl-kpi-card bg-surface-container-low p-space-md rounded-xl shadow-lg flex items-center gap-space-md">
+                        <div class="w-12 h-12 rounded-lg bg-surface-container-lowest flex items-center justify-center text-primary-container shadow-md"
+                            style="width: 48px; height: 48px; min-width: 48px; border-radius: 8px; background: #0b0e15; display: flex; align-items: center; justify-content: center; color: #ffb800;">
+                            <span class="material-symbols-outlined text-[26px]"
+                                style="font-size: 26px;">workspace_premium</span>
                         </div>
                         <div class="flex flex-col min-w-0" style="display: flex; flex-direction: column; min-width: 0;">
-                            <span class="font-label-hud text-label-hud uppercase text-on-surface-variant tracking-wider" style="font-family: 'Chivo', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 0.14em; color: #94a3b8; text-transform: uppercase;">BLACKLIST #1 LEADER</span>
-                            <span class="font-headline-sm text-headline-sm uppercase text-primary-container truncate font-black" style="font-family: 'Chivo', sans-serif; font-size: 18px; font-weight: 900; color: #ffb800; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">SRTXAVENGER™</span>
-                            <span class="font-label-data text-label-data text-on-surface-variant truncate" style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Carrera GT &amp; Lotus Elise</span>
+                            <span class="font-label-hud text-label-hud uppercase text-on-surface-variant tracking-wider"
+                                style="font-family: 'Chivo', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 0.14em; color: #94a3b8; text-transform: uppercase;">BLACKLIST
+                                #1 LEADER</span>
+                            <span
+                                class="font-headline-sm text-headline-sm uppercase text-primary-container truncate font-black"
+                                style="font-family: 'Chivo', sans-serif; font-size: 18px; font-weight: 900; color: #ffb800; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">SRTXAVENGER™</span>
+                            <span class="font-label-data text-label-data text-on-surface-variant truncate"
+                                style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Carrera
+                                GT &amp; Lotus Elise</span>
                         </div>
                     </div>
                     <!-- KPI 2: Rep Pot -->
-                    <div class="bl-kpi-card bg-surface-container-low p-space-md rounded-xl shadow-lg flex items-center gap-space-md">
-                        <div class="w-12 h-12 rounded-lg bg-surface-container-lowest flex items-center justify-center text-tertiary shadow-md" style="width: 48px; height: 48px; min-width: 48px; border-radius: 8px; background: #0b0e15; display: flex; align-items: center; justify-content: center; color: #38bdf8;">
+                    <div
+                        class="bl-kpi-card bg-surface-container-low p-space-md rounded-xl shadow-lg flex items-center gap-space-md">
+                        <div class="w-12 h-12 rounded-lg bg-surface-container-lowest flex items-center justify-center text-tertiary shadow-md"
+                            style="width: 48px; height: 48px; min-width: 48px; border-radius: 8px; background: #0b0e15; display: flex; align-items: center; justify-content: center; color: #38bdf8;">
                             <span class="material-symbols-outlined text-[26px]" style="font-size: 26px;">payments</span>
                         </div>
                         <div class="flex flex-col min-w-0" style="display: flex; flex-direction: column; min-width: 0;">
-                            <span class="font-label-hud text-label-hud uppercase text-on-surface-variant tracking-wider" style="font-family: 'Chivo', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 0.14em; color: #94a3b8; text-transform: uppercase;">TOTAL REP POT (SEM. 1)</span>
-                            <span class="font-label-timer-lg text-label-timer-lg text-tertiary font-bold tracking-tight" style="font-family: 'JetBrains Mono', monospace; font-size: 24px; font-weight: 700; color: #38bdf8; letter-spacing: -0.04em;">$9.680.000</span>
-                            <span class="font-label-data text-label-data text-secondary uppercase" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #ffb59c; text-transform: uppercase;">Bolsa Global: $23.500.000</span>
+                            <span class="font-label-hud text-label-hud uppercase text-on-surface-variant tracking-wider"
+                                style="font-family: 'Chivo', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 0.14em; color: #94a3b8; text-transform: uppercase;">TOTAL
+                                REP POT (SEM. 1)</span>
+                            <span class="font-label-timer-lg text-label-timer-lg text-tertiary font-bold tracking-tight"
+                                style="font-family: 'JetBrains Mono', monospace; font-size: 24px; font-weight: 700; color: #38bdf8; letter-spacing: -0.04em;">$9.680.000</span>
+                            <span class="font-label-data text-label-data text-secondary uppercase"
+                                style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #ffb59c; text-transform: uppercase;">Bolsa
+                                Global: $23.500.000</span>
                         </div>
                     </div>
                     <!-- KPI 3: Week Progress -->
-                    <div class="bl-kpi-card bg-surface-container-low p-space-md rounded-xl shadow-lg flex items-center gap-space-md">
-                        <div class="w-12 h-12 rounded-lg bg-surface-container-lowest flex items-center justify-center text-secondary shadow-md" style="width: 48px; height: 48px; min-width: 48px; border-radius: 8px; background: #0b0e15; display: flex; align-items: center; justify-content: center; color: #ff5708;">
-                            <span class="material-symbols-outlined text-[26px]" style="font-size: 26px;">date_range</span>
+                    <div
+                        class="bl-kpi-card bg-surface-container-low p-space-md rounded-xl shadow-lg flex items-center gap-space-md">
+                        <div class="w-12 h-12 rounded-lg bg-surface-container-lowest flex items-center justify-center text-secondary shadow-md"
+                            style="width: 48px; height: 48px; min-width: 48px; border-radius: 8px; background: #0b0e15; display: flex; align-items: center; justify-content: center; color: #ff5708;">
+                            <span class="material-symbols-outlined text-[26px]"
+                                style="font-size: 26px;">date_range</span>
                         </div>
                         <div class="flex flex-col min-w-0" style="display: flex; flex-direction: column; min-width: 0;">
-                            <span class="font-label-hud text-label-hud uppercase text-on-surface-variant tracking-wider" style="font-family: 'Chivo', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 0.14em; color: #94a3b8; text-transform: uppercase;">CHAMPIONSHIP WEEK</span>
-                            <span class="font-headline-sm text-headline-sm uppercase text-on-surface font-extrabold" style="font-family: 'Chivo', sans-serif; font-size: 18px; font-weight: 800; color: #ffffff; text-transform: uppercase;">SEMANA 1 / 4</span>
-                            <span class="font-label-data text-label-data text-on-surface-variant" style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #94a3b8;">8 Rutas Semanales Activas</span>
+                            <span class="font-label-hud text-label-hud uppercase text-on-surface-variant tracking-wider"
+                                style="font-family: 'Chivo', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 0.14em; color: #94a3b8; text-transform: uppercase;">CHAMPIONSHIP
+                                WEEK</span>
+                            <span class="font-headline-sm text-headline-sm uppercase text-on-surface font-extrabold"
+                                style="font-family: 'Chivo', sans-serif; font-size: 18px; font-weight: 800; color: #ffffff; text-transform: uppercase;">SEMANA
+                                1 / 4</span>
+                            <span class="font-label-data text-label-data text-on-surface-variant"
+                                style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #94a3b8;">8
+                                Rutas Semanales Activas</span>
                         </div>
                     </div>
                     <!-- KPI 4: Status -->
-                    <div class="bl-kpi-card bg-surface-container-low p-space-md rounded-xl shadow-lg flex items-center gap-space-md">
-                        <div class="w-12 h-12 rounded-lg bg-surface-container-lowest flex items-center justify-center text-primary-container shadow-md" style="width: 48px; height: 48px; min-width: 48px; border-radius: 8px; background: #0b0e15; display: flex; align-items: center; justify-content: center; color: #ffb800;">
+                    <div
+                        class="bl-kpi-card bg-surface-container-low p-space-md rounded-xl shadow-lg flex items-center gap-space-md">
+                        <div class="w-12 h-12 rounded-lg bg-surface-container-lowest flex items-center justify-center text-primary-container shadow-md"
+                            style="width: 48px; height: 48px; min-width: 48px; border-radius: 8px; background: #0b0e15; display: flex; align-items: center; justify-content: center; color: #ffb800;">
                             <span class="material-symbols-outlined text-[26px]" style="font-size: 26px;">flag</span>
                         </div>
                         <div class="flex flex-col min-w-0" style="display: flex; flex-direction: column; min-width: 0;">
-                            <span class="font-label-hud text-label-hud uppercase text-on-surface-variant tracking-wider" style="font-family: 'Chivo', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 0.14em; color: #94a3b8; text-transform: uppercase;">TOURNAMENT STATUS</span>
-                            <div class="flex items-center gap-space-xs" style="display: flex; align-items: center; gap: 6px;">
-                                <span class="w-2.5 h-2.5 rounded-full bg-tertiary pulse-cyan-glow" style="width: 9px; height: 9px; border-radius: 50%; background: #38bdf8; display: inline-block; box-shadow: 0 0 8px #38bdf8;"></span>
-                                <span class="font-headline-sm text-headline-sm uppercase text-tertiary font-bold tracking-wider" style="font-family: 'Chivo', sans-serif; font-size: 18px; font-weight: 800; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.05em;">EN CURSO</span>
-                                <span class="text-[10px] px-space-xs py-[1px] bg-tertiary/20 text-tertiary font-mono rounded font-bold uppercase tracking-widest animate-pulse" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.2); padding: 1px 5px; border-radius: 3px;">LIVE</span>
+                            <span class="font-label-hud text-label-hud uppercase text-on-surface-variant tracking-wider"
+                                style="font-family: 'Chivo', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 0.14em; color: #94a3b8; text-transform: uppercase;">TOURNAMENT
+                                STATUS</span>
+                            <div class="flex items-center gap-space-xs"
+                                style="display: flex; align-items: center; gap: 6px;">
+                                <span class="w-2.5 h-2.5 rounded-full bg-tertiary pulse-cyan-glow"
+                                    style="width: 9px; height: 9px; border-radius: 50%; background: #38bdf8; display: inline-block; box-shadow: 0 0 8px #38bdf8;"></span>
+                                <span
+                                    class="font-headline-sm text-headline-sm uppercase text-tertiary font-bold tracking-wider"
+                                    style="font-family: 'Chivo', sans-serif; font-size: 18px; font-weight: 800; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.05em;">EN
+                                    CURSO</span>
+                                <span
+                                    class="text-[10px] px-space-xs py-[1px] bg-tertiary/20 text-tertiary font-mono rounded font-bold uppercase tracking-widest animate-pulse"
+                                    style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.2); padding: 1px 5px; border-radius: 3px;">LIVE</span>
                             </div>
-                            <span class="font-label-data text-label-data text-on-surface-variant" style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #94a3b8;">4 Grupos Homologados</span>
+                            <span class="font-label-data text-label-data text-on-surface-variant"
+                                style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #94a3b8;">4
+                                Grupos Homologados</span>
                         </div>
                     </div>
                 </div>
@@ -2947,54 +3017,82 @@
                 <!-- 2. MENÚ DE NAVEGACIÓN Y TABS SECUNDARIOS -->
                 <div class="flex flex-col gap-space-md" style="display: flex; flex-direction: column; gap: 12px;">
                     <!-- Week Pills Selector -->
-                    <div class="bl-week-pills-bar bg-surface-container-lowest p-space-xs rounded-xl flex flex-wrap items-center justify-between gap-space-xs shadow-md">
-                        <div class="flex items-center gap-space-xs px-space-sm py-space-xs" style="display: flex; align-items: center; gap: 6px;">
-                            <span class="material-symbols-outlined text-primary-container text-[18px]" style="font-size: 18px; color: #ffb800;">sports_score</span>
-                            <span class="font-label-hud text-label-hud uppercase text-on-surface-variant tracking-wider" style="font-family: 'Chivo', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 0.14em; color: #94a3b8; text-transform: uppercase;">CALENDARIO OFICIAL:</span>
+                    <div
+                        class="bl-week-pills-bar bg-surface-container-lowest p-space-xs rounded-xl flex flex-wrap items-center justify-between gap-space-xs shadow-md">
+                        <div class="flex items-center gap-space-xs px-space-sm py-space-xs"
+                            style="display: flex; align-items: center; gap: 6px;">
+                            <span class="material-symbols-outlined text-primary-container text-[18px]"
+                                style="font-size: 18px; color: #ffb800;">sports_score</span>
+                            <span class="font-label-hud text-label-hud uppercase text-on-surface-variant tracking-wider"
+                                style="font-family: 'Chivo', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 0.14em; color: #94a3b8; text-transform: uppercase;">CALENDARIO
+                                OFICIAL:</span>
                         </div>
-                        <div class="flex flex-wrap items-center gap-space-xs" style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px;">
+                        <div class="flex flex-wrap items-center gap-space-xs"
+                            style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px;">
                             <!-- Week 1 - Active -->
-                            <button type="button" class="bl-week-btn active px-space-md py-space-xs rounded-lg bg-surface-container-high text-primary-container font-label-hud text-label-hud uppercase tracking-wider flex items-center gap-space-xs">
-                                <span class="w-2 h-2 rounded-full bg-primary-container animate-pulse" style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #ffb800;"></span>
+                            <button type="button"
+                                class="bl-week-btn active px-space-md py-space-xs rounded-lg bg-surface-container-high text-primary-container font-label-hud text-label-hud uppercase tracking-wider flex items-center gap-space-xs">
+                                <span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"
+                                    style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #ffb800;"></span>
                                 <span>SEMANA 1 (03 OCT - 09 OCT)</span>
                             </button>
                             <!-- Week 2 - Locked -->
-                            <button type="button" class="bl-week-btn px-space-md py-space-xs rounded-lg bg-surface-container-low text-on-surface-variant font-label-hud text-label-hud uppercase tracking-wider flex items-center gap-space-xs" style="color: #64748b; cursor: not-allowed;">
+                            <button type="button"
+                                class="bl-week-btn px-space-md py-space-xs rounded-lg bg-surface-container-low text-on-surface-variant font-label-hud text-label-hud uppercase tracking-wider flex items-center gap-space-xs"
+                                style="color: #64748b; cursor: not-allowed;">
                                 <span class="material-symbols-outlined text-[14px]" style="font-size: 14px;">lock</span>
                                 <span>SEMANA 2 (10 OCT - 16 OCT)</span>
                             </button>
                             <!-- Week 3 - Locked -->
-                            <button type="button" class="bl-week-btn px-space-md py-space-xs rounded-lg bg-surface-container-low text-on-surface-variant font-label-hud text-label-hud uppercase tracking-wider flex items-center gap-space-xs" style="color: #64748b; cursor: not-allowed;">
+                            <button type="button"
+                                class="bl-week-btn px-space-md py-space-xs rounded-lg bg-surface-container-low text-on-surface-variant font-label-hud text-label-hud uppercase tracking-wider flex items-center gap-space-xs"
+                                style="color: #64748b; cursor: not-allowed;">
                                 <span class="material-symbols-outlined text-[14px]" style="font-size: 14px;">lock</span>
                                 <span>SEMANA 3 (17 OCT - 23 OCT)</span>
                             </button>
                             <!-- Week 4 - Grand Final -->
-                            <button type="button" class="bl-week-btn px-space-md py-space-xs rounded-lg bg-surface-container-low text-secondary font-label-hud text-label-hud uppercase tracking-wider flex items-center gap-space-xs" style="color: #ffb59c; cursor: not-allowed;">
-                                <span class="material-symbols-outlined text-[14px] text-primary-container" style="font-size: 14px; color: #ffb800;">stars</span>
+                            <button type="button"
+                                class="bl-week-btn px-space-md py-space-xs rounded-lg bg-surface-container-low text-secondary font-label-hud text-label-hud uppercase tracking-wider flex items-center gap-space-xs"
+                                style="color: #ffb59c; cursor: not-allowed;">
+                                <span class="material-symbols-outlined text-[14px] text-primary-container"
+                                    style="font-size: 14px; color: #ffb800;">stars</span>
                                 <span>SEMANA 4 (24-31 OCT • GRAN FINAL RAZOR #1)</span>
                             </button>
                         </div>
                     </div>
 
                     <!-- Navigation Mode Tabs -->
-                    <div class="bl-nav-subtabs-bar flex flex-wrap items-center gap-space-xs bg-surface-container-low p-space-xs rounded-xl shadow-lg">
-                        <button type="button" class="bl-subtab-btn active px-space-md py-space-sm bg-surface-container-high text-primary-container font-headline-sm text-headline-sm uppercase tracking-wide rounded-lg flex items-center gap-space-xs shadow-md" onclick="switchView('blacklist')">
+                    <div
+                        class="bl-nav-subtabs-bar flex flex-wrap items-center gap-space-xs bg-surface-container-low p-space-xs rounded-xl shadow-lg">
+                        <button type="button"
+                            class="bl-subtab-btn active px-space-md py-space-sm bg-surface-container-high text-primary-container font-headline-sm text-headline-sm uppercase tracking-wide rounded-lg flex items-center gap-space-xs shadow-md"
+                            onclick="switchView('blacklist')">
                             <span class="material-symbols-outlined text-[18px]" style="font-size: 18px;">hub</span>
                             <span>GRUPOS &amp; DESAFÍOS (SEMANA 1)</span>
                         </button>
-                        <button type="button" class="bl-subtab-btn px-space-md py-space-sm text-on-surface-variant hover:text-on-surface font-headline-sm text-headline-sm uppercase tracking-wide rounded-lg flex items-center gap-space-xs" onclick="switchView('championship-standings')">
-                            <span class="material-symbols-outlined text-[18px]" style="font-size: 18px;">table_rows</span>
+                        <button type="button"
+                            class="bl-subtab-btn px-space-md py-space-sm text-on-surface-variant hover:text-on-surface font-headline-sm text-headline-sm uppercase tracking-wide rounded-lg flex items-center gap-space-xs"
+                            onclick="switchView('championship-standings')">
+                            <span class="material-symbols-outlined text-[18px]"
+                                style="font-size: 18px;">table_rows</span>
                             <span>TABLA GENERAL DE PUNTOS</span>
                         </button>
-                        <button type="button" class="bl-subtab-btn px-space-md py-space-sm text-on-surface-variant hover:text-on-surface font-headline-sm text-headline-sm uppercase tracking-wide rounded-lg flex items-center gap-space-xs" onclick="switchView('blacklist-cards')">
-                            <span class="material-symbols-outlined text-[18px]" style="font-size: 18px;">person_pin</span>
+                        <button type="button"
+                            class="bl-subtab-btn px-space-md py-space-sm text-on-surface-variant hover:text-on-surface font-headline-sm text-headline-sm uppercase tracking-wide rounded-lg flex items-center gap-space-xs"
+                            onclick="switchView('blacklist-cards')">
+                            <span class="material-symbols-outlined text-[18px]"
+                                style="font-size: 18px;">person_pin</span>
                             <span>DOSSIERS DE LOS 15 RIVALES</span>
                         </button>
-                        <button type="button" class="bl-subtab-btn px-space-md py-space-sm text-on-surface-variant hover:text-on-surface font-headline-sm text-headline-sm uppercase tracking-wide rounded-lg flex items-center gap-space-xs" onclick="switchView('tutorial')">
+                        <button type="button"
+                            class="bl-subtab-btn px-space-md py-space-sm text-on-surface-variant hover:text-on-surface font-headline-sm text-headline-sm uppercase tracking-wide rounded-lg flex items-center gap-space-xs"
+                            onclick="switchView('tutorial')">
                             <span class="material-symbols-outlined text-[18px]" style="font-size: 18px;">gavel</span>
                             <span>INSCRIPCIÓN &amp; REGLAMENTO</span>
                         </button>
-                        <button type="button" class="bl-subtab-btn px-space-md py-space-sm text-on-surface-variant hover:text-on-surface font-headline-sm text-headline-sm uppercase tracking-wide rounded-lg flex items-center gap-space-xs" onclick="switchView('past-tournaments')">
+                        <button type="button"
+                            class="bl-subtab-btn px-space-md py-space-sm text-on-surface-variant hover:text-on-surface font-headline-sm text-headline-sm uppercase tracking-wide rounded-lg flex items-center gap-space-xs"
+                            onclick="switchView('past-tournaments')">
                             <span class="material-symbols-outlined text-[18px]" style="font-size: 18px;">history</span>
                             <span>HISTORIAL DE EDICIONES</span>
                         </button>
@@ -3004,25 +3102,38 @@
                 <!-- 3. SECCIÓN RACING GROUPS -->
                 <div class="flex flex-col gap-space-md" style="display: flex; flex-direction: column; gap: 16px;">
                     <!-- Section Header -->
-                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-space-sm bg-surface-container-lowest p-space-md rounded-xl shadow-md" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; background: #0b0e15; border: 1px solid #1e2330; padding: 14px 18px; border-radius: 12px; gap: 12px;">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-space-sm bg-surface-container-lowest p-space-md rounded-xl shadow-md"
+                        style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; background: #0b0e15; border: 1px solid #1e2330; padding: 14px 18px; border-radius: 12px; gap: 12px;">
                         <div class="flex flex-col" style="display: flex; flex-direction: column;">
-                            <div class="flex items-center gap-space-xs text-primary-container" style="display: flex; align-items: center; gap: 8px;">
-                                <span class="material-symbols-outlined text-[20px]" style="font-size: 20px; color: #ffb800;">groups</span>
-                                <span class="font-headline-md text-headline-md uppercase tracking-tight text-on-surface" style="font-family: 'Chivo', sans-serif; font-size: 20px; font-weight: 800; color: #ffffff; text-transform: uppercase;">RACING GROUPS</span>
-                                <span class="font-label-hud text-label-hud uppercase text-on-surface-variant" style="font-family: 'Chivo', sans-serif; font-size: 11px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.1em;">(GRUPOS OFICIALES • ROTACIÓN SEMANAL)</span>
+                            <div class="flex items-center gap-space-xs text-primary-container"
+                                style="display: flex; align-items: center; gap: 8px;">
+                                <span class="material-symbols-outlined text-[20px]"
+                                    style="font-size: 20px; color: #ffb800;">groups</span>
+                                <span class="font-headline-md text-headline-md uppercase tracking-tight text-on-surface"
+                                    style="font-family: 'Chivo', sans-serif; font-size: 20px; font-weight: 800; color: #ffffff; text-transform: uppercase;">RACING
+                                    GROUPS</span>
+                                <span class="font-label-hud text-label-hud uppercase text-on-surface-variant"
+                                    style="font-family: 'Chivo', sans-serif; font-size: 11px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.1em;">(GRUPOS
+                                    OFICIALES • ROTACIÓN SEMANAL)</span>
                             </div>
-                            <p class="font-body-sm text-body-sm text-on-surface-variant mt-space-xs" style="font-family: 'Hanken Grotesk', sans-serif; font-size: 13px; color: #94a3b8; margin: 4px 0 0 0;">
-                                Duelos directos de 3 pilotos para disputar las 8 rutas y desafíos semanales. Los mejores tiempos acumulan bonos directos de $REP.
+                            <p class="font-body-sm text-body-sm text-on-surface-variant mt-space-xs"
+                                style="font-family: 'Hanken Grotesk', sans-serif; font-size: 13px; color: #94a3b8; margin: 4px 0 0 0;">
+                                Duelos directos de 3 pilotos para disputar las 8 rutas y desafíos semanales. Los mejores
+                                tiempos acumulan bonos directos de $REP.
                             </p>
                         </div>
-                        <div class="flex items-center gap-space-xs bg-surface-container-low px-space-md py-space-xs rounded-lg" style="display: flex; align-items: center; gap: 6px; background: #131720; border: 1px solid #1e2330; padding: 6px 12px; border-radius: 8px;">
-                            <span class="material-symbols-outlined text-secondary text-[16px]" style="font-size: 16px; color: #ff5708;">schedule</span>
-                            <span class="font-label-data text-label-data text-secondary uppercase font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 700; color: #ffb59c; text-transform: uppercase;">VENTANA: 03 OCT 2026 - 09 OCT 2026</span>
+                        <div class="flex items-center gap-space-xs bg-surface-container-low px-space-md py-space-xs rounded-lg"
+                            style="display: flex; align-items: center; gap: 6px; background: #131720; border: 1px solid #1e2330; padding: 6px 12px; border-radius: 8px;">
+                            <span class="material-symbols-outlined text-secondary text-[16px]"
+                                style="font-size: 16px; color: #ff5708;">schedule</span>
+                            <span id="bl-groups-dates-badge" class="font-label-data text-label-data text-secondary uppercase font-bold"
+                                style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 700; color: #ffb59c; text-transform: uppercase;">VENTANA:
+                                03 OCT 2026 - 09 OCT 2026</span>
                         </div>
                     </div>
 
                     <!-- 4 Groups Grid -->
-                    <div class="bl-groups-grid">
+                    <div class="bl-groups-grid" id="bl-groups-grid">
                         <!-- GROUP 1: ALPHA -->
                         <div class="bl-group-card">
                             <div class="bl-group-header">
@@ -3032,47 +3143,81 @@
                                 </div>
                                 <span class="bl-tier-badge alpha">TIER SUPREME</span>
                             </div>
-                            <div class="flex flex-col gap-space-xs" style="display: flex; flex-direction: column; gap: 6px;">
+                            <div class="flex flex-col gap-space-xs"
+                                style="display: flex; flex-direction: column; gap: 6px;">
                                 <!-- Pilot 1 (ZimanX) -->
                                 <div class="bl-pilot-item selected-highlight">
-                                    <div class="flex items-center gap-space-sm min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-sm min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <div class="bl-rank-box yellow-1">1</div>
-                                        <div class="flex flex-col min-w-0" style="display: flex; flex-direction: column; min-width: 0;">
-                                            <span class="font-headline-sm text-[14px] leading-tight uppercase text-on-surface font-extrabold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13.5px; font-weight: 800; color: #ffffff; text-transform: uppercase;">ZimanX "ZimanX"</span>
-                                            <span class="font-label-data text-[11px] text-on-surface-variant truncate" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8;">Porsche Carrera GT</span>
+                                        <div class="flex flex-col min-w-0"
+                                            style="display: flex; flex-direction: column; min-width: 0;">
+                                            <span
+                                                class="font-headline-sm text-[14px] leading-tight uppercase text-on-surface font-extrabold truncate"
+                                                style="font-family: 'Chivo', sans-serif; font-size: 13.5px; font-weight: 800; color: #ffffff; text-transform: uppercase;">ZimanX
+                                                "ZimanX"</span>
+                                            <span class="font-label-data text-[11px] text-on-surface-variant truncate"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8;">Porsche
+                                                Carrera GT</span>
                                         </div>
                                     </div>
-                                    <div class="flex flex-col text-right shrink-0" style="display: flex; flex-direction: column; text-align: right; flex-shrink: 0;">
-                                        <span class="font-label-data text-label-data text-primary-container font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #ffb800;">485 PTS</span>
-                                        <span class="font-label-data text-[11px] text-tertiary font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #38bdf8;">$1.390.000</span>
+                                    <div class="flex flex-col text-right shrink-0"
+                                        style="display: flex; flex-direction: column; text-align: right; flex-shrink: 0;">
+                                        <span class="font-label-data text-label-data text-primary-container font-bold"
+                                            style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #ffb800;">485
+                                            PTS</span>
+                                        <span class="font-label-data text-[11px] text-tertiary font-bold"
+                                            style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #38bdf8;">$1.390.000</span>
                                     </div>
                                 </div>
                                 <!-- Pilot 2 (N6 xBourne) -->
                                 <div class="bl-pilot-item">
-                                    <div class="flex items-center gap-space-sm min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-sm min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <div class="bl-rank-box neutral-rank">10</div>
-                                        <div class="flex flex-col min-w-0" style="display: flex; flex-direction: column; min-width: 0;">
-                                            <span class="font-headline-sm text-[14px] leading-tight uppercase text-on-surface font-extrabold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13.5px; font-weight: 800; color: #ffffff; text-transform: uppercase;">N6 xBourne "N6"</span>
-                                            <span class="font-label-data text-[11px] text-on-surface-variant truncate" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8;">Carrera GT &amp; Lotus Elise</span>
+                                        <div class="flex flex-col min-w-0"
+                                            style="display: flex; flex-direction: column; min-width: 0;">
+                                            <span
+                                                class="font-headline-sm text-[14px] leading-tight uppercase text-on-surface font-extrabold truncate"
+                                                style="font-family: 'Chivo', sans-serif; font-size: 13.5px; font-weight: 800; color: #ffffff; text-transform: uppercase;">N6
+                                                xBourne "N6"</span>
+                                            <span class="font-label-data text-[11px] text-on-surface-variant truncate"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8;">Carrera
+                                                GT &amp; Lotus Elise</span>
                                         </div>
                                     </div>
-                                    <div class="flex flex-col text-right shrink-0" style="display: flex; flex-direction: column; text-align: right; flex-shrink: 0;">
-                                        <span class="font-label-data text-label-data text-primary-container font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #ffb800;">806 PTS</span>
-                                        <span class="font-label-data text-[11px] text-tertiary font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #38bdf8;">$2.140.000</span>
+                                    <div class="flex flex-col text-right shrink-0"
+                                        style="display: flex; flex-direction: column; text-align: right; flex-shrink: 0;">
+                                        <span class="font-label-data text-label-data text-primary-container font-bold"
+                                            style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #ffb800;">806
+                                            PTS</span>
+                                        <span class="font-label-data text-[11px] text-tertiary font-bold"
+                                            style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #38bdf8;">$2.140.000</span>
                                     </div>
                                 </div>
                                 <!-- Pilot 3 (Nebula) -->
                                 <div class="bl-pilot-item">
-                                    <div class="flex items-center gap-space-sm min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-sm min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <div class="bl-rank-box neutral-rank">3</div>
-                                        <div class="flex flex-col min-w-0" style="display: flex; flex-direction: column; min-width: 0;">
-                                            <span class="font-headline-sm text-[14px] leading-tight uppercase text-on-surface font-extrabold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13.5px; font-weight: 800; color: #ffffff; text-transform: uppercase;">Nebula "Nebula"</span>
-                                            <span class="font-label-data text-[11px] text-on-surface-variant truncate" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8;">Carrera GT &amp; Lotus Elise</span>
+                                        <div class="flex flex-col min-w-0"
+                                            style="display: flex; flex-direction: column; min-width: 0;">
+                                            <span
+                                                class="font-headline-sm text-[14px] leading-tight uppercase text-on-surface font-extrabold truncate"
+                                                style="font-family: 'Chivo', sans-serif; font-size: 13.5px; font-weight: 800; color: #ffffff; text-transform: uppercase;">Nebula
+                                                "Nebula"</span>
+                                            <span class="font-label-data text-[11px] text-on-surface-variant truncate"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8;">Carrera
+                                                GT &amp; Lotus Elise</span>
                                         </div>
                                     </div>
-                                    <div class="flex flex-col text-right shrink-0" style="display: flex; flex-direction: column; text-align: right; flex-shrink: 0;">
-                                        <span class="font-label-data text-label-data text-primary-container font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #ffb800;">1.133 PTS</span>
-                                        <span class="font-label-data text-[11px] text-tertiary font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #38bdf8;">$2.950.000</span>
+                                    <div class="flex flex-col text-right shrink-0"
+                                        style="display: flex; flex-direction: column; text-align: right; flex-shrink: 0;">
+                                        <span class="font-label-data text-label-data text-primary-container font-bold"
+                                            style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #ffb800;">1.133
+                                            PTS</span>
+                                        <span class="font-label-data text-[11px] text-tertiary font-bold"
+                                            style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #38bdf8;">$2.950.000</span>
                                     </div>
                                 </div>
                             </div>
@@ -3087,47 +3232,80 @@
                                 </div>
                                 <span class="bl-tier-badge beta">TIER HIGH</span>
                             </div>
-                            <div class="flex flex-col gap-space-xs" style="display: flex; flex-direction: column; gap: 6px;">
+                            <div class="flex flex-col gap-space-xs"
+                                style="display: flex; flex-direction: column; gap: 6px;">
                                 <!-- Pilot 1 (xLeMondx) -->
                                 <div class="bl-pilot-item">
-                                    <div class="flex items-center gap-space-sm min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-sm min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <div class="bl-rank-box neutral-rank">4</div>
-                                        <div class="flex flex-col min-w-0" style="display: flex; flex-direction: column; min-width: 0;">
-                                            <span class="font-headline-sm text-[14px] leading-tight uppercase text-on-surface font-extrabold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13.5px; font-weight: 800; color: #ffffff; text-transform: uppercase;">xLeMondx "xLeMondx"</span>
-                                            <span class="font-label-data text-[11px] text-on-surface-variant truncate" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8;">Porsche Carrera GT</span>
+                                        <div class="flex flex-col min-w-0"
+                                            style="display: flex; flex-direction: column; min-width: 0;">
+                                            <span
+                                                class="font-headline-sm text-[14px] leading-tight uppercase text-on-surface font-extrabold truncate"
+                                                style="font-family: 'Chivo', sans-serif; font-size: 13.5px; font-weight: 800; color: #ffffff; text-transform: uppercase;">xLeMondx
+                                                "xLeMondx"</span>
+                                            <span class="font-label-data text-[11px] text-on-surface-variant truncate"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8;">Porsche
+                                                Carrera GT</span>
                                         </div>
                                     </div>
-                                    <div class="flex flex-col text-right shrink-0" style="display: flex; flex-direction: column; text-align: right; flex-shrink: 0;">
-                                        <span class="font-label-data text-label-data text-on-surface-variant font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #94a3b8;">0 PTS</span>
-                                        <span class="font-label-data text-[11px] text-on-surface-variant font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #64748b;">$0</span>
+                                    <div class="flex flex-col text-right shrink-0"
+                                        style="display: flex; flex-direction: column; text-align: right; flex-shrink: 0;">
+                                        <span class="font-label-data text-label-data text-on-surface-variant font-bold"
+                                            style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #94a3b8;">0
+                                            PTS</span>
+                                        <span class="font-label-data text-[11px] text-on-surface-variant font-bold"
+                                            style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #64748b;">$0</span>
                                     </div>
                                 </div>
                                 <!-- Pilot 2 (SRTxAvenger) -->
                                 <div class="bl-pilot-item selected-highlight">
-                                    <div class="flex items-center gap-space-sm min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-sm min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <div class="bl-rank-box orange-5">5</div>
-                                        <div class="flex flex-col min-w-0" style="display: flex; flex-direction: column; min-width: 0;">
-                                            <span class="font-headline-sm text-[14px] leading-tight uppercase text-primary-container font-extrabold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13.5px; font-weight: 800; color: #ffb800; text-transform: uppercase;">SRTxAvenger™</span>
-                                            <span class="font-label-data text-[11px] text-on-surface-variant truncate" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8;">Carrera GT &amp; Lotus Elise</span>
+                                        <div class="flex flex-col min-w-0"
+                                            style="display: flex; flex-direction: column; min-width: 0;">
+                                            <span
+                                                class="font-headline-sm text-[14px] leading-tight uppercase text-primary-container font-extrabold truncate"
+                                                style="font-family: 'Chivo', sans-serif; font-size: 13.5px; font-weight: 800; color: #ffb800; text-transform: uppercase;">SRTxAvenger™</span>
+                                            <span class="font-label-data text-[11px] text-on-surface-variant truncate"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8;">Carrera
+                                                GT &amp; Lotus Elise</span>
                                         </div>
                                     </div>
-                                    <div class="flex flex-col text-right shrink-0" style="display: flex; flex-direction: column; text-align: right; flex-shrink: 0;">
-                                        <span class="font-label-data text-label-data text-primary-container font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #ffb800;">1.320 PTS</span>
-                                        <span class="font-label-data text-[11px] text-tertiary font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #38bdf8;">$3.200.000</span>
+                                    <div class="flex flex-col text-right shrink-0"
+                                        style="display: flex; flex-direction: column; text-align: right; flex-shrink: 0;">
+                                        <span class="font-label-data text-label-data text-primary-container font-bold"
+                                            style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #ffb800;">1.320
+                                            PTS</span>
+                                        <span class="font-label-data text-[11px] text-tertiary font-bold"
+                                            style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #38bdf8;">$3.200.000</span>
                                     </div>
                                 </div>
                                 <!-- Pilot 3 (DarkShido) -->
                                 <div class="bl-pilot-item">
-                                    <div class="flex items-center gap-space-sm min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-sm min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <div class="bl-rank-box neutral-rank">6</div>
-                                        <div class="flex flex-col min-w-0" style="display: flex; flex-direction: column; min-width: 0;">
-                                            <span class="font-headline-sm text-[14px] leading-tight uppercase text-on-surface font-extrabold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13.5px; font-weight: 800; color: #ffffff; text-transform: uppercase;">DarkShido "Shido"</span>
-                                            <span class="font-label-data text-[11px] text-on-surface-variant truncate" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8;">BMW M3 GTR</span>
+                                        <div class="flex flex-col min-w-0"
+                                            style="display: flex; flex-direction: column; min-width: 0;">
+                                            <span
+                                                class="font-headline-sm text-[14px] leading-tight uppercase text-on-surface font-extrabold truncate"
+                                                style="font-family: 'Chivo', sans-serif; font-size: 13.5px; font-weight: 800; color: #ffffff; text-transform: uppercase;">DarkShido
+                                                "Shido"</span>
+                                            <span class="font-label-data text-[11px] text-on-surface-variant truncate"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8;">BMW
+                                                M3 GTR</span>
                                         </div>
                                     </div>
-                                    <div class="flex flex-col text-right shrink-0" style="display: flex; flex-direction: column; text-align: right; flex-shrink: 0;">
-                                        <span class="font-label-data text-label-data text-on-surface-variant font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #94a3b8;">0 PTS</span>
-                                        <span class="font-label-data text-[11px] text-on-surface-variant font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #64748b;">$0</span>
+                                    <div class="flex flex-col text-right shrink-0"
+                                        style="display: flex; flex-direction: column; text-align: right; flex-shrink: 0;">
+                                        <span class="font-label-data text-label-data text-on-surface-variant font-bold"
+                                            style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #94a3b8;">0
+                                            PTS</span>
+                                        <span class="font-label-data text-[11px] text-on-surface-variant font-bold"
+                                            style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #64748b;">$0</span>
                                     </div>
                                 </div>
                             </div>
@@ -3142,47 +3320,80 @@
                                 </div>
                                 <span class="bl-tier-badge gamma">TIER MID-HIGH</span>
                             </div>
-                            <div class="flex flex-col gap-space-xs" style="display: flex; flex-direction: column; gap: 6px;">
+                            <div class="flex flex-col gap-space-xs"
+                                style="display: flex; flex-direction: column; gap: 6px;">
                                 <!-- Pilot 1 (DannyLove) -->
                                 <div class="bl-pilot-item">
-                                    <div class="flex items-center gap-space-sm min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-sm min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <div class="bl-rank-box neutral-rank">7</div>
-                                        <div class="flex flex-col min-w-0" style="display: flex; flex-direction: column; min-width: 0;">
-                                            <span class="font-headline-sm text-[14px] leading-tight uppercase text-on-surface font-extrabold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13.5px; font-weight: 800; color: #ffffff; text-transform: uppercase;">DannyLove</span>
-                                            <span class="font-label-data text-[11px] text-on-surface-variant truncate" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8;">BMW M3 GTR</span>
+                                        <div class="flex flex-col min-w-0"
+                                            style="display: flex; flex-direction: column; min-width: 0;">
+                                            <span
+                                                class="font-headline-sm text-[14px] leading-tight uppercase text-on-surface font-extrabold truncate"
+                                                style="font-family: 'Chivo', sans-serif; font-size: 13.5px; font-weight: 800; color: #ffffff; text-transform: uppercase;">DannyLove</span>
+                                            <span class="font-label-data text-[11px] text-on-surface-variant truncate"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8;">BMW
+                                                M3 GTR</span>
                                         </div>
                                     </div>
-                                    <div class="flex flex-col text-right shrink-0" style="display: flex; flex-direction: column; text-align: right; flex-shrink: 0;">
-                                        <span class="font-label-data text-label-data text-on-surface-variant font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #94a3b8;">0 PTS</span>
-                                        <span class="font-label-data text-[11px] text-on-surface-variant font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #64748b;">$0</span>
+                                    <div class="flex flex-col text-right shrink-0"
+                                        style="display: flex; flex-direction: column; text-align: right; flex-shrink: 0;">
+                                        <span class="font-label-data text-label-data text-on-surface-variant font-bold"
+                                            style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #94a3b8;">0
+                                            PTS</span>
+                                        <span class="font-label-data text-[11px] text-on-surface-variant font-bold"
+                                            style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #64748b;">$0</span>
                                     </div>
                                 </div>
                                 <!-- Pilot 2 (Lea4Speed0) -->
                                 <div class="bl-pilot-item">
-                                    <div class="flex items-center gap-space-sm min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-sm min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <div class="bl-rank-box neutral-rank">8</div>
-                                        <div class="flex flex-col min-w-0" style="display: flex; flex-direction: column; min-width: 0;">
-                                            <span class="font-headline-sm text-[14px] leading-tight uppercase text-on-surface font-extrabold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13.5px; font-weight: 800; color: #ffffff; text-transform: uppercase;">Lea4Speed0 "Lea"</span>
-                                            <span class="font-label-data text-[11px] text-on-surface-variant truncate" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8;">Carrera GT &amp; M3 GTR</span>
+                                        <div class="flex flex-col min-w-0"
+                                            style="display: flex; flex-direction: column; min-width: 0;">
+                                            <span
+                                                class="font-headline-sm text-[14px] leading-tight uppercase text-on-surface font-extrabold truncate"
+                                                style="font-family: 'Chivo', sans-serif; font-size: 13.5px; font-weight: 800; color: #ffffff; text-transform: uppercase;">Lea4Speed0
+                                                "Lea"</span>
+                                            <span class="font-label-data text-[11px] text-on-surface-variant truncate"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8;">Carrera
+                                                GT &amp; M3 GTR</span>
                                         </div>
                                     </div>
-                                    <div class="flex flex-col text-right shrink-0" style="display: flex; flex-direction: column; text-align: right; flex-shrink: 0;">
-                                        <span class="font-label-data text-label-data text-on-surface-variant font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #94a3b8;">0 PTS</span>
-                                        <span class="font-label-data text-[11px] text-on-surface-variant font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #64748b;">$0</span>
+                                    <div class="flex flex-col text-right shrink-0"
+                                        style="display: flex; flex-direction: column; text-align: right; flex-shrink: 0;">
+                                        <span class="font-label-data text-label-data text-on-surface-variant font-bold"
+                                            style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #94a3b8;">0
+                                            PTS</span>
+                                        <span class="font-label-data text-[11px] text-on-surface-variant font-bold"
+                                            style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #64748b;">$0</span>
                                     </div>
                                 </div>
                                 <!-- Pilot 3 (Slot Available) -->
                                 <div class="bl-pilot-item slot-open">
-                                    <div class="flex items-center gap-space-sm min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-sm min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <div class="bl-rank-box open-slot">11</div>
-                                        <div class="flex flex-col min-w-0" style="display: flex; flex-direction: column; min-width: 0;">
-                                            <span class="font-headline-sm text-[14px] leading-tight uppercase text-on-surface-variant font-extrabold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13.5px; font-weight: 800; color: #94a3b8; text-transform: uppercase;">Plaza Disponible #11</span>
-                                            <span class="font-label-data text-[11px] text-primary-container truncate font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #ffb800;">Esperando Piloto</span>
+                                        <div class="flex flex-col min-w-0"
+                                            style="display: flex; flex-direction: column; min-width: 0;">
+                                            <span
+                                                class="font-headline-sm text-[14px] leading-tight uppercase text-on-surface-variant font-extrabold truncate"
+                                                style="font-family: 'Chivo', sans-serif; font-size: 13.5px; font-weight: 800; color: #94a3b8; text-transform: uppercase;">Plaza
+                                                Disponible #11</span>
+                                            <span
+                                                class="font-label-data text-[11px] text-primary-container truncate font-bold"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #ffb800;">Esperando
+                                                Piloto</span>
                                         </div>
                                     </div>
-                                    <div class="flex flex-col text-right shrink-0" style="display: flex; flex-direction: column; text-align: right; flex-shrink: 0;">
-                                        <span class="font-label-data text-label-data text-on-surface-variant" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #94a3b8;">OPEN</span>
-                                        <span class="font-label-data text-[11px] text-on-surface-variant font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #64748b;">$0</span>
+                                    <div class="flex flex-col text-right shrink-0"
+                                        style="display: flex; flex-direction: column; text-align: right; flex-shrink: 0;">
+                                        <span class="font-label-data text-label-data text-on-surface-variant"
+                                            style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #94a3b8;">OPEN</span>
+                                        <span class="font-label-data text-[11px] text-on-surface-variant font-bold"
+                                            style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #64748b;">$0</span>
                                     </div>
                                 </div>
                             </div>
@@ -3197,47 +3408,81 @@
                                 </div>
                                 <span class="bl-tier-badge delta">TIER COMPETICIÓN</span>
                             </div>
-                            <div class="flex flex-col gap-space-xs" style="display: flex; flex-direction: column; gap: 6px;">
+                            <div class="flex flex-col gap-space-xs"
+                                style="display: flex; flex-direction: column; gap: 6px;">
                                 <!-- Pilot 1 (ellafreyafan) -->
                                 <div class="bl-pilot-item">
-                                    <div class="flex items-center gap-space-sm min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-sm min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <div class="bl-rank-box neutral-rank">9</div>
-                                        <div class="flex flex-col min-w-0" style="display: flex; flex-direction: column; min-width: 0;">
-                                            <span class="font-headline-sm text-[14px] leading-tight uppercase text-on-surface font-extrabold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13.5px; font-weight: 800; color: #ffffff; text-transform: uppercase;">ellafreyafan "MW"</span>
-                                            <span class="font-label-data text-[11px] text-on-surface-variant truncate" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8;">BMW M3 GTR</span>
+                                        <div class="flex flex-col min-w-0"
+                                            style="display: flex; flex-direction: column; min-width: 0;">
+                                            <span
+                                                class="font-headline-sm text-[14px] leading-tight uppercase text-on-surface font-extrabold truncate"
+                                                style="font-family: 'Chivo', sans-serif; font-size: 13.5px; font-weight: 800; color: #ffffff; text-transform: uppercase;">ellafreyafan
+                                                "MW"</span>
+                                            <span class="font-label-data text-[11px] text-on-surface-variant truncate"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8;">BMW
+                                                M3 GTR</span>
                                         </div>
                                     </div>
-                                    <div class="flex flex-col text-right shrink-0" style="display: flex; flex-direction: column; text-align: right; flex-shrink: 0;">
-                                        <span class="font-label-data text-label-data text-on-surface-variant font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #94a3b8;">0 PTS</span>
-                                        <span class="font-label-data text-[11px] text-on-surface-variant font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #64748b;">$0</span>
+                                    <div class="flex flex-col text-right shrink-0"
+                                        style="display: flex; flex-direction: column; text-align: right; flex-shrink: 0;">
+                                        <span class="font-label-data text-label-data text-on-surface-variant font-bold"
+                                            style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #94a3b8;">0
+                                            PTS</span>
+                                        <span class="font-label-data text-[11px] text-on-surface-variant font-bold"
+                                            style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #64748b;">$0</span>
                                     </div>
                                 </div>
                                 <!-- Pilot 2 (Mystic) -->
                                 <div class="bl-pilot-item">
-                                    <div class="flex items-center gap-space-sm min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-sm min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <div class="bl-rank-box neutral-rank">2</div>
-                                        <div class="flex flex-col min-w-0" style="display: flex; flex-direction: column; min-width: 0;">
-                                            <span class="font-headline-sm text-[14px] leading-tight uppercase text-on-surface font-extrabold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13.5px; font-weight: 800; color: #ffffff; text-transform: uppercase;">Mystic "MysticX"</span>
-                                            <span class="font-label-data text-[11px] text-on-surface-variant truncate" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8;">BMW M3 GTR</span>
+                                        <div class="flex flex-col min-w-0"
+                                            style="display: flex; flex-direction: column; min-width: 0;">
+                                            <span
+                                                class="font-headline-sm text-[14px] leading-tight uppercase text-on-surface font-extrabold truncate"
+                                                style="font-family: 'Chivo', sans-serif; font-size: 13.5px; font-weight: 800; color: #ffffff; text-transform: uppercase;">Mystic
+                                                "MysticX"</span>
+                                            <span class="font-label-data text-[11px] text-on-surface-variant truncate"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8;">BMW
+                                                M3 GTR</span>
                                         </div>
                                     </div>
-                                    <div class="flex flex-col text-right shrink-0" style="display: flex; flex-direction: column; text-align: right; flex-shrink: 0;">
-                                        <span class="font-label-data text-label-data text-on-surface-variant font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #94a3b8;">0 PTS</span>
-                                        <span class="font-label-data text-[11px] text-on-surface-variant font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #64748b;">$0</span>
+                                    <div class="flex flex-col text-right shrink-0"
+                                        style="display: flex; flex-direction: column; text-align: right; flex-shrink: 0;">
+                                        <span class="font-label-data text-label-data text-on-surface-variant font-bold"
+                                            style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #94a3b8;">0
+                                            PTS</span>
+                                        <span class="font-label-data text-[11px] text-on-surface-variant font-bold"
+                                            style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #64748b;">$0</span>
                                     </div>
                                 </div>
                                 <!-- Pilot 3 (Slot Available) -->
                                 <div class="bl-pilot-item slot-open">
-                                    <div class="flex items-center gap-space-sm min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-sm min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <div class="bl-rank-box open-slot">12</div>
-                                        <div class="flex flex-col min-w-0" style="display: flex; flex-direction: column; min-width: 0;">
-                                            <span class="font-headline-sm text-[14px] leading-tight uppercase text-on-surface-variant font-extrabold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13.5px; font-weight: 800; color: #94a3b8; text-transform: uppercase;">Plaza Disponible #12</span>
-                                            <span class="font-label-data text-[11px] text-primary-container truncate font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #ffb800;">Esperando Piloto</span>
+                                        <div class="flex flex-col min-w-0"
+                                            style="display: flex; flex-direction: column; min-width: 0;">
+                                            <span
+                                                class="font-headline-sm text-[14px] leading-tight uppercase text-on-surface-variant font-extrabold truncate"
+                                                style="font-family: 'Chivo', sans-serif; font-size: 13.5px; font-weight: 800; color: #94a3b8; text-transform: uppercase;">Plaza
+                                                Disponible #12</span>
+                                            <span
+                                                class="font-label-data text-[11px] text-primary-container truncate font-bold"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #ffb800;">Esperando
+                                                Piloto</span>
                                         </div>
                                     </div>
-                                    <div class="flex flex-col text-right shrink-0" style="display: flex; flex-direction: column; text-align: right; flex-shrink: 0;">
-                                        <span class="font-label-data text-label-data text-on-surface-variant" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #94a3b8;">OPEN</span>
-                                        <span class="font-label-data text-[11px] text-on-surface-variant font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #64748b;">$0</span>
+                                    <div class="flex flex-col text-right shrink-0"
+                                        style="display: flex; flex-direction: column; text-align: right; flex-shrink: 0;">
+                                        <span class="font-label-data text-label-data text-on-surface-variant"
+                                            style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #94a3b8;">OPEN</span>
+                                        <span class="font-label-data text-[11px] text-on-surface-variant font-bold"
+                                            style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #64748b;">$0</span>
                                     </div>
                                 </div>
                             </div>
@@ -3248,49 +3493,81 @@
                 <!-- 4. SECCIÓN WEEKLY CHAMPIONSHIP CHALLENGES -->
                 <div class="flex flex-col gap-space-md" style="display: flex; flex-direction: column; gap: 16px;">
                     <!-- Section Title & Bonuses Pill Strip -->
-                    <div class="bg-surface-container-low p-space-md md:p-space-lg rounded-xl shadow-xl flex flex-col gap-space-md" style="background: #10141d; border: 1px solid #1e2330; padding: 18px 20px; border-radius: 12px; display: flex; flex-direction: column; gap: 14px;">
-                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px;">
+                    <div class="bg-surface-container-low p-space-md md:p-space-lg rounded-xl shadow-xl flex flex-col gap-space-md"
+                        style="background: #10141d; border: 1px solid #1e2330; padding: 18px 20px; border-radius: 12px; display: flex; flex-direction: column; gap: 14px;">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md"
+                            style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px;">
                             <div class="flex flex-col" style="display: flex; flex-direction: column;">
-                                <div class="flex items-center gap-space-xs text-primary-container" style="display: flex; align-items: center; gap: 8px;">
-                                    <span class="material-symbols-outlined text-[24px]" style="font-size: 24px; color: #ffb800;">alt_route</span>
-                                    <span class="font-headline-md text-headline-md uppercase text-on-surface font-black" style="font-family: 'Chivo', sans-serif; font-size: 20px; font-weight: 900; color: #ffffff; text-transform: uppercase;">WEEKLY CHAMPIONSHIP CHALLENGES</span>
+                                <div class="flex items-center gap-space-xs text-primary-container"
+                                    style="display: flex; align-items: center; gap: 8px;">
+                                    <span class="material-symbols-outlined text-[24px]"
+                                        style="font-size: 24px; color: #ffb800;">alt_route</span>
+                                    <span class="font-headline-md text-headline-md uppercase text-on-surface font-black"
+                                        style="font-family: 'Chivo', sans-serif; font-size: 20px; font-weight: 900; color: #ffffff; text-transform: uppercase;">WEEKLY
+                                        CHAMPIONSHIP CHALLENGES</span>
                                 </div>
-                                <span class="font-label-hud text-label-hud uppercase text-on-surface-variant tracking-wider" style="font-family: 'Chivo', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 0.14em; color: #94a3b8; text-transform: uppercase;">8 RUTAS POR GRUPO // SISTEMA DE BONOS POR MEJOR TIEMPO</span>
+                                <span
+                                    class="font-label-hud text-label-hud uppercase text-on-surface-variant tracking-wider"
+                                    style="font-family: 'Chivo', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 0.14em; color: #94a3b8; text-transform: uppercase;">8
+                                    RUTAS POR GRUPO // SISTEMA DE BONOS POR MEJOR TIEMPO</span>
                             </div>
                             <!-- Bonus Badges Strip -->
-                            <div class="flex flex-wrap items-center gap-space-xs bg-surface-container-lowest px-space-sm py-space-xs rounded-lg shadow-inner" style="display: flex; align-items: center; gap: 8px; background: #0b0e15; border: 1px solid #1e2330; padding: 6px 14px; border-radius: 8px;">
-                                <div class="flex items-center gap-space-xs" style="display: flex; align-items: center; gap: 6px;">
-                                    <span class="w-2 h-2 rounded-full bg-primary-container" style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #ffb800;"></span>
-                                    <span class="font-label-data text-label-data text-primary-container font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 700; color: #ffb800;">1st: +100 PTS</span>
+                            <div class="flex flex-wrap items-center gap-space-xs bg-surface-container-lowest px-space-sm py-space-xs rounded-lg shadow-inner"
+                                style="display: flex; align-items: center; gap: 8px; background: #0b0e15; border: 1px solid #1e2330; padding: 6px 14px; border-radius: 8px;">
+                                <div class="flex items-center gap-space-xs"
+                                    style="display: flex; align-items: center; gap: 6px;">
+                                    <span class="w-2 h-2 rounded-full bg-primary-container"
+                                        style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #ffb800;"></span>
+                                    <span class="font-label-data text-label-data text-primary-container font-bold"
+                                        style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 700; color: #ffb800;">1st:
+                                        +100 PTS</span>
                                 </div>
-                                <span class="text-outline-variant font-label-data text-label-data" style="color: #475569;">/</span>
-                                <div class="flex items-center gap-space-xs" style="display: flex; align-items: center; gap: 6px;">
-                                    <span class="w-2 h-2 rounded-full bg-secondary" style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #ff5708;"></span>
-                                    <span class="font-label-data text-label-data text-secondary font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 700; color: #ffb59c;">2nd: +50 PTS</span>
+                                <span class="text-outline-variant font-label-data text-label-data"
+                                    style="color: #475569;">/</span>
+                                <div class="flex items-center gap-space-xs"
+                                    style="display: flex; align-items: center; gap: 6px;">
+                                    <span class="w-2 h-2 rounded-full bg-secondary"
+                                        style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #ff5708;"></span>
+                                    <span class="font-label-data text-label-data text-secondary font-bold"
+                                        style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 700; color: #ffb59c;">2nd:
+                                        +50 PTS</span>
                                 </div>
-                                <span class="text-outline-variant font-label-data text-label-data" style="color: #475569;">/</span>
-                                <div class="flex items-center gap-space-xs" style="display: flex; align-items: center; gap: 6px;">
-                                    <span class="w-2 h-2 rounded-full bg-tertiary" style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #38bdf8;"></span>
-                                    <span class="font-label-data text-label-data text-tertiary font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 700; color: #38bdf8;">3rd: +20 PTS</span>
+                                <span class="text-outline-variant font-label-data text-label-data"
+                                    style="color: #475569;">/</span>
+                                <div class="flex items-center gap-space-xs"
+                                    style="display: flex; align-items: center; gap: 6px;">
+                                    <span class="w-2 h-2 rounded-full bg-tertiary"
+                                        style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #38bdf8;"></span>
+                                    <span class="font-label-data text-label-data text-tertiary font-bold"
+                                        style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 700; color: #38bdf8;">3rd:
+                                        +20 PTS</span>
                                 </div>
                             </div>
                         </div>
                         <!-- Filter By Group Segment -->
-                        <div class="flex flex-wrap items-center gap-space-xs pt-space-xs" id="bl-group-filters" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
-                            <button type="button" class="bl-challenges-group-filter-btn active" data-group="alpha" onclick="selectChampionshipGroupTab(0)">
-                                <span class="material-symbols-outlined text-[16px]" style="font-size: 16px;">local_fire_department</span>
+                        <div class="flex flex-wrap items-center gap-space-xs pt-space-xs" id="bl-group-filters"
+                            style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
+                            <button type="button" class="bl-challenges-group-filter-btn active" data-group="alpha"
+                                onclick="selectChampionshipGroupTab(0)">
+                                <span class="material-symbols-outlined text-[16px]"
+                                    style="font-size: 16px;">local_fire_department</span>
                                 <span>GRUPO ALPHA (LÍDERES)</span>
                             </button>
-                            <button type="button" class="bl-challenges-group-filter-btn" data-group="beta" onclick="selectChampionshipGroupTab(1)">
+                            <button type="button" class="bl-challenges-group-filter-btn" data-group="beta"
+                                onclick="selectChampionshipGroupTab(1)">
                                 <span class="material-symbols-outlined text-[16px]" style="font-size: 16px;">bolt</span>
                                 <span>GRUPO BETA (ASPIRANTES)</span>
                             </button>
-                            <button type="button" class="bl-challenges-group-filter-btn" data-group="gamma" onclick="selectChampionshipGroupTab(2)">
-                                <span class="material-symbols-outlined text-[16px]" style="font-size: 16px;">shield</span>
+                            <button type="button" class="bl-challenges-group-filter-btn" data-group="gamma"
+                                onclick="selectChampionshipGroupTab(2)">
+                                <span class="material-symbols-outlined text-[16px]"
+                                    style="font-size: 16px;">shield</span>
                                 <span>GRUPO GAMMA</span>
                             </button>
-                            <button type="button" class="bl-challenges-group-filter-btn" data-group="delta" onclick="selectChampionshipGroupTab(3)">
-                                <span class="material-symbols-outlined text-[16px]" style="font-size: 16px;">radio_button_checked</span>
+                            <button type="button" class="bl-challenges-group-filter-btn" data-group="delta"
+                                onclick="selectChampionshipGroupTab(3)">
+                                <span class="material-symbols-outlined text-[16px]"
+                                    style="font-size: 16px;">radio_button_checked</span>
                                 <span>GRUPO DELTA</span>
                             </button>
                         </div>
@@ -3301,54 +3578,87 @@
                         <!-- CHALLENGE 01 -->
                         <div class="bl-challenge-card">
                             <div class="bl-ch-header">
-                                <div class="flex items-center gap-space-xs min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                <div class="flex items-center gap-space-xs min-w-0"
+                                    style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                     <span class="bl-ch-num">#01</span>
                                     <span class="bl-ch-title">City Perimeter</span>
                                 </div>
                                 <span class="bl-ch-tag circuito">CIRCUITO</span>
                             </div>
                             <div class="bl-restriction-row">
-                                <span class="material-symbols-outlined text-[16px] text-secondary" style="font-size: 16px; color: #ff5708;">directions_car</span>
-                                <span class="font-label-data text-label-data text-on-surface-variant" style="color: #94a3b8;">COCHE RESTRINGIDO:</span>
-                                <span class="font-label-data text-label-data text-primary font-bold truncate" style="color: #ffb800; font-weight: 700;">BMW M3 GTR (Auto Bonus)</span>
+                                <span class="material-symbols-outlined text-[16px] text-secondary"
+                                    style="font-size: 16px; color: #ff5708;">directions_car</span>
+                                <span class="font-label-data text-label-data text-on-surface-variant"
+                                    style="color: #94a3b8;">COCHE RESTRINGIDO:</span>
+                                <span class="font-label-data text-label-data text-primary font-bold truncate"
+                                    style="color: #ffb800; font-weight: 700;">BMW M3 GTR (Auto Bonus)</span>
                             </div>
-                            <div class="flex flex-col gap-space-xs" style="display: flex; flex-direction: column; gap: 6px;">
+                            <div class="flex flex-col gap-space-xs"
+                                style="display: flex; flex-direction: column; gap: 6px;">
                                 <div class="bl-podium-row pos-1">
-                                    <div class="flex items-center gap-space-xs min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-xs min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <span class="bl-circle-pos yellow-1">1</span>
-                                        <span class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">NEBULA</span>
+                                        <span
+                                            class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate"
+                                            style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">NEBULA</span>
                                     </div>
-                                    <div class="flex items-center gap-space-sm" style="display: flex; align-items: center; gap: 10px;">
+                                    <div class="flex items-center gap-space-sm"
+                                        style="display: flex; align-items: center; gap: 10px;">
                                         <span class="bl-podium-time cyan-best">01:34.450</span>
-                                        <div class="flex flex-col text-right" style="display: flex; flex-direction: column; text-align: right;">
-                                            <span class="font-label-data text-[10px] text-primary-container font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb800;">+100 PTS</span>
-                                            <span class="font-label-data text-[10px] text-tertiary" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$400K REP</span>
+                                        <div class="flex flex-col text-right"
+                                            style="display: flex; flex-direction: column; text-align: right;">
+                                            <span class="font-label-data text-[10px] text-primary-container font-bold"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb800;">+100
+                                                PTS</span>
+                                            <span class="font-label-data text-[10px] text-tertiary"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$400K
+                                                REP</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="bl-podium-row pos-other">
-                                    <div class="flex items-center gap-space-xs min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-xs min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <span class="bl-circle-pos dark-pos">2</span>
-                                        <span class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">N6 XBOURNE</span>
+                                        <span
+                                            class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate"
+                                            style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">N6
+                                            XBOURNE</span>
                                     </div>
-                                    <div class="flex items-center gap-space-sm" style="display: flex; align-items: center; gap: 10px;">
+                                    <div class="flex items-center gap-space-sm"
+                                        style="display: flex; align-items: center; gap: 10px;">
                                         <span class="bl-podium-time white-time">01:34.800</span>
-                                        <div class="flex flex-col text-right" style="display: flex; flex-direction: column; text-align: right;">
-                                            <span class="font-label-data text-[10px] text-secondary font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb59c;">+50 PTS</span>
-                                            <span class="font-label-data text-[10px] text-tertiary" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$250K REP</span>
+                                        <div class="flex flex-col text-right"
+                                            style="display: flex; flex-direction: column; text-align: right;">
+                                            <span class="font-label-data text-[10px] text-secondary font-bold"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb59c;">+50
+                                                PTS</span>
+                                            <span class="font-label-data text-[10px] text-tertiary"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$250K
+                                                REP</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="bl-podium-row pos-other">
-                                    <div class="flex items-center gap-space-xs min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-xs min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <span class="bl-circle-pos dark-pos">3</span>
-                                        <span class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">ZIMANX</span>
+                                        <span
+                                            class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate"
+                                            style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">ZIMANX</span>
                                     </div>
-                                    <div class="flex items-center gap-space-sm" style="display: flex; align-items: center; gap: 10px;">
+                                    <div class="flex items-center gap-space-sm"
+                                        style="display: flex; align-items: center; gap: 10px;">
                                         <span class="bl-podium-time white-time">01:35.400</span>
-                                        <div class="flex flex-col text-right" style="display: flex; flex-direction: column; text-align: right;">
-                                            <span class="font-label-data text-[10px] text-primary font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb800;">+20 PTS</span>
-                                            <span class="font-label-data text-[10px] text-tertiary" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$120K REP</span>
+                                        <div class="flex flex-col text-right"
+                                            style="display: flex; flex-direction: column; text-align: right;">
+                                            <span class="font-label-data text-[10px] text-primary font-bold"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb800;">+20
+                                                PTS</span>
+                                            <span class="font-label-data text-[10px] text-tertiary"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$120K
+                                                REP</span>
                                         </div>
                                     </div>
                                 </div>
@@ -3358,54 +3668,87 @@
                         <!-- CHALLENGE 02 -->
                         <div class="bl-challenge-card">
                             <div class="bl-ch-header">
-                                <div class="flex items-center gap-space-xs min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                <div class="flex items-center gap-space-xs min-w-0"
+                                    style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                     <span class="bl-ch-num">#02</span>
                                     <span class="bl-ch-title">Heritage &amp; Campus</span>
                                 </div>
                                 <span class="bl-ch-tag sprint">SPRINT</span>
                             </div>
                             <div class="bl-restriction-row">
-                                <span class="material-symbols-outlined text-[16px] text-secondary" style="font-size: 16px; color: #ff5708;">directions_car</span>
-                                <span class="font-label-data text-label-data text-on-surface-variant" style="color: #94a3b8;">COCHE RESTRINGIDO:</span>
-                                <span class="font-label-data text-label-data text-primary font-bold truncate" style="color: #ffb800; font-weight: 700;">Fiat Punto (Stock)</span>
+                                <span class="material-symbols-outlined text-[16px] text-secondary"
+                                    style="font-size: 16px; color: #ff5708;">directions_car</span>
+                                <span class="font-label-data text-label-data text-on-surface-variant"
+                                    style="color: #94a3b8;">COCHE RESTRINGIDO:</span>
+                                <span class="font-label-data text-label-data text-primary font-bold truncate"
+                                    style="color: #ffb800; font-weight: 700;">Fiat Punto (Stock)</span>
                             </div>
-                            <div class="flex flex-col gap-space-xs" style="display: flex; flex-direction: column; gap: 6px;">
+                            <div class="flex flex-col gap-space-xs"
+                                style="display: flex; flex-direction: column; gap: 6px;">
                                 <div class="bl-podium-row pos-1">
-                                    <div class="flex items-center gap-space-xs min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-xs min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <span class="bl-circle-pos yellow-1">1</span>
-                                        <span class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">NEBULA</span>
+                                        <span
+                                            class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate"
+                                            style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">NEBULA</span>
                                     </div>
-                                    <div class="flex items-center gap-space-sm" style="display: flex; align-items: center; gap: 10px;">
+                                    <div class="flex items-center gap-space-sm"
+                                        style="display: flex; align-items: center; gap: 10px;">
                                         <span class="bl-podium-time cyan-best">02:18.700</span>
-                                        <div class="flex flex-col text-right" style="display: flex; flex-direction: column; text-align: right;">
-                                            <span class="font-label-data text-[10px] text-primary-container font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb800;">+100 PTS</span>
-                                            <span class="font-label-data text-[10px] text-tertiary" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$450K REP</span>
+                                        <div class="flex flex-col text-right"
+                                            style="display: flex; flex-direction: column; text-align: right;">
+                                            <span class="font-label-data text-[10px] text-primary-container font-bold"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb800;">+100
+                                                PTS</span>
+                                            <span class="font-label-data text-[10px] text-tertiary"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$450K
+                                                REP</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="bl-podium-row pos-other">
-                                    <div class="flex items-center gap-space-xs min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-xs min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <span class="bl-circle-pos dark-pos">2</span>
-                                        <span class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">N6 XBOURNE</span>
+                                        <span
+                                            class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate"
+                                            style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">N6
+                                            XBOURNE</span>
                                     </div>
-                                    <div class="flex items-center gap-space-sm" style="display: flex; align-items: center; gap: 10px;">
+                                    <div class="flex items-center gap-space-sm"
+                                        style="display: flex; align-items: center; gap: 10px;">
                                         <span class="bl-podium-time white-time">02:20.700</span>
-                                        <div class="flex flex-col text-right" style="display: flex; flex-direction: column; text-align: right;">
-                                            <span class="font-label-data text-[10px] text-secondary font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb59c;">+50 PTS</span>
-                                            <span class="font-label-data text-[10px] text-tertiary" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$280K REP</span>
+                                        <div class="flex flex-col text-right"
+                                            style="display: flex; flex-direction: column; text-align: right;">
+                                            <span class="font-label-data text-[10px] text-secondary font-bold"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb59c;">+50
+                                                PTS</span>
+                                            <span class="font-label-data text-[10px] text-tertiary"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$280K
+                                                REP</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="bl-podium-row pos-other">
-                                    <div class="flex items-center gap-space-xs min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-xs min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <span class="bl-circle-pos dark-pos">3</span>
-                                        <span class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">ZIMANX</span>
+                                        <span
+                                            class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate"
+                                            style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">ZIMANX</span>
                                     </div>
-                                    <div class="flex items-center gap-space-sm" style="display: flex; align-items: center; gap: 10px;">
+                                    <div class="flex items-center gap-space-sm"
+                                        style="display: flex; align-items: center; gap: 10px;">
                                         <span class="bl-podium-time white-time">02:22.470</span>
-                                        <div class="flex flex-col text-right" style="display: flex; flex-direction: column; text-align: right;">
-                                            <span class="font-label-data text-[10px] text-primary font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb800;">+20 PTS</span>
-                                            <span class="font-label-data text-[10px] text-tertiary" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$140K REP</span>
+                                        <div class="flex flex-col text-right"
+                                            style="display: flex; flex-direction: column; text-align: right;">
+                                            <span class="font-label-data text-[10px] text-primary font-bold"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb800;">+20
+                                                PTS</span>
+                                            <span class="font-label-data text-[10px] text-tertiary"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$140K
+                                                REP</span>
                                         </div>
                                     </div>
                                 </div>
@@ -3415,54 +3758,87 @@
                         <!-- CHALLENGE 03 -->
                         <div class="bl-challenge-card">
                             <div class="bl-ch-header">
-                                <div class="flex items-center gap-space-xs min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                <div class="flex items-center gap-space-xs min-w-0"
+                                    style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                     <span class="bl-ch-num">#03</span>
                                     <span class="bl-ch-title">Bayshore &amp; Boardwalk</span>
                                 </div>
                                 <span class="bl-ch-tag drag">DRAG</span>
                             </div>
                             <div class="bl-restriction-row">
-                                <span class="material-symbols-outlined text-[16px] text-secondary" style="font-size: 16px; color: #ff5708;">directions_car</span>
-                                <span class="font-label-data text-label-data text-on-surface-variant" style="color: #94a3b8;">COCHE RESTRINGIDO:</span>
-                                <span class="font-label-data text-label-data text-primary font-bold truncate" style="color: #ffb800; font-weight: 700;">Mazda RX-8 (Junkman)</span>
+                                <span class="material-symbols-outlined text-[16px] text-secondary"
+                                    style="font-size: 16px; color: #ff5708;">directions_car</span>
+                                <span class="font-label-data text-label-data text-on-surface-variant"
+                                    style="color: #94a3b8;">COCHE RESTRINGIDO:</span>
+                                <span class="font-label-data text-label-data text-primary font-bold truncate"
+                                    style="color: #ffb800; font-weight: 700;">Mazda RX-8 (Junkman)</span>
                             </div>
-                            <div class="flex flex-col gap-space-xs" style="display: flex; flex-direction: column; gap: 6px;">
+                            <div class="flex flex-col gap-space-xs"
+                                style="display: flex; flex-direction: column; gap: 6px;">
                                 <div class="bl-podium-row pos-1">
-                                    <div class="flex items-center gap-space-xs min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-xs min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <span class="bl-circle-pos yellow-1">1</span>
-                                        <span class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">NEBULA</span>
+                                        <span
+                                            class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate"
+                                            style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">NEBULA</span>
                                     </div>
-                                    <div class="flex items-center gap-space-sm" style="display: flex; align-items: center; gap: 10px;">
+                                    <div class="flex items-center gap-space-sm"
+                                        style="display: flex; align-items: center; gap: 10px;">
                                         <span class="bl-podium-time cyan-best">00:18.000</span>
-                                        <div class="flex flex-col text-right" style="display: flex; flex-direction: column; text-align: right;">
-                                            <span class="font-label-data text-[10px] text-primary-container font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb800;">+100 PTS</span>
-                                            <span class="font-label-data text-[10px] text-tertiary" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$350K REP</span>
+                                        <div class="flex flex-col text-right"
+                                            style="display: flex; flex-direction: column; text-align: right;">
+                                            <span class="font-label-data text-[10px] text-primary-container font-bold"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb800;">+100
+                                                PTS</span>
+                                            <span class="font-label-data text-[10px] text-tertiary"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$350K
+                                                REP</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="bl-podium-row pos-other">
-                                    <div class="flex items-center gap-space-xs min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-xs min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <span class="bl-circle-pos dark-pos">2</span>
-                                        <span class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">N6 XBOURNE</span>
+                                        <span
+                                            class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate"
+                                            style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">N6
+                                            XBOURNE</span>
                                     </div>
-                                    <div class="flex items-center gap-space-sm" style="display: flex; align-items: center; gap: 10px;">
+                                    <div class="flex items-center gap-space-sm"
+                                        style="display: flex; align-items: center; gap: 10px;">
                                         <span class="bl-podium-time white-time">00:17.000</span>
-                                        <div class="flex flex-col text-right" style="display: flex; flex-direction: column; text-align: right;">
-                                            <span class="font-label-data text-[10px] text-secondary font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb59c;">+50 PTS</span>
-                                            <span class="font-label-data text-[10px] text-tertiary" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$200K REP</span>
+                                        <div class="flex flex-col text-right"
+                                            style="display: flex; flex-direction: column; text-align: right;">
+                                            <span class="font-label-data text-[10px] text-secondary font-bold"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb59c;">+50
+                                                PTS</span>
+                                            <span class="font-label-data text-[10px] text-tertiary"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$200K
+                                                REP</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="bl-podium-row pos-other">
-                                    <div class="flex items-center gap-space-xs min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-xs min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <span class="bl-circle-pos dark-pos">3</span>
-                                        <span class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">ZIMANX</span>
+                                        <span
+                                            class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate"
+                                            style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">ZIMANX</span>
                                     </div>
-                                    <div class="flex items-center gap-space-sm" style="display: flex; align-items: center; gap: 10px;">
+                                    <div class="flex items-center gap-space-sm"
+                                        style="display: flex; align-items: center; gap: 10px;">
                                         <span class="bl-podium-time gray-time">00:00.000</span>
-                                        <div class="flex flex-col text-right" style="display: flex; flex-direction: column; text-align: right;">
-                                            <span class="font-label-data text-[10px] text-primary font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb800;">+20 PTS</span>
-                                            <span class="font-label-data text-[10px] text-tertiary" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$100K REP</span>
+                                        <div class="flex flex-col text-right"
+                                            style="display: flex; flex-direction: column; text-align: right;">
+                                            <span class="font-label-data text-[10px] text-primary font-bold"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb800;">+20
+                                                PTS</span>
+                                            <span class="font-label-data text-[10px] text-tertiary"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$100K
+                                                REP</span>
                                         </div>
                                     </div>
                                 </div>
@@ -3472,54 +3848,87 @@
                         <!-- CHALLENGE 04 -->
                         <div class="bl-challenge-card">
                             <div class="bl-ch-header">
-                                <div class="flex items-center gap-space-xs min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                <div class="flex items-center gap-space-xs min-w-0"
+                                    style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                     <span class="bl-ch-num">#04</span>
                                     <span class="bl-ch-title">Campus Way</span>
                                 </div>
                                 <span class="bl-ch-tag circuito">CIRCUITO</span>
                             </div>
                             <div class="bl-restriction-row">
-                                <span class="material-symbols-outlined text-[16px] text-secondary" style="font-size: 16px; color: #ff5708;">directions_car</span>
-                                <span class="font-label-data text-label-data text-on-surface-variant" style="color: #94a3b8;">COCHE RESTRINGIDO:</span>
-                                <span class="font-label-data text-label-data text-primary font-bold truncate" style="color: #ffb800; font-weight: 700;">Cobalt SS (Stock)</span>
+                                <span class="material-symbols-outlined text-[16px] text-secondary"
+                                    style="font-size: 16px; color: #ff5708;">directions_car</span>
+                                <span class="font-label-data text-label-data text-on-surface-variant"
+                                    style="color: #94a3b8;">COCHE RESTRINGIDO:</span>
+                                <span class="font-label-data text-label-data text-primary font-bold truncate"
+                                    style="color: #ffb800; font-weight: 700;">Cobalt SS (Stock)</span>
                             </div>
-                            <div class="flex flex-col gap-space-xs" style="display: flex; flex-direction: column; gap: 6px;">
+                            <div class="flex flex-col gap-space-xs"
+                                style="display: flex; flex-direction: column; gap: 6px;">
                                 <div class="bl-podium-row pos-1">
-                                    <div class="flex items-center gap-space-xs min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-xs min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <span class="bl-circle-pos yellow-1">1</span>
-                                        <span class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">NEBULA</span>
+                                        <span
+                                            class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate"
+                                            style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">NEBULA</span>
                                     </div>
-                                    <div class="flex items-center gap-space-sm" style="display: flex; align-items: center; gap: 10px;">
+                                    <div class="flex items-center gap-space-sm"
+                                        style="display: flex; align-items: center; gap: 10px;">
                                         <span class="bl-podium-time cyan-best">01:43.670</span>
-                                        <div class="flex flex-col text-right" style="display: flex; flex-direction: column; text-align: right;">
-                                            <span class="font-label-data text-[10px] text-primary-container font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb800;">+100 PTS</span>
-                                            <span class="font-label-data text-[10px] text-tertiary" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$400K REP</span>
+                                        <div class="flex flex-col text-right"
+                                            style="display: flex; flex-direction: column; text-align: right;">
+                                            <span class="font-label-data text-[10px] text-primary-container font-bold"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb800;">+100
+                                                PTS</span>
+                                            <span class="font-label-data text-[10px] text-tertiary"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$400K
+                                                REP</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="bl-podium-row pos-other">
-                                    <div class="flex items-center gap-space-xs min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-xs min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <span class="bl-circle-pos dark-pos">2</span>
-                                        <span class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">ZIMANX</span>
+                                        <span
+                                            class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate"
+                                            style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">ZIMANX</span>
                                     </div>
-                                    <div class="flex items-center gap-space-sm" style="display: flex; align-items: center; gap: 10px;">
+                                    <div class="flex items-center gap-space-sm"
+                                        style="display: flex; align-items: center; gap: 10px;">
                                         <span class="bl-podium-time white-time">01:45.270</span>
-                                        <div class="flex flex-col text-right" style="display: flex; flex-direction: column; text-align: right;">
-                                            <span class="font-label-data text-[10px] text-secondary font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb59c;">+50 PTS</span>
-                                            <span class="font-label-data text-[10px] text-tertiary" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$250K REP</span>
+                                        <div class="flex flex-col text-right"
+                                            style="display: flex; flex-direction: column; text-align: right;">
+                                            <span class="font-label-data text-[10px] text-secondary font-bold"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb59c;">+50
+                                                PTS</span>
+                                            <span class="font-label-data text-[10px] text-tertiary"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$250K
+                                                REP</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="bl-podium-row pos-other">
-                                    <div class="flex items-center gap-space-xs min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-xs min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <span class="bl-circle-pos dark-pos">3</span>
-                                        <span class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">N6 XBOURNE</span>
+                                        <span
+                                            class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate"
+                                            style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">N6
+                                            XBOURNE</span>
                                     </div>
-                                    <div class="flex items-center gap-space-sm" style="display: flex; align-items: center; gap: 10px;">
+                                    <div class="flex items-center gap-space-sm"
+                                        style="display: flex; align-items: center; gap: 10px;">
                                         <span class="bl-podium-time white-time">01:45.700</span>
-                                        <div class="flex flex-col text-right" style="display: flex; flex-direction: column; text-align: right;">
-                                            <span class="font-label-data text-[10px] text-primary font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb800;">+20 PTS</span>
-                                            <span class="font-label-data text-[10px] text-tertiary" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$120K REP</span>
+                                        <div class="flex flex-col text-right"
+                                            style="display: flex; flex-direction: column; text-align: right;">
+                                            <span class="font-label-data text-[10px] text-primary font-bold"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb800;">+20
+                                                PTS</span>
+                                            <span class="font-label-data text-[10px] text-tertiary"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$120K
+                                                REP</span>
                                         </div>
                                     </div>
                                 </div>
@@ -3529,54 +3938,87 @@
                         <!-- CHALLENGE 05 -->
                         <div class="bl-challenge-card">
                             <div class="bl-ch-header">
-                                <div class="flex items-center gap-space-xs min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                <div class="flex items-center gap-space-xs min-w-0"
+                                    style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                     <span class="bl-ch-num">#05</span>
                                     <span class="bl-ch-title">Seaside &amp; Power</span>
                                 </div>
                                 <span class="bl-ch-tag sprint">SPRINT</span>
                             </div>
                             <div class="bl-restriction-row">
-                                <span class="material-symbols-outlined text-[16px] text-secondary" style="font-size: 16px; color: #ff5708;">directions_car</span>
-                                <span class="font-label-data text-label-data text-on-surface-variant" style="color: #94a3b8;">COCHE RESTRINGIDO:</span>
-                                <span class="font-label-data text-label-data text-primary font-bold truncate" style="color: #ffb800; font-weight: 700;">Subaru WRX (Junkman)</span>
+                                <span class="material-symbols-outlined text-[16px] text-secondary"
+                                    style="font-size: 16px; color: #ff5708;">directions_car</span>
+                                <span class="font-label-data text-label-data text-on-surface-variant"
+                                    style="color: #94a3b8;">COCHE RESTRINGIDO:</span>
+                                <span class="font-label-data text-label-data text-primary font-bold truncate"
+                                    style="color: #ffb800; font-weight: 700;">Subaru WRX (Junkman)</span>
                             </div>
-                            <div class="flex flex-col gap-space-xs" style="display: flex; flex-direction: column; gap: 6px;">
+                            <div class="flex flex-col gap-space-xs"
+                                style="display: flex; flex-direction: column; gap: 6px;">
                                 <div class="bl-podium-row pos-1">
-                                    <div class="flex items-center gap-space-xs min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-xs min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <span class="bl-circle-pos yellow-1">1</span>
-                                        <span class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">NEBULA</span>
+                                        <span
+                                            class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate"
+                                            style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">NEBULA</span>
                                     </div>
-                                    <div class="flex items-center gap-space-sm" style="display: flex; align-items: center; gap: 10px;">
+                                    <div class="flex items-center gap-space-sm"
+                                        style="display: flex; align-items: center; gap: 10px;">
                                         <span class="bl-podium-time cyan-best">01:25.190</span>
-                                        <div class="flex flex-col text-right" style="display: flex; flex-direction: column; text-align: right;">
-                                            <span class="font-label-data text-[10px] text-primary-container font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb800;">+100 PTS</span>
-                                            <span class="font-label-data text-[10px] text-tertiary" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$500K REP</span>
+                                        <div class="flex flex-col text-right"
+                                            style="display: flex; flex-direction: column; text-align: right;">
+                                            <span class="font-label-data text-[10px] text-primary-container font-bold"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb800;">+100
+                                                PTS</span>
+                                            <span class="font-label-data text-[10px] text-tertiary"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$500K
+                                                REP</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="bl-podium-row pos-other">
-                                    <div class="flex items-center gap-space-xs min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-xs min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <span class="bl-circle-pos dark-pos">2</span>
-                                        <span class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">N6 XBOURNE</span>
+                                        <span
+                                            class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate"
+                                            style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">N6
+                                            XBOURNE</span>
                                     </div>
-                                    <div class="flex items-center gap-space-sm" style="display: flex; align-items: center; gap: 10px;">
+                                    <div class="flex items-center gap-space-sm"
+                                        style="display: flex; align-items: center; gap: 10px;">
                                         <span class="bl-podium-time white-time">01:26.360</span>
-                                        <div class="flex flex-col text-right" style="display: flex; flex-direction: column; text-align: right;">
-                                            <span class="font-label-data text-[10px] text-secondary font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb59c;">+50 PTS</span>
-                                            <span class="font-label-data text-[10px] text-tertiary" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$300K REP</span>
+                                        <div class="flex flex-col text-right"
+                                            style="display: flex; flex-direction: column; text-align: right;">
+                                            <span class="font-label-data text-[10px] text-secondary font-bold"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb59c;">+50
+                                                PTS</span>
+                                            <span class="font-label-data text-[10px] text-tertiary"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$300K
+                                                REP</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="bl-podium-row pos-other">
-                                    <div class="flex items-center gap-space-xs min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-xs min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <span class="bl-circle-pos dark-pos">3</span>
-                                        <span class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">ZIMANX</span>
+                                        <span
+                                            class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate"
+                                            style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">ZIMANX</span>
                                     </div>
-                                    <div class="flex items-center gap-space-sm" style="display: flex; align-items: center; gap: 10px;">
+                                    <div class="flex items-center gap-space-sm"
+                                        style="display: flex; align-items: center; gap: 10px;">
                                         <span class="bl-podium-time white-time">01:27.100</span>
-                                        <div class="flex flex-col text-right" style="display: flex; flex-direction: column; text-align: right;">
-                                            <span class="font-label-data text-[10px] text-primary font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb800;">+20 PTS</span>
-                                            <span class="font-label-data text-[10px] text-tertiary" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$150K REP</span>
+                                        <div class="flex flex-col text-right"
+                                            style="display: flex; flex-direction: column; text-align: right;">
+                                            <span class="font-label-data text-[10px] text-primary font-bold"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb800;">+20
+                                                PTS</span>
+                                            <span class="font-label-data text-[10px] text-tertiary"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$150K
+                                                REP</span>
                                         </div>
                                     </div>
                                 </div>
@@ -3586,54 +4028,87 @@
                         <!-- CHALLENGE 06 -->
                         <div class="bl-challenge-card">
                             <div class="bl-ch-header">
-                                <div class="flex items-center gap-space-xs min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                <div class="flex items-center gap-space-xs min-w-0"
+                                    style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                     <span class="bl-ch-num">#06</span>
                                     <span class="bl-ch-title">Ironwood States</span>
                                 </div>
                                 <span class="bl-ch-tag circuito">CIRCUITO</span>
                             </div>
                             <div class="bl-restriction-row">
-                                <span class="material-symbols-outlined text-[16px] text-secondary" style="font-size: 16px; color: #ff5708;">directions_car</span>
-                                <span class="font-label-data text-label-data text-on-surface-variant" style="color: #94a3b8;">COCHE RESTRINGIDO:</span>
-                                <span class="font-label-data text-label-data text-primary font-bold truncate" style="color: #ffb800; font-weight: 700;">Ford Mustang GT (Stock)</span>
+                                <span class="material-symbols-outlined text-[16px] text-secondary"
+                                    style="font-size: 16px; color: #ff5708;">directions_car</span>
+                                <span class="font-label-data text-label-data text-on-surface-variant"
+                                    style="color: #94a3b8;">COCHE RESTRINGIDO:</span>
+                                <span class="font-label-data text-label-data text-primary font-bold truncate"
+                                    style="color: #ffb800; font-weight: 700;">Ford Mustang GT (Stock)</span>
                             </div>
-                            <div class="flex flex-col gap-space-xs" style="display: flex; flex-direction: column; gap: 6px;">
+                            <div class="flex flex-col gap-space-xs"
+                                style="display: flex; flex-direction: column; gap: 6px;">
                                 <div class="bl-podium-row pos-1">
-                                    <div class="flex items-center gap-space-xs min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-xs min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <span class="bl-circle-pos yellow-1">1</span>
-                                        <span class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">NEBULA</span>
+                                        <span
+                                            class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate"
+                                            style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">NEBULA</span>
                                     </div>
-                                    <div class="flex items-center gap-space-sm" style="display: flex; align-items: center; gap: 10px;">
+                                    <div class="flex items-center gap-space-sm"
+                                        style="display: flex; align-items: center; gap: 10px;">
                                         <span class="bl-podium-time cyan-best">00:59.830</span>
-                                        <div class="flex flex-col text-right" style="display: flex; flex-direction: column; text-align: right;">
-                                            <span class="font-label-data text-[10px] text-primary-container font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb800;">+100 PTS</span>
-                                            <span class="font-label-data text-[10px] text-tertiary" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$450K REP</span>
+                                        <div class="flex flex-col text-right"
+                                            style="display: flex; flex-direction: column; text-align: right;">
+                                            <span class="font-label-data text-[10px] text-primary-container font-bold"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb800;">+100
+                                                PTS</span>
+                                            <span class="font-label-data text-[10px] text-tertiary"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$450K
+                                                REP</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="bl-podium-row pos-other">
-                                    <div class="flex items-center gap-space-xs min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-xs min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <span class="bl-circle-pos dark-pos">2</span>
-                                        <span class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">ZIMANX</span>
+                                        <span
+                                            class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate"
+                                            style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">ZIMANX</span>
                                     </div>
-                                    <div class="flex items-center gap-space-sm" style="display: flex; align-items: center; gap: 10px;">
+                                    <div class="flex items-center gap-space-sm"
+                                        style="display: flex; align-items: center; gap: 10px;">
                                         <span class="bl-podium-time white-time">01:00.630</span>
-                                        <div class="flex flex-col text-right" style="display: flex; flex-direction: column; text-align: right;">
-                                            <span class="font-label-data text-[10px] text-secondary font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb59c;">+50 PTS</span>
-                                            <span class="font-label-data text-[10px] text-tertiary" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$270K REP</span>
+                                        <div class="flex flex-col text-right"
+                                            style="display: flex; flex-direction: column; text-align: right;">
+                                            <span class="font-label-data text-[10px] text-secondary font-bold"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb59c;">+50
+                                                PTS</span>
+                                            <span class="font-label-data text-[10px] text-tertiary"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$270K
+                                                REP</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="bl-podium-row pos-other">
-                                    <div class="flex items-center gap-space-xs min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                    <div class="flex items-center gap-space-xs min-w-0"
+                                        style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                                         <span class="bl-circle-pos dark-pos">3</span>
-                                        <span class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate" style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">N6 XBOURNE</span>
+                                        <span
+                                            class="font-headline-sm text-[13px] uppercase text-on-surface font-bold truncate"
+                                            style="font-family: 'Chivo', sans-serif; font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase;">N6
+                                            XBOURNE</span>
                                     </div>
-                                    <div class="flex items-center gap-space-sm" style="display: flex; align-items: center; gap: 10px;">
+                                    <div class="flex items-center gap-space-sm"
+                                        style="display: flex; align-items: center; gap: 10px;">
                                         <span class="bl-podium-time white-time">01:01.200</span>
-                                        <div class="flex flex-col text-right" style="display: flex; flex-direction: column; text-align: right;">
-                                            <span class="font-label-data text-[10px] text-primary font-bold" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb800;">+20 PTS</span>
-                                            <span class="font-label-data text-[10px] text-tertiary" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$130K REP</span>
+                                        <div class="flex flex-col text-right"
+                                            style="display: flex; flex-direction: column; text-align: right;">
+                                            <span class="font-label-data text-[10px] text-primary font-bold"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ffb800;">+20
+                                                PTS</span>
+                                            <span class="font-label-data text-[10px] text-tertiary"
+                                                style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38bdf8;">$130K
+                                                REP</span>
                                         </div>
                                     </div>
                                 </div>
@@ -3645,33 +4120,60 @@
                 <!-- 5. BANNER INFERIOR "PROTOCOLO DE HOMOLOGACIÓN OFICIAL" -->
                 <div class="bl-protocol-banner" id="inscripcion">
                     <!-- Verification Info -->
-                    <div class="flex flex-col gap-space-sm max-w-2xl" style="display: flex; flex-direction: column; gap: 8px; max-width: 768px;">
-                        <div class="flex items-center gap-space-xs text-primary-container" style="display: flex; align-items: center; gap: 8px;">
-                            <span class="material-symbols-outlined text-[24px]" style="font-size: 24px; color: #ffb800;">verified_user</span>
-                            <span class="font-headline-md text-headline-md uppercase text-on-surface font-black" style="font-family: 'Chivo', sans-serif; font-size: 20px; font-weight: 900; color: #ffffff; text-transform: uppercase;">PROTOCOLO DE HOMOLOGACIÓN OFICIAL</span>
+                    <div class="flex flex-col gap-space-sm max-w-2xl"
+                        style="display: flex; flex-direction: column; gap: 8px; max-width: 768px;">
+                        <div class="flex items-center gap-space-xs text-primary-container"
+                            style="display: flex; align-items: center; gap: 8px;">
+                            <span class="material-symbols-outlined text-[24px]"
+                                style="font-size: 24px; color: #ffb800;">verified_user</span>
+                            <span class="font-headline-md text-headline-md uppercase text-on-surface font-black"
+                                style="font-family: 'Chivo', sans-serif; font-size: 20px; font-weight: 900; color: #ffffff; text-transform: uppercase;">PROTOCOLO
+                                DE HOMOLOGACIÓN OFICIAL</span>
                         </div>
-                        <p class="font-body-md text-body-md text-on-surface-variant" style="font-family: 'Hanken Grotesk', sans-serif; font-size: 14px; line-height: 22px; color: #94a3b8; margin: 0;">
-                            Para validar cualquier tiempo de la Semana 1, es mandatario adjuntar la grabación en vídeo continua (mínimo 60 FPS con audio original del juego), el archivo de guardado <span class="font-label-data text-label-data text-primary-container font-mono" style="font-family: 'JetBrains Mono', monospace; color: #ffb800; font-weight: 700;">Speed.cd / SaveGame.sav</span> y cumplir con el hash limpio de speed.exe v1.3 sin modificaciones ilegales de handling.
+                        <p class="font-body-md text-body-md text-on-surface-variant"
+                            style="font-family: 'Hanken Grotesk', sans-serif; font-size: 14px; line-height: 22px; color: #94a3b8; margin: 0;">
+                            Para validar cualquier tiempo de la Semana 1, es mandatario adjuntar la grabación en vídeo
+                            continua (mínimo 60 FPS con audio original del juego), el archivo de guardado <span
+                                class="font-label-data text-label-data text-primary-container font-mono"
+                                style="font-family: 'JetBrains Mono', monospace; color: #ffb800; font-weight: 700;">Speed.cd
+                                / SaveGame.sav</span> y cumplir con el hash limpio de speed.exe v1.3 sin modificaciones
+                            ilegales de handling.
                         </p>
-                        <div class="flex flex-wrap items-center gap-space-md mt-space-xs font-label-data text-label-data text-on-surface-variant" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 6px; font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #94a3b8;">
-                            <span class="flex items-center gap-space-xs" style="display: flex; align-items: center; gap: 6px;"><span class="material-symbols-outlined text-[16px] text-tertiary" style="font-size: 16px; color: #38bdf8;">check_circle</span> Anti-Cheat Memory Scan</span>
-                            <span class="flex items-center gap-space-xs" style="display: flex; align-items: center; gap: 6px;"><span class="material-symbols-outlined text-[16px] text-tertiary" style="font-size: 16px; color: #38bdf8;">check_circle</span> V-Sync 60Hz Replay</span>
-                            <span class="flex items-center gap-space-xs" style="display: flex; align-items: center; gap: 6px;"><span class="material-symbols-outlined text-[16px] text-tertiary" style="font-size: 16px; color: #38bdf8;">check_circle</span> Split Telemetry Parser</span>
+                        <div class="flex flex-wrap items-center gap-space-md mt-space-xs font-label-data text-label-data text-on-surface-variant"
+                            style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 6px; font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #94a3b8;">
+                            <span class="flex items-center gap-space-xs"
+                                style="display: flex; align-items: center; gap: 6px;"><span
+                                    class="material-symbols-outlined text-[16px] text-tertiary"
+                                    style="font-size: 16px; color: #38bdf8;">check_circle</span> Anti-Cheat Memory
+                                Scan</span>
+                            <span class="flex items-center gap-space-xs"
+                                style="display: flex; align-items: center; gap: 6px;"><span
+                                    class="material-symbols-outlined text-[16px] text-tertiary"
+                                    style="font-size: 16px; color: #38bdf8;">check_circle</span> V-Sync 60Hz
+                                Replay</span>
+                            <span class="flex items-center gap-space-xs"
+                                style="display: flex; align-items: center; gap: 6px;"><span
+                                    class="material-symbols-outlined text-[16px] text-tertiary"
+                                    style="font-size: 16px; color: #38bdf8;">check_circle</span> Split Telemetry
+                                Parser</span>
                         </div>
                     </div>
                     <!-- Submission CTAs -->
-                    <div class="flex flex-col sm:flex-row lg:flex-col gap-space-sm w-full lg:w-auto shrink-0" style="display: flex; flex-direction: column; gap: 8px; flex-shrink: 0;">
+                    <div class="flex flex-col sm:flex-row lg:flex-col gap-space-sm w-full lg:w-auto shrink-0"
+                        style="display: flex; flex-direction: column; gap: 8px; flex-shrink: 0;">
                         <button type="button" class="bl-btn-submit-time" onclick="switchView('submit')">
-                            <span class="material-symbols-outlined text-[20px]" style="font-size: 20px;">upload_file</span>
+                            <span class="material-symbols-outlined text-[20px]"
+                                style="font-size: 20px;">upload_file</span>
                             <span>SUBIR TIEMPO (.SAV / VIDEO)</span>
                         </button>
                         <button type="button" class="bl-btn-download-savegame" onclick="switchView('download')">
-                            <span class="material-symbols-outlined text-[18px] text-primary-container" style="font-size: 18px; color: #ffb800;">download</span>
+                            <span class="material-symbols-outlined text-[18px] text-primary-container"
+                                style="font-size: 18px; color: #ffb800;">download</span>
                             <span>DESCARGAR SAVEGAME BASE OFICIAL</span>
                         </button>
+                    </div>
                 </div>
-            </div>
-            <!-- Fin Sección Blacklist -->
+                <!-- Fin Sección Blacklist -->
         </section>
 
         <!-- SECCIÓN: CLASIFICACIÓN GENERAL DEL CAMPEONATO (TABLA OFICIAL TOP 15) -->
@@ -6883,14 +7385,17 @@
             <div class="powered-by-section">
                 <div class="powered-by-header">
                     <h3 class="powered-by-title" data-i18n="footer_powered_by">POWERED BY</h3>
-                    <p class="powered-by-subtitle" data-i18n="footer_powered_sub">Infrastructure and services behind nfsmwranks.online</p>
+                    <p class="powered-by-subtitle" data-i18n="footer_powered_sub">Infrastructure and services behind
+                        nfsmwranks.online</p>
                 </div>
                 <div class="powered-by-grid">
                     <!-- 1. GITHUB.IO -->
-                    <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="powered-by-card" title="GitHub Pages / GitHub.io (Pages & CDN)">
+                    <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="powered-by-card"
+                        title="GitHub Pages / GitHub.io (Pages & CDN)">
                         <div class="powered-by-icon-box">
                             <svg viewBox="0 0 24 24" width="34" height="34" fill="#FFFFFF" aria-hidden="true">
-                                <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/>
+                                <path
+                                    d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z" />
                             </svg>
                         </div>
                         <span class="powered-by-name">GITHUB.IO</span>
@@ -6898,28 +7403,35 @@
                     </a>
 
                     <!-- 2. FIREBASE -->
-                    <a href="https://firebase.google.com" target="_blank" rel="noopener noreferrer" class="powered-by-card" title="Google Firebase (Realtime Database & Backend)">
+                    <a href="https://firebase.google.com" target="_blank" rel="noopener noreferrer"
+                        class="powered-by-card" title="Google Firebase (Realtime Database & Backend)">
                         <div class="powered-by-icon-box">
-                            <img src="../assets/img/firebase-logo.png" alt="Firebase Logo" class="powered-by-img firebase-logo" width="26" height="38" loading="lazy" decoding="async">
+                            <img src="../assets/img/firebase-logo.png" alt="Firebase Logo"
+                                class="powered-by-img firebase-logo" width="26" height="38" loading="lazy"
+                                decoding="async">
                         </div>
                         <span class="powered-by-name">FIREBASE</span>
                         <span class="powered-by-role">REALTIME DB</span>
                     </a>
 
                     <!-- 3. SPACESHIP -->
-                    <a href="https://www.spaceship.com" target="_blank" rel="noopener noreferrer" class="powered-by-card" title="Spaceship (Domain & DNS)">
+                    <a href="https://www.spaceship.com" target="_blank" rel="noopener noreferrer"
+                        class="powered-by-card" title="Spaceship (Domain & DNS)">
                         <div class="powered-by-icon-box">
-                            <img src="../assets/img/spaceship-logo.png" alt="Spaceship Logo" class="powered-by-img" width="30" height="30" loading="lazy" decoding="async">
+                            <img src="../assets/img/spaceship-logo.png" alt="Spaceship Logo" class="powered-by-img"
+                                width="30" height="30" loading="lazy" decoding="async">
                         </div>
                         <span class="powered-by-name">SPACESHIP</span>
                         <span class="powered-by-role">DOMAIN &amp; DNS</span>
                     </a>
 
                     <!-- 4. DISCORD -->
-                    <a href="https://discord.gg/pgP45wSN8K" target="_blank" rel="noopener noreferrer" class="powered-by-card" title="Discord (Official Community Hub)">
+                    <a href="https://discord.gg/pgP45wSN8K" target="_blank" rel="noopener noreferrer"
+                        class="powered-by-card" title="Discord (Official Community Hub)">
                         <div class="powered-by-icon-box">
                             <svg viewBox="0 0 24 24" width="34" height="34" fill="#5865F2" aria-hidden="true">
-                                <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                                <path
+                                    d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
                             </svg>
                         </div>
                         <span class="powered-by-name">DISCORD</span>

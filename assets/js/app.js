@@ -4913,6 +4913,9 @@ async function loadRemoteChampionshipWeeksData() {
                             if (typeof syncBlacklistWithRotationsAndStandings === 'function') {
                                 syncBlacklistWithRotationsAndStandings();
                             }
+                            const activeW = (typeof currentChampionshipWeek !== 'undefined') ? currentChampionshipWeek : 1;
+                            if (typeof renderChampionshipGroups === 'function') renderChampionshipGroups(activeW);
+                            if (typeof renderChampionshipChallenges === 'function') renderChampionshipChallenges(activeW);
                         }
                     }
                 });
@@ -5132,53 +5135,72 @@ function switchChampionshipWeek(weekNumber, btn) {
 }
 
 function renderChampionshipGroups(weekNumber) {
-    const container = document.getElementById('champ-groups-grid');
-    const datesBadge = document.getElementById('champ-week-dates-badge');
+    const container = document.getElementById('bl-groups-grid') || 
+                      document.querySelector('#view-blacklist .bl-groups-grid') || 
+                      document.querySelector('.bl-groups-grid') || 
+                      document.getElementById('champ-groups-grid');
+    const datesBadge = document.getElementById('bl-groups-dates-badge') || 
+                       document.getElementById('champ-week-dates-badge');
     if (!container) return;
 
     if (typeof CHAMPIONSHIP_WEEKS_DATA === 'undefined') return;
-    const weekData = CHAMPIONSHIP_WEEKS_DATA[weekNumber] || CHAMPIONSHIP_WEEKS_DATA[1];
-    if (!weekData) return;
+    const wNum = weekNumber || currentChampionshipWeek || 1;
+    const weekData = CHAMPIONSHIP_WEEKS_DATA[wNum] || CHAMPIONSHIP_WEEKS_DATA[String(wNum)] || CHAMPIONSHIP_WEEKS_DATA[1];
+    if (!weekData || !weekData.groups || !Array.isArray(weekData.groups)) return;
 
     if (datesBadge) {
-        datesBadge.textContent = weekData.dates ? `VENTANA: ${weekData.dates}` : `VENTANA: SEMANA ${weekNumber}`;
+        datesBadge.textContent = weekData.dates ? `VENTANA: ${weekData.dates.toUpperCase()}` : `VENTANA: SEMANA ${wNum}`;
     }
 
     container.innerHTML = '';
 
-    const numGroups = (weekData.groups && weekData.groups.length) ? weekData.groups.length : 4;
+    const numGroups = weekData.groups.length || 4;
     weekData.groups.forEach((grp, grpIdx) => {
         const groupCard = document.createElement('div');
-        groupCard.className = 'stitch-group-card';
+        groupCard.className = 'bl-group-card';
 
-        // Determinar indicador y tag según grupo
+        // Determinar indicador, tag y nombres
         const gNameLower = (grp.name || '').toLowerCase();
         let indicatorClass = 'alpha';
         let defaultTag = 'TIER SUPREME';
-        let cleanName = 'GRUPO ALPHA';
+        let defaultName = 'GRUPO ALPHA';
         if (grpIdx === 1 || gNameLower.includes('beta')) {
             indicatorClass = 'beta';
             defaultTag = 'TIER HIGH';
-            cleanName = 'GRUPO BETA';
-        } else if (grpIdx === 2 || gNameLower.includes('gamma') || gNameLower.includes('gama')) {
+            defaultName = 'GRUPO BETA';
+        } else if (grpIdx === 2 || gNameLower.includes('gamma') || gNameLower.includes('gama') || gNameLower.includes('fuerza')) {
             indicatorClass = 'gamma';
             defaultTag = 'TIER MID-HIGH';
-            cleanName = 'GRUPO GAMMA';
+            defaultName = 'GRUPO GAMMA';
         } else if (grpIdx >= 3 || gNameLower.includes('delta')) {
             indicatorClass = 'delta';
             defaultTag = 'TIER COMPETICIÓN';
-            cleanName = 'GRUPO DELTA';
+            defaultName = 'GRUPO DELTA';
         }
 
-        const cleanTag = (grp.tag || defaultTag).replace(/[🔥⚡⚔️👑🏁🛡️]/g, '').trim();
+        const cleanTag = (grp.tag || defaultTag).replace(/[🔥⚡⚔️👑🏁🛡️\[\]]/g, '').trim();
 
-        // Incluir pilotos base del grupo y cualquier piloto extendido (> 15) asignado por rotación
-        const groupPilots = [...grp.pilots];
-        blacklistDrivers.forEach(d => {
-            if (d.rank > 15 && (d.rank - 1) % numGroups === grpIdx && !groupPilots.includes(d.rank)) {
-                groupPilots.push(d.rank);
-            }
-        });
+        // Formato de nombre del grupo preservando subtítulo si existe
+        let rawName = grp.name || defaultName;
+        let titleHtml = '';
+        if (rawName.includes('(')) {
+            const parts = rawName.split('(');
+            const mainName = parts[0].trim().toUpperCase();
+            const subName = ('(' + parts.slice(1).join('(')).trim().toUpperCase();
+            titleHtml = `<span class="bl-group-name">${escapeHtml(mainName)} <span style="font-size: 11px; color: #94a3b8; font-weight: 700; margin-left: 4px;">${escapeHtml(subName)}</span></span>`;
+        } else {
+            titleHtml = `<span class="bl-group-name">${escapeHtml(rawName.toUpperCase())}</span>`;
+        }
+
+        // Obtener pilotos del grupo
+        const groupPilots = Array.isArray(grp.pilots) ? [...grp.pilots] : [];
+        if (Array.isArray(blacklistDrivers)) {
+            blacklistDrivers.forEach(d => {
+                if (d.rank > 15 && (d.rank - 1) % numGroups === grpIdx && !groupPilots.includes(d.rank)) {
+                    groupPilots.push(d.rank);
+                }
+            });
+        }
 
         let pilotsHtml = '';
         groupPilots.forEach((pilotRank, pIdx) => {
@@ -5195,84 +5217,123 @@ function renderChampionshipGroups(weekNumber) {
                 }
 
                 pilotsHtml += `
-                    <div class="stitch-pilot-item slot-open" onclick="switchView('championship-register')">
-                        <div style="display:flex; align-items:center; gap:10px; min-width:0; flex:1;">
-                            <div class="stitch-rank-sq open-slot">${slotNum}</div>
-                            <div style="display:flex; flex-direction:column; min-width:0; line-height:1.2;">
-                                <span style="font-family:var(--font-racing); font-size:12.5px; font-weight:800; text-transform:uppercase; color:#ffffff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">PLAZA DISPONIBLE #${slotNum}</span>
-                                <span style="font-family:var(--font-mono); font-size:10.5px; color:#f59e0b; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Esperando Piloto</span>
+                    <div class="bl-pilot-item slot-open" onclick="switchView('championship-register')">
+                        <div class="flex items-center gap-space-sm min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                            <div class="bl-rank-box open-slot">${slotNum}</div>
+                            <div class="flex flex-col min-w-0" style="display: flex; flex-direction: column; min-width: 0;">
+                                <span class="font-headline-sm text-[14px] leading-tight uppercase text-on-surface-variant font-extrabold truncate"
+                                    style="font-family: 'Chivo', sans-serif; font-size: 13.5px; font-weight: 800; color: #94a3b8; text-transform: uppercase;">Plaza Disponible #${slotNum}</span>
+                                <span class="font-label-data text-[11px] text-primary-container truncate font-bold"
+                                    style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #ffb800;">Esperando Piloto</span>
                             </div>
                         </div>
-                        <div style="display:flex; flex-direction:column; align-items:flex-end; text-align:right; flex-shrink:0; line-height:1.2;">
-                            <span style="font-family:var(--font-mono); font-size:11.5px; color:#64748b; font-weight:800;">OPEN</span>
-                            <span style="font-family:var(--font-mono); font-size:10.5px; color:#64748b; font-weight:800;">$0</span>
+                        <div class="flex flex-col text-right shrink-0" style="display: flex; flex-direction: column; text-align: right; flex-shrink: 0;">
+                            <span class="font-label-data text-label-data text-on-surface-variant"
+                                style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #94a3b8;">OPEN</span>
+                            <span class="font-label-data text-[11px] text-on-surface-variant font-bold"
+                                style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #64748b;">$0</span>
                         </div>
                     </div>
                 `;
                 return;
             }
 
-            const driver = blacklistDrivers.find(d => 
-                d.rank === pilotRank || 
-                d.rank === parseInt(pilotRank, 10) || 
-                (d.alias && d.alias.toLowerCase() === String(pilotRank).toLowerCase()) || 
-                (d.name && d.name.toLowerCase() === String(pilotRank).toLowerCase())
-            ) || {
-                rank: typeof pilotRank === 'number' ? pilotRank : (groupPilots.indexOf(pilotRank) + 1),
-                name: `Piloto ${pilotRank}`,
-                alias: `${pilotRank}`,
-                ride: 'BMW M3 GTR',
-                rep: 0
-            };
+            // Buscar piloto en blacklistDrivers o en registeredParticipants
+            let driver = findBlacklistDriver(pilotRank);
+            if (!driver && typeof registeredParticipants !== 'undefined' && Array.isArray(registeredParticipants)) {
+                const rawMatch = registeredParticipants.find(p => 
+                    (p.rank && p.rank === parseInt(pilotRank, 10)) ||
+                    (p.alias && p.alias.toLowerCase() === String(pilotRank).toLowerCase()) ||
+                    (p.name && p.name.toLowerCase() === String(pilotRank).toLowerCase())
+                );
+                if (rawMatch) {
+                    driver = {
+                        rank: rawMatch.rank || (typeof pilotRank === 'number' ? pilotRank : (grpIdx * 3 + pIdx + 1)),
+                        name: rawMatch.name,
+                        alias: rawMatch.alias || rawMatch.name,
+                        ride: rawMatch.ride || 'Porsche Carrera GT',
+                        rep: rawMatch.rep || 0,
+                        victories: rawMatch.victories || { p1: 0, p2: 0, p3: 0, p4: 0 },
+                        bestTimes: rawMatch.bestTimes || { first: 0, second: 0, third: 0 }
+                    };
+                }
+            }
 
-            const isSelected = driver.rank === currentSelectedBlacklistRank;
+            if (!driver) {
+                driver = {
+                    rank: typeof pilotRank === 'number' ? pilotRank : (grpIdx * 3 + pIdx + 1),
+                    name: typeof pilotRank === 'string' ? pilotRank : `Piloto #${pilotRank}`,
+                    alias: typeof pilotRank === 'string' ? pilotRank : `Piloto #${pilotRank}`,
+                    ride: 'BMW M3 GTR',
+                    rep: 0,
+                    victories: { p1: 0, p2: 0, p3: 0, p4: 0 },
+                    bestTimes: { first: 0, second: 0, third: 0 }
+                };
+            }
+
+            const isSelected = (typeof currentSelectedBlacklistRank !== 'undefined') && (driver.rank === currentSelectedBlacklistRank);
             const pts = calculateDriverPoints(driver);
 
-            // Resaltado de rangos según Stitch:
-            // Rank 1: Gold (#eab308)
-            // Rank 5 (Avenger líder): Naranja brillante (#ea580c)
-            // Otros rangos: Slate (#1e293b)
-            let rankClass = 'normal';
-            if (driver.rank === 1) rankClass = 'gold';
-            else if (driver.rank === 5) rankClass = 'orange-leader';
+            let rankBoxClass = 'neutral-rank';
+            if (driver.rank === 1) rankBoxClass = 'yellow-1';
+            else if (driver.rank === 5) rankBoxClass = 'orange-5';
 
-            // Nombre estilizado: Avenger en dorado brillante
-            const isAvenger = driver.rank === 5 || (driver.alias && driver.alias.toLowerCase().includes('avenger'));
-            const pilotNameHtml = isAvenger
-                ? `<span style="font-family:var(--font-racing); font-size:12.5px; font-weight:900; text-transform:uppercase; color:#f59e0b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">SRTXAVENGER™</span>`
-                : `<span class="notranslate" translate="no" style="font-family:var(--font-racing); font-size:12.5px; font-weight:800; text-transform:uppercase; color:#ffffff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${driver.name} <span style="color:#94a3b8; font-weight:700;">"${driver.alias}"</span></span>`;
+            const isAvenger = (driver.rank === 5) || (driver.alias && driver.alias.toLowerCase().includes('avenger'));
+            const nameColor = isAvenger ? '#ffb800' : '#ffffff';
 
-            const ptsDisplay = pts > 0 ? `${pts.toLocaleString()} PTS` : '0 PTS';
-            const ptsColor = pts > 0 ? '#f59e0b' : '#64748b';
-            const repDisplay = (driver.rep && driver.rep > 0) ? `$${driver.rep.toLocaleString('de-DE')}` : '$0';
-            const repColor = (driver.rep && driver.rep > 0) ? '#38bdf8' : '#64748b';
+            let pilotNameText = '';
+            if (isAvenger) {
+                pilotNameText = 'SRTXAVENGER™';
+            } else if (driver.name && driver.alias && driver.name.toLowerCase() !== driver.alias.toLowerCase()) {
+                pilotNameText = `${escapeHtml(driver.name)} "${escapeHtml(driver.alias)}"`;
+            } else {
+                pilotNameText = escapeHtml(driver.alias || driver.name || `Piloto #${driver.rank}`);
+            }
+
+            const ptsDisplay = pts > 0 ? `${pts.toLocaleString('es-ES')} PTS` : '0 PTS';
+            const ptsColor = pts > 0 ? '#ffb800' : '#94a3b8';
+            const repVal = (driver.rep && driver.rep > 0) ? driver.rep : 0;
+            const repDisplay = repVal > 0 ? `$${repVal.toLocaleString('de-DE')}` : '$0';
+            const repColor = repVal > 0 ? '#38bdf8' : '#64748b';
 
             pilotsHtml += `
-                <div class="stitch-pilot-item ${isSelected ? 'selected' : ''}" onclick="selectBlacklistPilot(${driver.rank})">
-                    <div style="display:flex; align-items:center; gap:10px; min-width:0; flex:1;">
-                        <div class="stitch-rank-sq ${rankClass}">${driver.rank}</div>
-                        <div style="display:flex; flex-direction:column; min-width:0; line-height:1.2;">
-                            ${pilotNameHtml}
-                            <span style="font-family:var(--font-mono); font-size:10.5px; color:#94a3b8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${driver.ride}</span>
+                <div class="bl-pilot-item ${isSelected ? 'selected-highlight' : ''}" onclick="selectBlacklistPilot(${driver.rank})">
+                    <div class="flex items-center gap-space-sm min-w-0" style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                        <div class="bl-rank-box ${rankBoxClass}">${driver.rank}</div>
+                        <div class="flex flex-col min-w-0" style="display: flex; flex-direction: column; min-width: 0;">
+                            <span class="font-headline-sm text-[14px] leading-tight uppercase font-extrabold truncate"
+                                style="font-family: 'Chivo', sans-serif; font-size: 13.5px; font-weight: 800; color: ${nameColor}; text-transform: uppercase;">
+                                ${pilotNameText}
+                            </span>
+                            <span class="font-label-data text-[11px] text-on-surface-variant truncate"
+                                style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8;">
+                                ${escapeHtml(driver.ride || 'BMW M3 GTR')}
+                            </span>
                         </div>
                     </div>
-                    <div style="display:flex; flex-direction:column; align-items:flex-end; text-align:right; flex-shrink:0; line-height:1.2;">
-                        <span style="font-family:var(--font-mono); font-size:11.5px; color:${ptsColor}; font-weight:800;">${ptsDisplay}</span>
-                        <span style="font-family:var(--font-mono); font-size:10.5px; color:${repColor}; font-weight:800;">${repDisplay}</span>
+                    <div class="flex flex-col text-right shrink-0" style="display: flex; flex-direction: column; text-align: right; flex-shrink: 0;">
+                        <span class="font-label-data text-label-data font-bold"
+                            style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: ${ptsColor};">
+                            ${ptsDisplay}
+                        </span>
+                        <span class="font-label-data text-[11px] font-bold"
+                            style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: ${repColor};">
+                            ${repDisplay}
+                        </span>
                     </div>
                 </div>
             `;
         });
 
         groupCard.innerHTML = `
-            <div class="stitch-group-header-row">
-                <div class="stitch-group-title">
-                    <span class="stitch-group-indicator ${indicatorClass}">■</span>
-                    <span class="stitch-group-name-text">${cleanName}</span>
+            <div class="bl-group-header">
+                <div class="bl-group-title-wrap">
+                    <span class="bl-group-sq-indicator ${indicatorClass}"></span>
+                    ${titleHtml}
                 </div>
-                <span class="stitch-group-tier-badge ${indicatorClass}">${cleanTag}</span>
+                <span class="bl-tier-badge ${indicatorClass}">${escapeHtml(cleanTag)}</span>
             </div>
-            <div class="stitch-group-pilots-list">
+            <div class="flex flex-col gap-space-xs" style="display: flex; flex-direction: column; gap: 6px;">
                 ${pilotsHtml}
             </div>
         `;
@@ -6761,6 +6822,10 @@ function loadChampionshipParticipants() {
 
     mergeRegisteredParticipantsWithBlacklist();
     renderRegisteredPilotsUI();
+    if (typeof renderChampionshipGroups === 'function') {
+        const activeW = (typeof currentChampionshipWeek !== 'undefined') ? currentChampionshipWeek : 1;
+        renderChampionshipGroups(activeW);
+    }
 
     // 2. Sincronización con Firebase RTDB (REST API nativa)
     fetch(CHAMPIONSHIP_FIREBASE_URL)
@@ -6793,6 +6858,10 @@ function loadChampionshipParticipants() {
                     } catch (e) {}
                     mergeRegisteredParticipantsWithBlacklist();
                     renderRegisteredPilotsUI();
+                    if (typeof renderChampionshipGroups === 'function') {
+                        const activeW = (typeof currentChampionshipWeek !== 'undefined') ? currentChampionshipWeek : 1;
+                        renderChampionshipGroups(activeW);
+                    }
                 }
             }
         })
