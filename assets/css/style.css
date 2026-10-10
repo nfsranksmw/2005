@@ -20759,3 +20759,56 @@ header {
     transform: translateZ(0);
 }
 
+
+
+/* ==========================================================================
+   NAVBAR UI/UX: UNIFORM HEIGHT, ALIGNMENT & COMPACT FLOATING DROPDOWNS
+   ========================================================================== */
+.dropdown-group {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Invisible bridge preventing hover drop during the 6px gap */
+.dropdown-group .dropdown-panel::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 0;
+    right: 0;
+    height: 10px;
+}
+
+.dropdown-chevron {
+    display: inline-block;
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dropdown-group[data-open="true"] .dropdown-chevron {
+    transform: rotate(180deg);
+}
+
+.dropdown-panel {
+    background: rgba(13, 16, 23, 0.98) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.85) !important;
+    border-radius: 0.5rem !important;
+}
+
+/* Ensure active navbar links/buttons have compact height, integrated dark background, and never deform the navbar */
+#desktop-nav .nav-link,
+#desktop-nav .nav-dropdown-trigger {
+    height: 32px;
+    box-sizing: border-box;
+}
+
+#desktop-nav .nav-link.active,
+#desktop-nav .nav-dropdown-trigger.active {
+    background: #151922 !important;
+    color: #ffdca1 !important;
+    border: 1px solid rgba(255, 184, 0, 0.3) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+}

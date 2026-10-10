@@ -2093,17 +2093,20 @@ function getDefaultChampionshipGroups(weekNum = 1) {
         2: [
             { name: "Grupo Alfa (Velocidad Pura)", pilots: [1, 5, 8], tag: "🔥 TIER SUPREME" },
             { name: "Grupo Beta (Duelo Callejero)", pilots: [10, 6, 9], tag: "⚡ TIER HIGH" },
-            { name: "Grupo Gama (Fuerza & Asfalto)", pilots: [3, 4, 7], tag: "⚔️ TIER MID-HIGH" }
+            { name: "Grupo Gama (Fuerza & Asfalto)", pilots: [3, 4, 7], tag: "⚔️ TIER MID-HIGH" },
+            { name: "Grupo Delta (Competición & Desafío)", pilots: [2, "open_11", "open_12"], tag: "🏁 TIER COMPETICIÓN" }
         ],
         3: [
             { name: "Grupo Alfa (Cruce de Titanes)", pilots: [1, 6, 7], tag: "🔥 TIER SUPREME" },
             { name: "Grupo Beta (Duelo de Élite)", pilots: [10, 4, 8], tag: "⚡ TIER HIGH" },
-            { name: "Grupo Gama (Guerra de Caballos)", pilots: [3, 5, 9], tag: "⚔️ TIER MID-HIGH" }
+            { name: "Grupo Gama (Guerra de Caballos)", pilots: [3, 5, 9], tag: "⚔️ TIER MID-HIGH" },
+            { name: "Grupo Delta (Competición & Ascenso)", pilots: [2, "open_11", "open_12"], tag: "🏁 TIER COMPETICIÓN" }
         ],
         4: [
             { name: "Grupo Alfa (Gran Final • Corona)", pilots: [1, 4, 9], tag: "👑 CHAMPIONSHIP" },
             { name: "Grupo Beta (Duelo por el Podio)", pilots: [10, 5, 7], tag: "🥈 PODIUM RACE" },
-            { name: "Grupo Gama (Batalla de Honor)", pilots: [3, 6, 8], tag: "⚔️ TOP HONORS" }
+            { name: "Grupo Gama (Batalla de Honor)", pilots: [3, 6, 8], tag: "⚔️ TOP HONORS" },
+            { name: "Grupo Delta (Copa de Honor / Repechaje)", pilots: [2, "open_11", "open_12"], tag: "🏁 TIER COMPETICIÓN" }
         ]
     };
     return defaultRotations[w] ? JSON.parse(JSON.stringify(defaultRotations[w])) : JSON.parse(JSON.stringify(defaultRotations[1]));

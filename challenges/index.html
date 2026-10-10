@@ -2955,8 +2955,9 @@
                         </div>
                         <div class="flex flex-col min-w-0" style="display: flex; flex-direction: column; min-width: 0;">
                             <span class="font-label-hud text-label-hud uppercase text-on-surface-variant tracking-wider"
+                                id="bl-kpi-rep-title"
                                 style="font-family: 'Chivo', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 0.14em; color: #94a3b8; text-transform: uppercase;">TOTAL
-                                REP POT (SEM. 1)</span>
+                                REP POT (SEM. 2)</span>
                             <span class="font-label-timer-lg text-label-timer-lg text-tertiary font-bold tracking-tight"
                                 style="font-family: 'JetBrains Mono', monospace; font-size: 24px; font-weight: 700; color: #38bdf8; letter-spacing: -0.04em;">$9.680.000</span>
                             <span class="font-label-data text-label-data text-secondary uppercase"
@@ -2977,8 +2978,9 @@
                                 style="font-family: 'Chivo', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 0.14em; color: #94a3b8; text-transform: uppercase;">CHAMPIONSHIP
                                 WEEK</span>
                             <span class="font-headline-sm text-headline-sm uppercase text-on-surface font-extrabold"
+                                id="bl-kpi-champ-week"
                                 style="font-family: 'Chivo', sans-serif; font-size: 18px; font-weight: 800; color: #ffffff; text-transform: uppercase;">SEMANA
-                                1 / 4</span>
+                                2 / 4</span>
                             <span class="font-label-data text-label-data text-on-surface-variant"
                                 style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #94a3b8;">8
                                 Rutas Semanales Activas</span>
@@ -3029,31 +3031,38 @@
                         </div>
                         <div class="flex flex-wrap items-center gap-space-xs"
                             style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px;">
-                            <!-- Week 1 - Active -->
+                            <!-- Week 1 - Finalizada -->
                             <button type="button"
-                                class="bl-week-btn active px-space-md py-space-xs rounded-lg bg-surface-container-high text-primary-container font-label-hud text-label-hud uppercase tracking-wider flex items-center gap-space-xs">
-                                <span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"
-                                    style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #ffb800;"></span>
+                                class="bl-week-btn champ-pill px-space-md py-space-xs rounded-lg bg-surface-container-low text-on-surface-variant font-label-hud text-label-hud uppercase tracking-wider flex items-center gap-space-xs cursor-pointer hover:bg-surface-container-high hover:text-on-surface transition-all"
+                                data-week="1"
+                                onclick="switchChampionshipWeek(1, this)">
+                                <span class="material-symbols-outlined text-[14px] text-primary"
+                                    style="font-size: 14px; color: #ffb800;">check_circle</span>
                                 <span>SEMANA 1 (03 OCT - 09 OCT)</span>
                             </button>
-                            <!-- Week 2 - Locked -->
+                            <!-- Week 2 - Active & En Curso -->
                             <button type="button"
-                                class="bl-week-btn px-space-md py-space-xs rounded-lg bg-surface-container-low text-on-surface-variant font-label-hud text-label-hud uppercase tracking-wider flex items-center gap-space-xs"
-                                style="color: #64748b; cursor: not-allowed;">
-                                <span class="material-symbols-outlined text-[14px]" style="font-size: 14px;">lock</span>
-                                <span>SEMANA 2 (10 OCT - 16 OCT)</span>
+                                class="bl-week-btn champ-pill active px-space-md py-space-xs rounded-lg bg-surface-container-high text-primary-container font-label-hud text-label-hud uppercase tracking-wider flex items-center gap-space-xs cursor-pointer shadow-md transition-all"
+                                data-week="2"
+                                onclick="switchChampionshipWeek(2, this)">
+                                <span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"
+                                    style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #ffb800;"></span>
+                                <span>SEMANA 2 (10 OCT - 16 OCT • EN CURSO)</span>
                             </button>
-                            <!-- Week 3 - Locked -->
+                            <!-- Week 3 - Unlocked -->
                             <button type="button"
-                                class="bl-week-btn px-space-md py-space-xs rounded-lg bg-surface-container-low text-on-surface-variant font-label-hud text-label-hud uppercase tracking-wider flex items-center gap-space-xs"
-                                style="color: #64748b; cursor: not-allowed;">
-                                <span class="material-symbols-outlined text-[14px]" style="font-size: 14px;">lock</span>
+                                class="bl-week-btn champ-pill px-space-md py-space-xs rounded-lg bg-surface-container-low text-on-surface-variant font-label-hud text-label-hud uppercase tracking-wider flex items-center gap-space-xs cursor-pointer hover:bg-surface-container-high hover:text-on-surface transition-all"
+                                data-week="3"
+                                onclick="switchChampionshipWeek(3, this)">
+                                <span class="material-symbols-outlined text-[14px] text-tertiary"
+                                    style="font-size: 14px; color: #38bdf8;">calendar_month</span>
                                 <span>SEMANA 3 (17 OCT - 23 OCT)</span>
                             </button>
-                            <!-- Week 4 - Grand Final -->
+                            <!-- Week 4 - Grand Final - Unlocked -->
                             <button type="button"
-                                class="bl-week-btn px-space-md py-space-xs rounded-lg bg-surface-container-low text-secondary font-label-hud text-label-hud uppercase tracking-wider flex items-center gap-space-xs"
-                                style="color: #ffb59c; cursor: not-allowed;">
+                                class="bl-week-btn champ-pill px-space-md py-space-xs rounded-lg bg-surface-container-low text-secondary font-label-hud text-label-hud uppercase tracking-wider flex items-center gap-space-xs cursor-pointer hover:bg-surface-container-high hover:text-on-surface transition-all"
+                                data-week="4"
+                                onclick="switchChampionshipWeek(4, this)">
                                 <span class="material-symbols-outlined text-[14px] text-primary-container"
                                     style="font-size: 14px; color: #ffb800;">stars</span>
                                 <span>SEMANA 4 (24-31 OCT • GRAN FINAL RAZOR #1)</span>
@@ -3068,7 +3077,7 @@
                             class="bl-subtab-btn active px-space-md py-space-sm bg-surface-container-high text-primary-container font-headline-sm text-headline-sm uppercase tracking-wide rounded-lg flex items-center gap-space-xs shadow-md"
                             onclick="switchView('blacklist')">
                             <span class="material-symbols-outlined text-[18px]" style="font-size: 18px;">hub</span>
-                            <span>GRUPOS &amp; DESAFÍOS (SEMANA 1)</span>
+                            <span id="bl-subtab-current-week-label">GRUPOS &amp; DESAFÍOS (SEMANA 2)</span>
                         </button>
                         <button type="button"
                             class="bl-subtab-btn px-space-md py-space-sm text-on-surface-variant hover:text-on-surface font-headline-sm text-headline-sm uppercase tracking-wide rounded-lg flex items-center gap-space-xs"
@@ -3126,7 +3135,8 @@
                             style="display: flex; align-items: center; gap: 6px; background: #131720; border: 1px solid #1e2330; padding: 6px 12px; border-radius: 8px;">
                             <span class="material-symbols-outlined text-secondary text-[16px]"
                                 style="font-size: 16px; color: #ff5708;">schedule</span>
-                            <span id="bl-groups-dates-badge" class="font-label-data text-label-data text-secondary uppercase font-bold"
+                            <span id="bl-groups-dates-badge"
+                                class="font-label-data text-label-data text-secondary uppercase font-bold"
                                 style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 700; color: #ffb59c; text-transform: uppercase;">VENTANA:
                                 03 OCT 2026 - 09 OCT 2026</span>
                         </div>
@@ -4283,7 +4293,7 @@
                     <div class="stitch-kpi-info">
                         <span class="stitch-kpi-label" data-i18n="champ_stat_season">OFFICIAL SEASON</span>
                         <div class="stitch-kpi-val">CHAMPIONSHIP 2026</div>
-                        <span class="stitch-kpi-sub" style="color:var(--stitch-secondary, #ffb59c);">Semana 1 de 4 en
+                        <span class="stitch-kpi-sub" style="color:var(--stitch-secondary, #ffb59c);">Semana 2 de 4 en
                             Progreso</span>
                     </div>
                 </div>
@@ -4857,7 +4867,7 @@
                                         <span class="spec-box-lbl">GRUPO SEMANAL (BRACKET)</span>
                                         <span class="spec-box-val text-orange font-bold" id="cockpit-spec-group">Grupo
                                             Beta (Aspirantes)</span>
-                                        <span class="spec-box-sub text-slate">[Semana 1] • Oficial Roster</span>
+                                        <span class="spec-box-sub text-slate">[Semana 2] • Oficial Roster</span>
                                     </div>
                                     <div class="spec-box span-2">
                                         <span class="spec-box-lbl">VENTANA OPERACIONAL &amp; DISPONIBILIDAD

@@ -60,7 +60,7 @@ window.addEventListener('storage', (e) => {
 });
 /**
  * NFS: Most Wanted (2005) - World Records (NFSRANKSMW)
- * LÃ³gica principal: NavegaciÃ³n, TelemetrÃ­a F1, CachÃ© Inteligente,
+ * LÃ³gica principal: NavegaciÃ³n, Telemetría F1, CachÃ© Inteligente,
  * Lazy Loading, Renderizado de Podios Top 3 (estilo lokal.gg) y Tablas Deportivas.
  */
 
@@ -642,7 +642,7 @@ const SIMULATED_PILOTS = [
         baseKmh: 318,
         speed: 0.045,
         heat: 5,
-        status: 'LÃ­der en Fuga // Downtown Express',
+        status: 'Líder en Fuga // Downtown Express',
         district: 'Downtown Rockport',
         waypoints: [
             { x: 30.5, y: 62.0 },
@@ -1131,7 +1131,7 @@ function togglePlayerSimulation() {
     } else {
         if (btnText) btnText.setAttribute('data-i18n', 'map_btn_resume_sim');
         if (btnText) btnText.textContent = (typeof t === 'function' ? t('map_btn_resume_sim') : 'Reanudar SimulaciÃ³n');
-        if (btnIcon) btnIcon.textContent = 'â–¶ï¸';
+        if (btnIcon) btnIcon.textContent = '▶ï¸';
     }
 }
 
@@ -3436,7 +3436,7 @@ resultsEl.innerHTML = `<p style="color: var(--nfs-orange); font-family: var(--fo
                     <thead>
                         <tr>
                             <th>Ruta</th>
-                            <th>PosiciÃ³n</th>
+                            <th>Posición</th>
                             <th>Tiempo</th>
                             <th>Auto</th>
                             <th>Caja</th>
@@ -4124,7 +4124,7 @@ async function handleTimeSubmit(event) {
             if (seasonId) {
                 discordFields.push({
                     name: "ðŸ† DesafÃ­o de Temporada",
-                    value: `${seasonId.toUpperCase()} â€¢ Semana ${weekNum} (${challengeId})`,
+                    value: `${seasonId.toUpperCase()} • Semana ${weekNum} (${challengeId})`,
                     inline: false
                 });
             }
@@ -4135,7 +4135,7 @@ async function handleTimeSubmit(event) {
                     color: 16742144, // #ff7700
                     description: `Un piloto ha enviado un nuevo rÃ©cord para revisiÃ³n tÃ©cnica en **NFSRANKSMW**. Pendiente de homologaciÃ³n.`,
                     fields: discordFields,
-                    footer: { text: "NFSMWRANKS â€¢ ComisarÃ­a de HomologaciÃ³n de Tiempos" },
+                    footer: { text: "NFSMWRANKS • ComisarÃ­a de HomologaciÃ³n de Tiempos" },
                     timestamp: new Date().toISOString()
                 }]
             };
@@ -4253,7 +4253,7 @@ function startSeasonChallengeSubmission(seasonId, weekNum, challengeId, trackNam
     const seasonName = season ? season.name : 'Temporada Blacklist';
 
     if (banner) banner.style.display = 'flex';
-    if (bannerTitle) bannerTitle.innerHTML = `ðŸ† DESAFÃO OFICIAL VINCULADO: ${seasonName} â€¢ SEMANA ${weekNum}`;
+    if (bannerTitle) bannerTitle.innerHTML = `ðŸ† DESAFÃO OFICIAL VINCULADO: ${seasonName} • SEMANA ${weekNum}`;
     if (bannerDesc) bannerDesc.innerHTML = `ðŸ <strong>${escapeHtml(trackName)}</strong> (${escapeHtml(category)}) â€” Recompensa: <strong>${escapeHtml(rewardDesc || 'Puntos PTS & Bounty')}</strong>`;
 
     // Campos ocultos
@@ -4951,13 +4951,13 @@ window.renderChallengesUI = renderChallengesUI;
 window.initChallengesSystem = initChallengesSystem;
 
 // =======================================================
-// BLACKLIST EVENT // CAMPEONATO 2026 (4 SEMANAS â€¢ 5 GRUPOS â€¢ 8 DESAFÃOS)
+// BLACKLIST EVENT // CAMPEONATO 2026 (4 SEMANAS • 5 GRUPOS • 8 DESAFÃOS)
 // =======================================================
 
 const BLACKLIST_STORAGE_KEY = 'nfs_blacklist_championship_2026_v5';
 let blacklistDrivers = [];
 let currentSelectedBlacklistRank = 1;
-let currentChampionshipWeek = 1;
+let currentChampionshipWeek = 2;
 
 function loadBlacklistData() {
     try {
@@ -5109,26 +5109,44 @@ function getDriverGroupForWeek(pilotIdentifier, weekNum) {
 }
 
 function switchChampionshipWeek(weekNumber, btn) {
-    currentChampionshipWeek = weekNumber;
+    currentChampionshipWeek = parseInt(weekNumber, 10) || 2;
 
-    // Actualizar botones de selector de semana
-    const pills = document.querySelectorAll('.champ-pill');
+    // Actualizar botones de selector de semana (tanto .champ-pill como .bl-week-btn)
+    const pills = document.querySelectorAll('.champ-pill, .bl-week-btn');
     pills.forEach((p, idx) => {
-        if (btn) {
+        const wAttr = p.getAttribute('data-week');
+        if (wAttr) {
+            p.classList.toggle('active', parseInt(wAttr, 10) === currentChampionshipWeek);
+        } else if (btn) {
             p.classList.toggle('active', p === btn);
         } else {
-            p.classList.toggle('active', idx === (weekNumber - 1));
+            p.classList.toggle('active', idx === (currentChampionshipWeek - 1));
         }
     });
 
     const champWeekEl = document.getElementById('bl-summary-champ-week');
     if (champWeekEl) {
-        const weekPrefix = (window.nfsI18n ? window.nfsI18n.t('champ_week_' + weekNumber) : `Semana ${weekNumber}`);
+        const weekPrefix = (window.nfsI18n ? window.nfsI18n.t('champ_week_' + currentChampionshipWeek) : `Semana ${currentChampionshipWeek}`);
         champWeekEl.textContent = `${weekPrefix} / 4 (8 ${window.nfsI18n ? window.nfsI18n.t('champ_challenges_title') : 'Desafíos'})`;
     }
 
-    renderChampionshipGroups(weekNumber);
-    renderChampionshipChallenges(weekNumber);
+    const kpiWeekEl = document.getElementById('bl-kpi-champ-week');
+    if (kpiWeekEl) {
+        kpiWeekEl.textContent = `SEMANA ${currentChampionshipWeek} / 4`;
+    }
+
+    const repTitleEl = document.getElementById('bl-kpi-rep-title');
+    if (repTitleEl) {
+        repTitleEl.textContent = `TOTAL REP POT (SEM. ${currentChampionshipWeek})`;
+    }
+
+    const subtabWeekEl = document.getElementById('bl-subtab-current-week-label');
+    if (subtabWeekEl) {
+        subtabWeekEl.textContent = `GRUPOS & DESAFÍOS (SEMANA ${currentChampionshipWeek})`;
+    }
+
+    renderChampionshipGroups(currentChampionshipWeek);
+    renderChampionshipChallenges(currentChampionshipWeek);
     renderBlacklistUI();
     updateBlacklistTacticalCard();
     renderAllTacticalCards();
@@ -5943,7 +5961,7 @@ let currentCockpitSearchQuery = '';
 
 function setCockpitGroupFilter(group) {
     currentCockpitGroupFilter = group;
-    ['all', 'alpha', 'beta', 'delta'].forEach(g => {
+    ['all', 'alpha', 'beta', 'gamma', 'delta'].forEach(g => {
         const chip = document.getElementById(`chip-filter-${g}`);
         if (chip) chip.classList.toggle('active', g === group);
     });
@@ -6033,6 +6051,7 @@ function updateCockpitRosterActiveState() {
 
 function selectBlacklistPilot(rank) {
     selectBlacklistCockpitPilot(rank);
+    switchView('blacklist-cards');
 }
 
 function updateBlacklistTacticalCard() {
@@ -6670,6 +6689,9 @@ function updateChampionshipRosterLabels() {
 }
 
 function scrollToPilotCard(rank) {
+    if (typeof selectBlacklistCockpitPilot === 'function') {
+        selectBlacklistCockpitPilot(rank);
+    }
     const card = document.getElementById(`pilot-card-${rank}`);
     if (card) {
         card.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -7133,7 +7155,7 @@ ${pilot.schedule}
 function initBlacklistSystem() {
     loadBlacklistData();
     loadChampionshipParticipants();
-    switchChampionshipWeek(1);
+    switchChampionshipWeek(2);
     renderAllTacticalCards();
     syncBlacklistWithRotationsAndStandings();
 }
@@ -7600,7 +7622,7 @@ async function syncLiveLeaderboardWithOfficialSheet() {
             }
         }
     } catch (e) {
-        console.warn("TelemetrÃ­a oficial cargada desde registros oficiales de la tabla.", e);
+        console.warn("Telemetría oficial cargada desde registros oficiales de la tabla.", e);
     }
 }
 
@@ -8963,3 +8985,12 @@ window.resetStitchFilters = resetStitchFilters;
 window.goToStitchRouteLeaderboard = goToStitchRouteLeaderboard;
 window.selectStitchTrackCard = selectStitchTrackCard;
 
+
+function selectChampionshipWeek(weekNumber) {
+    switchChampionshipWeek(weekNumber);
+}
+
+window.selectChampionshipWeek = selectChampionshipWeek;
+window.selectBlacklistPilot = selectBlacklistPilot;
+window.scrollToPilotCard = scrollToPilotCard;
+window.setCockpitGroupFilter = setCockpitGroupFilter;
