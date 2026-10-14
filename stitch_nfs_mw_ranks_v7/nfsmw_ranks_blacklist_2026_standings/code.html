@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Chivo:ital,wght@0,700;0,800;0,900;1,900&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary-container":"#ffb800","on-secondary-container":"#511500","on-surface-variant":"#d5c4ab","surface-dim":"#10131a","tertiary-fixed":"#7df4ff","on-tertiary-fixed-variant":"#004f54","surface-variant":"#32353c","on-surface":"#e0e2ec","surface-container-highest":"#32353c","secondary":"#ffb59c","secondary-fixed-dim":"#ffb59c","secondary-fixed":"#ffdbcf","inverse-surface":"#e0e2ec","outline":"#9e8f78","on-primary-fixed":"#271900","surface-container":"#1d2027","primary-fixed-dim":"#ffba20","primary-fixed":"#ffdea8","on-secondary-fixed-variant":"#822700","on-tertiary-fixed":"#002022","tertiary":"#6ef3ff","surface-tint":"#ffba20","outline-variant":"#514532","inverse-primary":"#7c5800","surface-container-high":"#272a31","surface-container-low":"#191c23","tertiary-fixed-dim":"#00dbe9","on-primary-fixed-variant":"#5e4200","error":"#ffb4ab","background":"#10131a","on-tertiary":"#00363a","on-error-container":"#ffdad6","on-primary-container":"#6b4c00","secondary-container":"#ff5708","on-tertiary-container":"#005a60","tertiary-container":"#00d9e7","primary":"#ffdca1","surface-container-lowest":"#0b0e15","on-primary":"#412d00","surface-bright":"#363941","error-container":"#93000a","on-secondary-fixed":"#390c00","on-error":"#690005","surface":"#10131a","on-background":"#e0e2ec","on-secondary":"#5c1900","inverse-on-surface":"#2d3038"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{margin:"1rem","gutter-lg":"1.5rem","margin-lg":"3.5rem","space-sm":"0.5rem","space-xs":"0.25rem","space-xl":"2.5rem","space-md":"1rem","margin-md":"2rem","space-lg":"1.5rem",gutter:"1rem"},fontFamily:{"headline-xl-mobile":["Chivo"],"headline-lg":["Chivo"],"headline-sm":["Chivo"],"label-hud":["Chivo"],"label-data":["JetBrains Mono"],"body-md":["Hanken Grotesk"],"body-sm":["Hanken Grotesk"],"label-timer-lg":["JetBrains Mono"],"headline-lg-mobile":["Chivo"],"headline-md":["Chivo"],"body-lg":["Hanken Grotesk"],"headline-xl":["Chivo"],"label-timer-md":["JetBrains Mono"]},fontSize:{"headline-xl-mobile":["32px",{lineHeight:"36px",letterSpacing:"-0.02em",fontWeight:"900"}],"headline-lg":["36px",{lineHeight:"42px",letterSpacing:"-0.02em",fontWeight:"800"}],"headline-sm":["20px",{lineHeight:"26px",letterSpacing:"0em",fontWeight:"700"}],"label-hud":["11px",{lineHeight:"14px",letterSpacing:"0.14em",fontWeight:"900"}],"label-data":["12px",{lineHeight:"16px",letterSpacing:"0.06em",fontWeight:"500"}],"body-md":["15px",{lineHeight:"22px",fontWeight:"400"}],"body-sm":["13px",{lineHeight:"18px",fontWeight:"500"}],"label-timer-lg":["32px",{lineHeight:"36px",letterSpacing:"-0.04em",fontWeight:"700"}],"headline-lg-mobile":["26px",{lineHeight:"32px",letterSpacing:"-0.01em",fontWeight:"800"}],"headline-md":["24px",{lineHeight:"30px",letterSpacing:"-0.01em",fontWeight:"800"}],"body-lg":["18px",{lineHeight:"28px",fontWeight:"400"}],"headline-xl":["48px",{lineHeight:"52px",letterSpacing:"-0.03em",fontWeight:"900"}],"label-timer-md":["18px",{lineHeight:"22px",letterSpacing:"-0.02em",fontWeight:"600"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container"><header class="fixed top-0 left-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.6)]"><div class="w-full px-gutter-lg"><div class="h-20 flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg"><div class="flex items-center gap-space-sm"><img alt="Brand logo. - Primary color: #ffb800 - Font: chivo - Mode: dark - Roundness: rounded-lg" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1U0BusLDj07Q3GnZw_xdgavHc0KuvDl2siSzG3Za8fkR_NqGMW-Oo8i1pQad4EAsIvNOAeQqZCY5gF3e6COlctZ6B2BzHnULOk25InyKmE1iK_sNyI5yFIj6kd-EapjqTRJDOd9MSQVXo-sISbJLlDqHX4rOr715Sue3O3y1oFHzBCW-oeBpSsZ9r76HoGRfynsi0njGc-zlzmydKvXQeKyk9GDHVLTcwN7g_bDwwp7LhAMSXHk0noFDq8"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm uppercase text-on-surface tracking-tight leading-none">NFSMW <span class="text-primary-container font-headline-sm text-headline-sm">RANKS</span></span><span class="font-label-hud text-label-hud uppercase text-on-surface-variant tracking-widest">Rockport Telemetry Grid</span></div></div><div class="hidden xl:flex items-center gap-space-xs bg-surface-container-low px-space-sm py-space-xs rounded font-label-data text-label-data"><span class="inline-block w-2 h-2 rounded-full bg-secondary-container animate-pulse"></span><span class="text-secondary font-bold">ROCKPORT EN VIVO</span><span class="text-outline-variant">//</span><span class="text-on-surface-variant">TKR: 128Hz RTT: 12ms</span><span class="text-outline-variant">//</span><span class="text-primary-container font-bold">HEAT 5 ACTIVE</span></div></div><nav class="hidden lg:flex items-center gap-space-xs p-space-xs bg-surface-container-lowest rounded" data-active-classes="bg-surface-container-high text-primary-container font-bold shadow-[0_0_12px_rgba(255,184,0,0.2)]"><a class="px-space-md py-space-sm rounded font-label-hud text-label-hud uppercase tracking-wider text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="clasificacion-blacklist" href="#">Clasificación Blacklist</a><a class="px-space-md py-space-sm rounded font-label-hud text-label-hud uppercase tracking-wider text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="rutas-y-circuitos" href="#">Rutas y Circuitos</a><a class="px-space-md py-space-sm rounded font-label-hud text-label-hud uppercase tracking-wider text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="telemetria" href="#">Telemetría</a><a class="px-space-md py-space-sm rounded font-label-hud text-label-hud uppercase tracking-wider text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="desafios-y-torneos" href="#">Desafíos y Torneos</a><a class="px-space-md py-space-sm rounded font-label-hud text-label-hud uppercase tracking-wider text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="reglamento" href="#">Reglamento</a></nav><div class="flex items-center gap-space-md"><div class="hidden md:flex items-center gap-space-xs bg-surface-container-low px-space-sm py-space-xs rounded text-on-surface-variant"><span class="material-symbols-outlined text-[18px]">search</span><input class="bg-transparent border-0 text-on-surface placeholder:text-on-surface-variant/60 font-label-data text-label-data focus:outline-none w-40 lg:w-48" placeholder="Buscar piloto o coche..." type="text"/><kbd class="bg-surface-container-highest px-space-xs py-[2px] rounded font-label-data text-[10px] text-on-surface">Ctrl+K</kbd></div><div class="flex items-center gap-space-sm pl-space-sm"><div class="hidden sm:flex flex-col text-right"><span class="font-headline-sm text-[13px] leading-tight uppercase text-primary-container font-black">Razor #01 <span class="text-secondary">[BLACKLIST]</span></span><span class="font-label-data text-[11px] text-on-surface-variant uppercase">BMW M3 GTR E46</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></div></div></header><main class="w-full pt-20 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<!-- AMBIENT SCANLINE BACKDROP OVERLAY -->
+<div class="relative w-full px-gutter md:px-gutter-lg py-space-md">
+<!-- HERO HEADER SECTION -->
+<div class="relative w-full rounded-xl overflow-hidden bg-surface-container-lowest p-space-md md:p-space-lg shadow-xl mb-space-lg">
+<div class="absolute -right-20 -top-20 w-96 h-96 bg-primary-container/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -left-10 bottom-0 w-72 h-72 bg-secondary-container/10 rounded-full blur-2xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto">
+<!-- Official Verification Tag -->
+<div class="inline-flex items-center gap-space-xs px-space-md py-1 rounded-full bg-surface-container-high/80 backdrop-blur-md mb-space-sm shadow-sm">
+<span class="w-2 h-2 rounded-full bg-secondary-container animate-ping"></span>
+<span class="material-symbols-outlined text-[15px] text-primary-container" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+<span class="font-label-hud text-label-hud uppercase tracking-widest text-primary-container">OFFICIAL CUMULATIVE TABLE // ROCKPORT CITY</span>
+</div>
+<!-- Main Display Title -->
+<h1 class="font-headline-xl text-headline-xl uppercase italic tracking-tight text-on-surface">
+          STANDINGS <span class="text-secondary-container">//</span> <span class="bg-gradient-to-r from-primary-container via-secondary-container to-secondary bg-clip-text text-transparent">BLACKLIST 2026</span>
+</h1>
+<!-- Subtitle & Equation Legend -->
+<p class="font-body-md text-body-md text-on-surface-variant mt-space-xs text-center max-w-3xl">
+          Cumulative standings of drivers classified by total points, race podiums, time bonuses, and reputation ($ REP).
+        </p>
+<div class="mt-space-xs inline-flex flex-wrap items-center justify-center gap-x-space-md gap-y-1 font-label-data text-[11px] text-tertiary/90 bg-surface-container/60 px-space-md py-1 rounded">
+<span>Puntos calculados: Podios (P1=25, P2=18, P3=15, P4=12)</span>
+<span class="text-outline-variant">•</span>
+<span>Time Bonuses (🥇 +100, 🥈 +50, 🥉 +20 PTS)</span>
+<span class="text-outline-variant">•</span>
+<span>Reputation ($ REP / 10k)</span>
+</div>
+</div>
+</div>
+<!-- COMPETITION TAB NAVIGATION -->
+<div class="w-full flex items-center justify-start sm:justify-center overflow-x-auto pb-space-xs mb-space-lg gap-space-xs scrollbar-none">
+<button class="flex items-center gap-space-xs px-space-md py-space-sm rounded font-label-hud text-label-hud uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors whitespace-nowrap bg-surface-container-low">
+<span class="material-symbols-outlined text-[16px]">swords</span>
+<span>Grupos &amp; Challenges</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-space-sm rounded font-label-hud text-label-hud uppercase tracking-wider text-on-primary bg-primary-container font-black shadow-lg whitespace-nowrap">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">emoji_events</span>
+<span>Standings Table</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-space-sm rounded font-label-hud text-label-hud uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors whitespace-nowrap bg-surface-container-low">
+<span class="material-symbols-outlined text-[16px]">skull</span>
+<span>Driver Dossiers (1 - 15)</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-space-sm rounded font-label-hud text-label-hud uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors whitespace-nowrap bg-surface-container-low">
+<span class="material-symbols-outlined text-[16px]">description</span>
+<span>Register For Tournament</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-space-sm rounded font-label-hud text-label-hud uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors whitespace-nowrap bg-surface-container-low">
+<span class="material-symbols-outlined text-[16px]">account_balance</span>
+<span>Past Tournaments</span>
+</button>
+</div>
+<!-- 4-BLOCK CHAMPIONSHIP KPI GRID -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md mb-space-lg">
+<!-- KPI 1 -->
+<div class="relative bg-surface-container-low p-space-md rounded-lg flex flex-col justify-between overflow-hidden shadow-md">
+<div class="flex items-center justify-between mb-space-xs">
+<span class="font-label-hud text-label-hud uppercase tracking-widest text-on-surface-variant">CURRENT LEADER</span>
+<span class="material-symbols-outlined text-primary-container text-[20px]" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+<div class="font-headline-sm text-[17px] text-primary-container font-black leading-tight uppercase truncate">
+          SRTxAvenger™
+        </div>
+<span class="font-label-data text-[11px] text-on-surface-variant/80 mt-1 uppercase">Porsche Carrera GT &amp; Lotus Elise</span>
+<div class="absolute bottom-0 left-0 h-[2px] w-full bg-primary-container"></div>
+</div>
+<!-- KPI 2 -->
+<div class="relative bg-surface-container-low p-space-md rounded-lg flex flex-col justify-between overflow-hidden shadow-md">
+<div class="flex items-center justify-between mb-space-xs">
+<span class="font-label-hud text-label-hud uppercase tracking-widest text-on-surface-variant">TOTAL REP POT</span>
+<span class="material-symbols-outlined text-tertiary-container text-[20px]">payments</span>
+</div>
+<div class="font-label-timer-lg text-label-timer-lg text-tertiary-container font-bold leading-tight tracking-tight">
+          $9.680.000
+        </div>
+<span class="font-label-data text-[11px] text-on-surface-variant/80 mt-1 uppercase">Distribuido en 15 pilotos</span>
+<div class="absolute bottom-0 left-0 h-[2px] w-full bg-tertiary-container"></div>
+</div>
+<!-- KPI 3 -->
+<div class="relative bg-surface-container-low p-space-md rounded-lg flex flex-col justify-between overflow-hidden shadow-md">
+<div class="flex items-center justify-between mb-space-xs">
+<span class="font-label-hud text-label-hud uppercase tracking-widest text-on-surface-variant">OFFICIAL SEASON</span>
+<span class="material-symbols-outlined text-secondary-container text-[20px]">event_note</span>
+</div>
+<div class="font-headline-sm text-headline-sm text-on-surface font-extrabold leading-tight uppercase">
+          CHAMPIONSHIP 2026
+        </div>
+<span class="font-label-data text-[11px] text-secondary mt-1 uppercase">Semana 3 de 4 en Progreso</span>
+<div class="absolute bottom-0 left-0 h-[2px] w-full bg-secondary-container"></div>
+</div>
+<!-- KPI 4 -->
+<div class="relative bg-surface-container-low p-space-md rounded-lg flex flex-col justify-between overflow-hidden shadow-md">
+<div class="flex items-center justify-between mb-space-xs">
+<span class="font-label-hud text-label-hud uppercase tracking-widest text-on-surface-variant">COMPETING DRIVERS</span>
+<span class="material-symbols-outlined text-tertiary text-[20px]">sports_motorsports</span>
+</div>
+<div class="font-headline-sm text-headline-sm text-on-surface font-extrabold leading-tight uppercase">
+          15 ACTIVE PILOTS
+        </div>
+<span class="font-label-data text-[11px] text-on-surface-variant/80 mt-1 uppercase">100% Blacklist Registry Active</span>
+<div class="absolute bottom-0 left-0 h-[2px] w-full bg-tertiary"></div>
+</div>
+</div>
+<!-- TOOLBAR & VIEW CONTROLS -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-space-md mb-space-md shadow-md">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary-container text-[22px]">trophy</span>
+<h2 class="font-headline-sm text-headline-sm uppercase text-on-surface font-black">
+            STANDINGS <span class="text-on-surface-variant">(TOP 15 PILOTS)</span>
+</h2>
+</div>
+<p class="font-label-data text-[11px] text-on-surface-variant mt-0.5">
+          Clasificación oficial en vivo basada en splits certificados y persecuciones de Heat 5.
+        </p>
+</div>
+<!-- View Buttons & Filters Container -->
+<div class="flex flex-wrap items-center gap-space-xs">
+<!-- View selector pills -->
+<div class="inline-flex bg-surface-container-low p-1 rounded">
+<button class="flex items-center gap-1.5 px-space-sm py-1 rounded bg-secondary-container text-on-secondary font-label-hud text-label-hud uppercase font-black transition-colors" id="viewBtnCards">
+<span class="material-symbols-outlined text-[15px]">view_agenda</span>
+<span>Cards</span>
+</button>
+<button class="flex items-center gap-1.5 px-space-sm py-1 rounded hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface font-label-hud text-label-hud uppercase font-bold transition-colors" id="viewBtnTable">
+<span class="material-symbols-outlined text-[15px]">table_rows</span>
+<span>Table</span>
+</button>
+<button class="flex items-center gap-1.5 px-space-sm py-1 rounded hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface font-label-hud text-label-hud uppercase font-bold transition-colors">
+<span class="material-symbols-outlined text-[15px]">groups</span>
+<span>Groups</span>
+</button>
+<button class="flex items-center gap-1.5 px-space-sm py-1 rounded hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface font-label-hud text-label-hud uppercase font-bold transition-colors">
+<span class="material-symbols-outlined text-[15px]">badge</span>
+<span>Dossiers</span>
+</button>
+</div>
+<!-- Quick filter dropdowns -->
+<div class="flex items-center gap-space-xs">
+<select class="bg-surface-container-low text-on-surface font-label-data text-label-data px-space-sm py-1.5 rounded focus:outline-none focus:ring-1 focus:ring-primary-container">
+<option value="all">Todos los Grupos</option>
+<option value="alpha">Grupo Alpha (Líderes)</option>
+<option value="beta">Grupo Beta (Aspirantes)</option>
+<option value="gamma">Grupo Gamma</option>
+<option value="delta">Grupo Delta</option>
+</select>
+<select class="bg-surface-container-low text-on-surface font-label-data text-label-data px-space-sm py-1.5 rounded focus:outline-none focus:ring-1 focus:ring-primary-container">
+<option value="score">Mayor Puntuación</option>
+<option value="rep">Mayor Dinero REP</option>
+<option value="p1">Más Victorias P1</option>
+</select>
+</div>
+</div>
+</div>
+<!-- HORIZONTAL CARDS STREAM (STANDINGS MATRIX) -->
+<div class="flex flex-col gap-space-xs w-full mb-space-xl">
+<!-- ROW 1: SRTxAvenger™ (GOLD FIRST PLACE) -->
+<div class="relative bg-surface-container-lowest hover:bg-surface-container-low transition-all duration-150 rounded-lg p-space-sm md:p-space-md flex flex-col xl:flex-row items-start xl:items-center justify-between gap-space-md shadow-lg overflow-hidden group">
+<!-- Gold Edge Gauge -->
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-primary-container shadow-[0_0_12px_#ffb800]"></div>
+<!-- Pilot identity cluster -->
+<div class="flex items-center gap-space-md min-w-[280px]">
+<!-- Rank Number Badge -->
+<div class="w-12 h-12 rounded bg-primary-container text-on-primary flex items-center justify-center font-headline-md text-headline-md font-black shadow-md flex-shrink-0">
+            1
+          </div>
+<!-- Escuderia Avatar / Insignia -->
+<div class="w-12 h-12 rounded bg-surface-container-high flex items-center justify-center flex-shrink-0 text-primary-container">
+<span class="material-symbols-outlined text-[26px]">rocket_launch</span>
+</div>
+<!-- Callsign & Car info -->
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface font-extrabold leading-none">Avenger</span>
+<span class="font-label-data text-label-data text-secondary-container font-semibold">"SRTxAvenger™"</span>
+<span class="font-label-hud text-[10px] bg-primary-container/20 text-primary-container px-1.5 py-0.5 rounded font-black tracking-widest">BLACKLIST 1</span>
+</div>
+<div class="flex items-center gap-space-xs mt-1 text-on-surface-variant font-label-data text-label-data">
+<span class="material-symbols-outlined text-[14px]">cloud_upload</span>
+<span class="uppercase">Porsche Carrera GT y Lotus Elise</span>
+</div>
+<div class="mt-1">
+<span class="font-label-data text-[10px] bg-surface-container-highest px-2 py-0.5 rounded text-on-surface-variant uppercase font-medium">Grupo Beta (Aspirantes)</span>
+</div>
+</div>
+</div>
+<!-- Telemetry Data Blocks Grid -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-md items-center w-full xl:w-auto">
+<!-- REP Money Block -->
+<div class="flex flex-col bg-surface-container-high px-space-md py-1.5 rounded items-center justify-center min-w-[125px]">
+<span class="font-label-hud text-[9px] uppercase tracking-wider text-on-surface-variant">DINERO REP</span>
+<span class="font-label-data text-[15px] font-bold text-tertiary-container tracking-tight">$3.200.000</span>
+</div>
+<!-- Podiums Breakdown (P1, P2, P3, P4) -->
+<div class="flex items-center bg-surface-container-high rounded p-1 gap-1">
+<div class="flex flex-col items-center px-2 py-0.5 rounded bg-primary-container text-on-primary">
+<span class="font-label-hud text-[8px] uppercase font-black">P1</span>
+<span class="font-label-data text-[12px] font-black">8</span>
+</div>
+<div class="flex flex-col items-center px-2 py-0.5">
+<span class="font-label-hud text-[8px] uppercase text-on-surface-variant">P2</span>
+<span class="font-label-data text-[12px] text-on-surface-variant font-bold">0</span>
+</div>
+<div class="flex flex-col items-center px-2 py-0.5">
+<span class="font-label-hud text-[8px] uppercase text-on-surface-variant">P3</span>
+<span class="font-label-data text-[12px] text-on-surface-variant font-bold">0</span>
+</div>
+<div class="flex flex-col items-center px-2 py-0.5">
+<span class="font-label-hud text-[8px] uppercase text-on-surface-variant">P4</span>
+<span class="font-label-data text-[12px] text-on-surface-variant font-bold">0</span>
+</div>
+</div>
+<!-- Time Bono -->
+<div class="flex flex-col bg-surface-container-high px-space-md py-1.5 rounded items-center justify-center min-w-[95px]">
+<span class="font-label-hud text-[9px] uppercase tracking-wider text-on-surface-variant">TIME BONO</span>
+<span class="font-label-data text-[14px] font-bold text-primary-container">+800 PTS</span>
+</div>
+<!-- Total Score -->
+<div class="flex flex-col bg-surface-container-high px-space-md py-1.5 rounded items-center justify-center min-w-[110px]">
+<span class="font-label-hud text-[9px] uppercase tracking-wider text-on-surface-variant">TOTAL SCORE</span>
+<span class="font-label-timer-md text-label-timer-md font-black text-primary-container tracking-tight">1.320 PTS</span>
+</div>
+</div>
+<!-- Leader Status & Action Buttons -->
+<div class="flex items-center gap-space-xs w-full xl:w-auto justify-end">
+<span class="inline-flex items-center gap-1 font-label-hud text-[11px] font-black bg-primary-container/20 text-primary-container px-space-sm py-2 rounded">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+            LÍDER #1
+          </span>
+<button class="inline-flex items-center gap-1.5 px-space-md py-2 rounded bg-secondary-container hover:bg-secondary text-on-secondary font-headline-sm text-[12px] font-black uppercase tracking-wider transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[15px]">skull</span>
+<span>FICHA DOSSIER</span>
+</button>
+</div>
+</div>
+<!-- ROW 2: Nebula "Nebula" (SILVER SECOND PLACE) -->
+<div class="relative bg-surface-container-lowest hover:bg-surface-container-low transition-all duration-150 rounded-lg p-space-sm md:p-space-md flex flex-col xl:flex-row items-start xl:items-center justify-between gap-space-md shadow-md overflow-hidden group">
+<!-- Silver Edge Gauge -->
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-inverse-surface"></div>
+<!-- Pilot identity cluster -->
+<div class="flex items-center gap-space-md min-w-[280px]">
+<div class="w-12 h-12 rounded bg-surface-container-high text-on-surface flex items-center justify-center font-headline-md text-headline-md font-black flex-shrink-0">
+            2
+          </div>
+<div class="w-12 h-12 rounded bg-surface-container-high flex items-center justify-center flex-shrink-0 text-secondary">
+<span class="material-symbols-outlined text-[26px]">all_inclusive</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface font-extrabold leading-none">Nebula</span>
+<span class="font-label-data text-label-data text-secondary font-semibold">"Nebula"</span>
+<span class="font-label-hud text-[10px] bg-surface-container-highest text-on-surface-variant px-1.5 py-0.5 rounded font-black tracking-widest">BLACKLIST 2</span>
+</div>
+<div class="flex items-center gap-space-xs mt-1 text-on-surface-variant font-label-data text-label-data">
+<span class="material-symbols-outlined text-[14px]">cloud_upload</span>
+<span class="uppercase">Carrera GT y Lotus Elise</span>
+</div>
+<div class="mt-1">
+<span class="font-label-data text-[10px] bg-surface-container-highest px-2 py-0.5 rounded text-on-surface-variant uppercase font-medium">Grupo Alpha (Líderes)</span>
+</div>
+</div>
+</div>
+<!-- Telemetry Data Blocks Grid -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-md items-center w-full xl:w-auto">
+<div class="flex flex-col bg-surface-container-high px-space-md py-1.5 rounded items-center justify-center min-w-[125px]">
+<span class="font-label-hud text-[9px] uppercase tracking-wider text-on-surface-variant">DINERO REP</span>
+<span class="font-label-data text-[15px] font-bold text-tertiary-container tracking-tight">$2.950.000</span>
+</div>
+<div class="flex items-center bg-surface-container-high rounded p-1 gap-1">
+<div class="flex flex-col items-center px-2 py-0.5 rounded bg-primary-container text-on-primary">
+<span class="font-label-hud text-[8px] uppercase font-black">P1</span>
+<span class="font-label-data text-[12px] font-black">6</span>
+</div>
+<div class="flex flex-col items-center px-2 py-0.5">
+<span class="font-label-hud text-[8px] uppercase text-on-surface-variant">P2</span>
+<span class="font-label-data text-[12px] text-on-surface font-bold">1</span>
+</div>
+<div class="flex flex-col items-center px-2 py-0.5">
+<span class="font-label-hud text-[8px] uppercase text-on-surface-variant">P3</span>
+<span class="font-label-data text-[12px] text-on-surface-variant font-bold">0</span>
+</div>
+<div class="flex flex-col items-center px-2 py-0.5">
+<span class="font-label-hud text-[8px] uppercase text-on-surface-variant">P4</span>
+<span class="font-label-data text-[12px] text-on-surface-variant font-bold">0</span>
+</div>
+</div>
+<div class="flex flex-col bg-surface-container-high px-space-md py-1.5 rounded items-center justify-center min-w-[95px]">
+<span class="font-label-hud text-[9px] uppercase tracking-wider text-on-surface-variant">TIME BONO</span>
+<span class="font-label-data text-[14px] font-bold text-primary-container">+670 PTS</span>
+</div>
+<div class="flex flex-col bg-surface-container-high px-space-md py-1.5 rounded items-center justify-center min-w-[110px]">
+<span class="font-label-hud text-[9px] uppercase tracking-wider text-on-surface-variant">TOTAL SCORE</span>
+<span class="font-label-timer-md text-label-timer-md font-black text-on-surface tracking-tight">1.133 PTS</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs w-full xl:w-auto justify-end">
+<span class="inline-flex items-center gap-1 font-label-hud text-[11px] font-black bg-surface-container-high text-tertiary px-space-sm py-2 rounded">
+            PILOTO OFICIAL #3
+          </span>
+<button class="inline-flex items-center gap-1.5 px-space-md py-2 rounded bg-secondary-container hover:bg-secondary text-on-secondary font-headline-sm text-[12px] font-black uppercase tracking-wider transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[15px]">skull</span>
+<span>FICHA</span>
+</button>
+</div>
+</div>
+<!-- ROW 3: N6 xBourne "N6 xBourne" (BRONZE THIRD PLACE) -->
+<div class="relative bg-surface-container-lowest hover:bg-surface-container-low transition-all duration-150 rounded-lg p-space-sm md:p-space-md flex flex-col xl:flex-row items-start xl:items-center justify-between gap-space-md shadow-md overflow-hidden group">
+<!-- Bronze Edge Gauge -->
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-secondary-container"></div>
+<div class="flex items-center gap-space-md min-w-[280px]">
+<div class="w-12 h-12 rounded bg-secondary-container/20 text-secondary-container flex items-center justify-center font-headline-md text-headline-md font-black flex-shrink-0">
+            3
+          </div>
+<div class="w-12 h-12 rounded bg-surface-container-high flex items-center justify-center flex-shrink-0 text-tertiary">
+<span class="material-symbols-outlined text-[26px]">hexagon</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface font-extrabold leading-none">N6 xBourne</span>
+<span class="font-label-data text-label-data text-secondary font-semibold">"N6 xBourne"</span>
+<span class="font-label-hud text-[10px] bg-surface-container-highest text-on-surface-variant px-1.5 py-0.5 rounded font-black tracking-widest">BLACKLIST 3</span>
+</div>
+<div class="flex items-center gap-space-xs mt-1 text-on-surface-variant font-label-data text-label-data">
+<span class="material-symbols-outlined text-[14px]">cloud_upload</span>
+<span class="uppercase">Porsche Carrera GT y Lotus Elise</span>
+</div>
+<div class="mt-1">
+<span class="font-label-data text-[10px] bg-surface-container-highest px-2 py-0.5 rounded text-on-surface-variant uppercase font-medium">Grupo Alpha (Líderes)</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-md items-center w-full xl:w-auto">
+<div class="flex flex-col bg-surface-container-high px-space-md py-1.5 rounded items-center justify-center min-w-[125px]">
+<span class="font-label-hud text-[9px] uppercase tracking-wider text-on-surface-variant">DINERO REP</span>
+<span class="font-label-data text-[15px] font-bold text-tertiary-container tracking-tight">$2.140.000</span>
+</div>
+<div class="flex items-center bg-surface-container-high rounded p-1 gap-1">
+<div class="flex flex-col items-center px-2 py-0.5 rounded bg-primary-container text-on-primary">
+<span class="font-label-hud text-[8px] uppercase font-black">P1</span>
+<span class="font-label-data text-[12px] font-black">2</span>
+</div>
+<div class="flex flex-col items-center px-2 py-0.5">
+<span class="font-label-hud text-[8px] uppercase text-on-surface-variant">P2</span>
+<span class="font-label-data text-[12px] text-on-surface font-bold">4</span>
+</div>
+<div class="flex flex-col items-center px-2 py-0.5">
+<span class="font-label-hud text-[8px] uppercase text-on-surface-variant">P3</span>
+<span class="font-label-data text-[12px] text-on-surface font-bold">2</span>
+</div>
+<div class="flex flex-col items-center px-2 py-0.5">
+<span class="font-label-hud text-[8px] uppercase text-on-surface-variant">P4</span>
+<span class="font-label-data text-[12px] text-on-surface-variant font-bold">0</span>
+</div>
+</div>
+<div class="flex flex-col bg-surface-container-high px-space-md py-1.5 rounded items-center justify-center min-w-[95px]">
+<span class="font-label-hud text-[9px] uppercase tracking-wider text-on-surface-variant">TIME BONO</span>
+<span class="font-label-data text-[14px] font-bold text-primary-container">+440 PTS</span>
+</div>
+<div class="flex flex-col bg-surface-container-high px-space-md py-1.5 rounded items-center justify-center min-w-[110px]">
+<span class="font-label-hud text-[9px] uppercase tracking-wider text-on-surface-variant">TOTAL SCORE</span>
+<span class="font-label-timer-md text-label-timer-md font-black text-on-surface tracking-tight">806 PTS</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs w-full xl:w-auto justify-end">
+<span class="inline-flex items-center gap-1 font-label-hud text-[11px] font-black bg-surface-container-high text-tertiary px-space-sm py-2 rounded">
+            PILOTO OFICIAL #10
+          </span>
+<button class="inline-flex items-center gap-1.5 px-space-md py-2 rounded bg-secondary-container hover:bg-secondary text-on-secondary font-headline-sm text-[12px] font-black uppercase tracking-wider transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[15px]">skull</span>
+<span>FICHA</span>
+</button>
+</div>
+</div>
+<!-- ROW 4: ZimanX "ZimanX" -->
+<div class="relative bg-surface-container-lowest hover:bg-surface-container-low transition-all duration-150 rounded-lg p-space-sm md:p-space-md flex flex-col xl:flex-row items-start xl:items-center justify-between gap-space-md shadow-md overflow-hidden group">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-surface-container-highest"></div>
+<div class="flex items-center gap-space-md min-w-[280px]">
+<div class="w-12 h-12 rounded bg-surface-container-high text-on-surface-variant flex items-center justify-center font-headline-md text-headline-md font-black flex-shrink-0">
+            4
+          </div>
+<div class="w-12 h-12 rounded bg-surface-container-high flex items-center justify-center flex-shrink-0 text-secondary-container">
+<span class="material-symbols-outlined text-[26px]">shield</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface font-extrabold leading-none">ZimanX</span>
+<span class="font-label-data text-label-data text-secondary font-semibold">"ZimanX"</span>
+<span class="font-label-hud text-[10px] bg-surface-container-highest text-on-surface-variant px-1.5 py-0.5 rounded font-black tracking-widest">BLACKLIST 4</span>
+</div>
+<div class="flex items-center gap-space-xs mt-1 text-on-surface-variant font-label-data text-label-data">
+<span class="material-symbols-outlined text-[14px]">cloud_upload</span>
+<span class="uppercase">Porsche Carrera GT</span>
+</div>
+<div class="mt-1">
+<span class="font-label-data text-[10px] bg-surface-container-highest px-2 py-0.5 rounded text-on-surface-variant uppercase font-medium">Grupo Alpha (Líderes)</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-md items-center w-full xl:w-auto">
+<div class="flex flex-col bg-surface-container-high px-space-md py-1.5 rounded items-center justify-center min-w-[125px]">
+<span class="font-label-hud text-[9px] uppercase tracking-wider text-on-surface-variant">DINERO REP</span>
+<span class="font-label-data text-[15px] font-bold text-tertiary-container tracking-tight">$1.390.000</span>
+</div>
+<div class="flex items-center bg-surface-container-high rounded p-1 gap-1">
+<div class="flex flex-col items-center px-2 py-0.5">
+<span class="font-label-hud text-[8px] uppercase text-on-surface-variant">P1</span>
+<span class="font-label-data text-[12px] text-on-surface-variant font-bold">0</span>
+</div>
+<div class="flex flex-col items-center px-2 py-0.5">
+<span class="font-label-hud text-[8px] uppercase text-on-surface-variant">P2</span>
+<span class="font-label-data text-[12px] text-on-surface font-bold">2</span>
+</div>
+<div class="flex flex-col items-center px-2 py-0.5">
+<span class="font-label-hud text-[8px] uppercase text-on-surface-variant">P3</span>
+<span class="font-label-data text-[12px] text-on-surface font-bold">4</span>
+</div>
+<div class="flex flex-col items-center px-2 py-0.5">
+<span class="font-label-hud text-[8px] uppercase text-on-surface-variant">P4</span>
+<span class="font-label-data text-[12px] text-on-surface-variant font-bold">0</span>
+</div>
+</div>
+<div class="flex flex-col bg-surface-container-high px-space-md py-1.5 rounded items-center justify-center min-w-[95px]">
+<span class="font-label-hud text-[9px] uppercase tracking-wider text-on-surface-variant">TIME BONO</span>
+<span class="font-label-data text-[14px] font-bold text-primary-container">+250 PTS</span>
+</div>
+<div class="flex flex-col bg-surface-container-high px-space-md py-1.5 rounded items-center justify-center min-w-[110px]">
+<span class="font-label-hud text-[9px] uppercase tracking-wider text-on-surface-variant">TOTAL SCORE</span>
+<span class="font-label-timer-md text-label-timer-md font-black text-on-surface tracking-tight">485 PTS</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs w-full xl:w-auto justify-end">
+<span class="inline-flex items-center gap-1 font-label-hud text-[11px] font-black bg-surface-container-high text-primary-container px-space-sm py-2 rounded">
+            👑 LÍDER BLACKLIST #1
+          </span>
+<button class="inline-flex items-center gap-1.5 px-space-md py-2 rounded bg-secondary-container hover:bg-secondary text-on-secondary font-headline-sm text-[12px] font-black uppercase tracking-wider transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[15px]">skull</span>
+<span>FICHA</span>
+</button>
+</div>
+</div>
+<!-- ROW 5: Mystic "MysticX" -->
+<div class="relative bg-surface-container-lowest hover:bg-surface-container-low transition-all duration-150 rounded-lg p-space-sm md:p-space-md flex flex-col xl:flex-row items-start xl:items-center justify-between gap-space-md shadow-md overflow-hidden group">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-surface-container-highest"></div>
+<div class="flex items-center gap-space-md min-w-[280px]">
+<div class="w-12 h-12 rounded bg-surface-container-high text-on-surface-variant flex items-center justify-center font-headline-md text-headline-md font-black flex-shrink-0">
+            5
+          </div>
+<div class="w-12 h-12 rounded bg-surface-container-high flex items-center justify-center flex-shrink-0 text-tertiary">
+<span class="material-symbols-outlined text-[26px]">security</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface font-extrabold leading-none">Mystic</span>
+<span class="font-label-data text-label-data text-secondary font-semibold">"MysticX"</span>
+<span class="font-label-hud text-[10px] bg-surface-container-highest text-on-surface-variant px-1.5 py-0.5 rounded font-black tracking-widest">BLACKLIST 5</span>
+</div>
+<div class="flex items-center gap-space-xs mt-1 text-on-surface-variant font-label-data text-label-data">
+<span class="material-symbols-outlined text-[14px]">cloud_upload</span>
+<span class="uppercase">BMW M3 GTR</span>
+</div>
+<div class="mt-1">
+<span class="font-label-data text-[10px] bg-surface-container-highest px-2 py-0.5 rounded text-on-surface-variant uppercase font-medium">Grupo Delta</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-md items-center w-full xl:w-auto">
+<div class="flex flex-col bg-surface-container-high px-space-md py-1.5 rounded items-center justify-center min-w-[125px]">
+<span class="font-label-hud text-[9px] uppercase tracking-wider text-on-surface-variant">DINERO REP</span>
+<span class="font-label-data text-[15px] font-bold text-on-surface-variant tracking-tight">$0</span>
+</div>
+<div class="flex items-center bg-surface-container-high rounded p-1 gap-1">
+<div class="flex flex-col items-center px-2 py-0.5">
+<span class="font-label-hud text-[8px] uppercase text-on-surface-variant">P1</span>
+<span class="font-label-data text-[12px] text-on-surface-variant font-bold">0</span>
+</div>
+<div class="flex flex-col items-center px-2 py-0.5">
+<span class="font-label-hud text-[8px] uppercase text-on-surface-variant">P2</span>
+<span class="font-label-data text-[12px] text-on-surface-variant font-bold">0</span>
+</div>
+<div class="flex flex-col items-center px-2 py-0.5">
+<span class="font-label-hud text-[8px] uppercase text-on-surface-variant">P3</span>
+<span class="font-label-data text-[12px] text-on-surface-variant font-bold">0</span>
+</div>
+<div class="flex flex-col items-center px-2 py-0.5">
+<span class="font-label-hud text-[8px] uppercase text-on-surface-variant">P4</span>
+<span class="font-label-data text-[12px] text-on-surface-variant font-bold">0</span>
+</div>
+</div>
+<div class="flex flex-col bg-surface-container-high px-space-md py-1.5 rounded items-center justify-center min-w-[95px]">
+<span class="font-label-hud text-[9px] uppercase tracking-wider text-on-surface-variant">TIME BONO</span>
+<span class="font-label-data text-[14px] font-bold text-on-surface-variant">0 PTS</span>
+</div>
+<div class="flex flex-col bg-surface-container-high px-space-md py-1.5 rounded items-center justify-center min-w-[110px]">
+<span class="font-label-hud text-[9px] uppercase tracking-wider text-on-surface-variant">TOTAL SCORE</span>
+<span class="font-label-timer-md text-label-timer-md font-black text-on-surface-variant tracking-tight">0 PTS</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs w-full xl:w-auto justify-end">
+<span class="inline-flex items-center gap-1 font-label-hud text-[11px] font-black bg-surface-container-high text-on-surface-variant px-space-sm py-2 rounded">
+            PILOTO OFICIAL #2
+          </span>
+<button class="inline-flex items-center gap-1.5 px-space-md py-2 rounded bg-secondary-container hover:bg-secondary text-on-secondary font-headline-sm text-[12px] font-black uppercase tracking-wider transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[15px]">skull</span>
+<span>FICHA</span>
+</button>
+</div>
+</div>
+<!-- ROW 6: xLeMondx "xLeMondx" -->
+<div class="relative bg-surface-container-lowest hover:bg-surface-container-low transition-all duration-150 rounded-lg p-space-sm md:p-space-md flex flex-col xl:flex-row items-start xl:items-center justify-between gap-space-md shadow-md overflow-hidden group">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-surface-container-highest"></div>
+<div class="flex items-center gap-space-md min-w-[280px]">
+<div class="w-12 h-12 rounded bg-surface-container-high text-on-surface-variant flex items-center justify-center font-headline-md text-headline-md font-black flex-shrink-0">
+            6
+          </div>
+<div class="w-12 h-12 rounded bg-surface-container-high flex items-center justify-center flex-shrink-0 text-primary-container">
+<span class="material-symbols-outlined text-[26px]">adjust</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface font-extrabold leading-none">xLeMondx</span>
+<span class="font-label-data text-label-data text-secondary font-semibold">"xLeMondx"</span>
+<span class="font-label-hud text-[10px] bg-surface-container-highest text-on-surface-variant px-1.5 py-0.5 rounded font-black tracking-widest">BLACKLIST 6</span>
+</div>
+<div class="flex items-center gap-space-xs mt-1 text-on-surface-variant font-label-data text-label-data">
+<span class="material-symbols-outlined text-[14px]">cloud_upload</span>
+<span class="uppercase">Corvette C6.R &amp; Carrera GT</span>
+</div>
+<div class="mt-1">
+<span class="font-label-data text-[10px] bg-surface-container-highest px-2 py-0.5 rounded text-on-surface-variant uppercase font-medium">Grupo Gamma</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-md items-center w-full xl:w-auto">
+<div class="flex flex-col bg-surface-container-high px-space-md py-1.5 rounded items-center justify-center min-w-[125px]">
+<span class="font-label-hud text-[9px] uppercase tracking-wider text-on-surface-variant">DINERO REP</span>
+<span class="font-label-data text-[15px] font-bold text-tertiary-container tracking-tight">$750.000</span>
+</div>
+<div class="flex items-center bg-surface-container-high rounded p-1 gap-1">
+<div class="flex flex-col items-center px-2 py-0.5 rounded bg-primary-container text-on-primary">
+<span class="font-label-hud text-[8px] uppercase font-black">P1</span>
+<span class="font-label-data text-[12px] font-black">1</span>
+</div>
+<div class="flex flex-col items-center px-2 py-0.5">
+<span class="font-label-hud text-[8px] uppercase text-on-surface-variant">P2</span>
+<span class="font-label-data text-[12px] text-on-surface font-bold">1</span>
+</div>
+<div class="flex flex-col items-center px-2 py-0.5">
+<span class="font-label-hud text-[8px] uppercase text-on-surface-variant">P3</span>
+<span class="font-label-data text-[12px] text-on-surface-variant font-bold">0</span>
+</div>
+<div class="flex flex-col items-center px-2 py-0.5">
+<span class="font-label-hud text-[8px] uppercase text-on-surface-variant">P4</span>
+<span class="font-label-data text-[12px] text-on-surface font-bold">1</span>
+</div>
+</div>
+<div class="flex flex-col bg-surface-container-high px-space-md py-1.5 rounded items-center justify-center min-w-[95px]">
+<span class="font-label-hud text-[9px] uppercase tracking-wider text-on-surface-variant">TIME BONO</span>
+<span class="font-label-data text-[14px] font-bold text-primary-container">+150 PTS</span>
+</div>
+<div class="flex flex-col bg-surface-container-high px-space-md py-1.5 rounded items-center justify-center min-w-[110px]">
+<span class="font-label-hud text-[9px] uppercase tracking-wider text-on-surface-variant">TOTAL SCORE</span>
+<span class="font-label-timer-md text-label-timer-md font-black text-on-surface tracking-tight">215 PTS</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs w-full xl:w-auto justify-end">
+<span class="inline-flex items-center gap-1 font-label-hud text-[11px] font-black bg-surface-container-high text-tertiary px-space-sm py-2 rounded">
+            PILOTO OFICIAL #7
+          </span>
+<button class="inline-flex items-center gap-1.5 px-space-md py-2 rounded bg-secondary-container hover:bg-secondary text-on-secondary font-headline-sm text-[12px] font-black uppercase tracking-wider transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[15px]">skull</span>
+<span>FICHA</span>
+</button>
+</div>
+</div>
+</div>
+<!-- AUDIT, SCORING RULES & DATA INTEGRITY SECTION -->
+<div class="w-full bg-surface-container-lowest p-space-md md:p-space-lg rounded-xl shadow-xl flex flex-col lg:flex-row items-stretch justify-between gap-space-lg">
+<!-- Left: Scoring Rule Breakdown -->
+<div class="flex-1 flex flex-col">
+<div class="flex items-center gap-space-xs mb-space-xs">
+<span class="material-symbols-outlined text-primary-container text-[20px]">gavel</span>
+<h3 class="font-headline-sm text-headline-sm uppercase text-on-surface font-black">
+            TABLA OFICIAL DE PUNTUACIÓN DE TEMPORADA
+          </h3>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
+          Reglamento ratificado por la Federación de Telemetría Underground de Rockport City.
+        </p>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-sm">
+<div class="bg-surface-container-low p-space-sm rounded flex flex-col">
+<span class="font-label-hud text-label-hud uppercase text-primary-container font-black">1º LUGAR (P1)</span>
+<span class="font-label-timer-md text-[17px] text-on-surface font-bold mt-1">25 PTS</span>
+<span class="font-label-data text-[11px] text-primary-container">+ 🥇 100 PTS Bono</span>
+</div>
+<div class="bg-surface-container-low p-space-sm rounded flex flex-col">
+<span class="font-label-hud text-label-hud uppercase text-on-surface-variant font-black">2º LUGAR (P2)</span>
+<span class="font-label-timer-md text-[17px] text-on-surface font-bold mt-1">18 PTS</span>
+<span class="font-label-data text-[11px] text-secondary">+ 🥈 50 PTS Bono</span>
+</div>
+<div class="bg-surface-container-low p-space-sm rounded flex flex-col">
+<span class="font-label-hud text-label-hud uppercase text-secondary-container font-black">3º LUGAR (P3)</span>
+<span class="font-label-timer-md text-[17px] text-on-surface font-bold mt-1">15 PTS</span>
+<span class="font-label-data text-[11px] text-secondary-container">+ 🥉 20 PTS Bono</span>
+</div>
+<div class="bg-surface-container-low p-space-sm rounded flex flex-col">
+<span class="font-label-hud text-label-hud uppercase text-on-surface-variant font-black">4º LUGAR (P4)</span>
+<span class="font-label-timer-md text-[17px] text-on-surface font-bold mt-1">12 PTS</span>
+<span class="font-label-data text-[11px] text-on-surface-variant">Sin bono de tiempo</span>
+</div>
+</div>
+<div class="mt-space-md flex items-center gap-space-xs font-label-data text-[12px] text-tertiary bg-surface-container-high px-space-md py-space-xs rounded">
+<span class="material-symbols-outlined text-[16px]">info</span>
+<span>Conversión de Reputación: Cada $10.000 REP otorga 1 PTS para desempates en la Lista Negra.</span>
+</div>
+</div>
+<!-- Right: Audit Export & Integrity Seal -->
+<div class="lg:w-80 flex flex-col justify-between bg-surface-container-low p-space-md rounded-lg">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-hud text-label-hud uppercase text-on-surface-variant font-black">AUDITORÍA FIREBASE</span>
+<span class="flex items-center gap-1 font-label-data text-[11px] text-tertiary">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+              SYNC OK
+            </span>
+</div>
+<p class="font-label-data text-[11px] text-on-surface-variant">
+            Hash criptográfico de tabla: <br/>
+<span class="font-mono text-on-surface text-[10px] break-all">0x8F9A2C...D4E819</span>
+</p>
+</div>
+<div class="flex flex-col gap-space-xs mt-space-md">
+<button class="w-full flex items-center justify-center gap-space-xs px-space-md py-2 rounded bg-surface-container-high hover:bg-surface-container text-on-surface font-label-hud text-label-hud uppercase font-bold transition-colors">
+<span class="material-symbols-outlined text-[16px]">download</span>
+<span>Descargar CSV Oficial</span>
+</button>
+<button class="w-full flex items-center justify-center gap-space-xs px-space-md py-2 rounded bg-primary-container hover:bg-primary text-on-primary font-headline-sm text-[12px] font-black uppercase tracking-wider transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[16px]">picture_as_pdf</span>
+<span>Certificado FIA / NFSMW</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Simple view switcher interaction for cards and table preview
+  document.getElementById('viewBtnTable')?.addEventListener('click', function() {
+    alert('Modo Tabla Compacta activado: Visualizando 15 registros de telemetría con columnas reducidas.');
+  });
+  document.getElementById('viewBtnCards')?.addEventListener('click', function() {
+    // Current default view
+  });
+</script></main><footer class="w-full bg-surface-container-lowest mt-space-xl shadow-[0_-1px_12px_rgba(0,0,0,0.5)]"><div class="w-full px-gutter-lg py-space-xl"><div class="grid grid-cols-1 md:grid-cols-4 gap-space-lg pb-space-lg"><div class="flex flex-col gap-space-xs"><div class="flex items-center gap-space-sm"><span class="font-headline-md text-headline-md uppercase text-on-surface">NFSMW <span class="text-primary-container">RANKS</span></span></div><p class="font-body-sm text-body-sm text-on-surface-variant">Plataforma analítica y telemetría de precisión para records mundiales, speedruns y duelos de la Lista Negra de Rockport City (2005).</p><div class="flex items-center gap-space-xs mt-space-xs font-label-data text-label-data text-tertiary"><span class="material-symbols-outlined text-[16px]">speed</span><span>TELEMETRY TICK: 128Hz V-SYNC</span></div></div><div class="flex flex-col gap-space-xs"><span class="font-label-hud text-label-hud uppercase text-primary tracking-wider">Auditoría Anti-Trampas</span><div class="bg-surface-container-low p-space-sm rounded flex flex-col gap-space-xs"><div class="flex items-center justify-between font-label-data text-label-data"><span class="text-on-surface font-bold">MW-AC Shield</span><span class="text-primary-container font-mono">v2.4</span></div><div class="flex items-center gap-space-xs font-label-data text-[11px] text-tertiary"><span class="material-symbols-outlined text-[14px]">verified</span><span>Memory Scan Validated</span></div><div class="flex items-center gap-space-xs font-label-data text-[11px] text-on-surface-variant"><span>Engine: Speed.exe (1.3 EU/US)</span></div></div></div><div class="flex flex-col gap-space-xs"><span class="font-label-hud text-label-hud uppercase text-primary tracking-wider">Estado de Red y Servidor</span><div class="bg-surface-container-low p-space-sm rounded flex flex-col gap-space-xs"><div class="flex items-center justify-between font-label-data text-label-data"><span class="text-on-surface-variant">Mainframe Rockport:</span><span class="text-primary-container font-bold">OPERATIVO</span></div><div class="flex items-center justify-between font-label-data text-label-data"><span class="text-on-surface-variant">Detección Policial:</span><span class="text-secondary font-bold">HEAT LEVEL 5</span></div><div class="flex items-center justify-between font-label-data text-label-data"><span class="text-on-surface-variant">Verificaciones 24h:</span><span class="text-on-surface font-mono">1,482 Splits</span></div></div></div><div class="flex flex-col gap-space-xs"><span class="font-label-hud text-label-hud uppercase text-primary tracking-wider">Comunidad &amp; Protocolo</span><div class="flex flex-col gap-space-xs font-body-sm text-body-sm text-on-surface-variant"><a class="hover:text-primary transition-colors flex items-center gap-space-xs" href="#"><span class="material-symbols-outlined text-[14px]">forum</span>Discord Speedrun Hub</a><a class="hover:text-primary transition-colors flex items-center gap-space-xs" href="#"><span class="material-symbols-outlined text-[14px]">code</span>GitHub Telemetry Parser</a><a class="hover:text-primary transition-colors flex items-center gap-space-xs" href="#"><span class="material-symbols-outlined text-[14px]">policy</span>Reglamento Anti-Macro</a><a class="hover:text-primary transition-colors flex items-center gap-space-xs" href="#"><span class="material-symbols-outlined text-[14px]">verified_user</span>Términos y Privacidad</a></div></div></div><div class="pt-space-md flex flex-col md:flex-row items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm font-label-data text-label-data text-on-surface-variant"><span>© 2005-2025 NFSMW Ranks Telemetry Platform.</span><span class="text-outline-variant">//</span><span>Rockport Police Dept Record Registry</span></div><div class="flex items-center gap-space-md font-label-hud text-label-hud uppercase text-on-surface-variant"><a class="hover:text-primary transition-colors" href="#">Términos</a><a class="hover:text-primary transition-colors" href="#">Privacidad</a><a class="hover:text-primary transition-colors" href="#">Discord</a><a class="hover:text-primary transition-colors" href="#">GitHub</a></div></div></div></footer></body></html>

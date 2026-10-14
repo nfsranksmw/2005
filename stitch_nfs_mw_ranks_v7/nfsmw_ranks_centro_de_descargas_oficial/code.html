@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><title>NFSMW Ranks // Precision Telemetry &amp; Blacklist Leaderboards</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Chivo:ital,wght@0,700;0,800;0,900;1,900&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "tertiary": "#6ef3ff", "on-tertiary-container": "#005a60", "surface": "#10131a", "on-primary-fixed-variant": "#5e4200", "secondary-fixed": "#ffdbcf", "error": "#ffb4ab", "error-container": "#93000a", "primary": "#ffdca1", "outline-variant": "#514532", "surface-variant": "#32353c", "on-background": "#e0e2ec", "surface-container-highest": "#32353c", "primary-fixed": "#ffdea8", "inverse-on-surface": "#2d3038", "on-primary": "#412d00", "surface-container": "#1d2027", "secondary-container": "#ff5708", "background": "#10131a", "on-tertiary-fixed": "#002022", "on-secondary-fixed-variant": "#822700", "on-primary-container": "#6b4c00", "outline": "#9e8f78", "surface-container-high": "#272a31", "tertiary-container": "#00d9e7", "secondary-fixed-dim": "#ffb59c", "inverse-surface": "#e0e2ec", "primary-container": "#ffb800", "on-secondary": "#5c1900", "tertiary-fixed": "#7df4ff", "on-surface-variant": "#d5c4ab", "tertiary-fixed-dim": "#00dbe9", "surface-container-low": "#191c23", "surface-dim": "#10131a", "on-secondary-fixed": "#390c00", "on-error": "#690005", "on-primary-fixed": "#271900", "secondary": "#ffb59c", "surface-container-lowest": "#0b0e15", "on-secondary-container": "#511500", "surface-tint": "#ffba20", "on-tertiary-fixed-variant": "#004f54", "surface-bright": "#363941", "on-surface": "#e0e2ec", "primary-fixed-dim": "#ffba20", "on-tertiary": "#00363a", "inverse-primary": "#7c5800", "on-error-container": "#ffdad6" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-lg": "1.5rem", "margin-md": "2rem", "space-xl": "2.5rem", "space-xs": "0.25rem", "space-md": "1rem", "gutter": "1rem", "margin": "1rem", "margin-lg": "3.5rem", "space-sm": "0.5rem", "gutter-lg": "1.5rem" }, "fontFamily": { "label-data": [ "JetBrains Mono" ], "label-timer-lg": [ "JetBrains Mono" ], "headline-xl": [ "Chivo" ], "headline-xl-mobile": [ "Chivo" ], "headline-lg-mobile": [ "Chivo" ], "headline-md": [ "Chivo" ], "body-sm": [ "Hanken Grotesk" ], "label-timer-md": [ "JetBrains Mono" ], "label-hud": [ "Chivo" ], "headline-sm": [ "Chivo" ], "headline-lg": [ "Chivo" ], "body-md": [ "Hanken Grotesk" ], "body-lg": [ "Hanken Grotesk" ] }, "fontSize": { "label-data": [ "12px", { "lineHeight": "16px", "letterSpacing": "0.06em", "fontWeight": "500" } ], "label-timer-lg": [ "32px", { "lineHeight": "36px", "letterSpacing": "-0.04em", "fontWeight": "700" } ], "headline-xl": [ "48px", { "lineHeight": "52px", "letterSpacing": "-0.03em", "fontWeight": "900" } ], "headline-xl-mobile": [ "32px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "900" } ], "headline-lg-mobile": [ "26px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "800" } ], "headline-md": [ "24px", { "lineHeight": "30px", "letterSpacing": "-0.01em", "fontWeight": "800" } ], "body-sm": [ "13px", { "lineHeight": "18px", "fontWeight": "500" } ], "label-timer-md": [ "18px", { "lineHeight": "22px", "letterSpacing": "-0.02em", "fontWeight": "600" } ], "label-hud": [ "11px", { "lineHeight": "14px", "letterSpacing": "0.14em", "fontWeight": "900" } ], "headline-sm": [ "20px", { "lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "700" } ], "headline-lg": [ "36px", { "lineHeight": "42px", "letterSpacing": "-0.02em", "fontWeight": "800" } ], "body-md": [ "15px", { "lineHeight": "22px", "fontWeight": "400" } ], "body-lg": [ "18px", { "lineHeight": "28px", "fontWeight": "400" } ] } } } };</script></head><body class="bg-surface-container-lowest text-on-surface font-body-md text-body-md min-h-screen selection:bg-primary-container selection:text-on-primary-container"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest/95 backdrop-blur-xl shadow-[0_6px_28px_rgba(0,0,0,0.8)]"><div class="hidden xl:block bg-surface-container-low px-gutter-lg"><div class="w-full flex items-center justify-between h-7"><div class="flex items-center gap-space-lg"><div class="flex items-center gap-space-xs"><span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span><span class="font-label-hud text-label-hud text-primary uppercase">LIVE 128Hz</span><span class="font-label-data text-label-data text-outline">// TICK TKR: 128.00 SYNC</span><span class="font-label-data text-label-data text-tertiary">RTT: 11ms</span></div><div class="flex items-center gap-space-xs"><span class="font-label-hud text-label-hud text-outline">RADAR TÁCTICO:</span><span class="font-label-data text-label-data text-secondary-container font-bold px-1.5 py-0.5 bg-surface-container">HEAT LEVEL 5 - CORVETTE C6 STATE INTERCEPTOR ACTIVE</span></div></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs"><span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span><span class="font-label-hud text-label-hud text-outline">ESTADO DEL SERVIDOR:</span><span class="font-label-data text-label-data text-tertiary font-bold">OPERATIVO</span></div><span class="font-label-data text-label-data text-outline">|</span><span class="font-label-hud text-label-hud text-outline">MW-AC SHIELD v2.4 KERNEL ACTIVE</span></div></div></div><div class="h-24 w-full px-gutter-lg flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg shrink-0"><a class="flex items-center gap-space-sm group" href="#"><img alt="Brand logo. - Primary color: #ffb800
+- Font: chivo
+- Mode: dark
+- Roundness: rounded-lg
+" class="h-9 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1U0BusLDj07Q3GnZw_xdgavHc0KuvDl2siSzG3Za8fkR_NqGMW-Oo8i1pQad4EAsIvNOAeQqZCY5gF3e6COlctZ6B2BzHnULOk25InyKmE1iK_sNyI5yFIj6kd-EapjqTRJDOd9MSQVXo-sISbJLlDqHX4rOr715Sue3O3y1oFHzBCW-oeBpSsZ9r76HoGRfynsi0njGc-zlzmydKvXQeKyk9GDHVLTcwN7g_bDwwp7LhAMSXHk0noFDq8"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-surface uppercase tracking-tight group-hover:text-primary transition-colors">NFSMW<span class="text-primary-container ml-1">RANKS</span></span><span class="font-label-hud text-label-hud text-outline uppercase">PRECISION TELEMETRY SYSTEM</span></div></a></div><nav class="hidden lg:flex items-center gap-1 overflow-x-auto" data-active-classes="text-on-primary-container bg-primary-container font-headline-sm font-bold"><a class="px-2.5 py-1.5 font-headline-sm text-label-hud tracking-widest uppercase transition-colors text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded-sm" data-path="inicio" href="#">INICIO</a><a class="px-2.5 py-1.5 font-headline-sm text-label-hud tracking-widest uppercase transition-colors text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded-sm" data-path="rutas-y-circuitos" href="#">RUTAS &amp; CIRCUITOS</a><a class="px-2.5 py-1.5 font-headline-sm text-label-hud tracking-widest uppercase transition-colors text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded-sm" data-path="blacklist-2026" href="#">BLACKLIST 2026</a><a class="px-2.5 py-1.5 font-headline-sm text-label-hud tracking-widest uppercase transition-colors text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded-sm" data-path="guias-de-tuning" href="#">GUIAS DE TUNING</a><a class="px-2.5 py-1.5 font-headline-sm text-label-hud tracking-widest uppercase transition-colors text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded-sm" data-path="reglamento" href="#">REGLAMENTO</a><a class="px-2.5 py-1.5 font-headline-sm text-label-hud tracking-widest uppercase transition-colors text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded-sm" data-path="perfil-de-piloto" href="#">PERFIL DE PILOTO</a><a class="px-2.5 py-1.5 font-headline-sm text-label-hud tracking-widest uppercase transition-colors text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded-sm" data-path="subir-tiempo" href="#">SUBIR TIEMPO</a><a aria-current="page" class="px-2.5 py-1.5 tracking-widest uppercase transition-colors rounded-sm text-on-primary-container bg-primary-container font-headline-sm font-bold" data-path="descargas" href="#">DESCARGAS</a></nav><div class="flex items-center gap-space-sm shrink-0"><div class="flex items-center bg-surface-container px-1 py-0.5 rounded-sm"><button class="px-1.5 py-0.5 font-label-data text-label-data font-bold text-on-primary-container bg-primary-container rounded-sm">ES</button><button class="px-1.5 py-0.5 font-label-data text-label-data font-medium text-outline hover:text-on-surface transition-colors">EN</button></div><a class="hidden sm:flex items-center gap-space-xs px-3 py-1.5 bg-surface-container text-tertiary hover:bg-surface-container-high hover:text-on-surface transition-all rounded-sm" href="https://discord.gg" rel="noopener noreferrer" target="_blank"><span class="material-symbols-outlined text-[18px]">forum</span><span class="font-label-hud text-label-hud tracking-widest uppercase">DISCORD</span></a><a class="hidden md:flex items-center gap-space-xs px-3.5 py-1.5 bg-primary-container text-on-primary-container font-headline-sm text-label-hud tracking-widest uppercase hover:bg-primary transition-all rounded-sm shadow-[0_0_14px_rgba(255,184,0,0.3)]" data-path="subir-tiempo" href="#"><span class="material-symbols-outlined text-[16px]">speed</span><span>SUBMIT LOG</span></a></div></div></header><main class="w-full pt-24 bg-surface-container-lowest min-h-screen"><div class="flex flex-col w-full">
+<!-- AMBIENT SCANLINE & NOISE LAYER -->
+<div class="relative w-full overflow-hidden pb-space-xl">
+<div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[900px] h-[360px] bg-primary-container/10 blur-[130px] pointer-events-none rounded-full"></div>
+<div class="absolute top-48 right-12 w-[420px] h-[300px] bg-tertiary/5 blur-[110px] pointer-events-none rounded-full"></div>
+<div class="w-full px-gutter-lg max-w-7xl mx-auto flex flex-col gap-space-lg">
+<!-- HERO BANNER // PRECISION DOWNLOAD HEADER -->
+<section class="relative w-full mt-4 bg-surface-container-low rounded-lg p-space-lg md:p-space-xl shadow-[0_12px_40px_rgba(0,0,0,0.7)] overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-r from-surface-container-lowest via-surface-container-low to-surface-container-low/80 opacity-90"></div>
+<div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-secondary-container via-primary-container to-tertiary"></div>
+<div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="space-y-space-xs max-w-3xl">
+<div class="flex flex-wrap items-center gap-2">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-secondary-container/20 text-secondary-container font-label-data text-label-data uppercase rounded">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-container animate-ping"></span>
+                CORE REPOSITORY // REVISIÓN 2026.04
+              </span>
+<span class="px-2 py-0.5 bg-surface-container-high text-tertiary font-label-data text-label-data rounded">
+                MD5: E8A12FC09459B09F
+              </span>
+<span class="px-2 py-0.5 bg-surface-container-high text-primary font-label-hud text-label-hud rounded">
+                ANTI-TAMPER CERTIFIED
+              </span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight uppercase">
+              NEED FOR SPEED: MOST WANTED <span class="text-secondary-container font-black">//</span> <span class="text-primary-container">PC 2005 EDITION</span>
+</h1>
+<p class="font-body-md text-body-md text-outline max-w-2xl">
+              Imagen de disco oficial 1:1 precintada en ISO con parche acumulativo v1.3 pre-aplicado, biblioteca No-CD verificada para arquitecturas x64 y hook nativo de telemetría sub-frame para arbitraje federado en Rockport.
+            </p>
+</div>
+<div class="flex flex-col items-start md:items-end gap-2 shrink-0">
+<div class="bg-surface-container-lowest/80 px-4 py-2.5 rounded-lg flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-container text-2xl">speed</span>
+<div class="flex flex-col">
+<span class="font-label-hud text-label-hud text-outline uppercase">VERSIÓN DE TORNEO</span>
+<span class="font-label-timer-md text-label-timer-md text-on-surface">v1.3 CLEAN STABLE</span>
+</div>
+</div>
+<div class="flex items-center gap-2 text-outline font-label-data text-label-data">
+<span class="inline-block w-2 h-2 rounded-full bg-tertiary"></span>
+<span>128 HZ TICKRATE HOOK COMPATIBLE</span>
+</div>
+</div>
+</div>
+</section>
+<!-- MAIN PACKAGE MATRIX: DOWNLOAD HERO & TECHNICAL TELEMETRY -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- LEFT/CENTER: DOWNLOAD CRITICAL PACKAGE (8 COLS) -->
+<div class="lg:col-span-8 flex flex-col gap-space-md">
+<div class="bg-surface-container rounded-lg p-space-lg shadow-xl flex flex-col gap-space-lg">
+<!-- Header Identity Info -->
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-2">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-lg bg-surface-container-lowest flex items-center justify-center shrink-0 shadow-inner">
+<span class="material-symbols-outlined text-primary-container text-3xl">album</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-label-hud text-label-hud text-secondary-container uppercase">DIRECT CLOUD HIGH-SPEED</span>
+<span class="text-outline text-label-data">•</span>
+<span class="font-label-data text-label-data text-tertiary">1.94 GB TOTAL</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface uppercase">ISO NFSMW 2005 ENG PC DVD ZimanX .rar</h2>
+<span class="font-label-data text-label-data text-outline">Idioma: Inglés Neutro (ENG US) • Compresión RAR5 • Formato: ISO Bootable</span>
+</div>
+</div>
+<div class="px-3 py-1 bg-surface-container-high rounded text-right">
+<span class="font-label-hud text-label-hud text-outline block">TIPO DE REPOSITORIO</span>
+<span class="font-label-data text-label-data text-primary font-bold">100% TOURNAMENT LEGAL</span>
+</div>
+</div>
+<!-- 4 Technical Guarantee Badges Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-sm">
+<div class="bg-surface-container-lowest/80 p-3.5 rounded-lg flex items-start gap-3">
+<div class="p-1.5 rounded bg-primary-container/15 text-primary-container shrink-0">
+<span class="material-symbols-outlined text-xl">verified_user</span>
+</div>
+<div class="space-y-0.5">
+<span class="font-label-hud text-label-hud text-primary uppercase block">Copia Limpia Original (1:1 DVD)</span>
+<p class="font-body-sm text-body-sm text-outline">
+                    Clon íntegro libre de modificaciones invasivas, texturas reescaladas erróneas o scripts no homologados para tabla mundial.
+                  </p>
+</div>
+</div>
+<div class="bg-surface-container-lowest/80 p-3.5 rounded-lg flex items-start gap-3">
+<div class="p-1.5 rounded bg-secondary-container/15 text-secondary-container shrink-0">
+<span class="material-symbols-outlined text-xl">upgrade</span>
+</div>
+<div class="space-y-0.5">
+<span class="font-label-hud text-label-hud text-secondary-fixed uppercase block">Parche Oficial v1.3 Integrado</span>
+<p class="font-body-sm text-body-sm text-outline">
+                    Actualización obligatoria EA Sports para estabilidad de red LAN, arbitraje por telemetría y sincronización a 60/120 FPS.
+                  </p>
+</div>
+</div>
+<div class="bg-surface-container-lowest/80 p-3.5 rounded-lg flex items-start gap-3">
+<div class="p-1.5 rounded bg-tertiary/15 text-tertiary shrink-0">
+<span class="material-symbols-outlined text-xl">key</span>
+</div>
+<div class="space-y-0.5">
+<span class="font-label-hud text-label-hud text-tertiary uppercase block">No-CD Loader Homologado</span>
+<p class="font-body-sm text-body-sm text-outline">
+                    Ejecutable speed_MW.exe depurado de protección Safedisc v4, compatible con Windows 10 y 11 sin necesidad de lector óptico.
+                  </p>
+</div>
+</div>
+<div class="bg-surface-container-lowest/80 p-3.5 rounded-lg flex items-start gap-3">
+<div class="p-1.5 rounded bg-surface-container-highest text-on-surface-variant shrink-0">
+<span class="material-symbols-outlined text-xl">aspect_ratio</span>
+</div>
+<div class="space-y-0.5">
+<span class="font-label-hud text-label-hud text-on-surface uppercase block">Optimizado x64 &amp; Ultra-Widescreen</span>
+<p class="font-body-sm text-body-sm text-outline">
+                    Soporte directo para pantallas 16:9, 21:9 y 32:9 mediante wrappers DirectX 9.0c sin distorsión de HUD ni FOV estirado.
+                  </p>
+</div>
+</div>
+</div>
+<!-- PRIMARY DOWNLOAD CTA WITH ACCENT FLAIR -->
+<div class="flex flex-col gap-2 pt-2">
+<a class="group relative w-full overflow-hidden rounded-lg bg-secondary-container px-6 py-5 text-on-secondary shadow-[0_8px_24px_rgba(255,87,8,0.4)] transition-all duration-200 hover:bg-secondary-container/90 hover:shadow-[0_10px_32px_rgba(255,87,8,0.6)] flex items-center justify-between" href="https://drive.google.com" rel="noopener noreferrer" target="_blank">
+<div class="relative z-10 flex items-center gap-4">
+<div class="w-12 h-12 rounded bg-surface-container-lowest/30 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">cloud_download</span>
+</div>
+<div class="flex flex-col text-left">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm tracking-wide uppercase font-black text-on-secondary">
+                        DESCARGAR ISO OFICIAL (GOOGLE DRIVE)
+                      </span>
+<span class="hidden sm:inline-block px-2 py-0.5 bg-on-secondary text-secondary-container font-label-data text-label-data rounded font-bold">
+                        ULTRA RÁPIDO
+                      </span>
+</div>
+<span class="font-label-data text-label-data text-on-secondary/80">
+                      ISO NFSMW 2005 ENG PC DVD ZimanX .rar • Enlace directo de alta disponibilidad
+                    </span>
+</div>
+</div>
+<div class="relative z-10 flex items-center pl-4">
+<span class="material-symbols-outlined text-3xl text-on-secondary transform group-hover:translate-x-1.5 transition-transform">arrow_forward</span>
+</div>
+</a>
+<!-- Secondary Mirror Fallback Row -->
+<div class="flex flex-wrap items-center justify-between px-2 py-1 gap-2 text-outline font-label-data text-label-data">
+<div class="flex items-center gap-4">
+<span class="flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+                    Espejo Mega.nz: <a class="text-tertiary hover:underline" href="#">Servidor Backup #2</a>
+</span>
+<span class="flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+                    Torrent: <a class="text-primary hover:underline" href="#">Magnet Link Oficial</a>
+</span>
+</div>
+<span class="text-outline">Sin contraseñas de descompresión (.rar limpio)</span>
+</div>
+</div>
+</div>
+<!-- INSTALLATION QUICK NOTICES -->
+<div class="bg-surface-container-low rounded-lg p-space-md flex items-center justify-between gap-4 shadow-sm">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-container text-2xl">verified</span>
+<div>
+<span class="font-label-hud text-label-hud text-primary uppercase block">CONTROL FORENSE PREVENTIVO</span>
+<p class="font-body-sm text-body-sm text-outline">
+                  Este archivo contiene exclusivamente los binarios de Need for Speed Most Wanted 2005 para preservación digital y arbitraje competitivo sin software no deseado.
+                </p>
+</div>
+</div>
+<div class="shrink-0 font-label-data text-label-data text-outline hidden md:block">
+              SHA256 CHECKSUM OK
+            </div>
+</div>
+</div>
+<!-- RIGHT: TECHNICAL SPECS & DISCORD ASSISTANCE (4 COLS) -->
+<div class="lg:col-span-4 flex flex-col gap-space-md">
+<!-- TECHNICAL FILE SPECS CARD -->
+<div class="bg-surface-container rounded-lg p-space-md shadow-xl flex flex-col gap-space-sm">
+<div class="flex items-center justify-between pb-2 border-b-0">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container text-xl">terminal</span>
+<h3 class="font-headline-sm text-label-hud text-on-surface uppercase tracking-wider">FICHA TÉCNICA DEL ARCHIVO</h3>
+</div>
+<span class="font-label-data text-label-data text-tertiary">SYSTEM CERTIFIED</span>
+</div>
+<div class="divide-y-0 space-y-2 font-label-data text-label-data">
+<div class="flex justify-between items-start gap-2 py-1.5 px-2 bg-surface-container-lowest/60 rounded">
+<span class="text-outline uppercase text-[11px]">Nombre Archivo</span>
+<span class="text-right text-on-surface text-[11px] font-semibold">ISO NFSMW 2005 ENG PC DVD ZimanX .rar</span>
+</div>
+<div class="flex justify-between items-center py-1.5 px-2 bg-surface-container-lowest/60 rounded">
+<span class="text-outline uppercase text-[11px]">Servidor / Nube</span>
+<span class="text-tertiary font-bold">Google Drive CDN</span>
+</div>
+<div class="flex justify-between items-center py-1.5 px-2 bg-surface-container-lowest/60 rounded">
+<span class="text-outline uppercase text-[11px]">Versión Patch</span>
+<span class="text-secondary-fixed font-bold">Patch v1.3 + No-CD Crack</span>
+</div>
+<div class="flex justify-between items-center py-1.5 px-2 bg-surface-container-lowest/60 rounded">
+<span class="text-outline uppercase text-[11px]">Sistemas Compatibles</span>
+<span class="text-on-surface font-semibold">Windows 10 / 11 (64-bit)</span>
+</div>
+<div class="flex justify-between items-center py-1.5 px-2 bg-surface-container-lowest/60 rounded">
+<span class="text-outline uppercase text-[11px]">Uploader / Fuente</span>
+<span class="text-primary font-bold">ZimanX &amp; NFSRanks Ops</span>
+</div>
+<div class="flex justify-between items-center py-1.5 px-2 bg-surface-container-lowest/60 rounded">
+<span class="text-outline uppercase text-[11px]">Propósito Oficial</span>
+<span class="text-primary-container font-semibold">Leaderboards &amp; Rivals 2026</span>
+</div>
+</div>
+<div class="pt-2">
+<div class="p-2.5 bg-surface-container-high rounded text-center">
+<span class="font-label-hud text-label-hud text-outline uppercase block mb-1">REQUERIMIENTOS MÍNIMOS COMPETITIVOS</span>
+<span class="font-label-data text-label-data text-on-surface">DirectX 9.0c • 2GB RAM • GPU dedicada • Monitor 60Hz+</span>
+</div>
+</div>
+</div>
+<!-- COMMUNITY DISCORD SUPPORT BOX -->
+<div class="bg-surface-container-low rounded-lg p-space-md shadow-xl flex flex-col gap-3 relative overflow-hidden">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded bg-tertiary/10 text-tertiary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-2xl">support_agent</span>
+</div>
+<div class="space-y-1">
+<h4 class="font-headline-sm text-label-hud text-on-surface uppercase tracking-wide">¿DUDAS O PROBLEMAS DE INSTALACIÓN?</h4>
+<p class="font-body-sm text-body-sm text-outline">
+                  Nuestro canal de soporte técnico está disponible 24/7 para resolver errores de DirectX, pantalla negra, resolución 21:9 o calibración de mando.
+                </p>
+</div>
+</div>
+<a class="mt-1 w-full py-2.5 px-4 bg-[#5865F2] hover:bg-[#4752c4] text-white rounded font-headline-sm text-label-hud uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition-all" href="https://discord.gg" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-[18px]">forum</span>
+<span>UNIRSE AL DISCORD OFICIAL</span>
+</a>
+<div class="text-center font-label-data text-label-data text-outline">
+              Canal directo: <span class="text-tertiary">#ayuda-tecnica-mw</span>
+</div>
+</div>
+</div>
+</section>
+<!-- STEP-BY-STEP INSTALLATION GUIDE (4 BESPOKE CARDS) -->
+<section class="mt-4 flex flex-col gap-space-md">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-1">
+<div class="space-y-0.5">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 bg-primary-container rounded-sm"></span>
+<span class="font-label-hud text-label-hud text-primary-container uppercase tracking-widest">INSTALLATION GUIDE // STEP-BY-STEP</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface uppercase tracking-tight">
+              INSTRUCCIONES DE INSTALACIÓN PRECISA
+            </h2>
+</div>
+<div class="flex items-center gap-1 bg-surface-container p-1 rounded">
+<button class="px-3 py-1 font-label-data text-label-data bg-primary-container text-on-primary-container font-bold rounded" id="lang-btn-es">
+              ESPAÑOL
+            </button>
+<button class="px-3 py-1 font-label-data text-label-data text-outline hover:text-on-surface transition-colors rounded" id="lang-btn-en">
+              ENGLISH
+            </button>
+</div>
+</div>
+<!-- 4 Step Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- STEP 01 -->
+<div class="bg-surface-container rounded-lg p-space-md flex flex-col justify-between shadow-lg relative group hover:bg-surface-container-high transition-all">
+<div class="space-y-space-sm">
+<div class="flex items-center justify-between">
+<div class="w-10 h-10 rounded bg-surface-container-lowest flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-2xl">folder_zip</span>
+</div>
+<span class="font-label-timer-lg text-label-timer-lg text-outline-variant/60 font-black">01</span>
+</div>
+<div>
+<span class="font-label-hud text-label-hud text-primary uppercase block">FASE UNO</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface uppercase mt-1">MONTAR LA IMAGEN ISO</h3>
+</div>
+<p class="font-body-sm text-body-sm text-outline">
+                Extrae el archivo descargado <span class="text-on-surface font-label-data">.rar</span> con WinRAR o 7-Zip. En Windows 10/11 haz clic derecho sobre el archivo <span class="text-on-surface font-label-data">.iso</span> y selecciona <strong>"Montar"</strong> para crear una unidad virtual inmediata.
+              </p>
+</div>
+<div class="pt-4 flex items-center gap-1.5 text-primary text-label-data font-label-data">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+<span>Sin necesidad de Daemon Tools</span>
+</div>
+</div>
+<!-- STEP 02 -->
+<div class="bg-surface-container rounded-lg p-space-md flex flex-col justify-between shadow-lg relative group hover:bg-surface-container-high transition-all">
+<div class="space-y-space-sm">
+<div class="flex items-center justify-between">
+<div class="w-10 h-10 rounded bg-surface-container-lowest flex items-center justify-center text-secondary-container">
+<span class="material-symbols-outlined text-2xl">play_circle</span>
+</div>
+<span class="font-label-timer-lg text-label-timer-lg text-outline-variant/60 font-black">02</span>
+</div>
+<div>
+<span class="font-label-hud text-label-hud text-secondary-fixed uppercase block">FASE DOS</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface uppercase mt-1">EJECUTAR SETUP OFICIAL</h3>
+</div>
+<p class="font-body-sm text-body-sm text-outline">
+                Abre Este Equipo, accede a la unidad virtual montada y ejecuta <span class="text-on-surface font-label-data">EAInstall.exe</span> o <span class="text-on-surface font-label-data">AutoRun.exe</span>. Selecciona un directorio limpio sin caracteres especiales (ej. <span class="text-on-surface font-label-data">C:\Games\NFSMW</span>).
+              </p>
+</div>
+<div class="pt-4 flex items-center gap-1.5 text-secondary-fixed text-label-data font-label-data">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+<span>Ruta recomendada sin acentos</span>
+</div>
+</div>
+<!-- STEP 03 -->
+<div class="bg-surface-container rounded-lg p-space-md flex flex-col justify-between shadow-lg relative group hover:bg-surface-container-high transition-all">
+<div class="space-y-space-sm">
+<div class="flex items-center justify-between">
+<div class="w-10 h-10 rounded bg-surface-container-lowest flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-2xl">security_update_good</span>
+</div>
+<span class="font-label-timer-lg text-label-timer-lg text-outline-variant/60 font-black">03</span>
+</div>
+<div>
+<span class="font-label-hud text-label-hud text-tertiary uppercase block">FASE TRES</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface uppercase mt-1">TELEMETRÍA &amp; NO-CD</h3>
+</div>
+<p class="font-body-sm text-body-sm text-outline">
+                Copia el contenido de la carpeta <em>CRACK &amp; TELEMETRY</em> en el directorio principal de instalación. Reemplaza el ejecutable base por <span class="text-on-surface font-label-data">speed.exe</span> optimizado para sincronización automática con Firebase y shield anti-cheat.
+              </p>
+</div>
+<div class="pt-4 flex items-center gap-1.5 text-tertiary text-label-data font-label-data">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+<span>Pre-validado por MW-AC Shield</span>
+</div>
+</div>
+<!-- STEP 04 -->
+<div class="bg-surface-container rounded-lg p-space-md flex flex-col justify-between shadow-lg relative group hover:bg-surface-container-high transition-all">
+<div class="space-y-space-sm">
+<div class="flex items-center justify-between">
+<div class="w-10 h-10 rounded bg-surface-container-lowest flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-2xl">sports_score</span>
+</div>
+<span class="font-label-timer-lg text-label-timer-lg text-outline-variant/60 font-black">04</span>
+</div>
+<div>
+<span class="font-label-hud text-label-hud text-primary uppercase block">FASE CUATRO</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface uppercase mt-1">¡LISTO PARA COMPETIR!</h3>
+</div>
+<p class="font-body-sm text-body-sm text-outline">
+                Inicia el juego, conecta tu mando XInput o teclado mecánico y accede al modo Career o Challenge Series. El sistema registrará los logs automáticamente en cada split checkpoint para homologación en la Blacklist.
+              </p>
+</div>
+<div class="pt-4 flex items-center gap-1.5 text-primary text-label-data font-label-data">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+<span>Cronometraje 128Hz listo</span>
+</div>
+</div>
+</div>
+</section>
+<!-- ESSENTIAL TOOLS & OPTIMIZATION RECOMMENDATIONS (BENTO TILES) -->
+<section class="mt-4 bg-surface-container-low rounded-lg p-space-lg shadow-lg flex flex-col gap-space-md">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container text-2xl">tune</span>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface uppercase">COMPLEMENTOS HOMOLOGADOS DE OPTIMIZACIÓN</h3>
+<span class="font-label-data text-label-data text-outline">Drivers, Widescreen Fixes y herramientas de telemetría permitidas por el reglamento</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<!-- TOOL 01: ThirteenAG Widescreen Fix -->
+<div class="bg-surface-container p-4 rounded-lg flex flex-col justify-between gap-3">
+<div class="space-y-1">
+<div class="flex items-center justify-between">
+<span class="font-label-hud text-label-hud text-tertiary uppercase">RESOLUTION &amp; FOV</span>
+<span class="font-label-data text-label-data text-outline">v4.2.1</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface uppercase">ThirteenAG Widescreen Fix</h4>
+<p class="font-body-sm text-body-sm text-outline">
+                Habilita resoluciones panorámicas nativas (1080p, 1440p, 4K), corrige la relación de aspecto del tacómetro y optimiza el HUD sin cortes laterales.
+              </p>
+</div>
+<div class="flex items-center justify-between pt-2">
+<span class="px-2 py-0.5 bg-surface-container-high text-tertiary font-label-data text-label-data rounded">OFICIALMENTE PERMITIDO</span>
+<a class="font-label-hud text-label-hud text-primary hover:underline flex items-center gap-1" href="#">
+<span>CONFIGURAR</span>
+<span class="material-symbols-outlined text-sm">open_in_new</span>
+</a>
+</div>
+</div>
+<!-- TOOL 02: XInput & Gamepad Controllers -->
+<div class="bg-surface-container p-4 rounded-lg flex flex-col justify-between gap-3">
+<div class="space-y-1">
+<div class="flex items-center justify-between">
+<span class="font-label-hud text-label-hud text-primary uppercase">INPUT LATENCY</span>
+<span class="font-label-data text-label-data text-outline">POLLING 1000Hz</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface uppercase">XInput Xbox &amp; DualSense Driver</h4>
+<p class="font-body-sm text-body-sm text-outline">
+                Soporte plug &amp; play para mandos de Xbox One/Series, DualShock 4 y DualSense con gatillos analógicos calibrados y zona muerta lineal 0%.
+              </p>
+</div>
+<div class="flex items-center justify-between pt-2">
+<span class="px-2 py-0.5 bg-surface-container-high text-primary font-label-data text-label-data rounded">PLUG &amp; PLAY</span>
+<a class="font-label-hud text-label-hud text-primary hover:underline flex items-center gap-1" href="#">
+<span>DESCARGAR</span>
+<span class="material-symbols-outlined text-sm">open_in_new</span>
+</a>
+</div>
+</div>
+<!-- TOOL 03: Telemetry Live Hook Bridge -->
+<div class="bg-surface-container p-4 rounded-lg flex flex-col justify-between gap-3">
+<div class="space-y-1">
+<div class="flex items-center justify-between">
+<span class="font-label-hud text-label-hud text-secondary-container uppercase">FIREBASE SYNC</span>
+<span class="font-label-data text-label-data text-outline">ASI PLUGIN</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface uppercase">NFSRanks Live Bridge (ASI)</h4>
+<p class="font-body-sm text-body-sm text-outline">
+                Captura automáticamente tus cronos de carrera, niveles de persecución y telemetría de motor para enviarlos a la base de datos sin captura manual.
+              </p>
+</div>
+<div class="flex items-center justify-between pt-2">
+<span class="px-2 py-0.5 bg-secondary-container/20 text-secondary-container font-label-data text-label-data rounded">INTEGRACIÓN OFICIAL</span>
+<a class="font-label-hud text-label-hud text-primary hover:underline flex items-center gap-1" href="#">
+<span>HOOK ACTIVO</span>
+<span class="material-symbols-outlined text-sm">open_in_new</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+<!-- REGULATORY SPEEDRUN INTEGRITY NOTICE -->
+<section class="mt-2 p-space-md bg-surface-container-lowest rounded-lg flex flex-col sm:flex-row items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-outline text-2xl">balance</span>
+<p class="font-body-sm text-body-sm text-outline max-w-3xl">
+<strong>Aviso de Arbitraje:</strong> El uso de memorias alteradas, hacks de Nitro infinito o scripts de colisiones invisibles conllevará el baneo permanente del UID de jugador en la base de datos de NFSMW Ranks 2026.
+          </p>
+</div>
+<a class="font-label-hud text-label-hud text-tertiary uppercase hover:underline shrink-0" href="#">
+          LEER REGLAMENTO COMPLETO →
+        </a>
+</section>
+</div>
+</div>
+</div>
+<script>
+  // Simple language toggle mock interaction for instructions
+  const btnEs = document.getElementById('lang-btn-es');
+  const btnEn = document.getElementById('lang-btn-en');
+  if (btnEs && btnEn) {
+    btnEs.addEventListener('click', () => {
+      btnEs.className = 'px-3 py-1 font-label-data text-label-data bg-primary-container text-on-primary-container font-bold rounded';
+      btnEn.className = 'px-3 py-1 font-label-data text-label-data text-outline hover:text-on-surface transition-colors rounded';
+    });
+    btnEn.addEventListener('click', () => {
+      btnEn.className = 'px-3 py-1 font-label-data text-label-data bg-primary-container text-on-primary-container font-bold rounded';
+      btnEs.className = 'px-3 py-1 font-label-data text-label-data text-outline hover:text-on-surface transition-colors rounded';
+    });
+  }
+</script></main><footer class="w-full bg-surface-container-lowest text-on-surface-variant pt-space-xl pb-space-lg"><div class="w-full px-gutter-lg"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-space-xl pb-space-xl"><div class="lg:col-span-2 space-y-space-md"><div class="flex items-center gap-space-sm"><img alt="Brand logo. - Primary color: #ffb800
+- Font: chivo
+- Mode: dark
+- Roundness: rounded-lg
+" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1U0BusLDj07Q3GnZw_xdgavHc0KuvDl2siSzG3Za8fkR_NqGMW-Oo8i1pQad4EAsIvNOAeQqZCY5gF3e6COlctZ6B2BzHnULOk25InyKmE1iK_sNyI5yFIj6kd-EapjqTRJDOd9MSQVXo-sISbJLlDqHX4rOr715Sue3O3y1oFHzBCW-oeBpSsZ9r76HoGRfynsi0njGc-zlzmydKvXQeKyk9GDHVLTcwN7g_bDwwp7LhAMSXHk0noFDq8"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-surface uppercase tracking-tight">NFSMW <span class="text-primary-container">RANKS</span></span><span class="font-label-hud text-label-hud text-outline uppercase">PRECISION SPEEDRUN TELEMETRY</span></div></div><p class="font-body-md text-body-md text-outline max-w-md">Plataforma federada de auditoría y cronometraje de Need for Speed: Most Wanted (2005). Arbitraje de tiempos mediante validación sub-frame de memoria en tiempo real, tasas de refresco fijas y detección de exploits.</p><div class="flex flex-wrap items-center gap-space-sm pt-space-xs"><div class="px-2 py-1 bg-surface-container flex items-center gap-1.5 rounded-sm"><span class="material-symbols-outlined text-primary-container text-[16px]">verified</span><span class="font-label-hud text-label-hud text-on-surface uppercase">MW-AC SHIELD v2.4</span></div><div class="px-2 py-1 bg-surface-container flex items-center gap-1.5 rounded-sm"><span class="material-symbols-outlined text-tertiary text-[16px]">memory</span><span class="font-label-hud text-label-hud text-on-surface uppercase">VALIDACIÓN DE MEMORIA</span></div><div class="px-2 py-1 bg-surface-container flex items-center gap-1.5 rounded-sm"><span class="material-symbols-outlined text-secondary-container text-[16px]">security</span><span class="font-label-hud text-label-hud text-on-surface uppercase">ANTI-CHEAT KERNEL OK</span></div></div></div><div class="space-y-space-sm"><span class="font-label-hud text-label-hud text-primary uppercase block tracking-wider">NAVEGACIÓN DIRECTA</span><ul class="space-y-space-xs font-body-sm text-body-sm"><li class="flex items-center gap-space-xs text-outline-variant hover:text-on-surface"><a href="#">Inicio &amp; Clasificaciones</a></li><li class="flex items-center gap-space-xs text-outline-variant hover:text-on-surface"><a href="#">Rutas &amp; Circuitos Urbanos</a></li><li class="flex items-center gap-space-xs text-outline-variant hover:text-on-surface"><a href="#">Blacklist 2026 Rivals</a></li><li class="flex items-center gap-space-xs text-outline-variant hover:text-on-surface"><a href="#">Guías de Tuning &amp; Dyno</a></li><li class="flex items-center gap-space-xs text-outline-variant hover:text-on-surface"><a href="#">Reglamento de Competición</a></li><li class="flex items-center gap-space-xs text-outline-variant hover:text-on-surface"><a href="#">Centro de Descargas &amp; Tools</a></li></ul></div><div class="space-y-space-sm"><span class="font-label-hud text-label-hud text-primary uppercase block tracking-wider">REGLAMENTO &amp; ARBITRAJE</span><ul class="space-y-space-xs font-body-sm text-body-sm"><li class="flex items-center gap-space-xs text-outline-variant hover:text-on-surface"><a href="#">Reglamento Oficial Any% / 100%</a></li><li class="flex items-center gap-space-xs text-outline-variant hover:text-on-surface"><a href="#">Límites de FPS y ExtraOptions</a></li><li class="flex items-center gap-space-xs text-outline-variant hover:text-on-surface"><a href="#">Verificación de Logs de Telemetría</a></li><li class="flex items-center gap-space-xs text-outline-variant hover:text-on-surface"><a href="#">Especificaciones de Vehículos Permitidos</a></li><li class="flex items-center gap-space-xs text-outline-variant hover:text-on-surface"><a href="#">Protocolo de Submisión de Repeticiones</a></li></ul></div><div class="space-y-space-sm"><span class="font-label-hud text-label-hud text-primary uppercase block tracking-wider">TELEMETRÍA &amp; ESTADO</span><div class="space-y-space-xs font-label-data text-label-data"><div class="flex justify-between items-center"><span class="text-outline">NODO ROCKPORT SERVER</span><span class="text-tertiary font-bold">OPERATIVO</span></div><div class="flex justify-between items-center"><span class="text-outline">TICK RATE RECEPTOR</span><span class="text-primary">128 Hz LOCKED</span></div><div class="flex justify-between items-center"><span class="text-outline">ESTADO PURSUIT RADAR</span><span class="text-secondary-container font-bold">HEAT 5 ACTIVE</span></div><div class="flex justify-between items-center"><span class="text-outline">KERNEL VALIDATOR</span><span class="text-on-surface">ONLINE (99.99%)</span></div></div><div class="pt-space-xs"><a class="inline-flex items-center gap-1 font-label-hud text-label-hud text-primary-container uppercase hover:text-primary transition-colors" href="https://discord.gg" rel="noopener noreferrer" target="_blank"><span class="material-symbols-outlined text-[14px]">headset_mic</span><span>SOPORTE EN DISCORD</span></a></div></div></div><div class="pt-space-lg flex flex-col md:flex-row items-center justify-between gap-space-md font-body-sm text-body-sm text-outline"><p>© 2024–2026 NFSMW Ranks Community. Need for Speed™ y Most Wanted™ pertenecen a Electronic Arts Inc. Sistema independiente de verificación y arbitraje de speedruns.</p><div class="flex items-center gap-space-lg font-label-data text-label-data text-outline"><a class="hover:text-primary transition-colors" href="#">REGLAMENTOS</a><a class="hover:text-primary transition-colors" href="#">PRIVACIDAD &amp; LOGS</a><a class="hover:text-tertiary transition-colors flex items-center gap-1" href="https://discord.gg" rel="noopener noreferrer" target="_blank">DISCORD</a><a class="hover:text-primary-container transition-colors flex items-center gap-1" href="https://github.com" rel="noopener noreferrer" target="_blank">GITHUB</a></div></div></div></footer></body></html>
