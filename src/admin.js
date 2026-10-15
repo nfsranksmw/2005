@@ -2500,27 +2500,9 @@ function getActiveChampWeekData(weekNum) {
         }
     }
 
-    // Para Semana 3 y Semana 4: garantizar 5 grupos (Alfa, Beta, Gama, Delta, Épsilon) con 4 plazas cada uno
-    if (result && num >= 3) {
-        const defG = getDefaultChampionshipGroups(num);
-        if (!Array.isArray(result.groups) || result.groups.length < 5) {
-            if (!Array.isArray(result.groups) || result.groups.length === 0) {
-                result.groups = JSON.parse(JSON.stringify(defG));
-            } else {
-                for (let g = result.groups.length; g < defG.length; g++) {
-                    result.groups.push(JSON.parse(JSON.stringify(defG[g])));
-                }
-            }
-        }
-        result.groups.forEach((grp, gIdx) => {
-            if (!Array.isArray(grp.pilots)) grp.pilots = [];
-            while (grp.pilots.length < 4) {
-                const defVal = (defG[gIdx] && defG[gIdx].pilots && defG[gIdx].pilots[grp.pilots.length]) 
-                    ? defG[gIdx].pilots[grp.pilots.length] 
-                    : `open_${gIdx * 4 + grp.pilots.length + 1}`;
-                grp.pilots.push(defVal);
-            }
-        });
+    // Si la semana no tiene grupos configurados, inicializar con los grupos por defecto sin forzar tamaños
+    if (result && (!Array.isArray(result.groups) || result.groups.length === 0)) {
+        result.groups = JSON.parse(JSON.stringify(getDefaultChampionshipGroups(num)));
     }
 
     return result;
@@ -2702,18 +2684,26 @@ function renderChampionshipAdminGroupPills() {
 
     const activeGrp = groups[currentChampAdminGroup] || groups[0];
     if (saveGroupBtn && activeGrp) {
-        saveGroupBtn.innerHTML = `💾 Guardar los 8 Desafíos (${escapeHtml(activeGrp.name)})`;
-        saveGroupBtn.title = `Guardar todos los 8 desafíos y ganadores para ${escapeHtml(activeGrp.name)} en la Semana ${currentChampAdminWeek}`;
+        saveGroupBtn.innerHTML = `💾 Guardar Desafíos (${escapeHtml(activeGrp.name)})`;
+        saveGroupBtn.title = `Guardar desafíos y ganadores para ${escapeHtml(activeGrp.name)} en la Semana ${currentChampAdminWeek}`;
     }
 
     if (infoEl && activeGrp) {
-        const numSlots = (currentChampAdminWeek >= 3 || (Array.isArray(activeGrp.pilots) && activeGrp.pilots.length >= 4)) ? 4 : 3;
-        const pilots = Array.isArray(activeGrp.pilots) ? activeGrp.pilots : Array.from({ length: numSlots }, (_, i) => currentChampAdminGroup * numSlots + i + 1);
+        const defaultSlots = (currentChampAdminWeek >= 3) ? 4 : 3;
+        const pilots = (Array.isArray(activeGrp.pilots) && activeGrp.pilots.length > 0)
+            ? activeGrp.pilots
+            : Array.from({ length: defaultSlots }, (_, i) => currentChampAdminGroup * defaultSlots + i + 1);
         const pilotObjs = pilots.map(p => getChampionshipDriverByRank(p));
-        const colors = ['var(--nfs-orange)', '#38bdf8', '#a7f3d0', '#fbbf24', '#c084fc'];
+        const colors = ['var(--nfs-orange)', '#38bdf8', '#a7f3d0', '#fbbf24', '#c084fc', '#f43f5e'];
+
+        let groupTypeTitle = 'Grupo';
+        if (pilots.length === 2) groupTypeTitle = 'Dúo';
+        else if (pilots.length === 3) groupTypeTitle = 'Trío';
+        else if (pilots.length === 4) groupTypeTitle = 'Cuarteto';
+        else if (pilots.length >= 5) groupTypeTitle = 'Parrilla';
 
         infoEl.innerHTML = `
-            <span style="font-weight: 700; color: #fff;">${pilots.length >= 4 ? 'Cuarteto' : 'Trío'} ${escapeHtml(activeGrp.name)}:</span>
+            <span style="font-weight: 700; color: #fff;">${groupTypeTitle} ${escapeHtml(activeGrp.name)}:</span>
             ${pilotObjs.map((p, idx) => `<span style="color: ${colors[idx % colors.length]}; font-weight: 700;">🏎️ #${idx + 1} ${escapeHtml(p.alias)}</span>`).join(' <span style="color: #64748b;">•</span> ')}
         `;
     }
@@ -2761,13 +2751,20 @@ function renderChampionshipAdminGroups() {
         : getDefaultChampionshipGroups(currentChampAdminWeek);
 
     container.innerHTML = groups.map((grp, grpIdx) => {
-        const numSlots = (currentChampAdminWeek >= 3 || (Array.isArray(grp.pilots) && grp.pilots.length >= 4)) ? 4 : 3;
-        const pilots = Array.isArray(grp.pilots) ? grp.pilots : Array.from({ length: numSlots }, (_, i) => grpIdx * numSlots + i + 1);
-        while (pilots.length < numSlots) {
-            pilots.push(`open_${grpIdx * numSlots + pilots.length + 1}`);
-        }
+        const defaultSlots = (currentChampAdminWeek >= 3) ? 4 : 3;
+        const pilots = (Array.isArray(grp.pilots) && grp.pilots.length > 0) 
+            ? [...grp.pilots] 
+            : Array.from({ length: defaultSlots }, (_, i) => grpIdx * defaultSlots + i + 1);
+        const numSlots = pilots.length;
         const hasOpenSlots = pilots.some(p => String(p).startsWith('open'));
         const slotIndices = Array.from({ length: numSlots }, (_, i) => i);
+
+        let groupTypeTitle = 'Grupo';
+        if (numSlots === 2) groupTypeTitle = 'Dúo';
+        else if (numSlots === 3) groupTypeTitle = 'Trío';
+        else if (numSlots === 4) groupTypeTitle = 'Cuarteto';
+        else if (numSlots >= 5) groupTypeTitle = 'Parrilla Extendida';
+
         return `
             <div class="admin-group-card" id="admin-group-card-${grpIdx}" style="background: rgba(18,22,34,0.75); border: 1px solid ${hasOpenSlots ? 'rgba(16,185,129,0.35)' : 'rgba(255,255,255,0.08)'}; border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 10px; transition: border-color 0.2s ease;">
                 <div class="admin-group-header-row" style="display: flex; align-items: center; gap: 8px; justify-content: space-between;">
@@ -2781,17 +2778,17 @@ function renderChampionshipAdminGroups() {
                             💾 Guardar
                         </button>
                         <button type="button" class="admin-btn admin-btn-xs" onclick="deleteChampionshipAdminGroup(${grpIdx})" title="Eliminar este grupo únicamente de la semana activa" style="background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.5); color: #fca5a5; padding: 6px 10px; font-size: 11px; border-radius: 6px; cursor: pointer; white-space: nowrap; transition: all 0.2s ease;">
-                            🗑️ Eliminar
+                            🗑️ Eliminar Grupo
                         </button>
                     </div>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top:2px;">
-                    <div style="font-size:11px; color:var(--text-muted); font-weight:700;">Pilotos Asignados al ${numSlots >= 4 ? 'Cuarteto' : 'Trío'} / Grupo:</div>
+                    <div style="font-size:11px; color:var(--text-muted); font-weight:700;">Pilotos Asignados al ${groupTypeTitle} (${numSlots} Pilotos):</div>
                     ${hasOpenSlots ? `<span style="font-size:10px; font-weight:800; color:#34d399; background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.3); padding:2px 6px; border-radius:4px;">🟢 Contiene Plazas Disponibles</span>` : ''}
                 </div>
                 <div class="admin-group-pilots-list" style="display: flex; flex-direction: column; gap: 8px;">
                     ${slotIndices.map(slotIdx => {
-                        const pRank = pilots[slotIdx] !== undefined ? pilots[slotIdx] : `open_${grpIdx * numSlots + slotIdx + 1}`;
+                        const pRank = pilots[slotIdx] !== undefined ? pilots[slotIdx] : `open_${grpIdx * 4 + slotIdx + 1}`;
                         const isOpen = String(pRank).startsWith('open');
                         return `
                             <div class="admin-group-pilot-row" style="display: flex; align-items: center; gap: 8px; ${isOpen ? 'background: rgba(16,185,129,0.08); border: 1px dashed rgba(16,185,129,0.35); border-radius: 6px; padding: 4px 8px;' : ''}">
@@ -2808,13 +2805,97 @@ function renderChampionshipAdminGroups() {
                                         ✏️
                                     </button>
                                 `}
+                                <button type="button" class="admin-btn admin-btn-xs" onclick="removePilotFromGroup(${grpIdx}, ${slotIdx})" title="Eliminar este piloto de este grupo" style="background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.45); color: #fca5a5; padding: 5px 8px; font-size: 11px; border-radius: 4px; cursor: pointer; white-space: nowrap; transition: all 0.2s ease;">
+                                    🗑️
+                                </button>
                             </div>
                         `;
                     }).join('')}
                 </div>
+                <div style="display: flex; justify-content: flex-end; margin-top: 4px; padding-top: 6px; border-top: 1px dashed rgba(255,255,255,0.08);">
+                    <button type="button" class="admin-btn admin-btn-xs" onclick="addPilotToGroup(${grpIdx})" title="Añadir una nueva plaza o piloto a este grupo" style="background: rgba(16,185,129,0.18); border: 1px solid rgba(16,185,129,0.5); color: #6ee7b7; padding: 5px 12px; font-size: 11px; border-radius: 5px; cursor: pointer; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
+                        ➕ Añadir Piloto al Grupo
+                    </button>
+                </div>
             </div>
         `;
     }).join('');
+}
+
+async function removePilotFromGroup(grpIdx, slotIdx) {
+    const weekData = getActiveChampWeekData(currentChampAdminWeek);
+    if (!weekData) return;
+
+    const currentGroups = getChampionshipGroupsFromUI();
+    if (!currentGroups || !currentGroups[grpIdx]) return;
+
+    const grp = currentGroups[grpIdx];
+    if (!Array.isArray(grp.pilots) || grp.pilots.length <= 1) {
+        showToast("El grupo debe mantener al menos 1 piloto.", "warning");
+        return;
+    }
+
+    const removedPilotVal = grp.pilots[slotIdx];
+    const removedDriver = getChampionshipDriverByRank(removedPilotVal);
+    const removedName = removedDriver ? (removedDriver.alias || removedDriver.name) : `Piloto #${slotIdx + 1}`;
+
+    grp.pilots.splice(slotIdx, 1);
+    weekData.groups = currentGroups;
+    if (cachedChampWeeksData) {
+        if (Array.isArray(cachedChampWeeksData)) {
+            const found = cachedChampWeeksData.find(w => w && (w.weekNumber === currentChampAdminWeek || w.weekNum === currentChampAdminWeek));
+            if (found) found.groups = currentGroups;
+        } else if (typeof cachedChampWeeksData === 'object') {
+            if (cachedChampWeeksData[currentChampAdminWeek]) cachedChampWeeksData[currentChampAdminWeek].groups = currentGroups;
+            if (cachedChampWeeksData[String(currentChampAdminWeek)]) cachedChampWeeksData[String(currentChampAdminWeek)].groups = currentGroups;
+        }
+    }
+
+    renderChampionshipAdminGroups();
+    renderChampionshipAdminGroupPills();
+    renderChampionshipAdminChallenges();
+
+    await persistChampionshipWeeksData(cachedChampWeeksData);
+    showToast(`✓ Piloto "${removedName}" eliminado de ${grp.name} (Semana ${currentChampAdminWeek}) y sincronizado con la web.`, "success");
+}
+
+async function addPilotToGroup(grpIdx) {
+    const weekData = getActiveChampWeekData(currentChampAdminWeek);
+    if (!weekData) return;
+
+    const currentGroups = getChampionshipGroupsFromUI();
+    if (!currentGroups || !currentGroups[grpIdx]) return;
+
+    const grp = currentGroups[grpIdx];
+    if (!Array.isArray(grp.pilots)) {
+        grp.pilots = [];
+    }
+
+    if (grp.pilots.length >= 8) {
+        showToast("El grupo ya alcanzó el límite máximo de 8 pilotos.", "warning");
+        return;
+    }
+
+    const newSlotNumber = grp.pilots.length + 1;
+    const nextOpenId = `open_${grpIdx * 10 + newSlotNumber}`;
+    grp.pilots.push(nextOpenId);
+    weekData.groups = currentGroups;
+    if (cachedChampWeeksData) {
+        if (Array.isArray(cachedChampWeeksData)) {
+            const found = cachedChampWeeksData.find(w => w && (w.weekNumber === currentChampAdminWeek || w.weekNum === currentChampAdminWeek));
+            if (found) found.groups = currentGroups;
+        } else if (typeof cachedChampWeeksData === 'object') {
+            if (cachedChampWeeksData[currentChampAdminWeek]) cachedChampWeeksData[currentChampAdminWeek].groups = currentGroups;
+            if (cachedChampWeeksData[String(currentChampAdminWeek)]) cachedChampWeeksData[String(currentChampAdminWeek)].groups = currentGroups;
+        }
+    }
+
+    renderChampionshipAdminGroups();
+    renderChampionshipAdminGroupPills();
+    renderChampionshipAdminChallenges();
+
+    await persistChampionshipWeeksData(cachedChampWeeksData);
+    showToast(`✓ Nueva plaza (#${newSlotNumber}) agregada a ${grp.name} (Semana ${currentChampAdminWeek}) y sincronizada con la web.`, "success");
 }
 
 function getChampionshipGroupsFromUI() {
@@ -2837,13 +2918,13 @@ function getChampionshipGroupsFromUI() {
         const nameEl = document.getElementById(`grp-name-${grpIdx}`);
         const tagEl = document.getElementById(`grp-tag-${grpIdx}`);
         const slotRows = card.querySelectorAll('.admin-group-pilot-row');
-        const slotCount = slotRows.length || (currentChampAdminWeek >= 3 ? 4 : 3);
+        const slotCount = slotRows.length;
         const pilots = [];
         for (let slotIdx = 0; slotIdx < slotCount; slotIdx++) {
             const pEl = document.getElementById(`grp-p${slotIdx}-${grpIdx}`);
-            const defaultRank = (grpIdx * slotCount + slotIdx + 1 > 15) 
-                ? `open_${grpIdx * slotCount + slotIdx + 1}` 
-                : (grpIdx * slotCount + slotIdx + 1);
+            const defaultRank = (grpIdx * 4 + slotIdx + 1 > 15) 
+                ? `open_${grpIdx * 4 + slotIdx + 1}` 
+                : (grpIdx * 4 + slotIdx + 1);
             pilots.push(parsePilotVal(pEl ? pEl.value : null, defaultRank));
         }
 
@@ -3130,6 +3211,15 @@ async function deleteChampionshipAdminGroup(grpIdx) {
 
     currentGroups.splice(grpIdx, 1);
     weekData.groups = currentGroups;
+    if (cachedChampWeeksData) {
+        if (Array.isArray(cachedChampWeeksData)) {
+            const found = cachedChampWeeksData.find(w => w && (w.weekNumber === currentChampAdminWeek || w.weekNum === currentChampAdminWeek));
+            if (found) found.groups = currentGroups;
+        } else if (typeof cachedChampWeeksData === 'object') {
+            if (cachedChampWeeksData[currentChampAdminWeek]) cachedChampWeeksData[currentChampAdminWeek].groups = currentGroups;
+            if (cachedChampWeeksData[String(currentChampAdminWeek)]) cachedChampWeeksData[String(currentChampAdminWeek)].groups = currentGroups;
+        }
+    }
 
     const remainingGroups = (getActiveChampWeekData(currentChampAdminWeek)?.groups) || [];
     if (currentChampAdminGroup >= remainingGroups.length) {
@@ -3340,8 +3430,8 @@ function onAssignModalGroupChanged(preferredSlotIdx) {
     const participants = getChampionshipParticipantsList();
     const blDrivers = getChampionshipDefaultDrivers();
 
-    const numSlots = (currentChampAdminWeek >= 3 || pilots.length >= 4) ? 4 : 3;
-    const slotIndices = Array.from({ length: Math.max(pilots.length, numSlots) }, (_, sIdx) => sIdx);
+    const numSlots = pilots.length;
+    const slotIndices = Array.from({ length: numSlots }, (_, sIdx) => sIdx);
 
     slotSelect.innerHTML = slotIndices.map(sIdx => {
         const val = pilots[sIdx] !== undefined ? pilots[sIdx] : `open_${(grpIdx * 4) + sIdx + 1}`;
@@ -3527,8 +3617,8 @@ function onRegisterNewPilotGroupChanged(preferredSlotIdx) {
     const participants = getChampionshipParticipantsList();
     const blDrivers = getChampionshipDefaultDrivers();
 
-    const numSlots = (currentChampAdminWeek >= 3 || pilots.length >= 4) ? 4 : 3;
-    const slotIndices = Array.from({ length: Math.max(pilots.length, numSlots) }, (_, sIdx) => sIdx);
+    const numSlots = pilots.length;
+    const slotIndices = Array.from({ length: numSlots }, (_, sIdx) => sIdx);
 
     slotSelect.innerHTML = slotIndices.map(sIdx => {
         const val = pilots[sIdx] !== undefined ? pilots[sIdx] : `open_${(grpIdx * 4) + sIdx + 1}`;
@@ -4084,8 +4174,7 @@ function renderChampionshipAdminChallenges() {
         }
 
         const isWeek4 = (currentChampAdminWeek >= 3 || (top3 && top3.length >= 4) || (grpPilots && grpPilots.length >= 4));
-        const minLen = isWeek4 ? 4 : 3;
-        if (!top3 || !Array.isArray(top3) || top3.length < minLen) {
+        if (!top3 || !Array.isArray(top3) || top3.length === 0) {
             top3 = [
                 { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 400000, repBadge: "💰 $400.000 REP" },
                 { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 250000, repBadge: "💰 $250.000 REP" },
@@ -4095,14 +4184,6 @@ function renderChampionshipAdminChallenges() {
                 top3.push({ rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 10, badge: "🔩 +10 PTS", repMoney: 80000, repBadge: "💰 $80.000 REP" });
             }
         }
-        if (isWeek4 && top3.length < 4) {
-            top3.push({ rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 10, badge: "🔩 +10 PTS", repMoney: 80000, repBadge: "💰 $80.000 REP" });
-        }
-
-        const g1 = top3[0] || {};
-        const g2 = top3[1] || {};
-        const g3 = top3[2] || {};
-        const g4 = top3[3] || {};
 
         return `
             <div class="admin-challenge-card" id="champ-admin-ch-${idx}">
@@ -4117,7 +4198,7 @@ function renderChampionshipAdminChallenges() {
                             SEMANA ${currentChampAdminWeek} • ${escapeHtml(grpName)}
                         </span>
                     </div>
-                    <div class="admin-challenge-actions">
+                    <div class="admin-challenge-actions" style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
                         <button type="button" class="admin-btn admin-btn-xs" onclick="saveChampionshipSingleChallenge(${idx})" 
                             style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; font-weight: 700; border: none; box-shadow: 0 2px 6px rgba(16,185,129,0.35); padding: 5px 12px; font-size: 11px; border-radius: 5px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;"
                             title="Guardar este desafío individual para ${escapeHtml(grpName)}">
@@ -4127,6 +4208,11 @@ function renderChampionshipAdminChallenges() {
                             style="padding: 5px 10px; font-size: 11px; border-color: rgba(255,255,255,0.2); color: var(--text-muted);"
                             title="Restablecer este desafío a sus valores predeterminados">
                             ↺ Resetear
+                        </button>
+                        <button type="button" class="admin-btn admin-btn-xs" onclick="deleteChampionshipAdminChallenge(${idx})" 
+                            style="background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.5); color: #fca5a5; padding: 5px 10px; font-size: 11px; border-radius: 5px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;"
+                            title="Eliminar este desafío de la Semana ${currentChampAdminWeek}">
+                            🗑️ Eliminar Desafío
                         </button>
                     </div>
                 </div>
@@ -4151,169 +4237,74 @@ function renderChampionshipAdminChallenges() {
                     </div>
                 </div>
 
-                <!-- Casillas de Ganadores: Oro, Silver, Bronce y Zinc para este Grupo -->
+                <!-- Casillas de Ganadores Dinámicas: Oro, Silver, Bronce, Zinc y puestos adicionales -->
                 <div class="admin-winners-grid">
-                    <!-- Ganador Oro (1° Puesto) -->
-                    <div class="admin-winner-box admin-winner-gold">
-                        <div class="admin-winner-header">
-                            <span style="color: #fbbf24; font-weight: 800; font-size: 12px;">🥇 GANADOR ORO (1° PUESTO)</span>
-                            <span style="color: var(--nfs-orange); font-size: 11px; font-weight: 700;">+${(g1.bonus !== undefined && g1.bonus !== null && g1.bonus !== '') ? g1.bonus : 100} PTS</span>
-                        </div>
-                        <div style="display: flex; gap: 4px; align-items: center; margin-bottom: 2px; flex-wrap: wrap;">
-                            <span style="font-size: 10px; color: var(--text-muted); font-weight: 700;">⚡ Asignar:</span>
-                            ${grpPilots.map(p => `
-                                <button type="button" class="admin-winner-quick-chip" onclick="quickAssignPilotToWinner(${idx}, 1, '${escapeHtml(p.alias)}', '${escapeHtml(p.ride)}')">
-                                    ${escapeHtml(p.alias)}
-                                </button>
-                            `).join('')}
-                        </div>
-                        <div>
-                            <label class="admin-field-label">Piloto Ganador</label>
-                            <input type="text" id="ch-p1-pilot-${idx}" list="bl-pilots-datalist" class="admin-form-input" style="font-weight: 700;" value="${escapeHtml(g1.pilot === 'Por disputar' ? '' : (g1.pilot || ''))}" placeholder="Nombre o Nick del Piloto">
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                            <div>
-                                <label class="admin-field-label">Auto Utilizado</label>
-                                <input type="text" id="ch-p1-car-${idx}" class="admin-form-input" value="${escapeHtml(g1.car || '')}" placeholder="Vehículo">
-                            </div>
-                            <div>
-                                <label class="admin-field-label">Tiempo (mm:ss.ddd)</label>
-                                <input type="text" id="ch-p1-time-${idx}" class="admin-form-input" style="font-family: var(--font-mono); font-weight: 700; color: #fbbf24;" maxlength="9" oninput="applyRaceTimeMask(this)" value="${escapeHtml(isZeroOrNullTime(g1.time) ? '' : (g1.time || ''))}" placeholder="01:14.230">
-                            </div>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                            <div>
-                                <label class="admin-field-label">Bono Puntos</label>
-                                <input type="number" id="ch-p1-bonus-${idx}" class="admin-form-input" min="0" value="${(g1.bonus !== undefined && g1.bonus !== null && g1.bonus !== '') ? g1.bonus : 100}" placeholder="0">
-                            </div>
-                            <div>
-                                <label class="admin-field-label">Recompensa REP ($)</label>
-                                <input type="number" id="ch-p1-rep-${idx}" class="admin-form-input" min="0" value="${(g1.repMoney !== undefined && g1.repMoney !== null && g1.repMoney !== '') ? g1.repMoney : 400000}" placeholder="0">
-                            </div>
-                        </div>
-                    </div>
+                    ${top3.map((winner, mIdx) => {
+                        const pos = mIdx + 1;
+                        const cfg = getMedalPositionConfig(mIdx);
+                        const bonusVal = (winner.bonus !== undefined && winner.bonus !== null && winner.bonus !== '') ? winner.bonus : cfg.defBonus;
+                        const repVal = (winner.repMoney !== undefined && winner.repMoney !== null && winner.repMoney !== '') ? winner.repMoney : cfg.defRep;
+                        const pilotVal = (winner.pilot === 'Por disputar' ? '' : (winner.pilot || ''));
+                        const carVal = winner.car || '';
+                        const timeVal = isZeroOrNullTime(winner.time) ? '' : (winner.time || '');
 
-                    <!-- Ganador Silver (2° Puesto) -->
-                    <div class="admin-winner-box admin-winner-silver">
-                        <div class="admin-winner-header">
-                            <span style="color: #e2e8f0; font-weight: 800; font-size: 12px;">🥈 GANADOR SILVER (2° PUESTO)</span>
-                            <span style="color: var(--nfs-orange); font-size: 11px; font-weight: 700;">+${(g2.bonus !== undefined && g2.bonus !== null && g2.bonus !== '') ? g2.bonus : 50} PTS</span>
-                        </div>
-                        <div style="display: flex; gap: 4px; align-items: center; margin-bottom: 2px; flex-wrap: wrap;">
-                            <span style="font-size: 10px; color: var(--text-muted); font-weight: 700;">⚡ Asignar:</span>
-                            ${grpPilots.map(p => `
-                                <button type="button" class="admin-winner-quick-chip" onclick="quickAssignPilotToWinner(${idx}, 2, '${escapeHtml(p.alias)}', '${escapeHtml(p.ride)}')">
-                                    ${escapeHtml(p.alias)}
-                                </button>
-                            `).join('')}
-                        </div>
-                        <div>
-                            <label class="admin-field-label">Piloto Segundo</label>
-                            <input type="text" id="ch-p2-pilot-${idx}" list="bl-pilots-datalist" class="admin-form-input" style="font-weight: 700;" value="${escapeHtml(g2.pilot === 'Por disputar' ? '' : (g2.pilot || ''))}" placeholder="Nombre o Nick del Piloto">
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                            <div>
-                                <label class="admin-field-label">Auto Utilizado</label>
-                                <input type="text" id="ch-p2-car-${idx}" class="admin-form-input" value="${escapeHtml(g2.car || '')}" placeholder="Vehículo">
+                        return `
+                            <div class="admin-winner-box ${cfg.borderClass}" data-medal-idx="${mIdx}">
+                                <div class="admin-winner-header">
+                                    <span style="color: ${cfg.color}; font-weight: 800; font-size: 12px;">${cfg.title}</span>
+                                    <div style="display: flex; align-items: center; gap: 6px;">
+                                        <span style="color: var(--nfs-orange); font-size: 11px; font-weight: 700;">+${bonusVal} PTS</span>
+                                        <button type="button" class="admin-btn admin-btn-xs" onclick="removeMedalWinnerFromChallenge(${idx}, ${mIdx})" 
+                                            style="background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.45); color: #fca5a5; padding: 2px 6px; font-size: 10px; border-radius: 4px; cursor: pointer;"
+                                            title="Eliminar esta medalla / puesto">
+                                            🗑️ Eliminar
+                                        </button>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 4px; align-items: center; margin-bottom: 2px; flex-wrap: wrap;">
+                                    <span style="font-size: 10px; color: var(--text-muted); font-weight: 700;">⚡ Asignar:</span>
+                                    ${grpPilots.map(p => `
+                                        <button type="button" class="admin-winner-quick-chip" onclick="quickAssignPilotToWinner(${idx}, ${pos}, '${escapeHtml(p.alias)}', '${escapeHtml(p.ride)}')">
+                                            ${escapeHtml(p.alias)}
+                                        </button>
+                                    `).join('')}
+                                </div>
+                                <div>
+                                    <label class="admin-field-label">Piloto Ganador</label>
+                                    <input type="text" id="ch-p${pos}-pilot-${idx}" list="bl-pilots-datalist" class="admin-form-input" style="font-weight: 700;" value="${escapeHtml(pilotVal)}" placeholder="Nombre o Nick del Piloto">
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                    <div>
+                                        <label class="admin-field-label">Auto Utilizado</label>
+                                        <input type="text" id="ch-p${pos}-car-${idx}" class="admin-form-input" value="${escapeHtml(carVal)}" placeholder="Vehículo">
+                                    </div>
+                                    <div>
+                                        <label class="admin-field-label">Tiempo (mm:ss.ddd)</label>
+                                        <input type="text" id="ch-p${pos}-time-${idx}" class="admin-form-input" style="font-family: var(--font-mono); font-weight: 700; color: ${cfg.color};" maxlength="9" oninput="applyRaceTimeMask(this)" value="${escapeHtml(timeVal)}" placeholder="01:14.230">
+                                    </div>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                    <div>
+                                        <label class="admin-field-label">Bono Puntos</label>
+                                        <input type="number" id="ch-p${pos}-bonus-${idx}" class="admin-form-input" min="0" value="${bonusVal}" placeholder="0">
+                                    </div>
+                                    <div>
+                                        <label class="admin-field-label">Recompensa REP ($)</label>
+                                        <input type="number" id="ch-p${pos}-rep-${idx}" class="admin-form-input" min="0" value="${repVal}" placeholder="0">
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <label class="admin-field-label">Tiempo (mm:ss.ddd)</label>
-                                <input type="text" id="ch-p2-time-${idx}" class="admin-form-input" style="font-family: var(--font-mono); font-weight: 700; color: #e2e8f0;" maxlength="9" oninput="applyRaceTimeMask(this)" value="${escapeHtml(isZeroOrNullTime(g2.time) ? '' : (g2.time || ''))}" placeholder="01:16.890">
-                            </div>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                            <div>
-                                <label class="admin-field-label">Bono Puntos</label>
-                                <input type="number" id="ch-p2-bonus-${idx}" class="admin-form-input" min="0" value="${(g2.bonus !== undefined && g2.bonus !== null && g2.bonus !== '') ? g2.bonus : 50}" placeholder="0">
-                            </div>
-                            <div>
-                                <label class="admin-field-label">Recompensa REP ($)</label>
-                                <input type="number" id="ch-p2-rep-${idx}" class="admin-form-input" min="0" value="${(g2.repMoney !== undefined && g2.repMoney !== null && g2.repMoney !== '') ? g2.repMoney : 250000}" placeholder="0">
-                            </div>
-                        </div>
-                    </div>
+                        `;
+                    }).join('')}
+                </div>
 
-                    <!-- Ganador Bronce (3° Puesto) -->
-                    <div class="admin-winner-box admin-winner-bronze">
-                        <div class="admin-winner-header">
-                            <span style="color: #fdba74; font-weight: 800; font-size: 12px;">🥉 GANADOR BRONCE (3° PUESTO)</span>
-                            <span style="color: var(--nfs-orange); font-size: 11px; font-weight: 700;">+${(g3.bonus !== undefined && g3.bonus !== null && g3.bonus !== '') ? g3.bonus : 20} PTS</span>
-                        </div>
-                        <div style="display: flex; gap: 4px; align-items: center; margin-bottom: 2px; flex-wrap: wrap;">
-                            <span style="font-size: 10px; color: var(--text-muted); font-weight: 700;">⚡ Asignar:</span>
-                            ${grpPilots.map(p => `
-                                <button type="button" class="admin-winner-quick-chip" onclick="quickAssignPilotToWinner(${idx}, 3, '${escapeHtml(p.alias)}', '${escapeHtml(p.ride)}')">
-                                    ${escapeHtml(p.alias)}
-                                </button>
-                            `).join('')}
-                        </div>
-                        <div>
-                            <label class="admin-field-label">Piloto Tercero</label>
-                            <input type="text" id="ch-p3-pilot-${idx}" list="bl-pilots-datalist" class="admin-form-input" style="font-weight: 700;" value="${escapeHtml(g3.pilot === 'Por disputar' ? '' : (g3.pilot || ''))}" placeholder="Nombre o Nick del Piloto">
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                            <div>
-                                <label class="admin-field-label">Auto Utilizado</label>
-                                <input type="text" id="ch-p3-car-${idx}" class="admin-form-input" value="${escapeHtml(g3.car || '')}" placeholder="Vehículo">
-                            </div>
-                            <div>
-                                <label class="admin-field-label">Tiempo (mm:ss.ddd)</label>
-                                <input type="text" id="ch-p3-time-${idx}" class="admin-form-input" style="font-family: var(--font-mono); font-weight: 700; color: #fdba74;" maxlength="9" oninput="applyRaceTimeMask(this)" value="${escapeHtml(isZeroOrNullTime(g3.time) ? '' : (g3.time || ''))}" placeholder="01:19.450">
-                            </div>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                            <div>
-                                <label class="admin-field-label">Bono Puntos</label>
-                                <input type="number" id="ch-p3-bonus-${idx}" class="admin-form-input" min="0" value="${(g3.bonus !== undefined && g3.bonus !== null && g3.bonus !== '') ? g3.bonus : 20}" placeholder="0">
-                            </div>
-                            <div>
-                                <label class="admin-field-label">Recompensa REP ($)</label>
-                                <input type="number" id="ch-p3-rep-${idx}" class="admin-form-input" min="0" value="${(g3.repMoney !== undefined && g3.repMoney !== null && g3.repMoney !== '') ? g3.repMoney : 120000}" placeholder="0">
-                            </div>
-                        </div>
-                    </div>
-
-                    ${isWeek4 ? `
-                    <!-- Ganador Zinc / Aluminio (4° Puesto) -->
-                    <div class="admin-winner-box admin-winner-zinc">
-                        <div class="admin-winner-header">
-                            <span style="color: #94a3b8; font-weight: 800; font-size: 12px;">🔩 GANADOR ZINC / ALUMINIO (4° PUESTO)</span>
-                            <span style="color: var(--nfs-orange); font-size: 11px; font-weight: 700;">+${(g4.bonus !== undefined && g4.bonus !== null && g4.bonus !== '') ? g4.bonus : 10} PTS</span>
-                        </div>
-                        <div style="display: flex; gap: 4px; align-items: center; margin-bottom: 2px; flex-wrap: wrap;">
-                            <span style="font-size: 10px; color: var(--text-muted); font-weight: 700;">⚡ Asignar:</span>
-                            ${grpPilots.map(p => `
-                                <button type="button" class="admin-winner-quick-chip" onclick="quickAssignPilotToWinner(${idx}, 4, '${escapeHtml(p.alias)}', '${escapeHtml(p.ride)}')">
-                                    ${escapeHtml(p.alias)}
-                                </button>
-                            `).join('')}
-                        </div>
-                        <div>
-                            <label class="admin-field-label">Piloto Cuarto</label>
-                            <input type="text" id="ch-p4-pilot-${idx}" list="bl-pilots-datalist" class="admin-form-input" style="font-weight: 700;" value="${escapeHtml(g4.pilot === 'Por disputar' ? '' : (g4.pilot || ''))}" placeholder="Nombre o Nick del Piloto">
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                            <div>
-                                <label class="admin-field-label">Auto Utilizado</label>
-                                <input type="text" id="ch-p4-car-${idx}" class="admin-form-input" value="${escapeHtml(g4.car || '')}" placeholder="Vehículo">
-                            </div>
-                            <div>
-                                <label class="admin-field-label">Tiempo (mm:ss.ddd)</label>
-                                <input type="text" id="ch-p4-time-${idx}" class="admin-form-input" style="font-family: var(--font-mono); font-weight: 700; color: #94a3b8;" maxlength="9" oninput="applyRaceTimeMask(this)" value="${escapeHtml(isZeroOrNullTime(g4.time) ? '' : (g4.time || ''))}" placeholder="01:21.100">
-                            </div>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                            <div>
-                                <label class="admin-field-label">Bono Puntos</label>
-                                <input type="number" id="ch-p4-bonus-${idx}" class="admin-form-input" min="0" value="${(g4.bonus !== undefined && g4.bonus !== null && g4.bonus !== '') ? g4.bonus : 10}" placeholder="0">
-                            </div>
-                            <div>
-                                <label class="admin-field-label">Recompensa REP ($)</label>
-                                <input type="number" id="ch-p4-rep-${idx}" class="admin-form-input" min="0" value="${(g4.repMoney !== undefined && g4.repMoney !== null && g4.repMoney !== '') ? g4.repMoney : 80000}" placeholder="0">
-                            </div>
-                        </div>
-                    </div>
-                    ` : ''}
+                <!-- Botón para añadir una nueva casilla de medalla a este desafío -->
+                <div style="display: flex; justify-content: flex-start; margin-top: 6px; margin-bottom: 6px;">
+                    <button type="button" class="admin-btn admin-btn-xs" onclick="addMedalWinnerToChallenge(${idx})" 
+                        style="background: rgba(255,119,0,0.15); border: 1px solid rgba(255,119,0,0.4); color: var(--nfs-orange); padding: 5px 12px; font-size: 11px; border-radius: 5px; cursor: pointer; font-weight: 700; display: inline-flex; align-items: center; gap: 5px;"
+                        title="Añadir una casilla de medalla o puesto a este desafío">
+                        ➕ Añadir Casilla de Medalla (${getMedalPositionConfig(top3.length).shortTitle})
+                    </button>
                 </div>
 
                 <!-- Barra inferior de guardado rápido -->
@@ -4327,6 +4318,61 @@ function renderChampionshipAdminChallenges() {
             </div>
         `;
     }).join('');
+}
+
+function getMedalPositionConfig(posIdx) {
+    switch (posIdx) {
+        case 0:
+            return {
+                title: '🥇 GANADOR ORO (1° PUESTO)',
+                shortTitle: 'Oro',
+                badgeEmoji: '🥇',
+                borderClass: 'admin-winner-gold',
+                color: '#fbbf24',
+                defBonus: 100,
+                defRep: 400000
+            };
+        case 1:
+            return {
+                title: '🥈 GANADOR SILVER (2° PUESTO)',
+                shortTitle: 'Silver',
+                badgeEmoji: '🥈',
+                borderClass: 'admin-winner-silver',
+                color: '#e2e8f0',
+                defBonus: 50,
+                defRep: 250000
+            };
+        case 2:
+            return {
+                title: '🥉 GANADOR BRONCE (3° PUESTO)',
+                shortTitle: 'Bronce',
+                badgeEmoji: '🥉',
+                borderClass: 'admin-winner-bronze',
+                color: '#fdba74',
+                defBonus: 20,
+                defRep: 120000
+            };
+        case 3:
+            return {
+                title: '🔩 GANADOR ZINC / ALUMINIO (4° PUESTO)',
+                shortTitle: 'Zinc / Aluminio',
+                badgeEmoji: '🔩',
+                borderClass: 'admin-winner-zinc',
+                color: '#94a3b8',
+                defBonus: 10,
+                defRep: 80000
+            };
+        default:
+            return {
+                title: `🎖️ GANADOR PUESTO #${posIdx + 1}`,
+                shortTitle: `Puesto #${posIdx + 1}`,
+                badgeEmoji: '🎖️',
+                borderClass: 'admin-winner-zinc',
+                color: '#38bdf8',
+                defBonus: 5,
+                defRep: 40000
+            };
+    }
 }
 
 function getChampionshipChallengeFromUI(idx) {
@@ -4350,84 +4396,36 @@ function getChampionshipChallengeFromUI(idx) {
         return (!isNaN(n) && n >= 1) ? n : 0;
     };
 
-    const p1Pilot = document.getElementById(`ch-p1-pilot-${idx}`)?.value.trim() || 'Por disputar';
-    const p1Car = document.getElementById(`ch-p1-car-${idx}`)?.value.trim() || '';
-    const p1TimeRaw = (document.getElementById(`ch-p1-time-${idx}`)?.value || '').trim();
-    const p1Time = p1TimeRaw ? p1TimeRaw : '--:--.---';
-    const p1BonusRaw = document.getElementById(`ch-p1-bonus-${idx}`)?.value;
-    const p1Bonus = parseBonusInput(p1BonusRaw);
-    const p1RepRaw = document.getElementById(`ch-p1-rep-${idx}`)?.value;
-    const p1Rep = parseRepInput(p1RepRaw);
+    const chCard = document.getElementById(`champ-admin-ch-${idx}`);
+    const winnerBoxes = chCard ? chCard.querySelectorAll('.admin-winner-box') : [];
+    const winners = [];
 
-    const p2Pilot = document.getElementById(`ch-p2-pilot-${idx}`)?.value.trim() || 'Por disputar';
-    const p2Car = document.getElementById(`ch-p2-car-${idx}`)?.value.trim() || '';
-    const p2TimeRaw = (document.getElementById(`ch-p2-time-${idx}`)?.value || '').trim();
-    const p2Time = p2TimeRaw ? p2TimeRaw : '--:--.---';
-    const p2BonusRaw = document.getElementById(`ch-p2-bonus-${idx}`)?.value;
-    const p2Bonus = parseBonusInput(p2BonusRaw);
-    const p2RepRaw = document.getElementById(`ch-p2-rep-${idx}`)?.value;
-    const p2Rep = parseRepInput(p2RepRaw);
+    winnerBoxes.forEach((box, mIdx) => {
+        const pos = mIdx + 1;
+        const cfg = getMedalPositionConfig(mIdx);
+        const pilotEl = document.getElementById(`ch-p${pos}-pilot-${idx}`) || box.querySelector(`[id^="ch-p${pos}-pilot-"]`);
+        const carEl = document.getElementById(`ch-p${pos}-car-${idx}`) || box.querySelector(`[id^="ch-p${pos}-car-"]`);
+        const timeEl = document.getElementById(`ch-p${pos}-time-${idx}`) || box.querySelector(`[id^="ch-p${pos}-time-"]`);
+        const bonusEl = document.getElementById(`ch-p${pos}-bonus-${idx}`) || box.querySelector(`[id^="ch-p${pos}-bonus-"]`);
+        const repEl = document.getElementById(`ch-p${pos}-rep-${idx}`) || box.querySelector(`[id^="ch-p${pos}-rep-"]`);
 
-    const p3Pilot = document.getElementById(`ch-p3-pilot-${idx}`)?.value.trim() || 'Por disputar';
-    const p3Car = document.getElementById(`ch-p3-car-${idx}`)?.value.trim() || '';
-    const p3TimeRaw = (document.getElementById(`ch-p3-time-${idx}`)?.value || '').trim();
-    const p3Time = p3TimeRaw ? p3TimeRaw : '--:--.---';
-    const p3BonusRaw = document.getElementById(`ch-p3-bonus-${idx}`)?.value;
-    const p3Bonus = parseBonusInput(p3BonusRaw);
-    const p3RepRaw = document.getElementById(`ch-p3-rep-${idx}`)?.value;
-    const p3Rep = parseRepInput(p3RepRaw);
-
-    const winners = [
-        {
-            pilot: p1Pilot,
-            car: p1Car,
-            time: p1Time,
-            bonus: p1Bonus,
-            badge: p1Bonus > 0 ? `🥇 +${p1Bonus} PTS` : '0 PTS',
-            repMoney: p1Rep,
-            repBadge: p1Rep > 0 ? `💰 $${p1Rep.toLocaleString('de-DE')} REP` : '$0 REP'
-        },
-        {
-            pilot: p2Pilot,
-            car: p2Car,
-            time: p2Time,
-            bonus: p2Bonus,
-            badge: p2Bonus > 0 ? `🥈 +${p2Bonus} PTS` : '0 PTS',
-            repMoney: p2Rep,
-            repBadge: p2Rep > 0 ? `💰 $${p2Rep.toLocaleString('de-DE')} REP` : '$0 REP'
-        },
-        {
-            pilot: p3Pilot,
-            car: p3Car,
-            time: p3Time,
-            bonus: p3Bonus,
-            badge: p3Bonus > 0 ? `🥉 +${p3Bonus} PTS` : '0 PTS',
-            repMoney: p3Rep,
-            repBadge: p3Rep > 0 ? `💰 $${p3Rep.toLocaleString('de-DE')} REP` : '$0 REP'
-        }
-    ];
-
-    const p4PilotEl = document.getElementById(`ch-p4-pilot-${idx}`);
-    if (p4PilotEl || currentChampAdminWeek >= 3) {
-        const p4Pilot = p4PilotEl?.value.trim() || 'Por disputar';
-        const p4Car = document.getElementById(`ch-p4-car-${idx}`)?.value.trim() || '';
-        const p4TimeRaw = (document.getElementById(`ch-p4-time-${idx}`)?.value || '').trim();
-        const p4Time = p4TimeRaw ? p4TimeRaw : '--:--.---';
-        const p4BonusRaw = document.getElementById(`ch-p4-bonus-${idx}`)?.value;
-        const p4Bonus = parseBonusInput(p4BonusRaw);
-        const p4RepRaw = document.getElementById(`ch-p4-rep-${idx}`)?.value;
-        const p4Rep = parseRepInput(p4RepRaw);
+        const pilot = pilotEl?.value.trim() || 'Por disputar';
+        const car = carEl?.value.trim() || '';
+        const timeRaw = (timeEl?.value || '').trim();
+        const time = timeRaw ? timeRaw : '--:--.---';
+        const bonus = parseBonusInput(bonusEl?.value);
+        const rep = parseRepInput(repEl?.value);
 
         winners.push({
-            pilot: p4Pilot,
-            car: p4Car,
-            time: p4Time,
-            bonus: p4Bonus,
-            badge: p4Bonus > 0 ? `🔩 +${p4Bonus} PTS` : '0 PTS',
-            repMoney: p4Rep,
-            repBadge: p4Rep > 0 ? `💰 $${p4Rep.toLocaleString('de-DE')} REP` : '$0 REP'
+            pilot: pilot || 'Por disputar',
+            car: car,
+            time: time,
+            bonus: bonus,
+            badge: bonus > 0 ? `${cfg.badgeEmoji} +${bonus} PTS` : '0 PTS',
+            repMoney: rep,
+            repBadge: rep > 0 ? `💰 $${rep.toLocaleString('de-DE')} REP` : '$0 REP'
         });
-    }
+    });
 
     return {
         id: `w${currentChampAdminWeek}-ch${idx + 1}`,
@@ -4514,7 +4512,10 @@ async function saveChampionshipAllChallenges() {
     const grp = (weekData.groups && weekData.groups[currentChampAdminGroup]) || { name: `Grupo #${currentChampAdminGroup + 1}` };
     const grpName = grp.name || `Grupo #${currentChampAdminGroup + 1}`;
 
-    for (let idx = 0; idx < 8; idx++) {
+    const challengeCards = document.querySelectorAll('#champ-admin-challenges-container .admin-challenge-card');
+    const chCount = challengeCards.length > 0 ? challengeCards.length : (weekData.challenges ? weekData.challenges.length : 8);
+
+    for (let idx = 0; idx < chCount; idx++) {
         const chData = getChampionshipChallengeFromUI(idx);
         if (chData.top3 && Array.isArray(chData.top3)) {
             chData.top3.forEach(t => {
@@ -4547,13 +4548,193 @@ async function saveChampionshipAllChallenges() {
         }
     }
 
-    showToast(`💾 Guardando los 8 desafíos de ${grpName} (Semana ${currentChampAdminWeek})...`, "info");
+    showToast(`💾 Guardando los ${chCount} desafíos de ${grpName} (Semana ${currentChampAdminWeek})...`, "info");
     const ok = await persistChampionshipWeeksData(cachedChampWeeksData);
     if (ok) {
-        showToast(`✓ ¡Los 8 desafíos de ${grpName} (Semana ${currentChampAdminWeek}) guardados y sincronizados con la web!`, "success");
+        showToast(`✓ ¡Los ${chCount} desafíos de ${grpName} (Semana ${currentChampAdminWeek}) guardados y sincronizados con la web!`, "success");
     } else {
         showToast(`✓ ¡Desafíos guardados en caché local!`, "info");
     }
+}
+
+async function addChampionshipAdminChallenge() {
+    const defaults = getChampionshipDefaultWeeksData();
+    if (!cachedChampWeeksData) {
+        cachedChampWeeksData = defaults ? JSON.parse(JSON.stringify(defaults)) : {};
+    }
+    if (!cachedChampWeeksData[currentChampAdminWeek] && !cachedChampWeeksData[String(currentChampAdminWeek)]) {
+        if (defaults && (defaults[currentChampAdminWeek] || defaults[String(currentChampAdminWeek)])) {
+            cachedChampWeeksData[currentChampAdminWeek] = JSON.parse(JSON.stringify(defaults[currentChampAdminWeek] || defaults[String(currentChampAdminWeek)]));
+        } else {
+            cachedChampWeeksData[currentChampAdminWeek] = { groups: [], challenges: [] };
+        }
+    }
+    const weekData = cachedChampWeeksData[currentChampAdminWeek] || cachedChampWeeksData[String(currentChampAdminWeek)];
+    if (!weekData.challenges) weekData.challenges = [];
+
+    const newChIdx = weekData.challenges.length;
+    const newChNum = newChIdx + 1;
+    const isWeek4 = currentChampAdminWeek >= 3;
+
+    const defaultTop = [
+        { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 100, badge: "🥇 +100 PTS", repMoney: 400000, repBadge: "💰 $400.000 REP" },
+        { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 50, badge: "🥈 +50 PTS", repMoney: 250000, repBadge: "💰 $250.000 REP" },
+        { rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 20, badge: "🥉 +20 PTS", repMoney: 120000, repBadge: "💰 $120.000 REP" }
+    ];
+    if (isWeek4) {
+        defaultTop.push({ rank: null, pilot: "Por disputar", car: "", time: "--:--.---", bonus: 10, badge: "🔩 +10 PTS", repMoney: 80000, repBadge: "💰 $80.000 REP" });
+    }
+
+    const newChallenge = {
+        id: `w${currentChampAdminWeek}-ch${newChNum}`,
+        route: `Ruta Oficial #${newChNum}`,
+        type: "Circuito",
+        carRestriction: "BMW M3 GTR",
+        top3: JSON.parse(JSON.stringify(defaultTop)),
+        groupsWinners: {},
+        groupsResults: {}
+    };
+
+    const groups = (weekData.groups && weekData.groups.length > 0) ? weekData.groups : getDefaultChampionshipGroups(currentChampAdminWeek);
+    groups.forEach((grp, gIdx) => {
+        const gName = grp.name || `Grupo #${gIdx + 1}`;
+        newChallenge.groupsWinners[gIdx] = JSON.parse(JSON.stringify(defaultTop));
+        newChallenge.groupsWinners[gName] = JSON.parse(JSON.stringify(defaultTop));
+        newChallenge.groupsResults[gIdx] = JSON.parse(JSON.stringify(defaultTop));
+        newChallenge.groupsResults[gName] = JSON.parse(JSON.stringify(defaultTop));
+    });
+
+    weekData.challenges.push(newChallenge);
+
+    renderChampionshipAdminChallenges();
+    await persistChampionshipWeeksData(cachedChampWeeksData);
+    showToast(`✓ ¡Desafío #${newChNum} agregado a la Semana ${currentChampAdminWeek} y sincronizado con la web!`, "success");
+
+    setTimeout(() => {
+        const newCard = document.getElementById(`champ-admin-ch-${newChIdx}`);
+        if (newCard) {
+            newCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }, 150);
+}
+
+async function deleteChampionshipAdminChallenge(idx) {
+    const weekData = getActiveChampWeekData(currentChampAdminWeek);
+    if (!weekData || !weekData.challenges || !weekData.challenges[idx]) return;
+
+    const targetCh = weekData.challenges[idx];
+    const chTitle = targetCh.route || `Desafío #${idx + 1}`;
+
+    if (weekData.challenges.length <= 1) {
+        showToast("La semana debe mantener al menos 1 desafío.", "warning");
+        return;
+    }
+
+    const ok = confirm(`¿Estás seguro de que deseas eliminar el Desafío #${idx + 1} ("${chTitle}") de la Semana ${currentChampAdminWeek}?\n\n• Esta acción afectará únicamente a la Semana ${currentChampAdminWeek}.\n• Se reenumerarán los desafíos restantes y se sincronizará con la web.`);
+    if (!ok) return;
+
+    weekData.challenges.splice(idx, 1);
+
+    weekData.challenges.forEach((ch, cIdx) => {
+        if (ch.id && ch.id.startsWith(`w${currentChampAdminWeek}-ch`)) {
+            ch.id = `w${currentChampAdminWeek}-ch${cIdx + 1}`;
+        }
+    });
+
+    renderChampionshipAdminChallenges();
+    await persistChampionshipWeeksData(cachedChampWeeksData);
+    showToast(`✓ Desafío #${idx + 1} eliminado de la Semana ${currentChampAdminWeek} y sincronizado con la web.`, "success");
+}
+
+async function addMedalWinnerToChallenge(chIdx) {
+    const weekData = getActiveChampWeekData(currentChampAdminWeek);
+    if (!weekData || !weekData.challenges || !weekData.challenges[chIdx]) return;
+
+    const currentChData = getChampionshipChallengeFromUI(chIdx);
+    const targetCh = weekData.challenges[chIdx];
+    targetCh.route = currentChData.route;
+    targetCh.type = currentChData.type;
+    targetCh.carRestriction = currentChData.carRestriction;
+
+    const grp = (weekData.groups && weekData.groups[currentChampAdminGroup]) || { name: `Grupo #${currentChampAdminGroup + 1}` };
+    const grpName = grp.name || `Grupo #${currentChampAdminGroup + 1}`;
+
+    let currentWinners = currentChData.top3 || [];
+    if (currentWinners.length >= 8) {
+        showToast("El desafío ya alcanzó el límite máximo de 8 casillas de medalla.", "warning");
+        return;
+    }
+
+    const nextPosIdx = currentWinners.length;
+    const medalConfig = getMedalPositionConfig(nextPosIdx);
+
+    currentWinners.push({
+        rank: null,
+        pilot: "Por disputar",
+        car: "",
+        time: "--:--.---",
+        bonus: medalConfig.defBonus,
+        badge: `${medalConfig.badgeEmoji} +${medalConfig.defBonus} PTS`,
+        repMoney: medalConfig.defRep,
+        repBadge: `💰 $${medalConfig.defRep.toLocaleString('de-DE')} REP`
+    });
+
+    if (!targetCh.groupsWinners) targetCh.groupsWinners = {};
+    targetCh.groupsWinners[currentChampAdminGroup] = currentWinners;
+    targetCh.groupsWinners[grpName] = currentWinners;
+
+    if (!targetCh.groupsResults) targetCh.groupsResults = {};
+    targetCh.groupsResults[grpName] = currentWinners;
+    targetCh.groupsResults[currentChampAdminGroup] = currentWinners;
+
+    if (currentChampAdminGroup === 0) {
+        targetCh.top3 = currentWinners;
+    }
+
+    renderChampionshipAdminChallenges();
+    await persistChampionshipWeeksData(cachedChampWeeksData);
+    showToast(`✓ Casilla de medalla (${medalConfig.title}) añadida al Desafío #${chIdx + 1} (${grpName}) y sincronizada con la web.`, "success");
+}
+
+async function removeMedalWinnerFromChallenge(chIdx, medalIdx) {
+    const weekData = getActiveChampWeekData(currentChampAdminWeek);
+    if (!weekData || !weekData.challenges || !weekData.challenges[chIdx]) return;
+
+    const currentChData = getChampionshipChallengeFromUI(chIdx);
+    const targetCh = weekData.challenges[chIdx];
+    targetCh.route = currentChData.route;
+    targetCh.type = currentChData.type;
+    targetCh.carRestriction = currentChData.carRestriction;
+
+    const grp = (weekData.groups && weekData.groups[currentChampAdminGroup]) || { name: `Grupo #${currentChampAdminGroup + 1}` };
+    const grpName = grp.name || `Grupo #${currentChampAdminGroup + 1}`;
+
+    let currentWinners = currentChData.top3 || [];
+    if (currentWinners.length <= 1) {
+        showToast("El podio debe mantener al menos 1 posición de ganador.", "warning");
+        return;
+    }
+
+    const removedWinner = currentWinners[medalIdx];
+    const removedPilotName = removedWinner ? (removedWinner.pilot || `Puesto #${medalIdx + 1}`) : `Puesto #${medalIdx + 1}`;
+
+    currentWinners.splice(medalIdx, 1);
+
+    if (!targetCh.groupsWinners) targetCh.groupsWinners = {};
+    targetCh.groupsWinners[currentChampAdminGroup] = currentWinners;
+    targetCh.groupsWinners[grpName] = currentWinners;
+
+    if (!targetCh.groupsResults) targetCh.groupsResults = {};
+    targetCh.groupsResults[grpName] = currentWinners;
+    targetCh.groupsResults[currentChampAdminGroup] = currentWinners;
+
+    if (currentChampAdminGroup === 0) {
+        targetCh.top3 = currentWinners;
+    }
+
+    renderChampionshipAdminChallenges();
+    await persistChampionshipWeeksData(cachedChampWeeksData);
+    showToast(`✓ Casilla de ganador (${removedPilotName}) eliminada del Desafío #${chIdx + 1} (${grpName}) y sincronizada con la web.`, "success");
 }
 
 function resetChampionshipSingleChallenge(idx) {
@@ -4619,11 +4800,14 @@ async function saveChampionshipAdmin() {
     // 1. Guardar todos los Grupos Dinámicamente
     weekData.groups = getChampionshipGroupsFromUI();
 
-    // 2. Guardar los 8 Desafíos para el grupo activo
+    // 2. Guardar los Desafíos para el grupo activo
     const grp = (weekData.groups && weekData.groups[currentChampAdminGroup]) || { name: `Grupo #${currentChampAdminGroup + 1}` };
     const grpName = grp.name || `Grupo #${currentChampAdminGroup + 1}`;
 
-    for (let idx = 0; idx < 8; idx++) {
+    const challengeCards = document.querySelectorAll('#champ-admin-challenges-container .admin-challenge-card');
+    const chCount = challengeCards.length > 0 ? challengeCards.length : (weekData.challenges ? weekData.challenges.length : 8);
+
+    for (let idx = 0; idx < chCount; idx++) {
         const chData = getChampionshipChallengeFromUI(idx);
         if (!weekData.challenges[idx]) {
             weekData.challenges[idx] = {
@@ -5291,5 +5475,12 @@ window.getActiveChampWeekData = getActiveChampWeekData;
 window.getCurrentChampAdminWeek = () => currentChampAdminWeek;
 window.NFS_MW_2005_STORY_RIVALS = NFS_MW_2005_STORY_RIVALS;
 window.FALLBACK_TOURNAMENT_PARTICIPANTS = FALLBACK_TOURNAMENT_PARTICIPANTS;
+window.addPilotToGroup = addPilotToGroup;
+window.removePilotFromGroup = removePilotFromGroup;
+window.addChampionshipAdminChallenge = addChampionshipAdminChallenge;
+window.deleteChampionshipAdminChallenge = deleteChampionshipAdminChallenge;
+window.addMedalWinnerToChallenge = addMedalWinnerToChallenge;
+window.removeMedalWinnerFromChallenge = removeMedalWinnerFromChallenge;
+window.getMedalPositionConfig = getMedalPositionConfig;
 
 

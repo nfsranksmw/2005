@@ -242,31 +242,32 @@
       }
 
       return `
-        <div class="relative bg-surface-container-low border border-surface-container-highest/60 rounded-xl overflow-hidden shadow-xl hover:border-primary-container/70 transition-all flex flex-col justify-between group">
+        <div class="relative hud-card hover-card-lift tactical-chamfer-top-right overflow-hidden shadow-xl flex flex-col justify-between group">
+          <div class="tactical-watermark">#${idx + 1}</div>
           <!-- Top Thumbnail Banner -->
           <div class="relative h-44 w-full overflow-hidden bg-surface-container-lowest">
             <img src="${thumbUrl}" alt="${chal.track}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter brightness-90 group-hover:brightness-100" onerror="this.src='assets/img/routes-header-banner.jpg'"/>
             <div class="absolute inset-0 bg-gradient-to-t from-surface-container-low via-surface-container-low/40 to-transparent"></div>
             
             <!-- Type & Category Badges -->
-            <div class="absolute top-3 left-3 flex flex-wrap gap-1.5">
-              <span class="px-2 py-0.5 rounded text-[10px] font-label-data uppercase font-bold ${typeBadgeClass}">
+            <div class="absolute top-3 left-3 flex flex-wrap gap-1.5 z-10">
+              <span class="tactical-badge ${isSprint ? 'tactical-badge-nitro' : 'tactical-badge-cyan'}">
                 ${chal.type || 'Circuito'}
               </span>
-              <span class="px-2 py-0.5 rounded text-[10px] font-label-data uppercase font-bold ${catBadgeClass}">
+              <span class="tactical-badge ${isBMW ? 'tactical-badge-cyan' : 'tactical-badge-amber'}">
                 ${chal.category || 'Junkman'}
               </span>
             </div>
 
             <!-- Reward Pot Tag -->
-            <div class="absolute top-3 right-3 bg-surface-container-lowest/80 backdrop-blur-md px-2.5 py-0.5 rounded border border-primary-container/40">
-              <span class="font-label-data text-[11px] font-extrabold text-primary-container">
+            <div class="absolute top-3 right-3 bg-surface-container-lowest/80 backdrop-blur-md px-2.5 py-0.5 rounded-sm border border-primary-container/40 z-10">
+              <span class="font-label-data text-[11px] font-extrabold text-primary-container tabular-nums">
                 +${chal.reward?.pts || 300} PTS • ${chal.reward?.bounty || '$500K'}
               </span>
             </div>
 
             <!-- Track Title Overlay -->
-            <div class="absolute bottom-3 left-3 right-3">
+            <div class="absolute bottom-3 left-3 right-3 z-10">
               <div class="font-label-data text-[10px] uppercase text-outline font-semibold tracking-wider">
                 ${isEn ? `OFFICIAL TRIAL #${idx + 1}` : `PRUEBA OFICIAL #${idx + 1}`} // ${chal.lapType || 'Single Lap'}
               </div>
@@ -277,31 +278,31 @@
           </div>
 
           <!-- Card Body: Target Times & Regulations -->
-          <div class="p-4 flex-1 flex flex-col justify-between gap-4">
+          <div class="p-4 flex-1 flex flex-col justify-between gap-4 relative z-10">
             <!-- Benchmark Splits Grid -->
-            <div class="space-y-2">
-              <div class="flex items-center justify-between text-xs font-label-data border-b border-surface-container-highest/40 pb-1.5">
+            <div class="space-y-1">
+              <div class="hud-row-item flex items-center justify-between text-xs font-label-data pb-1.5">
                 <span class="text-on-surface-variant font-bold flex items-center gap-1.5">
-                  <span class="text-primary-container font-black">${isEn ? '🥇 GOLD (TARGET)' : '🥇 ORO (OBJETIVO)'}</span>
+                  <span class="text-primary-container font-black">[ GOLD // 🥇 ]</span>
                 </span>
-                <span class="font-label-timer-md text-primary-container font-bold">${chal.targetTime || '01:18.500'}</span>
+                <span class="font-label-timer-md text-primary-container font-bold tabular-nums">${chal.targetTime || '01:18.500'}</span>
               </div>
-              <div class="flex items-center justify-between text-xs font-label-data border-b border-surface-container-highest/40 pb-1.5">
+              <div class="hud-row-item flex items-center justify-between text-xs font-label-data pb-1.5">
                 <span class="text-on-surface-variant flex items-center gap-1.5">
-                  <span class="text-slate-300 font-bold">${isEn ? '🥈 SILVER' : '🥈 PLATA'}</span>
+                  <span class="text-slate-300 font-bold">[ SILVER // 🥈 ]</span>
                 </span>
-                <span class="text-on-surface font-semibold font-label-data">+02.500s (200 PTS)</span>
+                <span class="text-on-surface font-semibold font-label-data tabular-nums">+02.500s (200 PTS)</span>
               </div>
-              <div class="flex items-center justify-between text-xs font-label-data pb-1">
+              <div class="hud-row-item flex items-center justify-between text-xs font-label-data pb-1">
                 <span class="text-on-surface-variant flex items-center gap-1.5">
-                  <span class="text-amber-700 font-bold">${isEn ? '🥉 BRONZE' : '🥉 BRONCE'}</span>
+                  <span class="text-amber-500 font-bold">[ BRONZE // 🥉 ]</span>
                 </span>
-                <span class="text-on-surface-variant font-label-data">+05.000s (100 PTS)</span>
+                <span class="text-on-surface-variant font-label-data tabular-nums">+05.000s (100 PTS)</span>
               </div>
             </div>
 
             <!-- Car Restriction & Top Record Holder -->
-            <div class="bl-restriction-row bg-surface-container-lowest/90 p-2.5 rounded-lg border border-surface-container-highest/40 space-y-1.5 shadow-inner">
+            <div class="bl-restriction-row hud-card p-2.5 rounded-sm border border-white/5 space-y-1.5 shadow-inner">
               <div class="flex items-center justify-between text-[11px] font-label-data">
                 <span class="text-on-surface-variant font-bold flex items-center gap-1">
                   <span class="material-symbols-outlined text-[15px] text-secondary">directions_car</span>
@@ -311,17 +312,17 @@
               </div>
               <div class="flex items-center justify-between text-[11px] font-label-data">
                 <span class="text-outline uppercase">${isEn ? 'Current Record:' : 'Récord Actual:'}</span>
-                <span class="text-tertiary font-bold truncate max-w-[190px]">${topTimeInfo} (${topDriverInfo.split(' ')[0]})</span>
+                <span class="text-tertiary font-bold truncate max-w-[190px] tabular-nums">${topTimeInfo} (${topDriverInfo.split(' ')[0]})</span>
               </div>
             </div>
 
             <!-- Actions Row -->
             <div class="flex items-center gap-2 pt-1">
-              <a href="#routes-pistas?route=${encodeURIComponent(chal.track)}" onclick="switchView('routes-pistas')" class="flex-1 py-2 px-3 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface font-headline-sm text-[11px] font-bold uppercase tracking-wider text-center transition-colors flex items-center justify-center gap-1">
+              <a href="#routes-pistas?route=${encodeURIComponent(chal.track)}" onclick="switchView('routes-pistas')" class="flex-1 py-2 px-3 rounded-sm bg-surface-container-high hover:bg-surface-bright text-on-surface font-headline-sm text-[11px] font-bold uppercase tracking-wider text-center transition-colors flex items-center justify-center gap-1">
                 <span class="material-symbols-outlined text-[15px]">telemetry</span>
                 <span>${isEn ? 'View Route' : 'Ver Ruta'}</span>
               </a>
-              <a href="admin.html?action=submit&track=${encodeURIComponent(chal.track)}&week=${activeWeekNumber}" class="flex-1 py-2 px-3 rounded-lg bg-primary-container hover:bg-primary text-black font-headline-sm text-[11px] font-black uppercase tracking-wider text-center shadow transition-all flex items-center justify-center gap-1">
+              <a href="admin.html?action=submit&track=${encodeURIComponent(chal.track)}&week=${activeWeekNumber}" class="flex-1 py-2 px-3 rounded-sm bg-primary-container hover:bg-primary text-black font-headline-sm text-[11px] font-black uppercase tracking-wider text-center shadow transition-all flex items-center justify-center gap-1">
                 <span class="material-symbols-outlined text-[15px]">send</span>
                 <span>${isEn ? 'Submit Record' : 'Registrar Marca'}</span>
               </a>

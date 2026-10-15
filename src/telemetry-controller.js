@@ -454,21 +454,21 @@
       const isAltRow = idx % 2 === 1;
       const bgClass = isAltRow ? 'bg-surface-container-lowest' : 'bg-surface-container-low';
       const rankBadge = r.isWR
-        ? '<span class="px-1.5 py-0.5 rounded bg-primary-container text-on-primary-container font-label-hud text-label-hud font-bold">WR</span>'
-        : `<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface font-label-hud text-label-hud font-bold">#${String(r.rankNum).padStart(2, '0')}</span>`;
+        ? '<span class="tactical-badge tactical-badge-amber text-[9px] uppercase font-bold">WR</span>'
+        : `<span class="tactical-badge tactical-badge-neutral text-[9px] uppercase font-bold">#${String(r.rankNum).padStart(2, '0')}</span>`;
 
       const timeClass = r.isWR
-        ? 'text-primary-container font-bold'
-        : 'text-on-surface font-bold';
+        ? 'text-primary-container font-bold tabular-nums font-mono'
+        : 'text-on-surface font-bold tabular-nums font-mono';
 
       const deltaHtml = formatDelta(r.deltaMs);
       const hashStr = generateHash(`${r.trackKey}_${r.categoryKey}_${r.timeMs}`);
 
       const vodBtn = r.yt
-        ? `<a class="inline-flex items-center gap-1 px-2 py-1 rounded bg-secondary-container/20 text-secondary-container hover:bg-secondary-container hover:text-on-secondary transition-all font-label-hud text-label-hud uppercase shadow-sm" href="${escapeHtml(r.yt)}" rel="noopener noreferrer" target="_blank">
+        ? `<a class="inline-flex items-center gap-1 px-2 py-1 rounded-sm bg-secondary-container/20 text-secondary-container hover:bg-secondary-container hover:text-on-secondary transition-all font-label-hud text-label-hud uppercase shadow-sm" href="${escapeHtml(r.yt)}" rel="noopener noreferrer" target="_blank">
              <span class="material-symbols-outlined text-[14px]">smart_display</span> VOD
            </a>`
-        : `<span class="inline-flex items-center gap-1 px-2 py-1 rounded bg-surface-container text-outline opacity-40 font-label-hud text-label-hud uppercase" title="Sin enlace VOD reportado">
+        : `<span class="inline-flex items-center gap-1 px-2 py-1 rounded-sm bg-surface-container text-outline opacity-40 font-label-hud text-label-hud uppercase" title="Sin enlace VOD reportado">
              <span class="material-symbols-outlined text-[14px]">videocam_off</span> N/A
            </span>`;
 
@@ -489,7 +489,7 @@
             <div class="font-label-data text-label-data text-primary font-semibold">${escapeHtml(r.car)}</div>
             <div class="text-outline text-label-data">${escapeHtml(r.setup)}</div>
           </td>
-          <td class="py-3 px-3 text-right font-label-timer-md text-label-timer-md ${timeClass}">
+          <td class="py-3 px-3 text-right font-label-timer-md text-label-timer-md tabular-nums font-mono ${timeClass}">
             ${escapeHtml(r.time)}
           </td>
           <td class="py-3 px-3 text-center">

@@ -663,16 +663,16 @@
       const isSelected = (gIdx === currentChampionshipGroupTab);
 
       const card = document.createElement('div');
-      card.className = `bg-surface-container-low rounded-xl p-space-md shadow-xl flex flex-col gap-space-md hover-card-lift transition-all cursor-pointer border ${
+      card.className = `hud-card hud-card-interactive tactical-chamfer-top-right p-space-md shadow-xl flex flex-col gap-space-md cursor-pointer border relative overflow-hidden ${
         isSelected ? 'border-primary-container ring-1 ring-primary-container/50' : 'border-surface-container-highest/40'
       }`;
 
-      // Drivers in group: En Semana 3 y 4 se compite en cuartetos (4 pilotos obligatorios)
-      const numSlots = (weekNum >= 3 || activeWeekIndex >= 2 || (Array.isArray(grp.pilots) && grp.pilots.length >= 4)) ? 4 : 3;
-      const pilotsList = Array.isArray(grp.pilots) ? grp.pilots.slice() : [];
-      while (pilotsList.length < numSlots) {
-        pilotsList.push(`open_${(gIdx * numSlots) + pilotsList.length + 1}`);
-      }
+      // Drivers in group: Respeta el tamaño configurado en admin (dúos de 2, tríos de 3, cuartetos de 4, etc.)
+      const defaultSlots = (weekNum >= 3 || activeWeekIndex >= 2) ? 4 : 3;
+      const pilotsList = (Array.isArray(grp.pilots) && grp.pilots.length > 0)
+        ? grp.pilots.slice()
+        : Array.from({ length: defaultSlots }, (_, i) => `open_${(gIdx * defaultSlots) + i + 1}`);
+      const numSlots = pilotsList.length;
       let pilotsHtml = '';
 
       pilotsList.forEach((pIdentifier, pIdx) => {
@@ -689,9 +689,9 @@
           }
 
           pilotsHtml += `
-            <div class="bg-surface-container/40 hover:bg-surface-container transition-all p-space-sm rounded-lg flex items-center justify-between gap-space-xs">
+            <div class="hud-row-item p-space-sm flex items-center justify-between gap-space-xs">
               <div class="flex items-center gap-space-sm min-w-0">
-                <div class="w-7 h-7 rounded bg-surface-container-lowest text-on-surface-variant font-headline-sm text-headline-sm flex items-center justify-center font-bold">${slotNum}</div>
+                <div class="w-7 h-7 rounded-sm bg-surface-container-lowest text-on-surface-variant font-headline-sm text-headline-sm flex items-center justify-center font-bold">${slotNum}</div>
                 <div class="flex flex-col min-w-0">
                   <span class="font-headline-sm text-[14px] leading-tight uppercase text-on-surface-variant font-extrabold truncate">${isEn ? `Open Slot #${slotNum}` : `Plaza Disponible #${slotNum}`}</span>
                   <span class="font-label-data text-[11px] text-primary-container truncate font-bold">${isEn ? 'Awaiting Driver' : 'Esperando Piloto'}</span>
@@ -699,7 +699,7 @@
               </div>
               <div class="flex flex-col text-right shrink-0 min-w-[70px]">
                 <span class="font-label-data text-[12.5px] sm:text-[13px] text-on-surface-variant font-black">OPEN</span>
-                <span class="font-label-data text-[11px] sm:text-[12px] text-on-surface-variant/70 font-bold">$0</span>
+                <span class="font-label-data text-[11px] sm:text-[12px] text-on-surface-variant/70 font-bold tabular-nums">$0</span>
               </div>
             </div>
           `;
@@ -723,36 +723,37 @@
         }
 
         pilotsHtml += `
-          <div class="${pIdx === 0 ? 'bg-surface-container-high hover:bg-surface-bright shadow-inner' : 'bg-surface-container hover:bg-surface-container-high'} transition-all p-space-sm rounded-lg flex items-center justify-between gap-space-xs">
+          <div class="hud-row-item p-space-sm flex items-center justify-between gap-space-xs ${pIdx === 0 ? 'bg-surface-container-high/40' : ''}">
             <div class="flex items-center gap-space-sm min-w-0">
-              <div class="w-7 h-7 rounded ${badgeBg} font-headline-sm text-headline-sm flex items-center justify-center">${driverRank}</div>
+              <div class="w-7 h-7 rounded-sm ${badgeBg} font-headline-sm text-headline-sm flex items-center justify-center">${driverRank}</div>
               <div class="flex flex-col min-w-0">
                 <span class="font-headline-sm text-[14px] leading-tight uppercase text-on-surface font-extrabold truncate">${escapeHtml(name)}</span>
                 <span class="font-label-data text-[11px] text-on-surface-variant truncate">${escapeHtml(car)}</span>
               </div>
             </div>
             <div class="flex flex-col text-right shrink-0 min-w-[72px]">
-              <span class="font-label-data text-[13px] sm:text-[14px] text-primary-container font-black tracking-wide leading-tight">${pts} PTS</span>
-              <span class="font-label-data text-[12px] sm:text-[13px] text-tertiary font-black tracking-tight leading-tight drop-shadow-[0_0_8px_rgba(0,208,255,0.4)]">${rep}</span>
+              <span class="font-label-data text-[13px] sm:text-[14px] text-primary-container font-black tracking-wide leading-tight tabular-nums">${pts} PTS</span>
+              <span class="font-label-data text-[12px] sm:text-[13px] text-tertiary font-black tracking-tight leading-tight tabular-nums drop-shadow-[0_0_8px_rgba(0,208,255,0.4)]">${rep}</span>
             </div>
           </div>
         `;
       });
 
       card.innerHTML = `
-        <div class="flex flex-col gap-1.5">
+        <div class="tactical-watermark">GRP ${String.fromCharCode(65 + gIdx)}</div>
+        <div class="flex flex-col gap-1.5 relative z-10">
           <div class="flex items-center justify-between">
-            <span class="font-label-hud text-[10px] uppercase px-2 py-0.5 ${style.tierBg} rounded font-black tracking-wider w-fit inline-block">${escapeHtml(tierBadge)}</span>
+            <span class="tactical-badge text-[10px] uppercase px-2 py-0.5 ${style.tierBg} font-black tracking-wider w-fit inline-block">${escapeHtml(tierBadge)}</span>
           </div>
           <div class="flex items-center gap-2 min-w-0">
             <span class="w-2.5 h-2.5 rounded-sm ${style.dot} shrink-0"></span>
             <span class="font-headline-sm text-headline-sm uppercase text-on-surface font-black truncate">${escapeHtml(grp.name)}</span>
           </div>
         </div>
-        <div class="flex flex-col gap-space-xs">
+        <div class="flex flex-col gap-space-xs relative z-10">
           ${pilotsHtml}
         </div>
-        <div class="mt-auto pt-2 border-t border-surface-container-highest/30 flex items-center justify-between">
+        <div class="mt-auto pt-2 border-t border-surface-container-highest/30 flex items-center justify-between relative z-10">
           <span class="font-label-data text-[10px] uppercase text-outline flex items-center gap-1">
             <span class="material-symbols-outlined text-[13px] text-secondary">directions_car</span>
             <span>${isEn ? '8 ROUTES • RESTRICTED CAR' : '8 RUTAS • COCHE RESTRINGIDO'}</span>
@@ -909,7 +910,7 @@
 
     challenges.forEach((ch, idx) => {
       const card = document.createElement('div');
-      card.className = "bg-surface-container-low rounded-xl p-space-md shadow-xl flex flex-col gap-space-md hover-card-lift transition-all border border-surface-container-highest/30";
+      card.className = "hud-card hud-card-interactive tactical-chamfer-top-right p-space-md shadow-xl flex flex-col gap-space-md border border-surface-container-highest/30 relative overflow-hidden";
 
       // 1. Obtener Top 3 según el grupo seleccionado (Alpha, Beta, Gamma, Delta)
       let top3 = null;
@@ -1044,22 +1045,23 @@
       };
 
       card.innerHTML = `
-        <div class="flex items-center justify-between">
+        <div class="tactical-watermark">#${String(idx + 1).padStart(2, '0')}</div>
+        <div class="flex items-center justify-between relative z-10">
           <div class="flex items-center gap-space-xs">
             <span class="font-headline-sm text-headline-sm uppercase text-primary-container font-black">#${String(idx + 1).padStart(2, '0')}</span>
             <span class="font-headline-sm text-headline-sm uppercase text-on-surface font-extrabold truncate">${escapeHtml(ch.route || 'Ruta')}</span>
           </div>
-          <span class="font-label-hud text-label-hud uppercase px-space-xs py-[2px] bg-surface-container-highest text-on-surface rounded font-bold">${escapeHtml((ch.type || 'Circuito').toUpperCase())}</span>
+          <span class="tactical-badge text-on-surface">${escapeHtml((ch.type || 'Circuito').toUpperCase())}</span>
         </div>
 
         <!-- Coche Restringido & Grupo Pill (Estilo Cyber-Telemetry HUD: 2 líneas para evitar choques) -->
-        <div class="bl-restriction-row bg-surface-container-lowest px-space-sm py-2 rounded-lg flex flex-col gap-1 border border-surface-container-highest/40 shadow-inner">
+        <div class="bl-restriction-row bg-surface-container-lowest px-space-sm py-2 rounded-sm flex flex-col gap-1 border border-surface-container-highest/40 shadow-inner relative z-10">
           <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-1.5 min-w-0">
               <span class="material-symbols-outlined text-[15px] text-secondary shrink-0">directions_car</span>
               <span class="font-label-hud text-[10px] uppercase text-outline tracking-wider font-bold shrink-0">${isEn ? 'RESTRICTED CAR' : 'COCHE RESTRINGIDO'}</span>
             </div>
-            <span class="font-label-hud text-[10px] uppercase text-secondary px-2 py-0.5 rounded bg-surface-container-high font-black tracking-wider shrink-0">${escapeHtml(grpName.toUpperCase())}</span>
+            <span class="tactical-badge-amber">${escapeHtml(grpName.toUpperCase())}</span>
           </div>
           <div class="flex items-center gap-1.5 pl-0.5">
             <span class="text-secondary font-mono text-[12px] font-bold shrink-0">//</span>
@@ -1068,84 +1070,63 @@
         </div>
 
         <!-- Times list -->
-        <div class="flex flex-col gap-space-xs">
-          <!-- P1 (Ganador Oro / Dorado) -->
-          <div class="bg-surface-container-high p-space-sm rounded-lg grid grid-cols-[1fr_auto_1fr] items-center gap-2 shadow-inner">
-            <div class="flex items-center gap-2 min-w-0 justify-self-start">
-              <span class="w-5 h-5 rounded-full bg-primary-container text-black font-headline-sm text-[12px] flex items-center justify-center font-black shrink-0">1</span>
-              <span class="font-headline-sm text-[13px] sm:text-[13.5px] uppercase text-on-surface font-extrabold truncate" title="${escapeHtml(p1.pilot || 'Por disputar')}">${escapeHtml(p1.pilot || 'Por disputar')}</span>
-            </div>
-            <div class="flex items-center justify-center text-center justify-self-center px-1">
-              <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container-lowest/90 border border-surface-container-highest/50 shadow-inner">
-                <span class="material-symbols-outlined text-[13px] text-[#fbbf24] shrink-0">timer</span>
-                <span class="font-label-hud text-[9px] uppercase tracking-wider text-outline font-black shrink-0">TIME</span>
-                <span class="font-label-timer-md text-[13px] sm:text-[14px] text-[#fbbf24] font-black tracking-tight whitespace-nowrap">${escapeHtml(p1.time || '--:--.---')}</span>
-              </div>
-            </div>
-            <div class="flex flex-col text-right justify-self-end shrink-0 pl-1">
-              <span class="font-label-data text-[12.5px] sm:text-[13px] text-primary-container font-black tracking-wide leading-tight">${getSlotBonusDisplay(p1, 100)}</span>
-              <span class="font-label-data text-[12.5px] sm:text-[13px] text-tertiary font-black tracking-tight leading-tight drop-shadow-[0_0_8px_rgba(0,208,255,0.4)]">${getSlotRepDisplay(p1, 400000)}</span>
-            </div>
-          </div>
+        <div class="flex flex-col gap-space-xs relative z-10">
+          ${top3.map((p, pIdx) => {
+            const pos = pIdx + 1;
+            let posBadgeBg = 'bg-surface-container-highest text-on-surface font-bold';
+            let timerColor = '#cbd5e1';
+            let bonusColor = 'text-outline';
+            let defaultBonus = 10;
+            let defaultRep = 80000;
 
-          <!-- P2 (Ganador Plata / Silver) -->
-          <div class="bg-surface-container p-space-sm rounded-lg grid grid-cols-[1fr_auto_1fr] items-center gap-2">
-            <div class="flex items-center gap-2 min-w-0 justify-self-start">
-              <span class="w-5 h-5 rounded-full bg-surface-container-highest text-on-surface font-headline-sm text-[12px] flex items-center justify-center font-bold shrink-0">2</span>
-              <span class="font-headline-sm text-[13px] sm:text-[13.5px] uppercase text-on-surface font-extrabold truncate" title="${escapeHtml(p2.pilot || 'Por disputar')}">${escapeHtml(p2.pilot || 'Por disputar')}</span>
-            </div>
-            <div class="flex items-center justify-center text-center justify-self-center px-1">
-              <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container-lowest/90 border border-surface-container-highest/50 shadow-inner">
-                <span class="material-symbols-outlined text-[13px] text-[#e2e8f0] shrink-0">timer</span>
-                <span class="font-label-hud text-[9px] uppercase tracking-wider text-outline font-black shrink-0">TIME</span>
-                <span class="font-label-timer-md text-[13px] sm:text-[14px] text-[#e2e8f0] font-black tracking-tight whitespace-nowrap">${escapeHtml(p2.time || '--:--.---')}</span>
-              </div>
-            </div>
-            <div class="flex flex-col text-right justify-self-end shrink-0 pl-1">
-              <span class="font-label-data text-[12.5px] sm:text-[13px] text-secondary font-black tracking-wide leading-tight">${getSlotBonusDisplay(p2, 50)}</span>
-              <span class="font-label-data text-[12.5px] sm:text-[13px] text-tertiary font-black tracking-tight leading-tight drop-shadow-[0_0_8px_rgba(0,208,255,0.4)]">${getSlotRepDisplay(p2, 250000)}</span>
-            </div>
-          </div>
+            if (pos === 1) {
+              posBadgeBg = 'bg-primary-container text-black font-black';
+              timerColor = '#fbbf24';
+              bonusColor = 'text-primary-container';
+              defaultBonus = 100;
+              defaultRep = 400000;
+            } else if (pos === 2) {
+              posBadgeBg = 'bg-surface-container-highest text-on-surface font-bold';
+              timerColor = '#e2e8f0';
+              bonusColor = 'text-secondary';
+              defaultBonus = 50;
+              defaultRep = 250000;
+            } else if (pos === 3) {
+              posBadgeBg = 'bg-surface-container-highest text-on-surface font-bold';
+              timerColor = '#fdba74';
+              bonusColor = 'text-primary-fixed-dim';
+              defaultBonus = 20;
+              defaultRep = 120000;
+            } else if (pos === 4) {
+              posBadgeBg = 'bg-surface-container-highest text-on-surface font-bold';
+              timerColor = '#94a3b8';
+              bonusColor = 'text-outline';
+              defaultBonus = 10;
+              defaultRep = 80000;
+            }
 
-          <!-- P3 (Ganador Bronce) -->
-          <div class="bg-surface-container p-space-sm rounded-lg grid grid-cols-[1fr_auto_1fr] items-center gap-2">
-            <div class="flex items-center gap-2 min-w-0 justify-self-start">
-              <span class="w-5 h-5 rounded-full bg-surface-container-highest text-on-surface font-headline-sm text-[12px] flex items-center justify-center font-bold shrink-0">3</span>
-              <span class="font-headline-sm text-[13px] sm:text-[13.5px] uppercase text-on-surface font-extrabold truncate" title="${escapeHtml(p3.pilot || 'Por disputar')}">${escapeHtml(p3.pilot || 'Por disputar')}</span>
-            </div>
-            <div class="flex items-center justify-center text-center justify-self-center px-1">
-              <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container-lowest/90 border border-surface-container-highest/50 shadow-inner">
-                <span class="material-symbols-outlined text-[13px] text-[#fdba74] shrink-0">timer</span>
-                <span class="font-label-hud text-[9px] uppercase tracking-wider text-outline font-black shrink-0">TIME</span>
-                <span class="font-label-timer-md text-[13px] sm:text-[14px] text-[#fdba74] font-black tracking-tight whitespace-nowrap">${escapeHtml(p3.time || '--:--.---')}</span>
-              </div>
-            </div>
-            <div class="flex flex-col text-right justify-self-end shrink-0 pl-1">
-              <span class="font-label-data text-[12.5px] sm:text-[13px] text-primary-fixed-dim font-black tracking-wide leading-tight">${getSlotBonusDisplay(p3, 20)}</span>
-              <span class="font-label-data text-[12.5px] sm:text-[13px] text-tertiary font-black tracking-tight leading-tight drop-shadow-[0_0_8px_rgba(0,208,255,0.4)]">${getSlotRepDisplay(p3, 120000)}</span>
-            </div>
-          </div>
+            const rowBg = 'hud-row-item p-space-sm grid grid-cols-[1fr_auto_1fr] items-center gap-2 relative';
 
-          ${isWeek4Slots ? `
-          <!-- P4 (Ganador Zinc / Aluminio) -->
-          <div class="bg-surface-container p-space-sm rounded-lg grid grid-cols-[1fr_auto_1fr] items-center gap-2 border border-surface-container-highest/20">
-            <div class="flex items-center gap-2 min-w-0 justify-self-start">
-              <span class="w-5 h-5 rounded-full bg-surface-container-highest text-on-surface font-headline-sm text-[12px] flex items-center justify-center font-bold shrink-0">4</span>
-              <span class="font-headline-sm text-[13px] sm:text-[13.5px] uppercase text-on-surface font-extrabold truncate" title="${escapeHtml(p4.pilot || 'Por disputar')}">${escapeHtml(p4.pilot || 'Por disputar')}</span>
-            </div>
-            <div class="flex items-center justify-center text-center justify-self-center px-1">
-              <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container-lowest/90 border border-surface-container-highest/50 shadow-inner">
-                <span class="material-symbols-outlined text-[13px] text-[#94a3b8] shrink-0">timer</span>
-                <span class="font-label-hud text-[9px] uppercase tracking-wider text-outline font-black shrink-0">TIME</span>
-                <span class="font-label-timer-md text-[13px] sm:text-[14px] text-[#94a3b8] font-black tracking-tight whitespace-nowrap">${escapeHtml(p4.time || '--:--.---')}</span>
+            return `
+              <div class="${rowBg}">
+                <div class="flex items-center gap-2 min-w-0 justify-self-start">
+                  <span class="w-5 h-5 rounded-sm ${posBadgeBg} font-headline-sm text-[12px] flex items-center justify-center shrink-0">${pos}</span>
+                  <span class="font-headline-sm text-[13px] sm:text-[13.5px] uppercase text-on-surface font-extrabold truncate" title="${escapeHtml(p.pilot || 'Por disputar')}">${escapeHtml(p.pilot || 'Por disputar')}</span>
+                </div>
+                <div class="flex items-center justify-center text-center justify-self-center px-1">
+                  <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm bg-surface-container-lowest/90 border border-surface-container-highest/50 shadow-inner">
+                    <span class="material-symbols-outlined text-[13px] text-[${timerColor}] shrink-0">timer</span>
+                    <span class="font-label-hud text-[9px] uppercase tracking-wider text-outline font-black shrink-0">TIME</span>
+                    <span class="font-label-timer-md text-[13px] sm:text-[14px] text-[${timerColor}] font-black tracking-tight whitespace-nowrap tabular-nums">${escapeHtml(p.time || '--:--.---')}</span>
+                  </div>
+                </div>
+                <div class="flex flex-col text-right justify-self-end shrink-0 pl-1">
+                  <span class="font-label-data text-[12.5px] sm:text-[13px] ${bonusColor} font-black tracking-wide leading-tight tabular-nums">${getSlotBonusDisplay(p, defaultBonus)}</span>
+                  <span class="font-label-data text-[12.5px] sm:text-[13px] text-tertiary font-black tracking-tight leading-tight tabular-nums drop-shadow-[0_0_8px_rgba(0,208,255,0.4)]">${getSlotRepDisplay(p, defaultRep)}</span>
+                </div>
               </div>
-            </div>
-            <div class="flex flex-col text-right justify-self-end shrink-0 pl-1">
-              <span class="font-label-data text-[12.5px] sm:text-[13px] text-outline font-black tracking-wide leading-tight">${getSlotBonusDisplay(p4, 10)}</span>
-              <span class="font-label-data text-[12.5px] sm:text-[13px] text-tertiary font-black tracking-tight leading-tight drop-shadow-[0_0_8px_rgba(0,208,255,0.4)]">${getSlotRepDisplay(p4, 80000)}</span>
-            </div>
-          </div>
-          ` : ''}
+            `;
+          }).join('')}
         </div>
       `;
 
@@ -1410,18 +1391,19 @@
       const alias = driver.alias || driver.name || `Piloto #${driver.rank}`;
       const timeBonusPts = typeof driver.computedBonus === 'number' ? driver.computedBonus : ((bt.first || 0) * 100 + (bt.second || 0) * 50 + (bt.third || 0) * 20);
 
-      card.className = `relative ${rowBg} transition-all duration-150 rounded-lg p-space-sm md:p-space-md flex flex-col xl:flex-row items-start xl:items-center justify-between gap-space-md shadow-lg overflow-hidden group hover-card-lift`;
+      card.className = `relative hud-card hud-card-interactive tactical-chamfer-top-right p-space-sm md:p-space-md flex flex-col xl:flex-row items-start xl:items-center justify-between gap-space-md shadow-lg overflow-hidden group`;
 
       card.innerHTML = `
+        <div class="tactical-watermark">#${rankNum}</div>
         <!-- Edge Gauge -->
         <div class="absolute left-0 top-0 bottom-0 w-1.5 ${edgeGauge}"></div>
 
         <!-- Pilot Identity Cluster -->
-        <div class="flex items-center gap-space-md min-w-[260px] pl-space-xs">
+        <div class="flex items-center gap-space-md min-w-[260px] pl-space-xs relative z-10">
           <!-- Rank Number Badge -->
           <div class="${rankBadge}">${rankNum}</div>
           <!-- Escudería Avatar / Insignia -->
-          <div class="w-12 h-12 rounded bg-surface-container-high flex items-center justify-center flex-shrink-0 ${avatarColor}">
+          <div class="w-12 h-12 rounded-sm bg-surface-container-high flex items-center justify-center flex-shrink-0 ${avatarColor}">
             <span class="material-symbols-outlined text-[26px]">${avatarIcon}</span>
           </div>
           <!-- Callsign & Car info -->
@@ -1429,70 +1411,70 @@
             <div class="flex items-center gap-space-xs flex-wrap">
               <span class="font-headline-sm text-headline-sm uppercase text-on-surface font-extrabold leading-none truncate">${escapeHtml(alias)}</span>
               ${driver.name && driver.name !== driver.alias ? `<span class="font-label-data text-label-data text-secondary-container font-semibold truncate">"${escapeHtml(driver.name)}"</span>` : ''}
-              <span class="font-label-hud text-[10px] ${rankPillClass} px-1.5 py-0.5 rounded font-black tracking-widest">BLACKLIST ${driver.rank || rankNum}</span>
+              <span class="tactical-badge text-[10px] ${rankPillClass}">BLACKLIST ${driver.rank || rankNum}</span>
             </div>
             <div class="flex items-center gap-space-xs mt-1 text-on-surface-variant font-label-data text-label-data truncate">
               <span class="material-symbols-outlined text-[14px]">directions_car</span>
               <span class="uppercase truncate">${escapeHtml(car)}</span>
             </div>
             <div class="mt-1">
-              <span class="font-label-data text-[10px] bg-surface-container-highest px-2 py-0.5 rounded text-on-surface-variant uppercase font-medium">${escapeHtml(groupLabel)}</span>
+              <span class="font-label-data text-[10px] bg-surface-container-highest px-2 py-0.5 rounded-sm text-on-surface-variant uppercase font-medium">${escapeHtml(groupLabel)}</span>
             </div>
           </div>
         </div>
 
         <!-- Telemetry Data Blocks Grid -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-space-md items-center w-full xl:w-auto">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-space-md items-center w-full xl:w-auto relative z-10">
           <!-- REP Money Block -->
-          <div class="flex flex-col bg-surface-container-high px-space-md py-1.5 rounded items-center justify-center min-w-[125px]">
+          <div class="flex flex-col hud-card hud-row-item px-space-md py-1.5 items-center justify-center min-w-[125px]">
             <span class="font-label-hud text-[9px] uppercase tracking-wider text-on-surface-variant">${isEn ? 'REP CASH' : 'DINERO REP'}</span>
-            <span class="font-label-data text-[15px] font-bold text-tertiary tracking-tight">${rep}</span>
+            <span class="font-label-data text-[15px] font-bold text-tertiary tracking-tight tabular-nums">${rep}</span>
           </div>
 
           <!-- Podiums Breakdown (P1, P2, P3, P4) -->
-          <div class="flex items-center bg-surface-container-high rounded p-1 gap-1">
-            <div class="flex flex-col items-center px-2 py-0.5 rounded ${v.p1 > 0 ? 'bg-primary-container text-black font-black shadow-sm' : ''}" title="${isEn ? '1st Place Victories' : '1er Lugar (Victorias)'}: ${v.p1 || 0}">
+          <div class="flex items-center hud-card rounded-sm p-1 gap-1 border border-white/5">
+            <div class="flex flex-col items-center px-2 py-0.5 rounded-sm ${v.p1 > 0 ? 'bg-primary-container text-black font-black shadow-sm' : ''}" title="${isEn ? '1st Place Victories' : '1er Lugar (Victorias)'}: ${v.p1 || 0}">
               <span class="font-label-hud text-[8px] uppercase font-black ${v.p1 > 0 ? 'text-black' : 'text-on-surface-variant'}">P1</span>
-              <span class="font-label-data text-[12px] ${v.p1 > 0 ? 'font-black text-black' : 'text-on-surface-variant font-bold'}">${v.p1 || 0}</span>
+              <span class="font-label-data text-[12px] tabular-nums ${v.p1 > 0 ? 'font-black text-black' : 'text-on-surface-variant font-bold'}">${v.p1 || 0}</span>
             </div>
-            <div class="flex flex-col items-center px-2 py-0.5 rounded ${v.p2 > 0 ? 'bg-surface-bright text-white font-black border border-white/20 shadow-sm' : ''}" title="${isEn ? '2nd Place Podiums' : '2do Lugar'}: ${v.p2 || 0}">
+            <div class="flex flex-col items-center px-2 py-0.5 rounded-sm ${v.p2 > 0 ? 'bg-surface-bright text-white font-black border border-white/20 shadow-sm' : ''}" title="${isEn ? '2nd Place Podiums' : '2do Lugar'}: ${v.p2 || 0}">
               <span class="font-label-hud text-[8px] uppercase font-black ${v.p2 > 0 ? 'text-white' : 'text-on-surface-variant'}">P2</span>
-              <span class="font-label-data text-[12px] ${v.p2 > 0 ? 'font-black text-white' : 'text-on-surface-variant font-bold'}">${v.p2 || 0}</span>
+              <span class="font-label-data text-[12px] tabular-nums ${v.p2 > 0 ? 'font-black text-white' : 'text-on-surface-variant font-bold'}">${v.p2 || 0}</span>
             </div>
-            <div class="flex flex-col items-center px-2 py-0.5 rounded ${v.p3 > 0 ? 'bg-[#cd7f32]/30 text-[#f59e0b] font-black border border-[#cd7f32]/40 shadow-sm' : ''}" title="${isEn ? '3rd Place Podiums' : '3er Lugar'}: ${v.p3 || 0}">
+            <div class="flex flex-col items-center px-2 py-0.5 rounded-sm ${v.p3 > 0 ? 'bg-[#cd7f32]/30 text-[#f59e0b] font-black border border-[#cd7f32]/40 shadow-sm' : ''}" title="${isEn ? '3rd Place Podiums' : '3er Lugar'}: ${v.p3 || 0}">
               <span class="font-label-hud text-[8px] uppercase font-black ${v.p3 > 0 ? 'text-[#f59e0b]' : 'text-on-surface-variant'}">P3</span>
-              <span class="font-label-data text-[12px] ${v.p3 > 0 ? 'font-black text-[#f59e0b]' : 'text-on-surface-variant font-bold'}">${v.p3 || 0}</span>
+              <span class="font-label-data text-[12px] tabular-nums ${v.p3 > 0 ? 'font-black text-[#f59e0b]' : 'text-on-surface-variant font-bold'}">${v.p3 || 0}</span>
             </div>
-            <div class="flex flex-col items-center px-2 py-0.5 rounded ${v.p4 > 0 ? 'bg-surface-container-highest text-on-surface font-black' : ''}" title="${isEn ? '4th Place' : '4to Lugar'}: ${v.p4 || 0}">
+            <div class="flex flex-col items-center px-2 py-0.5 rounded-sm ${v.p4 > 0 ? 'bg-surface-container-highest text-on-surface font-black' : ''}" title="${isEn ? '4th Place' : '4to Lugar'}: ${v.p4 || 0}">
               <span class="font-label-hud text-[8px] uppercase font-black ${v.p4 > 0 ? 'text-on-surface' : 'text-on-surface-variant'}">P4</span>
-              <span class="font-label-data text-[12px] ${v.p4 > 0 ? 'font-black text-on-surface' : 'text-on-surface-variant font-bold'}">${v.p4 || 0}</span>
+              <span class="font-label-data text-[12px] tabular-nums ${v.p4 > 0 ? 'font-black text-on-surface' : 'text-on-surface-variant font-bold'}">${v.p4 || 0}</span>
             </div>
           </div>
 
           <!-- Time Bono -->
-          <div class="flex flex-col bg-surface-container-high px-space-md py-1.5 rounded items-center justify-center min-w-[95px]">
+          <div class="flex flex-col hud-card hud-row-item px-space-md py-1.5 items-center justify-center min-w-[95px]">
             <span class="font-label-hud text-[9px] uppercase tracking-wider text-on-surface-variant">${isEn ? 'TIME BONUS' : 'TIME BONO'}</span>
-            <span class="font-label-data text-[14px] font-bold text-primary-container">${timeBonusPts > 0 ? `+${timeBonusPts}` : '0'} PTS</span>
+            <span class="font-label-data text-[14px] font-bold text-primary-container tabular-nums">${timeBonusPts > 0 ? `+${timeBonusPts}` : '0'} PTS</span>
           </div>
 
           <!-- Total Score -->
-          <div class="flex flex-col bg-surface-container-high px-space-md py-1.5 rounded items-center justify-center min-w-[110px]">
+          <div class="flex flex-col hud-card hud-row-item px-space-md py-1.5 items-center justify-center min-w-[110px]">
             <span class="font-label-hud text-[9px] uppercase tracking-wider text-on-surface-variant">TOTAL SCORE</span>
-            <span class="font-label-timer-md text-label-timer-md font-black ${tagColor} tracking-tight">${pts.toLocaleString('es-ES')} PTS</span>
+            <span class="font-label-timer-md text-label-timer-md font-black ${tagColor} tracking-tight tabular-nums">${pts.toLocaleString('es-ES')} PTS</span>
           </div>
         </div>
 
         <!-- Leader Status & Action Buttons -->
-        <div class="flex items-center gap-space-xs w-full xl:w-auto justify-end">
+        <div class="flex items-center gap-space-xs w-full xl:w-auto justify-end relative z-10">
           ${isP1 ? `
-          <span class="inline-flex items-center gap-1 font-label-hud text-[11px] font-black bg-primary-container/20 text-primary-container px-space-sm py-2 rounded">
+          <span class="inline-flex items-center gap-1 tactical-badge-amber">
             <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">military_tech</span>
-            ${isEn ? 'LEADER #1' : 'LÍDER #1'}
+            <span>${isEn ? 'LEADER #1' : 'LÍDER #1'}</span>
           </span>` : `
-          <span class="inline-flex items-center gap-1 font-label-hud text-[11px] font-black bg-surface-container-high text-on-surface-variant px-space-sm py-2 rounded">
-            ${isEn ? 'DRIVER' : 'PILOTO'} #${driver.rank || rankNum}
+          <span class="inline-flex items-center gap-1 tactical-badge text-on-surface-variant">
+            <span>${isEn ? 'DRIVER' : 'PILOTO'} #${driver.rank || rankNum}</span>
           </span>`}
-          <button type="button" onclick="if (typeof window.selectDossierPilot === 'function') window.selectDossierPilot(${driver.rank || rankNum}); else if (typeof window.switchView === 'function') window.switchView('blacklist-cards');" class="inline-flex items-center gap-1.5 px-space-md py-2 rounded bg-secondary-container hover:bg-secondary text-on-secondary font-headline-sm text-[12px] font-black uppercase tracking-wider transition-colors shadow-sm cursor-pointer" title="${isEn ? 'View Dossier File' : 'Ver Ficha Dossier'}">
+          <button type="button" onclick="if (typeof window.selectDossierPilot === 'function') window.selectDossierPilot(${driver.rank || rankNum}); else if (typeof window.switchView === 'function') window.switchView('blacklist-cards');" class="inline-flex items-center gap-1.5 px-space-md py-2 rounded-sm bg-secondary-container hover:bg-secondary text-on-secondary font-headline-sm text-[12px] font-black uppercase tracking-wider transition-colors shadow-sm cursor-pointer" title="${isEn ? 'View Dossier File' : 'Ver Ficha Dossier'}">
             <span class="material-symbols-outlined text-[15px]">skull</span>
             <span>${isEn ? 'DOSSIER' : 'FICHA'}</span>
           </button>

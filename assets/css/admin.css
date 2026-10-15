@@ -989,6 +989,11 @@ body.admin-body {
   background: rgba(15, 20, 28, 0.88);
   box-shadow: 0 0 15px rgba(148, 163, 184, 0.04);
 }
+.admin-winner-extra {
+  border-color: rgba(56, 189, 248, 0.35);
+  background: rgba(15, 20, 28, 0.88);
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.04);
+}
 .admin-winner-header {
   display: flex;
   justify-content: space-between;
@@ -1011,5 +1016,31 @@ body.admin-body {
   background: var(--nfs-orange, #F97316);
   color: #FFF;
   border-color: var(--nfs-orange, #F97316);
+}
+
+/* RESPONSIVE SCALING & ADAPTABILITY */
+@media (max-width: 768px) {
+  .admin-container {
+    padding: 16px 12px 40px 12px;
+  }
+  .admin-navbar {
+    padding: 10px 14px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}
+
+@media (min-width: 2560px) {
+  .admin-container {
+    max-width: 2200px;
+    padding: 36px 40px 80px 40px;
+  }
+}
+
+@media (min-width: 3840px) {
+  .admin-container {
+    max-width: 3200px;
+    padding: 48px 56px 100px 56px;
+  }
 }
 

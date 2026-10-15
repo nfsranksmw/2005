@@ -138,28 +138,49 @@
   function updateNavbarUI(activeViewId) {
     const parentNavId = NAV_PARENT_MAP[activeViewId] || 'nav-home';
     const mainNav = document.getElementById('main-nav');
-    if (!mainNav) return;
+    if (mainNav) {
+      const navLinks = mainNav.querySelectorAll('a[data-action="navigate"]');
+      navLinks.forEach(link => {
+        // nav-leaderboard permanece oculto en todo momento
+        if (link.id === 'nav-leaderboard') {
+          link.classList.add('hidden');
+        }
 
-    const navLinks = mainNav.querySelectorAll('a[data-action="navigate"]');
-    navLinks.forEach(link => {
-      // nav-leaderboard permanece oculto en todo momento
-      if (link.id === 'nav-leaderboard') {
-        link.classList.add('hidden');
-      }
+        if (link.id === parentNavId) {
+          link.setAttribute('aria-current', 'page');
+          ACTIVE_CLASSES.forEach(c => link.classList.add(c));
+          INACTIVE_CLASSES.forEach(c => link.classList.remove(c));
+        } else {
+          link.removeAttribute('aria-current');
+          ACTIVE_CLASSES.forEach(c => link.classList.remove(c));
+          INACTIVE_CLASSES.forEach(c => link.classList.add(c));
+        }
+      });
+    }
 
-      if (link.id === parentNavId) {
-        link.setAttribute('aria-current', 'page');
-        ACTIVE_CLASSES.forEach(c => link.classList.add(c));
-        INACTIVE_CLASSES.forEach(c => link.classList.remove(c));
-      } else {
-        link.removeAttribute('aria-current');
-        ACTIVE_CLASSES.forEach(c => link.classList.remove(c));
-        INACTIVE_CLASSES.forEach(c => link.classList.add(c));
-      }
-    });
+    // Sincronizar estado activo en el menú lateral móvil
+    const mobileDrawer = document.getElementById('mobile-nav-drawer');
+    if (mobileDrawer) {
+      const mobileLinks = mobileDrawer.querySelectorAll('a[data-action="navigate"]');
+      mobileLinks.forEach(link => {
+        const target = link.getAttribute('data-target');
+        if (target === activeViewId || (activeViewId === 'home' && target === 'home')) {
+          link.classList.add('bg-primary-container', 'text-on-primary-container', 'font-bold');
+          link.classList.remove('text-on-surface-variant', 'hover:bg-surface-container-high');
+        } else {
+          link.classList.remove('bg-primary-container', 'text-on-primary-container', 'font-bold');
+          link.classList.add('text-on-surface-variant', 'hover:bg-surface-container-high');
+        }
+      });
+    }
   }
 
   function switchView(viewId, updateHash = true) {
+    // Cerrar automáticamente el menú móvil si está abierto
+    if (typeof closeMobileNav === 'function') {
+      closeMobileNav();
+    }
+
     const target = VIEW_MAP[viewId] || 'home';
 
     const sections = document.querySelectorAll('.view-section');
@@ -222,6 +243,95 @@
       window.applyTranslations();
     }
   }
+
+  // =========================================================================
+  // RESPONSIVE MOBILE NAVIGATION DRAWER CONTROLLER
+  // =========================================================================
+  function openMobileNav() {
+    const drawer = document.getElementById('mobile-nav-drawer');
+    const backdrop = document.getElementById('mobile-nav-backdrop');
+    const iconOpen = document.getElementById('mobile-menu-icon-open');
+    const iconClose = document.getElementById('mobile-menu-icon-close');
+    const btn = document.getElementById('btn-mobile-menu-toggle');
+    if (!drawer || !backdrop) return;
+
+    backdrop.classList.remove('hidden', 'pointer-events-none');
+    setTimeout(() => {
+      backdrop.classList.remove('opacity-0');
+    }, 10);
+
+    drawer.classList.remove('translate-x-full');
+    drawer.setAttribute('aria-hidden', 'false');
+    if (btn) btn.setAttribute('aria-expanded', 'true');
+    if (iconOpen) iconOpen.classList.add('hidden');
+    if (iconClose) iconClose.classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
+  }
+
+  function closeMobileNav() {
+    document.body.classList.remove('overflow-hidden');
+    const drawer = document.getElementById('mobile-nav-drawer');
+    const backdrop = document.getElementById('mobile-nav-backdrop');
+    const iconOpen = document.getElementById('mobile-menu-icon-open');
+    const iconClose = document.getElementById('mobile-menu-icon-close');
+    const btn = document.getElementById('btn-mobile-menu-toggle');
+    if (!drawer || !backdrop) return;
+
+    drawer.classList.add('translate-x-full');
+    drawer.setAttribute('aria-hidden', 'true');
+    backdrop.classList.add('opacity-0');
+    setTimeout(() => {
+      backdrop.classList.add('hidden', 'pointer-events-none');
+    }, 300);
+
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+    if (iconOpen) iconOpen.classList.remove('hidden');
+    if (iconClose) iconClose.classList.add('hidden');
+  }
+
+  function toggleMobileNav() {
+    const drawer = document.getElementById('mobile-nav-drawer');
+    if (!drawer) return;
+    const isOpen = !drawer.classList.contains('translate-x-full');
+    if (isOpen) {
+      closeMobileNav();
+    } else {
+      openMobileNav();
+    }
+  }
+
+  function toggleMobileSubmenu(id) {
+    const submenu = document.getElementById(id);
+    const chevron = document.getElementById(id + '-chevron');
+    if (!submenu) return;
+    const isHidden = submenu.classList.contains('hidden');
+    if (isHidden) {
+      submenu.classList.remove('hidden');
+      if (chevron) chevron.style.transform = 'rotate(180deg)';
+    } else {
+      submenu.classList.add('hidden');
+      if (chevron) chevron.style.transform = 'rotate(0deg)';
+    }
+  }
+
+  window.openMobileNav = openMobileNav;
+  window.closeMobileNav = closeMobileNav;
+  window.toggleMobileNav = toggleMobileNav;
+  window.toggleMobileSubmenu = toggleMobileSubmenu;
+
+  // Cerrar menú móvil al presionar tecla Escape
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeMobileNav();
+    }
+  });
+
+  // Cerrar menú móvil automáticamente si se redimensiona a pantalla ancha / apaisada
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 1025 || (window.innerWidth >= 640 && window.matchMedia('(orientation: landscape)').matches)) {
+      closeMobileNav();
+    }
+  });
 
   window.switchView = switchView;
   window.resolveViewFromUrl = resolveViewFromUrl;
@@ -388,12 +498,13 @@
     const wrCarDisplay = wr ? escapeHtml(wr.car || 'Junkman Stage 3') : `${route.type} Homologado`;
 
     return `
-<article class="group relative rounded-xl bg-surface-container-lowest hover:bg-surface-container-low transition-all duration-300 shadow-md hover:shadow-2xl flex flex-col justify-between overflow-hidden cursor-pointer" data-route="${escapeHtml(route.name)}">
-  <div class="p-space-md flex flex-col gap-space-sm">
+<article class="group relative hud-card hud-card-interactive tactical-chamfer-top-right border border-white/10 flex flex-col justify-between overflow-hidden cursor-pointer" data-route="${escapeHtml(route.name)}">
+  <div class="tactical-watermark select-none pointer-events-none">${escapeHtml((route.type || 'SECTOR').toUpperCase())}</div>
+  <div class="p-space-md flex flex-col gap-space-sm relative z-10">
     <!-- Header Badges -->
     <div class="flex items-center justify-between gap-2">
-      <span class="px-2 py-0.5 rounded ${style.badge} font-label-hud text-label-hud uppercase tracking-wider font-bold">
-        ${escapeHtml(route.type.toUpperCase())} • ${modality.toUpperCase()}
+      <span class="tactical-badge ${style.badge || 'tactical-badge-neutral'} uppercase">
+        ${escapeHtml(route.type.toUpperCase())} // ${modality.toUpperCase()}
       </span>
       <span class="font-label-data text-[11px] text-on-surface-variant uppercase flex items-center gap-1">
         <span class="material-symbols-outlined text-[13px]">location_on</span>
@@ -417,16 +528,16 @@
     </div>
 
     <!-- World Record Main Display -->
-    <div class="bg-surface-container p-space-sm rounded mt-1 flex items-center justify-between">
+    <div class="hud-card hud-row-item p-space-sm mt-1 flex items-center justify-between">
       <div class="flex flex-col">
         <span class="font-label-hud text-label-hud text-on-surface-variant uppercase">RÉCORD MUNDIAL (WR)</span>
-        <span class="font-label-timer-lg text-[28px] ${style.timer} font-bold leading-none mt-0.5 route-wr-time" data-wr-route="${escapeHtml(route.name)}">
+        <span class="font-label-timer-lg text-[28px] tabular-nums font-mono ${style.timer} font-bold leading-none mt-0.5 route-wr-time" data-wr-route="${escapeHtml(route.name)}">
           ${wrTimeDisplay}
         </span>
       </div>
       <div class="flex flex-col items-end">
         <div class="flex items-center gap-1.5">
-          <span class="text-[10px] font-label-data bg-surface-container-high px-1 rounded text-on-surface">WR</span>
+          <span class="tactical-badge tactical-badge-amber text-[9px]">WR</span>
           <span class="font-headline-sm text-[15px] text-on-surface route-wr-driver" data-wr-driver="${escapeHtml(route.name)}">${wrDriverDisplay}</span>
         </div>
         <span class="font-label-data text-[11px] text-outline route-wr-car" data-wr-car="${escapeHtml(route.name)}">${wrCarDisplay}</span>
@@ -434,7 +545,7 @@
     </div>
 
     <!-- Micro Stats & Telemetry Breakdown -->
-    <div class="grid grid-cols-3 gap-2 py-1 font-label-data text-label-data text-on-surface-variant">
+    <div class="grid grid-cols-3 gap-2 py-1 font-label-data text-label-data text-on-surface-variant border-t border-white/5">
       <div>
         <span class="block text-[10px] uppercase text-outline">Categoría</span>
         <span class="text-on-surface font-semibold">${escapeHtml(route.type)}</span>
@@ -451,12 +562,12 @@
   </div>
 
   <!-- Bottom Actions Drawer -->
-  <div class="bg-surface-container/60 px-space-md py-2.5 flex items-center justify-between gap-2">
+  <div class="bg-black/40 px-space-md py-2.5 flex items-center justify-between gap-2 border-t border-white/10 relative z-10">
     <a class="font-label-hud text-label-hud ${style.action} uppercase flex items-center gap-1 font-bold" href="#leaderboard" data-action="view-leaderboard" data-route="${escapeHtml(route.name)}">
       Ver Leaderboard <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
     </a>
     <div class="flex items-center gap-2">
-      <button class="p-1 rounded hover:bg-surface-container-high text-on-surface-variant hover:text-primary transition-colors" title="Abrir Leaderboard" data-action="view-leaderboard" data-route="${escapeHtml(route.name)}">
+      <button class="p-1 rounded-sm hover:bg-surface-container-high text-on-surface-variant hover:text-primary transition-colors" title="Abrir Leaderboard" data-action="view-leaderboard" data-route="${escapeHtml(route.name)}">
         <span class="material-symbols-outlined text-[16px]">leaderboard</span>
       </button>
     </div>
@@ -692,32 +803,32 @@
     let posSubLabelHtml = '';
     if (isP1) {
       posBadgeBoxHtml = `
-        <div class="w-8 h-8 rounded-lg bg-primary-container text-on-primary-container font-headline-sm text-headline-sm flex items-center justify-center font-black shadow-md">
+        <div class="w-8 h-8 rounded-sm bg-primary-container text-on-primary-container font-headline-sm text-headline-sm flex items-center justify-center font-black shadow-md tabular-nums">
           1
         </div>
       `;
-      posSubLabelHtml = `<span class="font-label-hud text-[9px] text-primary uppercase font-black mt-1">WR</span>`;
+      posSubLabelHtml = `<span class="tactical-badge tactical-badge-amber text-[9px] uppercase font-black mt-1">WR</span>`;
     } else if (pos === 2) {
       posBadgeBoxHtml = `
-        <div class="w-8 h-8 rounded-lg bg-surface-variant text-on-surface font-headline-sm text-headline-sm flex items-center justify-center font-bold">
+        <div class="w-8 h-8 rounded-sm bg-surface-variant text-on-surface font-headline-sm text-headline-sm flex items-center justify-center font-bold tabular-nums">
           2
         </div>
       `;
-      posSubLabelHtml = `<span class="font-label-hud text-[9px] text-outline uppercase font-semibold mt-1">TOP 2</span>`;
+      posSubLabelHtml = `<span class="tactical-badge tactical-badge-neutral text-[9px] uppercase font-semibold mt-1">TOP 2</span>`;
     } else if (pos === 3) {
       posBadgeBoxHtml = `
-        <div class="w-8 h-8 rounded-lg bg-surface-container-highest text-secondary font-headline-sm text-headline-sm flex items-center justify-center font-bold">
+        <div class="w-8 h-8 rounded-sm bg-surface-container-highest text-secondary font-headline-sm text-headline-sm flex items-center justify-center font-bold tabular-nums">
           3
         </div>
       `;
-      posSubLabelHtml = `<span class="font-label-hud text-[9px] text-secondary uppercase font-semibold mt-1">TOP 3</span>`;
+      posSubLabelHtml = `<span class="tactical-badge tactical-badge-amber text-[9px] uppercase font-semibold mt-1">TOP 3</span>`;
     } else {
       posBadgeBoxHtml = `
-        <div class="w-8 h-8 rounded-lg bg-surface-container text-outline font-headline-sm text-headline-sm flex items-center justify-center font-bold">
+        <div class="w-8 h-8 rounded-sm bg-surface-container text-outline font-headline-sm text-headline-sm flex items-center justify-center font-bold tabular-nums">
           ${pos}
         </div>
       `;
-      posSubLabelHtml = `<span class="font-label-hud text-[9px] text-outline/60 uppercase font-semibold mt-1">P${pos}</span>`;
+      posSubLabelHtml = `<span class="font-label-hud text-[9px] text-outline/60 uppercase font-semibold mt-1 tabular-nums">P${pos}</span>`;
     }
 
     // 3. Avatar Icon (Top 1 Amarillo primario vs Top 2+ Neutral/Outline)
@@ -732,15 +843,15 @@
     let rankBadgesHtml = '';
     if (isP1) {
       rankBadgesHtml = `
-        <span class="px-1.5 py-0.5 rounded bg-secondary-container text-on-surface font-label-hud text-[9px] font-black tracking-wider uppercase">WORLD RECORD</span>
-        <span class="px-1.5 py-0.5 rounded bg-surface-container font-label-data text-[10px] text-tertiary">TOP #1</span>
+        <span class="tactical-badge tactical-badge-amber text-[9px] tracking-wider uppercase font-black">WORLD RECORD</span>
+        <span class="tactical-badge tactical-badge-cyan text-[10px]">TOP #1</span>
       `;
     } else if (pos === 2) {
-      rankBadgesHtml = `<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-label-data text-[10px]">TOP #2 WORLD</span>`;
+      rankBadgesHtml = `<span class="tactical-badge tactical-badge-neutral text-[10px]">TOP #2 WORLD</span>`;
     } else if (pos === 3) {
-      rankBadgesHtml = `<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-label-data text-[10px]">TOP #3 WORLD</span>`;
+      rankBadgesHtml = `<span class="tactical-badge tactical-badge-neutral text-[10px]">TOP #3 WORLD</span>`;
     } else {
-      rankBadgesHtml = `<span class="px-1.5 py-0.5 rounded bg-surface-container font-label-data text-[10px] text-outline">TOP #${pos}</span>`;
+      rankBadgesHtml = `<span class="tactical-badge tactical-badge-neutral text-[10px] text-outline">TOP #${pos}</span>`;
     }
 
     // 6. Tiempo y Delta GAP (Top 1 Amarillo vs Top 2+ Blanco y Delta Gris secundario)
@@ -824,8 +935,8 @@
   <!-- Time & Delta -->
   <td class="py-space-md px-space-md">
     <div class="flex flex-col">
-      <span class="font-label-timer-md text-headline-sm ${timeClass} font-bold tracking-tight">${timeDisplay}</span>
-      <span class="font-label-data text-label-data ${deltaClass}">${deltaLabel}</span>
+      <span class="font-label-timer-md text-headline-sm tabular-nums font-mono ${timeClass} font-bold tracking-tight">${timeDisplay}</span>
+      <span class="font-label-data text-label-data tabular-nums font-mono ${deltaClass}">${deltaLabel}</span>
     </div>
   </td>
 
@@ -1100,6 +1211,18 @@
   // 4. INICIALIZACIÓN Y EVENT LISTENERS DEL DOM
   // =========================================================================
   document.addEventListener('DOMContentLoaded', () => {
+    // 0. Asegurar que el scroll vertical esté siempre habilitado
+    if (document.body) {
+      document.body.classList.remove('overflow-hidden');
+    }
+
+    // Listener para restablecer scroll si la ventana se amplía a modo escritorio
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 1025 || (window.innerWidth >= 640 && window.matchMedia('(orientation: landscape)').matches)) {
+        closeMobileNav();
+      }
+    });
+
     // 1. Disparar precarga global de Leaderboards para tener WRs instantáneos en las tarjetas
     fetchAllLeaderboards();
 
@@ -1530,21 +1653,22 @@
     if (!heroEl) return;
 
     heroEl.innerHTML = `
-      <div class="bg-surface-container-low rounded-xl p-space-lg shadow-xl border border-surface-container-highest/60 flex flex-col md:flex-row md:items-center justify-between gap-space-md">
-        <div class="flex flex-col gap-2">
+      <div class="hud-card tactical-border-accent tactical-corner-brackets p-space-lg shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-space-md relative overflow-hidden">
+        <div class="tactical-watermark select-none pointer-events-none">ARCHIVE</div>
+        <div class="flex flex-col gap-2 relative z-10">
           <div class="flex flex-wrap items-center gap-1.5">
-            <span class="px-2 py-0.5 rounded bg-primary-container/20 text-primary-container font-label-data text-body-xs font-black uppercase">${escapeHtml(t.edition)}</span>
-            <span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-data text-body-xs uppercase font-bold">${escapeHtml(t.date)}</span>
-            <span class="px-2 py-0.5 rounded bg-secondary-container/20 text-secondary font-label-data text-body-xs uppercase font-bold">${escapeHtml(t.category)}</span>
-            <span class="px-2 py-0.5 rounded bg-tertiary/20 text-tertiary font-label-data text-body-xs uppercase font-bold">${escapeHtml(t.format)}</span>
+            <span class="tactical-badge tactical-badge-amber text-body-xs font-black uppercase">${escapeHtml(t.edition)}</span>
+            <span class="tactical-badge tactical-badge-neutral text-body-xs uppercase font-bold">${escapeHtml(t.date)}</span>
+            <span class="tactical-badge tactical-badge-cyan text-body-xs uppercase font-bold">${escapeHtml(t.category)}</span>
+            <span class="tactical-badge tactical-badge-neutral text-body-xs uppercase font-bold">${escapeHtml(t.format)}</span>
           </div>
           <h2 class="font-headline-md text-headline-sm uppercase text-on-surface font-black">${escapeHtml(t.title)}</h2>
           <p class="font-body-md text-body-sm text-on-surface-variant max-w-2xl">
             Organizado y disputado bajo las normas oficiales de <strong>${escapeHtml(t.platform)}</strong>. ${t.hosts ? `Coordinación y arbitraje: <span class="text-primary-container font-bold">${escapeHtml(t.hosts)}</span>.` : ''}
           </p>
         </div>
-        <div class="shrink-0">
-          <a href="${escapeHtml(t.challongeUrl)}" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-lg bg-surface-container-high hover:bg-surface-bright text-primary-container font-headline-sm text-label-hud uppercase font-black tracking-wider flex items-center gap-2 border border-primary-container/30 transition-all">
+        <div class="shrink-0 relative z-10">
+          <a href="${escapeHtml(t.challongeUrl)}" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-sm bg-surface-container-high hover:bg-surface-bright text-primary-container font-headline-sm text-label-hud uppercase font-black tracking-wider flex items-center gap-2 border border-primary-container/30 transition-all">
             <span class="material-symbols-outlined text-[18px]">open_in_new</span>
             <span>Ver Bracket en Challonge</span>
           </a>
@@ -1558,24 +1682,24 @@
     if (!statsEl || !t.stats) return;
 
     statsEl.innerHTML = `
-      <div class="bg-surface-container-low p-space-md rounded-lg flex flex-col justify-between shadow-md">
+      <div class="hud-card hover-card-lift p-space-md flex flex-col justify-between shadow-md relative overflow-hidden">
         <span class="font-label-hud text-label-hud uppercase tracking-widest text-on-surface-variant">TOTAL PILOTOS</span>
-        <div class="font-headline-sm text-[16px] text-on-surface font-black leading-tight uppercase">${t.stats.totalPilots} Participantes</div>
+        <div class="font-headline-sm text-[16px] text-on-surface font-black leading-tight uppercase tabular-nums">${t.stats.totalPilots} Participantes</div>
         <span class="font-label-data text-[11px] text-on-surface-variant/80 mt-1 uppercase">Parrilla Verificada</span>
       </div>
-      <div class="bg-surface-container-low p-space-md rounded-lg flex flex-col justify-between shadow-md">
+      <div class="hud-card hover-card-lift p-space-md flex flex-col justify-between shadow-md relative overflow-hidden">
         <span class="font-label-hud text-label-hud uppercase tracking-widest text-on-surface-variant">MATCHES DISPUTADOS</span>
-        <div class="font-headline-sm text-[16px] text-secondary font-black leading-tight uppercase">${t.stats.totalMatches} Enfrentamientos</div>
+        <div class="font-headline-sm text-[16px] text-secondary font-black leading-tight uppercase tabular-nums">${t.stats.totalMatches} Enfrentamientos</div>
         <span class="font-label-data text-[11px] text-on-surface-variant/80 mt-1 uppercase">Doble Eliminación</span>
       </div>
-      <div class="bg-surface-container-low p-space-md rounded-lg flex flex-col justify-between shadow-md">
+      <div class="hud-card hover-card-lift p-space-md flex flex-col justify-between shadow-md relative overflow-hidden">
         <span class="font-label-hud text-label-hud uppercase tracking-widest text-on-surface-variant">CAMPEÓN DEL TORNEO</span>
-        <div class="font-headline-sm text-[16px] text-primary-container font-black leading-tight uppercase">🥇 ${escapeHtml(t.stats.champion)}</div>
+        <div class="font-headline-sm text-[16px] text-primary-container font-black leading-tight uppercase truncate">🥇 ${escapeHtml(t.stats.champion)}</div>
         <span class="font-label-data text-[11px] text-on-surface-variant/80 mt-1 uppercase font-bold">1er Lugar Oficial</span>
       </div>
-      <div class="bg-surface-container-low p-space-md rounded-lg flex flex-col justify-between shadow-md">
+      <div class="hud-card hover-card-lift p-space-md flex flex-col justify-between shadow-md relative overflow-hidden">
         <span class="font-label-hud text-label-hud uppercase tracking-widest text-on-surface-variant">SUBCAMPEÓN</span>
-        <div class="font-headline-sm text-[16px] text-tertiary font-black leading-tight uppercase">🥈 ${escapeHtml(t.stats.runnerUp)}</div>
+        <div class="font-headline-sm text-[16px] text-tertiary font-black leading-tight uppercase truncate">🥈 ${escapeHtml(t.stats.runnerUp)}</div>
         <span class="font-label-data text-[11px] text-on-surface-variant/80 mt-1 uppercase font-bold">2do Lugar Oficial</span>
       </div>
     `;
@@ -1662,27 +1786,28 @@
     if (!container || !Array.isArray(t.podium)) return;
 
     container.innerHTML = t.podium.map(item => {
-      let badgeColor = 'bg-surface-container-highest text-on-surface';
-      let borderGlow = 'border-surface-container-highest/40';
+      let badgeColor = 'tactical-badge-neutral';
+      let borderGlow = 'border-white/10';
       if (item.place === 1) {
-        badgeColor = 'bg-primary-container text-black font-black shadow-lg';
-        borderGlow = 'border-primary-container shadow-[0_0_15px_rgba(255,184,0,0.3)]';
+        badgeColor = 'tactical-badge-amber';
+        borderGlow = 'tactical-border-accent-amber shadow-[0_0_15px_rgba(255,184,0,0.3)]';
       } else if (item.place === 2) {
-        badgeColor = 'bg-surface-variant text-on-surface font-bold';
-        borderGlow = 'border-secondary-container/50';
+        badgeColor = 'tactical-badge-cyan';
+        borderGlow = 'tactical-border-accent-cyan';
       } else if (item.place === 3) {
-        badgeColor = 'bg-secondary-container/30 text-secondary font-bold';
-        borderGlow = 'border-tertiary/40';
+        badgeColor = 'tactical-badge-amber';
+        borderGlow = 'tactical-border-accent-amber';
       }
 
       return `
-        <div class="bg-surface-container-low rounded-xl p-space-md shadow-xl border ${borderGlow} flex flex-col justify-between hover-card-lift transition-all">
-          <div>
+        <div class="hud-card hud-card-interactive tactical-chamfer-top-right p-space-md shadow-xl border ${borderGlow} flex flex-col justify-between relative overflow-hidden group">
+          <div class="tactical-watermark select-none pointer-events-none">#${item.place}</div>
+          <div class="relative z-10">
             <div class="flex items-center justify-between mb-space-sm">
-              <span class="px-2.5 py-0.5 rounded ${badgeColor} text-[10px] font-label-data font-black uppercase">
+              <span class="${badgeColor} text-[10px] font-label-data uppercase font-bold">
                 ${item.medal} ${escapeHtml(item.rankName)}
               </span>
-              <span class="text-[10px] font-label-data text-outline">Seed #${item.seed}</span>
+              <span class="text-[10px] font-label-data text-outline tabular-nums">Seed #${item.seed}</span>
             </div>
             <h3 class="font-headline-md text-headline-sm uppercase text-on-surface font-black mb-1 truncate">
               ${escapeHtml(item.name)}
@@ -1691,7 +1816,7 @@
               ${escapeHtml(item.note)}
             </p>
           </div>
-          <div class="pt-space-sm border-t border-surface-container-highest/30 mt-space-sm text-[10px] font-label-data text-outline uppercase font-semibold">
+          <div class="pt-space-sm border-t border-white/10 mt-space-sm text-[10px] font-label-data text-outline uppercase font-semibold relative z-10">
             ${escapeHtml(t.shortTitle)}
           </div>
         </div>
