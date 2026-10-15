@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html class="dark" lang="es">
 <head>
-<meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><title>NFSMW Ranks // Precision Telemetry &amp; Blacklist Leaderboards</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Chivo:ital,wght@0,700;0,800;0,900;1,900&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }
+<meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><title>NFSMW Ranks // Precision Telemetry &amp; Blacklist Leaderboards</title>
+<!-- Favicon / Brand Icon for Browser Address Bar & Tabs -->
+<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg"/>
+<link rel="alternate icon" type="image/png" href="assets/img/nfsranksmwlogo.png"/>
+<link rel="apple-touch-icon" href="assets/img/favicon.svg"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Chivo:ital,wght@0,700;0,800;0,900;1,900&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base { html, body { margin: 0; padding: 0; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } }
 .bg-carbon-pattern {
   background-color: #0b0e15;
   background-image: 
@@ -73,12 +78,342 @@
   <style>
     .view-section { display: none; }
     .view-section.active { display: block; }
-    .hover-card-lift { transition: transform 0.2s ease, box-shadow 0.2s ease; }
-    .hover-card-lift:hover { transform: translateY(-2px); }
+    /* =========================================================================
+       MOTOR VISUAL MOTORSPORT HUD / BRUTALISTA-TÁCTICO (NFSMW / F1 TELEMETRY)
+       ========================================================================= */
+
+    /* Tabular numbers for millimeter vertical alignment across telemetry */
+    .font-mono, [class*="font-label-"], [class*="font-mono"], .tabular-nums, table td {
+      font-variant-numeric: tabular-nums lining-nums;
+    }
+
+    /* Asymmetric & Chamfered geometry (Cortes en diagonal a 45 grados) */
+    .tactical-chamfer {
+      clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+    }
+    .tactical-chamfer-top-right {
+      clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 0 100%);
+    }
+
+    /* Asymmetric Left Accent Borders (4px acento solido, resto 1px tecnico) */
+    .tactical-border-accent {
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      border-left: 4px solid #ff5500 !important;
+    }
+    .tactical-border-accent-amber {
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      border-left: 4px solid #ffb800 !important;
+    }
+    .tactical-border-accent-cyan {
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      border-left: 4px solid #00e5ff !important;
+    }
+
+    /* Corner Brackets (HUD Visor Escuadras 10px x 10px en esquinas opuestas) */
+    .tactical-corner-brackets {
+      position: relative;
+    }
+    .tactical-corner-brackets::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      width: 10px;
+      height: 10px;
+      border-top: 2px solid #ffb800;
+      border-left: 2px solid #ffb800;
+      pointer-events: none;
+      z-index: 20;
+    }
+    .tactical-corner-brackets::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      right: -1px;
+      width: 10px;
+      height: 10px;
+      border-bottom: 2px solid #ffb800;
+      border-right: 2px solid #ffb800;
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    .tactical-corner-brackets-cyan::before {
+      border-color: #00e5ff !important;
+    }
+    .tactical-corner-brackets-cyan::after {
+      border-color: #00e5ff !important;
+    }
+    .tactical-corner-brackets-nitro::before {
+      border-color: #ff5500 !important;
+    }
+    .tactical-corner-brackets-nitro::after {
+      border-color: #ff5500 !important;
+    }
+
+    /* Telemetry Dividers (Linea de 1px con degradado que se desvanece + bloque sesgado skewX(-20deg)) */
+    .telemetry-divider {
+      position: relative;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(255, 184, 0, 0.4) 15%, rgba(255, 85, 0, 0.5) 50%, rgba(255, 184, 0, 0.4) 85%, transparent 100%);
+      margin: 2.25rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .telemetry-divider::before {
+      content: '';
+      position: absolute;
+      width: 24px;
+      height: 5px;
+      background: #ffb800;
+      transform: skewX(-20deg);
+      box-shadow: 0 0 10px rgba(255, 184, 0, 0.8);
+    }
+    .telemetry-divider-left {
+      justify-content: flex-start;
+    }
+    .telemetry-divider-left::before {
+      left: 2rem;
+    }
+
+    /* HUD Card Multi-layer Depth Background & Micro-Scanlines */
+    .hud-card {
+      position: relative;
+      background-color: #0b0e15;
+      background-image: 
+        repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.02) 0px, rgba(255, 255, 255, 0.02) 1px, transparent 1px, transparent 2px),
+        linear-gradient(145deg, #111318 0%, #07080b 100%);
+      background-size: 100% 2px, 100% 100%;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1px;
+      overflow: hidden;
+    }
+
+    /* Spring Physics & Aggressive Brutalist Hover */
+    .hover-card-lift,
+    .hud-card-interactive {
+      position: relative;
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      overflow: hidden;
+    }
+    .hover-card-lift:hover,
+    .hud-card-interactive:hover {
+      transform: translateY(-5px) translateX(2px) !important;
+      box-shadow: -6px 6px 0px rgba(255, 85, 0, 0.25), 0 15px 30px rgba(0, 0, 0, 0.8) !important;
+      border-color: rgba(255, 184, 0, 0.45) !important;
+    }
+
+    /* Scan-Flash Sheen (Barrido de luz diagonal de -100% a 200%) */
+    .hud-scan-sheen,
+    .hover-card-lift,
+    .hud-card-interactive {
+      position: relative;
+    }
+    .hud-scan-sheen::after,
+    .hover-card-lift::after,
+    .hud-card-interactive::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.08) 50%, transparent 100%);
+      transform: skewX(-25deg);
+      pointer-events: none;
+      transition: left 0.75s ease-in-out;
+      z-index: 15;
+    }
+    .hud-scan-sheen:hover::after,
+    .hover-card-lift:hover::after,
+    .hud-card-interactive:hover::after {
+      left: 200%;
+    }
+
+    /* Full-width Internal Rows (No nested rounded boxes, shift 6px right + neon amber border on hover) */
+    .hud-row-item {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: 0.65rem 0.85rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      border-left: 2px solid transparent;
+      border-radius: 0 !important;
+      background: transparent;
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, border-color 0.2s ease;
+    }
+    .hud-row-item:last-child {
+      border-bottom: none;
+    }
+    .hud-row-item:hover {
+      transform: translateX(6px);
+      background-color: rgba(255, 184, 0, 0.04);
+      border-left-color: #ffb800 !important;
+    }
+    .hud-row-item:hover [class*="font-mono"],
+    .hud-row-item:hover .text-primary-container,
+    .hud-row-item:hover .font-label-timer-md {
+      color: #ffdca1 !important;
+      text-shadow: 0 0 8px rgba(255, 184, 0, 0.4);
+    }
+
+    /* Technical Monospace Badges & Skewed Indicators */
+    .tactical-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 1px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(0, 0, 0, 0.4);
+      transform: skewX(-10deg);
+    }
+    .tactical-badge > * {
+      transform: skewX(10deg);
+    }
+    .tactical-badge-amber {
+      border-color: rgba(255, 184, 0, 0.4) !important;
+      color: #ffb800 !important;
+      background: rgba(255, 184, 0, 0.08) !important;
+    }
+    .tactical-badge-nitro {
+      border-color: rgba(255, 85, 0, 0.4) !important;
+      color: #ff5500 !important;
+      background: rgba(255, 85, 0, 0.08) !important;
+    }
+    .tactical-badge-cyan {
+      border-color: rgba(0, 229, 255, 0.4) !important;
+      color: #00e5ff !important;
+      background: rgba(0, 229, 255, 0.08) !important;
+    }
+
+    /* Massive Editorial Watermark */
+    .tactical-watermark {
+      position: absolute;
+      top: 0.25rem;
+      right: 1.25rem;
+      font-family: 'Chivo', sans-serif;
+      font-size: 4.5rem;
+      font-weight: 900;
+      font-style: italic;
+      color: #ffffff;
+      opacity: 0.025;
+      pointer-events: none;
+      user-select: none;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      z-index: 0;
+    }
+
     .pulse-cyan-glow { box-shadow: 0 0 10px rgba(0, 217, 231, 0.6); }
     .pulse-halo-glow { box-shadow: 0 0 12px rgba(255, 184, 0, 0.25); }
-    @media (max-width: 1535px) {
-      nav[data-active-classes] { display: flex !important; flex-wrap: wrap; }
+
+    /* Anti-overflow & smooth scrolling globally */
+    html {
+      overflow-x: hidden;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      max-width: 100vw;
+    }
+
+    body {
+      overflow-x: hidden;
+      overflow-y: visible !important;
+      min-height: 100vh;
+      max-width: 100vw;
+      position: relative;
+    }
+
+    /* Cyber-telemetry scrollbars */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #07090e;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 184, 0, 0.35);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 184, 0, 0.7);
+    }
+
+    /* =========================================================================
+       RESPONSIVE BREAKPOINT ARCHITECTURE:
+       - Mobile devices (< 640px) & Tablets in vertical (portrait) orientation:
+         Show hamburger button (#btn-mobile-menu-toggle), hide horizontal #main-nav.
+       - Desktop & Tablets in horizontal (landscape) orientation:
+         Show single-line horizontal #main-nav, hide hamburger button and mobile drawer.
+       ========================================================================= */
+
+    /* Mobile Devices & Vertical/Portrait Tablets */
+    @media (max-width: 639px), ((max-width: 1024px) and (orientation: portrait)) {
+      #main-nav {
+        display: none !important;
+      }
+      #btn-mobile-menu-toggle {
+        display: flex !important;
+      }
+    }
+
+    /* Desktop & Landscape Tablets */
+    @media (min-width: 640px) and (orientation: landscape), (min-width: 1025px) {
+      #main-nav {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        white-space: nowrap !important;
+      }
+      #btn-mobile-menu-toggle {
+        display: none !important;
+      }
+      #mobile-nav-drawer,
+      #mobile-nav-backdrop {
+        display: none !important;
+        pointer-events: none !important;
+      }
+    }
+
+    /* Compact sizing for sub-1080p desktop & landscape tablet displays (1024px - 1440px) */
+    @media (max-width: 1440px) {
+      #main-nav {
+        gap: 0.25rem !important;
+      }
+      #main-nav > a,
+      #main-nav .group > a {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+        font-size: 11px !important;
+        letter-spacing: 0.05em !important;
+      }
+    }
+
+    @media (max-width: 1200px) {
+      html {
+        font-size: 15px;
+      }
+      #main-nav > a,
+      #main-nav .group > a {
+        padding-left: 0.35rem !important;
+        padding-right: 0.35rem !important;
+        font-size: 10px !important;
+        letter-spacing: 0.03em !important;
+      }
+    }
+
+    @media (max-width: 900px) {
+      html {
+        font-size: 14.5px;
+      }
     }
   </style>
 
@@ -219,9 +554,146 @@
           <span class="material-symbols-outlined text-on-primary text-[18px]">person</span>
         </div>
       </div>
+
+      <!-- Mobile Menu Toggle Button (Visible only on mobile devices & vertical tablets) -->
+      <button id="btn-mobile-menu-toggle" type="button" onclick="toggleMobileNav()" aria-label="Abrir Menú de Navegación" aria-expanded="false" aria-controls="mobile-nav-drawer" class="hidden items-center justify-center w-10 h-10 p-2 rounded-lg bg-surface-container hover:bg-surface-container-high border border-surface-container-highest/80 text-primary-container hover:text-primary transition-all cursor-pointer shadow-md active:scale-95 shrink-0 ml-1">
+        <span id="mobile-menu-icon-open" class="material-symbols-outlined text-[24px]">menu</span>
+        <span id="mobile-menu-icon-close" class="material-symbols-outlined text-[24px] hidden">close</span>
+      </button>
     </div>
   </div>
 </header>
+
+<!-- MOBILE NAVIGATION DRAWER & BACKDROP (Vertical Tablets & Mobile Devices) -->
+<div id="mobile-nav-backdrop" onclick="closeMobileNav()" class="fixed inset-0 bg-[#05070a]/80 backdrop-blur-md z-40 hidden transition-opacity duration-300 opacity-0 pointer-events-none" aria-hidden="true"></div>
+
+<aside id="mobile-nav-drawer" aria-hidden="true" class="fixed top-0 right-0 bottom-0 w-[88vw] max-w-[360px] bg-surface-container-lowest/98 border-l border-surface-container-highest/80 shadow-[-12px_0_35px_rgba(0,0,0,0.85)] z-50 flex flex-col justify-between overflow-y-auto transform translate-x-full transition-transform duration-300 ease-in-out backdrop-blur-2xl">
+  <!-- Drawer Header -->
+  <div class="p-4 border-b border-surface-container-highest/60 flex items-center justify-between bg-surface-container-low/60 shrink-0">
+    <div class="flex items-center gap-2">
+      <img alt="NFS Logo" class="h-7 w-auto object-contain drop-shadow-[0_2px_6px_rgba(226,38,60,0.4)]" src="assets/img/logo-badge.svg"/>
+      <div class="flex flex-col">
+        <span class="font-headline-sm text-sm text-on-surface font-black uppercase tracking-tight leading-none">NFSMWRANKS<span class="text-primary-container">.ONLINE</span></span>
+        <span class="font-label-hud text-outline text-[9px] uppercase tracking-wider mt-0.5" data-i18n="nav.telemetry_subtitle">BLACK EDITION TELEMETRY</span>
+      </div>
+    </div>
+    <button type="button" onclick="closeMobileNav()" aria-label="Cerrar Menú" class="w-9 h-9 flex items-center justify-center rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface hover:text-primary transition-colors cursor-pointer border border-surface-container-highest/40">
+      <span class="material-symbols-outlined text-[20px]">close</span>
+    </button>
+  </div>
+
+  <!-- Drawer Body Navigation Links -->
+  <div class="p-4 flex-1 flex flex-col gap-1.5 overflow-y-auto custom-scrollbar">
+    <a href="#home" data-action="navigate" data-target="home" onclick="closeMobileNav()" class="flex items-center gap-3 px-3 py-2.5 rounded font-headline-sm text-label-hud tracking-widest uppercase transition-all text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high cursor-pointer">
+      <span class="material-symbols-outlined text-[18px] text-primary-container">home</span>
+      <span data-i18n="nav.home">HOME</span>
+    </a>
+
+    <a href="#routes-pistas" data-action="navigate" data-target="routes-pistas" onclick="closeMobileNav()" class="flex items-center gap-3 px-3 py-2.5 rounded font-headline-sm text-label-hud tracking-widest uppercase transition-all text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high cursor-pointer">
+      <span class="material-symbols-outlined text-[18px] text-primary-container">route</span>
+      <span data-i18n="nav.routes">RUTAS &amp; CIRCUITOS</span>
+    </a>
+
+    <!-- Mobile Submenu: Challenges & Tournament -->
+    <div class="flex flex-col rounded border border-surface-container-highest/40 bg-surface-container-low/40 overflow-hidden">
+      <button type="button" onclick="toggleMobileSubmenu('mobile-submenu-challenges')" class="w-full flex items-center justify-between px-3 py-2.5 font-headline-sm text-label-hud tracking-widest uppercase text-on-surface hover:text-primary hover:bg-surface-container-high transition-colors cursor-pointer text-left">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[18px] text-primary-container">sports_score</span>
+          <span data-i18n="nav.challenges_tournament">CHALLENGES &amp; TOURNAMENT</span>
+        </div>
+        <span id="mobile-submenu-challenges-chevron" class="material-symbols-outlined text-[18px] transition-transform duration-200">expand_more</span>
+      </button>
+      <div id="mobile-submenu-challenges" class="hidden flex flex-col pl-4 pr-2 pb-2 pt-1 gap-1 border-t border-surface-container-highest/30 bg-surface-container-lowest/60">
+        <a href="#weekly-challenges" data-action="navigate" data-target="challenges" onclick="closeMobileNav()" class="flex items-center gap-2.5 px-2.5 py-1.5 rounded font-headline-sm text-body-sm text-on-surface-variant hover:text-primary hover:bg-surface-container-high uppercase transition-colors">
+          <span class="material-symbols-outlined text-[16px] text-primary-container">bolt</span>
+          <span data-i18n="nav.weekly_challenges">Weekly Challenges</span>
+        </a>
+        <a href="#blacklist" data-action="navigate" data-target="blacklist" onclick="closeMobileNav()" class="flex items-center gap-2.5 px-2.5 py-1.5 rounded font-headline-sm text-body-sm text-on-surface-variant hover:text-primary hover:bg-surface-container-high uppercase transition-colors">
+          <span class="material-symbols-outlined text-[16px] text-primary-container">swords</span>
+          <span data-i18n="nav.blacklist_groups">Blacklist Groups &amp; Rivals</span>
+        </a>
+        <a href="#championship-standings" data-action="navigate" data-target="championship-standings" onclick="closeMobileNav()" class="flex items-center gap-2.5 px-2.5 py-1.5 rounded font-headline-sm text-body-sm text-on-surface-variant hover:text-primary hover:bg-surface-container-high uppercase transition-colors">
+          <span class="material-symbols-outlined text-[16px] text-primary-container">emoji_events</span>
+          <span data-i18n="nav.standings">Championship Standings</span>
+        </a>
+        <a href="#driver-dossiers" data-action="navigate" data-target="blacklist-cards" onclick="closeMobileNav()" class="flex items-center gap-2.5 px-2.5 py-1.5 rounded font-headline-sm text-body-sm text-on-surface-variant hover:text-primary hover:bg-surface-container-high uppercase transition-colors">
+          <span class="material-symbols-outlined text-[16px] text-primary-container">badge</span>
+          <span>Driver Dossiers (1 - 15)</span>
+        </a>
+        <a href="#tournament-registration" data-action="navigate" data-target="championship-register" onclick="closeMobileNav()" class="flex items-center gap-2.5 px-2.5 py-1.5 rounded font-headline-sm text-body-sm text-on-surface-variant hover:text-primary hover:bg-surface-container-high uppercase transition-colors">
+          <span class="material-symbols-outlined text-[16px] text-primary-container">how_to_reg</span>
+          <span data-i18n="nav.register">Tournament Registration</span>
+        </a>
+        <a href="#tournament-tutorial" data-action="navigate" data-target="tutorial" onclick="closeMobileNav()" class="flex items-center gap-2.5 px-2.5 py-1.5 rounded font-headline-sm text-body-sm text-on-surface-variant hover:text-primary hover:bg-surface-container-high uppercase transition-colors">
+          <span class="material-symbols-outlined text-[16px] text-primary-container">menu_book</span>
+          <span data-i18n="nav.tutorial">Tournament Tutorial</span>
+        </a>
+        <a href="#past-tournaments" data-action="navigate" data-target="past-tournaments" onclick="closeMobileNav()" class="flex items-center gap-2.5 px-2.5 py-1.5 rounded font-headline-sm text-body-sm text-on-surface-variant hover:text-primary hover:bg-surface-container-high uppercase transition-colors">
+          <span class="material-symbols-outlined text-[16px] text-primary-container">history</span>
+          <span data-i18n="nav.past_tournaments">Past Tournaments (Challonge)</span>
+        </a>
+      </div>
+    </div>
+
+    <a href="#halloffame" data-action="navigate" data-target="halloffame" onclick="closeMobileNav()" class="flex items-center gap-3 px-3 py-2.5 rounded font-headline-sm text-label-hud tracking-widest uppercase transition-all text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high cursor-pointer">
+      <span class="material-symbols-outlined text-[18px] text-primary-container">military_tech</span>
+      <span data-i18n="nav.halloffame">HALL DE LA FAMA</span>
+    </a>
+
+    <a href="#telemetria" data-action="navigate" data-target="telemetria" onclick="closeMobileNav()" class="flex items-center gap-3 px-3 py-2.5 rounded font-headline-sm text-label-hud tracking-widest uppercase transition-all text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high cursor-pointer">
+      <span class="material-symbols-outlined text-[18px] text-primary-container">speed</span>
+      <span data-i18n="nav.telemetry">TELEMETRÍA</span>
+    </a>
+
+    <!-- Mobile Submenu: Comunidad -->
+    <div class="flex flex-col rounded border border-surface-container-highest/40 bg-surface-container-low/40 overflow-hidden">
+      <button type="button" onclick="toggleMobileSubmenu('mobile-submenu-community')" class="w-full flex items-center justify-between px-3 py-2.5 font-headline-sm text-label-hud tracking-widest uppercase text-on-surface hover:text-primary hover:bg-surface-container-high transition-colors cursor-pointer text-left">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[18px] text-primary-container">groups</span>
+          <span data-i18n="nav.community">COMUNIDAD</span>
+        </div>
+        <span id="mobile-submenu-community-chevron" class="material-symbols-outlined text-[18px] transition-transform duration-200">expand_more</span>
+      </button>
+      <div id="mobile-submenu-community" class="hidden flex flex-col pl-4 pr-2 pb-2 pt-1 gap-1 border-t border-surface-container-highest/30 bg-surface-container-lowest/60">
+        <a href="#guides" data-action="navigate" data-target="guides" onclick="closeMobileNav()" class="flex items-center gap-2.5 px-2.5 py-1.5 rounded font-headline-sm text-body-sm text-on-surface-variant hover:text-primary hover:bg-surface-container-high uppercase transition-colors">
+          <span class="material-symbols-outlined text-[16px] text-primary-container">tune</span>
+          <span data-i18n="nav.tuning_guides">Guías de Tuning</span>
+        </a>
+        <a href="#rules" data-action="navigate" data-target="rules" onclick="closeMobileNav()" class="flex items-center gap-2.5 px-2.5 py-1.5 rounded font-headline-sm text-body-sm text-on-surface-variant hover:text-primary hover:bg-surface-container-high uppercase transition-colors">
+          <span class="material-symbols-outlined text-[16px] text-primary-container">gavel</span>
+          <span data-i18n="nav.rules">Reglamento Oficial</span>
+        </a>
+        <a href="#map" data-action="navigate" data-target="map" onclick="closeMobileNav()" class="flex items-center gap-2.5 px-2.5 py-1.5 rounded font-headline-sm text-body-sm text-on-surface-variant hover:text-primary hover:bg-surface-container-high uppercase transition-colors">
+          <span class="material-symbols-outlined text-[16px] text-primary-container">map</span>
+          <span data-i18n="nav.map">Mapa Táctico</span>
+        </a>
+        <a href="#download" data-action="navigate" data-target="download" onclick="closeMobileNav()" class="flex items-center gap-2.5 px-2.5 py-1.5 rounded font-headline-sm text-body-sm text-on-surface-variant hover:text-primary hover:bg-surface-container-high uppercase transition-colors">
+          <span class="material-symbols-outlined text-[16px] text-primary-container">download</span>
+          <span data-i18n="nav.download">Centro de Descargas</span>
+        </a>
+        <a href="#submit" data-action="navigate" data-target="submit" onclick="closeMobileNav()" class="flex items-center gap-2.5 px-2.5 py-1.5 rounded font-headline-sm text-body-sm text-on-surface-variant hover:text-primary hover:bg-surface-container-high uppercase transition-colors">
+          <span class="material-symbols-outlined text-[16px] text-primary-container">upload_file</span>
+          <span data-i18n="nav.submit">Subir Registro</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Drawer Footer: Language & Discord -->
+  <div class="p-4 border-t border-surface-container-highest/60 bg-surface-container-low/80 flex flex-col gap-3 shrink-0">
+    <div class="flex items-center justify-between gap-2">
+      <span class="font-label-hud text-[11px] uppercase tracking-wider text-outline">IDIOMA / LANGUAGE:</span>
+      <div class="flex items-center gap-1">
+        <button type="button" onclick="changeLanguage('en')" class="px-2.5 py-1 text-[11px] font-label-hud uppercase rounded bg-surface-container hover:bg-primary-container hover:text-on-primary-container text-on-surface transition-colors cursor-pointer border border-surface-container-highest/60 font-bold">EN</button>
+        <button type="button" onclick="changeLanguage('es')" class="px-2.5 py-1 text-[11px] font-label-hud uppercase rounded bg-surface-container hover:bg-primary-container hover:text-on-primary-container text-on-surface transition-colors cursor-pointer border border-surface-container-highest/60 font-bold">ES</button>
+      </div>
+    </div>
+    <a href="https://discord.com" target="_blank" class="w-full flex items-center justify-center gap-2 py-2 px-3 bg-surface-container hover:bg-surface-container-high border border-surface-container-highest/60 text-tertiary hover:text-on-surface rounded font-label-hud text-label-hud tracking-widest uppercase transition-all shadow-sm">
+      <span class="material-symbols-outlined text-[18px]">forum</span>
+      <span data-i18n="nav.discord">DISCORD COMMUNITY</span>
+    </a>
+  </div>
+</aside>
 
 <main class="w-full pt-20 bg-[#0b0e15]/70 backdrop-blur-[1px] min-h-screen relative z-10">
 
@@ -303,8 +775,8 @@
 </section>
 <!-- HIGHLIGHT BANNER: BLACKLIST REVIVAL -->
 <section class="w-full max-w-7xl mx-auto px-gutter lg:px-gutter-lg -mt-4 mb-space-xl">
-<div class="relative bg-gradient-to-r from-surface-container via-surface-container-high to-surface-container p-space-lg lg:p-space-xl overflow-hidden shadow-2xl">
-<div class="absolute top-0 left-0 w-2 h-full bg-primary-container"></div>
+<div class="relative hud-card tactical-border-accent-amber tactical-corner-brackets p-space-lg lg:p-space-xl overflow-hidden shadow-2xl">
+<div class="tactical-watermark">15 // BLK</div>
 <div class="absolute -right-16 -bottom-16 w-64 h-64 bg-primary-container/10 rounded-full blur-3xl pointer-events-none"></div>
 <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-space-lg relative z-10">
 <div class="space-y-space-xs max-w-3xl">
@@ -335,6 +807,7 @@
 </div>
 </div>
 </div>
+<div class="telemetry-divider my-space-lg"></div>
 </section>
 <!-- SPLIT MATRIX: OFFICIAL TOURNAMENT & LIVE TELEMETRY RADAR -->
 <section class="w-full max-w-7xl mx-auto px-gutter lg:px-gutter-lg mb-space-xl">
@@ -342,11 +815,12 @@
 <!-- LEFT COLUMN (7 COLS): Tournament Details, KPIs & Video Promo -->
 <div class="lg:col-span-7 flex flex-col gap-space-lg">
 <!-- Tournament Main Card -->
-<div class="bg-surface-container p-space-lg space-y-space-md shadow-xl relative overflow-hidden">
+<div class="hud-card hud-card-interactive tactical-border-accent tactical-corner-brackets p-space-lg space-y-space-md shadow-xl relative overflow-hidden">
+<div class="tactical-watermark">STAGE 2026</div>
 <div class="flex items-center justify-between">
-<div class="inline-flex items-center gap-2 px-2.5 py-1 bg-surface-container-low text-secondary">
+<div class="tactical-badge-amber">
 <span class="material-symbols-outlined text-[14px]">flag</span>
-<span class="font-label-hud text-label-hud uppercase tracking-wider">TORNEO OFICIAL • ROCKPORT CITY 2026</span>
+<span>TORNEO OFICIAL • ROCKPORT 2026</span>
 </div>
 <span class="font-label-data text-label-data text-outline">// SERIE BLACKLIST EDICIÓN IV</span>
 </div>
@@ -360,21 +834,21 @@
 </div>
 <!-- KPI Metric Trio -->
 <div class="grid grid-cols-3 gap-space-sm pt-space-xs">
-<div class="bg-surface-container-low p-space-sm flex flex-col">
+<div class="hud-card hud-row-item p-space-sm flex flex-col justify-center">
 <div class="flex items-center gap-1.5 text-primary mb-1">
 <span class="material-symbols-outlined text-[18px]">directions_car</span>
 <span class="font-headline-sm text-body-md uppercase font-bold">+15 Pilotos</span>
 </div>
 <span class="font-label-data text-label-data text-outline">Parrilla Dinámica</span>
 </div>
-<div class="bg-surface-container-low p-space-sm flex flex-col">
+<div class="hud-card hud-row-item p-space-sm flex flex-col justify-center">
 <div class="flex items-center gap-1.5 text-secondary mb-1">
 <span class="material-symbols-outlined text-[18px]">calendar_month</span>
 <span class="font-headline-sm text-body-md uppercase font-bold">4 Semanas</span>
 </div>
 <span class="font-label-data text-label-data text-outline">Desafíos Oficiales</span>
 </div>
-<div class="bg-surface-container-low p-space-sm flex flex-col">
+<div class="hud-card hud-row-item p-space-sm flex flex-col justify-center">
 <div class="flex items-center gap-1.5 text-tertiary mb-1">
 <span class="material-symbols-outlined text-[18px]">monetization_on</span>
 <span class="font-headline-sm text-body-md uppercase font-bold">$23.5M REP</span>
@@ -399,9 +873,10 @@
 </div>
 </div>
 <!-- Video Promo Feature Card -->
-<div class="bg-surface-container p-space-lg space-y-space-md shadow-xl">
+<div class="hud-card hud-card-interactive tactical-border-accent tactical-corner-brackets p-space-lg space-y-space-md shadow-xl relative overflow-hidden">
+<div class="tactical-watermark">M3 GTR</div>
 <div class="flex items-center justify-between">
-<span class="font-label-hud text-label-hud text-secondary uppercase tracking-widest bg-secondary/10 px-2 py-0.5">TRÁILER OFICIAL // PROMO COMERCIAL</span>
+<span class="tactical-badge-amber text-on-surface">[ // TRÁILER OFICIAL ]</span>
 <span class="font-label-data text-label-data text-outline">PROMO ID: #MW-BR-2026</span>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-12 gap-space-md items-center">
@@ -454,13 +929,14 @@
 <!-- RIGHT COLUMN (5 COLS): Status Radar, Live Leaderboard & Meta Tracker -->
 <div class="lg:col-span-5 flex flex-col gap-space-lg">
 <!-- Live Tournament Specifications HUD -->
-<div class="bg-surface-container p-space-lg shadow-xl space-y-space-md">
+<div class="hud-card hud-card-interactive tactical-border-accent tactical-corner-brackets p-space-lg shadow-xl space-y-space-md relative overflow-hidden">
+<div class="tactical-watermark">RADAR</div>
 <div class="flex items-center justify-between">
-<span class="font-label-hud text-label-hud text-outline uppercase tracking-wider">ESTADO DE LA COMPETICIÓN</span>
+<span class="tactical-badge-cyan">[ STATUS: ACTIVE ]</span>
 <span class="font-label-data text-label-data text-primary">ID: #MW2026-CHAMP</span>
 </div>
 <!-- Pulsing Live Banner -->
-<div class="p-3 bg-surface-container-low flex items-center justify-between">
+<div class="hud-row-item flex items-center justify-between">
 <div class="flex items-center gap-2">
 <span class="w-2.5 h-2.5 rounded-full bg-tertiary animate-pulse"></span>
 <span class="font-headline-sm text-body-md text-tertiary uppercase font-extrabold tracking-wider">¡EVENTO EN CURSO!</span>
@@ -468,36 +944,36 @@
 <span class="font-label-data text-label-data text-outline">FASE CLASIFICATORIA</span>
 </div>
 <!-- Technical Specs Table -->
-<div class="space-y-space-xs font-body-sm text-body-sm bg-surface-container-low p-space-md">
-<div class="flex justify-between items-center py-1">
+<div class="space-y-0.5 font-body-sm text-body-sm">
+<div class="hud-row-item flex justify-between items-center py-1.5">
 <span class="text-outline flex items-center gap-1.5">
 <span class="material-symbols-outlined text-[16px]">calendar_today</span> Fechas:
               </span>
 <span class="font-label-data text-label-data text-on-surface font-semibold">3 - 31 OCT 2026</span>
 </div>
-<div class="flex justify-between items-center py-1">
+<div class="hud-row-item flex justify-between items-center py-1.5">
 <span class="text-outline flex items-center gap-1.5">
 <span class="material-symbols-outlined text-[16px]">account_tree</span> Formato:
               </span>
 <span class="font-label-data text-label-data text-on-surface">4 grupos + duelos 1v1</span>
 </div>
-<div class="flex justify-between items-center py-1">
+<div class="hud-row-item flex justify-between items-center py-1.5">
 <span class="text-outline flex items-center gap-1.5">
 <span class="material-symbols-outlined text-[16px]">directions_car</span> Categorías:
               </span>
 <span class="font-label-data text-label-data text-primary">Junkman, M3 GTR, Serie</span>
 </div>
-<div class="flex justify-between items-center py-1">
+<div class="hud-row-item flex justify-between items-center py-1.5">
 <span class="text-outline flex items-center gap-1.5">
 <span class="material-symbols-outlined text-[16px]">payments</span> Bolsa de Premios:
               </span>
-<span class="font-label-timer-md text-body-sm text-tertiary font-bold">$23.500.000 REP</span>
+<span class="font-label-timer-md text-body-sm text-tertiary font-bold tabular-nums">$23.500.000 REP</span>
 </div>
-<div class="flex justify-between items-center pt-2">
+<div class="hud-row-item flex justify-between items-center py-1.5">
 <span class="text-outline flex items-center gap-1.5">
 <span class="material-symbols-outlined text-[16px]">lock_clock</span> Estado:
               </span>
-<span class="font-label-hud text-[10px] text-secondary bg-secondary/10 px-2 py-0.5 uppercase tracking-wider">INSCRIPCIONES CERRADAS</span>
+<span class="tactical-badge-nitro">INSCRIPCIONES CERRADAS</span>
 </div>
 </div>
 <div class="grid grid-cols-2 gap-2">
@@ -512,11 +988,12 @@
 </div>
 </div>
 <!-- Real-Time Top Leaderboard Table -->
-<div class="bg-surface-container p-space-lg shadow-xl space-y-space-md">
+<div class="hud-card hud-card-interactive tactical-border-accent tactical-corner-brackets p-space-lg shadow-xl space-y-space-md relative overflow-hidden">
+<div class="tactical-watermark">TELEMETRY</div>
 <div class="flex items-center justify-between">
 <div class="flex items-center gap-2">
 <span class="w-2 h-2 rounded-full bg-tertiary"></span>
-<span class="font-label-hud text-label-hud text-tertiary uppercase tracking-wider">TIEMPOS OFICIALES VERIFICADOS</span>
+<span class="tactical-badge-cyan">[ // TIEMPOS OFICIALES ]</span>
 </div>
 <span class="font-label-data text-label-data text-outline">TIEMPO REAL</span>
 </div>
@@ -525,9 +1002,9 @@
 <p class="font-label-data text-label-data text-outline">Mejores récords mundiales • Temporada 2026</p>
 </div>
 <!-- Entries Matrix -->
-<div class="space-y-1.5">
+<div class="space-y-1">
 <!-- Rank 1: Gold Crown -->
-<div class="p-2.5 bg-surface-container-low hover:bg-surface-container-high flex items-center justify-between transition-colors shadow-sm relative overflow-hidden group">
+<div class="hud-row-item p-2.5 flex items-center justify-between relative overflow-hidden group">
 <div class="absolute left-0 top-0 bottom-0 w-1 bg-primary-container"></div>
 <div class="flex items-center gap-space-sm pl-2">
 <div class="w-6 h-6 bg-primary-container text-on-primary-container font-headline-sm text-body-sm font-extrabold flex items-center justify-center shadow">1</div>
@@ -537,12 +1014,12 @@
 </div>
 </div>
 <div class="text-right">
-<div class="font-label-timer-md text-label-timer-md text-tertiary font-bold">1:20.750</div>
+<div class="font-label-timer-md text-label-timer-md text-tertiary font-bold tabular-nums">1:20.750</div>
 <div class="font-label-data text-[10px] text-primary-container uppercase">CARRERA GT</div>
 </div>
 </div>
 <!-- Rank 2 -->
-<div class="p-2.5 bg-surface-container-low hover:bg-surface-container-high flex items-center justify-between transition-colors shadow-sm relative overflow-hidden group">
+<div class="hud-row-item p-2.5 flex items-center justify-between relative overflow-hidden group">
 <div class="absolute left-0 top-0 bottom-0 w-1 bg-surface-container-highest"></div>
 <div class="flex items-center gap-space-sm pl-2">
 <div class="w-6 h-6 bg-surface-container-highest text-on-surface font-headline-sm text-body-sm font-extrabold flex items-center justify-center">2</div>
@@ -552,12 +1029,12 @@
 </div>
 </div>
 <div class="text-right">
-<div class="font-label-timer-md text-label-timer-md text-on-surface font-bold">1:20.767</div>
+<div class="font-label-timer-md text-label-timer-md text-on-surface font-bold tabular-nums">1:20.767</div>
 <div class="font-label-data text-[10px] text-outline uppercase">CARRERA GT</div>
 </div>
 </div>
 <!-- Rank 3 -->
-<div class="p-2.5 bg-surface-container-low hover:bg-surface-container-high flex items-center justify-between transition-colors shadow-sm relative overflow-hidden group">
+<div class="hud-row-item p-2.5 flex items-center justify-between relative overflow-hidden group">
 <div class="absolute left-0 top-0 bottom-0 w-1 bg-secondary-container"></div>
 <div class="flex items-center gap-space-sm pl-2">
 <div class="w-6 h-6 bg-surface-container-highest text-on-surface font-headline-sm text-body-sm font-extrabold flex items-center justify-center">3</div>
@@ -567,12 +1044,12 @@
 </div>
 </div>
 <div class="text-right">
-<div class="font-label-timer-md text-label-timer-md text-on-surface font-bold">1:20.780</div>
+<div class="font-label-timer-md text-label-timer-md text-on-surface font-bold tabular-nums">1:20.780</div>
 <div class="font-label-data text-[10px] text-outline uppercase">CARRERA GT</div>
 </div>
 </div>
 <!-- Rank 4 -->
-<div class="p-2 bg-surface-container-low hover:bg-surface-container-high flex items-center justify-between transition-colors text-outline">
+<div class="hud-row-item p-2 flex items-center justify-between relative overflow-hidden text-outline">
 <div class="flex items-center gap-space-sm pl-2">
 <div class="w-6 h-6 bg-surface-container text-outline font-label-data text-body-sm flex items-center justify-center">4</div>
 <div>
@@ -581,12 +1058,12 @@
 </div>
 </div>
 <div class="text-right">
-<div class="font-label-timer-md text-body-sm text-tertiary">1:20.840</div>
+<div class="font-label-timer-md text-body-sm text-tertiary tabular-nums">1:20.840</div>
 <div class="font-label-data text-[10px] text-outline uppercase">CARRERA GT</div>
 </div>
 </div>
 <!-- Rank 5 -->
-<div class="p-2 bg-surface-container-low hover:bg-surface-container-high flex items-center justify-between transition-colors text-outline">
+<div class="hud-row-item p-2 flex items-center justify-between relative overflow-hidden text-outline">
 <div class="flex items-center gap-space-sm pl-2">
 <div class="w-6 h-6 bg-surface-container text-outline font-label-data text-body-sm flex items-center justify-center">5</div>
 <div>
@@ -595,7 +1072,7 @@
 </div>
 </div>
 <div class="text-right">
-<div class="font-label-timer-md text-body-sm text-tertiary">1:20.870</div>
+<div class="font-label-timer-md text-body-sm text-tertiary tabular-nums">1:20.870</div>
 <div class="font-label-data text-[10px] text-outline uppercase">CARRERA GT</div>
 </div>
 </div>
@@ -616,11 +1093,12 @@
 <!-- Trio of Disciplines Cards -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-space-sm">
 <!-- Card 1: Circuitos -->
-<div class="bg-surface-container p-space-md flex flex-col justify-between hover:bg-surface-container-high transition-all shadow-md group">
-<div class="space-y-space-xs">
+<div class="hud-card hover-card-lift tactical-chamfer-top-right p-space-md flex flex-col justify-between shadow-md group relative overflow-hidden">
+<div class="tactical-watermark">LAPS</div>
+<div class="space-y-space-xs relative z-10">
 <div class="flex items-center justify-between">
 <span class="material-symbols-outlined text-primary-container text-[24px]">sync</span>
-<span class="font-label-hud text-[10px] text-primary-container bg-primary-container/10 px-2 py-0.5 uppercase tracking-wider">Circuitos</span>
+<span class="tactical-badge-cyan">CIRCUITOS</span>
 </div>
 <h4 class="font-headline-sm text-headline-sm text-on-surface uppercase group-hover:text-primary transition-colors">
                 CIRCUITOS OFICIALES
@@ -629,17 +1107,18 @@
                 Trazados técnicos y cerrados de Rockport City. Pon a prueba tu consistencia por vuelta y dominio en curvas cerradas.
               </p>
 </div>
-<div class="pt-space-md flex items-center justify-between text-outline group-hover:text-primary transition-colors">
+<div class="pt-space-md flex items-center justify-between text-outline group-hover:text-primary transition-colors relative z-10">
 <span class="font-label-data text-[11px]">Junkman y BMW M3 GTR</span>
 <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
 </div>
 </div>
 <!-- Card 2: Sprints -->
-<div class="bg-surface-container p-space-md flex flex-col justify-between hover:bg-surface-container-high transition-all shadow-md group">
-<div class="space-y-space-xs">
+<div class="hud-card hover-card-lift tactical-chamfer-top-right p-space-md flex flex-col justify-between shadow-md group relative overflow-hidden">
+<div class="tactical-watermark">SPRINT</div>
+<div class="space-y-space-xs relative z-10">
 <div class="flex items-center justify-between">
 <span class="material-symbols-outlined text-secondary text-[24px]">bolt</span>
-<span class="font-label-hud text-[10px] text-secondary bg-secondary/10 px-2 py-0.5 uppercase tracking-wider">Sprints</span>
+<span class="tactical-badge-nitro">SPRINTS</span>
 </div>
 <h4 class="font-headline-sm text-headline-sm text-on-surface uppercase group-hover:text-secondary transition-colors">
                 SPRINTS DE ALTA VELOCIDAD
@@ -648,17 +1127,18 @@
                 Trazados lineales de punto A a punto B a través de autopistas, túneles y sectores industriales a máxima velocidad.
               </p>
 </div>
-<div class="pt-space-md flex items-center justify-between text-outline group-hover:text-secondary transition-colors">
+<div class="pt-space-md flex items-center justify-between text-outline group-hover:text-secondary transition-colors relative z-10">
 <span class="font-label-data text-[11px]">Junkman y BMW M3 GTR</span>
 <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
 </div>
 </div>
 <!-- Card 3: Drag / Arrastre -->
-<div class="bg-surface-container p-space-md flex flex-col justify-between hover:bg-surface-container-high transition-all shadow-md group">
-<div class="space-y-space-xs">
+<div class="hud-card hover-card-lift tactical-chamfer-top-right p-space-md flex flex-col justify-between shadow-md group relative overflow-hidden">
+<div class="tactical-watermark">DRAG</div>
+<div class="space-y-space-xs relative z-10">
 <div class="flex items-center justify-between">
 <span class="material-symbols-outlined text-tertiary text-[24px]">traffic</span>
-<span class="font-label-hud text-[10px] text-tertiary bg-tertiary/10 px-2 py-0.5 uppercase tracking-wider">Arrastre</span>
+<span class="tactical-badge-amber">ARRASTRE</span>
 </div>
 <h4 class="font-headline-sm text-headline-sm text-on-surface uppercase group-hover:text-tertiary transition-colors">
                 DUELOS DE DRAG
@@ -667,15 +1147,16 @@
                 Aceleración pura y cambios manuales perfectos. Reacciones al milisegundo esquivando el tráfico civil en cruces ciegos.
               </p>
 </div>
-<div class="pt-space-md flex items-center justify-between text-outline group-hover:text-tertiary transition-colors">
+<div class="pt-space-md flex items-center justify-between text-outline group-hover:text-tertiary transition-colors relative z-10">
 <span class="font-label-data text-[11px]">Precisión telemetría</span>
 <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
 </div>
 </div>
 </div>
 <!-- Integrity & Fair Play Advisory Card -->
-<div class="bg-surface-container p-space-lg shadow-xl relative overflow-hidden">
-<div class="flex items-start gap-space-md">
+<div class="hud-card hud-card-interactive tactical-border-accent-amber tactical-corner-brackets p-space-lg shadow-xl relative overflow-hidden">
+<div class="tactical-watermark">RULES</div>
+<div class="flex items-start gap-space-md relative z-10">
 <div class="w-10 h-10 bg-secondary-container/20 text-secondary-container flex items-center justify-center shrink-0">
 <span class="material-symbols-outlined text-[24px]">gavel</span>
 </div>
@@ -706,12 +1187,13 @@
 </div>
 </div>
 <!-- RIGHT: DESAFÍOS DE LA SEMANA WIDGET (5 COLS) -->
-<div class="lg:col-span-5 bg-surface-container p-space-lg shadow-xl flex flex-col justify-between">
-<div class="space-y-space-md">
+<div class="lg:col-span-5 hud-card hud-card-interactive tactical-border-accent tactical-corner-brackets p-space-lg shadow-xl flex flex-col justify-between relative overflow-hidden">
+<div class="tactical-watermark">CHALLENGES</div>
+<div class="space-y-space-md relative z-10">
 <div class="flex items-center justify-between">
-<div class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-surface-container-low text-tertiary">
+<div class="tactical-badge-cyan">
 <span class="material-symbols-outlined text-[14px]">bolt</span>
-<span class="font-label-hud text-label-hud uppercase tracking-wider">4 SEMANAS</span>
+<span>4 SEMANAS</span>
 </div>
 <span class="font-label-data text-label-data text-outline">01 - 28 NOV</span>
 </div>
@@ -724,9 +1206,9 @@
             </p>
 </div>
 <!-- Weekly Schedule Blocks -->
-<div class="space-y-2">
+<div class="space-y-1">
 <!-- Week 1: Active -->
-<div class="p-3 bg-surface-container-high flex items-center justify-between shadow-sm relative overflow-hidden">
+<div class="hud-row-item p-3 flex items-center justify-between relative overflow-hidden">
 <div class="absolute left-0 top-0 bottom-0 w-1 bg-secondary-container"></div>
 <div class="flex items-center gap-3 pl-2">
 <div class="w-8 h-8 bg-surface-container-highest text-secondary font-headline-sm text-body-sm font-extrabold flex items-center justify-center">
@@ -737,12 +1219,12 @@
 <div class="font-label-data text-[11px] text-outline">1-7 nov - 2 circuitos + 2 carreras vel. (Junkman y BMW)</div>
 </div>
 </div>
-<span class="font-label-hud text-[10px] bg-secondary-container text-on-surface px-2 py-0.5 uppercase tracking-wider font-bold shrink-0">
+<span class="tactical-badge-amber shrink-0">
                 ACTIVO
               </span>
 </div>
 <!-- Week 2: Locked -->
-<div class="p-3 bg-surface-container-low opacity-60 flex items-center justify-between">
+<div class="hud-row-item p-3 opacity-60 flex items-center justify-between relative overflow-hidden">
 <div class="flex items-center gap-3">
 <div class="w-8 h-8 bg-surface-container text-outline font-headline-sm text-body-sm flex items-center justify-center">
                   S2
@@ -755,7 +1237,7 @@
 <span class="material-symbols-outlined text-outline text-[18px]">lock</span>
 </div>
 <!-- Week 3: Locked -->
-<div class="p-3 bg-surface-container-low opacity-60 flex items-center justify-between">
+<div class="hud-row-item p-3 opacity-60 flex items-center justify-between relative overflow-hidden">
 <div class="flex items-center gap-3">
 <div class="w-8 h-8 bg-surface-container text-outline font-headline-sm text-body-sm flex items-center justify-center">
                   S3
@@ -768,7 +1250,7 @@
 <span class="material-symbols-outlined text-outline text-[18px]">lock</span>
 </div>
 <!-- Week 4: Final Reward -->
-<div class="p-3 bg-surface-container-low flex items-center justify-between">
+<div class="hud-row-item p-3 flex items-center justify-between relative overflow-hidden">
 <div class="flex items-center gap-3">
 <div class="w-8 h-8 bg-surface-container text-primary-container font-headline-sm text-body-sm flex items-center justify-center font-bold">
                   S4
@@ -778,18 +1260,17 @@
 <div class="font-label-data text-[11px] text-outline">22 - 28 nov - Fondo de recompensa $1,000,000</div>
 </div>
 </div>
-<span class="font-label-hud text-[10px] bg-primary-container/20 text-primary-container px-2 py-0.5 uppercase tracking-wider flex items-center gap-1">
-<span class="material-symbols-outlined text-[12px]">star</span> FINAL
-              </span>
+<span class="tactical-badge-nitro shrink-0">FINAL</span>
 </div>
 </div>
 </div>
-<button onclick="switchView('challenges')" class="cursor-pointer w-full mt-space-md bg-surface-container-high hover:bg-surface-bright text-tertiary font-headline-sm text-body-sm uppercase py-3 flex items-center justify-center gap-2 transition-colors">
+<button onclick="switchView('challenges')" class="cursor-pointer w-full mt-space-md bg-surface-container-high hover:bg-surface-bright text-tertiary font-headline-sm text-body-sm uppercase py-3 flex items-center justify-center gap-2 transition-colors relative z-10">
 <span class="material-symbols-outlined text-[18px]">bolt</span>
 <span>VER DESAFÍOS SEMANALES</span>
 </button>
 </div>
 </div>
+<div class="telemetry-divider my-space-lg"></div>
 </section>
 <!-- BOTTOM COMMUNITY TICKER STRIP -->
 <section class="w-full bg-surface-container-low py-space-md border-none">
@@ -840,7 +1321,8 @@
 </a>
 </div>
 <!-- Banner Main Cockpit Card -->
-<div class="relative w-full overflow-hidden rounded-lg bg-surface-container-low p-space-md lg:p-space-lg shadow-xl">
+<div class="relative w-full overflow-hidden hud-card tactical-border-accent tactical-corner-brackets p-space-md lg:p-space-lg shadow-2xl">
+<div class="tactical-watermark select-none pointer-events-none">TELEMETRY</div>
 <!-- Background Track Action Image with Sepia Fall Filter -->
 <div class="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-luminosity filter contrast-125" data-alt="High speed underground racing scene from Need for Speed Most Wanted 2005. Porsche Carrera GT and BMW M3 GTR speeding through the City Perimeter industrial district at sunset, intense golden yellow and amber sepia lighting, motion blur on asphalt, autumn leaves flying, police radar telemetry HUD overlays in cyan and safety orange." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC5ZXQzGpSmkWQ8FaJQ1p6l_qo5NAl-bo37zQ_wMIQbtHBTZieOHAUbiERcEritSyMlpgCs1BFUCPYMRHjdNfvoHOQqSmTFq0cApIzHjxUQccf6yhvdh4B7ju2zgFUjW86cTBgqslTcqWRVNdmIE7LalxO3teX9Ce_E1rHvnWfWuTozl3baxeONBOV_p5oOqxNUABjn1qorvdUoTa_lTjSuBUYVmid1J5crYrhUQKIbDtpTO4JWfQG8')"></div>
 <div class="absolute inset-0 bg-gradient-to-r from-surface-container-lowest via-surface-container-lowest/80 to-transparent"></div>
@@ -992,11 +1474,11 @@
 </div>
 </div>
 <!-- LEADERBOARD TABLE MATRIX -->
-<div class="w-full overflow-x-auto bg-surface-container-lowest rounded-lg shadow-2xl">
+<div class="w-full overflow-x-auto hud-card tactical-border-accent shadow-2xl">
 <table class="w-full text-left border-collapse min-w-[960px]">
 <!-- Table HUD Header -->
 <thead>
-<tr class="bg-surface-container-low font-label-hud text-label-hud text-outline uppercase tracking-wider">
+<tr class="bg-black/60 border-b border-white/10 font-label-hud text-label-hud text-outline uppercase tracking-wider">
 <th class="py-3 px-space-md w-16 text-center">POS</th>
 <th class="py-3 px-space-md">PILOTO &amp; ESCUDERÍA</th>
 <th class="py-3 px-space-md">TIEMPO HOMOLOGADO</th>
@@ -1718,16 +2200,13 @@
 <div class="w-full max-w-7xl mx-auto flex flex-col gap-space-lg">
 <!-- 1. HERO / CONTEXT BANNER -->
 <section class="w-full pb-space-sm">
-<div class="relative w-full rounded-xl bg-surface-container-lowest p-space-md lg:p-space-xl overflow-hidden shadow-2xl">
+<div class="relative w-full hud-card tactical-border-accent tactical-corner-brackets p-space-md lg:p-space-xl overflow-hidden shadow-2xl">
+<div class="tactical-watermark select-none pointer-events-none">ROUTES</div>
 <!-- Need for Speed Most Wanted Official Graffiti Banner Background -->
 <div class="absolute inset-0 pointer-events-none overflow-hidden select-none z-0" aria-hidden="true">
   <img src="assets/img/nfsmw-graffiti-banner.png" alt="Need for Speed Most Wanted" class="w-full h-full object-cover sm:object-contain object-right opacity-25 filter contrast-125 select-none pointer-events-none mix-blend-screen" />
   <div class="absolute inset-0 bg-gradient-to-r from-surface-container-lowest via-surface-container-lowest/80 to-transparent"></div>
 </div>
-<!-- Technical HUD Watermarks -->
-<div class="absolute -right-6 -bottom-10 pointer-events-none opacity-5 select-none font-headline-xl text-[140px] text-on-surface uppercase tracking-tighter">
-          ROUTES
-        </div>
 <div class="absolute top-0 right-0 w-32 h-1 bg-gradient-to-l from-primary-container via-secondary-container to-transparent"></div>
 
 <div class="relative z-10 flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-space-lg">
@@ -2486,7 +2965,8 @@
       <!-- MAIN CONTAINER: Constrained to max-w-7xl mx-auto matching Blacklist Event -->
       <div class="w-full max-w-7xl mx-auto flex flex-col gap-space-lg">
       <!-- HERO HEADER -->
-      <div class="relative w-full rounded-xl overflow-hidden bg-surface-container-lowest p-space-md md:p-space-lg shadow-xl mb-space-lg">
+      <div class="relative w-full hud-card tactical-border-accent tactical-corner-brackets p-space-md md:p-space-lg shadow-xl mb-space-lg overflow-hidden">
+        <div class="tactical-watermark">WEEKLY</div>
         <!-- Need for Speed Most Wanted Official Graffiti Banner Background -->
         <div class="absolute inset-0 pointer-events-none overflow-hidden select-none z-0" aria-hidden="true">
           <img src="assets/img/nfsmw-graffiti-banner.png" alt="" class="w-full h-full object-cover sm:object-contain object-right opacity-25 filter contrast-125 select-none pointer-events-none mix-blend-screen" />
@@ -2496,10 +2976,10 @@
         <div class="absolute -left-10 bottom-0 w-72 h-72 bg-secondary-container/10 rounded-full blur-2xl pointer-events-none"></div>
         <div class="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto">
           <!-- Status Tag -->
-          <div class="inline-flex items-center gap-space-xs px-space-md py-1 rounded-full bg-surface-container-high/80 backdrop-blur-md mb-space-sm shadow-sm">
+          <div class="tactical-badge-cyan mb-space-sm">
             <span class="w-2 h-2 rounded-full bg-primary-container animate-ping"></span>
-            <span class="material-symbols-outlined text-[15px] text-primary-container" style="font-variation-settings: 'FILL' 1;">bolt</span>
-            <span class="font-label-hud text-label-hud uppercase tracking-widest text-primary-container">TEMPORADA 1 // ROCKPORT SEASONS</span>
+            <span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">bolt</span>
+            <span>TEMPORADA 1 // ROCKPORT SEASONS</span>
           </div>
           <!-- Title -->
           <h1 class="font-headline-xl text-headline-xl uppercase italic tracking-tight text-on-surface">
@@ -2514,53 +2994,53 @@
       <!-- SUMMARY KPI BAR -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md mb-space-lg">
         <!-- Date Range -->
-        <div class="bg-surface-container-low p-space-md rounded-lg flex flex-col justify-between overflow-hidden shadow-md">
-          <div class="flex items-center justify-between mb-space-xs">
+        <div class="hud-card hover-card-lift p-space-md flex flex-col justify-between overflow-hidden shadow-md">
+          <div class="flex items-center justify-between mb-space-xs relative z-10">
             <span class="font-label-hud text-label-hud uppercase tracking-widest text-on-surface-variant">SEMANA ACTIVA</span>
             <span class="material-symbols-outlined text-secondary-container text-[20px]">calendar_today</span>
           </div>
-          <div id="c-summary-daterange" class="font-headline-sm text-[16px] text-on-surface font-black leading-tight uppercase truncate">
+          <div id="c-summary-daterange" class="font-headline-sm text-[16px] text-on-surface font-black leading-tight uppercase truncate relative z-10">
             01 Nov - 07 Nov 2026
           </div>
-          <span class="font-label-data text-[11px] text-on-surface-variant/80 mt-1 uppercase">Periodo de Homologación</span>
+          <span class="font-label-data text-[11px] text-on-surface-variant/80 mt-1 uppercase relative z-10">Periodo de Homologación</span>
         </div>
         <!-- Count -->
-        <div class="bg-surface-container-low p-space-md rounded-lg flex flex-col justify-between overflow-hidden shadow-md">
-          <div class="flex items-center justify-between mb-space-xs">
+        <div class="hud-card hover-card-lift p-space-md flex flex-col justify-between overflow-hidden shadow-md">
+          <div class="flex items-center justify-between mb-space-xs relative z-10">
             <span class="font-label-hud text-label-hud uppercase tracking-widest text-on-surface-variant">PRUEBAS OFICIALES</span>
             <span class="material-symbols-outlined text-primary-container text-[20px]">sports_score</span>
           </div>
-          <div id="c-summary-count" class="font-headline-sm text-[16px] text-primary-container font-black leading-tight uppercase truncate">
+          <div id="c-summary-count" class="font-headline-sm text-[16px] text-primary-container font-black leading-tight uppercase truncate relative z-10">
             4 Pruebas Oficiales
           </div>
-          <span class="font-label-data text-[11px] text-on-surface-variant/80 mt-1 uppercase">2 Circuitos + 2 Sprints</span>
+          <span class="font-label-data text-[11px] text-on-surface-variant/80 mt-1 uppercase relative z-10">2 Circuitos + 2 Sprints</span>
         </div>
         <!-- Reward Pot -->
-        <div class="bg-surface-container-low p-space-md rounded-lg flex flex-col justify-between overflow-hidden shadow-md">
-          <div class="flex items-center justify-between mb-space-xs">
+        <div class="hud-card hover-card-lift p-space-md flex flex-col justify-between overflow-hidden shadow-md">
+          <div class="flex items-center justify-between mb-space-xs relative z-10">
             <span class="font-label-hud text-label-hud uppercase tracking-widest text-on-surface-variant">BOLSA SEMANAL</span>
             <span class="material-symbols-outlined text-tertiary text-[20px]">payments</span>
           </div>
-          <div id="c-summary-pot" class="font-headline-sm text-[16px] text-tertiary font-black leading-tight uppercase truncate">
+          <div id="c-summary-pot" class="font-headline-sm text-[16px] text-tertiary font-black leading-tight uppercase truncate tabular-nums relative z-10">
             $2.000.000 Bounty
           </div>
-          <span class="font-label-data text-[11px] text-on-surface-variant/80 mt-1 uppercase">Reputación en Juego</span>
+          <span class="font-label-data text-[11px] text-on-surface-variant/80 mt-1 uppercase relative z-10">Reputación en Juego</span>
         </div>
         <!-- Rules -->
-        <div class="bg-surface-container-low p-space-md rounded-lg flex flex-col justify-between overflow-hidden shadow-md">
-          <div class="flex items-center justify-between mb-space-xs">
+        <div class="hud-card hover-card-lift p-space-md flex flex-col justify-between overflow-hidden shadow-md">
+          <div class="flex items-center justify-between mb-space-xs relative z-10">
             <span class="font-label-hud text-label-hud uppercase tracking-widest text-on-surface-variant">CATEGORÍAS</span>
             <span class="material-symbols-outlined text-outline text-[20px]">verified</span>
           </div>
-          <div class="font-headline-sm text-[16px] text-on-surface font-black leading-tight uppercase truncate">
+          <div class="font-headline-sm text-[16px] text-on-surface font-black leading-tight uppercase truncate relative z-10">
             Junkman + BMW M3 GTR
           </div>
-          <span class="font-label-data text-[11px] text-on-surface-variant/80 mt-1 uppercase">Sin Modificaciones Prohibidas</span>
+          <span class="font-label-data text-[11px] text-on-surface-variant/80 mt-1 uppercase relative z-10">Sin Modificaciones Prohibidas</span>
         </div>
       </div>
 
       <!-- WEEK SELECTOR & FILTERS -->
-      <div class="flex flex-col md:flex-row items-center justify-between gap-space-md bg-surface-container-low p-space-md rounded-xl shadow-md mb-space-lg">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-space-md hud-card p-space-md shadow-md mb-space-lg">
         <!-- Week Navigation Pills -->
         <div class="flex items-center gap-space-xs overflow-x-auto w-full md:w-auto pb-1 md:pb-0" id="challenges-week-pills">
           <!-- Rendered dynamically by challenges-controller.js -->
@@ -2568,16 +3048,16 @@
 
         <!-- Category Filters -->
         <div class="flex items-center gap-1.5 flex-wrap">
-          <button data-challenge-filter="all" onclick="setChallengeCategoryFilter('all')" class="px-3 py-1.5 rounded-lg bg-primary-container text-black font-headline-sm text-body-xs font-black uppercase tracking-wider shadow transition-all">Todos</button>
-          <button data-challenge-filter="circuito" onclick="setChallengeCategoryFilter('circuito')" class="px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface-variant hover:text-white font-headline-sm text-body-xs font-bold uppercase tracking-wider transition-all">Circuitos</button>
-          <button data-challenge-filter="sprint" onclick="setChallengeCategoryFilter('sprint')" class="px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface-variant hover:text-white font-headline-sm text-body-xs font-bold uppercase tracking-wider transition-all">Sprints</button>
-          <button data-challenge-filter="junkman" onclick="setChallengeCategoryFilter('junkman')" class="px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface-variant hover:text-white font-headline-sm text-body-xs font-bold uppercase tracking-wider transition-all">Junkman</button>
-          <button data-challenge-filter="bmw" onclick="setChallengeCategoryFilter('bmw')" class="px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface-variant hover:text-white font-headline-sm text-body-xs font-bold uppercase tracking-wider transition-all">BMW M3 GTR</button>
+          <button data-challenge-filter="all" onclick="setChallengeCategoryFilter('all')" class="px-3 py-1.5 rounded-sm bg-primary-container text-black font-headline-sm text-body-xs font-black uppercase tracking-wider shadow transition-all">Todos</button>
+          <button data-challenge-filter="circuito" onclick="setChallengeCategoryFilter('circuito')" class="px-3 py-1.5 rounded-sm bg-surface-container-high hover:bg-surface-bright text-on-surface-variant hover:text-white font-headline-sm text-body-xs font-bold uppercase tracking-wider transition-all">Circuitos</button>
+          <button data-challenge-filter="sprint" onclick="setChallengeCategoryFilter('sprint')" class="px-3 py-1.5 rounded-sm bg-surface-container-high hover:bg-surface-bright text-on-surface-variant hover:text-white font-headline-sm text-body-xs font-bold uppercase tracking-wider transition-all">Sprints</button>
+          <button data-challenge-filter="junkman" onclick="setChallengeCategoryFilter('junkman')" class="px-3 py-1.5 rounded-sm bg-surface-container-high hover:bg-surface-bright text-on-surface-variant hover:text-white font-headline-sm text-body-xs font-bold uppercase tracking-wider transition-all">Junkman</button>
+          <button data-challenge-filter="bmw" onclick="setChallengeCategoryFilter('bmw')" class="px-3 py-1.5 rounded-sm bg-surface-container-high hover:bg-surface-bright text-on-surface-variant hover:text-white font-headline-sm text-body-xs font-bold uppercase tracking-wider transition-all">BMW M3 GTR</button>
         </div>
       </div>
 
       <!-- ACTIVE WEEK LABEL BANNER -->
-      <div class="flex items-center justify-between bg-surface-container-lowest px-space-md py-space-sm rounded-lg border border-surface-container-highest/40 mb-space-md">
+      <div class="flex items-center justify-between hud-card tactical-border-accent-amber px-space-md py-space-sm mb-space-md">
         <div class="flex items-center gap-space-xs">
           <span class="w-2 h-2 rounded-full bg-secondary-container animate-pulse"></span>
           <span id="challenges-active-week-label" class="font-headline-sm text-label-hud font-black uppercase text-on-surface tracking-wider">
@@ -2606,42 +3086,41 @@
       <div class="absolute top-1/2 right-10 w-80 h-80 bg-primary-container/10 rounded-full blur-3xl pointer-events-none"></div>
       <div class="relative w-full max-w-7xl mx-auto flex flex-col gap-space-lg">
         <!-- Main Hero HUD Card -->
-        <div class="relative bg-surface-container-low rounded-xl p-space-lg md:p-space-xl shadow-2xl overflow-hidden hover-card-lift">
+        <div class="relative hud-card tactical-border-accent tactical-corner-brackets p-space-lg md:p-space-xl shadow-2xl overflow-hidden">
+          <div class="tactical-watermark">BLACKLIST</div>
           <!-- Top Status Bar & Discord Pill -->
-          <div class="flex flex-wrap items-center justify-between gap-space-sm mb-space-md">
-            <div class="flex items-center gap-space-xs bg-surface-container-lowest px-space-sm py-space-xs rounded-full shadow-inner">
+          <div class="flex flex-wrap items-center justify-between gap-space-sm mb-space-md relative z-10">
+            <div class="tactical-badge-cyan">
               <span class="w-2 h-2 rounded-full bg-secondary-container animate-pulse"></span>
-              <span class="font-label-hud text-label-hud uppercase text-secondary tracking-widest">OFFICIAL TOURNAMENT</span>
-              <span class="text-outline-variant font-label-data text-label-data">//</span>
-              <span class="font-label-hud text-label-hud uppercase text-on-surface-variant">ROCKPORT CITY ELITE</span>
+              <span>OFFICIAL TOURNAMENT // ROCKPORT ELITE</span>
             </div>
-            <div onclick="window.open('https://discord.gg', '_blank')" class="flex items-center gap-space-xs bg-surface-container-highest/60 hover:bg-surface-container-highest transition-colors px-space-sm py-space-xs rounded text-primary cursor-pointer">
-              <span class="material-symbols-outlined text-[18px]">sports_esports</span>
-              <span class="font-label-data text-label-data uppercase tracking-wider text-on-surface">DISCORD DISPUTES ACTIVE</span>
+            <div onclick="window.open('https://discord.gg', '_blank')" class="tactical-badge hover:bg-surface-container-highest transition-colors text-primary cursor-pointer">
+              <span class="material-symbols-outlined text-[16px]">sports_esports</span>
+              <span>DISCORD DISPUTES ACTIVE</span>
             </div>
           </div>
           <!-- Hero Headline -->
-          <div class="flex flex-col gap-space-xs">
+          <div class="flex flex-col gap-space-xs relative z-10">
             <h1 class="font-headline-xl text-headline-xl uppercase tracking-tighter text-on-surface flex flex-wrap items-center gap-x-space-sm">
               <span class="">BLACKLIST EVENT</span>
               <span class="text-secondary font-headline-xl">//</span>
               <span class="text-primary-container font-headline-xl drop-shadow-[0_0_20px_rgba(255,184,0,0.35)]">RANKS 2026</span>
             </h1>
             <p class="font-body-lg text-body-lg text-on-surface-variant max-w-3xl">
-              Campeonato Oficial de 4 Semanas: 15 Rivales legendarios, 8 Desafíos semanales por grupos rotativos y <span class="text-primary font-bold">$23.5M REP</span> en premios acumulados con telemetría en vivo a 128Hz.
+              Campeonato Oficial de 4 Semanas: 15 Rivales legendarios, 8 Desafíos semanales por grupos rotativos y <span class="text-primary font-bold tabular-nums">$23.5M REP</span> en premios acumulados con telemetría en vivo a 128Hz.
             </p>
           </div>
           <!-- Action CTA Hub -->
-          <div class="flex flex-wrap items-center gap-space-md mt-space-lg">
-            <a onclick="switchView('championship-register')" class="cursor-pointer flex items-center gap-space-xs px-space-lg py-space-sm bg-primary-container hover:bg-primary-fixed-dim text-on-primary-container font-headline-sm text-headline-sm uppercase tracking-wide rounded-lg shadow-xl shadow-primary-container/20 transition-all hover:scale-[1.02] active:scale-[0.98]">
+          <div class="flex flex-wrap items-center gap-space-md mt-space-lg relative z-10">
+            <a onclick="switchView('championship-register')" class="cursor-pointer flex items-center gap-space-xs px-space-lg py-space-sm bg-primary-container hover:bg-primary-fixed-dim text-on-primary-container font-headline-sm text-headline-sm uppercase tracking-wide rounded-sm shadow-xl shadow-primary-container/20 transition-all hover:scale-[1.02] active:scale-[0.98]">
               <span class="material-symbols-outlined text-[20px]">local_fire_department</span>
               <span>INSCRIBIRSE AL TORNEO 2026</span>
             </a>
-            <a onclick="switchView('rules')" class="cursor-pointer flex items-center gap-space-xs px-space-md py-space-sm bg-surface-container-high hover:bg-surface-bright text-on-surface font-headline-sm text-headline-sm uppercase tracking-wider rounded-lg transition-colors">
+            <a onclick="switchView('rules')" class="cursor-pointer flex items-center gap-space-xs px-space-md py-space-sm bg-surface-container-high hover:bg-surface-bright text-on-surface font-headline-sm text-headline-sm uppercase tracking-wider rounded-sm transition-colors">
               <span class="material-symbols-outlined text-[18px] text-tertiary">menu_book</span>
               <span>CÓMO FUNCIONA EL TORNEO (REGLAMENTO)</span>
             </a>
-            <a onclick="switchView('championship-standings')" class="cursor-pointer flex items-center gap-space-xs px-space-md py-space-sm bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface font-label-hud text-label-hud uppercase tracking-widest rounded-lg transition-colors">
+            <a onclick="switchView('championship-standings')" class="cursor-pointer flex items-center gap-space-xs px-space-md py-space-sm bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface font-label-hud text-label-hud uppercase tracking-widest rounded-sm transition-colors">
               <span class="material-symbols-outlined text-[18px] text-secondary">leaderboard</span>
               <span>VER TABLA GENERAL DE STANDINGS</span>
             </a>
@@ -2651,30 +3130,30 @@
         <!-- Live KPI 4-Card Cockpit Strip -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
           <!-- KPI 1: Leader -->
-          <div class="bg-surface-container-low hover:bg-surface-container transition-all p-space-md rounded-xl shadow-lg flex items-center gap-space-md hover-card-lift">
-            <div class="w-12 h-12 rounded-lg bg-surface-container-lowest flex items-center justify-center text-primary-container shadow-md">
+          <div class="hud-card hover-card-lift p-space-md shadow-lg flex items-center gap-space-md relative overflow-hidden">
+            <div class="w-12 h-12 rounded-sm bg-surface-container-lowest flex items-center justify-center text-primary-container shadow-md shrink-0">
               <span class="material-symbols-outlined text-[26px]">workspace_premium</span>
             </div>
             <div class="flex flex-col min-w-0">
               <span class="font-label-hud text-label-hud uppercase text-on-surface-variant tracking-wider">BLACKLIST #1 LEADER</span>
               <span id="t-kpi-leader-name" class="font-headline-sm text-headline-sm uppercase text-primary-container truncate font-black">SRTxAvenger™</span>
-              <span id="t-kpi-leader-pts" class="font-label-data text-label-data text-on-surface-variant truncate font-bold">1.320 PTS</span>
+              <span id="t-kpi-leader-pts" class="font-label-data text-label-data text-on-surface-variant truncate font-bold tabular-nums">1.320 PTS</span>
             </div>
           </div>
           <!-- KPI 2: Rep Pot -->
-          <div class="bg-surface-container-low hover:bg-surface-container transition-all p-space-md rounded-xl shadow-lg flex items-center gap-space-md hover-card-lift">
-            <div class="w-12 h-12 rounded-lg bg-surface-container-lowest flex items-center justify-center text-tertiary shadow-md">
+          <div class="hud-card hover-card-lift p-space-md shadow-lg flex items-center gap-space-md relative overflow-hidden">
+            <div class="w-12 h-12 rounded-sm bg-surface-container-lowest flex items-center justify-center text-tertiary shadow-md shrink-0">
               <span class="material-symbols-outlined text-[26px]">payments</span>
             </div>
             <div class="flex flex-col min-w-0">
               <span class="font-label-hud text-label-hud uppercase text-on-surface-variant tracking-wider">TOTAL REP POT (SEM. 1)</span>
-              <span id="t-kpi-rep-pot" class="font-label-timer-lg text-label-timer-lg text-tertiary font-bold tracking-tight">$9.680.000</span>
-              <span class="font-label-data text-label-data text-secondary uppercase font-bold">Bolsa Global: $23.500.000</span>
+              <span id="t-kpi-rep-pot" class="font-label-timer-lg text-label-timer-lg text-tertiary font-bold tracking-tight tabular-nums">$9.680.000</span>
+              <span class="font-label-data text-label-data text-secondary uppercase font-bold tabular-nums">Bolsa Global: $23.500.000</span>
             </div>
           </div>
           <!-- KPI 3: Week Progress -->
-          <div class="bg-surface-container-low hover:bg-surface-container transition-all p-space-md rounded-xl shadow-lg flex items-center gap-space-md hover-card-lift">
-            <div class="w-12 h-12 rounded-lg bg-surface-container-lowest flex items-center justify-center text-secondary shadow-md">
+          <div class="hud-card hover-card-lift p-space-md shadow-lg flex items-center gap-space-md relative overflow-hidden">
+            <div class="w-12 h-12 rounded-sm bg-surface-container-lowest flex items-center justify-center text-secondary shadow-md shrink-0">
               <span class="material-symbols-outlined text-[26px]">date_range</span>
             </div>
             <div class="flex flex-col min-w-0">
@@ -2684,13 +3163,13 @@
             </div>
           </div>
           <!-- KPI 4: Status -->
-          <div class="bg-surface-container-low hover:bg-surface-container transition-all p-space-md rounded-xl shadow-lg flex items-center gap-space-md hover-card-lift">
-            <div class="w-12 h-12 rounded-lg bg-surface-container-lowest flex items-center justify-center text-primary-container shadow-md">
+          <div class="hud-card hover-card-lift p-space-md shadow-lg flex items-center gap-space-md relative overflow-hidden">
+            <div class="w-12 h-12 rounded-sm bg-surface-container-lowest flex items-center justify-center text-primary-container shadow-md shrink-0">
               <span class="material-symbols-outlined text-[26px]">flag</span>
             </div>
             <div class="flex flex-col min-w-0">
               <span class="font-label-hud text-label-hud uppercase text-on-surface-variant tracking-wider">TOURNAMENT STATUS</span>
-              <div class="flex items-center gap-space-xs"><span class="w-2.5 h-2.5 rounded-full bg-tertiary pulse-cyan-glow"></span><span id="t-kpi-status" class="font-headline-sm text-headline-sm uppercase text-tertiary font-bold tracking-wider">EN CURSO</span><span class="text-[10px] px-space-xs py-[1px] bg-tertiary/20 text-tertiary font-mono rounded font-bold uppercase tracking-widest animate-pulse">LIVE</span></div>
+              <div class="flex items-center gap-space-xs"><span class="w-2.5 h-2.5 rounded-full bg-tertiary pulse-cyan-glow"></span><span id="t-kpi-status" class="font-headline-sm text-headline-sm uppercase text-tertiary font-bold tracking-wider">EN CURSO</span><span class="tactical-badge-cyan">LIVE</span></div>
               <span id="t-kpi-groups-count" class="font-label-data text-label-data text-on-surface-variant">4 Grupos Homologados</span>
             </div>
           </div>
@@ -2702,7 +3181,7 @@
     <section class="w-full px-gutter md:px-gutter-lg pb-space-lg">
       <div class="w-full max-w-7xl mx-auto flex flex-col gap-space-md">
         <!-- Week Pills Selector -->
-        <div class="bg-surface-container-lowest p-space-xs rounded-xl flex flex-wrap items-center justify-between gap-space-xs shadow-md">
+        <div class="hud-card p-space-xs flex flex-wrap items-center justify-between gap-space-xs shadow-md">
           <div class="flex items-center gap-space-xs px-space-sm py-space-xs">
             <span class="material-symbols-outlined text-primary-container text-[18px]">sports_score</span>
             <span class="font-label-hud text-label-hud uppercase text-on-surface-variant tracking-wider">CALENDARIO OFICIAL:</span>
@@ -2712,24 +3191,24 @@
           </div>
         </div>
         <!-- Navigation Mode Tabs -->
-        <div class="flex flex-wrap items-center gap-space-xs bg-surface-container-low p-space-xs rounded-xl shadow-lg">
-          <button onclick="switchView('blacklist')" class="px-space-md py-space-sm bg-surface-container-high text-primary-container font-headline-sm text-headline-sm uppercase tracking-wide rounded-lg flex items-center gap-space-xs shadow-md cursor-pointer">
+        <div class="flex flex-wrap items-center gap-space-xs hud-card p-space-xs shadow-lg">
+          <button onclick="switchView('blacklist')" class="px-space-md py-space-sm bg-primary-container text-black font-headline-sm text-headline-sm uppercase tracking-wide rounded-sm flex items-center gap-space-xs shadow-md cursor-pointer font-black">
             <span class="material-symbols-outlined text-[18px]">hub</span>
             <span>GRUPOS &amp; DESAFÍOS</span>
           </button>
-          <button onclick="switchView('championship-standings')" class="px-space-md py-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-headline-sm text-headline-sm uppercase tracking-wide rounded-lg flex items-center gap-space-xs cursor-pointer">
+          <button onclick="switchView('championship-standings')" class="px-space-md py-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-headline-sm text-headline-sm uppercase tracking-wide rounded-sm flex items-center gap-space-xs cursor-pointer">
             <span class="material-symbols-outlined text-[18px]">table_rows</span>
             <span>TABLA GENERAL DE PUNTOS</span>
           </button>
-          <button onclick="switchView('blacklist-cards')" class="px-space-md py-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-headline-sm text-headline-sm uppercase tracking-wide rounded-lg flex items-center gap-space-xs cursor-pointer">
+          <button onclick="switchView('blacklist-cards')" class="px-space-md py-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-headline-sm text-headline-sm uppercase tracking-wide rounded-sm flex items-center gap-space-xs cursor-pointer">
             <span class="material-symbols-outlined text-[18px]">person_pin</span>
             <span>DOSSIERS DE LOS 15 RIVALES</span>
           </button>
-          <button onclick="switchView('rules')" class="px-space-md py-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-headline-sm text-headline-sm uppercase tracking-wide rounded-lg flex items-center gap-space-xs cursor-pointer">
+          <button onclick="switchView('rules')" class="px-space-md py-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-headline-sm text-headline-sm uppercase tracking-wide rounded-sm flex items-center gap-space-xs cursor-pointer">
             <span class="material-symbols-outlined text-[18px]">gavel</span>
             <span>INSCRIPCIÓN &amp; REGLAMENTO</span>
           </button>
-          <button onclick="switchView('past-tournaments')" class="px-space-md py-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-headline-sm text-headline-sm uppercase tracking-wide rounded-lg flex items-center gap-space-xs cursor-pointer">
+          <button onclick="switchView('past-tournaments')" class="px-space-md py-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-headline-sm text-headline-sm uppercase tracking-wide rounded-sm flex items-center gap-space-xs cursor-pointer">
             <span class="material-symbols-outlined text-[18px]">history</span>
             <span>HISTORIAL DE EDICIONES</span>
           </button>
@@ -2880,7 +3359,8 @@
       <div class="w-full max-w-7xl mx-auto flex flex-col gap-space-md">
 
         <!-- HERO HEADER -->
-        <div class="relative w-full rounded-xl overflow-hidden bg-surface-container-lowest p-space-md md:p-space-lg shadow-xl">
+        <div class="relative w-full hud-card tactical-border-accent tactical-corner-brackets p-space-md md:p-space-lg shadow-xl overflow-hidden">
+          <div class="tactical-watermark">STANDINGS</div>
           <!-- Need for Speed Most Wanted Official Graffiti Banner Background -->
           <div class="absolute inset-0 pointer-events-none overflow-hidden select-none z-0" aria-hidden="true">
             <img src="assets/img/nfsmw-graffiti-banner.png" alt="" class="w-full h-full object-cover sm:object-contain object-right opacity-25 filter contrast-125 select-none pointer-events-none mix-blend-screen" />
@@ -2889,10 +3369,10 @@
           <div class="absolute -right-20 -top-20 w-96 h-96 bg-primary-container/10 rounded-full blur-3xl pointer-events-none"></div>
           <div class="absolute -left-10 bottom-0 w-72 h-72 bg-secondary-container/10 rounded-full blur-2xl pointer-events-none"></div>
           <div class="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto">
-            <div class="inline-flex items-center gap-space-xs px-space-md py-1 rounded-full bg-surface-container-high/80 backdrop-blur-md mb-space-sm shadow-sm">
+            <div class="tactical-badge-cyan mb-space-sm">
               <span class="w-2 h-2 rounded-full bg-secondary-container animate-ping"></span>
-              <span class="material-symbols-outlined text-[15px] text-primary-container" style="font-variation-settings: 'FILL' 1;">military_tech</span>
-              <span class="font-label-hud text-label-hud uppercase tracking-widest text-primary-container">TABLA ACUMULATIVA OFICIAL // ROCKPORT CITY</span>
+              <span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+              <span>TABLA ACUMULATIVA OFICIAL // ROCKPORT CITY</span>
             </div>
             <h1 class="font-headline-xl text-headline-xl uppercase italic tracking-tight text-on-surface">
               STANDINGS <span class="text-secondary-container">//</span> <span class="bg-gradient-to-r from-primary-container via-secondary-container to-secondary bg-clip-text text-transparent">BLACKLIST 2026</span>
@@ -2900,7 +3380,7 @@
             <p class="font-body-md text-body-md text-on-surface-variant mt-space-xs text-center max-w-3xl">
               Clasificación acumulativa oficial de pilotos clasificados por puntos totales, podios de carreras, bonos de vuelta rápida y reputación ($ REP). Sincronizado en tiempo real con Firebase Realtime Database.
             </p>
-            <div class="mt-space-xs inline-flex flex-wrap items-center justify-center gap-x-space-md gap-y-1 font-label-data text-[11px] text-tertiary/90 bg-surface-container/60 px-space-md py-1 rounded">
+            <div class="mt-space-xs inline-flex flex-wrap items-center justify-center gap-x-space-md gap-y-1 font-label-data text-[11px] text-tertiary/90 bg-surface-container/60 px-space-md py-1 rounded-sm">
               <span>Podios (P1=25, P2=18, P3=15, P4=12)</span>
               <span class="text-outline-variant">•</span>
               <span>Vuelta Rápida (🥇+100, 🥈+50, 🥉+20 PTS)</span>
@@ -2911,24 +3391,24 @@
         </div>
 
         <!-- COMPETITION TAB NAVIGATION (Consistent with Groups & Weekly Rotation) -->
-        <div class="flex flex-wrap items-center gap-space-xs bg-surface-container-low p-space-xs rounded-xl shadow-lg">
-          <button onclick="switchView('blacklist')" class="px-space-md py-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-headline-sm text-headline-sm uppercase tracking-wide rounded-lg flex items-center gap-space-xs cursor-pointer">
+        <div class="flex flex-wrap items-center gap-space-xs hud-card p-space-xs shadow-lg">
+          <button onclick="switchView('blacklist')" class="px-space-md py-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-headline-sm text-headline-sm uppercase tracking-wide rounded-sm flex items-center gap-space-xs cursor-pointer">
             <span class="material-symbols-outlined text-[18px]">hub</span>
             <span>GRUPOS &amp; DESAFÍOS</span>
           </button>
-          <button onclick="switchView('championship-standings')" class="px-space-md py-space-sm bg-surface-container-high text-primary-container font-headline-sm text-headline-sm uppercase tracking-wide rounded-lg flex items-center gap-space-xs shadow-md cursor-pointer">
+          <button onclick="switchView('championship-standings')" class="px-space-md py-space-sm bg-primary-container text-black font-headline-sm text-headline-sm uppercase tracking-wide rounded-sm flex items-center gap-space-xs shadow-md cursor-pointer font-black">
             <span class="material-symbols-outlined text-[18px]">table_rows</span>
             <span>TABLA GENERAL DE PUNTOS</span>
           </button>
-          <button onclick="switchView('blacklist-cards')" class="px-space-md py-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-headline-sm text-headline-sm uppercase tracking-wide rounded-lg flex items-center gap-space-xs cursor-pointer">
+          <button onclick="switchView('blacklist-cards')" class="px-space-md py-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-headline-sm text-headline-sm uppercase tracking-wide rounded-sm flex items-center gap-space-xs cursor-pointer">
             <span class="material-symbols-outlined text-[18px]">person_pin</span>
             <span>DOSSIERS DE LOS 15 RIVALES</span>
           </button>
-          <button onclick="switchView('rules')" class="px-space-md py-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-headline-sm text-headline-sm uppercase tracking-wide rounded-lg flex items-center gap-space-xs cursor-pointer">
+          <button onclick="switchView('rules')" class="px-space-md py-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-headline-sm text-headline-sm uppercase tracking-wide rounded-sm flex items-center gap-space-xs cursor-pointer">
             <span class="material-symbols-outlined text-[18px]">gavel</span>
             <span>INSCRIPCIÓN &amp; REGLAMENTO</span>
           </button>
-          <button onclick="switchView('past-tournaments')" class="px-space-md py-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-headline-sm text-headline-sm uppercase tracking-wide rounded-lg flex items-center gap-space-xs cursor-pointer">
+          <button onclick="switchView('past-tournaments')" class="px-space-md py-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-headline-sm text-headline-sm uppercase tracking-wide rounded-sm flex items-center gap-space-xs cursor-pointer">
             <span class="material-symbols-outlined text-[18px]">history</span>
             <span>HISTORIAL DE EDICIONES</span>
           </button>
@@ -2936,65 +3416,65 @@
 
         <!-- 5-BLOCK STANDINGS KPI GRID -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-space-md">
-          <div class="relative bg-surface-container-low p-space-md rounded-lg flex flex-col justify-between overflow-hidden shadow-md">
-            <div class="flex items-center justify-between">
+          <div class="hud-card hover-card-lift p-space-md flex flex-col justify-between overflow-hidden shadow-md relative">
+            <div class="flex items-center justify-between relative z-10">
               <span class="font-label-hud text-label-hud uppercase tracking-widest text-on-surface-variant">LÍDER GENERAL</span>
               <span class="material-symbols-outlined text-primary-container text-[20px]" style="font-variation-settings: 'FILL' 1;">emoji_events</span>
             </div>
-            <div id="s-kpi-leader" class="font-headline-sm text-[16px] text-primary-container font-black leading-tight uppercase truncate mt-2">
+            <div id="s-kpi-leader" class="font-headline-sm text-[16px] text-primary-container font-black leading-tight uppercase truncate mt-2 relative z-10">
               Nebula
             </div>
-            <span id="s-kpi-leader-pts" class="font-label-data text-[11px] text-on-surface-variant/80 mt-1 uppercase font-bold">2.532 PTS</span>
+            <span id="s-kpi-leader-pts" class="font-label-data text-[11px] text-on-surface-variant/80 mt-1 uppercase font-bold tabular-nums relative z-10">2.532 PTS</span>
             <div class="absolute bottom-0 left-0 h-[2px] w-full bg-primary-container"></div>
           </div>
-          <div class="relative bg-surface-container-low p-space-md rounded-lg flex flex-col justify-between overflow-hidden shadow-md">
-            <div class="flex items-center justify-between">
+          <div class="hud-card hover-card-lift p-space-md flex flex-col justify-between overflow-hidden shadow-md relative">
+            <div class="flex items-center justify-between relative z-10">
               <span class="font-label-hud text-label-hud uppercase tracking-widest text-on-surface-variant">TOTAL REP EN JUEGO</span>
               <span class="material-symbols-outlined text-tertiary text-[20px]">monetization_on</span>
             </div>
-            <div id="s-kpi-rep" class="font-headline-sm text-[16px] text-tertiary font-black leading-tight uppercase truncate mt-2">
+            <div id="s-kpi-rep" class="font-headline-sm text-[16px] text-tertiary font-black leading-tight uppercase truncate mt-2 tabular-nums relative z-10">
               $29.630.000
             </div>
-            <span class="font-label-data text-[11px] text-on-surface-variant/80 mt-1 uppercase font-bold">Semanas 1 &amp; 2</span>
+            <span class="font-label-data text-[11px] text-on-surface-variant/80 mt-1 uppercase font-bold relative z-10">Semanas 1 &amp; 2</span>
             <div class="absolute bottom-0 left-0 h-[2px] w-full bg-tertiary"></div>
           </div>
-          <div class="relative bg-surface-container-low p-space-md rounded-lg flex flex-col justify-between overflow-hidden shadow-md">
-            <div class="flex items-center justify-between">
+          <div class="hud-card hover-card-lift p-space-md flex flex-col justify-between overflow-hidden shadow-md relative">
+            <div class="flex items-center justify-between relative z-10">
               <span class="font-label-hud text-label-hud uppercase tracking-widest text-on-surface-variant">PILOTOS ACTIVOS</span>
               <span class="material-symbols-outlined text-secondary-container text-[20px]">sports_motorsports</span>
             </div>
-            <div class="font-headline-sm text-[16px] text-on-surface font-black leading-tight uppercase truncate mt-2">
+            <div class="font-headline-sm text-[16px] text-on-surface font-black leading-tight uppercase truncate mt-2 relative z-10">
               15 Pilotos
             </div>
-            <span class="font-label-data text-[11px] text-on-surface-variant/80 mt-1 uppercase font-bold">Parrilla Completa</span>
+            <span class="font-label-data text-[11px] text-on-surface-variant/80 mt-1 uppercase font-bold relative z-10">Parrilla Completa</span>
             <div class="absolute bottom-0 left-0 h-[2px] w-full bg-secondary-container"></div>
           </div>
-          <div class="relative bg-surface-container-low p-space-md rounded-lg flex flex-col justify-between overflow-hidden shadow-md">
-            <div class="flex items-center justify-between">
+          <div class="hud-card hover-card-lift p-space-md flex flex-col justify-between overflow-hidden shadow-md relative">
+            <div class="flex items-center justify-between relative z-10">
               <span class="font-label-hud text-label-hud uppercase tracking-widest text-on-surface-variant">VUELTAS REGISTRADAS</span>
               <span class="material-symbols-outlined text-secondary text-[20px]">speed</span>
             </div>
-            <div id="s-kpi-runs" class="font-headline-sm text-[16px] text-secondary font-black leading-tight uppercase truncate mt-2">
+            <div id="s-kpi-runs" class="font-headline-sm text-[16px] text-secondary font-black leading-tight uppercase truncate mt-2 relative z-10">
               128 Homologadas
             </div>
-            <span class="font-label-data text-[11px] text-on-surface-variant/80 mt-1 uppercase font-bold">Telemetría 60 FPS</span>
+            <span class="font-label-data text-[11px] text-on-surface-variant/80 mt-1 uppercase font-bold relative z-10">Telemetría 60 FPS</span>
             <div class="absolute bottom-0 left-0 h-[2px] w-full bg-secondary"></div>
           </div>
-          <div class="relative bg-surface-container-low p-space-md rounded-lg flex flex-col justify-between overflow-hidden shadow-md">
-            <div class="flex items-center justify-between">
+          <div class="hud-card hover-card-lift p-space-md flex flex-col justify-between overflow-hidden shadow-md relative">
+            <div class="flex items-center justify-between relative z-10">
               <span class="font-label-hud text-label-hud uppercase tracking-widest text-on-surface-variant">FAIR PLAY</span>
               <span class="material-symbols-outlined text-primary-container text-[20px]">verified_user</span>
             </div>
-            <div id="s-kpi-integrity" class="font-headline-sm text-[16px] text-primary-container font-black leading-tight uppercase truncate mt-2">
+            <div id="s-kpi-integrity" class="font-headline-sm text-[16px] text-primary-container font-black leading-tight uppercase truncate mt-2 relative z-10">
               100% Verificado
             </div>
-            <span class="font-label-data text-[11px] text-on-surface-variant/80 mt-1 uppercase font-bold">Anti-Cheat Memory</span>
+            <span class="font-label-data text-[11px] text-on-surface-variant/80 mt-1 uppercase font-bold relative z-10">Anti-Cheat Memory</span>
             <div class="absolute bottom-0 left-0 h-[2px] w-full bg-primary-container"></div>
           </div>
         </div>
 
         <!-- SEARCH, SORT & GROUP FILTER CONTROLS (Stitch Design Reference) -->
-        <div class="bg-surface-container-lowest p-space-md rounded-xl flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-space-md shadow-md">
+        <div class="hud-card p-space-md flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-space-md shadow-md">
           <div class="flex flex-col">
             <div class="flex items-center gap-space-xs">
               <span class="material-symbols-outlined text-primary-container text-[22px]">trophy</span>
@@ -3131,7 +3611,8 @@
       <!-- MAIN CONTAINER: Constrained to max-w-7xl mx-auto matching Blacklist Event -->
       <div class="w-full max-w-7xl mx-auto flex flex-col gap-space-lg">
       <!-- HERO HEADER -->
-      <div class="relative w-full rounded-xl overflow-hidden bg-surface-container-lowest p-space-md md:p-space-lg shadow-xl mb-space-lg">
+      <div class="relative w-full overflow-hidden hud-card tactical-border-accent tactical-corner-brackets p-space-md md:p-space-lg shadow-2xl mb-space-lg">
+        <div class="tactical-watermark select-none pointer-events-none">REGISTER</div>
         <!-- Need for Speed Most Wanted Official Graffiti Banner Background -->
         <div class="absolute inset-0 pointer-events-none overflow-hidden select-none z-0" aria-hidden="true">
           <img src="assets/img/nfsmw-graffiti-banner.png" alt="" class="w-full h-full object-cover sm:object-contain object-right opacity-25 filter contrast-125 select-none pointer-events-none mix-blend-screen" />
@@ -3322,7 +3803,8 @@
     <!-- AMBIENT SCANLINE BACKDROP OVERLAY -->
     <div class="relative w-full px-gutter md:px-gutter-lg py-space-md">
       <!-- HERO HEADER -->
-      <div class="relative w-full rounded-xl overflow-hidden bg-surface-container-lowest p-space-md md:p-space-lg shadow-xl mb-space-lg">
+      <div class="relative w-full overflow-hidden hud-card tactical-border-accent tactical-corner-brackets p-space-md md:p-space-lg shadow-2xl mb-space-lg">
+        <div class="tactical-watermark select-none pointer-events-none">TUTORIAL</div>
         <div class="absolute -right-20 -top-20 w-96 h-96 bg-primary-container/10 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute -left-10 bottom-0 w-72 h-72 bg-secondary-container/10 rounded-full blur-2xl pointer-events-none"></div>
         <div class="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto">
@@ -3445,7 +3927,8 @@
       <!-- MAIN CONTAINER: Constrained to max-w-7xl mx-auto matching Blacklist Event -->
       <div class="w-full max-w-7xl mx-auto flex flex-col gap-space-lg">
       <!-- HERO HEADER -->
-      <div class="relative w-full rounded-xl overflow-hidden bg-surface-container-lowest p-space-md md:p-space-lg shadow-xl mb-space-lg">
+      <div class="relative w-full overflow-hidden hud-card tactical-border-accent tactical-corner-brackets p-space-md md:p-space-lg shadow-2xl mb-space-lg">
+        <div class="tactical-watermark select-none pointer-events-none">ARCHIVE</div>
         <div class="absolute -right-20 -top-20 w-96 h-96 bg-primary-container/10 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute -left-10 bottom-0 w-72 h-72 bg-secondary-container/10 rounded-full blur-2xl pointer-events-none"></div>
         <div class="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto">
@@ -3557,7 +4040,8 @@
   <!-- MAIN CONTAINER: Constrained to max-w-7xl mx-auto matching Blacklist Event -->
   <div class="w-full max-w-7xl mx-auto flex flex-col gap-space-lg">
 <!-- TOP TACTICAL DOSSIER BANNER -->
-<div class="relative w-full rounded-lg overflow-hidden bg-surface-container-low shadow-[0_8px_32px_rgba(0,0,0,0.85)] mt-4">
+<div class="relative w-full overflow-hidden hud-card tactical-border-accent tactical-corner-brackets shadow-2xl mt-4">
+<div class="tactical-watermark select-none pointer-events-none">DOSSIER</div>
 <!-- Need for Speed Most Wanted Official Graffiti Banner Background -->
 <div class="absolute inset-0 pointer-events-none overflow-hidden select-none z-0" aria-hidden="true">
   <img src="assets/img/nfsmw-graffiti-banner.png" alt="" class="w-full h-full object-cover sm:object-contain object-right opacity-25 filter contrast-125 select-none pointer-events-none mix-blend-screen" />
@@ -4828,7 +5312,8 @@ UPTIME: 99.98%
 </div>
 </div>
 <!-- Hero Header Section with Atmospheric Street Background -->
-<div class="w-full relative px-gutter-lg pt-space-lg pb-space-xl overflow-hidden bg-surface-container-lowest">
+<div class="w-full relative px-gutter-lg pt-space-lg pb-space-xl overflow-hidden hud-card tactical-border-accent tactical-corner-brackets">
+<div class="tactical-watermark">LEGENDS</div>
 <!-- Need for Speed Most Wanted Official Graffiti Banner Background -->
 <div class="absolute inset-0 pointer-events-none overflow-hidden select-none z-0" aria-hidden="true">
   <img src="assets/img/nfsmw-graffiti-banner.png" alt="" class="w-full h-full object-cover sm:object-contain object-right opacity-25 filter contrast-125 select-none pointer-events-none mix-blend-screen" />
@@ -4839,12 +5324,10 @@ UPTIME: 99.98%
 <div class="absolute -top-10 right-10 w-96 h-96 bg-tertiary/5 blur-3xl pointer-events-none"></div>
 <div class="max-w-[1440px] mx-auto relative z-10 flex flex-col items-center text-center">
 <!-- Crown Overline Badge -->
-<div class="inline-flex items-center gap-2 px-3 py-1 bg-surface-container-high rounded-full shadow-[0_0_20px_rgba(255,184,0,0.18)] mb-space-sm">
+<div class="tactical-badge-amber mb-space-sm">
 <span class="w-2 h-2 rounded-full bg-secondary-container"></span>
-<span class="material-symbols-outlined text-primary-container text-[16px]" style="font-variation-settings: 'FILL' 1;">crown</span>
-<span class="font-label-hud text-label-hud tracking-widest text-primary uppercase">HALL OF FAME // ROCKPORT LEGENDS</span>
-<span class="text-outline text-[10px]">•</span>
-<span class="font-label-data text-label-data text-tertiary">2005 — 2026 ARCHIVE</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">crown</span>
+<span>HALL OF FAME // ROCKPORT LEGENDS</span>
 </div>
 <!-- Main Title -->
 <h1 class="font-headline-xl text-headline-xl text-on-surface uppercase tracking-tight max-w-4xl">
@@ -4855,30 +5338,30 @@ UPTIME: 99.98%
       </p>
 <!-- Quick Metrics Strip -->
 <div class="grid grid-cols-2 md:grid-cols-4 gap-space-sm w-full max-w-4xl mt-space-lg">
-<div class="bg-surface-container-low p-space-sm flex flex-col items-start justify-center shadow-md">
+<div class="hud-card hover-card-lift p-space-sm flex flex-col items-start justify-center shadow-md">
 <span class="font-label-hud text-label-hud text-outline uppercase tracking-wider">RÉCORDS HOMOLOGADOS</span>
 <div class="flex items-baseline gap-1 mt-0.5">
-<span class="font-headline-md text-headline-md text-primary">348</span>
+<span class="font-headline-md text-headline-md text-primary tabular-nums">348</span>
 <span class="font-label-data text-label-data text-on-surface-variant">WRs</span>
 </div>
 <span class="font-label-data text-[10px] text-tertiary">100% Hash Verificado</span>
 </div>
-<div class="bg-surface-container-low p-space-sm flex flex-col items-start justify-center shadow-md">
+<div class="hud-card hover-card-lift p-space-sm flex flex-col items-start justify-center shadow-md">
 <span class="font-label-hud text-label-hud text-outline uppercase tracking-wider">PILOTO #1 HISTÓRICO</span>
 <div class="flex items-baseline gap-1 mt-0.5">
 <span class="font-headline-md text-headline-md text-primary-container">ARS3N</span>
-<span class="font-label-data text-label-data text-secondary">88 WRs</span>
+<span class="font-label-data text-label-data text-secondary tabular-nums">88 WRs</span>
 </div>
 <span class="font-label-data text-[10px] text-outline">Dominio Absoluto 25.2%</span>
 </div>
-<div class="bg-surface-container-low p-space-sm flex flex-col items-start justify-center shadow-md">
+<div class="hud-card hover-card-lift p-space-sm flex flex-col items-start justify-center shadow-md">
 <span class="font-label-hud text-label-hud text-outline uppercase tracking-wider">PLATAFORMA PREDOMINANTE</span>
 <div class="flex items-baseline gap-1 mt-0.5">
 <span class="font-headline-md text-headline-md text-on-surface">PC / MULTI</span>
 </div>
 <span class="font-label-data text-[10px] text-tertiary">128Hz Sub-frame Lock</span>
 </div>
-<div class="bg-surface-container-low p-space-sm flex flex-col items-start justify-center shadow-md">
+<div class="hud-card hover-card-lift p-space-sm flex flex-col items-start justify-center shadow-md">
 <span class="font-label-hud text-label-hud text-outline uppercase tracking-wider">VEHÍCULO MÁS LAUREADO</span>
 <div class="flex items-baseline gap-1 mt-0.5">
 <span class="font-headline-md text-headline-md text-on-surface">CARRERA GT</span>
@@ -4892,11 +5375,12 @@ UPTIME: 99.98%
 <div class="w-full px-gutter-lg -mt-4 pb-space-lg relative z-20">
 <div class="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-space-md items-end">
 <!-- Rank #2: LEA4SPEED0 (Silver Wing) -->
-<div class="lg:col-span-4 bg-surface-container p-space-md flex flex-col justify-between shadow-xl relative order-2 lg:order-1 transition-all duration-300 hover:bg-surface-container-high group">
+<div class="lg:col-span-4 hud-card hover-card-lift tactical-chamfer-top-right p-space-md flex flex-col justify-between shadow-xl relative order-2 lg:order-1 transition-all duration-300 group">
+<div class="tactical-watermark">#2</div>
 <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-on-surface to-transparent opacity-40 group-hover:opacity-100 transition-opacity"></div>
-<div class="flex items-start justify-between">
+<div class="flex items-start justify-between relative z-10">
 <div class="flex items-center gap-space-sm">
-<div class="w-12 h-12 rounded-full bg-surface-container-lowest flex items-center justify-center text-on-surface font-headline-md text-headline-md">
+<div class="w-12 h-12 rounded-sm bg-surface-container-lowest flex items-center justify-center text-on-surface font-headline-md text-headline-md">
               #2
             </div>
 <div class="w-14 h-14 bg-surface-container-low flex items-center justify-center text-tertiary">
@@ -4907,19 +5391,19 @@ UPTIME: 99.98%
 <span class="font-headline-md text-headline-md text-on-surface uppercase tracking-tight">LEA4SPEED0</span>
 <span class="material-symbols-outlined text-[16px] text-tertiary" title="Verificado">verified</span>
 </div>
-<span class="font-label-hud text-label-hud tracking-widest text-on-surface uppercase">ELITE DRIVER</span>
+<span class="tactical-badge text-on-surface">ELITE DRIVER</span>
 </div>
 </div>
 <span class="font-headline-xl text-headline-xl text-surface-bright select-none font-black">#2</span>
 </div>
-<div class="mt-space-md pt-space-sm bg-surface-container-low/70 p-space-sm flex items-center justify-between">
+<div class="mt-space-md pt-space-sm hud-card hud-row-item p-space-sm flex items-center justify-between relative z-10">
 <div class="flex flex-col">
 <span class="font-label-hud text-label-hud text-outline uppercase tracking-wider">WORLD RECORDS</span>
 <span class="font-label-data text-[11px] text-tertiary">Sprint &amp; Circuit Master</span>
 </div>
-<span class="font-label-timer-lg text-label-timer-lg text-tertiary font-bold">51</span>
+<span class="font-label-timer-lg text-label-timer-lg text-tertiary font-bold tabular-nums">51</span>
 </div>
-<div class="mt-space-sm pt-space-xs grid grid-cols-2 gap-space-xs font-label-data text-label-data text-outline">
+<div class="mt-space-sm pt-space-xs grid grid-cols-2 gap-space-xs font-label-data text-label-data text-outline relative z-10">
 <div class="flex items-center gap-1.5">
 <span class="material-symbols-outlined text-[14px]">sports_motorsports</span>
 <span class="truncate">Porsche Carrera GT</span>
@@ -4931,11 +5415,12 @@ UPTIME: 99.98%
 </div>
 </div>
 <!-- Rank #1: ARS3N (Absolute Legend - Gold Apex) -->
-<div class="lg:col-span-4 bg-surface-container-high p-space-lg flex flex-col justify-between shadow-[0_0_36px_rgba(255,184,0,0.22)] relative order-1 lg:order-2 transition-all duration-300 transform lg:-translate-y-4 group">
+<div class="lg:col-span-4 hud-card hover-card-lift tactical-chamfer-top-right p-space-lg flex flex-col justify-between shadow-[0_0_36px_rgba(255,184,0,0.22)] relative order-1 lg:order-2 transition-all duration-300 transform lg:-translate-y-4 group">
+<div class="tactical-watermark">#1</div>
 <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-primary-container via-primary to-secondary-container"></div>
-<div class="flex items-start justify-between">
+<div class="flex items-start justify-between relative z-10">
 <div class="flex items-center gap-space-sm">
-<div class="w-14 h-14 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-headline-md text-headline-md shadow-lg">
+<div class="w-14 h-14 rounded-sm bg-primary-container text-on-primary-container flex items-center justify-center font-headline-md text-headline-md shadow-lg">
               #1
             </div>
 <div class="w-16 h-16 bg-surface-container-lowest flex items-center justify-center text-primary-container shadow-inner">
@@ -6072,7 +6557,8 @@ UPTIME: 99.98%
 <div class="absolute top-48 right-12 w-[420px] h-[300px] bg-tertiary/5 blur-[110px] pointer-events-none rounded-full"></div>
 <div class="w-full px-gutter-lg max-w-7xl mx-auto flex flex-col gap-space-lg">
 <!-- HERO BANNER // PRECISION DOWNLOAD HEADER -->
-<section class="relative w-full mt-4 bg-surface-container-low rounded-lg p-space-lg md:p-space-xl shadow-[0_12px_40px_rgba(0,0,0,0.7)] overflow-hidden">
+<section class="relative w-full mt-4 hud-card tactical-border-accent tactical-corner-brackets p-space-lg md:p-space-xl shadow-2xl overflow-hidden">
+<div class="tactical-watermark select-none pointer-events-none">DOWNLOAD</div>
 <!-- Need for Speed Most Wanted Official Graffiti Banner Background -->
 <div class="absolute inset-0 pointer-events-none overflow-hidden select-none z-0" aria-hidden="true">
   <img src="assets/img/nfsmw-graffiti-banner.png" alt="Need for Speed Most Wanted" class="w-full h-full object-cover sm:object-contain object-right opacity-25 filter contrast-125 select-none pointer-events-none mix-blend-screen" />
@@ -7902,7 +8388,8 @@ UPTIME: 99.98%
 <div class="flex flex-col w-full">
 <div class="w-full max-w-[1440px] mx-auto px-gutter-lg pb-space-xl">
 <!-- Hero / Title Banner Section -->
-<section class="relative w-full rounded-lg overflow-hidden bg-surface-container-low shadow-xl mt-space-md mb-space-lg">
+<section class="relative w-full overflow-hidden hud-card tactical-border-accent tactical-corner-brackets shadow-2xl mt-space-md mb-space-lg">
+<div class="tactical-watermark select-none pointer-events-none">SPORTING</div>
 <!-- Need for Speed Most Wanted Official Graffiti Banner Background -->
 <div class="absolute inset-0 pointer-events-none overflow-hidden select-none z-0" aria-hidden="true">
   <img src="assets/img/nfsmw-graffiti-banner.png" alt="Need for Speed Most Wanted" class="w-full h-full object-cover sm:object-contain object-right opacity-25 filter contrast-125 select-none pointer-events-none mix-blend-screen" />
@@ -8408,7 +8895,8 @@ UPTIME: 99.98%
 <div class="absolute top-20 right-10 w-[420px] h-[280px] bg-primary-container blur-[150px] rounded-full"></div>
 </div>
 <!-- Hero Homologation Header Banner -->
-<div class="relative max-w-6xl mx-auto mt-4 mb-space-lg rounded-xl overflow-hidden bg-surface-container-low shadow-2xl">
+<div class="relative max-w-6xl mx-auto mt-4 mb-space-lg overflow-hidden hud-card tactical-border-accent tactical-corner-brackets shadow-2xl">
+<div class="tactical-watermark select-none pointer-events-none">SUBMIT</div>
 <!-- Need for Speed Most Wanted Official Graffiti Banner Background -->
 <div class="absolute inset-0 pointer-events-none overflow-hidden select-none z-0" aria-hidden="true">
   <img src="assets/img/nfsmw-graffiti-banner.png" alt="Need for Speed Most Wanted" class="w-full h-full object-cover sm:object-contain object-right opacity-25 filter contrast-125 select-none pointer-events-none mix-blend-screen" />
