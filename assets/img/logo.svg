@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+  <defs>
+    <linearGradient id="nfsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff8833"/>
+      <stop offset="100%" stop-color="#cc5500"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="glow"/>
+      <feComposite in="SourceGraphic" in2="glow" operator="over"/>
+    </filter>
+  </defs>
+  <rect width="200" height="60" rx="8" fill="#16161a" stroke="#ff8833" stroke-width="1.5"/>
+  <path d="M15 45 L35 15 L45 15 L25 45 Z" fill="url(#nfsGrad)" filter="url(#glow)"/>
+  <path d="M30 45 L50 15 L60 15 L40 45 Z" fill="#ffffff" opacity="0.8"/>
+  <text x="70" y="28" font-family="'Segoe UI', Arial, sans-serif" font-weight="900" font-size="14" fill="#ff8833" letter-spacing="1">NFS:MW</text>
+  <text x="70" y="44" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="11" fill="#cbd5e1" letter-spacing="2">RANKS</text>
+</svg>
