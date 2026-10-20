@@ -1,0 +1,82 @@
+Created At: 2026-10-13T21:02:00-04:00
+Completed At: 2026-10-13T21:02:03-04:00
+
+The command exited with code 0.
+Output:
+<truncated 11 lines>
+  G2: DannyLove (--:--.---, pos 1, B:0, R:0) | Lea (--:--.---, pos 2, B:0, R:0) | Por disputar (--:--.---, pos 3, B:0, R:0)
+  G3: NFSMW (--:--.---, pos 1, B:0, R:0) | SRTxSigy (--:--.---, pos 2, B:0, R:0) | Flow. (--:--.---, pos 3, B:0, R:0)
+Ch 2 [Bayshore & Boardwalk]:
+  G0: Nebula (00:18.000, pos 1, B:100, R:350000) | N6 xBourne (00:17.000, pos 2, B:50, R:200000) | ZimanX (00:00.000, pos 3, B:0, R:100000)
+  G1: SRTxAvenger™ (00:00.000, pos 1, B:0, R:340000) | DarkShido (00:00.000, pos 2, B:0, R:0) | xLeMondx (00:00.000, pos 3, B:0, R:0)
+  G2: DannyLove (--:--.---, pos 1, B:0, R:0) | Lea (--:--.---, pos 2, B:0, R:0) | Por disputar (--:--.---, pos 3, B:0, R:0)
+  G3: NFSMW (--:--.---, pos 1, B:0, R:0) | Por disputar (--:--.---, pos 2, B:0, R:0) | SRTxSigy (--:--.---, pos 3, B:0, R:0)
+Ch 3 [Campus Way]:
+  G0: Nebula (01:43.670, pos 1, B:100, R:400000) | ZimanX (01:45.270, pos 2, B:50, R:250000) | N6 xBourne (01:47.380, pos 3, B:20, R:120000)
+  G1: SRTxAvenger™ (01:37.690, pos 1, B:100, R:390000) | DarkShido (00:00.000, pos 2, B:0, R:0) | xLeMondx (00:00.000, pos 3, B:0, R:0)
+  G2: DannyLove (--:--.---, pos 1, B:0, R:0) | Lea (--:--.---, pos 2, B:0, R:0) | Por disputar (--:--.---, pos 3, B:0, R:0)
+  G3: NFSMW (--:--.---, pos 1, B:0, R:0) | Flow. (--:--.---, pos 2, B:0, R:0) | SRTxSigy (--:--.---, pos 3, B:0, R:0)
+Ch 4 [Seaside & Power Station]:
+  G0: Nebula (01:25.190, pos 1, B:100, R:500000) | N6 xBourne (01:26.360, pos 2, B:50, R:300000) | ZimanX (01:27.450, pos 3, B:20, R:150000)
+  G1: SRTxAvenger™ (01:23.790, pos 1, B:100, R:480000) | DarkShido (00:00.000, pos 2, B:0, R:0) | xLeMondx (00:00.000, pos 3, B:0, R:0)
+  G2: DannyLove (--:--.---, pos 1, B:0, R:0) | Lea (--:--.---, pos 2, B:0, R:0) | Por disputar (--:--.---, pos 3, B:0, R:0)
+  G3: Flow. (--:--.---, pos 1, B:0, R:0) | Flow. (--:--.---, pos 2, B:0, R:0) | SRTxSigy (--:--.---, pos 3, B:0, R:0)
+Ch 5 [Ironwood States]:
+  G0: Nebula (00:59.830, pos 1, B:100, R:450000) | ZimanX (01:00.630, pos 2, B:50, R:270000) | N6 xBourne (01:02.200, pos 3, B:20, R:130000)
+  G1: SRTxAvenger™ (00:59.013, pos 1, B:100, R:440000) | DarkShido (00:00.000, pos 2, B:0, R:0) | xLeMondx (00:00.000, pos 3, B:0, R:0)
+  G2: DannyLove (--:--.---, pos 1, B:0, R:0) | Lea (--:--.---, pos 2, B:0, R:0) | Por disputar (--:--.---, pos 3, B:0, R:0)
+  G3: NFSMW (--:--.---, pos 1, B:0, R:0) | Flow. (--:--.---, pos 2, B:0, R:0) | SRTxSigy (--:--.---, pos 3, B:0, R:0)
+Ch 6 [Heritage & Rosewood]:
+  G0: N6 xBourne (00:25.960, pos 1, B:100, R:380000) | ZimanX (00:00.000, pos 2, B:0, R:220000) | Nebula (00:00.000, pos 3, B:0, R:110000)
+  G1: SRTxAvenger™ (00:00.000, pos 1, B:0, R:360000) | DarkShido (00:00.000, pos 2, B:0, R:0) | xLeMondx (00:00.000, pos 3, B:0, R:0)
+  G2: DannyLove (--:--.---, pos 1, B:0, R:0) | Lea (--:--.---, pos 2, B:8, R:0) | Por disputar (--:--.---, pos 3, B:0, R:0)
+  G3: NFSMW (--:--.---, pos 1, B:0, R:0) | Por disputar (--:--.---, pos 2, B:0, R:0) | SRTxSigy (--:--.---, pos 3, B:0, R:0)
+Ch 7 [Petersburgs]:
+  G0: N6 xBourne (00:51.400, pos 1, B:100, R:480000) | Nebula (00:52.130, pos 2, B:50, R:290000) | ZimanX (00:58.180, pos 3, B:20, R:140000)
+  G1: SRTxAvenger™ (00:51.340, pos 1, B:100, R:428000) | DarkShido (00:00.000, pos 2, B:0, R:0) | xLeMondx (00:00.000, pos 3, B:0, R:0)
+  G2: DannyLove (--:--.---, pos 1, B:0, R:0) | Lea (--:--.---, pos 2, B:0, R:0) | Por disputar (--:--.---, pos 3, B:0, R:0)
+  G3: NFSMW (--:--.---, pos 1, B:0, R:0) | Flow. (--:--.---, pos 2, B:0, R:0) | SRTxSigy (--:--.---, pos 3, B:0, R:0)
+==================================================
+WEEK 2: Semana 2: Rotación de Tríos & Duelos de Velocidad (10 - 16 Oct)
+==================================================
+Ch 0 [NFS World Loop]:
+  G0: SRTxAvenger™ (04:58.750, pos 1, B:100, R:500000) | ZimanX (05:04.500, pos 2, B:50, R:300000) | SRTxSigy (00:00.000, pos 3, B:0, R:0)
+  G1: Lea (04:56.960, pos 1, B:100, R:500000) | xLeMondx (05:00.600, pos 2, B:50, R:300000) | NFSMW (--:--.---, pos 3, B:0, R:0)
+  G2: Shido (05:02.300, pos 1, B:100, R:500000) | N6 xBourne (05:22.380, pos 2, B:50, R:300000) | Flow. (--:--.---, pos 3, B:0, R:0)
+  G3: DannyLove (05:02.650, pos 1, B:100, R:500000) | Nebula (05:09.830, pos 2, B:50, R:300000) | RazorV8 (--:--.---, pos 3, B:0, R:0)
+Ch 1 [Highlands]:
+  G0: SRTxAvenger™ (00:57.750, pos 1, B:100, R:460000) | ZimanX (00:58.880, pos 2, B:50, R:280000) | SRTxSigy (00:00.000, pos 3, B:0, R:0)
+  G1: xLeMondx (--:--.---, pos 1, B:0, R:0) | Lea (--:--.---, pos 2, B:0, R:0) | NFSMW (--:--.---, pos 3, B:0, R:0)
+  G2: Shido (00:57.650, pos 1, B:100, R:460000) | N6 xBourne (00:57.750, pos 2, B:50, R:280000) | Flow. (--:--.---, pos 3, B:0, R:0)
+  G3: DannyLove (00:57.960, pos 1, B:100, R:460000) | Nebula (00:59.000, pos 2, B:50, R:280000) | RazorV8 (--:--.---, pos 3, B:0, R:0)
+Ch 2 [Harbor & Ocean]:
+  G0: ZimanX (00:20.380, pos 1, B:100, R:400000) | SRTxAvenger™ (00:22.040, pos 2, B:50, R:240000) | SRTxSigy (00:00.000, pos 3, B:0, R:0)
+  G1: Lea (--:--.---, pos 1, B:0, R:0) | xLeMondx (--:--.---, pos 2, B:0, R:0) | NFSMW (--:--.---, pos 3, B:0, R:0)
+  G2: N6 xBourne (00:20.140, pos 1, B:100, R:400000) | Shido (00:00.000, pos 2, B:0, R:240000) | Flow. (--:--.---, pos 3, B:0, R:0)
+  G3: Nebula (00:24.920, pos 1, B:100, R:400000) | DannyLove (--:--.---, pos 2, B:0, R:240000) | RazorV8 (--:--.---, pos 3, B:0, R:0)
+Ch 3 [Diamond & Unión]:
+  G0: ZimanX (01:43.720, pos 1, B:100, R:520000) | SRTxAvenger™ (01:44.170, pos 2, B:50, R:310000) | SRTxSigy (--:--.---, pos 3, B:0, R:0)
+  G1: Lea (01:44.000, pos 1, B:100, R:520000) | xLeMondx (01:45.000, pos 2, B:50, R:310000) | NFSMW (--:--.---, pos 3, B:0, R:0)
+  G2: Shido (01:43.470, pos 1, B:100, R:520000) | N6 xBourne (01:45.640, pos 2, B:50, R:310000) | Flow. (--:--.---, pos 3, B:0, R:0)
+  G3: DannyLove (01:43.670, pos 1, B:100, R:520000) | Nebula (01:46.960, pos 2, B:50, R:310000) | RazorV8 (--:--.---, pos 3, B:0, R:0)
+Ch 4 [Heritage Height]:
+  G0: ZimanX (01:12.930, pos 1, B:100, R:480000) | SRTxAvenger™ (01:14.850, pos 2, B:50, R:290000) | SRTxSigy (--:--.---, pos 3, B:0, R:0)
+  G1: Lea (--:--.---, pos 1, B:0, R:0) | xLeMondx (--:--.---, pos 2, B:0, R:0) | NFSMW (--:--.---, pos 3, B:0, R:0)
+  G2: Shido (01:15.620, pos 1, B:100, R:480000) | N6 xBourne (01:16.350, pos 2, B:50, R:290000) | Flow. (--:--.---, pos 3, B:0, R:0)
+  G3: Nebula (01:14.500, pos 1, B:100, R:480000) | DannyLove (01:18.230, pos 2, B:50, R:290000) | RazorV8 (--:--.---, pos 3, B:0, R:0)
+Ch 5 [Hwy 99 & States]:
+  G0: SRTxAvenger™ (02:03.870, pos 1, B:100, R:510000) | ZimanX (02:06.520, pos 2, B:50, R:310000) | SRTxSigy (--:--.---, pos 3, B:0, R:0)
+  G1: Lea (02:06.000, pos 1, B:100, R:510000) | xLeMondx (02:07.000, pos 2, B:50, R:310000) | NFSMW (--:--.---, pos 3, B:0, R:0)
+  G2: N6 xBourne (02:13.290, pos 1, B:100, R:510000) | Shido (02:14.529, pos 2, B:50, R:310000) | Por disputar (--:--.---, pos 3, B:0, R:0)
+  G3: DannyLove (02:06.390, pos 1, B:100, R:510000) | Nebula (02:11.740, pos 2, B:50, R:310000) | RazorV8 (--:--.---, pos 3, B:0, R:0)
+Ch 6 [Seaside & Camden]:
+  G0: SRTxAvenger™ (00:16.010, pos 1, B:100, R:420000) | ZimanX (00:00.000, pos 2, B:0, R:250000) | SRTxSigy (00:00.000, pos 3, B:0, R:0)
+  G1: xLeMondx (--:--.---, pos 1, B:0, R:0) | Lea (--:--.---, pos 2, B:0, R:0) | NFSMW (--:--.---, pos 3, B:0, R:0)
+  G2: N6 xBourne (00:16.460, pos 1, B:100, R:420000) | Shido (00:00.000, pos 2, B:0, R:250000) | Flow. (--:--.---, pos 3, B:0, R:0)
+  G3: Nebula (00:17.540, pos 1, B:100, R:420000) | DannyLove (--:--.---, pos 2, B:0, R:250000) | RazorV8 (--:--.---, pos 3, B:0, R:0)
+Ch 7 [Omega]:
+  G0: SRTxAvenger™ (01:32.270, pos 1, B:100, R:550000) | ZimanX (01:34.520, pos 2, B:50, R:330000) | SRTxSigy (00:00.000, pos 3, B:0, R:0)
+  G1: Lea (--:--.---, pos 1, B:0, R:0) | xLeMondx (--:--.---, pos 2, B:0, R:0) | NFSMW (--:--.---, pos 3, B:0, R:0)
+  G2: Nebula (01:33.140, pos 1, B:100, R:550000) | xLeMondx (01:37.770, pos 2, B:50, R:330000) | Flow. (--:--.---, pos 3, B:0, R:0)
+  G3: DannyLove (01:35.040, pos 1, B:100, R:550000) | Nebula (01:36.040, pos 2, B:50, R:330000) | RazorV8 (--:--.---, pos 3, B:0, R:0)
+
