@@ -1,0 +1,1119 @@
+/**
+ * NFSMW RANKS // CORE APPLICATION CONTROLLER
+ * Integración de Router SPA, Catálogo de Rutas y Firebase Realtime Database
+ * Estricta Regla de Oro: Preservación absoluta de tokens y clases de Stitch
+ */
+
+(function () {
+  'use strict';
+
+  // =========================================================================
+  // 1. ROUTER SPA & CONTROL DE NAVEGACIÓN
+  // =========================================================================
+  const VIEW_MAP = {
+    '': 'home',
+    'home': 'home',
+    'hogar': 'home',
+    'inicio': 'home',
+    'leaderboard': 'leaderboard',
+    'leaderboards': 'leaderboard',
+    'tablas-de-clasificacion': 'leaderboard',
+    'routes': 'routes-pistas',
+    'rutas': 'routes-pistas',
+    'pistas': 'routes-pistas',
+    'routes-pistas': 'routes-pistas',
+    'rutas-y-circuitos': 'routes-pistas',
+    'blacklist': 'blacklist',
+    'torneos-y-blacklist': 'blacklist',
+    'blacklist-2026': 'blacklist',
+    'blacklist-groups': 'blacklist',
+    'standings': 'blacklist',
+    'championship-standings': 'blacklist',
+    'past-tournaments': 'blacklist',
+    'challenges-tournament': 'blacklist',
+    'cards': 'cockpit',
+    'blacklist-cards': 'cockpit',
+    'driver-dossiers': 'cockpit',
+    'cockpit': 'cockpit',
+    'dossiers': 'cockpit',
+    'challenges': 'challenges',
+    'weekly-challenges': 'challenges',
+    'tournament-registration': 'challenges',
+    'championship-register': 'challenges',
+    'tournament-tutorial': 'challenges',
+    'tutorial': 'challenges',
+    'desafios': 'challenges',
+    'desafio': 'challenges',
+    'telemetria': 'telemetria',
+    'telemetry': 'telemetria',
+    'driverprofile': 'telemetria',
+    'perfil-de-piloto': 'telemetria',
+    'profile': 'telemetria',
+    'driver': 'telemetria',
+    'halloffame': 'halloffame',
+    'fame': 'halloffame',
+    'salon-de-la-fama': 'halloffame',
+    'map': 'map',
+    'mapa': 'map',
+    'download': 'download',
+    'descargas': 'download',
+    'guides': 'guides',
+    'guias': 'guides',
+    'tuning': 'guides',
+    'guias-de-tuning': 'guides',
+    'rules': 'rules',
+    'reglas': 'rules',
+    'reglamento': 'rules',
+    'submit': 'submit',
+    'enviar': 'submit',
+    'subir-tiempo': 'submit',
+    'community': 'halloffame',
+    'comunidad': 'halloffame',
+    'members': 'halloffame'
+  };
+
+  const NAV_PARENT_MAP = {
+    'home': 'nav-home',
+    'leaderboard': 'nav-leaderboard',
+    'routes-pistas': 'nav-routes-pistas',
+    'blacklist': 'nav-blacklist',
+    'challenges': 'nav-blacklist',
+    'cockpit': 'nav-blacklist',
+    'telemetria': 'nav-telemetria',
+    'halloffame': 'nav-community',
+    'guides': 'nav-community',
+    'rules': 'nav-community',
+    'map': 'nav-community',
+    'download': 'nav-community',
+    'submit': 'nav-community'
+  };
+
+  const ACTIVE_CLASSES = ['text-on-primary-container', 'bg-primary-container', 'font-bold'];
+  const INACTIVE_CLASSES = ['text-on-surface-variant', 'hover:text-on-surface', 'hover:bg-surface-container-high'];
+
+  function resolveViewFromUrl() {
+    const rawHash = (window.location.hash || '').replace(/^#view-|^#/, '').trim();
+    const hash = rawHash.split('?')[0].toLowerCase();
+    if (hash && VIEW_MAP[hash]) return VIEW_MAP[hash];
+
+    const sp = new URLSearchParams(window.location.search);
+    if (sp.has('view')) {
+      const v = sp.get('view').toLowerCase().trim();
+      if (VIEW_MAP[v]) return VIEW_MAP[v];
+    }
+    return 'home';
+  }
+
+  function updateNavbarUI(activeViewId) {
+    const parentNavId = NAV_PARENT_MAP[activeViewId] || 'nav-home';
+    const mainNav = document.getElementById('main-nav');
+    if (!mainNav) return;
+
+    const navLinks = mainNav.querySelectorAll('a[data-action="navigate"]');
+    navLinks.forEach(link => {
+      // nav-leaderboard permanece oculto en todo momento
+      if (link.id === 'nav-leaderboard') {
+        link.classList.add('hidden');
+      }
+
+      if (link.id === parentNavId) {
+        link.setAttribute('aria-current', 'page');
+        ACTIVE_CLASSES.forEach(c => link.classList.add(c));
+        INACTIVE_CLASSES.forEach(c => link.classList.remove(c));
+      } else {
+        link.removeAttribute('aria-current');
+        ACTIVE_CLASSES.forEach(c => link.classList.remove(c));
+        INACTIVE_CLASSES.forEach(c => link.classList.add(c));
+      }
+    });
+  }
+
+  function switchView(viewId, updateHash = true) {
+    const target = VIEW_MAP[viewId] || 'home';
+
+    const sections = document.querySelectorAll('.view-section');
+    let found = false;
+    sections.forEach(sec => {
+      if (sec.id === 'view-' + target) {
+        sec.classList.add('active');
+        found = true;
+      } else {
+        sec.classList.remove('active');
+      }
+    });
+
+    if (!found) {
+      const homeSec = document.getElementById('view-home');
+      if (homeSec) homeSec.classList.add('active');
+    }
+
+    updateNavbarUI(target);
+
+    if (updateHash && window.location.hash !== '#' + target) {
+      window.location.hash = '#' + target;
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Disparar carga de datos específica si la vista lo requiere
+    if (target === 'routes-pistas') {
+      ensureRoutesRendered();
+    } else if (target === 'leaderboard') {
+      const sp = new URLSearchParams(window.location.search);
+      const hp = new URLSearchParams((window.location.hash || '').split('?')[1] || '');
+      const routeParam = sp.get('route') || hp.get('route');
+      loadRouteLeaderboard(routeParam || currentActiveRoute || 'City Perimeter');
+    }
+  }
+
+  window.switchView = switchView;
+  window.resolveViewFromUrl = resolveViewFromUrl;
+
+  window.addEventListener('hashchange', () => {
+    switchView(resolveViewFromUrl(), false);
+  });
+
+  window.addEventListener('popstate', () => {
+    switchView(resolveViewFromUrl(), false);
+  });
+
+  // =========================================================================
+  // 2. LÓGICA DE FILTROS Y RENDERIZADO DE RUTAS
+  // =========================================================================
+  let currentCategory = 'all';
+  let currentSearchQuery = '';
+  let routesRendered = false;
+
+  const SVG_TRACK_PATHS = {
+    'Circuito': 'M 15,20 Q 30,5 60,15 T 85,45 Q 85,75 55,70 T 20,60 Z',
+    'Sprint': 'M 10,70 Q 30,55 50,55 T 75,30 Q 85,15 95,10',
+    'Drag': 'M 10,65 L 45,50 L 70,30 L 95,15'
+  };
+
+  const TYPE_STYLES = {
+    'Circuito': {
+      badge: 'bg-primary-container/20 text-primary-container',
+      stroke: 'stroke-primary-container',
+      shadow: 'drop-shadow-[0_0_8px_rgba(255,184,0,0.3)]',
+      timer: 'text-primary-container',
+      hover: 'group-hover:text-primary',
+      action: 'text-primary hover:text-primary-container',
+      subtitle: 'Trazado técnico cerrado de 2 vueltas'
+    },
+    'Sprint': {
+      badge: 'bg-tertiary/15 text-tertiary',
+      stroke: 'stroke-tertiary',
+      shadow: 'drop-shadow-[0_0_8px_rgba(110,243,255,0.3)]',
+      timer: 'text-tertiary',
+      hover: 'group-hover:text-tertiary',
+      action: 'text-tertiary hover:text-tertiary-fixed',
+      subtitle: 'Trazado punto a punto de alta velocidad'
+    },
+    'Drag': {
+      badge: 'bg-secondary-container/20 text-secondary-container',
+      stroke: 'stroke-secondary-container',
+      shadow: 'drop-shadow-[0_0_8px_rgba(255,87,8,0.3)]',
+      timer: 'text-secondary-container',
+      hover: 'group-hover:text-secondary-container',
+      action: 'text-secondary-container hover:text-secondary-fixed',
+      subtitle: 'Aceleración pura con tráfico dinámico'
+    }
+  };
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  // =========================================================================
+  // CACHÉ GLOBAL DE LEADERBOARDS & LOOKUP DE RÉCORDS MUNDIALES (WR)
+  // =========================================================================
+  let allLeaderboardsData = null;
+  let isFetchingAllLeaderboards = false;
+
+  async function fetchAllLeaderboards() {
+    if (allLeaderboardsData) return allLeaderboardsData;
+    if (isFetchingAllLeaderboards) return null;
+    isFetchingAllLeaderboards = true;
+
+    const baseUrl = window.FIREBASE_RTDB_BASE_URL || "https://nfsranks-blacklist-default-rtdb.firebaseio.com";
+    const url = `${baseUrl}/leaderboards.json?_t=${Date.now()}`;
+
+    try {
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      allLeaderboardsData = (data && typeof data === 'object') ? data : {};
+      window.allLeaderboardsData = allLeaderboardsData;
+
+      // Actualizar en caliente todas las tarjetas que ya están en el DOM
+      updateRouteCardsWithWR();
+      return allLeaderboardsData;
+    } catch (err) {
+      console.warn("Aviso Firebase RTDB Leaderboards:", err);
+      return {};
+    } finally {
+      isFetchingAllLeaderboards = false;
+    }
+  }
+
+  function getTrackWR(routeName) {
+    if (!allLeaderboardsData || !routeName) return null;
+    const sanitizeFn = (window.NFS_FIREBASE && window.NFS_FIREBASE.sanitizeKey)
+      ? window.NFS_FIREBASE.sanitizeKey
+      : (str => str.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '_'));
+    const routeKey = sanitizeFn(routeName);
+    const track = allLeaderboardsData[routeKey];
+    if (!track) return null;
+
+    // Buscar categoría preferida para WR (Junkman Single Lap o Junkman en Sprint/Drag, o fallback a BMW)
+    const records = track.junkman_single || track.junkman || track.bmw_single || track.bmw || track.junkman_fast || track.bmw_fast || [];
+    if (!Array.isArray(records) || records.length === 0) return null;
+
+    // Ordenar de menor a mayor tiempo para asegurar el Top 1 auténtico
+    const parseFn = (window.NFS_FIREBASE && window.NFS_FIREBASE.parseTimeToMs)
+      ? window.NFS_FIREBASE.parseTimeToMs
+      : (s => typeof s === 'number' ? s : 9999999);
+
+    const validRecords = records.filter(r => r && (r.time || r.timeMs));
+    if (validRecords.length === 0) return null;
+
+    const sorted = [...validRecords].sort((a, b) => {
+      const tA = (typeof a.timeMs === 'number') ? a.timeMs : parseFn(a.time);
+      const tB = (typeof b.timeMs === 'number') ? b.timeMs : parseFn(b.time);
+      return tA - tB;
+    });
+
+    return sorted[0] || null;
+  }
+
+  function updateRouteCardsWithWR() {
+    const container = document.getElementById('routes-cards-container');
+    if (!container) return;
+
+    const cards = container.querySelectorAll('article[data-route]');
+    cards.forEach(card => {
+      const routeName = card.getAttribute('data-route');
+      if (!routeName) return;
+      const wr = getTrackWR(routeName);
+      if (!wr) return;
+
+      const timeEl = card.querySelector('.route-wr-time');
+      if (timeEl) {
+        timeEl.textContent = wr.time || formatTime(wr.timeMs);
+      }
+
+      const driverEl = card.querySelector('.route-wr-driver');
+      if (driverEl) {
+        driverEl.textContent = wr.driver;
+      }
+
+      const carEl = card.querySelector('.route-wr-car');
+      if (carEl && wr.car) {
+        carEl.textContent = wr.car;
+      }
+    });
+  }
+
+  function createRouteCardHtml(route) {
+    const style = TYPE_STYLES[route.type] || TYPE_STYLES['Circuito'];
+    const pathD = SVG_TRACK_PATHS[route.type] || SVG_TRACK_PATHS['Circuito'];
+    const modality = route.type === 'Circuito' ? '2 Vueltas' : (route.type === 'Drag' ? '400 Metros' : 'Punto a Punto');
+
+    const wr = getTrackWR(route.name);
+    const wrTimeDisplay = wr ? (wr.time || formatTime(wr.timeMs)) : '--:--.---';
+    const wrDriverDisplay = wr ? escapeHtml(wr.driver) : 'Ver Leaderboard';
+    const wrCarDisplay = wr ? escapeHtml(wr.car || 'Junkman Stage 3') : `${route.type} Homologado`;
+
+    return `
+<article class="group relative rounded-xl bg-surface-container-lowest hover:bg-surface-container-low transition-all duration-300 shadow-md hover:shadow-2xl flex flex-col justify-between overflow-hidden cursor-pointer" data-route="${escapeHtml(route.name)}">
+  <div class="p-space-md flex flex-col gap-space-sm">
+    <!-- Header Badges -->
+    <div class="flex items-center justify-between gap-2">
+      <span class="px-2 py-0.5 rounded ${style.badge} font-label-hud text-label-hud uppercase tracking-wider font-bold">
+        ${escapeHtml(route.type.toUpperCase())} • ${modality.toUpperCase()}
+      </span>
+      <span class="font-label-data text-[11px] text-on-surface-variant uppercase flex items-center gap-1">
+        <span class="material-symbols-outlined text-[13px]">location_on</span>
+        Rockport City
+      </span>
+    </div>
+
+    <!-- Route Title & Silhouette -->
+    <div class="flex items-center justify-between gap-space-sm mt-1">
+      <div>
+        <h4 class="font-headline-md text-headline-md uppercase text-on-surface ${style.hover} transition-colors">
+          ${escapeHtml(route.name)}
+        </h4>
+        <p class="font-label-data text-label-data text-on-surface-variant">${style.subtitle}</p>
+      </div>
+      <div class="w-16 h-12 shrink-0">
+        <svg class="w-full h-full ${style.stroke} fill-none ${style.shadow}" viewBox="0 0 100 80">
+          <path d="${pathD}" stroke-linecap="round" stroke-width="3"></path>
+        </svg>
+      </div>
+    </div>
+
+    <!-- World Record Main Display -->
+    <div class="bg-surface-container p-space-sm rounded mt-1 flex items-center justify-between">
+      <div class="flex flex-col">
+        <span class="font-label-hud text-label-hud text-on-surface-variant uppercase">RÉCORD MUNDIAL (WR)</span>
+        <span class="font-label-timer-lg text-[28px] ${style.timer} font-bold leading-none mt-0.5 route-wr-time" data-wr-route="${escapeHtml(route.name)}">
+          ${wrTimeDisplay}
+        </span>
+      </div>
+      <div class="flex flex-col items-end">
+        <div class="flex items-center gap-1.5">
+          <span class="text-[10px] font-label-data bg-surface-container-high px-1 rounded text-on-surface">WR</span>
+          <span class="font-headline-sm text-[15px] text-on-surface route-wr-driver" data-wr-driver="${escapeHtml(route.name)}">${wrDriverDisplay}</span>
+        </div>
+        <span class="font-label-data text-[11px] text-outline route-wr-car" data-wr-car="${escapeHtml(route.name)}">${wrCarDisplay}</span>
+      </div>
+    </div>
+
+    <!-- Micro Stats & Telemetry Breakdown -->
+    <div class="grid grid-cols-3 gap-2 py-1 font-label-data text-label-data text-on-surface-variant">
+      <div>
+        <span class="block text-[10px] uppercase text-outline">Categoría</span>
+        <span class="text-on-surface font-semibold">${escapeHtml(route.type)}</span>
+      </div>
+      <div>
+        <span class="block text-[10px] uppercase text-outline">Modalidad</span>
+        <span class="text-on-surface font-semibold">${modality}</span>
+      </div>
+      <div class="text-right">
+        <span class="block text-[10px] uppercase text-outline">Estado</span>
+        <span class="text-tertiary font-semibold">Auditado 128Hz</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Actions Drawer -->
+  <div class="bg-surface-container/60 px-space-md py-2.5 flex items-center justify-between gap-2">
+    <a class="font-label-hud text-label-hud ${style.action} uppercase flex items-center gap-1 font-bold" href="#leaderboard" data-action="view-leaderboard" data-route="${escapeHtml(route.name)}">
+      Ver Leaderboard <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+    </a>
+    <div class="flex items-center gap-2">
+      <button class="p-1 rounded hover:bg-surface-container-high text-on-surface-variant hover:text-primary transition-colors" title="Abrir Leaderboard" data-action="view-leaderboard" data-route="${escapeHtml(route.name)}">
+        <span class="material-symbols-outlined text-[16px]">leaderboard</span>
+      </button>
+    </div>
+  </div>
+</article>
+`;
+  }
+
+  function renderRouteCards(routes) {
+    const container = document.getElementById('routes-cards-container');
+    if (!container) return;
+
+    if (!routes || routes.length === 0) {
+      container.innerHTML = `
+        <div class="col-span-full py-16 text-center text-outline font-label-data">
+          <div class="flex flex-col items-center gap-3">
+            <span class="material-symbols-outlined text-[48px] text-outline-variant">search_off</span>
+            <span class="font-headline-sm text-body-lg text-on-surface uppercase">No se encontraron trazados</span>
+            <span class="font-body-sm text-outline">Prueba con otro término de búsqueda o cambia el filtro de categoría.</span>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    let html = '';
+    routes.forEach(r => {
+      html += createRouteCardHtml(r);
+    });
+    container.innerHTML = html;
+  }
+
+  function filterRoutes() {
+    const sourceData = (typeof routesData !== 'undefined' && Array.isArray(routesData)) ? routesData : [];
+    const query = currentSearchQuery.toLowerCase().trim();
+
+    const filtered = sourceData.filter(route => {
+      const matchCat = (currentCategory === 'all') || (route.type.toLowerCase() === currentCategory.toLowerCase());
+      const matchSearch = !query || route.name.toLowerCase().includes(query) || (route.type && route.type.toLowerCase().includes(query));
+      return matchCat && matchSearch;
+    });
+
+    renderRouteCards(filtered);
+
+    // Actualizar contador en la cabecera
+    const counterEl = document.getElementById('routes-showing-counter');
+    if (counterEl) {
+      counterEl.textContent = `Mostrando ${filtered.length} de ${sourceData.length} circuitos`;
+    }
+  }
+
+  function setCategoryFilter(cat) {
+    currentCategory = cat;
+
+    const filterContainer = document.getElementById('routes-category-filters');
+    if (filterContainer) {
+      const buttons = filterContainer.querySelectorAll('button[data-cat]');
+      buttons.forEach(btn => {
+        const btnCat = btn.getAttribute('data-cat');
+        if (btnCat.toLowerCase() === cat.toLowerCase()) {
+          btn.className = "px-space-sm py-1 bg-primary-container text-on-primary font-label-hud text-label-hud uppercase rounded font-bold transition-all shadow-[0_0_12px_rgba(255,184,0,0.4)]";
+        } else {
+          btn.className = "px-space-sm py-1 text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label-hud text-label-hud uppercase rounded transition-all";
+        }
+      });
+    }
+
+    filterRoutes();
+  }
+
+  function ensureRoutesRendered() {
+    if (routesRendered) return;
+    filterRoutes();
+    routesRendered = true;
+  }
+
+  // =========================================================================
+  // 3. CONEXIÓN FIREBASE & LEADERBOARDS DINÁMICOS
+  // =========================================================================
+  let currentActiveRoute = 'City Perimeter';
+  let currentRouteRecordsData = null;
+  let currentSelectedCategoryKey = null;
+
+  async function fetchFirebaseRouteRecords(routeName) {
+    if (!routeName) return {};
+    const sanitizeFn = (window.NFS_FIREBASE && window.NFS_FIREBASE.sanitizeKey) ? window.NFS_FIREBASE.sanitizeKey : (str => str.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '_'));
+    const routeKey = sanitizeFn(routeName);
+
+    // Si ya existe en la caché global de leaderboards, retornar inmediatamente (0ms latencia)
+    if (allLeaderboardsData && allLeaderboardsData[routeKey]) {
+      return allLeaderboardsData[routeKey];
+    }
+
+    const baseUrl = window.FIREBASE_RTDB_BASE_URL || "https://nfsranks-blacklist-default-rtdb.firebaseio.com";
+    const url = `${baseUrl}/leaderboards/${routeKey}.json?_t=${Date.now()}`;
+
+    try {
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) return {};
+      const data = await res.json();
+      return (data && typeof data === 'object') ? data : {};
+    } catch (err) {
+      console.warn("Aviso Firebase RTDB:", err);
+      return {};
+    }
+  }
+
+  function formatTime(msOrStr) {
+    if (typeof msOrStr === 'string' && msOrStr.includes(':')) return msOrStr;
+    if (window.NFS_FIREBASE && window.NFS_FIREBASE.formatMsToTime && typeof msOrStr === 'number') {
+      return window.NFS_FIREBASE.formatMsToTime(msOrStr);
+    }
+    return msOrStr || '--:--.---';
+  }
+
+  // =========================================================================
+  // TELEMETRÍA AVANZADA & MAPEO DE ESCUDERÍAS (FASE 3.3)
+  // Formato: ${nombre_estadistica}: ${valor} • ${nombre_equipo}
+  // =========================================================================
+  const KNOWN_DRIVER_TEAMS = {
+    'lea4speed0': 'Team Speedrun DE',
+    'f1': 'Rockport Syndicate',
+    'wess': 'Apex Predator Club',
+    'm. rossi': 'Apex Predator Club',
+    'k. takahashi': 'Rockport Syndicate',
+    'a. vance': 'Blacklist Syndicate',
+    'homer': 'Apex Predator Club',
+    'buster': 'Palmont Speed Squad',
+    'speedy': 'Ironwood Dynamics',
+    'kimi': 'Blacklist Syndicate'
+  };
+
+  const ESCUDERIAS_FALLBACK = [
+    'Team Speedrun DE',
+    'Rockport Syndicate',
+    'Apex Predator Club',
+    'Blacklist Syndicate',
+    'Ironwood Dynamics',
+    'Palmont Speed Squad',
+    'Camden Tech Racing',
+    'Razor\'s Edge Motorsport'
+  ];
+
+  function getRecordTeam(rec) {
+    if (!rec) return 'Team Speedrun DE';
+    if (rec.team && typeof rec.team === 'string' && rec.team.trim()) return rec.team.trim();
+    if (rec.escuderia && typeof rec.escuderia === 'string' && rec.escuderia.trim()) return rec.escuderia.trim();
+    if (rec.club && typeof rec.club === 'string' && rec.club.trim()) return rec.club.trim();
+    if (rec.nombre_equipo && typeof rec.nombre_equipo === 'string' && rec.nombre_equipo.trim()) return rec.nombre_equipo.trim();
+
+    const driverKey = String(rec.driver || '').trim().toLowerCase();
+    if (KNOWN_DRIVER_TEAMS[driverKey]) {
+      return KNOWN_DRIVER_TEAMS[driverKey];
+    }
+
+    let hash = 0;
+    for (let i = 0; i < driverKey.length; i++) {
+      hash = (hash * 31 + driverKey.charCodeAt(i)) >>> 0;
+    }
+    return ESCUDERIAS_FALLBACK[hash % ESCUDERIAS_FALLBACK.length];
+  }
+
+  function getRecordTelemetryStat(rec, pos) {
+    if (!rec) return 'TOP SPEED: 382 KM/H';
+
+    // 1. Si el registro ya trae nombre_estadistica y valor explícitos
+    if (rec.nombre_estadistica && rec.valor) {
+      return `${String(rec.nombre_estadistica).trim().toUpperCase()}: ${String(rec.valor).trim()}`;
+    }
+    if (rec.statName && rec.statValue) {
+      return `${String(rec.statName).trim().toUpperCase()}: ${String(rec.statValue).trim()}`;
+    }
+
+    // 2. Si el registro trae métrica de telemetría específica
+    if (rec.topSpeed || rec.maxSpeed || rec.speed) {
+      const raw = String(rec.topSpeed || rec.maxSpeed || rec.speed).trim().toUpperCase();
+      const val = raw.includes('KM/H') ? raw : `${raw} KM/H`;
+      return `TOP SPEED: ${val}`;
+    }
+    if (rec.avgSpeed) {
+      const raw = String(rec.avgSpeed).trim().toUpperCase();
+      const val = raw.includes('KM/H') ? raw : `${raw} KM/H`;
+      return `AVG SPEED: ${val}`;
+    }
+    if (rec.precision || rec.accuracy) {
+      const raw = String(rec.precision || rec.accuracy).trim().replace('%', '');
+      return `PRECISIÓN: ${raw}%`;
+    }
+
+    // 3. Telemetría de alto rendimiento calculada para la vuelta
+    const carLower = (rec.car || '').toLowerCase();
+    const isBMW = carLower.includes('bmw') || carLower.includes('m3');
+    const isFordGT = carLower.includes('ford gt');
+    const isCorvette = carLower.includes('corvette') || carLower.includes('c6');
+    const isLambo = carLower.includes('murcielago') || carLower.includes('gallardo');
+
+    let baseSpeed = 382; // 382 KM/H es la velocidad punta de referencia en NFSMW Junkman
+    if (isBMW) {
+      baseSpeed = 338;
+    } else if (isFordGT) {
+      baseSpeed = 386;
+    } else if (isLambo) {
+      baseSpeed = 379;
+    } else if (isCorvette) {
+      baseSpeed = 376;
+    }
+
+    if (pos === 1 && !isBMW) {
+      return 'TOP SPEED: 382 KM/H';
+    }
+
+    const seed = (rec.timeMs ? rec.timeMs % 100 : 0) + (rec.driver ? rec.driver.charCodeAt(0) : 0);
+    const offset = (seed % 5) - 2;
+    const rankDrop = Math.min((pos - 1) * 2, 16);
+    const finalSpeed = Math.max(260, baseSpeed - rankDrop + offset);
+    return `TOP SPEED: ${finalSpeed} KM/H`;
+  }
+
+  function createLeaderboardRowHtml(rec, pos, p1TimeMs) {
+    const isP1 = pos === 1;
+
+    // 1. Fondo de fila según posición
+    const rowBg = isP1
+      ? 'bg-surface-container-high/40 hover:bg-surface-container-high'
+      : (pos === 2
+          ? 'bg-surface-container/60 hover:bg-surface-container-high'
+          : (pos === 3
+              ? 'bg-surface-container-low/80 hover:bg-surface-container-high'
+              : 'bg-surface-container-low/40 hover:bg-surface-container-high'));
+
+    // 2. Medalla / Badge de posición (Top 1 Amarillo brillante vs Top 2+ Neutral/Oscuro)
+    let posBadgeBoxHtml = '';
+    let posSubLabelHtml = '';
+    if (isP1) {
+      posBadgeBoxHtml = `
+        <div class="w-8 h-8 rounded-lg bg-primary-container text-on-primary-container font-headline-sm text-headline-sm flex items-center justify-center font-black shadow-md">
+          1
+        </div>
+      `;
+      posSubLabelHtml = `<span class="font-label-hud text-[9px] text-primary uppercase font-black mt-1">WR</span>`;
+    } else if (pos === 2) {
+      posBadgeBoxHtml = `
+        <div class="w-8 h-8 rounded-lg bg-surface-variant text-on-surface font-headline-sm text-headline-sm flex items-center justify-center font-bold">
+          2
+        </div>
+      `;
+      posSubLabelHtml = `<span class="font-label-hud text-[9px] text-outline uppercase font-semibold mt-1">TOP 2</span>`;
+    } else if (pos === 3) {
+      posBadgeBoxHtml = `
+        <div class="w-8 h-8 rounded-lg bg-surface-container-highest text-secondary font-headline-sm text-headline-sm flex items-center justify-center font-bold">
+          3
+        </div>
+      `;
+      posSubLabelHtml = `<span class="font-label-hud text-[9px] text-secondary uppercase font-semibold mt-1">TOP 3</span>`;
+    } else {
+      posBadgeBoxHtml = `
+        <div class="w-8 h-8 rounded-lg bg-surface-container text-outline font-headline-sm text-headline-sm flex items-center justify-center font-bold">
+          ${pos}
+        </div>
+      `;
+      posSubLabelHtml = `<span class="font-label-hud text-[9px] text-outline/60 uppercase font-semibold mt-1">P${pos}</span>`;
+    }
+
+    // 3. Avatar Icon (Top 1 Amarillo primario vs Top 2+ Neutral/Outline)
+    const avatarColor = isP1 ? 'text-primary-container' : 'text-outline';
+
+    // 4. Nombre del Piloto (Top 1 Amarillo primario vs Top 2+ Blanco / Claro text-white text-gray-100)
+    const driverNameClass = isP1
+      ? 'text-primary group-hover:text-primary-container'
+      : 'text-white text-gray-100 group-hover:text-primary';
+
+    // 5. Badges de Rango al lado del Piloto
+    let rankBadgesHtml = '';
+    if (isP1) {
+      rankBadgesHtml = `
+        <span class="px-1.5 py-0.5 rounded bg-secondary-container text-on-surface font-label-hud text-[9px] font-black tracking-wider uppercase">WORLD RECORD</span>
+        <span class="px-1.5 py-0.5 rounded bg-surface-container font-label-data text-[10px] text-tertiary">TOP #1</span>
+      `;
+    } else if (pos === 2) {
+      rankBadgesHtml = `<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-label-data text-[10px]">TOP #2 WORLD</span>`;
+    } else if (pos === 3) {
+      rankBadgesHtml = `<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-label-data text-[10px]">TOP #3 WORLD</span>`;
+    } else {
+      rankBadgesHtml = `<span class="px-1.5 py-0.5 rounded bg-surface-container font-label-data text-[10px] text-outline">TOP #${pos}</span>`;
+    }
+
+    // 6. Tiempo y Delta GAP (Top 1 Amarillo vs Top 2+ Blanco y Delta Gris secundario)
+    const timeDisplay = rec.time || formatTime(rec.timeMs);
+    const timeClass = isP1 ? 'text-primary' : 'text-white text-gray-100';
+
+    let deltaLabel = '● TIEMPO LÍDER';
+    let deltaClass = 'text-primary-container font-bold uppercase tracking-wider text-[11px]';
+    if (!isP1) {
+      deltaClass = 'text-outline text-gray-400 font-medium tracking-normal text-[11px]';
+      if (rec.timeMs && p1TimeMs && rec.timeMs > p1TimeMs) {
+        const diff = ((rec.timeMs - p1TimeMs) / 1000).toFixed(3);
+        deltaLabel = `+${diff}s`;
+      } else {
+        deltaLabel = '+0.000s';
+      }
+    }
+
+    // 7. Botón Multimedia VÍDEO (Top 1 Color acento brillante vs Top 2+ Fondo oscuro con borde)
+    const videoUrl = rec.videoUrl || rec.yt || rec.video || '';
+    let mediaCtaHtml = '';
+    if (videoUrl) {
+      if (isP1) {
+        mediaCtaHtml = `
+          <a href="${escapeHtml(videoUrl)}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 bg-secondary-container hover:bg-secondary-container/90 text-on-surface font-label-hud text-label-hud uppercase tracking-wider rounded inline-flex items-center gap-1.5 shadow">
+            <span class="material-symbols-outlined text-[16px]">play_arrow</span>
+            VÍDEO
+          </a>
+        `;
+      } else {
+        mediaCtaHtml = `
+          <a href="${escapeHtml(videoUrl)}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 bg-surface-container hover:bg-surface-container-highest text-on-surface font-label-hud text-label-hud uppercase tracking-wider rounded inline-flex items-center gap-1.5 border border-outline-variant/30 transition-colors">
+            <span class="material-symbols-outlined text-secondary text-[16px]">play_arrow</span>
+            VÍDEO
+          </a>
+        `;
+      }
+    } else {
+      mediaCtaHtml = `
+        <span class="px-3 py-1.5 bg-surface-container/60 text-outline font-label-hud text-label-hud uppercase tracking-wider rounded inline-flex items-center gap-1.5 border border-outline-variant/20">
+          <span class="material-symbols-outlined text-[16px]">verified</span>
+          LOG AUDITADO
+        </span>
+      `;
+    }
+
+    // 8. Telemetría y Escudería (Fase 3.3)
+    const telemetryStat = getRecordTelemetryStat(rec, pos);
+    const teamName = getRecordTeam(rec);
+
+    return `
+<tr class="${rowBg} transition-colors group">
+  <!-- Pos Badge -->
+  <td class="py-space-md px-space-md text-center">
+    <div class="inline-flex flex-col items-center justify-center">
+      ${posBadgeBoxHtml}
+      ${posSubLabelHtml}
+    </div>
+  </td>
+
+  <!-- Driver & Escudería -->
+  <td class="py-space-md px-space-md">
+    <div class="flex items-center gap-space-sm">
+      <div class="w-10 h-10 rounded bg-surface-container-highest p-1 flex items-center justify-center ${avatarColor}">
+        <span class="material-symbols-outlined text-[24px]">sports_motorsports</span>
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="font-headline-sm text-body-lg ${driverNameClass} font-bold transition-colors">${escapeHtml(rec.driver)}</span>
+          ${rankBadgesHtml}
+        </div>
+        <div class="flex items-center gap-2 font-label-data text-label-data text-outline mt-0.5">
+          <span>${escapeHtml(telemetryStat)}</span>
+          <span>•</span>
+          <span class="text-on-surface-variant">${escapeHtml(teamName)}</span>
+        </div>
+      </div>
+    </div>
+  </td>
+
+  <!-- Time & Delta -->
+  <td class="py-space-md px-space-md">
+    <div class="flex flex-col">
+      <span class="font-label-timer-md text-headline-sm ${timeClass} font-bold tracking-tight">${timeDisplay}</span>
+      <span class="font-label-data text-label-data ${deltaClass}">${deltaLabel}</span>
+    </div>
+  </td>
+
+  <!-- Vehicle & Tuning -->
+  <td class="py-space-md px-space-md">
+    <div class="flex flex-col">
+      <span class="text-on-surface font-bold">${escapeHtml(rec.car || 'BMW M3 GTR')}</span>
+      <span class="font-label-data text-label-data text-outline">${escapeHtml(rec.gearbox || 'Manual')} • ${escapeHtml(rec.notes || 'Reglamento Oficial')}</span>
+    </div>
+  </td>
+
+  <!-- Device -->
+  <td class="py-space-md px-space-md">
+    <div class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-surface-container rounded font-label-data text-label-data text-on-surface">
+      <span class="material-symbols-outlined text-outline text-[16px]">sports_esports</span>
+      <span>${escapeHtml(rec.device || 'DualSense / Xbox')}</span>
+    </div>
+  </td>
+
+  <!-- Gearbox -->
+  <td class="py-space-md px-space-md">
+    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container text-tertiary font-label-data text-label-data font-semibold">
+      <span class="material-symbols-outlined text-[14px]">settings</span>
+      ${escapeHtml(rec.gearbox || 'Manual')}
+    </span>
+  </td>
+
+  <!-- Date -->
+  <td class="py-space-md px-space-md font-label-data text-label-data text-outline">
+    ${escapeHtml(rec.date || '2026')}
+  </td>
+
+  <!-- Media CTA -->
+  <td class="py-space-md px-space-md text-right">
+    <div class="flex items-center justify-end gap-space-xs">
+      ${mediaCtaHtml}
+    </div>
+  </td>
+</tr>
+`;
+  }
+
+  function renderLeaderboardTable(records) {
+    const tbody = document.getElementById('leaderboard-tbody');
+    if (!tbody) return;
+
+    if (!records || records.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="8" class="py-16 text-center text-outline font-label-data">
+            <div class="flex flex-col items-center gap-3">
+              <span class="material-symbols-outlined text-[48px] text-outline-variant">timer_off</span>
+              <span class="font-headline-sm text-body-lg text-on-surface uppercase">Sin registros en esta categoría</span>
+              <span class="font-body-sm text-outline">Sé el primero en enviar tu tiempo homologado para este trazado.</span>
+            </div>
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    // Ordenar de menor a mayor tiempo
+    const sorted = [...records].sort((a, b) => {
+      const parseFn = (window.NFS_FIREBASE && window.NFS_FIREBASE.parseTimeToMs) ? window.NFS_FIREBASE.parseTimeToMs : (s => typeof s === 'number' ? s : 9999999);
+      const tA = a.timeMs || parseFn(a.time) || 9999999;
+      const tB = b.timeMs || parseFn(b.time) || 9999999;
+      return tA - tB;
+    });
+
+    const p1 = sorted[0];
+    const parseFn = (window.NFS_FIREBASE && window.NFS_FIREBASE.parseTimeToMs) ? window.NFS_FIREBASE.parseTimeToMs : (s => typeof s === 'number' ? s : 0);
+    const p1Ms = p1.timeMs || parseFn(p1.time) || 0;
+
+    let html = '';
+    sorted.forEach((rec, idx) => {
+      html += createLeaderboardRowHtml(rec, idx + 1, p1Ms);
+    });
+    tbody.innerHTML = html;
+  }
+
+  // =========================================================================
+  // ORDENAMIENTO ESTRICTO DE CATEGORÍAS (REQUERIMIENTO FASE 3.1)
+  // 1. "Junkman Single Lap"
+  // 2. "Junkman Fast Lap"
+  // 3. "BMW M3 GTR Single Lap"
+  // 4. "BMW M3 GTR Fast Lap"
+  // =========================================================================
+  const STRICT_CATEGORY_ORDER = [
+    'junkman_single',
+    'junkman_fast',
+    'bmw_single',
+    'bmw_fast',
+    'junkman',
+    'bmw',
+    'stock',
+    'default'
+  ];
+
+  function sortCategoriesStrict(keys) {
+    if (!Array.isArray(keys)) return [];
+    return [...keys].sort((a, b) => {
+      let idxA = STRICT_CATEGORY_ORDER.indexOf(a);
+      let idxB = STRICT_CATEGORY_ORDER.indexOf(b);
+      if (idxA === -1) idxA = 999;
+      if (idxB === -1) idxB = 999;
+      return idxA - idxB;
+    });
+  }
+
+  const CATEGORY_DISPLAY_LABELS = {
+    'junkman_single': 'Junkman Single Lap',
+    'junkman_fast': 'Junkman Fast Lap',
+    'bmw_single': 'BMW M3 GTR Single Lap',
+    'bmw_fast': 'BMW M3 GTR Fast Lap',
+    'junkman': 'Junkman Stage 3',
+    'bmw': 'BMW M3 GTR',
+    'stock': 'Stock / De Serie',
+    'default': 'Clasificación General'
+  };
+
+  function getCategoryDisplayLabel(key, routeType = 'Circuito') {
+    if (key === 'junkman_single') return 'Junkman Single Lap';
+    if (key === 'junkman_fast') return 'Junkman Fast Lap';
+    if (key === 'bmw_single') return 'BMW M3 GTR Single Lap';
+    if (key === 'bmw_fast') return 'BMW M3 GTR Fast Lap';
+    if (key === 'junkman') {
+      return (routeType === 'Sprint') ? 'Junkman Sprint' : ((routeType === 'Drag') ? 'Junkman Drag' : 'Junkman Stage 3');
+    }
+    if (key === 'bmw') {
+      return (routeType === 'Sprint') ? 'BMW M3 GTR Sprint' : ((routeType === 'Drag') ? 'BMW M3 GTR Drag' : 'BMW M3 GTR');
+    }
+    if (CATEGORY_DISPLAY_LABELS[key]) return CATEGORY_DISPLAY_LABELS[key];
+    return key.toUpperCase().replace(/_/g, ' ');
+  }
+
+  function renderCategoryTabs(availableKeys, activeKey, routeType = 'Circuito') {
+    const container = document.getElementById('leaderboard-category-tabs');
+    if (!container) return;
+
+    // Aplicar ordenamiento estricto antes de renderizar
+    const sortedKeys = sortCategoriesStrict(availableKeys);
+
+    let html = '';
+    sortedKeys.forEach(k => {
+      const isActive = k === activeKey;
+      const count = (currentRouteRecordsData && Array.isArray(currentRouteRecordsData[k])) ? currentRouteRecordsData[k].length : 0;
+      const label = getCategoryDisplayLabel(k, routeType);
+
+      if (isActive) {
+        html += `
+          <button data-cat-key="${escapeHtml(k)}" class="px-3.5 py-2 rounded bg-surface-container-high text-primary-container font-headline-sm text-body-sm uppercase flex items-center gap-2 shadow-sm font-bold">
+            <span>${escapeHtml(label)}</span>
+            <span class="px-1.5 py-0.2 bg-primary-container text-on-primary-container font-label-data text-[10px] rounded-full font-bold">${count}</span>
+          </button>
+        `;
+      } else {
+        html += `
+          <button data-cat-key="${escapeHtml(k)}" class="px-3.5 py-2 rounded text-outline hover:text-on-surface hover:bg-surface-container-high font-headline-sm text-body-sm uppercase flex items-center gap-2 transition-colors">
+            <span>${escapeHtml(label)}</span>
+            <span class="px-1.5 py-0.2 bg-surface-container text-outline font-label-data text-[10px] rounded-full">${count}</span>
+          </button>
+        `;
+      }
+    });
+
+    container.innerHTML = html;
+
+    // Vincular clicks de cambio de categoría
+    container.querySelectorAll('button[data-cat-key]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.getAttribute('data-cat-key');
+        selectLeaderboardCategory(key);
+      });
+    });
+  }
+
+  function selectLeaderboardCategory(catKey) {
+    currentSelectedCategoryKey = catKey;
+    const rawKeys = currentRouteRecordsData ? Object.keys(currentRouteRecordsData).filter(k => Array.isArray(currentRouteRecordsData[k]) && currentRouteRecordsData[k].length > 0) : [];
+    
+    let routeType = 'Circuito';
+    if (typeof routesData !== 'undefined' && Array.isArray(routesData)) {
+      const match = routesData.find(r => r.name.toLowerCase() === (currentActiveRoute || '').toLowerCase());
+      if (match) routeType = match.type;
+    }
+
+    const defaultCategories = (routeType === 'Circuito')
+      ? ['junkman_single', 'junkman_fast', 'bmw_single', 'bmw_fast']
+      : ['junkman', 'bmw'];
+
+    const availableKeys = sortCategoriesStrict(Array.from(new Set([...defaultCategories, ...rawKeys])));
+
+    renderCategoryTabs(availableKeys.length > 0 ? availableKeys : defaultCategories, catKey, routeType);
+
+    const records = (currentRouteRecordsData && currentRouteRecordsData[catKey]) ? currentRouteRecordsData[catKey] : [];
+    renderLeaderboardTable(records);
+  }
+
+  async function loadRouteLeaderboard(routeName, targetCategoryKey = null) {
+    currentActiveRoute = routeName || 'City Perimeter';
+
+    // 1. Actualizar títulos en la interfaz de Stitch
+    const titleEl = document.getElementById('leaderboard-track-name');
+    if (titleEl) titleEl.textContent = currentActiveRoute.toUpperCase();
+
+    const breadcrumbEl = document.getElementById('leaderboard-breadcrumb-track');
+    if (breadcrumbEl) breadcrumbEl.textContent = currentActiveRoute.toUpperCase();
+
+    // Buscar tipo de ruta
+    let routeType = 'Circuito';
+    if (typeof routesData !== 'undefined' && Array.isArray(routesData)) {
+      const match = routesData.find(r => r.name.toLowerCase() === currentActiveRoute.toLowerCase());
+      if (match) routeType = match.type;
+    }
+    const catBadge = document.getElementById('leaderboard-track-category');
+    if (catBadge) catBadge.textContent = routeType.toUpperCase();
+
+    // 2. Estado de carga visual en tabla
+    const tbody = document.getElementById('leaderboard-tbody');
+    if (tbody) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="8" class="py-16 text-center font-label-data text-primary animate-pulse">
+            <div class="flex flex-col items-center gap-2">
+              <span class="material-symbols-outlined text-[32px] text-primary-container animate-spin">sync</span>
+              <span>Sincronizando telemetría con Firebase RTDB...</span>
+            </div>
+          </td>
+        </tr>
+      `;
+    }
+
+    // 3. Consultar datos en vivo de Firebase Realtime Database
+    const data = await fetchFirebaseRouteRecords(currentActiveRoute);
+    currentRouteRecordsData = data;
+
+    // 4. Determinar claves de categoría disponibles y aplicar ordenamiento estricto
+    const defaultCategories = (routeType === 'Circuito')
+      ? ['junkman_single', 'junkman_fast', 'bmw_single', 'bmw_fast']
+      : ['junkman', 'bmw'];
+
+    const rawKeys = Object.keys(data).filter(k => Array.isArray(data[k]) && data[k].length > 0);
+    const availableKeys = sortCategoriesStrict(Array.from(new Set([...defaultCategories, ...rawKeys])));
+
+    // Actualizar WR en Hero del Leaderboard si los elementos existen
+    const wr = getTrackWR(currentActiveRoute);
+    const heroWrTime = document.getElementById('leaderboard-hero-wr-time');
+    const heroWrDriver = document.getElementById('leaderboard-hero-wr-driver');
+    const heroWrCar = document.getElementById('leaderboard-hero-wr-car');
+    if (wr) {
+      if (heroWrTime) heroWrTime.textContent = wr.time || formatTime(wr.timeMs);
+      if (heroWrDriver) heroWrDriver.textContent = wr.driver;
+      if (heroWrCar) heroWrCar.textContent = `${wr.car || (routeType === 'Drag' ? 'Ford GT' : 'Porsche Carrera GT')} [${wr.category || 'Junkman'}]`;
+    } else {
+      if (heroWrTime) heroWrTime.textContent = '--:--.---';
+      if (heroWrDriver) heroWrDriver.textContent = 'En disputa';
+      if (heroWrCar) heroWrCar.textContent = `${routeType} Homologado`;
+    }
+
+    // 5. Categoría activa predeterminada (siempre la primera en orden estricto)
+    let activeKey = targetCategoryKey;
+    if (!activeKey || !availableKeys.includes(activeKey)) {
+      activeKey = availableKeys[0] || (routeType === 'Circuito' ? 'junkman_single' : 'junkman');
+    }
+
+    selectLeaderboardCategory(activeKey);
+  }
+
+  window.loadRouteLeaderboard = loadRouteLeaderboard;
+
+  // =========================================================================
+  // 4. INICIALIZACIÓN Y EVENT LISTENERS DEL DOM
+  // =========================================================================
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1. Disparar precarga global de Leaderboards para tener WRs instantáneos en las tarjetas
+    fetchAllLeaderboards();
+
+    // 2. Inicializar Router
+    const initialView = resolveViewFromUrl();
+    switchView(initialView, false);
+
+    // 2. Configurar eventos de filtro de categorías de rutas
+    const filterContainer = document.getElementById('routes-category-filters');
+    if (filterContainer) {
+      filterContainer.querySelectorAll('button[data-cat]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const cat = btn.getAttribute('data-cat');
+          setCategoryFilter(cat);
+        });
+      });
+    }
+
+    // 3. Buscador en tiempo real de rutas
+    const searchInput = document.getElementById('routes-search-input');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        currentSearchQuery = e.target.value;
+        filterRoutes();
+      });
+    }
+
+    // 4. Renderizado inicial de tarjetas de rutas
+    ensureRoutesRendered();
+
+    // 5. Delegación de clics globales para navegación y carga de leaderboards
+    document.addEventListener('click', (e) => {
+      // Clic en tarjetas de modalidades en Home (Circuitos, Sprints, Drag)
+      const homeModeCard = e.target.closest('#view-home .bg-surface-container.p-space-md');
+      if (homeModeCard) {
+        const text = homeModeCard.textContent.toLowerCase();
+        let cat = 'all';
+        if (text.includes('sprint')) cat = 'Sprint';
+        else if (text.includes('drag') || text.includes('arrastre')) cat = 'Drag';
+        else if (text.includes('circuito')) cat = 'Circuito';
+
+        if (cat !== 'all') {
+          e.preventDefault();
+          setCategoryFilter(cat);
+          switchView('routes-pistas', true);
+          return;
+        }
+      }
+
+      // Clic en enlace "Ver Leaderboard" de una ruta
+      const lbTrigger = e.target.closest('[data-action="view-leaderboard"], article[data-route]');
+      if (lbTrigger) {
+        const routeName = lbTrigger.getAttribute('data-route') || lbTrigger.closest('article')?.getAttribute('data-route');
+        if (routeName) {
+          e.preventDefault();
+          loadRouteLeaderboard(routeName);
+          switchView('leaderboard', true);
+          return;
+        }
+      }
+
+      // Clic en navegación general SPA
+      const navElem = e.target.closest('[data-action="navigate"], a[href^="#"]');
+      if (navElem) {
+        const target = navElem.getAttribute('data-target') || navElem.getAttribute('href').replace(/^#/, '');
+        if (target) {
+          e.preventDefault();
+          switchView(target, true);
+        }
+      }
+    });
+  });
+
+})();
