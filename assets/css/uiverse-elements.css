@@ -1,0 +1,604 @@
+/* ==========================================================================
+   UIVERSE.IO / GALAXY REPOSITORY AUTHENTIC UI ELEMENTS STYLESHEET
+   Source: https://github.com/uiverse-io/galaxy
+   Covers all 12 official Galaxy categories:
+   Buttons, Checkboxes, Toggle-switches, Cards, loaders, Inputs,
+   Radio-buttons, Forms, Patterns, Tooltips, Notifications
+   ========================================================================== */
+
+/* 1. From Uiverse.io by 0x-Sarthak (Buttons/0x-Sarthak_hungry-penguin-30.html) */
+.gal-btn-sarthak .cta {
+  position: relative;
+  margin: auto;
+  padding: 11.5px 18px;
+  transition: all 0.2s ease;
+  border: 3px solid #552da8;
+  border-radius: 50px;
+  background: #552da8;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.gal-btn-sarthak .cta::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: block;
+  border-radius: 50px;
+  background: white;
+  width: 42px;
+  height: 100%;
+  transition: all 0.6s ease;
+}
+
+.gal-btn-sarthak .cta span {
+  position: relative;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  color: white;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  z-index: 1;
+}
+
+.gal-btn-sarthak .cta svg {
+  position: relative;
+  margin-left: 10px;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke: #552da8;
+  stroke-width: 2;
+  transform: translateX(-2px);
+  transition: all 0.4s ease;
+  z-index: 1;
+}
+
+.gal-btn-sarthak .cta:hover::before {
+  width: 100%;
+  background: #1c1c1c;
+}
+
+.gal-btn-sarthak .cta:hover svg {
+  stroke: #ffffff;
+  transform: translateX(3px);
+}
+
+.gal-btn-sarthak .cta:active {
+  transform: scale(0.95);
+}
+
+/* 2. From Uiverse.io by alexruix (Buttons - Conic Galaxy Glow) */
+.gal-btn-alexruix {
+  --border-angle: 0turn;
+  position: relative;
+  padding: 11px 24px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(180deg, #18181c, #101014) padding-box,
+    conic-gradient(
+      from var(--border-angle),
+      #27272a 15%,
+      #6366f1 40%,
+      #a855f7 50%,
+      #ec4899 60%,
+      #27272a 85%
+    ) border-box;
+  color: #ffffff;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.25);
+  animation: uiv-spin 3.2s linear infinite;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gal-btn-alexruix:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 28px rgba(168, 85, 247, 0.55);
+}
+
+@keyframes uiv-spin {
+  to {
+    --border-angle: 1turn;
+  }
+}
+
+/* 3. From Uiverse.io by AKAspidey01 (Checkboxes/AKAspidey01_itchy-wombat-76.html) */
+.gal-chk-spidey .checkboxtoggler {
+  width: 2.8em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+  cursor: pointer;
+}
+
+.gal-chk-spidey .line-1,
+.gal-chk-spidey .line-2,
+.gal-chk-spidey .line-3 {
+  background: #df6447;
+  height: 0.28em;
+  border-radius: 10em;
+  transition-duration: 450ms;
+}
+
+.gal-chk-spidey input[type="checkbox"] {
+  display: none;
+}
+
+.gal-chk-spidey input[type="checkbox"]:checked + label .checkboxtoggler .line-1 {
+  transform: rotate(45deg) translateY(0.62em) translateX(0.62em);
+}
+
+.gal-chk-spidey input[type="checkbox"]:checked + label .checkboxtoggler .line-2 {
+  transform: rotate(-45deg) translateY(0em) translateX(0.08em);
+}
+
+.gal-chk-spidey input[type="checkbox"]:checked + label .checkboxtoggler .line-3 {
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+/* 4. From Uiverse.io by AIVIIID (Toggle-switches/AIVIIID_spicy-horse-27.html) */
+.gal-sw-aiviiid .toggle-switch {
+  position: relative;
+  width: 90px;
+  height: 34px;
+}
+
+.gal-sw-aiviiid .toggle-switch input[type="checkbox"] {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.gal-sw-aiviiid .toggle-switch-label {
+  position: absolute;
+  inset: 0;
+  background-color: #ddd;
+  border-radius: 34px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+
+.gal-sw-aiviiid .toggle-switch-label::before,
+.gal-sw-aiviiid .toggle-switch-label::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+.gal-sw-aiviiid .toggle-switch-label::before {
+  left: 6px;
+  width: 26px;
+  height: 26px;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+  transition: all 0.4s ease;
+  z-index: 2;
+}
+
+.gal-sw-aiviiid .toggle-switch-label::after {
+  left: 0;
+  width: 44px;
+  height: 34px;
+  background-color: #fff;
+  border-radius: 34px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  transition: all 0.4s ease;
+}
+
+.gal-sw-aiviiid .toggle-switch-checkbox:checked + .toggle-switch-label::before {
+  transform: translateX(52px);
+}
+
+.gal-sw-aiviiid .toggle-switch-checkbox:checked + .toggle-switch-label {
+  background-color: #000000;
+  box-shadow: 0 0 0 1px #3f3f46;
+}
+
+.gal-sw-aiviiid .toggle-switch-checkbox:checked + .toggle-switch-label::after {
+  transform: scale(0);
+}
+
+/* 5. From Uiverse.io by 1osm (Cards/1osm_light-chipmunk-10.html) */
+.gal-card-1osm .card {
+  width: 235px;
+  height: 92px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #262626;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
+.gal-card-1osm .smallIcon {
+  width: 100%;
+  height: 100%;
+  background-color: #27272d;
+  padding: 2px;
+}
+
+.gal-card-1osm .smallIcon div {
+  background: linear-gradient(120deg, #3a3a44 30%, #525260 38%, #525260 40%, #3a3a44 48%);
+  margin-top: 9px;
+  background-size: 200% 100%;
+  background-position: 100% 0;
+  animation: load89234 2s infinite;
+}
+
+.gal-card-1osm .Icon {
+  margin: 10px;
+  width: 66px;
+  height: 66px;
+  float: left;
+  border-radius: 6px;
+}
+
+.gal-card-1osm .Name {
+  width: 82px;
+  height: 18px;
+  float: left;
+  transform: translate(6px, 0);
+  border-radius: 5px;
+}
+
+.gal-card-1osm .Roles {
+  width: 38px;
+  height: 18px;
+  float: left;
+  transform: translate(14px, 0);
+  border-radius: 5px;
+}
+
+.gal-card-1osm .Descripion {
+  margin: 8px;
+  width: 132px;
+  height: 38px;
+  float: left;
+  transform: translate(0, -3px);
+  border-radius: 5px;
+}
+
+@keyframes load89234 {
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+/* 6. From Uiverse.io by A-nshuman (loaders/A-nshuman_fluffy-fox-90.html) */
+.gal-ldr-anshuman .blocks {
+  border: 2px solid #2b83e2;
+  width: 132px;
+  padding: 4px;
+  border-radius: 8px;
+  gap: 4px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.gal-ldr-anshuman .blocks .block {
+  display: flex;
+  flex: 1;
+  border-radius: 4px;
+  background: #2b83e2;
+  width: 55px;
+  height: 55px;
+  animation: blockLoading 1s infinite;
+}
+
+.gal-ldr-anshuman .blocks .block:nth-child(1) {
+  animation-delay: 0ms;
+}
+
+.gal-ldr-anshuman .blocks .block:nth-child(2) {
+  animation-delay: 200ms;
+}
+
+.gal-ldr-anshuman .blocks .block:nth-child(3) {
+  animation-delay: 400ms;
+}
+
+.gal-ldr-anshuman .blocks .block:nth-child(4) {
+  animation-delay: 600ms;
+}
+
+@keyframes blockLoading {
+  0%,
+  100% {
+    flex: 1;
+  }
+  50% {
+    flex: 4;
+  }
+}
+
+/* 7. From Uiverse.io by 1osm (Inputs/1osm_pretty-frog-15.html) */
+.gal-inp-1osm .Message {
+  position: relative;
+  width: 245px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: #40414f;
+  box-shadow: 4px 4px #2c2d38;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px 0 12px;
+}
+
+.gal-inp-1osm .MsgInput {
+  font-size: 14px;
+  border-radius: 5px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  width: 175px;
+  height: 30px;
+  color: white;
+  font-weight: 600;
+}
+
+.gal-inp-1osm .MsgInput::placeholder {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.gal-inp-1osm .l {
+  width: 1.5px;
+  height: 24px;
+  background-color: #2e2f38;
+}
+
+.gal-inp-1osm .SendSVG {
+  width: 26px;
+  height: 26px;
+  padding: 3px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background-color 0.25s;
+}
+
+.gal-inp-1osm .SendSVG:hover {
+  background-color: #2b2b35;
+}
+
+/* 8. From Uiverse.io by AmIt-DasIT (Radio-buttons/AmIt-DasIT_neat-turkey-32.html) */
+.gal-rad-amit .radio-input .label input {
+  display: none;
+}
+
+.gal-rad-amit .radio-input {
+  display: flex;
+  gap: 18px;
+}
+
+.gal-rad-amit .radio-input .label {
+  display: flex;
+}
+
+.gal-rad-amit .radio-input .label .check {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.3s;
+  border: 3px solid transparent;
+  box-shadow:
+    3px 3px 6px rgba(0, 0, 0, 0.65),
+    -1px -1px 4px rgba(255, 255, 255, 0.35);
+}
+
+.gal-rad-amit .radio-input .label input:checked + .check {
+  border-color: #8b5cf6;
+  box-shadow:
+    3px 3px 6px rgba(0, 0, 0, 0.65),
+    -1px -1px 4px rgba(255, 255, 255, 0.35),
+    inset 3px 3px 6px rgba(0, 0, 0, 0.65),
+    inset -1px -1px 4px rgba(139, 92, 246, 0.45);
+  transform: scale(1.1);
+}
+
+/* 9. From Uiverse.io by Praashoo7 (Forms) */
+.gal-form-praashoo {
+  width: 215px;
+  background-color: #17171c;
+  border: 1px solid #2e2e36;
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+.gal-form-praashoo .form-heading {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #f4f4f6;
+  text-align: center;
+  margin-bottom: 2px;
+}
+
+.gal-form-praashoo input {
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #27272d;
+  background-color: #0e0e11;
+  color: #f4f4f6;
+  font-size: 11.5px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.gal-form-praashoo input:focus {
+  border-color: #8b5cf6;
+}
+
+.gal-form-praashoo button {
+  width: 100%;
+  padding: 7px;
+  border-radius: 6px;
+  border: none;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* 10. From Uiverse.io by AmruthGowda91200 (Patterns/AmruthGowda91200_rotten-catfish-64.html) */
+.gal-pat-amruth {
+  width: 210px;
+  height: 125px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      #ff7e5f,
+      #ff7e5f 10px,
+      #3f51b5 10px,
+      #3f51b5 20px
+    ),
+    repeating-linear-gradient(
+      45deg,
+      #3f51b5,
+      #3f51b5 10px,
+      #ff7e5f 10px,
+      #ff7e5f 20px
+    );
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+}
+
+/* 11. From Uiverse.io by Cksunandh (Tooltips/Cksunandh_afraid-snail-51.html) */
+.gal-tip-cksunandh .tooltip-container {
+  color: #ffffff;
+  --background: #00a36d;
+  position: relative;
+  background: var(--background);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0.65em 1.5em;
+  border-radius: 50px;
+  user-select: none;
+}
+
+.gal-tip-cksunandh .tooltip {
+  background-color: #00a36d;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.3em 0.75em;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s;
+  border-radius: 50px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.gal-tip-cksunandh .tooltip::before {
+  background-color: #00a36d;
+  position: absolute;
+  content: "";
+  height: 0.6em;
+  width: 0.6em;
+  bottom: -0.2em;
+  left: 50%;
+  transform: translate(-50%) rotate(45deg);
+}
+
+.gal-tip-cksunandh .tooltip-container:hover .tooltip {
+  top: -115%;
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 12. From Uiverse.io by alexruix (Notifications/alexruix_gentle-octopus-87.html) */
+.gal-notif-alexruix {
+  display: inline-flex;
+  align-items: center;
+}
+
+.gal-notif-alexruix .box-avatar {
+  background-color: #181818;
+  padding: 5px;
+  width: 3.4em;
+  height: 3.4em;
+  border-radius: 50%;
+  margin-right: -16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+.gal-notif-alexruix .avatar {
+  background-color: #fda203;
+  padding: 0.5em;
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.gal-notif-alexruix .avatar-icon {
+  width: 100%;
+  height: 100%;
+  fill: white;
+  animation: gal-grow 2s ease-in-out infinite;
+}
+
+.gal-notif-alexruix .notification {
+  display: flex;
+  width: 215px;
+  padding: 2px;
+  background: #ddd;
+  border-radius: 10px;
+}
+
+.gal-notif-alexruix .notification-info {
+  display: inline-flex;
+  overflow: hidden;
+  background-color: #181818;
+  color: #fff;
+  width: 100%;
+  border-radius: 10px 8px 8px 10px;
+  padding-left: 20px;
+  align-items: center;
+}
+
+.gal-notif-alexruix .notification-text {
+  padding: 9px 8px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.gal-notif-alexruix .highlight {
+  color: #ffc300;
+  font-weight: 600;
+}
+
+@keyframes gal-grow {
+  0%,
+  100% {
+    transform: translateY(0%);
+  }
+  50% {
+    transform: translateY(-8%);
+  }
+}

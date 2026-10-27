@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <!-- Vibrant Motorsport Red Gradient -->
+    <radialGradient id="nfsFavRed" cx="50%" cy="38%" r="65%">
+      <stop offset="0%" stop-color="#ff2b42" />
+      <stop offset="65%" stop-color="#cc1124" />
+      <stop offset="100%" stop-color="#880512" />
+    </radialGradient>
+    
+    <!-- Top Glass Highlight Gradient -->
+    <linearGradient id="nfsFavGloss" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35" />
+      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.05" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- High-Contrast Shadow for Crisp Text at 16x16 / 32x32 -->
+    <filter id="nfsTextShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="1.5" stdDeviation="1" flood-color="#000000" flood-opacity="0.75" />
+    </filter>
+  </defs>
+
+  <!-- Background Badge with Rounded Squircle Shape -->
+  <rect x="2" y="2" width="60" height="60" rx="15" fill="url(#nfsFavRed)" stroke="rgba(255, 255, 255, 0.28)" stroke-width="1.5" />
+  
+  <!-- Subtle Inner Circular Glow Ring -->
+  <circle cx="32" cy="32" r="23" fill="none" stroke="rgba(255, 255, 255, 0.12)" stroke-width="1" />
+  
+  <!-- Top Specular Shimmer Arc -->
+  <path d="M 12 10 Q 32 4 52 10 Q 55 14 55 24 Q 32 18 9 24 Q 9 14 12 10 Z" fill="url(#nfsFavGloss)" opacity="0.6" />
+
+  <!-- Bold, High-Contrast White 'NFS' Typography (Always 100% Opaque & Crisp) -->
+  <text x="32" y="34.5" 
+        text-anchor="middle" 
+        dominant-baseline="central" 
+        fill="#ffffff" 
+        font-family="system-ui, -apple-system, 'Montserrat', 'Inter', 'Chakra Petch', 'Arial Black', sans-serif" 
+        font-weight="900" 
+        font-size="26.5" 
+        letter-spacing="0.5" 
+        filter="url(#nfsTextShadow)">NFS</text>
+</svg>

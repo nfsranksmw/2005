@@ -1,0 +1,3543 @@
+/* ==========================================================
+   BOTÓN GLITCH RECTANGULAR (ESTILO "EXPLORAR" HOME):
+   REPOSO: FONDO NEGRO, BORDE GRIS SUTIL, LETRA BLANCA
+   HOVER: EFECTO GLITCH + SE TORNA EN NARANJA (#FF7B00)
+   ========================================================== */
+
+/* 1. Estado en Reposo (Idle): Rectangular, fondo negro, texto blanco y borde gris sutil */
+.glitch-nfs-btn,
+.nav-link-glitch,
+.dropdown-glitch-item,
+.glitch-menu-item,
+.showcase-card-btn {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: #0a0a0c !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.24) !important;
+  border-radius: 6px !important;
+  padding: 8px 18px;
+  font-family: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease, color 0.18s ease, transform 0.18s ease !important;
+  overflow: visible !important;
+  box-sizing: border-box !important;
+}
+
+/* 2. Capa de clonación para el efecto de interferencia (Pseudo-elemento) */
+.glitch-nfs-btn::after,
+.nav-link-glitch::after,
+.dropdown-glitch-item::after,
+.glitch-menu-item::after,
+.showcase-card-btn::after {
+  --move1: inset(50% 50% 50% 50%);
+  --move2: inset(31% 0 40% 0);
+  --move3: inset(39% 0 15% 0);
+  --move4: inset(45% 0 40% 0);
+  --move5: inset(45% 0 6% 0);
+  --move6: inset(14% 0 61% 0);
+  content: attr(data-text) !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  clip-path: var(--move1);
+  background-color: #ff7b00 !important;
+  pointer-events: none !important;
+  border-radius: inherit !important;
+  color: #ffffff !important;
+  opacity: 0;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  letter-spacing: inherit !important;
+  box-sizing: border-box !important;
+  z-index: 4 !important;
+}
+
+/* 3. Estado Hover: Hace el efecto Glitch y se torna el botón en Naranja (#ff7b00) */
+.glitch-nfs-btn:hover,
+.nav-link-glitch:hover,
+.dropdown-glitch-item:hover,
+.glitch-menu-item:hover,
+.showcase-card-btn:hover {
+  background-color: #ff7b00 !important;
+  border-color: #ff9d42 !important;
+  color: #ffffff !important;
+  text-shadow: -1px -1px 0px #0a0a0c, 1px 1px 0px rgba(124, 58, 237, 0.85) !important;
+  box-shadow: 0 0 18px rgba(255, 123, 0, 0.6), 0 0 4px rgba(255, 184, 0, 0.45) !important;
+}
+
+.glitch-nfs-btn:hover::after,
+.nav-link-glitch:hover::after,
+.dropdown-glitch-item:hover::after,
+.glitch-menu-item:hover::after,
+.showcase-card-btn:hover::after {
+  display: flex !important;
+  opacity: 1 !important;
+  animation: glitch-orange-purple 0.65s infinite steps(2, end) !important;
+  background-color: #ff7b00 !important;
+  color: #ffffff !important;
+  border: 1px solid #ffffff !important;
+  text-shadow: -2px -2px 0px #0a0a0c, 2px 2px 0px #7c3aed !important;
+}
+
+/* 4. Estado Activo / Seleccionado */
+.glitch-nfs-btn.active,
+.glitch-nfs-btn.is-active,
+.nav-link-glitch.active,
+.nav-link-glitch.is-active,
+.dropdown-glitch-item.active,
+.dropdown-glitch-item.is-active,
+.glitch-menu-item.active,
+.glitch-menu-item.is-active {
+  background-color: #14110e !important;
+  border-color: #ff7b00 !important;
+  box-shadow: 0 0 12px rgba(255, 123, 0, 0.38) !important;
+  color: #ffffff !important;
+}
+
+.glitch-nfs-btn.active::after,
+.glitch-nfs-btn.is-active::after,
+.nav-link-glitch.active::after,
+.nav-link-glitch.is-active::after,
+.dropdown-glitch-item.active::after,
+.dropdown-glitch-item.is-active::after,
+.glitch-menu-item.active::after,
+.glitch-menu-item.is-active::after {
+  opacity: 0;
+  animation: none;
+}
+
+.glitch-nfs-btn.active:hover,
+.glitch-nfs-btn.is-active:hover,
+.nav-link-glitch.active:hover,
+.nav-link-glitch.is-active:hover,
+.dropdown-glitch-item.active:hover,
+.dropdown-glitch-item.is-active:hover,
+.glitch-menu-item.active:hover,
+.glitch-menu-item.is-active:hover {
+  background-color: #ff7b00 !important;
+  border-color: #ffffff !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 20px rgba(255, 123, 0, 0.7) !important;
+}
+
+.glitch-nfs-btn.active:hover::after,
+.glitch-nfs-btn.is-active:hover::after,
+.nav-link-glitch.active:hover::after,
+.nav-link-glitch.is-active:hover::after,
+.dropdown-glitch-item.active:hover::after,
+.dropdown-glitch-item.is-active:hover::after,
+.glitch-menu-item.active:hover::after,
+.glitch-menu-item.is-active:hover::after {
+  display: flex !important;
+  opacity: 1 !important;
+  animation: glitch-orange-purple 0.65s infinite steps(2, end) !important;
+  background-color: #ff7b00 !important;
+}
+
+/* Keyframes con saltos de interferencia */
+@keyframes glitch-orange-purple {
+  0%   { clip-path: var(--move1); transform: translate(0px, -3px); }
+  10%  { clip-path: var(--move2); transform: translate(-3px, 3px); }
+  20%  { clip-path: var(--move3); transform: translate(3px, 0px); }
+  30%  { clip-path: var(--move4); transform: translate(-3px, 3px); }
+  40%  { clip-path: var(--move5); transform: translate(3px, -3px); }
+  50%  { clip-path: var(--move6); transform: translate(-3px, 3px); }
+  60%  { clip-path: var(--move1); transform: translate(3px, -3px); }
+  70%  { clip-path: var(--move3); transform: translate(-3px, 3px); }
+  80%  { clip-path: var(--move2); transform: translate(3px, -3px); }
+  90%  { clip-path: var(--move4); transform: translate(-3px, 3px); }
+  100% { clip-path: var(--move1); transform: translate(0); }
+}
+
+@keyframes glitch_4011 {
+  0%   { clip-path: var(--move1); transform: translate(0px, -3px); }
+  10%  { clip-path: var(--move2); transform: translate(-3px, 3px); }
+  20%  { clip-path: var(--move3); transform: translate(3px, 0px); }
+  30%  { clip-path: var(--move4); transform: translate(-3px, 3px); }
+  40%  { clip-path: var(--move5); transform: translate(3px, -3px); }
+  50%  { clip-path: var(--move6); transform: translate(-3px, 3px); }
+  60%  { clip-path: var(--move1); transform: translate(3px, -3px); }
+  70%  { clip-path: var(--move3); transform: translate(-3px, 3px); }
+  80%  { clip-path: var(--move2); transform: translate(3px, -3px); }
+  90%  { clip-path: var(--move4); transform: translate(-3px, 3px); }
+  100% { clip-path: var(--move1); transform: translate(0); }
+}
+
+/* Ajustes geométricos para ítems desplegables */
+.dropdown-glitch-item {
+  width: 100% !important;
+  justify-content: flex-start !important;
+  padding: 8px 14px !important;
+  gap: 10px !important;
+  border-radius: 6px !important;
+  text-align: left !important;
+}
+
+.dropdown-glitch-item::after {
+  justify-content: flex-start !important;
+  padding-left: 44px !important;
+  text-align: left !important;
+}
+
+/* ==========================================================
+   ADAPTACIONES DE COMPONENTES ESPECÍFICOS
+   ========================================================== */
+
+/* 1. Submenú Desplegable Minimalista */
+.nav-dropdown-menu,
+.elements-mega-menu {
+  background-color: #0a0a0c !important;
+  border: 1px solid rgba(255, 123, 0, 0.18) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.9), 0 0 15px rgba(0, 0, 0, 0.5) !important;
+  max-width: 390px !important;
+  min-width: 340px !important;
+  width: max-content !important;
+  padding: 12px !important;
+}
+
+.mega-item,
+.submenu-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 10px 14px !important;
+  background-color: #0a0a0c !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 6px !important;
+  color: #ffffff !important;
+  font-family: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.015em !important;
+  -webkit-font-smoothing: antialiased !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+}
+
+.mega-item:hover,
+.submenu-item:hover {
+  background-color: #ff7b00 !important;
+  border-color: #ff9d42 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 18px rgba(255, 123, 0, 0.6) !important;
+}
+
+/* Dropdown items styling harmonization */
+.elements-mega-menu .dropdown-glitch-item,
+.nav-dropdown-menu .dropdown-glitch-item {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
+  border-radius: 6px !important;
+}
+
+/* Supresión de contadores, badges y textos secundarios */
+.submenu-item .badge,
+.submenu-item .counter,
+.submenu-item .sector-label,
+.submenu-item .mega-item-count,
+.submenu-item .mega-item-badge-new,
+.mega-item-count,
+.mega-item-badge-new,
+.dropdown-footer,
+.mega-menu-footer,
+.mega-menu-header,
+.mega-menu-subtitle {
+  display: none !important;
+}
+
+/* ==========================================================================
+   2. SUB-NAVEGACIÓN, CATÁLOGO DE RUTAS, LEADERBOARDS, GRUPOS Y TORNEO
+   Todos con el mismo estilo de botón "Explorar" (Negro -> Glitch Naranja)
+   ========================================================================== */
+.btn-squid-orange,
+.filter-pill-btn,
+.track-filter-pill,
+.champ-leaderboard-btn,
+.stage-action-btn,
+[data-routes-cat],
+[data-routes-district],
+[data-champ-week],
+[data-champ-group-tab],
+[data-season-week],
+[data-season-id],
+[data-season-mode],
+[data-standings-mode],
+[data-cockpit-filter],
+[data-hof-tab],
+[data-tel-type],
+[data-lb-tab],
+.past-view-mode-tabs .filter-pill-btn {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: #0a0a0c !important;
+  border: 1px solid rgba(255, 255, 255, 0.24) !important;
+  color: #ffffff !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  overflow: visible !important;
+  padding: 8px 16px !important;
+  font-family: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+  transition: color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, transform 0.2s ease !important;
+  text-decoration: none !important;
+  z-index: 1 !important;
+}
+
+/* Ensure text and icons stay crisp and white on hover */
+.btn-squid-orange > *:not(.squid-layer),
+.filter-pill-btn > *:not(.squid-layer),
+.track-filter-pill > *:not(.squid-layer),
+.champ-leaderboard-btn > *:not(.squid-layer),
+.stage-action-btn > *:not(.squid-layer),
+[data-routes-cat] > *:not(.squid-layer),
+[data-routes-district] > *:not(.squid-layer),
+[data-champ-week] > *:not(.squid-layer),
+[data-champ-group-tab] > *:not(.squid-layer),
+[data-season-week] > *:not(.squid-layer) {
+  position: relative !important;
+  z-index: 2 !important;
+  color: #ffffff !important;
+  transition: color 0.2s ease !important;
+}
+
+.squid-layer {
+  display: none !important;
+}
+
+/* Hover: Glitch + Fondo Naranja (#ff7b00) y Texto Blanco */
+.btn-squid-orange:hover,
+.filter-pill-btn:hover,
+.track-filter-pill:hover,
+.champ-leaderboard-btn:hover,
+.stage-action-btn:hover,
+[data-routes-cat]:hover,
+[data-routes-district]:hover,
+[data-champ-week]:hover,
+[data-champ-group-tab]:hover,
+[data-season-week]:hover,
+[data-season-id]:hover,
+[data-season-mode]:hover,
+[data-standings-mode]:hover,
+[data-cockpit-filter]:hover,
+[data-hof-tab]:hover,
+[data-tel-type]:hover,
+[data-lb-tab]:hover {
+  background-color: #ff7b00 !important;
+  color: #ffffff !important;
+  border-color: #ff9d42 !important;
+  box-shadow: 0 0 18px rgba(255, 123, 0, 0.65), 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+}
+
+.btn-squid-orange:hover > *:not(.squid-layer),
+.filter-pill-btn:hover > *:not(.squid-layer),
+.track-filter-pill:hover > *:not(.squid-layer),
+.champ-leaderboard-btn:hover > *:not(.squid-layer),
+.stage-action-btn:hover > *:not(.squid-layer),
+[data-routes-cat]:hover > *:not(.squid-layer),
+[data-routes-district]:hover > *:not(.squid-layer),
+[data-champ-week]:hover > *:not(.squid-layer),
+[data-champ-group-tab]:hover > *:not(.squid-layer),
+[data-season-week]:hover > *:not(.squid-layer) {
+  color: #ffffff !important;
+}
+
+/* Active State: Borde Naranja encendido con texto blanco y al pasar cursor hace Glitch Naranja */
+.btn-squid-orange.is-active,
+.btn-squid-orange.active,
+.filter-pill-btn.is-active,
+.filter-pill-btn.active,
+.track-filter-pill.is-active,
+.track-filter-pill.active,
+[data-routes-cat].is-active,
+[data-routes-district].is-active,
+[data-champ-week].is-active,
+[data-champ-group-tab].is-active,
+[data-season-week].is-active,
+[data-season-id].is-active,
+[data-season-mode].is-active,
+[data-standings-mode].is-active,
+[data-cockpit-filter].is-active,
+[data-hof-tab].is-active,
+[data-tel-type].is-active,
+[data-lb-tab].is-active,
+.torneo-nav-pill.glitch-nfs-btn.is-active,
+.torneo-nav-pill.glitch-nfs-btn.active,
+.torneo-group-pill.glitch-nfs-btn.is-active,
+.torneo-group-pill.glitch-nfs-btn.active {
+  background-color: #14110e !important;
+  color: #ffffff !important;
+  border: 1px solid #ff7b00 !important;
+  font-weight: 700 !important;
+  box-shadow: 0 0 14px rgba(255, 123, 0, 0.4) !important;
+}
+
+.btn-squid-orange.is-active > *:not(.squid-layer),
+.btn-squid-orange.active > *:not(.squid-layer),
+.filter-pill-btn.is-active > *:not(.squid-layer),
+.filter-pill-btn.active > *:not(.squid-layer),
+.track-filter-pill.is-active > *:not(.squid-layer),
+.track-filter-pill.active > *:not(.squid-layer),
+[data-routes-cat].is-active > *:not(.squid-layer),
+[data-routes-district].is-active > *:not(.squid-layer),
+[data-champ-week].is-active > *:not(.squid-layer),
+[data-champ-group-tab].is-active > *:not(.squid-layer),
+[data-season-week].is-active > *:not(.squid-layer) {
+  color: #ffffff !important;
+}
+
+.filter-pill-btn.is-active:hover,
+.filter-pill-btn.active:hover,
+.track-filter-pill.is-active:hover,
+.track-filter-pill.active:hover,
+[data-routes-cat].is-active:hover,
+[data-routes-district].is-active:hover,
+[data-champ-week].is-active:hover,
+[data-champ-group-tab].is-active:hover,
+[data-season-week].is-active:hover,
+[data-season-id].is-active:hover,
+[data-season-mode].is-active:hover,
+[data-standings-mode].is-active:hover,
+[data-cockpit-filter].is-active:hover,
+[data-hof-tab].is-active:hover,
+[data-tel-type].is-active:hover,
+[data-lb-tab].is-active:hover {
+  background-color: #ff7b00 !important;
+  border-color: #ffffff !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 20px rgba(255, 123, 0, 0.7) !important;
+}
+
+/* 3. Botón Principal + Submit Record */
+.btn-uiverse-create.glitch-nfs-btn {
+  background: #0a0a0c !important;
+  border: 1px solid rgba(255, 255, 255, 0.24) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+  height: 38px;
+  padding: 0 16px;
+  color: #ffffff !important;
+}
+
+.btn-uiverse-create.glitch-nfs-btn:hover {
+  background: #ff7b00 !important;
+  border-color: #ff9d42 !important;
+  box-shadow: 0 0 18px rgba(255, 123, 0, 0.6) !important;
+  text-shadow: -1px -1px 0px #0a0a0c, 1px 1px 0px #7c3aed !important;
+}
+
+/* 4. Botón Leaderboard → en Fichas del Catálogo */
+.uiverse-baboon-btn,
+.champ-leaderboard-btn {
+  background-image: none !important;
+  background-color: #0a0a0c !important;
+  border: 1px solid rgba(255, 255, 255, 0.24) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+  padding: 0 !important;
+}
+
+.uiverse-baboon-btn > .text,
+.uiverse-baboon-btn > span:not(.squid-layer),
+.champ-leaderboard-btn > .text,
+.champ-leaderboard-btn > span:not(.squid-layer) {
+  background-color: transparent !important;
+  padding: 6px 14px !important;
+  color: #ffffff !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.uiverse-baboon-btn.glitch-nfs-btn:hover,
+.champ-leaderboard-btn.glitch-nfs-btn:hover,
+.uiverse-baboon-btn:hover,
+.champ-leaderboard-btn:hover {
+  background-color: #ff7b00 !important;
+  border-color: #ff9d42 !important;
+  color: #ffffff !important;
+  text-shadow: -1px -1px 0px #0a0a0c, 1px 1px 0px #7c3aed !important;
+  box-shadow: 0 0 18px rgba(255, 123, 0, 0.6) !important;
+  transform: translateY(-2px);
+}
+
+/* 5. Menú Lateral Izquierdo (Filtros de Categorías, Distritos y Challenger/Torneo) */
+.sidebar-btn.glitch-nfs-btn,
+.sidebar-category-item.glitch-nfs-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  background-color: #0a0a0c !important;
+  border: 1px solid rgba(255, 255, 255, 0.24) !important;
+  border-radius: 6px !important;
+  color: #ffffff !important;
+  position: relative !important;
+  overflow: visible !important;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease, color 0.18s ease !important;
+}
+
+.sidebar-btn.glitch-nfs-btn::after,
+.sidebar-category-item.glitch-nfs-btn::after {
+  content: attr(data-text) !important;
+  position: absolute !important;
+  inset: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  padding-left: 48px !important;
+  font-family: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
+  color: #ffffff !important;
+  clip-path: var(--move1);
+  background: #ff7b00 !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  box-sizing: border-box !important;
+  z-index: 4 !important;
+}
+
+.sidebar-btn.glitch-nfs-btn:hover,
+.sidebar-category-item.glitch-nfs-btn:hover {
+  background-color: #ff7b00 !important;
+  border-color: #ff9d42 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 18px rgba(255, 123, 0, 0.6), 0 0 4px rgba(124, 58, 237, 0.35) !important;
+  text-shadow: -1px -1px 0px #0a0a0c, 1px 1px 0px rgba(124, 58, 237, 0.7) !important;
+}
+
+.sidebar-btn.glitch-nfs-btn:hover::after,
+.sidebar-category-item.glitch-nfs-btn:hover::after {
+  opacity: 1 !important;
+  animation: glitch-orange-purple 0.65s infinite steps(2, end) !important;
+  background-color: #ff7b00 !important;
+  border: 1px solid #ffffff !important;
+  text-shadow: -2px -2px 0px #0a0a0c, 2px 2px 0px #7c3aed !important;
+}
+
+.sidebar-btn.glitch-nfs-btn.is-active,
+.sidebar-btn.glitch-nfs-btn.active,
+.sidebar-category-item.glitch-nfs-btn.is-active,
+.sidebar-category-item.glitch-nfs-btn.active {
+  background-color: #14110e !important;
+  border-color: #ff7b00 !important;
+  box-shadow: 0 0 12px rgba(255, 123, 0, 0.38) !important;
+  color: #ffffff !important;
+}
+
+.sidebar-btn.glitch-nfs-btn.is-active:hover,
+.sidebar-btn.glitch-nfs-btn.active:hover,
+.sidebar-category-item.glitch-nfs-btn.is-active:hover,
+.sidebar-category-item.glitch-nfs-btn.active:hover {
+  background-color: #ff7b00 !important;
+  border-color: #ffffff !important;
+  color: #ffffff !important;
+}
+
+.sidebar-btn.glitch-nfs-btn.is-active:hover::after,
+.sidebar-btn.glitch-nfs-btn.active:hover::after,
+.sidebar-category-item.glitch-nfs-btn.is-active:hover::after,
+.sidebar-category-item.glitch-nfs-btn.active:hover::after {
+  display: flex !important;
+  opacity: 1 !important;
+  animation: glitch-orange-purple 0.65s infinite steps(2, end) !important;
+  background-color: #ff7b00 !important;
+}
+
+/* 6. Botones de Acción Globales (Dossier, Hall of Fame, Tuning, Reglamento, Descargas, Discord, Mapa) */
+.btn-filter-group.glitch-nfs-btn,
+.btn-filter-group-routes.glitch-nfs-btn,
+.dossier-btn.glitch-nfs-btn,
+.dossier-pilot-btn.glitch-nfs-btn,
+.v7-dossier-btn-orange,
+.v7-btn-export-csv,
+.v7-btn-audit-wrs,
+.v7-epoch-btn,
+.rival-selector-btn.glitch-nfs-btn,
+.hall-fame-btn.glitch-nfs-btn,
+.hof-filter-btn.glitch-nfs-btn,
+.hz-toggle-btn.glitch-nfs-btn,
+.tuning-btn.glitch-nfs-btn,
+.tuning-filter-btn,
+.tuning-preset-btn.glitch-nfs-btn,
+.btn-save-setup.glitch-nfs-btn,
+.rules-btn.glitch-nfs-btn,
+.rules-nav-btn.glitch-nfs-btn,
+.btn-download-rules.glitch-nfs-btn,
+.download-btn.glitch-nfs-btn,
+.download-card-btn.glitch-nfs-btn,
+.btn-download-patch.glitch-nfs-btn,
+.discord-btn.glitch-nfs-btn,
+.btn-discord-join.glitch-nfs-btn,
+.discord-cta-btn.glitch-nfs-btn,
+.discord-floating-trigger.glitch-nfs-btn,
+.member-filter-chip,
+.tactical-map-btn.glitch-nfs-btn,
+.district-radar-btn.glitch-nfs-btn,
+.radar-control-btn.glitch-nfs-btn,
+.map-sector-btn.glitch-nfs-btn,
+.btn-map-control,
+.btn-back-to-tracks,
+.standings-pagination-btn.glitch-nfs-btn,
+.pagination-btn.glitch-nfs-btn,
+.btn-export-standings.glitch-nfs-btn,
+.past-bracket-btn.glitch-nfs-btn,
+.challonge-btn.glitch-nfs-btn {
+  background: #0a0a0c !important;
+  background-color: #0a0a0c !important;
+  border: 1px solid rgba(255, 255, 255, 0.24) !important;
+  color: #ffffff !important;
+  border-radius: 6px !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-filter-group.glitch-nfs-btn:hover,
+.btn-filter-group-routes.glitch-nfs-btn:hover,
+.dossier-btn.glitch-nfs-btn:hover,
+.dossier-pilot-btn.glitch-nfs-btn:hover,
+.v7-dossier-btn-orange:hover,
+.v7-btn-export-csv:hover,
+.v7-btn-audit-wrs:hover,
+.v7-epoch-btn:hover,
+.rival-selector-btn.glitch-nfs-btn:hover,
+.hall-fame-btn.glitch-nfs-btn:hover,
+.hof-filter-btn.glitch-nfs-btn:hover,
+.hz-toggle-btn.glitch-nfs-btn:hover,
+.tuning-btn.glitch-nfs-btn:hover,
+.tuning-filter-btn:hover,
+.tuning-preset-btn.glitch-nfs-btn:hover,
+.btn-save-setup.glitch-nfs-btn:hover,
+.rules-btn.glitch-nfs-btn:hover,
+.rules-nav-btn.glitch-nfs-btn:hover,
+.btn-download-rules.glitch-nfs-btn:hover,
+.download-btn.glitch-nfs-btn:hover,
+.download-card-btn.glitch-nfs-btn:hover,
+.btn-download-patch.glitch-nfs-btn:hover,
+.discord-btn.glitch-nfs-btn:hover,
+.btn-discord-join.glitch-nfs-btn:hover,
+.discord-cta-btn.glitch-nfs-btn:hover,
+.discord-floating-trigger.glitch-nfs-btn:hover,
+.member-filter-chip:hover,
+.tactical-map-btn.glitch-nfs-btn:hover,
+.district-radar-btn.glitch-nfs-btn:hover,
+.radar-control-btn.glitch-nfs-btn:hover,
+.map-sector-btn.glitch-nfs-btn:hover,
+.btn-map-control:hover,
+.btn-back-to-tracks:hover,
+.standings-pagination-btn.glitch-nfs-btn:hover,
+.pagination-btn.glitch-nfs-btn:hover,
+.btn-export-standings.glitch-nfs-btn:hover,
+.past-bracket-btn.glitch-nfs-btn:hover,
+.challonge-btn.glitch-nfs-btn:hover {
+  background: #ff7b00 !important;
+  background-color: #ff7b00 !important;
+  border-color: #ff9d42 !important;
+  color: #ffffff !important;
+  text-shadow: -1px -1px 0px #0a0a0c, 1px 1px 0px #7c3aed !important;
+  box-shadow: 0 0 18px rgba(255, 123, 0, 0.6) !important;
+}
+
+
+/* ==========================================================
+   FORMULARIO DE HOMOLOGACIÓN OFICIAL - ESTILO UIVERSE / NFSMW
+   ========================================================== */
+
+.homologation-container,
+.form-container {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  border-radius: 0.75rem;
+  background-color: #0d0e12;
+  border: 1px solid rgba(255, 123, 0, 0.25);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 123, 0, 0.15);
+  padding: 2.25rem;
+  color: #f3f4f6;
+  position: relative;
+}
+
+.homologation-container .title,
+.form-container .title {
+  text-align: center;
+  font-size: 1.75rem;
+  line-height: 2.25rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #ffffff;
+  text-shadow: 0 0 12px rgba(255, 123, 0, 0.4);
+}
+
+.homologation-container .subtitle {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #9ca3af;
+  margin-top: 0.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.input-group {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.input-group.full-width {
+  grid-column: span 2;
+}
+
+.input-group label {
+  display: block;
+  color: #cbd5e1;
+  font-weight: 600;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+  width: 100%;
+  border-radius: 0.375rem;
+  border: 1px solid #262626;
+  outline: 0;
+  background-color: #14151b;
+  padding: 0.75rem 1rem;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.9rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+
+.input-group select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff7b00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1em;
+}
+
+.input-group select option {
+  background-color: #0d0e12;
+  color: #ffffff;
+}
+
+.input-group input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.8) sepia(1) saturate(5) hue-rotate(345deg);
+  cursor: pointer;
+}
+
+/* Enfoque: Naranja Neón con halo suave púrpura */
+.input-group input:focus,
+.input-group select:focus,
+.input-group textarea:focus {
+  border-color: #ff7b00;
+  box-shadow: 0 0 12px rgba(255, 123, 0, 0.4), 0 0 2px rgba(124, 58, 237, 0.5);
+}
+
+/* Botón Glitch Naranja / Negro para Enviar Homologación */
+.btn-submit-homologation {
+  display: block;
+  width: 100%;
+  margin-top: 1.5rem;
+  background-color: #ff7b00;
+  padding: 0.85rem;
+  text-align: center;
+  color: #0d0e12;
+  border: none;
+  border-radius: 0.375rem;
+  font-weight: 800;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(255, 123, 0, 0.45);
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-submit-homologation:hover {
+  background-color: #ff9500;
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(255, 123, 0, 0.65), 0 0 5px rgba(124, 58, 237, 0.4);
+}
+
+@media (max-width: 640px) {
+  .homologation-container,
+  .form-container {
+    padding: 1.5rem 1rem;
+  }
+  .form-group-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  .input-group.full-width {
+    grid-column: span 1;
+  }
+}
+
+/* ========================================================================
+   8. LEADERBOARD VIDEO BANNER, REPOSITIONED CONTROLS & GLITCH FILTER TABS
+   ======================================================================== */
+
+/* Leaderboard banner wrapper container */
+.leaderboard-banner-wrapper {
+  position: relative !important;
+  width: 100% !important;
+  min-height: 290px !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  margin-bottom: 24px !important;
+  border: 1px solid rgba(255, 123, 0, 0.4) !important;
+  box-shadow:
+    0 24px 50px -12px rgba(0, 0, 0, 0.9),
+    0 0 30px rgba(255, 123, 0, 0.2),
+    0 0 25px rgba(168, 85, 247, 0.15) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  padding: 36px 40px !important;
+  background-color: #08080c !important;
+}
+
+/* Back button relocated to top-right of the video banner */
+.leaderboard-banner-wrapper .btn-back-to-tracks {
+  position: absolute !important;
+  top: 1.25rem !important;
+  right: 1.5rem !important;
+  z-index: 10 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 9px 18px !important;
+  background: #0d0e12 !important;
+  color: #f3f4f6 !important;
+  border: 1.5px solid rgba(255, 123, 0, 0.6) !important;
+  border-radius: 8px !important;
+  font-family: var(--font-heading, "Montserrat", sans-serif) !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  cursor: pointer !important;
+  transition: all 0.25s ease !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7), 0 0 12px rgba(255, 123, 0, 0.25) !important;
+}
+
+.leaderboard-banner-wrapper .btn-back-to-tracks:hover {
+  color: #ffffff !important;
+  border-color: #ff7b00 !important;
+  background: #141720 !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.85), 0 0 20px rgba(255, 123, 0, 0.55) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Video Background Clarity Optimization */
+.leaderboard-banner-wrapper .banner-video-bg,
+.lb-video-banner .section-bg-video {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  transform: translate(-50%, -50%) !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  filter: contrast(1.18) brightness(1.08) saturate(1.12) !important;
+  opacity: 0.85 !important;
+  transition: filter 0.4s ease, opacity 0.4s ease, transform 0.6s ease !important;
+}
+
+.leaderboard-banner-wrapper:hover .banner-video-bg,
+.lb-video-banner:hover .section-bg-video {
+  filter: contrast(1.22) brightness(1.14) saturate(1.18) !important;
+  opacity: 0.95 !important;
+  transform: translate(-50%, -50%) scale(1.02) !important;
+}
+
+/* Refined Radial Vignette for Depth Without Loss of Car Visuals */
+.leaderboard-banner-wrapper .banner-vignette-overlay,
+.lb-video-banner .section-bg-vignette {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  background:
+    radial-gradient(ellipse 75% 70% at 50% 50%, rgba(8, 8, 12, 0.15) 0%, rgba(8, 8, 12, 0.55) 65%, rgba(8, 8, 12, 0.85) 100%),
+    linear-gradient(180deg, rgba(8, 8, 12, 0.45) 0%, rgba(8, 8, 12, 0.1) 40%, rgba(8, 8, 12, 0.75) 100%),
+    linear-gradient(90deg, rgba(8, 8, 12, 0.7) 0%, rgba(8, 8, 12, 0.2) 50%, rgba(8, 8, 12, 0.65) 100%) !important;
+}
+
+/* Suppress redundant dark blur box over video in LB banner */
+.lb-video-banner .section-banner-content {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  padding: 0 !important;
+}
+
+/* Raise the banner position by reducing top whitespace in leaderboard view */
+#view-leaderboard .secondary-view-wrap {
+  padding-top: calc(var(--navbar-height, 60px) + 16px) !important;
+}
+
+/* Category Filter Tabs & Glitch NFS Styling */
+.setup-filters-row .filter-pill-btn.glitch-nfs-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-family: var(--font-heading, "Montserrat", sans-serif) !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  padding: 8px 16px !important;
+  background-color: #0a0a0c !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+  border-radius: 999px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  position: relative !important;
+}
+
+.setup-filters-row .filter-pill-btn.glitch-nfs-btn:hover {
+  border-color: #ffffff !important;
+  color: #ffffff !important;
+  background-color: #050507 !important;
+  text-shadow: -1px -1px 0px #ffffff, 1px 1px 0px #94a3b8 !important;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.35), 0 0 2px #e2e8f0 !important;
+}
+
+.setup-filters-row .filter-pill-btn.glitch-nfs-btn.is-active,
+.setup-filters-row .filter-pill-btn.glitch-nfs-btn.active {
+  background: #ff7b00 !important;
+  background-color: #ff7b00 !important;
+  color: #ffffff !important;
+  border: 1px solid #ff9500 !important;
+  font-weight: 800 !important;
+  box-shadow: 0 0 14px rgba(255, 123, 0, 0.45) !important;
+}
+
+.setup-filters-row .filter-pill-btn.glitch-nfs-btn.is-active::after,
+.setup-filters-row .filter-pill-btn.glitch-nfs-btn.active::after {
+  display: none !important;
+}
+
+/* Quick Route Switcher in Filter Row */
+.setup-filters-row .nfs-lb-select,
+.setup-filters-row .nfs-lb-input {
+  background: #0d0e12 !important;
+  border: 1px solid rgba(255, 123, 0, 0.35) !important;
+  color: #f1f5f9 !important;
+  border-radius: 8px !important;
+  padding: 7px 12px !important;
+  font-size: 13px !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.setup-filters-row .nfs-lb-select:focus,
+.setup-filters-row .nfs-lb-input:focus {
+  border-color: #ff7b00 !important;
+  box-shadow: 0 0 12px rgba(255, 123, 0, 0.45) !important;
+  outline: none !important;
+}
+
+@media (max-width: 768px) {
+  .leaderboard-banner-wrapper .btn-back-to-tracks {
+    position: static !important;
+    margin-bottom: 16px !important;
+    align-self: flex-start !important;
+  }
+  .leaderboard-banner-wrapper {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    padding: 24px 20px !important;
+    min-height: auto !important;
+  }
+}
+
+/* ==========================================================================
+   CHALLENGE CARDS HEADER RESTRUCTURING & SUBNAV FIX
+   ========================================================================== */
+.champ-route-num-badge {
+  display: none !important;
+}
+
+.challenge-card-header,
+.champ-challenge-ticket .t-header {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 10px !important;
+  margin-bottom: 12px !important;
+}
+
+.challenge-header-top-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+}
+
+.challenge-header-title-wrap {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 5px !important;
+  width: 100% !important;
+}
+
+.brand-nfs-ranks,
+.champ-challenge-ticket .t-header-left .t-logo,
+.champ-challenge-ticket .t-logo {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-family: var(--font-heading, "Space Grotesk", sans-serif) !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+}
+
+.brand-nfs-ranks .brand-icon,
+.champ-challenge-ticket .t-header-left .t-logo svg,
+.champ-challenge-ticket .t-header-left .t-logo-svg,
+.champ-challenge-ticket .t-logo-svg {
+  width: 18px !important;
+  height: 18px !important;
+  fill: none !important;
+  stroke: #ff7b00 !important;
+  color: #ff7b00 !important;
+  filter: drop-shadow(0 0 6px rgba(255, 123, 0, 0.6)) !important;
+  flex-shrink: 0 !important;
+}
+
+.track-main-title,
+.champ-challenge-ticket .t-title {
+  font-family: var(--font-heading, "Montserrat", sans-serif) !important;
+  font-size: 1.35rem !important; /* ~21px */
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+  text-transform: uppercase !important;
+  text-align: left !important;
+  color: #ffffff !important;
+  background: none !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95) !important;
+  letter-spacing: -0.01em !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
+  hyphens: none !important;
+}
+
+.group-category-pill,
+.champ-challenge-ticket .champ-group-badge-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  width: fit-content !important;
+  font-family: var(--font-heading, "Montserrat", sans-serif) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: #c4b5fd !important;
+  background: rgba(124, 58, 237, 0.15) !important;
+  border: 1px solid rgba(139, 92, 246, 0.35) !important;
+  padding: 3px 8px !important;
+  border-radius: 5px !important;
+  letter-spacing: 0.03em !important;
+}
+
+.race-type-badge,
+.champ-challenge-ticket .t-type {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  padding: 4px 10px !important;
+  border-radius: 6px !important;
+  background: #0f1015 !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  color: #ffffff !important;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.35) !important;
+}
+
+.race-type-badge.type-circuito,
+.champ-challenge-ticket .t-type-circuito {
+  border-color: rgba(59, 130, 246, 0.6) !important;
+  color: #93c5fd !important;
+  text-shadow: 0 0 8px rgba(59, 130, 246, 0.4) !important;
+}
+
+.race-type-badge.type-sprint,
+.champ-challenge-ticket .t-type-sprint {
+  border-color: rgba(234, 179, 8, 0.6) !important;
+  color: #fde047 !important;
+  text-shadow: 0 0 8px rgba(234, 179, 8, 0.4) !important;
+}
+
+.race-type-badge.type-drag,
+.champ-challenge-ticket .t-type-drag {
+  border-color: rgba(239, 68, 68, 0.6) !important;
+  color: #fca5a5 !important;
+  text-shadow: 0 0 8px rgba(239, 68, 68, 0.4) !important;
+}
+
+.restriction-badge {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  background: rgba(14, 13, 20, 0.9) !important;
+  border: 1px solid rgba(255, 123, 0, 0.35) !important;
+  border-radius: 7px !important;
+  padding: 5px 10px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 10px rgba(255, 123, 0, 0.12) !important;
+  width: 100% !important;
+}
+
+.restriction-badge .restriction-label {
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 10.5px !important;
+  font-weight: 800 !important;
+  color: #94a3b8 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  line-height: 1 !important;
+  flex-shrink: 0 !important;
+}
+
+.restriction-badge .restriction-vehicle {
+  font-family: var(--font-heading, "Space Grotesk", sans-serif) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #ffb800 !important;
+  text-shadow: 0 0 10px rgba(255, 184, 0, 0.35) !important;
+  line-height: 1.2 !important;
+  white-space: normal !important;
+  text-align: right !important;
+}
+
+.champ-challenge-ticket .t-subtitle {
+  display: none !important;
+}
+
+/* Sidebar & Subnav Text Overflow Wrap Rules */
+.sidebar-submenu-item,
+.subnav-btn,
+.mobile-subnav-item {
+  white-space: normal !important;
+  word-break: keep-all !important;
+  min-width: 0 !important;
+}
+
+@media (max-width: 640px) {
+  .challenge-card-header,
+  .champ-challenge-ticket .t-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+  .challenge-header-right {
+    align-items: flex-start !important;
+    text-align: left !important;
+    width: 100% !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    flex-wrap: wrap !important;
+  }
+  .restriction-badge {
+    align-items: flex-start !important;
+  }
+}
+
+/* ==========================================================================
+   UIVERSE.IO ITSRISH01/MODERN-MOUSE-31 SQUIRCLE DOCK FOOTER
+   ========================================================================== */
+.modern-mouse-dock-wrapper {
+  max-width: 1180px;
+  margin: 46px auto 14px;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.modern-mouse-dock {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+}
+
+.dock-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 11, 16, 0.65);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 123, 0, 0.15);
+  pointer-events: none;
+}
+
+.dock-icons {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  padding: 4px;
+  z-index: 2;
+}
+
+.dock-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+}
+
+.dock-squircle {
+  width: 58px;
+  height: 58px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0, 0, 0.2, 1), filter 0.3s ease;
+  transform: translate3d(0, 0, 0);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.dock-item:hover .dock-squircle {
+  transform: translateY(-8px) scale(1.12);
+  box-shadow: 0 22px 35px rgba(0, 0, 0, 0.7);
+}
+
+.dock-github {
+  background: linear-gradient(135deg, #374151, #111827);
+  border: 1px solid rgba(156, 163, 175, 0.4);
+}
+.dock-item:hover .dock-github {
+  box-shadow: 0 22px 35px rgba(0, 0, 0, 0.7), 0 0 22px rgba(255, 255, 255, 0.3);
+}
+
+.dock-firebase {
+  background: linear-gradient(135deg, #f5820d, #ffca28);
+  border: 1px solid rgba(255, 202, 40, 0.5);
+}
+.dock-item:hover .dock-firebase {
+  box-shadow: 0 22px 35px rgba(0, 0, 0, 0.7), 0 0 24px rgba(255, 123, 0, 0.65);
+}
+
+.dock-youtube {
+  background: linear-gradient(135deg, #dc2626, #991b1b);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+}
+.dock-item:hover .dock-youtube {
+  box-shadow: 0 22px 35px rgba(0, 0, 0, 0.7), 0 0 24px rgba(239, 68, 68, 0.65);
+}
+
+.dock-discord {
+  background: linear-gradient(135deg, #5865F2, #3730a3);
+  border: 1px solid rgba(99, 102, 241, 0.5);
+}
+.dock-item:hover .dock-discord {
+  box-shadow: 0 22px 35px rgba(0, 0, 0, 0.7), 0 0 24px rgba(88, 101, 242, 0.65);
+}
+
+.dock-svg {
+  width: 30px;
+  height: 30px;
+  color: #ffffff;
+  fill: #ffffff;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+  transition: transform 0.25s ease;
+}
+
+.dock-item:hover .dock-svg {
+  transform: scale(1.05);
+}
+
+.dock-tooltip {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: rgba(0, 0, 0, 0.9);
+  color: #ffb800;
+  border: 1px solid rgba(255, 184, 0, 0.3);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
+}
+
+.dock-item:hover .dock-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+
+
+
+/* ==========================================================================
+   OVERRIDE FINAL: GLITCH NARANJA + PÚRPURA EN TODOS LOS BOTONES SECUNDARIOS
+   Catálogo oficial · Leaderboard de rutas · Botones de Video · Desafíos
+   semanales (Semana 1-4) · Championship Standings · Tabla oficial ·
+   Grupos & Rivales · Champion Challenge
+   (:not(#_) eleva la especificidad para vencer reglas antiguas squid/plata)
+   ========================================================================== */
+html body :is(
+  .filter-pill-btn, .track-filter-pill, .glitch-pill-btn,
+  .champ-leaderboard-btn, .stage-action-btn, .uiverse-baboon-btn,
+  .btn-glitch-racing, .btn-video-glitch,
+  .champ-filter-group-btn, .torneo-group-pill, .btn-squid-orange,
+  .tuning-filter-btn, .member-filter-chip, .theme-stage-btn,
+  button[data-champ-week], button[data-season-week], button[data-season-id], button[data-season-mode],
+  button[data-season-subview], button[data-standings-mode], button[data-champ-group-tab],
+  button[data-select-champ-group], button[data-lb-tab], button[data-open-route-lb],
+  button[data-cockpit-filter], button[data-torneo-tab], button[data-hof-tab], button[data-tel-type],
+  button[data-select-pilot], button[data-toggle-ch-done], button[data-torneo-jump],
+  button[data-routes-cat], button[data-routes-district], button[data-home-cat],
+  button[data-cockpit-select-rank], .v7-roster-item
+):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link) {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #0a0a0c !important;
+  background-color: #0a0a0c !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  border-radius: 4px !important;
+  font-family: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+  letter-spacing: -0.015em !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  overflow: visible !important;
+  transform: none !important;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease !important;
+}
+
+/* Botones compactos (Tablas de Leaderboard, Standings, etc.) */
+html body :is(
+  .stage-action-btn.btn-sm,
+  .btn-video-glitch.btn-sm,
+  .btn-sm.glitch-nfs-btn
+):not(#_) {
+  padding: 4px 10px !important;
+  font-size: 11px !important;
+  letter-spacing: -0.015em !important;
+  line-height: 1.2 !important;
+  min-height: 26px !important;
+}
+
+/* Hijos (texto/iconos) siempre blancos, sin desplazamientos */
+html body :is(
+  .filter-pill-btn, .track-filter-pill, .glitch-pill-btn,
+  .champ-leaderboard-btn, .stage-action-btn, .uiverse-baboon-btn,
+  .btn-glitch-racing, .btn-video-glitch,
+  .champ-filter-group-btn, .torneo-group-pill, .btn-squid-orange,
+  button[data-champ-week], button[data-season-week], button[data-season-id], button[data-season-mode],
+  button[data-season-subview], button[data-standings-mode], button[data-champ-group-tab],
+  button[data-select-champ-group], button[data-lb-tab], button[data-open-route-lb],
+  button[data-routes-cat], button[data-routes-district], button[data-home-cat]
+):not(#_):not(.mega-item):not(.sidebar-btn) > *:not(svg):not(.squid-layer) {
+  color: #ffffff !important;
+  transform: none !important;
+}
+
+/* Desactivar definitivamente las capas squid deslizantes */
+html body .squid-layer:not(#_) {
+  display: none !important;
+}
+
+/* Pseudo-elemento clon del glitch */
+html body :is(
+  .filter-pill-btn, .track-filter-pill, .glitch-pill-btn,
+  .champ-leaderboard-btn, .stage-action-btn, .uiverse-baboon-btn,
+  .btn-glitch-racing, .btn-video-glitch,
+  .champ-filter-group-btn, .torneo-group-pill, .btn-squid-orange,
+  .tuning-filter-btn, .member-filter-chip, .theme-stage-btn,
+  button[data-champ-week], button[data-season-week], button[data-season-id], button[data-season-mode],
+  button[data-season-subview], button[data-standings-mode], button[data-champ-group-tab],
+  button[data-select-champ-group], button[data-lb-tab], button[data-open-route-lb],
+  button[data-cockpit-filter], button[data-torneo-tab], button[data-hof-tab], button[data-tel-type],
+  button[data-select-pilot], button[data-toggle-ch-done], button[data-torneo-jump],
+  button[data-routes-cat], button[data-routes-district], button[data-home-cat],
+  button[data-cockpit-select-rank], .v7-roster-item
+):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link)::after {
+  --move1: inset(50% 50% 50% 50%);
+  --move2: inset(31% 0 40% 0);
+  --move3: inset(39% 0 15% 0);
+  --move4: inset(45% 0 40% 0);
+  --move5: inset(45% 0 6% 0);
+  --move6: inset(14% 0 61% 0);
+  content: attr(data-text) !important;
+  display: flex !important;
+  position: absolute !important;
+  inset: 0 !important;
+  align-items: center !important;
+  justify-content: center !important;
+  clip-path: var(--move1);
+  background: transparent !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: inherit !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  letter-spacing: inherit !important;
+  text-transform: none !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  animation: none !important;
+  box-sizing: border-box !important;
+}
+
+/* HOVER: glitch naranja dominante + destello púrpura */
+html body :is(
+  .filter-pill-btn, .track-filter-pill, .glitch-pill-btn,
+  .champ-leaderboard-btn, .stage-action-btn, .uiverse-baboon-btn,
+  .btn-glitch-racing, .btn-video-glitch,
+  .champ-filter-group-btn, .torneo-group-pill, .btn-squid-orange,
+  .tuning-filter-btn, .member-filter-chip, .theme-stage-btn,
+  button[data-champ-week], button[data-season-week], button[data-season-id], button[data-season-mode],
+  button[data-season-subview], button[data-standings-mode], button[data-champ-group-tab],
+  button[data-select-champ-group], button[data-lb-tab], button[data-open-route-lb],
+  button[data-cockpit-filter], button[data-torneo-tab], button[data-hof-tab], button[data-tel-type],
+  button[data-select-pilot], button[data-toggle-ch-done], button[data-torneo-jump],
+  button[data-routes-cat], button[data-routes-district], button[data-home-cat],
+  button[data-cockpit-select-rank], .v7-roster-item
+):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link):hover {
+  background-color: #0d0e13 !important;
+  border-color: #ff7b00 !important;
+  color: #ffffff !important;
+  text-shadow: -2px -1px 0px #ff7b00, 2px 1px 0px rgba(124, 58, 237, 0.7) !important;
+  box-shadow: 0 0 14px rgba(255, 123, 0, 0.4), 0 0 4px rgba(124, 58, 237, 0.35) !important;
+}
+
+html body :is(
+  .filter-pill-btn, .track-filter-pill, .glitch-pill-btn,
+  .champ-leaderboard-btn, .stage-action-btn, .uiverse-baboon-btn,
+  .btn-glitch-racing, .btn-video-glitch,
+  .champ-filter-group-btn, .torneo-group-pill, .btn-squid-orange,
+  .tuning-filter-btn, .member-filter-chip, .theme-stage-btn,
+  button[data-champ-week], button[data-season-week], button[data-season-id], button[data-season-mode],
+  button[data-season-subview], button[data-standings-mode], button[data-champ-group-tab],
+  button[data-select-champ-group], button[data-lb-tab], button[data-open-route-lb],
+  button[data-cockpit-filter], button[data-torneo-tab], button[data-hof-tab], button[data-tel-type],
+  button[data-select-pilot], button[data-toggle-ch-done], button[data-torneo-jump],
+  button[data-routes-cat], button[data-routes-district], button[data-home-cat],
+  button[data-cockpit-select-rank], .v7-roster-item
+):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link):hover::after {
+  opacity: 1 !important;
+  animation: glitch-orange-purple 0.75s infinite steps(2, end) !important;
+  border: 1px solid #ff9500 !important;
+  text-shadow: -2px -2px 0px #ff7b00, 2px 2px 0px #7c3aed !important;
+}
+
+/* ACTIVO / SELECCIONADO (Semana activa, grupo activo, pestaña activa) */
+html body :is(
+  .filter-pill-btn, .track-filter-pill, .glitch-pill-btn,
+  .champ-leaderboard-btn, .stage-action-btn, .uiverse-baboon-btn,
+  .champ-filter-group-btn, .torneo-group-pill,
+  .tuning-filter-btn, .member-filter-chip, .theme-stage-btn,
+  button[data-champ-week], button[data-season-week], button[data-season-id], button[data-season-mode],
+  button[data-season-subview], button[data-standings-mode], button[data-champ-group-tab],
+  button[data-select-champ-group], button[data-lb-tab], button[data-torneo-tab], button[data-hof-tab],
+  button[data-tel-type], button[data-select-pilot],
+  button[data-routes-cat], button[data-routes-district], button[data-home-cat]
+):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link):is(.is-active, .active, .is-selected, .selected) {
+  background-color: #121318 !important;
+  border-color: #ff7b00 !important;
+  box-shadow: 0 0 10px rgba(255, 123, 0, 0.35) !important;
+  color: #ffffff !important;
+}
+
+html body :is(
+  .filter-pill-btn, .track-filter-pill, .glitch-pill-btn,
+  .champ-leaderboard-btn, .stage-action-btn, .uiverse-baboon-btn,
+  .champ-filter-group-btn, .torneo-group-pill,
+  .tuning-filter-btn, .member-filter-chip, .theme-stage-btn,
+  button[data-champ-week], button[data-season-week], button[data-season-id], button[data-season-mode],
+  button[data-season-subview], button[data-standings-mode], button[data-champ-group-tab],
+  button[data-select-champ-group], button[data-lb-tab], button[data-torneo-tab], button[data-hof-tab],
+  button[data-tel-type], button[data-select-pilot],
+  button[data-routes-cat], button[data-routes-district], button[data-home-cat]
+):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link):is(.is-active, .active, .is-selected, .selected):hover::after {
+  opacity: 1 !important;
+  animation: glitch-orange-purple 0.75s infinite steps(2, end) !important;
+}
+
+/* Iconos SVG y flechas dentro de los botones */
+html body :is(.filter-pill-btn, .stage-action-btn, .uiverse-baboon-btn, .champ-filter-group-btn):not(#_) .btn-hover-arrow {
+  color: #ffffff !important;
+  transform: none !important;
+}
+html body :is(.filter-pill-btn, .stage-action-btn, .uiverse-baboon-btn, .champ-filter-group-btn):not(#_):hover .btn-hover-arrow {
+  color: #ff7b00 !important;
+}
+
+/* ==========================================================================
+   DIRECTIVE: LEADERBOARD BANNER LAYOUT & CYBER-GLITCH BACK BUTTON
+   1. Botón Volver a Rutas y Circuitos: Fijo Arriba a la Derecha del banner con glitch naranja+púrpura
+   2. Título Leaderboard: Centrado verticalmente, alineado a la izquierda, max-width clamp para no chocar con WR card
+   3. Tipografía: Blanco resaltante puro (#ffffff) sin tonos amarillentos
+   ========================================================================== */
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner) {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  min-height: 280px !important;
+  padding: 36px 40px !important;
+}
+
+/* 1. Botón volver a rutas arriba a la derecha */
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner) .btn-back-to-tracks:not(#_) {
+  position: absolute !important;
+  top: clamp(16px, 2.4vw, 24px) !important;
+  right: clamp(16px, 2.4vw, 28px) !important;
+  bottom: auto !important;
+  left: auto !important;
+  z-index: 25 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 8px 16px !important;
+  background: #0a0a0c !important;
+  background-color: #0a0a0c !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  border-radius: 4px !important;
+  font-family: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-weight: 500 !important;
+  font-size: 13px !important;
+  letter-spacing: -0.015em !important;
+  text-transform: none !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7) !important;
+  text-shadow: none !important;
+  overflow: visible !important;
+  transform: none !important;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease !important;
+}
+
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner) .btn-back-to-tracks:not(#_) > *:not(svg):not(.squid-layer) {
+  color: #ffffff !important;
+  transform: none !important;
+}
+
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner) .btn-back-to-tracks:not(#_)::after {
+  --move1: inset(50% 50% 50% 50%);
+  --move2: inset(31% 0 40% 0);
+  --move3: inset(39% 0 15% 0);
+  --move4: inset(45% 0 40% 0);
+  --move5: inset(45% 0 6% 0);
+  --move6: inset(14% 0 61% 0);
+  content: attr(data-text) !important;
+  display: flex !important;
+  position: absolute !important;
+  inset: 0 !important;
+  align-items: center !important;
+  justify-content: center !important;
+  clip-path: var(--move1);
+  background: transparent !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: inherit !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  letter-spacing: inherit !important;
+  text-transform: uppercase !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  animation: none !important;
+  box-sizing: border-box !important;
+}
+
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner) .btn-back-to-tracks:not(#_):hover {
+  background-color: #0d0e13 !important;
+  border-color: #ff7b00 !important;
+  color: #ffffff !important;
+  text-shadow: -2px -1px 0px #ff7b00, 2px 1px 0px rgba(124, 58, 237, 0.7) !important;
+  box-shadow: 0 0 16px rgba(255, 123, 0, 0.5), 0 0 6px rgba(124, 58, 237, 0.4) !important;
+}
+
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner) .btn-back-to-tracks:not(#_):hover::after {
+  opacity: 1 !important;
+  animation: glitch-orange-purple 0.75s infinite steps(2, end) !important;
+  border: 1px solid #ff9500 !important;
+  text-shadow: -2px -2px 0px #ff7b00, 2px 2px 0px #7c3aed !important;
+}
+
+/* 2. Contenedor de Título alineado a la izquierda y restringido en ancho para no colisionar con WR Card */
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner) .section-banner-content {
+  position: relative !important;
+  z-index: 2 !important;
+  width: 100% !important;
+  max-width: min(850px, calc(100% - 340px)) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  text-align: left !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+}
+
+/* 3. Título Leaderboard en blanco resaltante con sombra nítida */
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner) #lb-hero-route-title {
+  text-align: left !important;
+  margin: 0 0 8px 0 !important;
+  align-self: flex-start !important;
+  width: 100% !important;
+  display: block !important;
+  color: #ffffff !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner) #lb-hero-route-title .lb-title-prefix,
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner) #lb-hero-route-title .lb-title-route-name {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95),
+               0 4px 18px rgba(0, 0, 0, 0.98),
+               0 0 28px rgba(255, 255, 255, 0.7) !important;
+  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.95)) !important;
+}
+
+/* 4. Divisor de neón alineado a la izquierda */
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner) .uiverse-blog-neon-divider {
+  margin: 10px 0 0 0 !important;
+  left: 0 !important;
+  transform: none !important;
+  align-self: flex-start !important;
+  width: 200px !important;
+  height: 3px !important;
+  background: linear-gradient(90deg, #ff7700, #ffffff, transparent) !important;
+  box-shadow: 0 0 12px rgba(255, 119, 0, 0.8) !important;
+}
+
+/* 5. Comportamiento Responsive */
+@media (max-width: 860px) {
+  html body :is(.leaderboard-banner-wrapper, .lb-video-banner) {
+    min-height: auto !important;
+    padding: 60px 20px 24px 20px !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+  html body :is(.leaderboard-banner-wrapper, .lb-video-banner) .btn-back-to-tracks:not(#_) {
+    top: 14px !important;
+    right: 16px !important;
+    padding: 6px 12px !important;
+    font-size: 11px !important;
+  }
+  html body :is(.leaderboard-banner-wrapper, .lb-video-banner) .section-banner-content {
+    max-width: 100% !important;
+  }
+  html body :is(.leaderboard-banner-wrapper, .lb-video-banner) .lb-banner-wr-card {
+    position: static !important;
+    margin-top: 16px !important;
+    width: 100% !important;
+    text-align: left !important;
+  }
+}
+
+/* ==========================================================================
+   6. UIVERSE COSMIC GLASS TRACK CARDS (TELEMETRY EXPLORER REDESIGN)
+   ========================================================================== */
+
+/* Grid container styling: 4 columns on desktop matching reference layout */
+#routes-catalog-grid,
+.elements-grid#routes-catalog-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 20px !important;
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 1400px) {
+  #routes-catalog-grid,
+  .elements-grid#routes-catalog-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 18px !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  #routes-catalog-grid,
+  .elements-grid#routes-catalog-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  #routes-catalog-grid,
+  .elements-grid#routes-catalog-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+}
+
+/* Uiverse Conic Glass Card: Aumentado de tamaño en vertical (310px+ min-height) */
+.uiverse-cosmic-card,
+.stitch-track-card.element-card,
+.stitch-track-card {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  background: radial-gradient(120% 120% at 50% 0%, rgba(28, 27, 34, 0.82) 0%, rgba(11, 11, 14, 0.98) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.09) !important;
+  border-radius: 20px !important;
+  padding: 24px 22px !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+  overflow: hidden !important;
+  cursor: pointer !important;
+  min-height: 310px !important;
+}
+
+.uiverse-cosmic-card:hover,
+.stitch-track-card:hover {
+  border-color: rgba(139, 92, 246, 0.55) !important;
+  box-shadow: 0 16px 40px -12px rgba(139, 92, 246, 0.35), inset 0 1px 1px 0 rgba(255, 255, 255, 0.15) !important;
+  transform: translateY(-3px) !important;
+}
+
+/* Glowing border top simulation */
+.glow-border-top {
+  position: absolute !important;
+  top: 0 !important;
+  left: 10% !important;
+  right: 10% !important;
+  height: 1px !important;
+  background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.8), rgba(6, 182, 212, 0.8), transparent) !important;
+  pointer-events: none !important;
+}
+
+/* Backdrop car watermark for realtime dynamic sync */
+.stitch-track-card .stitch-car-backdrop {
+  position: absolute !important;
+  right: -8px !important;
+  bottom: 42px !important;
+  width: 58% !important;
+  height: 52% !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-position: right center !important;
+  opacity: 0.10 !important;
+  pointer-events: none !important;
+  filter: grayscale(25%) !important;
+  transition: opacity 0.3s ease, transform 0.3s ease !important;
+  z-index: 0 !important;
+}
+
+.uiverse-cosmic-card:hover .stitch-car-backdrop,
+.stitch-track-card:hover .stitch-car-backdrop {
+  opacity: 0.18 !important;
+  transform: scale(1.04) translateX(-4px) !important;
+}
+
+/* Modality Badges: Circuito (Amber), Sprint (Cyan), Drag (Pink) */
+.stitch-badge-modality {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 2px 8px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+  border-radius: 6px !important;
+  text-transform: uppercase !important;
+}
+
+.stitch-badge-circuito,
+.stitch-track-card .stitch-badge-circuito {
+  color: #f59e0b !important;
+  background-color: rgba(245, 158, 11, 0.1) !important;
+  border: 1px solid rgba(245, 158, 11, 0.3) !important;
+}
+
+.stitch-badge-sprint,
+.stitch-track-card .stitch-badge-sprint {
+  color: #06b6d4 !important;
+  background-color: rgba(6, 182, 212, 0.1) !important;
+  border: 1px solid rgba(6, 182, 212, 0.3) !important;
+}
+
+.stitch-badge-drag,
+.stitch-track-card .stitch-badge-drag {
+  color: #ec4899 !important;
+  background-color: rgba(236, 72, 153, 0.1) !important;
+  border: 1px solid rgba(236, 72, 153, 0.3) !important;
+}
+
+.stitch-badge-default {
+  color: #8b5cf6 !important;
+  background-color: rgba(139, 92, 246, 0.1) !important;
+  border: 1px solid rgba(139, 92, 246, 0.3) !important;
+}
+
+/* Cosmic Palette Utilities */
+.bg-cosmic-emerald {
+  background-color: #10b981 !important;
+}
+.text-cosmic-amber {
+  color: #f59e0b !important;
+}
+.bg-cosmic-amber\/10 {
+  background-color: rgba(245, 158, 11, 0.1) !important;
+}
+.border-cosmic-amber\/30 {
+  border-color: rgba(245, 158, 11, 0.3) !important;
+}
+.text-cosmic-cyan {
+  color: #06b6d4 !important;
+}
+.bg-cosmic-cyan\/10 {
+  background-color: rgba(6, 182, 212, 0.1) !important;
+}
+.border-cosmic-cyan\/30 {
+  border-color: rgba(6, 182, 212, 0.3) !important;
+}
+.text-cosmic-pink {
+  color: #ec4899 !important;
+}
+.bg-cosmic-pink\/10 {
+  background-color: rgba(236, 72, 153, 0.1) !important;
+}
+.border-cosmic-pink\/30 {
+  border-color: rgba(236, 72, 153, 0.3) !important;
+}
+.bg-cosmic-void\/80 {
+  background-color: rgba(7, 7, 9, 0.85) !important;
+}
+.bg-cosmic-violet\/20 {
+  background-color: rgba(139, 92, 246, 0.2) !important;
+}
+.hover\:bg-cosmic-violet:hover {
+  background-color: #8b5cf6 !important;
+}
+.border-cosmic-violet\/50 {
+  border-color: rgba(139, 92, 246, 0.5) !important;
+}
+.hover\:border-cosmic-violet:hover,
+.hover\:border-cosmic-violet\/60:hover {
+  border-color: rgba(139, 92, 246, 0.6) !important;
+}
+
+/* ==========================================================================
+   STITCH TRACK CARD INNER ARCHITECTURE & FLEX LAYOUT (BULLETPROOF)
+   ========================================================================== */
+.stitch-track-card .stitch-card-header,
+.uiverse-cosmic-card .stitch-card-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  margin-bottom: 14px !important;
+}
+
+.stitch-track-card .stitch-card-brand,
+.uiverse-cosmic-card .stitch-card-brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.stitch-track-card .stitch-card-dot,
+.uiverse-cosmic-card .stitch-card-dot {
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+  background-color: #10b981 !important;
+  box-shadow: 0 0 8px #10b981 !important;
+  display: inline-block !important;
+  flex-shrink: 0 !important;
+  animation: pulse-dot-card 2s infinite ease-in-out !important;
+}
+
+@keyframes pulse-dot-card {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.85);
+  }
+}
+
+.stitch-track-card .stitch-card-brand-text,
+.uiverse-cosmic-card .stitch-card-brand-text {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.08em !important;
+  color: #cbd5e1 !important;
+  text-transform: uppercase !important;
+}
+
+.stitch-track-card .stitch-card-title,
+.uiverse-cosmic-card .stitch-card-title,
+.uiverse-cosmic-card h4,
+.stitch-track-card h4 {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 22px !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em !important;
+  color: #ffffff !important;
+  line-height: 1.25 !important;
+  margin: 0 0 8px 0 !important;
+  text-align: left !important;
+  transition: color 0.2s ease !important;
+}
+
+.uiverse-cosmic-card:hover h4,
+.stitch-track-card:hover h4,
+.group:hover .group-hover\:text-purple-300 {
+  color: #d8b4fe !important;
+}
+
+.stitch-track-card .stitch-card-subtitle,
+.uiverse-cosmic-card .stitch-card-subtitle {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  margin-bottom: 18px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 11.5px !important;
+  width: 100% !important;
+}
+
+.stitch-track-card .stitch-card-district,
+.uiverse-cosmic-card .stitch-card-district {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  min-width: 0 !important;
+  color: #cbd5e1 !important;
+  font-weight: 600 !important;
+}
+
+.stitch-track-card .stitch-card-distance,
+.uiverse-cosmic-card .stitch-card-distance {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  text-align: right !important;
+  flex-shrink: 0 !important;
+  color: #94a3b8 !important;
+  font-weight: 500 !important;
+}
+
+/* Telemetry Box & Inner Layout */
+.stitch-track-card .stitch-telemetry-box,
+.uiverse-cosmic-card .stitch-telemetry-box {
+  background: rgba(0, 0, 0, 0.65) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 16px !important;
+  padding: 14px 16px !important;
+  margin-bottom: 18px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.stitch-track-card .stitch-telemetry-upper,
+.uiverse-cosmic-card .stitch-telemetry-upper {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: flex-end !important;
+  padding-bottom: 12px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  width: 100% !important;
+}
+
+.stitch-track-card .stitch-telemetry-driver-col,
+.uiverse-cosmic-card .stitch-telemetry-driver-col {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  text-align: left !important;
+}
+
+.stitch-track-card .stitch-telemetry-time-col,
+.uiverse-cosmic-card .stitch-telemetry-time-col {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  text-align: right !important;
+}
+
+.stitch-track-card .stitch-telemetry-label,
+.uiverse-cosmic-card .stitch-telemetry-label {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: #94a3b8 !important;
+}
+
+.stitch-track-card .stitch-telemetry-driver-row,
+.uiverse-cosmic-card .stitch-telemetry-driver-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.stitch-track-card .stitch-telemetry-lower,
+.uiverse-cosmic-card .stitch-telemetry-lower {
+  display: flex !important;
+  flex-direction: column !important;
+  text-align: left !important;
+  gap: 3px !important;
+  width: 100% !important;
+}
+
+.uiverse-cosmic-card .record-time,
+.stitch-track-card .record-time,
+.stitch-track-card [data-metric="time"] {
+  color: #ffffff !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 14.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em !important;
+}
+
+.uiverse-cosmic-card .driver-name,
+.stitch-track-card .driver-name,
+.stitch-track-card [data-metric="driver"] {
+  color: #ffffff !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em !important;
+}
+
+.uiverse-cosmic-card .vehicle-model,
+.stitch-track-card .vehicle-model,
+.stitch-track-card [data-metric="car"] {
+  color: #f1f5f9 !important;
+  font-size: 13.5px !important;
+  font-weight: 700 !important;
+}
+
+/* Card Action Footer */
+.stitch-track-card .stitch-card-footer,
+.uiverse-cosmic-card .stitch-card-footer {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding-top: 14px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.stitch-track-card .stitch-rank-badge,
+.uiverse-cosmic-card .stitch-rank-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 6px 12px !important;
+  border-radius: 10px !important;
+  background: rgba(245, 158, 11, 0.12) !important;
+  border: 1px solid rgba(245, 158, 11, 0.35) !important;
+  color: #fbbf24 !important;
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+.stitch-track-card .stitch-footer-actions,
+.uiverse-cosmic-card .stitch-footer-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.stitch-track-card .stitch-telemetry-btn,
+.uiverse-cosmic-card .stitch-telemetry-btn {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 10px !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #cbd5e1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.stitch-track-card .stitch-telemetry-btn:hover,
+.uiverse-cosmic-card .stitch-telemetry-btn:hover {
+  background: rgba(6, 182, 212, 0.2) !important;
+  border-color: #06b6d4 !important;
+  color: #06b6d4 !important;
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.35) !important;
+}
+
+.stitch-leaderboard-btn {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  padding: 8px 16px !important;
+  border-radius: 10px !important;
+  background-color: rgba(139, 92, 246, 0.25) !important;
+  color: #ffffff !important;
+  font-size: 11.5px !important;
+  font-weight: 800 !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  letter-spacing: 0.06em !important;
+  border: 1px solid rgba(139, 92, 246, 0.55) !important;
+  cursor: pointer !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  text-decoration: none !important;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.25) !important;
+}
+
+.stitch-leaderboard-btn:hover {
+  background-color: #8b5cf6 !important;
+  border-color: #a855f7 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 18px rgba(139, 92, 246, 0.6) !important;
+  transform: translateY(-1px) !important;
+}
+
+.stitch-leaderboard-btn i {
+  font-size: 10px !important;
+  transition: transform 0.2s ease !important;
+}
+
+.stitch-leaderboard-btn:hover i {
+  transform: translateX(2px) !important;
+}
+
+/* ==========================================================================
+   7. RUTAS & CIRCUITOS BANNER - GOOGLE STITCH CYBER-HUD DESIGN
+   ========================================================================== */
+
+/* Outer Banner Container */
+.section-video-banner.rc-stitch-banner {
+  position: relative !important;
+  width: 100% !important;
+  min-height: 290px !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  margin-bottom: 24px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background-color: #08080c !important;
+  box-shadow:
+    0 24px 50px -12px rgba(0, 0, 0, 0.85),
+    0 0 25px rgba(168, 85, 247, 0.15),
+    0 0 20px rgba(255, 123, 0, 0.15) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 36px 40px !important;
+}
+
+/* Banner Content Wrapper (Flex Row: Left Text + Right Metrics) */
+.rc-banner-content-wrap {
+  position: relative !important;
+  z-index: 2 !important;
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 32px !important;
+}
+
+/* Left Content Column */
+.rc-banner-left {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  max-width: 650px !important;
+}
+
+/* Top Pill Badge */
+.rc-banner-tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 5px 14px !important;
+  border-radius: 9999px !important;
+  background: rgba(13, 13, 18, 0.88) !important;
+  border: 1px solid rgba(139, 92, 246, 0.35) !important;
+  box-shadow: 0 0 16px rgba(139, 92, 246, 0.15) !important;
+  margin-bottom: 14px !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+  color: #cbd5e1 !important;
+}
+
+.rc-banner-tag i {
+  color: #06b6d4 !important;
+  font-size: 10.5px !important;
+}
+
+.rc-tag-dot {
+  color: #a855f7 !important;
+  font-size: 11px !important;
+  margin: 0 2px !important;
+}
+
+.rc-tag-network {
+  color: #ff9500 !important;
+  font-weight: 800 !important;
+}
+
+/* Main Title */
+.rc-banner-title {
+  font-family: 'Chakra Petch', 'Montserrat', sans-serif !important;
+  font-size: clamp(2rem, 3.8vw, 3.2rem) !important;
+  font-weight: 800 !important;
+  line-height: 1.08 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.02em !important;
+  margin: 0 0 14px 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+}
+
+/* Line 1: Pure White Resaltante */
+.rc-title-line-white {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.95),
+    0 4px 20px rgba(0, 0, 0, 0.9),
+    0 0 35px rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Line 2: Orange to Purple Cyber Gradient + Aura Glow */
+.rc-title-line-gradient {
+  position: relative !important;
+  display: inline-block !important;
+  background: linear-gradient(90deg, #ff7b00 0%, #ff9500 30%, #a855f7 72%, #c084fc 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  filter:
+    drop-shadow(0 0 16px rgba(255, 123, 0, 0.48))
+    drop-shadow(0 0 28px rgba(168, 85, 247, 0.45)) !important;
+}
+
+/* Atmospheric haze aura behind WORLD RECORDS */
+.rc-title-line-gradient::after {
+  content: "" !important;
+  position: absolute !important;
+  right: -24px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 160px !important;
+  height: 80px !important;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.48) 0%, rgba(255, 123, 0, 0.22) 50%, transparent 75%) !important;
+  filter: blur(24px) !important;
+  pointer-events: none !important;
+  z-index: -1 !important;
+}
+
+/* Subtitle Description */
+.rc-banner-desc {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13.5px !important;
+  color: #94a3b8 !important;
+  line-height: 1.55 !important;
+  margin: 0 !important;
+  max-width: 600px !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
+}
+
+/* 4-Column Statistics Widget */
+.rc-banner-metrics-card {
+  background: rgba(11, 11, 16, 0.92) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 18px !important;
+  padding: 16px 24px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 20px !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  box-shadow:
+    0 12px 36px rgba(0, 0, 0, 0.75),
+    0 0 20px rgba(139, 92, 246, 0.08) !important;
+  flex-shrink: 0 !important;
+}
+
+/* Metric Item Column */
+.rc-metric-item {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  min-width: 82px !important;
+}
+
+.rc-metric-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  margin-bottom: 4px !important;
+}
+
+.rc-metric-label {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  color: #94a3b8 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+}
+
+/* Icons */
+.rc-icon-flag {
+  color: #ff7b00 !important;
+  font-size: 10px !important;
+}
+
+.rc-icon-sampling {
+  color: #06b6d4 !important;
+  font-size: 10.5px !important;
+}
+
+.rc-icon-pilots {
+  color: #a855f7 !important;
+  font-size: 10.5px !important;
+}
+
+.rc-icon-latency {
+  color: #f59e0b !important;
+  font-size: 11px !important;
+}
+
+/* Numbers */
+.rc-metric-number {
+  font-family: 'Chakra Petch', 'JetBrains Mono', monospace !important;
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.01em !important;
+}
+
+.rc-metric-number.rc-num-cyan {
+  color: #06b6d4 !important;
+  text-shadow: 0 0 10px rgba(6, 182, 212, 0.4) !important;
+}
+
+.rc-metric-number.rc-num-amber {
+  color: #f59e0b !important;
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.4) !important;
+}
+
+.rc-unit {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  margin-left: 1px !important;
+}
+
+/* Sub-labels */
+.rc-metric-sub {
+  display: flex !important;
+  flex-direction: column !important;
+  margin-top: 3px !important;
+  font-size: 10px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  line-height: 1.25 !important;
+}
+
+.rc-sub-cyan {
+  color: #06b6d4 !important;
+  font-weight: 700 !important;
+  font-size: 9.5px !important;
+}
+
+.rc-sub-muted {
+  color: #64748b !important;
+  font-size: 9px !important;
+}
+
+.rc-sub-fuchsia {
+  color: #d946ef !important;
+  font-size: 9.5px !important;
+  font-weight: 600 !important;
+}
+
+.rc-sub-amber {
+  color: #f59e0b !important;
+  font-size: 9.5px !important;
+  font-weight: 600 !important;
+}
+
+/* Dividers */
+.rc-metric-sep {
+  width: 1px !important;
+  height: 48px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Responsive Behavior */
+@media (max-width: 1180px) {
+  .rc-banner-content-wrap {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 24px !important;
+  }
+  .rc-banner-metrics-card {
+    width: 100% !important;
+    justify-content: space-around !important;
+    flex-wrap: wrap !important;
+    gap: 16px !important;
+  }
+  .rc-metric-sep {
+    display: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .section-video-banner.rc-stitch-banner {
+    padding: 24px 20px !important;
+  }
+  .rc-banner-title {
+    font-size: 1.85rem !important;
+  }
+  .rc-banner-metrics-card {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+  }
+}
+
+/* ==========================================================================
+   8. LEADERBOARD BANNER TITLE: STITCH STYLE (WHITE LEADERBOARD + ORANGE-PURPLE MODALITY)
+   ========================================================================== */
+
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner) #lb-hero-route-title,
+.lb-hero-main-title {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  text-align: left !important;
+  font-family: 'Chakra Petch', 'Montserrat', sans-serif !important;
+  font-size: clamp(1.85rem, 3.4vw, 2.85rem) !important;
+  font-weight: 800 !important;
+  line-height: 1.12 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.02em !important;
+  margin: 0 !important;
+}
+
+/* 1. LEADERBOARD: Pure White */
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner) #lb-hero-route-title .lb-title-prefix,
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner) #lb-hero-route-title .lb-title-line-white {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  font-family: 'Chakra Petch', 'Montserrat', sans-serif !important;
+  font-size: 0.9em !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.04em !important;
+  text-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.95),
+    0 4px 18px rgba(0, 0, 0, 0.9),
+    0 0 30px rgba(255, 255, 255, 0.35) !important;
+  display: block !important;
+  margin-bottom: 2px !important;
+}
+
+/* 2. Modality & Track line */
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner) #lb-hero-route-title .lb-title-line-gradient {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+}
+
+/* Modality Word (CIRCUITO, SPRINT, DRAG): Orange-Purple Cyber Gradient */
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner) #lb-hero-route-title .lb-title-modality {
+  position: relative !important;
+  display: inline-block !important;
+  background: linear-gradient(90deg, #ff7b00 0%, #ff9500 32%, #a855f7 72%, #c084fc 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  filter:
+    drop-shadow(0 0 14px rgba(255, 123, 0, 0.5))
+    drop-shadow(0 0 24px rgba(168, 85, 247, 0.45)) !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.04em !important;
+}
+
+/* Atmospheric haze aura behind CIRCUITO, DRAG, SPRINT */
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner) #lb-hero-route-title .lb-title-modality::after {
+  content: "" !important;
+  position: absolute !important;
+  right: -14px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 100px !important;
+  height: 50px !important;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.45) 0%, rgba(255, 123, 0, 0.2) 50%, transparent 75%) !important;
+  filter: blur(20px) !important;
+  pointer-events: none !important;
+  z-index: -1 !important;
+}
+
+/* Separator dot */
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner) #lb-hero-route-title .lb-title-sep {
+  color: #ff9500 !important;
+  -webkit-text-fill-color: #ff9500 !important;
+  opacity: 0.85 !important;
+  margin: 0 4px !important;
+}
+
+/* Route Name in Resaltante White Glow */
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner) #lb-hero-route-title .lb-title-route-name {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  font-family: 'Chakra Petch', 'Montserrat', sans-serif !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em !important;
+  text-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.95),
+    0 4px 18px rgba(0, 0, 0, 0.98),
+    0 0 28px rgba(255, 255, 255, 0.75) !important;
+  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.95)) !important;
+}
+
+/* ==========================================================================
+   9. HOME 3-COLUMN MOBILE SHOWCASE CARDS (INTERACTIVE 3D CARDS WITH MOTION)
+   ========================================================================== */
+
+.home-showcase-section {
+  position: relative !important;
+  width: 100% !important;
+  margin-top: 14px !important;
+  margin-bottom: 36px !important;
+}
+
+.home-showcase-header {
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: space-between !important;
+  gap: 20px !important;
+  margin-bottom: 22px !important;
+  padding-bottom: 14px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.home-showcase-header-left {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+}
+
+.home-showcase-tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.12em !important;
+  color: #06b6d4 !important;
+  text-transform: uppercase !important;
+}
+
+.home-showcase-title {
+  font-family: 'Chakra Petch', 'Montserrat', sans-serif !important;
+  font-size: clamp(1.35rem, 2.2vw, 1.85rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em !important;
+  color: #ffffff !important;
+  margin: 0 !important;
+  text-transform: uppercase !important;
+  line-height: 1.2 !important;
+}
+
+.home-showcase-desc {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  color: #94a3b8 !important;
+  margin: 0 !important;
+  max-width: 680px !important;
+  line-height: 1.5 !important;
+}
+
+/* 3-Column Responsive Grid */
+.home-showcase-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 24px !important;
+  perspective: 1200px !important;
+}
+
+/* Interactive Card Container with 3D Feel */
+.home-showcase-card {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  background: radial-gradient(120% 120% at 50% 0%, rgba(28, 27, 36, 0.88) 0%, rgba(11, 11, 14, 0.98) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.09) !important;
+  border-radius: 20px !important;
+  padding: 20px !important;
+  overflow: hidden !important;
+  cursor: pointer !important;
+  transform-style: preserve-3d !important;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.45s ease,
+              box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  box-shadow: 0 14px 35px -8px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Floating Card Motion on Hover */
+.home-showcase-card:hover {
+  transform: translateY(-10px) rotateX(3deg) scale(1.02) !important;
+}
+
+/* Ambient Radial Glow behind image */
+.showcase-card-ambient {
+  position: absolute !important;
+  top: 25% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 250px !important;
+  height: 250px !important;
+  border-radius: 9999px !important;
+  filter: blur(55px) !important;
+  opacity: 0.22 !important;
+  pointer-events: none !important;
+  transition: opacity 0.5s ease, transform 0.5s ease !important;
+  z-index: 0 !important;
+}
+
+.showcase-card-violet .showcase-card-ambient {
+  background: radial-gradient(circle, #8b5cf6 0%, transparent 70%) !important;
+}
+.showcase-card-cyan .showcase-card-ambient {
+  background: radial-gradient(circle, #06b6d4 0%, transparent 70%) !important;
+}
+.showcase-card-amber .showcase-card-ambient {
+  background: radial-gradient(circle, #ff7b00 0%, transparent 70%) !important;
+}
+
+.home-showcase-card:hover .showcase-card-ambient {
+  opacity: 0.65 !important;
+  transform: translate(-50%, -50%) scale(1.25) !important;
+}
+
+/* Glow Border & Hover Colors */
+.showcase-card-violet:hover {
+  border-color: rgba(139, 92, 246, 0.6) !important;
+  box-shadow: 0 22px 48px -12px rgba(139, 92, 246, 0.35),
+              0 0 25px rgba(139, 92, 246, 0.2),
+              inset 0 1px 1px 0 rgba(255, 255, 255, 0.15) !important;
+}
+
+.showcase-card-cyan:hover {
+  border-color: rgba(6, 182, 212, 0.6) !important;
+  box-shadow: 0 22px 48px -12px rgba(6, 182, 212, 0.35),
+              0 0 25px rgba(6, 182, 212, 0.2),
+              inset 0 1px 1px 0 rgba(255, 255, 255, 0.15) !important;
+}
+
+.showcase-card-amber:hover {
+  border-color: rgba(255, 123, 0, 0.6) !important;
+  box-shadow: 0 22px 48px -12px rgba(255, 123, 0, 0.35),
+              0 0 25px rgba(255, 123, 0, 0.2),
+              inset 0 1px 1px 0 rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Moving Light Glare Sheen across card surface */
+.showcase-card-glare {
+  position: absolute !important;
+  top: -100% !important;
+  left: -100% !important;
+  width: 300% !important;
+  height: 300% !important;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.03) 45%, rgba(255, 255, 255, 0.18) 50%, rgba(255, 255, 255, 0.03) 55%, transparent 65%) !important;
+  pointer-events: none !important;
+  z-index: 10 !important;
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transform: translateX(-60%) translateY(-60%) !important;
+}
+
+.home-showcase-card:hover .showcase-card-glare {
+  transform: translateX(35%) translateY(35%) !important;
+}
+
+/* Card Header & Category Pills */
+.showcase-card-header {
+  position: relative !important;
+  z-index: 2 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin-bottom: 14px !important;
+}
+
+.showcase-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 4px 10px !important;
+  border-radius: 6px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+}
+
+.pill-violet {
+  color: #c084fc !important;
+  background-color: rgba(168, 85, 247, 0.12) !important;
+  border: 1px solid rgba(168, 85, 247, 0.35) !important;
+}
+
+.pill-cyan {
+  color: #06b6d4 !important;
+  background-color: rgba(6, 182, 212, 0.12) !important;
+  border: 1px solid rgba(6, 182, 212, 0.35) !important;
+}
+
+.pill-amber {
+  color: #f59e0b !important;
+  background-color: rgba(245, 158, 11, 0.12) !important;
+  border: 1px solid rgba(245, 158, 11, 0.35) !important;
+}
+
+.showcase-pill-badge {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  color: #94a3b8 !important;
+  letter-spacing: 0.06em !important;
+}
+
+.showcase-pill-badge.badge-cyan {
+  color: #38bdf8 !important;
+}
+
+.showcase-pill-badge.badge-amber {
+  color: #fbbf24 !important;
+}
+
+/* Showcase Image Wrapper & 3D Motion */
+.showcase-img-wrap {
+  position: relative !important;
+  z-index: 1 !important;
+  width: 100% !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  background-color: #08080c !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.6) !important;
+  margin-bottom: 16px !important;
+  aspect-ratio: 9 / 17 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.showcase-card-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: top center !important;
+  display: block !important;
+  image-rendering: -webkit-optimize-contrast !important;
+  image-rendering: crisp-edges !important;
+  backface-visibility: hidden !important;
+  transform: translateZ(0) !important;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transform-origin: center bottom !important;
+}
+
+.home-showcase-card:hover .showcase-card-img {
+  transform: scale(1.05) translateY(-6px) !important;
+  filter: brightness(1.07) contrast(1.04) !important;
+}
+
+/* Showcase Footer & Info */
+.showcase-card-footer {
+  position: relative !important;
+  z-index: 2 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  padding-top: 12px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.showcase-card-info {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3px !important;
+  min-width: 0 !important;
+}
+
+.showcase-item-title {
+  font-family: 'Chakra Petch', 'Montserrat', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  letter-spacing: 0.02em !important;
+  margin: 0 !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  transition: color 0.2s ease !important;
+}
+
+.showcase-card-violet:hover .showcase-item-title {
+  color: #c084fc !important;
+}
+
+.showcase-card-cyan:hover .showcase-item-title {
+  color: #38bdf8 !important;
+}
+
+.showcase-card-amber:hover .showcase-item-title {
+  color: #fb923c !important;
+}
+
+.showcase-item-sub {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 11px !important;
+  color: #94a3b8 !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.showcase-card-btn {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  padding: 6px 14px !important;
+  border-radius: 6px !important;
+  background-color: #0a0a0c !important;
+  color: #ffffff !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  letter-spacing: 0.05em !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  text-decoration: none !important;
+  flex-shrink: 0 !important;
+  overflow: visible !important;
+}
+
+.showcase-card-btn:hover {
+  background-color: #ff7b00 !important;
+  border-color: #ff9d42 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 18px rgba(255, 123, 0, 0.6) !important;
+  transform: translateX(2px) !important;
+}
+
+.showcase-card-btn:hover::after {
+  display: flex !important;
+  opacity: 1 !important;
+  animation: glitch-orange-purple 0.65s infinite steps(2, end) !important;
+  background-color: #ff7b00 !important;
+  color: #ffffff !important;
+  border: 1px solid #ffffff !important;
+  text-shadow: -2px -2px 0px #0a0a0c, 2px 2px 0px #7c3aed !important;
+}
+
+.showcase-card-btn i {
+  font-size: 10px !important;
+  transition: transform 0.2s ease !important;
+}
+
+.showcase-card-btn:hover i {
+  transform: translateX(2px) !important;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1080px) {
+  .home-showcase-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .home-showcase-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+  .home-showcase-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+}
+
+/* ==========================================================================
+   10. GOOGLE STITCHES NUMBER TYPOGRAPHY & TIME DISPLAY ENGINE
+   ========================================================================== */
+
+/* Universal Google Stitch Numeric Font Engine */
+.stitch-num,
+.stitch-num-font,
+.lb-time-val,
+.stitch-time-display,
+.stitch-pts-pill,
+.stitch-delta-val,
+.stitch-date-val,
+.record-time,
+.v7-tier-time,
+.champ-driver-time-badge,
+.champ-group-pts-pill,
+.pilot-points-badge,
+.nfs-podium-stat-num {
+  font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-feature-settings: "tnum" 1, "cv05" 1, "cv08" 1 !important;
+  font-variant-numeric: tabular-nums !important;
+}
+
+/* Exact Google Stitches Time Layout: 01:20 (white) .750 (neon cyan) */
+.stitch-time-display {
+  display: inline-flex !important;
+  align-items: baseline !important;
+  font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-feature-settings: "tnum" 1, "cv05" 1, "cv08" 1 !important;
+  font-variant-numeric: tabular-nums !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.01em !important;
+  line-height: 1 !important;
+}
+
+.stitch-time-main {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+}
+
+.stitch-time-ms {
+  color: #38bdf8 !important; /* Google Stitch Cyan */
+  font-weight: 800 !important;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.45) !important;
+}
+
+/* Points Pill in Leaderboard & Tournaments */
+.stitch-pts-pill {
+  font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-feature-settings: "tnum" 1, "cv05" 1 !important;
+  font-variant-numeric: tabular-nums !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  color: #ffae00 !important;
+  background: rgba(255, 174, 0, 0.12) !important;
+  border: 1px solid rgba(255, 174, 0, 0.35) !important;
+  padding: 2px 7px !important;
+  border-radius: 6px !important;
+  letter-spacing: 0.04em !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 3px !important;
+}
+
+.stitch-pts-pill small {
+  font-size: 9px !important;
+  color: #fbbf24 !important;
+  font-weight: 700 !important;
+}
+
+/* Delta Value in Leaderboards */
+.stitch-delta-val {
+  font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-feature-settings: "tnum" 1, "cv05" 1 !important;
+  font-variant-numeric: tabular-nums !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* Date Column in Leaderboards */
+.stitch-date-val {
+  font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-feature-settings: "tnum" 1, "cv05" 1 !important;
+  font-variant-numeric: tabular-nums !important;
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+  color: #94a3b8 !important;
+  letter-spacing: 0.03em !important;
+}
+
+/* Leaderboard Table Specific Number & Pilot Polish */
+.lb-clean-table .lb-user-name {
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  letter-spacing: -0.01em !important;
+  line-height: 1.25 !important;
+}
+
+.lb-clean-table .lb-time-cell {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+}
+
+.lb-clean-table .lb-time-val {
+  font-size: 16.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.01em !important;
+}
+
+.lb-clean-table td {
+  vertical-align: middle !important;
+}
+
+/* Track Card WR Time Badge in Stitch Typography */
+.stitch-track-card .record-time {
+  font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-feature-settings: "tnum" 1, "cv05" 1, "cv08" 1 !important;
+  font-variant-numeric: tabular-nums !important;
+  font-size: 14.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* Challenges, Standings, Groups, Drivers & Hall of Fame Numbers */
+.v7-tier-time,
+.champ-driver-time-badge,
+#telemetry-records-tbody td:nth-child(5) span,
+#torneo-standings-tbody td:nth-child(4) span,
+#torneo-standings-tbody td:nth-child(9) span,
+#torneo-standings-tbody td:nth-child(10) span,
+#hof-main-tbody td:nth-child(4) span {
+  font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-feature-settings: "tnum" 1, "cv05" 1, "cv08" 1 !important;
+  font-variant-numeric: tabular-nums !important;
+  font-weight: 800 !important;
+}
+
+/* ==========================================================================
+   CHALLENGER Y TORNEOS - GOOGLE STITCH CYBER-HUD BANNER
+   ========================================================================== */
+.section-video-banner.torneo-stitch-banner {
+  position: relative !important;
+  width: 100% !important;
+  min-height: 290px !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  margin-bottom: 24px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background-color: #08080c !important;
+  box-shadow:
+    0 24px 50px -12px rgba(0, 0, 0, 0.85),
+    0 0 25px rgba(168, 85, 247, 0.18),
+    0 0 22px rgba(255, 123, 0, 0.18) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 36px 40px !important;
+}
+
+.torneo-stitch-banner .rc-banner-tag {
+  border-color: rgba(255, 123, 0, 0.4) !important;
+  box-shadow: 0 0 16px rgba(255, 123, 0, 0.15) !important;
+}
+
+.torneo-stitch-banner .rc-banner-tag i {
+  color: #f59e0b !important;
+}
+
+.torneo-stitch-banner .rc-banner-metrics-card {
+  box-shadow:
+    0 12px 36px rgba(0, 0, 0, 0.75),
+    0 0 20px rgba(255, 123, 0, 0.1),
+    0 0 20px rgba(139, 92, 246, 0.1) !important;
+}
+
+/* ==========================================================================
+   LEADERBOARD FULL-PAGE CINEMATIC BACKGROUND VIDEO & STITCH BANNER
+   ========================================================================== */
+#view-leaderboard {
+  position: relative !important;
+  overflow: hidden !important;
+  background-color: #050608 !important;
+}
+
+.leaderboard-view-bg-video-wrap {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  overflow: hidden !important;
+}
+
+.leaderboard-page-bg-video {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center 30% !important;
+  opacity: 0.35 !important;
+  filter: brightness(0.40) contrast(1.18) saturate(1.1) !important;
+  transform: scale(1.02) !important;
+}
+
+.leaderboard-page-bg-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  background: radial-gradient(circle at 50% 20%, rgba(5, 6, 10, 0.45) 0%, rgba(5, 6, 8, 0.88) 60%, #050608 100%),
+              linear-gradient(180deg, rgba(5, 6, 8, 0.5) 0%, rgba(5, 6, 8, 0.95) 100%) !important;
+  pointer-events: none !important;
+}
+
+#view-leaderboard .secondary-view-wrap {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.leaderboard-banner-wrapper .rc-banner-content-wrap {
+  position: relative !important;
+  z-index: 2 !important;
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 32px !important;
+}
+
+.leaderboard-banner-wrapper .lb-banner-wr-card {
+  position: static !important;
+  flex-shrink: 0 !important;
+  margin: 0 !important;
+}
+
+@media (max-width: 860px) {
+  .leaderboard-banner-wrapper .rc-banner-content-wrap {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 20px !important;
+  }
+}
+
+/* ==========================================================================
+   HALL OF FAME DISCIPLINE NAVIGATION PILLS
+   ========================================================================== */
+.v7-hof-discipline-nav {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+}
+
+.v7-hof-discipline-nav .filter-pill-btn {
+  font-family: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.015em !important;
+  font-size: 13px !important;
+  text-transform: none !important;
+}
+
+/* ==========================================================================
+   HALL OF FAME (TOP GLOBAL / CIRCUITO / SPRINT / DRAG) HUD & TABLE STYLING
+   ========================================================================== */
+.hof-hud-metrics-strip {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)) !important;
+  gap: 14px !important;
+  margin-bottom: 22px !important;
+}
+
+.hof-hud-card {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  background: linear-gradient(135deg, rgba(17, 24, 39, 0.85) 0%, rgba(10, 14, 23, 0.95) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 12px !important;
+  padding: 14px 18px !important;
+  box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.6) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.hof-hud-card:hover {
+  transform: translateY(-2px) !important;
+  border-color: rgba(255, 184, 0, 0.3) !important;
+  box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.7), 0 0 14px rgba(255, 184, 0, 0.1) !important;
+}
+
+.hof-hud-card::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 3px !important;
+  height: 100% !important;
+  background: linear-gradient(180deg, #ffb800 0%, rgba(255, 184, 0, 0) 100%) !important;
+}
+
+.hof-hud-icon {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 10px !important;
+  background: rgba(255, 184, 0, 0.1) !important;
+  border: 1px solid rgba(255, 184, 0, 0.25) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 19px !important;
+  flex-shrink: 0 !important;
+}
+
+.hof-hud-data {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  min-width: 0 !important;
+}
+
+.hof-hud-label {
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  color: #94a3b8 !important;
+  text-transform: uppercase !important;
+}
+
+.hof-hud-value {
+  font-family: 'Outfit', 'Inter', var(--font-heading), sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  letter-spacing: -0.01em !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.hof-hud-sub {
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 10px !important;
+  color: #64748b !important;
+  margin-top: 1px !important;
+}
+
+/* Medals & Achievements */
+.hof-medals-wrap {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  flex-wrap: wrap !important;
+}
+
+.hof-medal-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  padding: 3px 7px !important;
+  border-radius: 6px !important;
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em !important;
+}
+
+.hof-medal-pill.gold {
+  background: rgba(251, 191, 36, 0.14) !important;
+  border: 1px solid rgba(251, 191, 36, 0.45) !important;
+  color: #fde047 !important;
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.12) !important;
+}
+
+.hof-medal-pill.silver {
+  background: rgba(226, 232, 240, 0.12) !important;
+  border: 1px solid rgba(226, 232, 240, 0.35) !important;
+  color: #f1f5f9 !important;
+}
+
+.hof-medal-pill.bronze {
+  background: rgba(217, 119, 6, 0.14) !important;
+  border: 1px solid rgba(217, 119, 6, 0.4) !important;
+  color: #fdba74 !important;
+}
+
+/* Non-podium drivers best-pos pill */
+.hof-best-pos-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  padding: 3px 8px !important;
+  border-radius: 6px !important;
+  background: rgba(56, 189, 248, 0.08) !important;
+  border: 1px solid rgba(56, 189, 248, 0.28) !important;
+  color: #38bdf8 !important;
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+}
+
+/* Puntos FIA Cell & Bar */
+.hof-points-cell {
+  min-width: 130px !important;
+}
+
+.hof-points-num {
+  font-family: 'Outfit', 'Inter', var(--font-mono), sans-serif !important;
+  font-size: 14.5px !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  letter-spacing: -0.01em !important;
+}
+
+.hof-points-pts-label {
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  color: #94a3b8 !important;
+  margin-left: 3px !important;
+}
+
+.hof-points-bar-wrap {
+  width: 100% !important;
+  height: 4px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-radius: 2px !important;
+  overflow: hidden !important;
+  margin-top: 5px !important;
+}
+
+.hof-points-bar-fill {
+  height: 100% !important;
+  border-radius: 2px !important;
+  background: linear-gradient(90deg, #ffb800 0%, #38bdf8 100%) !important;
+  transition: width 0.4s ease !important;
+}
+
+/* Mejor Puesto Pill */
+.hof-puesto-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 3px 9px !important;
+  border-radius: 6px !important;
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 11.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em !important;
+}
+
+.hof-puesto-p1 {
+  background: rgba(251, 191, 36, 0.18) !important;
+  border: 1px solid #fbbf24 !important;
+  color: #fbbf24 !important;
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.25) !important;
+}
+
+.hof-puesto-p2 {
+  background: rgba(226, 232, 240, 0.14) !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #f1f5f9 !important;
+}
+
+.hof-puesto-p3 {
+  background: rgba(217, 119, 6, 0.16) !important;
+  border: 1px solid #f97316 !important;
+  color: #fed7aa !important;
+}
+
+.hof-puesto-p4 {
+  background: rgba(56, 189, 248, 0.12) !important;
+  border: 1px solid rgba(56, 189, 248, 0.4) !important;
+  color: #7dd3fc !important;
+}
+
+.hof-puesto-p5 {
+  background: rgba(168, 85, 247, 0.12) !important;
+  border: 1px solid rgba(168, 85, 247, 0.4) !important;
+  color: #d8b4fe !important;
+}
+
+.hof-puesto-rest {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #94a3b8 !important;
+}
+
+/* Honor Tiers */
+.v7-tier-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  padding: 3px 9px !important;
+  border-radius: 5px !important;
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+}
+
+.tier-legend {
+  background: rgba(250, 204, 21, 0.15) !important;
+  border: 1px solid rgba(250, 204, 21, 0.45) !important;
+  color: #fde047 !important;
+  box-shadow: 0 0 10px rgba(250, 204, 21, 0.18) !important;
+}
+
+.tier-master {
+  background: rgba(168, 85, 247, 0.15) !important;
+  border: 1px solid rgba(168, 85, 247, 0.45) !important;
+  color: #c084fc !important;
+}
+
+.tier-holder {
+  background: rgba(6, 182, 212, 0.15) !important;
+  border: 1px solid rgba(6, 182, 212, 0.45) !important;
+  color: #22d3ee !important;
+}
+
+.tier-podium {
+  background: rgba(249, 115, 22, 0.15) !important;
+  border: 1px solid rgba(249, 115, 22, 0.45) !important;
+  color: #fb923c !important;
+}
+
+.tier-top5 {
+  background: rgba(16, 185, 129, 0.15) !important;
+  border: 1px solid rgba(16, 185, 129, 0.45) !important;
+  color: #34d399 !important;
+}
+
+.tier-track {
+  background: rgba(148, 163, 184, 0.1) !important;
+  border: 1px solid rgba(148, 163, 184, 0.25) !important;
+  color: #94a3b8 !important;
+}
+
+/* Live RTDB pulse indicator */
+.hof-live-dot {
+  display: inline-block !important;
+  width: 7px !important;
+  height: 7px !important;
+  border-radius: 50% !important;
+  background: #10b981 !important;
+  box-shadow: 0 0 8px #10b981 !important;
+  animation: hofPulseDot 2s infinite ease-in-out !important;
+  vertical-align: middle !important;
+  margin-right: 5px !important;
+}
+
+@keyframes hofPulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}

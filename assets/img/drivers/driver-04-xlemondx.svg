@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="bgGrad_LM" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14141e" />
+      <stop offset="50%" stop-color="#0a0a10" />
+      <stop offset="100%" stop-color="#030305" />
+    </linearGradient>
+    <linearGradient id="primaryGrad_LM" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde047" />
+      <stop offset="45%" stop-color="#ff7700" />
+      <stop offset="100%" stop-color="#ea580c" />
+    </linearGradient>
+    <linearGradient id="silverGrad_LM" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="50%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <filter id="glow_LM" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Outer Hexagonal / Shield Base -->
+  <polygon points="100,8 184,45 184,145 100,192 16,145 16,45" fill="url(#bgGrad_LM)" stroke="url(#primaryGrad_LM)" stroke-width="4" filter="url(#glow_LM)" />
+  <polygon points="100,15 176,49 176,141 100,184 24,141 24,49" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="1.5" />
+
+  <!-- Speed Stripes -->
+  <path d="M 40,30 L 160,30" stroke="url(#primaryGrad_LM)" stroke-width="2" stroke-opacity="0.4" />
+  <path d="M 50,22 L 150,22" stroke="url(#primaryGrad_LM)" stroke-width="1" stroke-opacity="0.25" />
+  <path d="M 35,160 L 165,160" stroke="url(#primaryGrad_LM)" stroke-width="2" stroke-opacity="0.4" />
+
+  <!-- Rank Badge Header -->
+  <rect x="66" y="26" width="68" height="22" rx="11" fill="#000" stroke="url(#primaryGrad_LM)" stroke-width="1.5" />
+  <text x="100" y="41" font-family="'Montserrat', 'Arial Black', sans-serif" font-weight="900" font-size="11" fill="#fde047" text-anchor="middle" letter-spacing="1">RANK #4</text>
+
+  <!-- Center Monogram -->
+  <circle cx="100" cy="98" r="40" fill="rgba(0,0,0,0.65)" stroke="url(#primaryGrad_LM)" stroke-width="2.5" />
+  <circle cx="100" cy="98" r="35" fill="none" stroke="url(#silverGrad_LM)" stroke-width="1" stroke-dasharray="4,4" opacity="0.6" />
+  <text x="100" y="110" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="32" fill="url(#primaryGrad_LM)" text-anchor="middle" letter-spacing="1">LM</text>
+
+  <!-- Driver Name Banner -->
+  <path d="M 30,146 L 170,146" stroke="url(#silverGrad_LM)" stroke-width="1" />
+  <text x="100" y="158" font-family="'Montserrat', sans-serif" font-weight="900" font-size="11.5" fill="#ffffff" text-anchor="middle" letter-spacing="1">XLEMONDX</text>
+  <text x="100" y="174" font-family="'Consolas', monospace" font-weight="700" font-size="8.5" fill="#fde047" text-anchor="middle" letter-spacing="0.5">CORVETTE C6</text>
+</svg>

@@ -1,0 +1,1186 @@
+/* ==========================================================================
+   TICKET THEME - CÓDIGO FUENTE COMPLETO (UIVERSE ADAPTED)
+   ========================================================================== */
+
+:root {
+  --t-canvas-bg: #212121;
+  --t-bg: #1e1e24;
+  --t-bg-light: #2b2b36;
+  --t-accent: #7c3aed;
+  --t-accent-glow: rgba(124, 58, 237, 0.5);
+  --t-text-main: #f8fafc;
+  --t-text-muted: #94a3b8;
+}
+
+.ticket-wrapper {
+  --t-bg: #1e1e24;
+  --t-bg-light: #2b2b36;
+  --t-accent: #7c3aed;
+  --t-accent-glow: rgba(124, 58, 237, 0.5);
+  --t-text-main: #f8fafc;
+  --t-text-muted: #94a3b8;
+  font-size: 10px;
+  perspective: 1000px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.ticket {
+  position: relative;
+  width: 100%;
+  color: var(--t-text-main);
+  font-family: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.6s ease;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  background: transparent;
+  filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.5));
+}
+
+.ticket-wrapper:hover .ticket {
+  transform: rotateX(4deg) translateY(-4px) scale(1.01);
+  box-shadow: 20px 20px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.1), -5px -5px 20px var(--t-accent-glow);
+}
+
+.ticket::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 1em;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    transparent 40%,
+    rgba(255, 255, 255, 0.1) 45%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0.1) 55%,
+    transparent 60%,
+    transparent 100%
+  );
+  z-index: 10;
+  background-size: 250% 250%;
+  background-position: 100% 100%;
+  transition: background-position 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  mix-blend-mode: overlay;
+}
+
+.ticket-wrapper:hover .ticket::after {
+  background-position: 0% 0%;
+}
+
+.t-main {
+  padding: 1.8em;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at bottom left, transparent 1em, var(--t-bg) 1.05em),
+              radial-gradient(circle at bottom right, transparent 1em, var(--t-bg) 1.05em);
+  background-size: 51% 100%;
+  background-position: bottom left, bottom right;
+  background-repeat: no-repeat;
+  border-top-left-radius: 1em;
+  border-top-right-radius: 1em;
+}
+
+.t-main::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: linear-gradient(rgba(124, 58, 237, 0.15) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(124, 58, 237, 0.15) 1px, transparent 1px);
+  background-size: 2em 2em;
+  opacity: 0.6;
+  z-index: 0;
+  pointer-events: none;
+  transform: perspective(500px) rotateX(20deg) scale(1.5);
+  animation: grid-scroll 20s linear infinite;
+}
+
+@keyframes grid-scroll {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 4em; }
+}
+
+/* ==========================================================
+   VEHÍCULO DINÁMICO DE FONDO (TRACK CAR BACKDROP)
+   ========================================================== */
+.track-car-backdrop {
+  position: absolute;
+  right: -10px;
+  bottom: -10px;
+  width: 75%;
+  height: 80%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  opacity: 0.22; /* Opacidad media equilibrada */
+  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.9)) grayscale(20%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 0;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.ticket-wrapper:hover .track-car-backdrop {
+  opacity: 0.35;
+  transform: scale(1.05) translate(-4px, -2px);
+}
+
+.t-content {
+  position: relative;
+  z-index: 1;
+}
+
+.t-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5em;
+}
+
+.t-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-weight: 900;
+  font-size: 1.2em;
+  letter-spacing: -0.05em;
+  color: #fff;
+}
+
+.t-logo svg {
+  width: 1.5em;
+  height: 1.5em;
+  fill: var(--t-accent);
+  filter: drop-shadow(0 0 5px var(--t-accent));
+  animation: logo-pulse 3s ease-in-out infinite alternate;
+}
+
+@keyframes logo-pulse {
+  0% { filter: drop-shadow(0 0 2px var(--t-accent)); }
+  100% { filter: drop-shadow(0 0 10px var(--t-accent)) brightness(1.2); }
+}
+
+.t-type {
+  font-size: 0.7em;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--t-accent);
+  border: 1px solid var(--t-accent);
+  padding: 0.3em 0.8em;
+  border-radius: 99em;
+  font-weight: 700;
+}
+
+.t-title {
+  font-family: var(--font-heading, "Montserrat", 'Chivo', sans-serif);
+  font-size: 2.2em;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  margin-bottom: 0.2em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.t-subtitle {
+  color: var(--t-text-muted);
+  font-size: 0.9em;
+  margin-bottom: 1.5em;
+}
+
+.t-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2em;
+  margin-bottom: 1em;
+}
+
+.t-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+}
+
+.t-label {
+  font-size: 0.65em;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--t-text-muted);
+}
+
+.t-value {
+  font-size: 1.2em;
+  font-weight: 700;
+  color: var(--t-text-main);
+}
+
+.t-perforation {
+  display: flex;
+  justify-content: space-between;
+  height: 1em;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.t-perf-line {
+  flex-grow: 1;
+  height: 0;
+  border-top: 2px dashed rgba(255, 255, 255, 0.2);
+  margin: 0 1.5em;
+}
+
+.t-stub {
+  padding: 1.5em 1.8em;
+  background: radial-gradient(circle at top left, transparent 1em, var(--t-bg-light) 1.05em),
+              radial-gradient(circle at top right, transparent 1em, var(--t-bg-light) 1.05em);
+  background-size: 51% 100%;
+  background-position: top left, top right;
+  background-repeat: no-repeat;
+  border-bottom-left-radius: 1em;
+  border-bottom-right-radius: 1em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.ticket-wrapper:active .ticket {
+  transform: rotateX(10deg) scale(0.99);
+}
+
+/* ==========================================================================
+   TASK 3: CONTENEDOR GENERAL #212121 & BOTÓN RACING GLITCH
+   ========================================================================== */
+
+/* Fondo transparente para catálogo de rutas y circuitos */
+#routes-catalog-grid,
+.elements-grid#routes-catalog-grid,
+.catalog-content-main {
+  background: transparent !important;
+  background-color: transparent !important;
+  border-radius: 14px;
+}
+
+.ticket-canvas {
+  width: 100%;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  padding: 0;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+/* Botón Leaderboard con efecto glitch Lightning Silver & Black */
+.btn-glitch-racing {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0a0a0c !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+  overflow: visible;
+}
+
+.btn-glitch-racing::after {
+  --move1: inset(50% 50% 50% 50%);
+  --move2: inset(31% 0 40% 0);
+  --move3: inset(39% 0 15% 0);
+  --move4: inset(45% 0 40% 0);
+  --move5: inset(45% 0 6% 0);
+  --move6: inset(14% 0 61% 0);
+  clip-path: var(--move1);
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.btn-glitch-racing:hover {
+  background-color: #050507 !important;
+  border-color: #ffffff !important;
+  color: #ffffff !important;
+  text-shadow: -1px -1px 0px #ffffff, 1px 1px 0px #94a3b8 !important;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.35), 0 0 2px #e2e8f0 !important;
+  transform: translateY(-1px);
+}
+
+.btn-glitch-racing:hover::after {
+  animation: glitch-lightning 0.8s infinite steps(2, end);
+  background-color: transparent !important;
+  border: 1px solid #e2e8f0 !important;
+  text-shadow: -2px -2px 0px #ffffff, 2px 2px 0px #64748b !important;
+}
+
+.btn-glitch-racing.is-active,
+.btn-glitch-racing.active {
+  background-color: #0d0e12 !important;
+  border: 1px solid #ffffff !important;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.3) !important;
+  color: #ffffff !important;
+}
+
+.btn-glitch-racing.is-active::after,
+.btn-glitch-racing.active::after {
+  display: none !important;
+}
+
+@keyframes glitch-lightning {
+  0% {
+    clip-path: var(--move1);
+    transform: translate(0px, -3px);
+  }
+  10% {
+    clip-path: var(--move2);
+    transform: translate(-3px, 3px);
+  }
+  20% {
+    clip-path: var(--move3);
+    transform: translate(3px, 0px);
+  }
+  30% {
+    clip-path: var(--move4);
+    transform: translate(-3px, 3px);
+  }
+  40% {
+    clip-path: var(--move5);
+    transform: translate(3px, -3px);
+  }
+  50% {
+    clip-path: var(--move6);
+    transform: translate(-3px, 3px);
+  }
+  60% {
+    clip-path: var(--move1);
+    transform: translate(3px, -3px);
+  }
+  70% {
+    clip-path: var(--move3);
+    transform: translate(-3px, 3px);
+  }
+  80% {
+    clip-path: var(--move2);
+    transform: translate(3px, -3px);
+  }
+  90% {
+    clip-path: var(--move4);
+    transform: translate(-3px, 3px);
+  }
+  100% {
+    clip-path: var(--move1);
+    transform: translate(0);
+  }
+}
+
+/* Supresión total y permanente de cualquier código de barras */
+.track-card .barcode,
+.track-card .barcode-container,
+.track-card svg[class*="barcode"],
+.track-card .t-barcode-container,
+.track-card .t-barcode,
+.track-card .t-barcode-id,
+.ticket .barcode,
+.t-barcode-container,
+.t-barcode,
+.t-barcode-id {
+  display: none !important;
+}
+
+/* ==========================================================================
+   BLACKLIST GROUPS & TOURNAMENT COMPONENT STYLES
+   ========================================================================== */
+
+/* Badges Numéricos Modernos */
+:root {
+  --badge-gold-bg: rgba(255, 184, 0, 0.12);
+  --badge-gold-text: #ffb800;
+  --badge-gold-border: 1px solid rgba(255, 184, 0, 0.5);
+  --badge-gold-glow: 0 0 10px rgba(255, 184, 0, 0.3);
+
+  --badge-silver-bg: rgba(226, 232, 240, 0.1);
+  --badge-silver-text: #e2e8f0;
+  --badge-silver-border: 1px solid rgba(226, 232, 240, 0.4);
+
+  --badge-bronze-bg: rgba(217, 119, 6, 0.12);
+  --badge-bronze-text: #f59e0b;
+  --badge-bronze-border: 1px solid rgba(217, 119, 6, 0.4);
+}
+
+.ticket-grid-bg {
+  background-color: var(--t-bg) !important;
+  background-image: 
+    linear-gradient(rgba(124, 58, 237, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124, 58, 237, 0.05) 1px, transparent 1px) !important;
+  background-size: 20px 20px !important;
+}
+
+.badge-numeric {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 26px;
+  padding: 0 4px;
+  border-radius: 6px;
+  font-family: var(--font-mono, monospace);
+  font-size: 11.5px;
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
+
+.badge-numeric.badge-gold,
+.badge-numeric.rank-1 {
+  background: var(--badge-gold-bg) !important;
+  color: var(--badge-gold-text) !important;
+  border: var(--badge-gold-border) !important;
+  box-shadow: var(--badge-gold-glow) !important;
+}
+
+.badge-numeric.badge-silver,
+.badge-numeric.rank-2 {
+  background: var(--badge-silver-bg) !important;
+  color: var(--badge-silver-text) !important;
+  border: var(--badge-silver-border) !important;
+  box-shadow: none !important;
+}
+
+.badge-numeric.badge-bronze,
+.badge-numeric.rank-3 {
+  background: var(--badge-bronze-bg) !important;
+  color: var(--badge-bronze-text) !important;
+  border: var(--badge-bronze-border) !important;
+  box-shadow: none !important;
+}
+
+.badge-numeric.badge-neutral {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: var(--t-text-muted) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: none !important;
+}
+
+/* Tarjetas de Grupos de la Blacklist */
+.nfs-group-card {
+  position: relative;
+  border-radius: 14px;
+  padding: 16px;
+  background-color: var(--t-bg) !important;
+  border: 1px solid var(--t-border, rgba(124, 58, 237, 0.25)) !important;
+  box-shadow: 0 10px 24px -6px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.22s ease, box-shadow 0.22s ease;
+  cursor: pointer;
+}
+
+.nfs-group-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--t-accent) !important;
+  box-shadow: 0 14px 32px -8px rgba(0, 0, 0, 0.65), 0 0 20px var(--t-accent-glow) !important;
+}
+
+.nfs-group-card.is-selected {
+  border-color: var(--t-accent) !important;
+  box-shadow: 0 14px 34px -6px rgba(0, 0, 0, 0.7), 0 0 24px var(--t-accent-glow) !important;
+  background-color: var(--t-bg) !important;
+}
+
+.nfs-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.nfs-group-title {
+  font-family: var(--font-heading, "Montserrat", sans-serif);
+  font-size: 15px;
+  font-weight: 800;
+  color: #ffffff !important;
+  letter-spacing: 0.02em;
+}
+
+.champ-group-counter-pill {
+  border: 1px solid rgba(124, 58, 237, 0.4);
+  background: rgba(124, 58, 237, 0.14);
+  color: #c4b5fd;
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 99em;
+  letter-spacing: 0.04em;
+}
+
+.nfs-group-pilot-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 7px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nfs-group-pilot-row:hover {
+  background: rgba(124, 58, 237, 0.1);
+  border-color: rgba(124, 58, 237, 0.4);
+  transform: translateX(3px);
+}
+
+.champ-pilot-name {
+  font-family: var(--font-heading, "Montserrat", sans-serif);
+  font-size: 0.975rem !important;
+  font-weight: 600 !important;
+  color: #ffffff !important;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.25;
+}
+
+.champ-pilot-meta {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  color: var(--t-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pilot-points-badge,
+.champ-group-pts-pill {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace) !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+  font-variant-numeric: tabular-nums !important;
+  white-space: nowrap !important;
+  color: #ffb800 !important;
+  background: rgba(255, 184, 0, 0.12) !important;
+  border: 1px solid rgba(255, 184, 0, 0.35) !important;
+  padding: 4px 10px !important;
+  border-radius: 6px !important;
+  flex-shrink: 0;
+  box-shadow: 0 0 10px rgba(255, 184, 0, 0.25) !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.champ-filter-group-btn {
+  background: #0a0a0c !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+  font-family: var(--font-sans, "Space Grotesk", sans-serif) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  padding: 6px 14px !important;
+  border-radius: 8px !important;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.champ-filter-group-btn:hover {
+  background: #050507 !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.4) !important;
+  color: #ffffff !important;
+  text-shadow: -1px -1px 0px #ffffff, 1px 1px 0px #94a3b8 !important;
+  transform: translateY(-1px);
+}
+
+.champ-filter-group-btn.is-active,
+.champ-filter-group-btn.active {
+  background: #0d0e12 !important;
+  border: 1px solid #ffffff !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.3) !important;
+}
+
+:not(.nfs-group-card-footer):not(.nfs-group-card) > .champ-filter-group-btn,
+.nfs-torneo-controls-card .champ-filter-group-btn {
+  display: none !important;
+}
+
+/* ==========================================================================
+   CHAMPIONSHIP CHALLENGES (WEEKLY TICKETS)
+   ========================================================================== */
+.champ-challenge-ticket {
+  height: auto !important;
+}
+
+.champ-challenge-ticket .ticket-wrapper {
+  height: auto !important;
+  perspective: 1200px;
+}
+
+.champ-challenge-ticket .ticket {
+  height: auto !important;
+  border-radius: 14px !important;
+  box-shadow:
+    0 12px 36px rgba(0, 0, 0, 0.85),
+    0 0 20px -2px rgba(139, 92, 246, 0.35),
+    0 0 28px -4px rgba(255, 123, 0, 0.28) !important;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease !important;
+}
+
+.champ-challenge-ticket:hover .ticket {
+  transform: translateY(-4px) scale(1.01) !important;
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.95),
+    0 0 28px rgba(139, 92, 246, 0.6),
+    0 0 38px rgba(255, 123, 0, 0.5) !important;
+}
+
+.champ-challenge-ticket .t-main {
+  background-color: var(--t-bg, #181622) !important;
+  border: 1.5px solid rgba(139, 92, 246, 0.45) !important;
+  border-bottom: none !important;
+  border-top-left-radius: 14px !important;
+  border-top-right-radius: 14px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  min-height: auto !important;
+  height: auto !important;
+  padding: 1.4rem !important;
+  position: relative !important;
+}
+
+/* Neon Top Strip: Purple to Orange */
+.champ-challenge-ticket .t-main::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2.5px;
+  background: linear-gradient(90deg, #a855f7 0%, #7c3aed 40%, #f97316 75%, #ff7b00 100%);
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.8), 0 0 18px rgba(255, 123, 0, 0.8);
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+  z-index: 5;
+}
+
+.champ-challenge-ticket .t-stub {
+  background: linear-gradient(180deg, #13121b 0%, #1b1726 100%) !important;
+  border: 1.5px solid rgba(255, 123, 0, 0.4) !important;
+  border-top: none !important;
+  border-bottom-left-radius: 14px !important;
+  border-bottom-right-radius: 14px !important;
+  padding: 0.85rem 1.25rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: auto !important;
+  box-shadow: inset 0 -1px 0 rgba(255, 123, 0, 0.2) !important;
+}
+
+.champ-challenge-ticket:hover .t-main {
+  border-color: rgba(168, 85, 247, 0.7) !important;
+}
+
+.champ-challenge-ticket:hover .t-stub {
+  border-color: rgba(255, 123, 0, 0.75) !important;
+}
+
+.champ-challenge-ticket .t-perforation {
+  display: flex !important;
+  justify-content: space-between !important;
+  height: 12px !important;
+  align-items: center !important;
+  position: relative !important;
+  z-index: 2 !important;
+  margin-top: 4px !important;
+}
+
+.champ-challenge-ticket .t-perf-line {
+  flex-grow: 1 !important;
+  height: 0 !important;
+  border-top: 2px dashed rgba(255, 123, 0, 0.4) !important;
+  margin: 0 0.8rem !important;
+  filter: drop-shadow(0 0 4px rgba(255, 123, 0, 0.5)) !important;
+}
+
+.champ-challenge-ticket .t-stub-actions {
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.champ-challenge-ticket .champ-leaderboard-btn {
+  width: 100% !important;
+}
+
+/* Hide old P1=25 badge anywhere in stub if still present */
+.ticket-p1-badge,
+.t-admit-num {
+  display: none !important;
+}
+
+.champ-route-num-badge {
+  display: none !important;
+}
+
+.challenge-card-header,
+.champ-challenge-ticket .t-header {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 10px !important;
+  margin-bottom: 12px !important;
+}
+
+.challenge-header-top-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+}
+
+.challenge-header-title-wrap {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 5px !important;
+  width: 100% !important;
+}
+
+.brand-nfs-ranks,
+.champ-challenge-ticket .t-header-left .t-logo,
+.champ-challenge-ticket .t-logo {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-family: var(--font-heading, "Space Grotesk", sans-serif) !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+}
+
+.brand-nfs-ranks .brand-icon,
+.champ-challenge-ticket .t-header-left .t-logo svg,
+.champ-challenge-ticket .t-header-left .t-logo-svg,
+.champ-challenge-ticket .t-logo-svg {
+  width: 18px !important;
+  height: 18px !important;
+  fill: none !important;
+  stroke: #ff7b00 !important;
+  color: #ff7b00 !important;
+  filter: drop-shadow(0 0 6px rgba(255, 123, 0, 0.6)) !important;
+  flex-shrink: 0 !important;
+}
+
+.track-main-title,
+.champ-challenge-ticket .t-title {
+  font-family: var(--font-heading, "Montserrat", sans-serif) !important;
+  font-size: 1.35rem !important; /* ~21px */
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+  text-transform: uppercase !important;
+  text-align: left !important;
+  color: #ffffff !important;
+  background: none !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95) !important;
+  letter-spacing: -0.01em !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
+  hyphens: none !important;
+}
+
+.group-category-pill,
+.champ-challenge-ticket .champ-group-badge-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  width: fit-content !important;
+  font-family: var(--font-heading, "Montserrat", sans-serif) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: #c4b5fd !important;
+  background: rgba(124, 58, 237, 0.15) !important;
+  border: 1px solid rgba(139, 92, 246, 0.35) !important;
+  padding: 3px 8px !important;
+  border-radius: 5px !important;
+  letter-spacing: 0.03em !important;
+}
+
+.race-type-badge,
+.champ-challenge-ticket .t-type {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  padding: 4px 10px !important;
+  border-radius: 6px !important;
+  background: #0f1015 !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  color: #ffffff !important;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.35) !important;
+}
+
+.race-type-badge.type-circuito,
+.champ-challenge-ticket .t-type-circuito {
+  border-color: rgba(59, 130, 246, 0.6) !important;
+  color: #93c5fd !important;
+  text-shadow: 0 0 8px rgba(59, 130, 246, 0.4) !important;
+}
+
+.race-type-badge.type-sprint,
+.champ-challenge-ticket .t-type-sprint {
+  border-color: rgba(234, 179, 8, 0.6) !important;
+  color: #fde047 !important;
+  text-shadow: 0 0 8px rgba(234, 179, 8, 0.4) !important;
+}
+
+.race-type-badge.type-drag,
+.champ-challenge-ticket .t-type-drag {
+  border-color: rgba(239, 68, 68, 0.6) !important;
+  color: #fca5a5 !important;
+  text-shadow: 0 0 8px rgba(239, 68, 68, 0.4) !important;
+}
+
+.restriction-badge {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  background: rgba(14, 13, 20, 0.9) !important;
+  border: 1px solid rgba(255, 123, 0, 0.35) !important;
+  border-radius: 7px !important;
+  padding: 5px 10px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 10px rgba(255, 123, 0, 0.12) !important;
+  width: 100% !important;
+}
+
+.restriction-badge .restriction-label {
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 10.5px !important;
+  font-weight: 800 !important;
+  color: #94a3b8 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  line-height: 1 !important;
+  flex-shrink: 0 !important;
+}
+
+.restriction-badge .restriction-vehicle {
+  font-family: var(--font-heading, "Space Grotesk", sans-serif) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #ffb800 !important;
+  text-shadow: 0 0 10px rgba(255, 184, 0, 0.35) !important;
+  line-height: 1.2 !important;
+  white-space: normal !important;
+  text-align: right !important;
+}
+
+.champ-challenge-ticket .t-subtitle {
+  display: none !important;
+}
+
+.champ-challenge-ticket .t-champ-drivers-roster {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+  margin-bottom: 8px;
+  background: rgba(15, 14, 22, 0.88);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.champ-driver-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 9px;
+  background: rgba(28, 26, 38, 0.92);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+  transition: all 0.22s ease-in-out;
+  cursor: pointer;
+}
+
+.champ-driver-card:hover {
+  background: rgba(38, 34, 52, 0.98);
+  border-color: rgba(255, 123, 0, 0.55);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7), 0 0 16px rgba(255, 123, 0, 0.3);
+}
+
+.champ-driver-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+}
+
+.champ-driver-identity {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.champ-driver-avatar {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid rgba(139, 92, 246, 0.5) !important;
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.3);
+}
+
+.champ-driver-name {
+  font-family: var(--font-heading, "Montserrat", sans-serif);
+  font-size: 14.5px !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95);
+  line-height: 1.2;
+}
+
+.driver-time-pill,
+.driver-lap-time,
+.champ-driver-time-badge {
+  font-family: 'JetBrains Mono', var(--font-mono), monospace !important;
+  font-size: 0.92rem !important;
+  font-weight: 700 !important;
+  font-variant-numeric: tabular-nums !important;
+  letter-spacing: 0.5px !important;
+  white-space: nowrap !important;
+  padding: 4px 9px !important;
+  border-radius: 6px !important;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.driver-time-pill.has-time,
+.driver-lap-time.has-time,
+.champ-driver-time-badge.has-time {
+  color: #22d3ee !important;
+  background: rgba(34, 211, 238, 0.12) !important;
+  border: 1px solid rgba(34, 211, 238, 0.45) !important;
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.4) !important;
+}
+
+.driver-time-pill.no-time,
+.driver-lap-time.no-time,
+.champ-driver-time-badge.no-time {
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  color: #fb7185 !important;
+  background: rgba(244, 63, 94, 0.14) !important;
+  border: 1px solid rgba(244, 63, 94, 0.4) !important;
+}
+
+.champ-driver-card-bottom {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  width: 100% !important;
+  padding-top: 6px !important;
+  border-top: 1px dashed rgba(255, 255, 255, 0.08) !important;
+  flex-wrap: wrap !important;
+}
+
+.champ-driver-car-box {
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+}
+
+.champ-driver-car-icon {
+  font-size: 11px !important;
+  opacity: 0.85 !important;
+  flex-shrink: 0 !important;
+}
+
+.champ-driver-car {
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  color: #e2e8f0 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  line-height: 1.25 !important;
+  word-break: break-word !important;
+}
+
+.champ-driver-metrics-group {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  flex-shrink: 0 !important;
+  margin-left: auto !important;
+}
+
+.driver-rep-value,
+.driver-rep-reward,
+.champ-driver-rep-badge {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace) !important;
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  color: #10b981 !important;
+  background: rgba(16, 185, 129, 0.12) !important;
+  border: 1px solid rgba(16, 185, 129, 0.35) !important;
+  padding: 2px 7px !important;
+  border-radius: 5px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  white-space: nowrap !important;
+  letter-spacing: 0.01em !important;
+  font-variant-numeric: tabular-nums !important;
+}
+
+.driver-rep-value .rep-icon,
+.driver-rep-reward .rep-icon,
+.champ-driver-rep-badge .rep-icon {
+  font-size: 13px;
+  line-height: 1;
+  color: #10b981 !important;
+}
+
+.driver-points-badge,
+.champ-driver-pts-badge,
+.card-points-value {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace) !important;
+  font-size: 0.8rem !important;
+  font-weight: 800 !important;
+  color: #ffb800 !important;
+  background: rgba(255, 184, 0, 0.12) !important;
+  border: 1px solid rgba(255, 184, 0, 0.35) !important;
+  padding: 2px 7px !important;
+  border-radius: 5px !important;
+  white-space: nowrap !important;
+  font-variant-numeric: tabular-nums !important;
+  box-shadow: 0 0 8px rgba(255, 184, 0, 0.18) !important;
+}
+
+.champ-challenge-ticket .uiverse-baboon-btn,
+.champ-leaderboard-btn {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: #0d0e12 !important;
+  border: 1.5px solid #ff7b00 !important;
+  color: #ffffff !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  overflow: hidden !important;
+  padding: 8px 16px !important;
+  font-family: var(--font-heading, "Montserrat", sans-serif) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  box-shadow: 0 0 10px rgba(255, 123, 0, 0.25) !important;
+  transition: color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, background-color 0.4s ease !important;
+}
+
+.champ-challenge-ticket .uiverse-baboon-btn > *:not(.squid-layer),
+.champ-leaderboard-btn > *:not(.squid-layer) {
+  position: relative !important;
+  z-index: 2 !important;
+  transition: color 0.35s ease !important;
+}
+
+.champ-challenge-ticket .uiverse-baboon-btn:hover,
+.champ-leaderboard-btn:hover {
+  color: #000000 !important;
+  border-color: #ff9500 !important;
+  box-shadow: 0 0 18px rgba(255, 123, 0, 0.65), 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+}
+
+.champ-challenge-ticket .uiverse-baboon-btn:hover > *:not(.squid-layer),
+.champ-leaderboard-btn:hover > *:not(.squid-layer) {
+  color: #000000 !important;
+}
+
+.champ-challenge-ticket .uiverse-baboon-btn:hover .squid-1,
+.champ-leaderboard-btn:hover .squid-1 {
+  top: 0% !important;
+}
+.champ-challenge-ticket .uiverse-baboon-btn:hover .squid-2,
+.champ-leaderboard-btn:hover .squid-2 {
+  right: 0% !important;
+}
+.champ-challenge-ticket .uiverse-baboon-btn:hover .squid-3,
+.champ-leaderboard-btn:hover .squid-3 {
+  left: 0% !important;
+}
+.champ-challenge-ticket .uiverse-baboon-btn:hover .squid-4,
+.champ-leaderboard-btn:hover .squid-4 {
+  bottom: 0% !important;
+}

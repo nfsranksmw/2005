@@ -1,0 +1,152 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%" class="nfs-logo-svg">
+  <defs>
+    <!-- Gradiente para el fondo rojo con un toque de viñeta sutil -->
+    <radialGradient id="bg-red" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#e3182d" />
+      <stop offset="100%" stop-color="#b80d1f" />
+    </radialGradient>
+
+    <!-- Gradiente para el barrido de luz (Shimmer) -->
+    <linearGradient id="shine-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0)" />
+      <stop offset="40%" stop-color="rgba(255,255,255,0)" />
+      <stop offset="50%" stop-color="rgba(255,255,255,0.85)" />
+      <stop offset="60%" stop-color="rgba(255,255,255,0)" />
+      <stop offset="100%" stop-color="rgba(255,255,255,0)" />
+    </linearGradient>
+
+    <!-- Filtro de sombra y resplandor (Glow) -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#000000" flood-opacity="0.25" />
+    </filter>
+    
+    <filter id="hover-glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="12" result="blur" />
+      <feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#000000" flood-opacity="0.4" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <!-- Máscara con el texto NFS para que el brillo solo pase por las letras -->
+    <mask id="text-mask">
+      <g font-family="&#39;Montserrat&#39;, &#39;Arial Black&#39;, &#39;Impact&#39;, sans-serif" font-weight="900" font-size="310" fill="#ffffff" text-anchor="middle" letter-spacing="-5">
+        <text x="400" y="410">NFS</text>
+      </g>
+    </mask>
+  </defs>
+
+  <style>
+    .nfs-logo-svg {
+      cursor: pointer;
+      overflow: hidden;
+      border-radius: 8px;
+    }
+
+    /* Fondo */
+    .bg-rect {
+      fill: url(#bg-red);
+      transition: all 0.4s ease;
+    }
+
+    /* Estilo base de las letras */
+    .letter {
+      font-family: 'Montserrat', 'Helvetica Neue', 'Arial Black', sans-serif;
+      font-weight: 900;
+      font-size: 310px;
+      fill: #ffffff;
+      filter: url(#glow);
+      transform-origin: center;
+      opacity: 1;
+      animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards,
+                 floatPulse 4s ease-in-out infinite 1.5s;
+      transition: all 0.3s ease;
+    }
+
+    /* Retrasos escalonados para cada letra */
+    .letter-n { animation-delay: 0.1s, 1.5s; }
+    .letter-f { animation-delay: 0.25s, 1.7s; }
+    .letter-s { animation-delay: 0.4s, 1.9s; }
+
+    /* Efecto al pasar el cursor (Hover) sobre el logo */
+    .nfs-logo-svg:hover .letter {
+      filter: url(#hover-glow);
+      transform: scale(1.04) translateY(-5px);
+    }
+
+    /* Barrido de luz periódico */
+    .shimmer-bar {
+      fill: url(#shine-gradient);
+      transform: skewX(-25deg);
+      animation: shimmerSweep 3.5s infinite ease-in-out 1s;
+    }
+
+    /* Destello de fondo sutil */
+    .ambient-light {
+      fill: #ffffff;
+      opacity: 0.05;
+      transform-origin: center;
+      animation: ambientPulse 3s infinite alternate ease-in-out;
+    }
+
+    /* Keyframes de las animaciones */
+    @keyframes popIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.5) translateY(40px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    @keyframes floatPulse {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+      }
+      50% {
+        transform: translateY(-6px) scale(1.015);
+      }
+    }
+
+    @keyframes shimmerSweep {
+      0% {
+        x: -900px;
+      }
+      45%, 100% {
+        x: 1200px;
+      }
+    }
+
+    @keyframes ambientPulse {
+      0% {
+        r: 150px;
+        opacity: 0.03;
+      }
+      100% {
+        r: 350px;
+        opacity: 0.12;
+      }
+    }
+  </style>
+
+  <!-- 1. Fondo Rojo -->
+  <rect width="800" height="600" class="bg-rect" />
+
+  <!-- 2. Luz ambiental dinámica en el centro -->
+  <circle cx="400" cy="300" r="250" class="ambient-light" />
+
+  <!-- 3. Letras principales animadas por separado -->
+  <g text-anchor="middle" letter-spacing="-5">
+    <text x="195" y="410" class="letter letter-n">N</text>
+    <text x="415" y="410" class="letter letter-f">F</text>
+    <text x="615" y="410" class="letter letter-s">S</text>
+  </g>
+
+  <!-- 4. Capa de brillo (Shimmer) que cruza las letras -->
+  <g mask="url(#text-mask)">
+    <rect id="shimmer" y="0" width="500" height="600" class="shimmer-bar" />
+  </g>
+</svg>
