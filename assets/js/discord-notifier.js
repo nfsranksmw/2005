@@ -1,24 +1,21 @@
 /**
  * DISCORD NOTIFIER - Need for Speed: Most Wanted (2005)
- * Conector oficial con el Webhook de Discord del Servidor de NFS MW Ranks
+ * Conector oficial con el Webhook "Verify Records" (#verified-runs ✅) del Servidor de NFS MW Ranks
  * 
  * Capacidades:
- * - Publicaciones bilingües simultáneas/paralelas (Español e Inglés) por cada tiempo homologado o modificado
- * - Notificaciones de aprobación en la oficina técnica de homologación
- * - Notificaciones de modificación desde la sección Leaderboards (vía checkbox de webhook)
- * - Rechazos de solicitudes con motivo reglamentario
- * - Eliminaciones de registros
- * - Publicación de clasificaciones de temporada Blacklist
+ * - Publicación bilingüe unificada (Inglés y Español en UN SOLO PIN / MENSAJE) por cada récord aprobado o modificado
+ * - Notificaciones automáticas de aprobación desde la Cola de Moderación en admin.html
+ * - Notificaciones desde el Gestor de Leaderboards (al agregar/editar o mediante botón directo de envío)
+ * - Rechazos de solicitudes con motivo reglamentario (bilingüe)
+ * - Eliminaciones de registros y publicación de clasificaciones de temporada Blacklist
  */
 
 const NFS_DISCORD_NOTIFIER = (function () {
-    const WEBHOOK_URL = "https://discord.com/api/webhooks/1552495472365543554/2VZ91_lHgDLdAHruuAfFDOf33g_F1jtfzbE3BKejAykYwiI3aLmBh64gzevwccaxtzgd";
-    const BOT_NAME = "NFS Most Wanted Ranks • Comisaría";
-    const AVATAR_URL = "https://i.imgur.com/8Q9b7w0.png";
+    const WEBHOOK_URL = "https://discord.com/api/webhooks/1564734251814092900/ViKOSGJ6yuyKJKYBCPDmVSHm6N3oh48nLH9Yw8SCGJIapT61Gzv-0Vc3S7N9rF-_514j";
 
     // Paleta de colores oficial Discord Embed (en entero decimal)
     const COLORS = {
-        APPROVED_GOLD: 0xf59e0b,  // #f59e0b (Oro / Récord)
+        APPROVED_GOLD: 0xf59e0b,  // #f59e0b (Oro / Récord Mundial #1)
         APPROVED_GREEN: 0x22c55e, // #22c55e (Verde neón homologado)
         UPDATED_BLUE: 0x3b82f6,   // #3b82f6 (Azul modificación técnica)
         REJECTED_RED: 0xef4444,   // #ef4444 (Rojo alerta rechazo)
@@ -27,21 +24,16 @@ const NFS_DISCORD_NOTIFIER = (function () {
     };
 
     /**
-     * Envío genérico al Webhook de Discord
+     * Envío genérico al Webhook de Discord (#verified-runs ✅ • Verify Records)
+     * Respeta el nombre ("Verify Records") y el avatar oficial (icono NFS rojo) configurados en Discord.
      */
     async function sendWebhookPayload(payload) {
         if (!WEBHOOK_URL) return false;
         try {
-            const body = {
-                username: BOT_NAME,
-                avatar_url: AVATAR_URL,
-                ...payload
-            };
-
             const res = await fetch(WEBHOOK_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
+                body: JSON.stringify(payload)
             });
 
             if (!res.ok) {
@@ -55,67 +47,65 @@ const NFS_DISCORD_NOTIFIER = (function () {
     }
 
     // =======================================================
-    // HELPERS DE TRADUCCIÓN Y FORMATEO BILINGÜE
+    // HELPERS DE TRADUCCIÓN Y FORMATEO BILINGÜE (EN / ES)
     // =======================================================
 
-    function translateDeviceToEN(device) {
-        if (!device) return 'PC Keyboard';
+    function formatBilingualDevice(device) {
+        if (!device) return 'PC Keyboard / Teclado';
         const d = String(device).trim();
         const map = {
-            'Teclado': 'PC Keyboard',
-            'Mando': 'Gamepad / Controller',
-            'Mando Xbox': 'Xbox Controller',
+            'Teclado': 'PC Keyboard / Teclado',
+            'Mando': 'Gamepad / Mando',
+            'Mando Xbox': 'Xbox Controller / Mando Xbox',
             'Xbox One': 'Xbox One Controller',
             'Xbox Series X': 'Xbox Series X Controller',
             'Xbox': 'Xbox Controller',
-            'DualSense': 'PlayStation 5 DualSense Controller',
-            'PlayStation DualSense': 'PlayStation 5 DualSense Controller',
-            'PlayStation 5 DualSense': 'PlayStation 5 DualSense Controller',
-            'PlayStation 4 DualShock 4': 'PlayStation 4 DualShock 4 Controller',
-            'PlayStation DualShock 4': 'PlayStation 4 DualShock 4 Controller',
-            'DualShock 4': 'PlayStation 4 DualShock 4 Controller',
-            'DS4': 'PlayStation 4 DualShock 4 Controller',
-            'PlayStation 3 DualShock 3': 'PlayStation 3 DualShock 3 Controller',
-            'PlayStation DualShock 3': 'PlayStation 3 DualShock 3 Controller',
-            'DualShock 3': 'PlayStation 3 DualShock 3 Controller',
+            'DualSense': 'PS5 DualSense Controller',
+            'PlayStation DualSense': 'PS5 DualSense Controller',
+            'PlayStation 5 DualSense': 'PS5 DualSense Controller',
+            'PlayStation 4 DualShock 4': 'PS4 DualShock 4 Controller',
+            'PlayStation DualShock 4': 'PS4 DualShock 4 Controller',
+            'DualShock 4': 'PS4 DualShock 4 Controller',
+            'DS4': 'PS4 DualShock 4 Controller',
+            'PlayStation 3 DualShock 3': 'PS3 DualShock 3 Controller',
+            'PlayStation DualShock 3': 'PS3 DualShock 3 Controller',
+            'DualShock 3': 'PS3 DualShock 3 Controller',
             'Logitech Dual Action': 'Logitech Dual Action Gamepad',
             'Dual Action': 'Logitech Dual Action Gamepad',
             'TA': 'Logitech Dual Action Gamepad',
             'Logitech F310': 'Logitech F310 Gamepad',
             'Logitech F710': 'Logitech F710 Wireless Gamepad',
-            'Logitech Extreme 3D Pro': 'Logitech Extreme 3D Pro Flightstick',
-            'Volante': 'Racing Wheel & Pedals',
-            'Mando Genérico': 'Generic Gamepad / Pad',
-            'Mando Genérico / Pad': 'Generic Gamepad / Pad'
+            'Logitech Extreme 3D Pro': 'Logitech Extreme 3D Pro',
+            'Volante': 'Racing Wheel / Volante',
+            'Mando Genérico': 'Generic Gamepad / Mando Genérico',
+            'Mando Genérico / Pad': 'Generic Gamepad / Mando Genérico'
         };
         return map[d] || d;
     }
 
-    function translateGearboxToEN(gearbox) {
+    function formatBilingualGearbox(gearbox) {
         if (!gearbox) return 'Manual';
         const g = String(gearbox).trim().toLowerCase();
-        if (g.includes('auto')) return 'Automatic Transmission';
-        return 'Manual Transmission';
+        if (g.includes('auto')) return 'Automatic / Automática';
+        return 'Manual';
     }
 
-    function translateCategoryToEN(cat) {
-        if (!cat) return 'Junkman (Performance Upgrades)';
-        let c = String(cat);
-        c = c.replace(/Vuelta Única|Vuelta Unica/gi, 'Single Lap');
-        c = c.replace(/Vuelta Rápida|Vuelta Rapida/gi, 'Fastest Lap');
-        c = c.replace(/Circuito/gi, 'Circuit');
-        c = c.replace(/Junkman/gi, 'Junkman (Performance Upgrades)');
-        c = c.replace(/BMW M3 GTR/gi, 'BMW M3 GTR (Stock / Canonical)');
+    function formatBilingualCategory(cat) {
+        if (!cat) return 'Junkman';
+        let c = String(cat).trim();
+        c = c.replace(/Vuelta Única|Vuelta Unica/gi, 'Single Lap / Vuelta Única');
+        c = c.replace(/Vuelta Rápida|Vuelta Rapida/gi, 'Fast Lap / Vuelta Rápida');
         return c;
     }
 
     // =======================================================
-    // CONSTRUCTORES DE PAYLOAD (ESPAÑOL & INGLÉS)
+    // CONSTRUCTOR DE PAYLOAD BILINGÜE UNIFICADO (1 SOLO PIN)
     // =======================================================
 
-    function buildApprovalPayloadES(data) {
+    function buildUnifiedBilingualApprovalPayload(data) {
         const isWorldRecord = data.rank === '#1' || data.rank === 1;
         const isUpdate = Boolean(data.isUpdate || data.actionType === 'update');
+        const rankStr = String(data.rank || '#1').startsWith('#') ? String(data.rank) : `#${data.rank}`;
 
         let color = COLORS.APPROVED_GREEN;
         if (isWorldRecord) {
@@ -124,143 +114,91 @@ const NFS_DISCORD_NOTIFIER = (function () {
             color = COLORS.UPDATED_BLUE;
         }
 
-        let rankBadge = isWorldRecord ? '👑 ¡NUEVO RÉCORD MUNDIAL #1!' : `🏁 Puesto Asignado: ${data.rank}`;
+        // Encabezados de estado en Inglés y Español
+        let badgeEN = isWorldRecord ? '👑 **NEW WORLD RECORD #1!**' : `🏁 **Assigned Position:** \`${rankStr}\``;
+        let badgeES = isWorldRecord ? '👑 **¡NUEVO RÉCORD MUNDIAL #1!**' : `🏁 **Puesto Asignado:** \`${rankStr}\``;
+
         if (isUpdate && isWorldRecord) {
-            rankBadge = '👑 ¡RÉCORD MUNDIAL #1 ACTUALIZADO!';
+            badgeEN = '👑 **WORLD RECORD #1 UPDATED!**';
+            badgeES = '👑 **¡RÉCORD MUNDIAL #1 ACTUALIZADO!**';
         } else if (isUpdate) {
-            rankBadge = `✏️ Registro Actualizado en Posición: ${data.rank}`;
+            badgeEN = `✏️ **Record Updated at Position:** \`${rankStr}\``;
+            badgeES = `✏️ **Registro Actualizado en Posición:** \`${rankStr}\``;
         }
 
-        const seasonText = data.seasonName ? `\n🏆 **Evento Oficial**: ${data.seasonName} · ${data.weekTitle || ''}` : '';
+        const eventLineEN = data.seasonName
+            ? `\n🏆 **Event:** Blacklist Championship 2026${data.weekTitle ? ' · ' + data.weekTitle.replace(/Semana/gi, 'Week') : ''}`
+            : '';
+        const eventLineES = data.seasonName
+            ? `\n🏆 **Evento:** ${data.seasonName}${data.weekTitle ? ' · ' + data.weekTitle : ''}`
+            : '';
+
+        const descEN = isUpdate
+            ? `🇬🇧 **ENGLISH** — ${badgeEN}\nThe lap time record by **${data.driver || 'Unknown'}** on **${data.route || 'Track'}** has been officially verified and updated in the live Leaderboard.${eventLineEN}`
+            : `🇬🇧 **ENGLISH** — ${badgeEN}\nA new official lap time by **${data.driver || 'Unknown'}** on **${data.route || 'Track'}** has been verified and homologated by the Technical Stewards.${eventLineEN}`;
+
+        const descES = isUpdate
+            ? `🇪🇸 **ESPAÑOL** — ${badgeES}\nEl registro de tiempo de **${data.driver || 'Desconocido'}** en **${data.route || 'Pista'}** ha sido verificado y actualizado oficialmente en la tabla Leaderboard.${eventLineES}`
+            : `🇪🇸 **ESPAÑOL** — ${badgeES}\nUn nuevo tiempo oficial de **${data.driver || 'Desconocido'}** en **${data.route || 'Pista'}** ha sido validado y homologado por la Comisaría Técnica.${eventLineES}`;
 
         const fields = [
-            { name: "👤 Piloto", value: `**${data.driver || 'Desconocido'}**`, inline: true },
-            { name: "🏁 Trazado / Pista", value: `${data.route || 'General'}`, inline: true },
-            { name: "🏆 Categoría", value: `${data.category || 'Junkman'}`, inline: true },
-            { name: "⏱️ Tiempo Oficial", value: `**\`${data.time}\`**`, inline: true },
-            { name: "🏎️ Vehículo", value: `${data.car || 'BMW M3 GTR'}`, inline: true },
-            { name: "🎮 Dispositivo & Caja", value: `${data.device || 'Teclado'} · ${data.gearbox || 'Manual'}`, inline: true },
-            { name: "👮 Comisario Validador", value: `${data.moderator || 'Comisaría Oficial'}`, inline: true },
-            { name: "📅 Fecha de Validación", value: `${data.date || new Date().toISOString().split('T')[0]}`, inline: true }
+            { name: "👤 Driver / Piloto", value: `**${data.driver || 'Unknown'}**`, inline: true },
+            { name: "🏁 Track / Pista", value: `**${data.route || 'General'}**`, inline: true },
+            { name: "🥇 Position / Puesto", value: `**\`${rankStr}\`**`, inline: true },
+            { name: "⏱️ Official Time / Tiempo", value: `**\`${data.time || '--:--.---'}\`**`, inline: true },
+            { name: "🏆 Category / Categoría", value: `${formatBilingualCategory(data.category)}`, inline: true },
+            { name: "🏎️ Car / Vehículo", value: `${data.car || 'BMW M3 GTR'}`, inline: true },
+            { name: "🎮 Setup / Dispositivo & Caja", value: `${formatBilingualDevice(data.device)} · ${formatBilingualGearbox(data.gearbox)}`, inline: true },
+            { name: "👮 Verified By / Comisario", value: `${data.moderator || 'Official Stewards / Comisaría'}`, inline: true },
+            { name: "📅 Date / Fecha", value: `${data.date || new Date().toISOString().split('T')[0]}`, inline: true }
         ];
 
         if (data.rewardDesc) {
-            fields.push({ name: "🎁 Recompensa Asignada", value: `${data.rewardDesc}`, inline: false });
+            fields.push({
+                name: "🎁 Reward Granted / Recompensa Asignada",
+                value: `${data.rewardDesc}`,
+                inline: false
+            });
         }
 
         if (data.videoUrl && data.videoUrl !== '#' && data.videoUrl !== '') {
-            fields.push({ name: "🎬 Video de Telemetría", value: `[Ver Prueba en Video](${data.videoUrl})`, inline: true });
+            fields.push({
+                name: "🎬 Telemetry Proof / Prueba en Video",
+                value: `[▶️ Watch Video Proof / Ver Video de Telemetría](${data.videoUrl})`,
+                inline: true
+            });
         }
 
         const routeParam = encodeURIComponent(data.route || '');
-        const catParam = encodeURIComponent(data.categoryKey || (data.category && data.category.includes('BMW') ? 'bmw' : 'junkman'));
+        const catParam = encodeURIComponent(data.categoryKey || (data.category && String(data.category).toLowerCase().includes('bmw') ? 'bmw' : 'junkman'));
         const leaderboardUrl = `https://nfsmwranks.online/leaderboard?route=${routeParam}&cat=${catParam}`;
         fields.push({
-            name: "📊 Tabla Leaderboard Oficial",
-            value: `[Consultar Clasificación en Vivo](${leaderboardUrl})`,
+            name: "📊 Live Leaderboard / Tabla Oficial",
+            value: `[🌐 View Live Standings / Consultar Clasificación](${leaderboardUrl})`,
             inline: true
         });
 
-        const actionTitle = isUpdate 
-            ? `✏️ [ES] MODIFICACIÓN OFICIAL DE TIEMPO: ${data.driver} [${data.time}]`
-            : `✓ [ES] HOMOLOGACIÓN OFICIAL: ${data.driver} [${data.time}]`;
-
-        const descText = isUpdate
-            ? `${rankBadge}\nSe ha verificado y actualizado oficialmente el registro del piloto en la tabla Leaderboard.${seasonText}`
-            : `${rankBadge}\nSe ha validado y publicado oficialmente el registro de tiempo en la tabla Leaderboard.${seasonText}`;
+        const embedTitle = isUpdate
+            ? `✏️ VERIFIED RECORD UPDATED // RÉCORD ACTUALIZADO: ${data.driver} [${data.time}]`
+            : `✅ VERIFIED RECORD APPROVED // RÉCORD HOMOLOGADO: ${data.driver} [${data.time}]`;
 
         const embed = {
-            title: actionTitle,
-            description: descText,
+            title: embedTitle,
+            description: `${descEN}\n\n${descES}`,
             color: color,
             fields: fields,
-            footer: { text: "NFS Most Wanted Ranks • Sistema Oficial de Homologaciones 2026 [ES]" },
+            footer: {
+                text: "NFS Most Wanted Ranks • Official Time Verification System [EN / ES]"
+            },
             timestamp: new Date().toISOString()
         };
 
-        let alertContent = `📢 **[ES] NUEVO REGISTRO HOMOLOGADO** • **${data.driver}** [${data.time}] en **${data.route}**`;
+        // Un único mensaje/pin con resumen bilingüe en content
+        let alertContent = `✅ **VERIFIED RUN / TIEMPO HOMOLOGADO** • **${data.driver}** logged **\`${data.time}\`** (${rankStr}) on **${data.route}**!`;
         if (isWorldRecord) {
-            alertContent = `🚨 @everyone ¡Nuevo Récord Mundial marcado por **${data.driver}** en **${data.route}**!`;
+            alertContent = `🚨 @everyone **NEW WORLD RECORD / ¡NUEVO RÉCORD MUNDIAL #1!** • **${data.driver}** clocked **\`${data.time}\`** on **${data.route}**! 🏆`;
         } else if (isUpdate) {
-            alertContent = `✏️ **[ES] TIEMPO MODIFICADO EN LEADERBOARDS** • **${data.driver}** [${data.time}] en **${data.route}**`;
-        }
-
-        return {
-            content: alertContent,
-            embeds: [embed]
-        };
-    }
-
-    function buildApprovalPayloadEN(data) {
-        const isWorldRecord = data.rank === '#1' || data.rank === 1;
-        const isUpdate = Boolean(data.isUpdate || data.actionType === 'update');
-
-        let color = COLORS.APPROVED_GREEN;
-        if (isWorldRecord) {
-            color = COLORS.APPROVED_GOLD;
-        } else if (isUpdate) {
-            color = COLORS.UPDATED_BLUE;
-        }
-
-        let rankBadge = isWorldRecord ? '👑 NEW WORLD RECORD #1!' : `🏁 Assigned Position: ${data.rank}`;
-        if (isUpdate && isWorldRecord) {
-            rankBadge = '👑 WORLD RECORD #1 UPDATED!';
-        } else if (isUpdate) {
-            rankBadge = `✏️ Record Updated at Position: ${data.rank}`;
-        }
-
-        const seasonTextEN = data.seasonName ? `\n🏆 **Official Event**: Blacklist Championship 2026 · ${data.weekTitle ? data.weekTitle.replace('Semana', 'Week') : ''}` : '';
-
-        const fields = [
-            { name: "👤 Driver / Pilot", value: `**${data.driver || 'Unknown'}**`, inline: true },
-            { name: "🏁 Track / Route", value: `${data.route || 'General'}`, inline: true },
-            { name: "🏆 Category", value: `${translateCategoryToEN(data.category)}`, inline: true },
-            { name: "⏱️ Official Lap Time", value: `**\`${data.time}\`**`, inline: true },
-            { name: "🏎️ Vehicle / Car", value: `${data.car || 'BMW M3 GTR'}`, inline: true },
-            { name: "🎮 Device & Gearbox", value: `${translateDeviceToEN(data.device)} · ${translateGearboxToEN(data.gearbox)}`, inline: true },
-            { name: "👮 Technical Steward", value: `${data.moderator || 'Official Stewards'}`, inline: true },
-            { name: "📅 Verification Date", value: `${data.date || new Date().toISOString().split('T')[0]}`, inline: true }
-        ];
-
-        if (data.rewardDesc) {
-            fields.push({ name: "🎁 Reward Granted", value: `${data.rewardDesc}`, inline: false });
-        }
-
-        if (data.videoUrl && data.videoUrl !== '#' && data.videoUrl !== '') {
-            fields.push({ name: "🎬 Telemetry Proof", value: `[Watch Video Evidence](${data.videoUrl})`, inline: true });
-        }
-
-        const routeParam = encodeURIComponent(data.route || '');
-        const catParam = encodeURIComponent(data.categoryKey || (data.category && data.category.includes('BMW') ? 'bmw' : 'junkman'));
-        const leaderboardUrl = `https://nfsmwranks.online/leaderboard?route=${routeParam}&cat=${catParam}`;
-        fields.push({
-            name: "📊 Official Leaderboards",
-            value: `[Check Live Rankings on NFSMWRanks](${leaderboardUrl})`,
-            inline: true
-        });
-
-        const actionTitle = isUpdate 
-            ? `✏️ [EN] OFFICIAL TIME UPDATE: ${data.driver} [${data.time}]`
-            : `✓ [EN] OFFICIAL HOMOLOGATION: ${data.driver} [${data.time}]`;
-
-        const descText = isUpdate
-            ? `${rankBadge}\nThe driver's record on **${data.route}** has been updated and officially verified in the Leaderboard.${seasonTextEN}`
-            : `${rankBadge}\nThe lap time record has been officially verified and published to the Leaderboard.${seasonTextEN}`;
-
-        const embed = {
-            title: actionTitle,
-            description: descText,
-            color: color,
-            fields: fields,
-            footer: { text: "NFS Most Wanted Ranks • Official Homologation System 2026 [EN]" },
-            timestamp: new Date().toISOString()
-        };
-
-        let alertContent = `📢 **[EN] NEW HOMOLOGATED LAP TIME** • **${data.driver}** [${data.time}] on **${data.route}**`;
-        if (isWorldRecord) {
-            alertContent = `🚨 @everyone New World Record set by **${data.driver}** on **${data.route}**!`;
-        } else if (isUpdate) {
-            alertContent = `✏️ **[EN] TIME MODIFIED IN LEADERBOARDS** • **${data.driver}** [${data.time}] on **${data.route}**`;
+            alertContent = `✏️ **VERIFIED TIME UPDATED / TIEMPO ACTUALIZADO** • **${data.driver}** — **\`${data.time}\`** (${rankStr}) on **${data.route}**`;
         }
 
         return {
@@ -271,23 +209,11 @@ const NFS_DISCORD_NOTIFIER = (function () {
 
     /**
      * Notificar Aprobación / Homologación o Modificación de Tiempo
-     * Publica paralelamente una versión en Español y otra en Inglés
+     * Envía UN SOLO PIN / MENSAJE BILINGÜE (Inglés + Español) al canal #verified-runs ✅
      */
     async function notifyApproval(data) {
-        const payloadES = buildApprovalPayloadES(data);
-        const payloadEN = buildApprovalPayloadEN(data);
-
-        // Envío en paralelo mediante Promise.all
-        // Se aplica un breve desfase de 200ms en el segundo mensaje para garantizar
-        // que Discord preserve estrictamente el orden en el canal (Español primero, luego Inglés)
-        const sendES = sendWebhookPayload(payloadES);
-        const sendEN = (async () => {
-            await new Promise(resolve => setTimeout(resolve, 200));
-            return sendWebhookPayload(payloadEN);
-        })();
-
-        const [resES, resEN] = await Promise.all([sendES, sendEN]);
-        return resES && resEN;
+        const unifiedPayload = buildUnifiedBilingualApprovalPayload(data);
+        return await sendWebhookPayload(unifiedPayload);
     }
 
     /**

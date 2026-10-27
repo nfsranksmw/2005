@@ -17,11 +17,15 @@
   <!-- Modular Uiverse Stylesheets -->
   <link rel="stylesheet" href="assets/css/reset-and-tokens.css" />
   <link rel="stylesheet" href="assets/css/navbar-dropdowns.css" />
-  <link rel="stylesheet" href="assets/css/sidebar-and-grid.css" />
+  <link rel="stylesheet" href="assets/css/sidebar-and-grid.css?v=20261027_v11" />
   <link rel="stylesheet" href="assets/css/uiverse-elements.css" />
-  <link rel="stylesheet" href="assets/css/community.css" />
-  <link rel="stylesheet" href="assets/css/ticket-theme.css" />
-  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/community.css?v=20261027_v11" />
+  <link rel="stylesheet" href="assets/css/ticket-theme.css?v=20261027_v11" />
+  <link rel="stylesheet" href="assets/css/components.css?v=20261027_v11" />
+  <!-- Google Material Symbols (NFSMWO Web Section) -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <!-- NFSMWO Web Dedicated Stylesheet -->
+  <link rel="stylesheet" href="assets/css/nfsmwo-web.css?v=20261027_v11" />
 </head>
 <body>
 
@@ -48,10 +52,18 @@
               </a>
             </li>
 
-            <!-- 2. ROUTES & CIRCUITS (with Floating Mega-Menu) -->
+            <!-- 2. NFSMWO WEB (Play in Browser) -->
+            <li class="nav-item">
+              <a href="#view-nfsmwo" class="nav-link nav-link-glitch" id="nav-link-nfsmwo" data-view-target="view-nfsmwo" data-text="NFSMWO WEB">
+                <span style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981; margin-right: 6px; vertical-align: middle;"></span>
+                <span data-i18n="nav.nfsmwo_web">NFSMWO WEB</span>
+              </a>
+            </li>
+
+            <!-- 3. ROUTES & CIRCUITS (with Floating Mega-Menu) -->
             <li class="nav-item has-megamenu" id="nav-item-elements">
-              <button type="button" class="nav-link nav-link-glitch" id="btn-elements-trigger" data-view-target="view-challenges" data-text="ROUTES & CIRCUITS" aria-expanded="false">
-                <span data-i18n="nav.routes">ROUTES &amp; CIRCUITS</span>
+              <button type="button" class="nav-link nav-link-glitch" id="btn-elements-trigger" data-view-target="view-challenges" data-text="LEADERBOARD" aria-expanded="false">
+                <span data-i18n="nav.routes">LEADERBOARD</span>
                 <svg class="nav-chevron" viewBox="0 0 24 24">
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
@@ -498,12 +510,21 @@
           <span class="mobile-nav-badge">OFICIAL</span>
         </a>
 
+        <!-- 2. NFSMWO WEB (Online Web) -->
+        <a href="#view-nfsmwo" class="mobile-nav-link" data-view-target="view-nfsmwo">
+          <span class="mobile-nav-link-left">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            <span data-i18n="nav.nfsmwo_web">NFSMWO WEB</span>
+          </span>
+          <span class="mobile-nav-badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4);">ONLINE</span>
+        </a>
+
         <!-- 2. Routes & Circuits Accordion -->
         <div class="mobile-nav-accordion" id="mobile-acc-routes">
           <button type="button" class="mobile-accordion-trigger" aria-expanded="false">
             <span class="mobile-nav-link-left">
               <svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
-              <span data-i18n="nav.routes">ROUTES &amp; CIRCUITS</span>
+              <span data-i18n="nav.routes">LEADERBOARD</span>
             </span>
             <span class="mobile-acc-right">
               <span class="mobile-acc-count">86 PISTAS</span>
@@ -708,10 +729,17 @@
           <span><u>86 OFFICIAL TRACKS</u> SYNCED WITH FIREBASE!</span>
         </div>
 
-        <!-- Requested Title: White + Neon Purple & Orange Effect -->
-        <h1 class="hero-title">
-          <span class="hero-title-white">Need for Speed Most Wanted</span><br />
-          <span class="hero-title-neon">- Rockport World Records</span>
+        <!-- Requested Title: Monochromatic & Sepia Official NFSMW Typography -->
+        <h1 class="hero-title nfs-graffiti-title-block">
+          <span class="nfs-title-prefix">
+            <span class="nfs-word-needfor">NEED FOR</span>
+            <span class="nfs-word-speed speed-motion-effect">SPEED</span>
+          </span>
+          <span class="nfs-title-main">MOST WANTED</span>
+          <span class="nfs-title-sub">
+            <span class="nfs-word-rockport">ROCKPORT</span>
+            <span class="nfs-word-records">WORLD RECORDS</span>
+          </span>
         </h1>
 
         <!-- Subtitle -->
@@ -720,7 +748,7 @@
           29 Circuits &bull; 46 Sprints &bull; 11 Drags &bull; Live Firebase Realtime Database.
         </p>
 
-        <!-- Light Pill Search Bar with Embedded Indigo Search Button -->
+        <!-- Light Pill Search Bar with Embedded Search Button -->
         <div class="hero-search-bar">
           <svg viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="7"></circle>
@@ -733,11 +761,45 @@
             placeholder="Buscar vehículo oficial o especificación (ej. BMW M3 GTR, Carrera GT, Junkman)..."
             autocomplete="off"
           />
-          <button type="button" class="hero-search-btn" id="hero-search-submit-btn">Search</button>
+          <button type="button" class="hero-search-btn btn-nfs-white-cta" id="hero-search-submit-btn">SEARCH</button>
         </div>
 
       </div>
     </section>
+
+    <!-- FLOATING PROMO WIDGET IN HOME SECTION: PLAY ONLINE AT WEB.NFSMWO.COM -->
+    <aside class="nfsmwo-home-floating-promo" id="nfsmwo-home-floating-promo" aria-label="Jugar Need for Speed Most Wanted en Línea desde el Navegador">
+      <div class="nfsmwo-floating-card" id="nfsmwo-floating-card">
+        <button type="button" class="nfsmwo-floating-minimize" id="nfsmwo-floating-min-btn" onclick="toggleNfsmwoPromo(event)" title="Minimizar / Expandir anuncio" aria-label="Minimizar anuncio">
+          <span>—</span>
+        </button>
+
+        <div class="nfsmwo-floating-top">
+          <span class="nfsmwo-live-pill">
+            <span class="nfsmwo-live-dot"></span>
+            <span>BROWSER EDITION • PARTNER</span>
+          </span>
+          <span class="nfsmwo-domain-tag">web.nfsmwo.com</span>
+        </div>
+
+        <div class="nfsmwo-floating-body">
+          <div class="nfsmwo-floating-title">NEED FOR SPEED™ MOST WANTED WEB</div>
+          <p class="nfsmwo-floating-desc">
+            Apoya el proyecto comunitario y juega en línea directamente desde tu navegador sin descargas.
+          </p>
+        </div>
+
+        <a href="https://web.nfsmwo.com/" target="_blank" rel="noopener noreferrer" class="btn-nfs-white-cta nfsmwo-play-btn">
+          <span>JUGAR EN LÍNEA</span>
+        </a>
+      </div>
+
+      <!-- Minimized Pill State -->
+      <button type="button" class="nfsmwo-floating-pill" id="nfsmwo-floating-pill" onclick="toggleNfsmwoPromo(event)" style="display: none;" aria-label="Abrir acceso a Jugar en Línea">
+        <span class="nfsmwo-live-dot"></span>
+        <span>🎮 JUGAR EN LÍNEA (WEB.NFSMWO.COM)</span>
+      </button>
+    </aside>
 
     <!-- HOME CATALOG LAYOUT: LEFT SIDEBAR (OFFICIAL CARS ONLY) + BENTO LIVE FIREBASE + CARS GRID -->
     <div class="uiverse-catalog-layout" id="uiverse-catalog-anchor">
@@ -825,8 +887,8 @@
                 Explora los 86 trazados oficiales de Need for Speed: Most Wanted (29 Circuitos, 46 Sprints y 11 Drags) conectados en tiempo real a Google Firebase.
               </p>
               <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 6px;">
-                <button type="button" class="btn-uiverse-create glitch-nfs-btn" data-view-target="view-challenges" data-text="Explorar 86 Rutas y Circuitos">
-                  <span>Explorar 86 Rutas y Circuitos</span>
+                <button type="button" class="btn-uiverse-create btn-nfs-white-cta" data-view-target="view-challenges" data-text="Explorar 86 Rutas y Circuitos">
+                  <span>EXPLORAR 86 RUTAS Y CIRCUITOS</span>
                 </button>
                 <button type="button" class="filter-pill-btn glitch-nfs-btn" id="btn-home-open-perimeter" data-text="Ver WR City Perimeter (01:20.750)">
                   <span>Ver WR City Perimeter (01:20.750)</span>
@@ -866,7 +928,7 @@
               </p>
             </div>
             <div class="home-showcase-header-right">
-              <a href="#view-challenges" class="btn-uiverse-create glitch-nfs-btn" data-view-target="view-challenges" data-text="VER LAS 86 PISTAS →">
+              <a href="#view-challenges" class="btn-uiverse-create btn-nfs-white-cta" data-view-target="view-challenges" data-text="VER LAS 86 PISTAS →">
                 <span>VER LAS 86 PISTAS</span>
                 <i class="fa-solid fa-arrow-right" style="margin-left: 6px;"></i>
               </a>
@@ -897,7 +959,7 @@
                   <h4 class="showcase-item-title">Explora Rutas y Circuitos</h4>
                   <p class="showcase-item-sub">29 Circuitos • 46 Sprints • 11 Drags</p>
                 </div>
-                <button type="button" class="showcase-card-btn glitch-nfs-btn" data-view-target="view-challenges" data-text="EXPLORAR →">
+                <button type="button" class="showcase-card-btn btn-nfs-white-cta" data-view-target="view-challenges" data-text="EXPLORAR →">
                   <span>EXPLORAR</span>
                   <i class="fa-solid fa-arrow-right"></i>
                 </button>
@@ -927,7 +989,7 @@
                   <h4 class="showcase-item-title">Récords &amp; Telemetría 128Hz</h4>
                   <p class="showcase-item-sub">Tiempos por sector, telemetría y curvas de aceleración</p>
                 </div>
-                <button type="button" class="showcase-card-btn glitch-nfs-btn" data-view-target="view-challenges" data-text="INSPECCIONAR →">
+                <button type="button" class="showcase-card-btn btn-nfs-white-cta" data-view-target="view-challenges" data-text="INSPECCIONAR →">
                   <span>INSPECCIONAR</span>
                   <i class="fa-solid fa-arrow-right"></i>
                 </button>
@@ -957,7 +1019,7 @@
                   <h4 class="showcase-item-title">Domina Cada Distrito</h4>
                   <p class="showcase-item-sub">Downtown, Camden Beach, Rosewood y Turnpike</p>
                 </div>
-                <button type="button" class="showcase-card-btn glitch-nfs-btn" data-view-target="view-challenges" data-text="VER SECTORES →">
+                <button type="button" class="showcase-card-btn btn-nfs-white-cta" data-view-target="view-challenges" data-text="VER SECTORES →">
                   <span>VER SECTORES</span>
                   <i class="fa-solid fa-arrow-right"></i>
                 </button>
@@ -1160,10 +1222,10 @@
                 <span class="rc-tag-network">S1-S4 NETWORK</span>
               </div>
 
-              <!-- Main Title: Line 1 White + Line 2 Orange-Purple Cyber Gradient with Atmospheric Glow -->
-              <h1 class="rc-banner-title">
-                <span class="rc-title-line-white">RUTAS, CIRCUITOS &amp;</span>
-                <span class="rc-title-line-gradient">WORLD RECORDS</span>
+              <!-- Main Title: Line 1 Slate Gray + Line 2 Pure White 3D Glow -->
+              <h1 class="rc-banner-title lb-hero-main-title" id="routes-catalog-banner-title">
+                <span class="rc-title-line-white lb-title-prefix" id="rc-banner-prefix">RUTAS, CIRCUITOS &amp;</span>
+                <span class="rc-title-line-gradient lb-title-line-gradient" id="rc-banner-main">WORLD RECORDS</span>
               </h1>
 
               <!-- Subtitle Description -->
@@ -1332,12 +1394,10 @@
               <span class="rc-tag-network" id="lb-hero-tag-network">CIRCUITO • OFFICIAL LEADERBOARD</span>
             </div>
 
-            <!-- Main Title: Line 1 White + Line 2 Orange-Purple Cyber Gradient with Atmospheric Glow -->
+            <!-- Main Title: Line 1 Slate Gray + Line 2 Pure White 3D Glow -->
             <h1 class="rc-banner-title lb-hero-main-title" id="lb-hero-route-title">
-              <span class="rc-title-line-white lb-title-prefix">LEADERBOARD</span>
-              <span class="rc-title-line-gradient lb-title-line-gradient">
-                <span class="lb-title-modality" id="lb-hero-modality">CIRCUITO</span>
-                <span class="lb-title-sep">•</span>
+              <span class="rc-title-line-white lb-title-prefix" id="lb-hero-prefix">LEADERBOARD • CIRCUITO</span>
+              <span class="rc-title-line-gradient lb-title-line-gradient" id="lb-hero-main">
                 <span class="lb-title-route-name" id="lb-hero-route-name">CITY PERIMETER</span>
               </span>
             </h1>
@@ -1500,8 +1560,8 @@
               <option value="track">Track Contender (P6+)</option>
             </select>
           </div>
-          <button type="button" class="v7-btn-export-csv" id="btn-hof-export-csv" title="Download full standings in CSV file">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <button type="button" class="v7-btn-export-csv btn-nfs-white-cta" id="btn-hof-export-csv" title="Download full standings in CSV file">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
             <span data-i18n="hof.btn_export">EXPORT CSV</span>
           </button>
         </div>
@@ -2059,8 +2119,8 @@
                 </div>
 
                 <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
-                  <button type="submit" id="btn-submit-registration" class="filter-pill-btn glitch-nfs-btn is-active" data-text="🚀 REGISTRARME EN EL CAMPEONATO 2026" style="padding: 11px 24px; font-size: 13.5px;">
-                    🚀 REGISTRARME EN EL CAMPEONATO 2026
+                  <button type="submit" id="btn-submit-registration" class="btn-nfs-white-cta" data-text="REGISTRARME EN EL CAMPEONATO 2026" style="padding: 13px 26px; font-size: 13.5px;">
+                    <span>REGISTRARME EN EL CAMPEONATO 2026</span>
                   </button>
                 </div>
 
@@ -2213,8 +2273,8 @@
                   Entra a la sección de Registro de Torneo, ingresa tu Nick, vehículo y canal de YouTube para reservar tu plaza en la parrilla oficial.
                 </p>
               </div>
-              <button type="button" class="filter-pill-btn glitch-nfs-btn is-active" data-torneo-tab="register" data-text="Ir a Inscripción →" style="width: 100%; padding: 8px 12px; font-size: 11px;">
-                Ir a Inscripción &rarr;
+              <button type="button" class="btn-nfs-white-cta" data-torneo-tab="register" data-text="Ir a Inscripción →" style="width: 100%; padding: 10px 14px; font-size: 11.5px;">
+                <span>IR A INSCRIPCIÓN &rarr;</span>
               </button>
             </div>
 
@@ -2229,8 +2289,8 @@
                   Compite en 2 Circuitos y 2 Sprints semanales con autos Junkman y BMW M3 GTR según las restricciones y bonos de cada ronda.
                 </p>
               </div>
-              <button type="button" class="filter-pill-btn glitch-nfs-btn is-active" data-torneo-tab="seasons" data-text="Ver Desafíos Semanales →" style="width: 100%; padding: 8px 12px; font-size: 11px;">
-                Ver Desafíos Semanales &rarr;
+              <button type="button" class="btn-nfs-white-cta" data-torneo-tab="seasons" data-text="Ver Desafíos Semanales →" style="width: 100%; padding: 10px 14px; font-size: 11.5px;">
+                <span>VER DESAFÍOS SEMANALES &rarr;</span>
               </button>
             </div>
 
@@ -2245,8 +2305,8 @@
                   Graba tu carrera completa a 60 FPS continuos con audio original del juego sin cortes y sube el video a YouTube como prueba oficial.
                 </p>
               </div>
-              <button type="button" class="filter-pill-btn glitch-nfs-btn is-active" data-torneo-tab="rules" data-text="Ver Reglamento →" style="width: 100%; padding: 8px 12px; font-size: 11px;">
-                Ver Reglamento &rarr;
+              <button type="button" class="btn-nfs-white-cta" data-torneo-tab="rules" data-text="Ver Reglamento →" style="width: 100%; padding: 10px 14px; font-size: 11.5px;">
+                <span>VER REGLAMENTO &rarr;</span>
               </button>
             </div>
 
@@ -2261,8 +2321,8 @@
                   Los jueces arbitran tu tiempo cuadro por cuadro y lo sincronizan en Firebase RTDB para sumar puntos oficiales a tu clasificación en la Blacklist.
                 </p>
               </div>
-              <button type="button" class="filter-pill-btn glitch-nfs-btn is-active" data-torneo-tab="standings" data-text="Ver Standings →" style="width: 100%; padding: 8px 12px; font-size: 11px;">
-                Ver Standings &rarr;
+              <button type="button" class="btn-nfs-white-cta" data-torneo-tab="standings" data-text="Ver Standings →" style="width: 100%; padding: 10px 14px; font-size: 11.5px;">
+                <span>VER STANDINGS &rarr;</span>
               </button>
             </div>
           </div>
@@ -2378,7 +2438,7 @@
         <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
           <div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 280px;">
             <input type="text" id="telemetry-pilot-search-input" class="nfs-lb-input" placeholder="Buscar piloto por nombre (ej. Lea4Speed0, ARS3N, 13MwRR, SRTxAvenger, ZimanX)..." style="flex: 1; padding: 10px 14px; font-size: 13.5px;" />
-            <button type="button" id="telemetry-pilot-search-btn" class="filter-pill-btn glitch-nfs-btn is-active" data-text="Buscar Piloto">Buscar Piloto</button>
+            <button type="button" id="telemetry-pilot-search-btn" class="btn-nfs-white-cta" data-text="Buscar Piloto"><span>BUSCAR PILOTO</span></button>
           </div>
           <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary);">
             PILOTOS DESTACADOS:
@@ -2639,9 +2699,9 @@
             </label>
           </div>
 
-          <!-- Botón de Envío Oficial Glitch -->
+          <!-- Botón de Envío Oficial -->
           <div class="input-group full-width">
-            <button type="submit" id="btn-submit-time" class="btn-submit-homologation glitch-nfs-btn" data-text="ENVIAR HOMOLOGACIÓN">
+            <button type="submit" id="btn-submit-time" class="btn-submit-homologation btn-nfs-white-cta" data-text="ENVIAR HOMOLOGACIÓN">
               <span>ENVIAR HOMOLOGACIÓN</span>
             </button>
             <div id="sub-status" class="sub-status-box" style="margin-top: 14px; display: none;"></div>
@@ -2933,9 +2993,8 @@
             </div>
           </div>
 
-          <a href="https://drive.google.com/file/d/1FrgMIa0UMiE6-Nr_R6QkDlElJOlqSsID/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-download-primary">
+          <a href="https://drive.google.com/file/d/1FrgMIa0UMiE6-Nr_R6QkDlElJOlqSsID/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-download-primary btn-nfs-white-cta">
             <span>DESCARGA ISO NFS MOST WANTED (MÚSICA, PC, DVD, GOOGLE DRIVE)</span>
-            <span>⬇️</span>
           </a>
         </div>
 
@@ -3062,14 +3121,8 @@
               </div>
             </div>
 
-            <a href="https://www.radmin-vpn.com/es/" target="_blank" rel="noopener noreferrer" class="btn-download-radmin">
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
+            <a href="https://www.radmin-vpn.com/es/" target="_blank" rel="noopener noreferrer" class="btn-download-radmin btn-nfs-white-cta">
               <span>DESCARGAR E INSTALAR RADMIN VPN (SITIO OFICIAL)</span>
-              <span>🌐</span>
             </a>
           </div>
 
@@ -3122,14 +3175,8 @@
               </div>
             </div>
 
-            <a href="https://github.com/nfsranksmw/Fix-LAN-para-Radmin-VPN/releases/tag/v1.0.0" target="_blank" rel="noopener noreferrer" class="btn-download-fix">
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
+            <a href="https://github.com/nfsranksmw/Fix-LAN-para-Radmin-VPN/releases/tag/v1.0.0" target="_blank" rel="noopener noreferrer" class="btn-download-fix btn-nfs-white-cta">
               <span>DESCARGAR FIX LAN ONLINE (GITHUB RELEASE v1.0.0)</span>
-              <span>📦</span>
             </a>
           </div>
         </div>
@@ -3241,7 +3288,7 @@
             Base de datos sincronizada con los roles oficiales de la comunidad NFSRANKSMW
           </span>
         </div>
-        <a href="https://discord.gg/pgP45wSN8K" target="_blank" rel="noopener noreferrer" class="btn-discord-join btn-discord-floating-cta" style="width: auto; padding: 7px 16px;">
+        <a href="https://discord.gg/pgP45wSN8K" target="_blank" rel="noopener noreferrer" class="btn-discord-join btn-nfs-white-cta" style="width: auto; padding: 9px 20px;">
           <span>UNIRME AL DISCORD</span>
         </a>
       </div>
@@ -3263,6 +3310,533 @@
             <!-- Rendered dynamically by community-controller.js -->
           </tbody>
         </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       4A-12. VIEW: NFSMWO WEB (ONLINE BROWSER RACING - WEBGL 2.0 / WEBGPU)
+       Diseño oficial Stitch monocromático & sepia con conexión a web.nfsmwo.com
+       ======================================================================== -->
+  <section id="view-nfsmwo" class="view-section nfsmwo-web-section" aria-label="Need for Speed Most Wanted Online Web">
+    <!-- 1. HERO LAUNCHER STAGE -->
+    <div class="mwo-hero-stage">
+      <!-- Atmospheric Visual Backing -->
+      <div class="mwo-hero-bg" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBQOx2c4q7r06CDf6nkmg9Zug3fnaT-KQEH_m3deDxR7f_nvk5K00b2gC0jnl6A5LWrug9TQ9PyaTdKOeXF1nvKjX9CeOLF_YiISpvjK5daGQPkpkj1JiJj33z0yzjrc1xF2e0v8d_XRU-ezKXH7Qf5q8sGEsh_iXVFR9Opa-M67S9z0rtA96YI2NxcKb2e9gNaoSqEOT8VypqzZ8anAZ3Sisi5KoweuHjbxDkuwtbS');"></div>
+      <div class="mwo-hero-vignette"></div>
+      <div class="mwo-hero-radial"></div>
+
+      <!-- HUD Bracket Lines & Telemetry Top Bar -->
+      <div class="mwo-hud-bar">
+        <div class="mwo-hud-pill">
+          <span class="mwo-hud-ping-dot"></span>
+          <span>SERVIDORES: <strong style="color: #ffffff;">ONLINE</strong></span>
+          <span style="color: #64748b;">•</span>
+          <span style="color: #e2e8f0; font-weight: 700;">1,420 CORREDORES ACTIVOS</span>
+        </div>
+        <div class="mwo-hud-right">
+          <div class="mwo-hud-item">
+            <span class="material-symbols-outlined" style="font-size: 16px; color: #d4a017;">speed</span>
+            <span>MOTOR: <strong>WEBGL 2.0 / 60 FPS</strong></span>
+          </div>
+          <div class="mwo-hud-item">
+            <span class="material-symbols-outlined" style="font-size: 16px; color: #10b981;">network_check</span>
+            <span>LATENCIA: <strong>~24ms P2P</strong></span>
+          </div>
+          <div class="mwo-hud-item">
+            <span class="material-symbols-outlined" style="font-size: 16px; color: #38bdf8;">sports_esports</span>
+            <span>MANDO: <strong>PLUG &amp; PLAY</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Central Tactical Action Core -->
+      <div class="mwo-hero-core">
+        <!-- Stencil Marker Overline -->
+        <div class="mwo-stencil-badge">
+          <span>⚡ ROCKPORT UNDERWORLD PROTOCOL // BUILD 2025.10.4-WEB</span>
+        </div>
+
+        <!-- Main Title -->
+        <div class="mwo-title-wrapper">
+          <h1 class="mwo-title-nfs">NEED FOR SPEED</h1>
+          <div class="mwo-title-mw-row">
+            <span class="mwo-title-mw">MOST WANTED</span>
+            <span class="mwo-title-online-badge">ONLINE WEB</span>
+          </div>
+        </div>
+
+        <!-- Subhead -->
+        <p class="mwo-hero-desc">
+          Corre directamente en tu navegador sin descargas pesadas ni emuladores externos. La experiencia definitiva de carreras callejeras con física original de Black Box, multijugador peer-to-peer y compatibilidad total con mando.
+        </p>
+
+        <!-- CTA Buttons Stack -->
+        <div class="mwo-cta-stack">
+          <button type="button" id="btnPlayOnline" class="mwo-btn-play-online" aria-label="Jugar Online Ahora">
+            <span class="material-symbols-outlined" style="font-size: 26px;">sports_motorsports</span>
+            <span>JUGAR ONLINE AHORA</span>
+          </button>
+
+          <button type="button" id="btnSingleplayer" class="mwo-btn-single" aria-label="Modo Historia / Un Jugador">
+            <span class="material-symbols-outlined" style="font-size: 20px; color: #d4a017;">directions_car</span>
+            <span>MODO HISTORIA (UN JUGADOR)</span>
+          </button>
+        </div>
+
+        <!-- Quick Utility Row -->
+        <div class="mwo-utility-row">
+          <select id="mwoRegionSelect" class="mwo-lang-select" aria-label="Seleccionar Servidor Regional">
+            <option value="us-east">🇺🇸 Región: US-East (Virginia)</option>
+            <option value="eu-west">🇪🇺 Región: EU-West (Frankfurt)</option>
+            <option value="sa-br">🇧🇷 Región: South America (São Paulo)</option>
+            <option value="latam">🇲🇽 Región: LATAM (México)</option>
+          </select>
+
+          <a href="https://web.nfsmwo.com/" target="_blank" rel="noopener noreferrer" class="mwo-util-btn" title="Abrir en pestaña nueva">
+            <span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span>
+            <span>WEB.NFSMWO.COM</span>
+          </a>
+
+          <a href="https://discord.gg/pgP45wSN8K" target="_blank" rel="noopener noreferrer" class="mwo-discord-wide-btn">
+            <span class="material-symbols-outlined" style="font-size: 18px; color: #5865f2;">forum</span>
+            <span>UNIRSE A LA COMUNIDAD EN DISCORD</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Bottom Promo Banner (Razor's Mustang GT Referral) -->
+      <div class="mwo-promo-anchor">
+        <div class="mwo-promo-wrap">
+          <div class="mwo-promo-left">
+            <div class="mwo-promo-thumb" style="background-image: url('assets/img/cars/ford-mustang-gt.jpg');">
+              <span class="mwo-promo-badge">TIER 1 REWARD</span>
+            </div>
+            <div class="mwo-promo-info">
+              <div class="mwo-promo-title-row">
+                <span class="material-symbols-outlined" style="font-size: 18px; color: #d4a017;">workspace_premium</span>
+                <span class="mwo-promo-title">DESBLOQUEA EL FORD MUSTANG GT DE RAZOR</span>
+              </div>
+              <p class="mwo-promo-sub">
+                Ingresa con el enlace de patrocinio oficial de la comunidad y reclama bonificación de arranque de $50,000 en efectivo virtual.
+              </p>
+            </div>
+          </div>
+          <div class="mwo-promo-actions">
+            <div class="mwo-promo-codebox">
+              <span>CÓDIGO:</span>
+              <strong id="referralCodeText">MWSPEED-8921</strong>
+            </div>
+            <button type="button" id="btnCopyReferral" class="mwo-btn-copy" aria-label="Copiar Enlace de Referido">
+              COPIAR ENLACE
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. LIVE SERVER LOBBY STATUS -->
+    <div class="mwo-section-servers">
+      <div class="mwo-container">
+        <div class="mwo-servers-header">
+          <div>
+            <div class="mwo-section-tag">
+              <span class="material-symbols-outlined" style="font-size: 14px; color: #10b981;">hub</span>
+              <span>LOBBIES MULTIJUGADOR // TIEMPO REAL</span>
+            </div>
+            <h2 class="mwo-section-title">SERVIDORES ACTIVOS EN VIVO</h2>
+          </div>
+          <div class="mwo-servers-top-actions">
+            <span class="mwo-server-count-label">3 DE 12 SALAS DISPONIBLES</span>
+            <button type="button" class="mwo-btn-autojoin btn-mwo-play">PARTIDA RÁPIDA (AUTO-JOIN)</button>
+          </div>
+        </div>
+
+        <div class="mwo-servers-grid">
+          <!-- Server 1 -->
+          <div class="mwo-server-card">
+            <div>
+              <div class="mwo-server-card-top">
+                <span class="mwo-server-mode-tag">SPRINT // BLACKLIST TIER 1</span>
+                <span class="mwo-server-ping">
+                  <span class="mwo-hud-ping-dot"></span>
+                  <span>18ms</span>
+                </span>
+              </div>
+              <div class="mwo-server-card-mid">
+                <h3 class="mwo-server-name">ROCKPORT DOWNTOWN LOOP</h3>
+                <div class="mwo-server-stats-row">
+                  <span>REGIÓN: <strong>US-EAST</strong></span>
+                  <span>•</span>
+                  <span>JUGADORES: <strong>28 / 32</strong></span>
+                  <span>•</span>
+                  <span>TRÁFICO: <strong>DENSO</strong></span>
+                </div>
+              </div>
+            </div>
+            <div class="mwo-server-card-bot">
+              <div class="mwo-server-progress-track">
+                <div class="mwo-server-progress-bar" style="width: 87.5%; background: #ffffff;"></div>
+              </div>
+              <button type="button" class="mwo-btn-join-server btn-mwo-server-join" data-server="rockport-downtown">ENTRAR</button>
+            </div>
+          </div>
+
+          <!-- Server 2 -->
+          <div class="mwo-server-card">
+            <div>
+              <div class="mwo-server-card-top">
+                <span class="mwo-server-mode-tag">CIRCUITO // HIGH SPEED</span>
+                <span class="mwo-server-ping">
+                  <span class="mwo-hud-ping-dot"></span>
+                  <span>34ms</span>
+                </span>
+              </div>
+              <div class="mwo-server-card-mid">
+                <h3 class="mwo-server-name">ROSEWOOD EXPRESSWAY</h3>
+                <div class="mwo-server-stats-row">
+                  <span>REGIÓN: <strong>EU-CENTRAL</strong></span>
+                  <span>•</span>
+                  <span>JUGADORES: <strong>31 / 32</strong></span>
+                  <span>•</span>
+                  <span>CLIMA: <strong>LLUVIA / TARMAC</strong></span>
+                </div>
+              </div>
+            </div>
+            <div class="mwo-server-card-bot">
+              <div class="mwo-server-progress-track">
+                <div class="mwo-server-progress-bar" style="width: 96.8%; background: #d4a017;"></div>
+              </div>
+              <button type="button" class="mwo-btn-join-server btn-mwo-server-join" data-server="rosewood-expressway">ENTRAR</button>
+            </div>
+          </div>
+
+          <!-- Server 3 -->
+          <div class="mwo-server-card">
+            <div>
+              <div class="mwo-server-card-top">
+                <span class="mwo-server-mode-tag">DRAG // CAMBIO MANUAL</span>
+                <span class="mwo-server-ping">
+                  <span class="mwo-hud-ping-dot"></span>
+                  <span>42ms</span>
+                </span>
+              </div>
+              <div class="mwo-server-card-mid">
+                <h3 class="mwo-server-name">CAMDEN BEACH STRIP</h3>
+                <div class="mwo-server-stats-row">
+                  <span>REGIÓN: <strong>SA-EAST</strong></span>
+                  <span>•</span>
+                  <span>JUGADORES: <strong>16 / 24</strong></span>
+                  <span>•</span>
+                  <span>NITRO: <strong>ILIMITADO</strong></span>
+                </div>
+              </div>
+            </div>
+            <div class="mwo-server-card-bot">
+              <div class="mwo-server-progress-track">
+                <div class="mwo-server-progress-bar" style="width: 66.6%; background: #38bdf8;"></div>
+              </div>
+              <button type="button" class="mwo-btn-join-server btn-mwo-server-join" data-server="camden-beach">ENTRAR</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. WHY PLAY IN BROWSER (CORE ADVANTAGES) -->
+    <div class="mwo-section-why">
+      <div class="mwo-container">
+        <div class="mwo-section-tag">
+          <span class="material-symbols-outlined" style="font-size: 14px; color: #d4a017;">architecture</span>
+          <span>ARQUITECTURA DE PRÓXIMA GENERACIÓN</span>
+        </div>
+        <h2 class="mwo-section-title">¿POR QUÉ CORRER EN EL NAVEGADOR EN 2026?</h2>
+        <p class="mwo-why-desc">
+          Olvídate de parches obsoletos, configuraciones complejas de Wine o compatibilidad rota con sistemas modernos. El motor corre nativamente sobre el pipeline de WebAssembly y WebGL 2.0.
+        </p>
+
+        <div class="mwo-advantages-grid">
+          <!-- Adv 1 -->
+          <div class="mwo-advantage-card">
+            <div class="mwo-adv-icon-box">
+              <span class="material-symbols-outlined">bolt</span>
+            </div>
+            <h3 class="mwo-adv-title">CERO INSTALACIÓN</h3>
+            <p class="mwo-adv-text">
+              Sin descargar gigabytes de archivos ISO ni lidiar con cracks o instaladores de dudosa procedencia. Carga instantánea por WebGL.
+            </p>
+            <span class="mwo-adv-tag">INSTANT READY</span>
+          </div>
+
+          <!-- Adv 2 -->
+          <div class="mwo-advantage-card">
+            <div class="mwo-adv-icon-box dark-icon">
+              <span class="material-symbols-outlined">sports_motorsports</span>
+            </div>
+            <h3 class="mwo-adv-title">FÍSICA ORIGINAL BLACK BOX</h3>
+            <p class="mwo-adv-text">
+              Física de colisión, curvas en Speedbreaker y derrape calcadas del motor clásico de 2005 compiladas directamente en C++ a WebAssembly.
+            </p>
+            <span class="mwo-adv-tag">1:1 HANDLING REPLICA</span>
+          </div>
+
+          <!-- Adv 3 -->
+          <div class="mwo-advantage-card">
+            <div class="mwo-adv-icon-box">
+              <span class="material-symbols-outlined">wifi_tethering</span>
+            </div>
+            <h3 class="mwo-adv-title">MULTIJUGADOR P2P ROLLBACK</h3>
+            <p class="mwo-adv-text">
+              Sincronización WebRTC de 128-tick y predicción de posición para carreras en paralelo sin micro-cortes ni desincronización de coches.
+            </p>
+            <span class="mwo-adv-tag">128-TICK WEBRTC</span>
+          </div>
+
+          <!-- Adv 4 -->
+          <div class="mwo-advantage-card">
+            <div class="mwo-adv-icon-box dark-icon">
+              <span class="material-symbols-outlined">sports_esports</span>
+            </div>
+            <h3 class="mwo-adv-title">SOPORTE TOTAL DE MANDOS</h3>
+            <p class="mwo-adv-text">
+              Conecta mandos de Xbox Series, DualSense PS5, volantes Logitech G29 o teclado mecánico con vibración háptica mediante WebHID API.
+            </p>
+            <span class="mwo-adv-tag">GAMEPAD VIBRATION</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. GARAGE & VEHICLE SHOWCASE -->
+    <div class="mwo-section-garage">
+      <div class="mwo-container">
+        <div class="mwo-garage-header">
+          <div>
+            <div class="mwo-section-tag">
+              <span class="material-symbols-outlined" style="font-size: 14px; color: #cbd5e1;">garage</span>
+              <span>GARAJE OFICIAL DE ROCKPORT</span>
+            </div>
+            <h2 class="mwo-section-title">VEHÍCULOS EMBLEMÁTICOS LISTOS PARA RODAR</h2>
+          </div>
+          <span class="mwo-garage-subhead">ACTUALIZACIÓN CONTINUA DE TUNING Y RENDIMIENTO</span>
+        </div>
+
+        <div class="mwo-cars-grid">
+          <!-- Car 1: BMW M3 GTR -->
+          <div class="mwo-car-card">
+            <div class="mwo-car-img-stage">
+              <div class="mwo-car-img" style="background-image: url('assets/img/cars/bmw-m3-gtr.jpg');"></div>
+              <span class="mwo-car-tier-pill">BLACKLIST #0 // LEGEND</span>
+            </div>
+            <div class="mwo-car-body">
+              <div>
+                <span class="mwo-car-brand">BMW MOTORSPORT // 4.0L V8</span>
+                <h3 class="mwo-car-title">BMW M3 GTR E46</h3>
+              </div>
+              <div class="mwo-car-stats">
+                <div>
+                  <div class="mwo-stat-row">
+                    <span>VELOCIDAD MÁXIMA</span>
+                    <strong>385 KM/H (98%)</strong>
+                  </div>
+                  <div class="mwo-stat-bar-track">
+                    <div class="mwo-stat-bar-fill" style="width: 98%;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="mwo-stat-row">
+                    <span>MANEJO Y AGARRE</span>
+                    <strong>95%</strong>
+                  </div>
+                  <div class="mwo-stat-bar-track">
+                    <div class="mwo-stat-bar-fill fill-silver" style="width: 95%;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="mwo-stat-row">
+                    <span>ACELERACIÓN</span>
+                    <strong>96%</strong>
+                  </div>
+                  <div class="mwo-stat-bar-track">
+                    <div class="mwo-stat-bar-fill" style="width: 96%;"></div>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="mwo-btn-testdrive btn-mwo-drive" data-car="bmw-m3-gtr">
+                <span class="material-symbols-outlined" style="font-size: 16px;">play_arrow</span>
+                <span>PROBAR EN PISTA WEB</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Car 2: Ford Mustang GT -->
+          <div class="mwo-car-card">
+            <div class="mwo-car-img-stage">
+              <div class="mwo-car-img" style="background-image: url('assets/img/cars/ford-mustang-gt.jpg');"></div>
+              <span class="mwo-car-tier-pill tier-dark">BLACKLIST #1 // RAZOR</span>
+            </div>
+            <div class="mwo-car-body">
+              <div>
+                <span class="mwo-car-brand">FORD PERFORMANCE // 4.6L V8 SUPERCHARGED</span>
+                <h3 class="mwo-car-title">FORD MUSTANG GT S197</h3>
+              </div>
+              <div class="mwo-car-stats">
+                <div>
+                  <div class="mwo-stat-row">
+                    <span>VELOCIDAD MÁXIMA</span>
+                    <strong>340 KM/H (86%)</strong>
+                  </div>
+                  <div class="mwo-stat-bar-track">
+                    <div class="mwo-stat-bar-fill" style="width: 86%;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="mwo-stat-row">
+                    <span>MANEJO Y AGARRE</span>
+                    <strong>78%</strong>
+                  </div>
+                  <div class="mwo-stat-bar-track">
+                    <div class="mwo-stat-bar-fill fill-silver" style="width: 78%;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="mwo-stat-row">
+                    <span>ACELERACIÓN</span>
+                    <strong>89%</strong>
+                  </div>
+                  <div class="mwo-stat-bar-track">
+                    <div class="mwo-stat-bar-fill" style="width: 89%;"></div>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="mwo-btn-testdrive btn-mwo-drive" data-car="ford-mustang-gt">
+                <span class="material-symbols-outlined" style="font-size: 16px;">play_arrow</span>
+                <span>PROBAR EN PISTA WEB</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Car 3: Porsche Carrera GT -->
+          <div class="mwo-car-card">
+            <div class="mwo-car-img-stage">
+              <div class="mwo-car-img" style="background-image: url('assets/img/cars/porsche-carrera-gt.jpg');"></div>
+              <span class="mwo-car-tier-pill">BLACKLIST #3 // RONNIE</span>
+            </div>
+            <div class="mwo-car-body">
+              <div>
+                <span class="mwo-car-brand">PORSCHE MOTORSPORT // 5.7L V10</span>
+                <h3 class="mwo-car-title">PORSCHE CARRERA GT</h3>
+              </div>
+              <div class="mwo-car-stats">
+                <div>
+                  <div class="mwo-stat-row">
+                    <span>VELOCIDAD MÁXIMA</span>
+                    <strong>390 KM/H (99%)</strong>
+                  </div>
+                  <div class="mwo-stat-bar-track">
+                    <div class="mwo-stat-bar-fill" style="width: 99%;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="mwo-stat-row">
+                    <span>MANEJO Y AGARRE</span>
+                    <strong>92%</strong>
+                  </div>
+                  <div class="mwo-stat-bar-track">
+                    <div class="mwo-stat-bar-fill fill-silver" style="width: 92%;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="mwo-stat-row">
+                    <span>ACELERACIÓN</span>
+                    <strong>97%</strong>
+                  </div>
+                  <div class="mwo-stat-bar-track">
+                    <div class="mwo-stat-bar-fill" style="width: 97%;"></div>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="mwo-btn-testdrive btn-mwo-drive" data-car="porsche-carrera-gt">
+                <span class="material-symbols-outlined" style="font-size: 16px;">play_arrow</span>
+                <span>PROBAR EN PISTA WEB</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. BROWSER COMPATIBILITY & SYSTEM DIAGNOSTIC -->
+    <div class="mwo-section-diagnostic">
+      <div class="mwo-container">
+        <div class="mwo-diag-card">
+          <div class="mwo-diag-left">
+            <div class="mwo-diag-icon">
+              <span class="material-symbols-outlined">verified</span>
+            </div>
+            <div>
+              <div class="mwo-diag-meta">
+                <span class="material-symbols-outlined" style="font-size: 14px; color: #10b981;">check_circle</span>
+                <span>DIAGNÓSTICO DEL SISTEMA AUTOMÁTICO</span>
+              </div>
+              <h3 class="mwo-diag-heading">TU EQUIPO ESTÁ 100% LISTO PARA CORRER A 60 FPS</h3>
+              <p class="mwo-diag-desc">
+                Navegador compatible con WebGL 2.0 y WebAssembly detectado. Latencia promedio calculada: ~24ms. No requiere privilegios de administrador.
+              </p>
+            </div>
+          </div>
+          <button type="button" id="btnLaunchDirect" class="mwo-btn-launch-direct">
+            <span class="material-symbols-outlined" style="font-size: 20px;">rocket_launch</span>
+            <span>LANZAR JUEGO INMEDIATAMENTE</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. INTERACTIVE CLIENT-SIDE ENGINE MODAL -->
+    <div id="gameLauncherModal" class="mwo-modal-backdrop is-hidden" role="dialog" aria-modal="true" aria-labelledby="launcherModalTitle">
+      <div class="mwo-modal-card">
+        <button type="button" id="launcherCloseBtn" class="mwo-modal-close" aria-label="Cerrar modal">
+          <span class="material-symbols-outlined" style="font-size: 22px;">close</span>
+        </button>
+
+        <div class="mwo-modal-header">
+          <div class="mwo-modal-logo">MW</div>
+          <div class="mwo-modal-header-text">
+            <span class="mwo-modal-tag">ROCKPORT UNDERWORLD ENGINE // WEBGL</span>
+            <h3 id="launcherModalTitle" class="mwo-modal-title">INICIALIZANDO MOTOR ONLINE</h3>
+          </div>
+        </div>
+
+        <div class="mwo-modal-progress-wrap">
+          <div class="mwo-modal-progress-labels">
+            <span id="launcherStatusText">COMPILANDO SHADERS Y CONECTANDO A SALA...</span>
+            <strong id="launcherPct">0%</strong>
+          </div>
+          <div class="mwo-modal-progress-track">
+            <div id="launcherProgress" class="mwo-modal-progress-fill" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <div class="mwo-modal-details">
+          <div class="mwo-modal-row">
+            <span>PIPELINE GRÁFICO:</span>
+            <strong>WEBGL 2.0 / HARDWARE ACCELERATED</strong>
+          </div>
+          <div class="mwo-modal-row">
+            <span>SISTEMA DE RED:</span>
+            <strong>WEBRTC PEER-TO-PEER (ENCRYPTED)</strong>
+          </div>
+          <div class="mwo-modal-row">
+            <span>DESTINO REMOTO:</span>
+            <strong>HTTPS://WEB.NFSMWO.COM/</strong>
+          </div>
+        </div>
+
+        <div class="mwo-modal-actions">
+          <button type="button" id="launcherCancelBtn" class="mwo-btn-cancel">CANCELAR</button>
+          <button type="button" id="btnLaunchNow" class="mwo-btn-launch-modal">ENTRAR AHORA</button>
+        </div>
       </div>
     </div>
   </section>
@@ -3702,7 +4276,7 @@
       <div style="font-family: var(--font-mono); font-size: 11px; color: #64748b; margin-bottom: 20px;">
         <span>ID DE SOLICITUD: </span><strong id="succ-modal-id" style="color: #ffffff;">SUB-XXXXX</strong>
       </div>
-      <button type="button" class="btn-submit-official" onclick="closeSubmissionSuccessModal()" style="padding: 12px 20px; font-size: 13px;">
+      <button type="button" class="btn-submit-official btn-nfs-white-cta" onclick="closeSubmissionSuccessModal()" style="padding: 12px 20px; font-size: 13px;">
         <span>ENTENDIDO</span>
       </button>
     </div>
@@ -3787,21 +4361,23 @@
   </div>
 
   <!-- Migrated Data & Firebase Scripts from NFSMW V7 -->
-  <script src="assets/js/firebase-config.js?v=20261027_v8"></script>
-  <script src="assets/js/routes-data.js?v=20261027_v8"></script>
-  <script src="assets/js/operator-icons.js?v=20261027_v8"></script>
-  <script src="assets/js/hardware-icons.js?v=20261027_v8"></script>
-  <script src="assets/js/blacklist-data.js?v=20261027_v8"></script>
-  <script src="assets/js/seasons-data.js?v=20261027_v8"></script>
-  <script src="assets/js/tournaments-data.js?v=20261027_v8"></script>
-  <script src="assets/js/tuning-data.js?v=20261027_v8"></script>
-  <script src="assets/js/members-data.js?v=20261027_v8"></script>
-  <script src="assets/js/i18n.js?v=20261027_v8"></script>
+  <script src="assets/js/firebase-config.js?v=20261027_v10"></script>
+  <script src="assets/js/routes-data.js?v=20261027_v10"></script>
+  <script src="assets/js/operator-icons.js?v=20261027_v10"></script>
+  <script src="assets/js/hardware-icons.js?v=20261027_v10"></script>
+  <script src="assets/js/blacklist-data.js?v=20261027_v10"></script>
+  <script src="assets/js/seasons-data.js?v=20261027_v10"></script>
+  <script src="assets/js/tournaments-data.js?v=20261027_v10"></script>
+  <script src="assets/js/tuning-data.js?v=20261027_v10"></script>
+  <script src="assets/js/members-data.js?v=20261027_v10"></script>
+  <script src="assets/js/i18n.js?v=20261027_v11"></script>
   <!-- Community & Telemetry Controller -->
-  <script src="assets/js/community-controller.js?v=20261027_v8"></script>
+  <script src="assets/js/community-controller.js?v=20261027_v11"></script>
   <!-- UI Interactions & Dynamic Glitch Effects -->
-  <script src="assets/js/ui-interactions.js?v=20261027_v8"></script>
+  <script src="assets/js/ui-interactions.js?v=20261027_v11"></script>
   <!-- Main Interactive & Firebase Sync Engine -->
-  <script src="assets/js/app-cloner.js?v=20261027_v8"></script>
+  <script src="assets/js/app-cloner.js?v=20261027_v11"></script>
+  <!-- NFSMWO Web Controller -->
+  <script src="assets/js/nfsmwo-controller.js?v=20261027_v11"></script>
 </body>
 </html>

@@ -316,7 +316,9 @@ function getStitchRouteMetadata(route) {
 }
 
 function getRouteWRData(route) {
-  if (!route) return { time: "01:20.750", driver: "Lea4Speed0", car: "Porsche Carrera GT", pilots: "12 Pilotos" };
+  const defaultYt = (rName, drv) =>
+    `https://www.youtube.com/results?search_query=${encodeURIComponent("NFS Most Wanted " + (rName || "Rockport") + " WR " + (drv || ""))}`;
+  if (!route) return { time: "01:20.750", driver: "Lea4Speed0", car: "Porsche Carrera GT", pilots: "12 Pilotos", videoUrl: defaultYt("City Perimeter", "Lea4Speed0") };
   const key = (route.name || "").trim().toLowerCase();
 
   if (window.NFS_GLOBAL_LEADERBOARDS_CACHE) {
@@ -328,11 +330,14 @@ function getRouteWRData(route) {
       let list = Array.isArray(catData) ? catData : catData && typeof catData === "object" ? Object.values(catData) : [];
       list = list.filter(Boolean);
       if (list.length > 0 && list[0].time && list[0].driver) {
+        const rawVid = list[0].videoUrl || list[0].yt || list[0].video || "";
+        const validVid = String(rawVid).startsWith("http") ? String(rawVid).trim() : defaultYt(route.name, list[0].driver);
         return {
           time: formatRaceTimeStandard(list[0].time),
           driver: list[0].driver,
           car: list[0].car || "Porsche Carrera GT",
-          pilots: `${list.length} Pilotos`
+          pilots: `${list.length} Pilotos`,
+          videoUrl: validVid
         };
       }
     }
@@ -344,7 +349,8 @@ function getRouteWRData(route) {
       time: formatRaceTimeStandard(rec.time),
       driver: rec.driver,
       car: rec.car,
-      pilots: rec.pilots || "10 Pilotos"
+      pilots: rec.pilots || "10 Pilotos",
+      videoUrl: rec.videoUrl || defaultYt(route.name, rec.driver)
     };
   }
 
@@ -352,7 +358,8 @@ function getRouteWRData(route) {
     time: "01:25.000",
     driver: "Lea4Speed0",
     car: "Porsche Carrera GT",
-    pilots: "10 Pilotos"
+    pilots: "10 Pilotos",
+    videoUrl: defaultYt(route.name, "Lea4Speed0")
   };
 }
 
@@ -511,6 +518,9 @@ function syncAllCardsWithFirebaseCache() {
     });
     document.querySelectorAll(`[data-wr-car-pill="${rKey}"] span`).forEach((span) => {
       span.textContent = wr.car;
+    });
+    document.querySelectorAll(`[data-wr-video="${rKey}"]`).forEach((a) => {
+      if (wr.videoUrl) a.href = wr.videoUrl;
     });
   });
 }
@@ -1074,24 +1084,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
         <!-- Card Actions Footer -->
         <div class="stitch-card-footer" style="display: flex; align-items: center; justify-content: space-between; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.08); width: 100%; box-sizing: border-box;">
-          <div class="stitch-rank-badge" style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 10px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); color: #fbbf24; font-family: var(--font-mono, 'JetBrains Mono', monospace);">
+          <div class="stitch-rank-badge" style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 8px; border-radius: 8px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); color: #fbbf24; font-family: var(--font-mono, 'JetBrains Mono', monospace); flex-shrink: 0;">
             <i class="fa-solid fa-trophy" style="color: #f59e0b; font-size: 13px;"></i>
             <div style="display: flex; flex-direction: column; text-align: left; line-height: 1.1; gap: 1px;">
               <span style="font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #d97706;">RANK</span>
               <span style="font-size: 11px; font-weight: 800; color: #fbbf24;">#1 WR</span>
             </div>
           </div>
-          <div class="stitch-footer-actions" style="display: flex; align-items: center; gap: 8px;">
-            <button type="button" class="stitch-telemetry-btn" title="Telemetría" data-open-route-lb="${escapeHtml(route.name)}" onclick="abrirLeaderboard('${escapeHtml(route.name)}')" style="width: 36px; height: 36px; border-radius: 10px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); color: #cbd5e1; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;">
-              <i class="fa-solid fa-chart-line" style="font-size: 13px;"></i>
-            </button>
-            <button type="button" class="stitch-leaderboard-btn glitch-nfs-btn"
-              data-text="LEADERBOARD →"
+          <div class="stitch-footer-actions" style="display: flex; align-items: center; gap: 6px;">
+            <a href="${escapeHtml(wr.videoUrl || 'https://www.youtube.com/results?search_query=' + encodeURIComponent('NFSMW ' + route.name + ' WR ' + wr.driver))}"
+              target="_blank" rel="noopener noreferrer"
+              onclick="event.stopPropagation();"
+              class="stage-action-btn btn-sm glitch-nfs-btn stitch-video-btn"
+              title="Ver Video del World Record (${escapeHtml(wr.driver)})"
+              data-wr-video="${rKey}"
+              data-text="VIDEO">
+              <i class="fa-solid fa-play" style="font-size: 8px;"></i>
+              <span>VIDEO</span>
+            </a>
+            <button type="button" class="stage-action-btn btn-sm glitch-nfs-btn stitch-leaderboard-btn"
               data-open-route-lb="${escapeHtml(route.name)}"
-              onclick="abrirLeaderboard('${escapeHtml(route.name)}')"
-              style="padding: 8px 16px; border-radius: 10px; background: rgba(139, 92, 246, 0.25); border: 1px solid rgba(139, 92, 246, 0.55); color: #ffffff; font-family: var(--font-mono, 'JetBrains Mono', monospace); font-size: 11.5px; font-weight: 800; letter-spacing: 0.06em; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; transition: all 0.2s; box-shadow: 0 0 10px rgba(139, 92, 246, 0.25);">
+              data-text="LEADERBOARD"
+              onclick="event.stopPropagation(); abrirLeaderboard('${escapeHtml(route.name)}')">
               <span>LEADERBOARD</span>
-              <i class="fa-solid fa-arrow-right" style="font-size: 10px;"></i>
+              <i class="fa-solid fa-arrow-right" style="font-size: 8px;"></i>
             </button>
           </div>
         </div>
@@ -1312,6 +1328,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderRoutesCatalog();
 
+  function updateRoutesBannerTitle(cat) {
+    const prefixEl = document.getElementById("rc-banner-prefix");
+    const mainEl = document.getElementById("rc-banner-main");
+    if (!prefixEl || !mainEl) return;
+    if (cat === "Circuito") {
+      prefixEl.textContent = "TABLA DE CLASIFICACIÓN • 29 PISTAS";
+      mainEl.textContent = "CIRCUITO LEADERBOARDS";
+    } else if (cat === "Sprint") {
+      prefixEl.textContent = "TABLA DE CLASIFICACIÓN • 46 PISTAS";
+      mainEl.textContent = "SPRINT LEADERBOARDS";
+    } else if (cat === "Drag") {
+      prefixEl.textContent = "TABLA DE CLASIFICACIÓN • 11 PISTAS";
+      mainEl.textContent = "DRAG LEADERBOARDS";
+    } else {
+      prefixEl.textContent = "RUTAS, CIRCUITOS &";
+      mainEl.textContent = "WORLD RECORDS";
+    }
+  }
+
   document.querySelectorAll("[data-routes-cat]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const cat = btn.dataset.routesCat || "all";
@@ -1323,6 +1358,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll("[data-routes-district]").forEach((b) => {
         b.classList.toggle("is-active", b.dataset.routesDistrict === "all");
       });
+      updateRoutesBannerTitle(cat);
       switchView("view-challenges");
       closeAllDropdowns();
       renderRoutesCatalog();
@@ -1560,8 +1596,8 @@ document.addEventListener("DOMContentLoaded", () => {
             <td style="text-align: center;" onclick="event.stopPropagation();">
               ${
                 hasVideo
-                  ? `<a href="${escapeHtml(row.videoUrl)}" target="_blank" rel="noopener noreferrer" class="uiverse-baboon-btn stage-action-btn btn-sm btn-video-glitch glitch-nfs-btn" data-text="Video" style="text-decoration: none; display: inline-flex;">
-                      <span class="text">Video</span>
+                  ? `<a href="${escapeHtml(row.videoUrl)}" target="_blank" rel="noopener noreferrer" class="btn-nfs-white-cta btn-table-video no-glitch" title="Ver video oficial" style="padding: 5px 12px; font-size: 11px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+                      <span>VIDEO</span>
                     </a>`
                   : `<span style="font-size: 11px; color: #52525b; font-weight: 600;">-</span>`
               }
@@ -1634,10 +1670,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const titleMarkup = `
-      <span class="rc-title-line-white lb-title-prefix">LEADERBOARD</span>
+      <span class="rc-title-line-white lb-title-prefix">LEADERBOARD • ${modalityWord}</span>
       <span class="rc-title-line-gradient lb-title-line-gradient">
-        <span class="lb-title-modality">${modalityWord}</span>
-        <span class="lb-title-sep">•</span>
         <span class="lb-title-route-name">${routeNameUpper}</span>
       </span>
     `;
@@ -2163,7 +2197,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 <span class="v7-tier-pill tier-${d.tierKey}">${escapeHtml(d.tierLabel)}</span>
               </td>
               <td style="text-align: right;">
-                <button type="button" class="v7-btn-audit-wrs" data-open-pilot="${escapeHtml(d.name)}" title="${isEn ? 'View Complete Telemetry Dossier' : 'Ver Expediente de Telemetría Completo'}">${isEn ? 'DOSSIER' : 'EXPEDIENTE'} &nearr;</button>
+                <div style="display: inline-flex; gap: 6px; justify-content: flex-end;">
+                  ${(() => {
+                    const firstVidRec = (d.records || []).find((r) => r.videoUrl && r.videoUrl !== "#" && String(r.videoUrl).startsWith("http"));
+                    const vidHref = firstVidRec ? firstVidRec.videoUrl : `https://www.youtube.com/results?search_query=${encodeURIComponent("NFS Most Wanted " + d.name + " WR")}`;
+                    return `<a href="${escapeHtml(vidHref)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="btn-nfs-white-cta btn-table-video no-glitch" style="padding: 5px 12px; font-size: 11px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;" title="Ver Video de ${escapeHtml(d.name)}"><span>VIDEO</span></a>`;
+                  })()}
+                  <button type="button" class="v7-btn-audit-wrs btn-nfs-white-cta" data-open-pilot="${escapeHtml(d.name)}" title="${isEn ? 'View Complete Telemetry Dossier' : 'Ver Expediente de Telemetría Completo'}">${isEn ? 'DOSSIER' : 'EXPEDIENTE'} &nearr;</button>
+                </div>
               </td>
             </tr>
           `;
@@ -3553,9 +3594,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
               </td>
               <td style="text-align: right;">
-                <div style="display: flex; gap: 6px; justify-content: flex-end;">
-                  <button type="button" class="uiverse-baboon-btn stage-action-btn btn-sm glitch-nfs-btn" data-text="Ficha" data-open-dossier-rank="${d.rank}" title="Abrir Ficha Técnica Cockpit"><span class="text">Ficha</span></button>
-                  <button type="button" class="uiverse-baboon-btn stage-action-btn btn-sm glitch-nfs-btn" data-text="Records →" data-open-pilot="${escapeHtml(cleanName)}" title="Ver Telemetría del Piloto"><span class="text">Records &rarr;</span></button>
+                <div style="display: flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap;">
+                  ${
+                    d.youtube
+                      ? `<a href="${escapeHtml(d.youtube)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="btn-nfs-white-cta btn-table-video no-glitch" style="padding: 5px 12px; font-size: 11px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;" title="Ver Canal / Video Oficial"><span>VIDEO</span></a>`
+                      : ""
+                  }
+                  <button type="button" class="uiverse-baboon-btn stage-action-btn btn-sm btn-nfs-white-cta" data-text="Ficha" data-open-dossier-rank="${d.rank}" title="Abrir Ficha Técnica Cockpit"><span class="text">Ficha</span></button>
+                  <button type="button" class="uiverse-baboon-btn stage-action-btn btn-sm btn-nfs-white-cta" data-text="Records →" data-open-pilot="${escapeHtml(cleanName)}" title="Ver Telemetría del Piloto"><span class="text">Records &rarr;</span></button>
                 </div>
               </td>
             </tr>
@@ -3725,11 +3771,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div style="font-family: var(--font-mono); font-size: 11.5px; font-weight: 800; color: #34d399;">+${escapeHtml(bountyStr)} REP</div>
                 <div style="font-family: var(--font-mono); font-size: 10px; color: #fde047;">🏅 ${escapeHtml(badgeStr)}</div>
               </div>
-              <div style="display: flex; gap: 6px;">
-                <button type="button" class="uiverse-baboon-btn stage-action-btn glitch-nfs-btn ${isDone ? "is-active" : ""}" data-text="${isDone ? "Completado" : "Marcar Meta"}" data-toggle-ch-done="${escapeHtml(ch.id)}">
+              <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <a href="${escapeHtml(wr.videoUrl || 'https://www.youtube.com/results?search_query=' + encodeURIComponent('NFSMW ' + trackName + ' ' + wr.driver))}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="btn-nfs-white-cta btn-table-video no-glitch" style="padding: 5px 12px; font-size: 11px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+                  <span>VIDEO</span>
+                </a>
+                <button type="button" class="uiverse-baboon-btn stage-action-btn btn-nfs-white-cta ${isDone ? "is-active" : ""}" data-text="${isDone ? "Completado" : "Marcar Meta"}" data-toggle-ch-done="${escapeHtml(ch.id)}">
                   <span class="text">${isDone ? "✔ Completado" : "Marcar Meta"}</span>
                 </button>
-                <button type="button" class="uiverse-baboon-btn stage-action-btn glitch-nfs-btn" data-text="Pista →" data-open-route-lb="${escapeHtml(trackName)}"><span class="text">Pista &rarr;</span></button>
+                <button type="button" class="uiverse-baboon-btn stage-action-btn btn-nfs-white-cta" data-text="Pista →" data-open-route-lb="${escapeHtml(trackName)}"><span class="text">Pista &rarr;</span></button>
               </div>
             </div>
           </article>
@@ -4238,6 +4287,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           const routeNumStr = String(chIdx + 1).padStart(2, "0");
           const routeCar = ch.carRestriction || (activeGrp && (activeGrp.restrictedCar || activeGrp.carRestriction)) || "Tier 1 Homologado";
+          const routeWr = getRouteWRData({ name: ch.route, type: ch.type });
 
           return `
             <article class="v7-challenge-cyber-card" data-route-name="${escapeHtml(ch.route)}" data-route-type="${escapeHtml(ch.type)}">
@@ -4251,8 +4301,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 <span style="color: #ffb800; font-weight: 800;">${escapeHtml(activeGroupLabel)}</span>
               </div>
               <div>${groupPodiumHtml}</div>
-              <div style="margin-top: 10px; display: flex; justify-content: flex-end;">
-                <button type="button" class="v7-group-footer-btn" data-open-route-lb="${escapeHtml(ch.route)}" title="Ver Leaderboard Oficial">
+              <div style="margin-top: 10px; display: flex; justify-content: flex-end; gap: 8px;">
+                <a href="${escapeHtml(routeWr.videoUrl || 'https://www.youtube.com/results?search_query=' + encodeURIComponent('NFSMW ' + ch.route))}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="btn-nfs-white-cta v7-group-footer-btn no-glitch" style="padding: 6px 14px; font-size: 11px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;" title="Ver Video de la Ruta">
+                  <span>VIDEO</span>
+                </a>
+                <button type="button" class="v7-group-footer-btn btn-nfs-white-cta" data-open-route-lb="${escapeHtml(ch.route)}" title="Ver Leaderboard Oficial">
                   <span>LEADERBOARD &rarr;</span>
                 </button>
               </div>
@@ -4448,10 +4501,10 @@ document.addEventListener("DOMContentLoaded", () => {
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
           ${
             d.youtube
-              ? `<a href="${escapeHtml(d.youtube)}" target="_blank" rel="noopener noreferrer" class="uiverse-baboon-btn stage-action-btn btn-video-glitch glitch-nfs-btn" data-text="Canal YouTube ▶" style="text-decoration: none;"><span class="text">Canal YouTube ▶</span></a>`
+              ? `<a href="${escapeHtml(d.youtube)}" target="_blank" rel="noopener noreferrer" class="btn-nfs-white-cta btn-table-video no-glitch" style="padding: 6px 14px; font-size: 11px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;"><span>VIDEO ▶</span></a>`
               : ""
           }
-          <button type="button" class="uiverse-baboon-btn stage-action-btn glitch-nfs-btn" data-text="Expediente Telemetría →" data-open-pilot="${escapeHtml(cleanName)}"><span class="text">Expediente Telemetría &rarr;</span></button>
+          <button type="button" class="uiverse-baboon-btn stage-action-btn btn-nfs-white-cta" data-text="Expediente Telemetría →" data-open-pilot="${escapeHtml(cleanName)}"><span class="text">Expediente Telemetría &rarr;</span></button>
         </div>
       </div>
 
@@ -4649,10 +4702,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div style="display: flex; gap: 6px;">
                   ${
                     d.youtube
-                      ? `<a href="${escapeHtml(d.youtube)}" target="_blank" rel="noopener noreferrer" class="uiverse-baboon-btn stage-action-btn btn-video-glitch glitch-nfs-btn" data-text="YouTube ▶" style="text-decoration: none;"><span class="text">YouTube ▶</span></a>`
+                      ? `<a href="${escapeHtml(d.youtube)}" target="_blank" rel="noopener noreferrer" class="btn-nfs-white-cta btn-table-video no-glitch" style="padding: 5px 12px; font-size: 11px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;"><span>VIDEO ▶</span></a>`
                       : ""
                   }
-                  <button type="button" class="uiverse-baboon-btn stage-action-btn glitch-nfs-btn" data-text="Expediente →" data-open-pilot="${escapeHtml(cleanName)}"><span class="text">Expediente &rarr;</span></button>
+                  <button type="button" class="uiverse-baboon-btn stage-action-btn btn-nfs-white-cta" data-text="Expediente →" data-open-pilot="${escapeHtml(cleanName)}"><span class="text">Expediente &rarr;</span></button>
                 </div>
               </div>
             </article>
@@ -5266,7 +5319,14 @@ document.addEventListener("DOMContentLoaded", () => {
               <span class="creator-slug">${escapeHtml(rec.gearbox)}</span>
             </td>
             <td style="text-align: right;">
-              <button type="button" class="uiverse-baboon-btn stage-action-btn btn-sm glitch-nfs-btn" data-text="Leaderboard →" data-open-route-lb="${escapeHtml(rec.route)}"><span class="text">Leaderboard &rarr;</span></button>
+              <div style="display: inline-flex; gap: 6px; justify-content: flex-end;">
+                ${
+                  rec.videoUrl && rec.videoUrl !== "#" && String(rec.videoUrl).startsWith("http")
+                    ? `<a href="${escapeHtml(rec.videoUrl)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="btn-nfs-white-cta btn-table-video no-glitch" style="padding: 5px 12px; font-size: 11px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;"><span>VIDEO</span></a>`
+                    : ""
+                }
+                <button type="button" class="uiverse-baboon-btn stage-action-btn btn-sm btn-nfs-white-cta" data-text="Leaderboard →" data-open-route-lb="${escapeHtml(rec.route)}"><span class="text">Leaderboard &rarr;</span></button>
+              </div>
             </td>
           </tr>
         `;
@@ -5428,6 +5488,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchParams = new URLSearchParams(window.location.search);
   const qView = searchParams.get("view");
   const qTab = searchParams.get("tab");
+  const qCat = searchParams.get("cat");
+  if (qCat && (qCat === "Circuito" || qCat === "Sprint" || qCat === "Drag")) {
+    routesViewState.cat = qCat;
+    document.querySelectorAll("[data-routes-cat]").forEach((b) => {
+      b.classList.toggle("is-active", b.dataset.routesCat === qCat);
+    });
+    if (typeof updateRoutesBannerTitle === "function") {
+      updateRoutesBannerTitle(qCat);
+    }
+    if (typeof renderRoutesCatalog === "function") {
+      renderRoutesCatalog();
+    }
+  }
   if (qView && document.getElementById(qView) && typeof switchView === "function") {
     switchView(qView, qTab);
   }

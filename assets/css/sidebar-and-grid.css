@@ -109,7 +109,8 @@
   font-weight: 800;
   letter-spacing: -0.035em;
   line-height: 1.1;
-  margin-bottom: 20px;
+  margin: 0 auto 20px auto;
+  text-align: center;
   max-width: 920px;
 }
 
@@ -1037,8 +1038,8 @@ body.light-stages .element-stage {
 }
 
 /* Antigravity & Uiverse Wonderful-Baboon-62 Button (Lightning Silver & Black Theme) */
-.uiverse-baboon-btn,
-.stage-action-btn {
+.uiverse-baboon-btn:not(.btn-nfs-white-cta):not(.btn-table-video),
+.stage-action-btn:not(.btn-nfs-white-cta):not(.btn-table-video) {
   align-items: center;
   background-image: none !important;
   background-color: #0a0a0c !important;
@@ -1066,17 +1067,17 @@ body.light-stages .element-stage {
   overflow: visible !important;
 }
 
-.uiverse-baboon-btn:active,
-.uiverse-baboon-btn:hover,
-.stage-action-btn:active,
-.stage-action-btn:hover {
+.uiverse-baboon-btn:not(.btn-nfs-white-cta):not(.btn-table-video):active,
+.uiverse-baboon-btn:not(.btn-nfs-white-cta):not(.btn-table-video):hover,
+.stage-action-btn:not(.btn-nfs-white-cta):not(.btn-table-video):active,
+.stage-action-btn:not(.btn-nfs-white-cta):not(.btn-table-video):hover {
   outline: 0 !important;
 }
 
-.uiverse-baboon-btn > span,
-.stage-action-btn > span,
-.uiverse-baboon-btn > .text,
-.stage-action-btn > .text {
+.uiverse-baboon-btn:not(.btn-nfs-white-cta):not(.btn-table-video) > span,
+.stage-action-btn:not(.btn-nfs-white-cta):not(.btn-table-video) > span,
+.uiverse-baboon-btn:not(.btn-nfs-white-cta):not(.btn-table-video) > .text,
+.stage-action-btn:not(.btn-nfs-white-cta):not(.btn-table-video) > .text {
   background-color: transparent !important;
   padding: 6px 14px;
   border-radius: 6px;
@@ -1090,8 +1091,8 @@ body.light-stages .element-stage {
   transition: all 0.2s ease;
 }
 
-.uiverse-baboon-btn:hover,
-.stage-action-btn:hover {
+.uiverse-baboon-btn:not(.btn-nfs-white-cta):not(.btn-table-video):hover,
+.stage-action-btn:not(.btn-nfs-white-cta):not(.btn-table-video):hover {
   background-color: #050507 !important;
   border-color: #ffffff !important;
   color: #ffffff !important;
@@ -1100,32 +1101,32 @@ body.light-stages .element-stage {
   transform: translateY(-2px);
 }
 
-.uiverse-baboon-btn:hover > span,
-.stage-action-btn:hover > span,
-.uiverse-baboon-btn:hover > .text,
-.stage-action-btn:hover > .text {
+.uiverse-baboon-btn:not(.btn-nfs-white-cta):not(.btn-table-video):hover > span,
+.stage-action-btn:not(.btn-nfs-white-cta):not(.btn-table-video):hover > span,
+.uiverse-baboon-btn:not(.btn-nfs-white-cta):not(.btn-table-video):hover > .text,
+.stage-action-btn:not(.btn-nfs-white-cta):not(.btn-table-video):hover > .text {
   background: transparent !important;
   color: #ffffff !important;
 }
 
-.uiverse-baboon-btn:active,
-.stage-action-btn:active {
+.uiverse-baboon-btn:not(.btn-nfs-white-cta):not(.btn-table-video):active,
+.stage-action-btn:not(.btn-nfs-white-cta):not(.btn-table-video):active {
   transform: scale(0.96) !important;
 }
 
 /* NFSMW Glitch variant of baboon button */
-.uiverse-baboon-btn.glitch-nfs-btn,
-.stage-action-btn.glitch-nfs-btn {
+.uiverse-baboon-btn.glitch-nfs-btn:not(.btn-nfs-white-cta):not(.btn-table-video),
+.stage-action-btn.glitch-nfs-btn:not(.btn-nfs-white-cta):not(.btn-table-video) {
   background-image: none !important;
   background-color: #0a0a0c !important;
   border: 1px solid rgba(255, 255, 255, 0.15) !important;
   padding: 0 !important;
 }
 
-.uiverse-baboon-btn.glitch-nfs-btn > span,
-.stage-action-btn.glitch-nfs-btn > span,
-.uiverse-baboon-btn.glitch-nfs-btn > .text,
-.stage-action-btn.glitch-nfs-btn > .text {
+.uiverse-baboon-btn.glitch-nfs-btn:not(.btn-nfs-white-cta):not(.btn-table-video) > span,
+.stage-action-btn.glitch-nfs-btn:not(.btn-nfs-white-cta):not(.btn-table-video) > span,
+.uiverse-baboon-btn.glitch-nfs-btn:not(.btn-nfs-white-cta):not(.btn-table-video) > .text,
+.stage-action-btn.glitch-nfs-btn:not(.btn-nfs-white-cta):not(.btn-table-video) > .text {
   background: transparent !important;
   padding: 6px 14px !important;
   color: #ffffff !important;

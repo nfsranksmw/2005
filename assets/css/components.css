@@ -1347,7 +1347,7 @@
 html body :is(
   .filter-pill-btn, .track-filter-pill, .glitch-pill-btn,
   .champ-leaderboard-btn, .stage-action-btn, .uiverse-baboon-btn,
-  .btn-glitch-racing, .btn-video-glitch,
+  .btn-glitch-racing,
   .champ-filter-group-btn, .torneo-group-pill, .btn-squid-orange,
   .tuning-filter-btn, .member-filter-chip, .theme-stage-btn,
   button[data-champ-week], button[data-season-week], button[data-season-id], button[data-season-mode],
@@ -1357,7 +1357,7 @@ html body :is(
   button[data-select-pilot], button[data-toggle-ch-done], button[data-torneo-jump],
   button[data-routes-cat], button[data-routes-district], button[data-home-cat],
   button[data-cockpit-select-rank], .v7-roster-item
-):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link) {
+):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch) {
   position: relative !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -1382,9 +1382,8 @@ html body :is(
 /* Botones compactos (Tablas de Leaderboard, Standings, etc.) */
 html body :is(
   .stage-action-btn.btn-sm,
-  .btn-video-glitch.btn-sm,
   .btn-sm.glitch-nfs-btn
-):not(#_) {
+):not(#_):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch) {
   padding: 4px 10px !important;
   font-size: 11px !important;
   letter-spacing: -0.015em !important;
@@ -1396,13 +1395,13 @@ html body :is(
 html body :is(
   .filter-pill-btn, .track-filter-pill, .glitch-pill-btn,
   .champ-leaderboard-btn, .stage-action-btn, .uiverse-baboon-btn,
-  .btn-glitch-racing, .btn-video-glitch,
+  .btn-glitch-racing,
   .champ-filter-group-btn, .torneo-group-pill, .btn-squid-orange,
   button[data-champ-week], button[data-season-week], button[data-season-id], button[data-season-mode],
   button[data-season-subview], button[data-standings-mode], button[data-champ-group-tab],
   button[data-select-champ-group], button[data-lb-tab], button[data-open-route-lb],
   button[data-routes-cat], button[data-routes-district], button[data-home-cat]
-):not(#_):not(.mega-item):not(.sidebar-btn) > *:not(svg):not(.squid-layer) {
+):not(#_):not(.mega-item):not(.sidebar-btn):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch) > *:not(svg):not(.squid-layer) {
   color: #ffffff !important;
   transform: none !important;
 }
@@ -1416,7 +1415,7 @@ html body .squid-layer:not(#_) {
 html body :is(
   .filter-pill-btn, .track-filter-pill, .glitch-pill-btn,
   .champ-leaderboard-btn, .stage-action-btn, .uiverse-baboon-btn,
-  .btn-glitch-racing, .btn-video-glitch,
+  .btn-glitch-racing,
   .champ-filter-group-btn, .torneo-group-pill, .btn-squid-orange,
   .tuning-filter-btn, .member-filter-chip, .theme-stage-btn,
   button[data-champ-week], button[data-season-week], button[data-season-id], button[data-season-mode],
@@ -1426,7 +1425,7 @@ html body :is(
   button[data-select-pilot], button[data-toggle-ch-done], button[data-torneo-jump],
   button[data-routes-cat], button[data-routes-district], button[data-home-cat],
   button[data-cockpit-select-rank], .v7-roster-item
-):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link)::after {
+):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch)::after {
   --move1: inset(50% 50% 50% 50%);
   --move2: inset(31% 0 40% 0);
   --move3: inset(39% 0 15% 0);
@@ -1459,7 +1458,7 @@ html body :is(
 html body :is(
   .filter-pill-btn, .track-filter-pill, .glitch-pill-btn,
   .champ-leaderboard-btn, .stage-action-btn, .uiverse-baboon-btn,
-  .btn-glitch-racing, .btn-video-glitch,
+  .btn-glitch-racing,
   .champ-filter-group-btn, .torneo-group-pill, .btn-squid-orange,
   .tuning-filter-btn, .member-filter-chip, .theme-stage-btn,
   button[data-champ-week], button[data-season-week], button[data-season-id], button[data-season-mode],
@@ -1469,7 +1468,7 @@ html body :is(
   button[data-select-pilot], button[data-toggle-ch-done], button[data-torneo-jump],
   button[data-routes-cat], button[data-routes-district], button[data-home-cat],
   button[data-cockpit-select-rank], .v7-roster-item
-):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link):hover {
+):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch):hover {
   background-color: #0d0e13 !important;
   border-color: #ff7b00 !important;
   color: #ffffff !important;
@@ -1480,7 +1479,7 @@ html body :is(
 html body :is(
   .filter-pill-btn, .track-filter-pill, .glitch-pill-btn,
   .champ-leaderboard-btn, .stage-action-btn, .uiverse-baboon-btn,
-  .btn-glitch-racing, .btn-video-glitch,
+  .btn-glitch-racing,
   .champ-filter-group-btn, .torneo-group-pill, .btn-squid-orange,
   .tuning-filter-btn, .member-filter-chip, .theme-stage-btn,
   button[data-champ-week], button[data-season-week], button[data-season-id], button[data-season-mode],
@@ -1490,7 +1489,7 @@ html body :is(
   button[data-select-pilot], button[data-toggle-ch-done], button[data-torneo-jump],
   button[data-routes-cat], button[data-routes-district], button[data-home-cat],
   button[data-cockpit-select-rank], .v7-roster-item
-):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link):hover::after {
+):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch):hover::after {
   opacity: 1 !important;
   animation: glitch-orange-purple 0.75s infinite steps(2, end) !important;
   border: 1px solid #ff9500 !important;
@@ -1508,7 +1507,7 @@ html body :is(
   button[data-select-champ-group], button[data-lb-tab], button[data-torneo-tab], button[data-hof-tab],
   button[data-tel-type], button[data-select-pilot],
   button[data-routes-cat], button[data-routes-district], button[data-home-cat]
-):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link):is(.is-active, .active, .is-selected, .selected) {
+):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch):is(.is-active, .active, .is-selected, .selected) {
   background-color: #121318 !important;
   border-color: #ff7b00 !important;
   box-shadow: 0 0 10px rgba(255, 123, 0, 0.35) !important;
@@ -1525,17 +1524,17 @@ html body :is(
   button[data-select-champ-group], button[data-lb-tab], button[data-torneo-tab], button[data-hof-tab],
   button[data-tel-type], button[data-select-pilot],
   button[data-routes-cat], button[data-routes-district], button[data-home-cat]
-):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link):is(.is-active, .active, .is-selected, .selected):hover::after {
+):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch):is(.is-active, .active, .is-selected, .selected):hover::after {
   opacity: 1 !important;
   animation: glitch-orange-purple 0.75s infinite steps(2, end) !important;
 }
 
 /* Iconos SVG y flechas dentro de los botones */
-html body :is(.filter-pill-btn, .stage-action-btn, .uiverse-baboon-btn, .champ-filter-group-btn):not(#_) .btn-hover-arrow {
+html body :is(.filter-pill-btn, .stage-action-btn, .uiverse-baboon-btn, .champ-filter-group-btn):not(#_):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch) .btn-hover-arrow {
   color: #ffffff !important;
   transform: none !important;
 }
-html body :is(.filter-pill-btn, .stage-action-btn, .uiverse-baboon-btn, .champ-filter-group-btn):not(#_):hover .btn-hover-arrow {
+html body :is(.filter-pill-btn, .stage-action-btn, .uiverse-baboon-btn, .champ-filter-group-btn):not(#_):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch):hover .btn-hover-arrow {
   color: #ff7b00 !important;
 }
 
@@ -2164,7 +2163,7 @@ html body :is(.leaderboard-banner-wrapper, .lb-video-banner) .uiverse-blog-neon-
   box-shadow: 0 0 10px rgba(6, 182, 212, 0.35) !important;
 }
 
-.stitch-leaderboard-btn {
+.stitch-leaderboard-btn:not(.btn-nfs-white-cta) {
   position: relative !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -2185,7 +2184,7 @@ html body :is(.leaderboard-banner-wrapper, .lb-video-banner) .uiverse-blog-neon-
   box-shadow: 0 0 10px rgba(139, 92, 246, 0.25) !important;
 }
 
-.stitch-leaderboard-btn:hover {
+.stitch-leaderboard-btn:not(.btn-nfs-white-cta):hover {
   background-color: #8b5cf6 !important;
   border-color: #a855f7 !important;
   color: #ffffff !important;
@@ -3540,4 +3539,505 @@ html body :is(.leaderboard-banner-wrapper, .lb-video-banner) #lb-hero-route-titl
 @keyframes hofPulseDot {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+/* ==========================================================================
+   BOTÓN OFICIAL "JUGAR EN LÍNEA" (FONDO BLANCO PURO + TIPOGRAFÍA NEGRA BOLD)
+   Aplicado exclusivamente en los gestores de descarga (Download Center) y en
+   los botones principales de las secciones web (.view-section).
+   El menú de navegación principal (.uiverse-navbar) permanece intacto.
+   ========================================================================== */
+/* ==========================================================================
+   BOTÓN OFICIAL "JUGAR EN LÍNEA" & CTA BLANCO DE ALTO IMPACTO (STYLE JUGAR EN LÍNEA)
+   Inspirado en media_1793133757693_1e695c75.png:
+   Fondo blanco puro (#ffffff), texto negro puro (#000000), bordes nítidos,
+   sombra con brillo blanco elegante y tipografía bold uppercase.
+   Aplica a:
+   - Botón VIDEO en tablas de clasificación (Leaderboard, Standings, etc.)
+   - Botón VIDEO en tarjetas visuales de todas las rutas y desafíos
+   - Botón LEADERBOARD en tarjetas de rutas
+   - Botones principales de descarga en Download Center
+   - Botón CTA de publicidad web.nfsmwo.com
+   ========================================================================== */
+html body :is(
+  .btn-nfs-white-cta,
+  .btn-table-video,
+  .v7-group-footer-btn,
+  #view-download .btn-download-primary,
+  #view-download .btn-download-radmin,
+  #view-download .btn-download-fix
+):not(#_) {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  border: 1px solid #ffffff !important;
+  border-radius: 4px !important;
+  font-family: 'Montserrat', 'Chakra Petch', 'Chivo', 'Inter', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  text-decoration: none !important;
+  text-shadow: none !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), 0 0 10px rgba(255, 255, 255, 0.28) !important;
+  cursor: pointer !important;
+  overflow: hidden !important;
+  z-index: 2 !important;
+  transform: none !important;
+  line-height: 1.2 !important;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease, border-color 0.16s ease !important;
+}
+
+/* Hover state con brillo blanco y leve elevación */
+html body :is(
+  .btn-nfs-white-cta,
+  .btn-table-video,
+  .v7-group-footer-btn,
+  #view-download .btn-download-primary,
+  #view-download .btn-download-radmin,
+  #view-download .btn-download-fix
+):not(#_):hover {
+  background: #f1f5f9 !important;
+  background-color: #f1f5f9 !important;
+  border-color: #ffffff !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.45), 0 0 16px rgba(255, 255, 255, 0.6) !important;
+  transform: translateY(-1.5px) !important;
+}
+
+html body :is(
+  .btn-nfs-white-cta,
+  .btn-table-video,
+  .v7-group-footer-btn,
+  #view-download .btn-download-primary,
+  #view-download .btn-download-radmin,
+  #view-download .btn-download-fix
+):not(#_):active {
+  transform: translateY(0px) scale(0.98) !important;
+}
+
+/* Hijos internos (spans, textos, iconos, svg): Siempre NEGRO PURO #000000 y fondo transparente */
+html body :is(
+  .btn-nfs-white-cta,
+  .btn-table-video,
+  .v7-group-footer-btn,
+  #view-download .btn-download-primary,
+  #view-download .btn-download-radmin,
+  #view-download .btn-download-fix
+):not(#_) :is(*, span, .text, strong, i, svg) {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  font-family: 'Montserrat', 'Chakra Petch', 'Chivo', 'Inter', sans-serif !important;
+  font-weight: 900 !important;
+  stroke: #000000 !important;
+  fill: currentColor !important;
+  text-decoration: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  text-shadow: none !important;
+}
+
+/* Supresión total de pseudo-elementos glitch en estos botones */
+html body :is(
+  .btn-nfs-white-cta,
+  .btn-table-video,
+  .v7-group-footer-btn,
+  #view-download .btn-download-primary,
+  #view-download .btn-download-radmin,
+  #view-download .btn-download-fix
+):not(#_)::before,
+html body :is(
+  .btn-nfs-white-cta,
+  .btn-table-video,
+  .v7-group-footer-btn,
+  #view-download .btn-download-primary,
+  #view-download .btn-download-radmin,
+  #view-download .btn-download-fix
+):not(#_)::after {
+  display: none !important;
+  content: "" !important;
+}
+
+/* Ajustes de tamaño específicos por contexto */
+html body :is( .stitch-leaderboard-btn):not(#_) {
+  padding: 5px 9px !important;
+  font-size: 10px !important;
+  letter-spacing: 0.05em !important;
+  white-space: nowrap !important;
+}
+
+html body :is(.btn-table-video):not(#_) {
+  padding: 4px 10px !important;
+  font-size: 11px !important;
+  letter-spacing: 0.05em !important;
+  white-space: nowrap !important;
+  min-height: 24px !important;
+}
+
+#view-download .btn-download-primary,
+#view-download .btn-download-radmin,
+#view-download .btn-download-fix {
+  width: 100% !important;
+  padding: 14px 22px !important;
+  font-size: 13.5px !important;
+  letter-spacing: 0.08em !important;
+}
+
+.hero-search-bar .hero-search-btn.btn-nfs-white-cta {
+  padding: 9px 20px !important;
+  font-size: 12px !important;
+  border-radius: 4px !important;
+  height: auto !important;
+}
+
+/* ==========================================================================
+   PUBLICIDAD FLOTANTE EN HOME: WEB.NFSMWO.COM (JUGAR EN LÍNEA DESDE LA WEB)
+   Visible únicamente cuando la sección Home (#view-elements) está activa.
+   ========================================================================== */
+.nfsmwo-home-floating-promo {
+  position: fixed !important;
+  bottom: 24px !important;
+  left: 24px !important;
+  z-index: 995 !important;
+  max-width: 345px !important;
+  width: calc(100vw - 48px) !important;
+  pointer-events: auto !important;
+  animation: nfsmwoFloatIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+@keyframes nfsmwoFloatIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.nfsmwo-floating-card {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 11px !important;
+  padding: 16px 18px !important;
+  background:
+    linear-gradient(145deg, rgba(22, 18, 12, 0.94) 0%, rgba(10, 10, 14, 0.97) 100%) !important;
+  border: 1px solid rgba(255, 184, 0, 0.42) !important;
+  border-radius: 10px !important;
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.85),
+    0 0 24px rgba(255, 149, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+
+.nfsmwo-floating-minimize {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 4px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  color: #cbd5e1 !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  transition: background 0.2s ease, color 0.2s ease !important;
+}
+
+.nfsmwo-floating-minimize:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}
+
+.nfsmwo-floating-top {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding-right: 28px !important;
+  flex-wrap: wrap !important;
+}
+
+.nfsmwo-live-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 3px 8px !important;
+  border-radius: 4px !important;
+  background: rgba(34, 197, 94, 0.15) !important;
+  border: 1px solid rgba(34, 197, 94, 0.45) !important;
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.06em !important;
+  color: #4ade80 !important;
+  text-transform: uppercase !important;
+}
+
+.nfsmwo-live-dot {
+  width: 6px !important;
+  height: 6px !important;
+  border-radius: 50% !important;
+  background: #22c55e !important;
+  box-shadow: 0 0 8px #22c55e !important;
+  display: inline-block !important;
+}
+
+.nfsmwo-domain-tag {
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  color: #fbbf24 !important;
+}
+
+.nfsmwo-floating-title {
+  font-family: 'Montserrat', 'Chivo', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.02em !important;
+  color: #ffffff !important;
+  text-transform: uppercase !important;
+  line-height: 1.25 !important;
+  margin-bottom: 4px !important;
+}
+
+.nfsmwo-floating-desc {
+  margin: 0 !important;
+  font-size: 12px !important;
+  color: #d4d4d8 !important;
+  line-height: 1.45 !important;
+}
+
+.nfsmwo-play-btn {
+  width: 100% !important;
+  padding: 12px 18px !important;
+  font-size: 14px !important;
+  letter-spacing: 0.09em !important;
+  border-radius: 3px !important;
+  margin-top: 2px !important;
+}
+
+.nfsmwo-floating-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #ffffff !important;
+  border-radius: 3px !important;
+  font-family: 'Montserrat', 'Chivo', sans-serif !important;
+  font-size: 11.5px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.75), 0 0 16px rgba(255, 255, 255, 0.45) !important;
+  cursor: pointer !important;
+}
+
+@media (max-width: 640px) {
+  .nfsmwo-home-floating-promo {
+    bottom: 16px !important;
+    left: 16px !important;
+    max-width: 290px !important;
+  }
+}
+
+/* ==========================================================================
+   NFSMWO OFFICIAL TYPOGRAPHY SYSTEM (HERO & CLASSIFICATION BANNERS)
+   ========================================================================== */
+
+/* 1. Home Hero Headline - Centered, Chunky, High-Impact Chivo 900 Italic */
+.hero-title.nfs-graffiti-title-block {
+  font-family: 'Chivo', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  text-transform: uppercase !important;
+  font-style: italic !important;
+  line-height: 0.94 !important;
+  letter-spacing: -0.03em !important;
+  margin: 0 auto 22px auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  width: 100% !important;
+  max-width: 1080px !important;
+  filter: drop-shadow(0 20px 35px rgba(0, 0, 0, 0.9)) !important;
+  user-select: none !important;
+}
+
+.hero-title.nfs-graffiti-title-block .nfs-title-prefix {
+  display: block !important;
+  font-family: 'Chivo', 'Montserrat', sans-serif !important;
+  font-size: clamp(26px, 4.2vw, 48px) !important;
+  font-weight: 900 !important;
+  font-style: italic !important;
+  letter-spacing: -0.03em !important;
+  color: #64748b !important;
+  -webkit-text-fill-color: #64748b !important;
+  -webkit-text-stroke: 0.6px #64748b !important;
+  text-shadow: 0 10px 25px rgba(0, 0, 0, 0.9) !important;
+  text-align: center !important;
+  margin: 0 auto 4px auto !important;
+}
+
+.hero-title.nfs-graffiti-title-block .nfs-title-main {
+  display: block !important;
+  font-family: 'Chivo', 'Montserrat', sans-serif !important;
+  font-size: clamp(52px, 8.8vw, 98px) !important;
+  font-weight: 900 !important;
+  font-style: italic !important;
+  letter-spacing: -0.02em !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-text-stroke: 0.8px #ffffff !important;
+  text-shadow:
+    0 0 35px rgba(255, 255, 255, 0.4),
+    0 10px 30px rgba(0, 0, 0, 0.9) !important;
+  text-align: center !important;
+  margin: 0 auto 4px auto !important;
+}
+
+.hero-title.nfs-graffiti-title-block .nfs-title-sub {
+  display: block !important;
+  font-family: 'Chivo', 'Montserrat', sans-serif !important;
+  font-size: clamp(20px, 3.4vw, 38px) !important;
+  font-weight: 900 !important;
+  font-style: italic !important;
+  letter-spacing: -0.02em !important;
+  color: #64748b !important;
+  -webkit-text-fill-color: #64748b !important;
+  -webkit-text-stroke: 0.5px #64748b !important;
+  text-shadow: 0 10px 25px rgba(0, 0, 0, 0.9) !important;
+  text-align: center !important;
+  margin: 0 auto !important;
+}
+
+/* 2. Classification Table Banners (Circuito, Sprint, Drag & Routes Catalog) */
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner, .routes-catalog-hero-banner) :is(#lb-hero-route-title, #routes-catalog-banner-title, .lb-hero-main-title, .rc-banner-title),
+.rc-banner-title,
+.lb-hero-main-title,
+#routes-catalog-banner-title,
+#lb-hero-route-title {
+  font-family: 'Chivo', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-style: italic !important;
+  text-transform: uppercase !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  line-height: 1.05 !important;
+  margin-bottom: 12px !important;
+}
+
+/* Top Prefix Line: TABLA DE CLASIFICACIÓN / LEADERBOARD • CIRCUITO/SPRINT/DRAG */
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner, .routes-catalog-hero-banner) :is(#lb-hero-route-title, #routes-catalog-banner-title, .lb-hero-main-title, .rc-banner-title) :is(.lb-title-prefix, .rc-title-line-white),
+.rc-banner-title .lb-title-prefix,
+.rc-banner-title .rc-title-line-white,
+.lb-hero-main-title .lb-title-prefix,
+.lb-hero-main-title .rc-title-line-white,
+#rc-banner-prefix,
+#lb-hero-prefix {
+  font-family: 'Chivo', 'Montserrat', sans-serif !important;
+  font-size: clamp(14px, 1.8vw, 19px) !important;
+  font-weight: 900 !important;
+  font-style: italic !important;
+  letter-spacing: -0.02em !important;
+  color: #64748b !important;
+  -webkit-text-fill-color: #64748b !important;
+  -webkit-text-stroke: 0.4px #64748b !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9) !important;
+  margin-bottom: 4px !important;
+  display: block !important;
+}
+
+/* Main Line: Route Name / Modality Name in Glowing White */
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner, .routes-catalog-hero-banner) :is(#lb-hero-route-title, #routes-catalog-banner-title, .lb-hero-main-title, .rc-banner-title) :is(.lb-title-line-gradient, .rc-title-line-gradient, .lb-title-route-name),
+.rc-banner-title .lb-title-line-gradient,
+.rc-banner-title .rc-title-line-gradient,
+.lb-hero-main-title .lb-title-line-gradient,
+.lb-hero-main-title .rc-title-line-gradient,
+.lb-hero-main-title .lb-title-route-name,
+#rc-banner-main,
+#lb-hero-main,
+#lb-hero-route-name {
+  font-family: 'Chivo', 'Montserrat', sans-serif !important;
+  font-size: clamp(2rem, 3.8vw, 3.2rem) !important;
+  font-weight: 900 !important;
+  font-style: italic !important;
+  letter-spacing: -0.02em !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-text-stroke: 0.6px #ffffff !important;
+  background: none !important;
+  text-shadow:
+    0 0 35px rgba(255, 255, 255, 0.4),
+    0 10px 30px rgba(0, 0, 0, 0.9) !important;
+  filter: none !important;
+  text-transform: uppercase !important;
+  display: inline-block !important;
+}
+
+.rc-banner-title .rc-title-line-gradient::after,
+.lb-hero-main-title .rc-title-line-gradient::after,
+.lb-hero-main-title .lb-title-line-gradient::after {
+  display: none !important;
+}
+
+/* 3. Botones de acción en tarjetas de ruta (VIDEO y LEADERBOARD Glitch Cyber) */
+.stitch-footer-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  flex-wrap: nowrap !important;
+}
+
+.stitch-footer-actions .stitch-video-btn,
+.stitch-footer-actions .stitch-leaderboard-btn {
+  padding: 4px 10px !important;
+  font-size: 10.5px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  border-radius: 4px !important;
+  min-height: 26px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  background-color: #0a0a0c !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  color: #ffffff !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+  box-sizing: border-box !important;
+}
+
+.stitch-footer-actions .stitch-video-btn:hover,
+.stitch-footer-actions .stitch-leaderboard-btn:hover {
+  background-color: #0d0e13 !important;
+  border-color: #ff7b00 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 14px rgba(255, 123, 0, 0.45), 0 0 4px rgba(124, 58, 237, 0.35) !important;
 }

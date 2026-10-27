@@ -1,0 +1,1433 @@
+/* ==========================================================================
+   NFSMW ONLINE WEB - VISTA INTEGRADA EN EL NAVEGADOR (WEBGL 2.0 & WEBGPU)
+   Basado en el diseño oficial Stitch: 0e9236bb6dd04c52994ee0eb626ae61a
+   "NFS Most Wanted Online - Versión Monocromática & Sepia"
+   ========================================================================== */
+
+#view-nfsmwo {
+  display: none;
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #0a0a0c;
+  color: #ffffff;
+  font-family: 'Chivo', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+#view-nfsmwo.is-active {
+  display: block !important;
+}
+
+#view-nfsmwo *,
+#view-nfsmwo *::before,
+#view-nfsmwo *::after {
+  box-sizing: border-box;
+}
+
+/* Material Symbols & Icon sizing */
+#view-nfsmwo .material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  vertical-align: middle;
+}
+
+/* --------------------------------------------------------------------------
+   1. HERO LAUNCHER STAGE
+   -------------------------------------------------------------------------- */
+.mwo-hero-stage {
+  position: relative;
+  width: 100%;
+  min-height: 880px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  background-color: #0a0a0c;
+  padding-top: 24px;
+}
+
+/* Atmospheric Visual Backing */
+.mwo-hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  mix-blend-mode: luminosity;
+  opacity: 0.35;
+  filter: grayscale(100%) contrast(125%);
+  pointer-events: none;
+}
+
+/* Urban Grunge Gradient Vignette */
+.mwo-hero-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(to top, #0a0a0c 0%, rgba(10, 10, 12, 0.88) 50%, rgba(7, 7, 9, 0.96) 100%);
+  pointer-events: none;
+}
+
+.mwo-hero-radial {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.05) 0%, transparent 75%);
+  pointer-events: none;
+}
+
+/* HUD Top Telemetry Bar */
+.mwo-hud-bar {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.mwo-hud-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  background: rgba(7, 7, 9, 0.92);
+  border: 1px solid #2a2a30;
+  border-radius: 4px;
+  backdrop-filter: blur(8px);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  color: #94a3b8;
+}
+
+.mwo-hud-ping-dot {
+  width: 8px;
+  height: 8px;
+  background: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #10b981;
+  animation: mwoPulse 1.8s infinite;
+}
+
+@keyframes mwoPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.mwo-hud-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.mwo-hud-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: rgba(17, 17, 20, 0.9);
+  border: 1px solid #2a2a30;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  color: #9ca3af;
+}
+
+.mwo-hud-item strong {
+  color: #ffffff;
+}
+
+/* Central Tactical Action Core */
+.mwo-hero-core {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 860px;
+  margin: auto auto;
+  padding: 40px 24px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Stencil Marker Overline */
+.mwo-stencil-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  background: #16161a;
+  border: 1px solid #2a2a30;
+  backdrop-filter: blur(8px);
+  transform: skewX(-6deg);
+  margin-bottom: 22px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
+}
+
+.mwo-stencil-badge span {
+  transform: skewX(6deg);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #e2e8f0;
+  text-transform: uppercase;
+}
+
+/* Main Graffiti NFS MW Title */
+.mwo-title-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+  margin-bottom: 12px;
+}
+
+.mwo-title-nfs {
+  font-family: 'Chivo', 'Montserrat', sans-serif !important;
+  font-size: clamp(34px, 5.5vw, 64px) !important;
+  font-weight: 900 !important;
+  font-style: italic !important;
+  line-height: 1 !important;
+  letter-spacing: -0.03em !important;
+  color: #64748b !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 10px 25px rgba(0, 0, 0, 0.9) !important;
+  -webkit-text-stroke: 0.6px #64748b;
+  margin: 0 !important;
+}
+
+.mwo-title-mw-row {
+  position: relative !important;
+  margin-top: -6px !important;
+}
+
+.mwo-title-mw {
+  font-family: 'Chivo', 'Montserrat', sans-serif !important;
+  font-size: clamp(40px, 7vw, 76px) !important;
+  font-weight: 900 !important;
+  font-style: italic !important;
+  line-height: 1 !important;
+  letter-spacing: -0.02em !important;
+  color: #ffffff !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 0 35px rgba(255, 255, 255, 0.4), 0 10px 30px rgba(0, 0, 0, 0.9) !important;
+  -webkit-text-stroke: 0.6px #ffffff;
+}
+
+.mwo-title-online-badge {
+  position: absolute;
+  bottom: -4px;
+  right: -8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  font-weight: 800;
+  background: #070709;
+  border: 1px solid #333338;
+  color: #ffffff;
+  padding: 4px 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  transform: skewX(-12deg);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.8);
+}
+
+.mwo-hero-desc {
+  font-size: 16.5px;
+  line-height: 1.6;
+  color: #cbd5e1;
+  max-width: 660px;
+  margin: 18px 0 28px;
+  font-weight: 400;
+}
+
+/* Primary Action Stack */
+.mwo-cta-stack {
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+/* JUGAR ONLINE AHORA (Gold/Sepia Accent Button) */
+.mwo-btn-play-online {
+  position: relative;
+  width: 100%;
+  padding: 16px 28px;
+  background: linear-gradient(135deg, #e8b938 0%, #d4a017 100%);
+  color: #120c00 !important;
+  font-family: 'Space Grotesk', 'Montserrat', sans-serif;
+  font-size: 19px;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid rgba(232, 185, 56, 0.6);
+  border-radius: 4px;
+  box-shadow: 0 0 32px rgba(212, 160, 23, 0.4), 0 4px 16px rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.mwo-btn-play-online * {
+  color: #120c00 !important;
+}
+
+.mwo-btn-play-online:hover {
+  background: linear-gradient(135deg, #f0c54e 0%, #c99718 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 0 48px rgba(212, 160, 23, 0.65), 0 8px 24px rgba(0, 0, 0, 0.7);
+}
+
+.mwo-btn-play-online:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Secondary Button: MODO HISTORIA / UN JUGADOR */
+.mwo-btn-single {
+  width: 100%;
+  padding: 14px 26px;
+  background: #16161a;
+  color: #ffffff;
+  border: 1px solid #2a2a30;
+  border-radius: 4px;
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.mwo-btn-single:hover {
+  background: #202026;
+  border-color: #3a3a42;
+  color: #ffffff;
+  transform: translateY(-1.5px);
+}
+
+/* Quick Utility Row */
+.mwo-utility-row {
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.mwo-lang-select {
+  flex: 1;
+  min-width: 120px;
+  height: 40px;
+  padding: 0 12px;
+  background: #111114;
+  color: #cbd5e1;
+  border: 1px solid #2a2a30;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  outline: none;
+}
+
+.mwo-lang-select:focus {
+  border-color: #3a3a42;
+  background: #1a1a20;
+}
+
+.mwo-util-btn {
+  height: 40px;
+  padding: 0 14px;
+  background: #18181c;
+  color: #ffffff;
+  border: 1px solid #2a2a30;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.16s ease, border-color 0.16s ease;
+}
+
+.mwo-util-btn:hover {
+  background: #222228;
+  border-color: #3a3a42;
+  color: #ffffff;
+}
+
+.mwo-discord-wide-btn {
+  width: 100%;
+  margin-top: 4px;
+  height: 42px;
+  background: #16161a;
+  border: 1px solid #2a2a30;
+  border-radius: 4px;
+  color: #ffffff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.mwo-discord-wide-btn:hover {
+  background: #222228;
+  border-color: #5865f2;
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(88, 101, 242, 0.35);
+}
+
+/* Bottom Promo Banner Anchor (Razor's Mustang GT Referral) */
+.mwo-promo-anchor {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  background: #070709;
+  border-top: 1px solid #2a2a30;
+  margin-top: 24px;
+}
+
+.mwo-promo-wrap {
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (min-width: 992px) {
+  .mwo-promo-wrap {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.mwo-promo-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.mwo-promo-thumb {
+  position: relative;
+  width: 112px;
+  height: 64px;
+  background: #18181c;
+  border: 1px solid #2a2a30;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background-size: cover;
+  background-position: center;
+}
+
+.mwo-promo-badge {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  padding: 2px 5px;
+  background: #ffffff;
+  color: #000000;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+  border-radius: 2px;
+}
+
+.mwo-promo-info {
+  text-align: left;
+}
+
+.mwo-promo-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.mwo-promo-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+
+.mwo-promo-sub {
+  font-size: 12.5px;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.mwo-promo-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.mwo-promo-codebox {
+  padding: 8px 14px;
+  background: #111114;
+  border: 1px solid #2a2a30;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #9ca3af;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mwo-promo-codebox strong {
+  color: #ffffff;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  user-select: all;
+}
+
+.mwo-btn-copy {
+  padding: 8px 16px;
+  background: #ffffff;
+  color: #000000 !important;
+  border: 1px solid #ffffff;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.16s ease;
+  white-space: nowrap;
+}
+
+.mwo-btn-copy:hover {
+  background: #e2e8f0;
+  transform: translateY(-1px);
+}
+
+/* --------------------------------------------------------------------------
+   2. LIVE SERVER LOBBY STATUS & QUICK MATCH MODULE
+   -------------------------------------------------------------------------- */
+.mwo-section-servers {
+  width: 100%;
+  background: #111114;
+  border-bottom: 1px solid #2a2a30;
+  padding: 56px 24px;
+}
+
+.mwo-container {
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+}
+
+.mwo-servers-header {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 32px;
+}
+
+@media (min-width: 768px) {
+  .mwo-servers-header {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+}
+
+.mwo-section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #94a3b8;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 6px;
+}
+
+.mwo-section-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(24px, 3.5vw, 36px);
+  font-weight: 800;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  margin: 0;
+  line-height: 1.15;
+}
+
+.mwo-servers-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.mwo-server-count-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  color: #9ca3af;
+  text-transform: uppercase;
+}
+
+.mwo-btn-autojoin {
+  padding: 10px 18px;
+  background: #18181c;
+  border: 1px solid #333338;
+  color: #ffffff;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.mwo-btn-autojoin:hover {
+  background: #25252b;
+  border-color: #d4a017;
+  color: #ffffff;
+}
+
+/* Server Cards Grid */
+.mwo-servers-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .mwo-servers-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.mwo-server-card {
+  background: #16161a;
+  border: 1px solid #2a2a30;
+  border-radius: 6px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 220px;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+}
+
+.mwo-server-card:hover {
+  border-color: #3a3a42;
+  transform: translateY(-2px);
+}
+
+.mwo-server-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.mwo-server-mode-tag {
+  padding: 3px 8px;
+  background: #0a0a0c;
+  border: 1px solid #2a2a30;
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 800;
+  color: #cbd5e1;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.mwo-server-ping {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #cbd5e1;
+}
+
+.mwo-server-card-mid {
+  margin-bottom: 20px;
+}
+
+.mwo-server-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffffff;
+  text-transform: uppercase;
+  margin: 0 0 8px;
+  letter-spacing: -0.01em;
+}
+
+.mwo-server-stats-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.mwo-server-stats-row strong {
+  color: #ffffff;
+}
+
+.mwo-server-card-bot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.mwo-server-progress-track {
+  flex: 1;
+  height: 6px;
+  background: #25252b;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.mwo-server-progress-bar {
+  height: 100%;
+  background: #ffffff;
+  border-radius: 3px;
+}
+
+.mwo-btn-join-server {
+  padding: 6px 14px;
+  background: #0a0a0c;
+  border: 1px solid #2a2a30;
+  border-radius: 4px;
+  color: #ffffff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: all 0.16s ease;
+  white-space: nowrap;
+}
+
+.mwo-btn-join-server:hover {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #000000;
+}
+
+.mwo-btn-join-server.is-full {
+  background: #0a0a0c;
+  border-color: #2a2a30;
+  color: #52525b;
+  cursor: not-allowed;
+}
+
+/* --------------------------------------------------------------------------
+   3. WHY PLAY IN BROWSER (CORE ADVANTAGES)
+   -------------------------------------------------------------------------- */
+.mwo-section-why {
+  width: 100%;
+  background: #0a0a0c;
+  border-bottom: 1px solid #2a2a30;
+  padding: 64px 24px;
+}
+
+.mwo-why-desc {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #94a3b8;
+  max-width: 680px;
+  margin: 10px 0 36px;
+}
+
+.mwo-advantages-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 18px;
+}
+
+@media (min-width: 640px) {
+  .mwo-advantages-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .mwo-advantages-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.mwo-advantage-card {
+  background: #16161a;
+  border: 1px solid #2a2a30;
+  border-radius: 6px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.mwo-advantage-card:hover {
+  border-color: #3a3a42;
+  transform: translateY(-2px);
+}
+
+.mwo-adv-icon-box {
+  width: 46px;
+  height: 46px;
+  background: #ffffff;
+  color: #000000;
+  transform: skewX(-6deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+}
+
+.mwo-adv-icon-box.dark-icon {
+  background: #25252b;
+  border: 1px solid #333338;
+  color: #ffffff;
+}
+
+.mwo-adv-icon-box .material-symbols-outlined {
+  transform: skewX(6deg);
+  font-size: 24px;
+}
+
+.mwo-adv-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16.5px;
+  font-weight: 800;
+  color: #ffffff;
+  text-transform: uppercase;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.mwo-adv-text {
+  font-size: 13px;
+  line-height: 1.55;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.mwo-adv-tag {
+  margin-top: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: #cbd5e1;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* --------------------------------------------------------------------------
+   4. GARAGE & VEHICLE SHOWCASE
+   -------------------------------------------------------------------------- */
+.mwo-section-garage {
+  width: 100%;
+  background: #070709;
+  border-bottom: 1px solid #2a2a30;
+  padding: 64px 24px;
+}
+
+.mwo-garage-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+@media (min-width: 768px) {
+  .mwo-garage-header {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+}
+
+.mwo-garage-subhead {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.mwo-cars-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .mwo-cars-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1100px) {
+  .mwo-cars-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.mwo-car-card {
+  background: #16161a;
+  border: 1px solid #2a2a30;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.mwo-car-card:hover {
+  border-color: #3a3a42;
+  transform: translateY(-3px);
+}
+
+.mwo-car-img-stage {
+  position: relative;
+  height: 220px;
+  background: #1e1e23;
+  overflow: hidden;
+}
+
+.mwo-car-img {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.35s ease;
+}
+
+.mwo-car-card:hover .mwo-car-img {
+  transform: scale(1.05);
+}
+
+.mwo-car-tier-pill {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 3px 10px;
+  background: #ffffff;
+  color: #000000;
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.mwo-car-tier-pill.tier-dark {
+  background: #25252b;
+  border: 1px solid #333338;
+  color: #ffffff;
+}
+
+.mwo-car-body {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+.mwo-car-brand {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.mwo-car-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff;
+  text-transform: uppercase;
+  margin: 2px 0 0;
+  letter-spacing: -0.01em;
+}
+
+/* Car Performance Bars */
+.mwo-car-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+}
+
+.mwo-stat-row {
+  display: flex;
+  justify-content: space-between;
+  color: #94a3b8;
+  margin-bottom: 3px;
+}
+
+.mwo-stat-row strong {
+  color: #ffffff;
+}
+
+.mwo-stat-bar-track {
+  width: 100%;
+  height: 5px;
+  background: #25252b;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.mwo-stat-bar-fill {
+  height: 100%;
+  background: #ffffff;
+  border-radius: 2px;
+}
+
+.mwo-stat-bar-fill.fill-silver {
+  background: #cbd5e1;
+}
+
+.mwo-btn-testdrive {
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px 18px;
+  background: #1e1e23;
+  border: 1px solid #333338;
+  border-radius: 4px;
+  color: #ffffff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.mwo-btn-testdrive:hover {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #000000;
+}
+
+/* --------------------------------------------------------------------------
+   5. BROWSER COMPATIBILITY & SYSTEM DIAGNOSTIC
+   -------------------------------------------------------------------------- */
+.mwo-section-diagnostic {
+  width: 100%;
+  background: #0a0a0c;
+  padding: 48px 24px 72px;
+}
+
+.mwo-diag-card {
+  background: #16161a;
+  border: 1px solid #2a2a30;
+  border-radius: 8px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.7);
+}
+
+@media (min-width: 992px) {
+  .mwo-diag-card {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.mwo-diag-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.mwo-diag-icon {
+  width: 58px;
+  height: 58px;
+  background: #ffffff;
+  color: #000000;
+  transform: skewX(-12deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 4px;
+}
+
+.mwo-diag-icon .material-symbols-outlined {
+  transform: skewX(12deg);
+  font-size: 32px;
+}
+
+.mwo-diag-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 800;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.mwo-diag-heading {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(18px, 2.5vw, 24px);
+  font-weight: 800;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin: 4px 0 6px;
+}
+
+.mwo-diag-desc {
+  font-size: 13.5px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.mwo-btn-launch-direct {
+  padding: 15px 32px;
+  background: linear-gradient(135deg, #e8b938 0%, #d4a017 100%);
+  color: #120c00 !important;
+  border: 1px solid rgba(232, 185, 56, 0.6);
+  border-radius: 4px;
+  font-family: 'Space Grotesk', 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 0 24px rgba(212, 160, 23, 0.35);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.mwo-btn-launch-direct * {
+  color: #120c00 !important;
+}
+
+.mwo-btn-launch-direct:hover {
+  background: linear-gradient(135deg, #f0c54e 0%, #c99718 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 0 38px rgba(212, 160, 23, 0.55);
+}
+
+/* --------------------------------------------------------------------------
+   6. INTERACTIVE CLIENT-SIDE ENGINE MODAL
+   -------------------------------------------------------------------------- */
+.mwo-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(7, 7, 9, 0.96);
+  backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.mwo-modal-backdrop.is-hidden {
+  display: none !important;
+}
+
+.mwo-modal-card {
+  width: 100%;
+  max-width: 640px;
+  background: #16161a;
+  border: 1px solid #2a2a30;
+  border-radius: 8px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+  position: relative;
+}
+
+.mwo-modal-close {
+  position: absolute !important;
+  top: 16px !important;
+  right: 16px !important;
+  width: 36px !important;
+  height: 36px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid #2a2a30 !important;
+  border-radius: 4px !important;
+  color: #94a3b8 !important;
+  cursor: pointer !important;
+  padding: 0 !important;
+  outline: none !important;
+  transition: all 0.16s ease !important;
+  z-index: 10 !important;
+}
+
+.mwo-modal-close:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+  border-color: #3a3a42 !important;
+}
+
+.mwo-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.mwo-modal-logo {
+  width: 44px;
+  height: 44px;
+  background: #ffffff;
+  color: #000000;
+  transform: skewX(-12deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 900;
+  border-radius: 3px;
+}
+
+.mwo-modal-header-text {
+  text-align: left;
+}
+
+.mwo-modal-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.mwo-modal-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff;
+  text-transform: uppercase;
+  margin: 3px 0 0;
+}
+
+.mwo-modal-progress-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mwo-modal-progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  color: #94a3b8;
+}
+
+.mwo-modal-progress-labels strong {
+  color: #ffffff;
+}
+
+.mwo-modal-progress-track {
+  width: 100%;
+  height: 8px;
+  background: #25252b;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.mwo-modal-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #d4a017, #ffffff);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.mwo-modal-details {
+  background: #111114;
+  border: 1px solid #2a2a30;
+  border-radius: 4px;
+  padding: 14px 18px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  color: #9ca3af;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mwo-modal-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.mwo-modal-row strong {
+  color: #ffffff;
+}
+
+.mwo-modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 6px;
+}
+
+.mwo-btn-cancel {
+  padding: 10px 18px;
+  background: #111114;
+  border: 1px solid #2a2a30;
+  border-radius: 4px;
+  color: #cbd5e1;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.mwo-btn-cancel:hover {
+  background: #1e1e23;
+  color: #ffffff;
+}
+
+.mwo-btn-launch-modal {
+  padding: 10px 22px;
+  background: #d4a017;
+  color: #120c00 !important;
+  border: 1px solid rgba(232, 185, 56, 0.6);
+  border-radius: 4px;
+  font-family: 'Space Grotesk', 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  animation: mwoPulse 1.5s infinite;
+}
+
+.mwo-btn-launch-modal * {
+  color: #120c00 !important;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE DESIGN ADAPTATIONS
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .mwo-hero-core {
+    padding: 24px 16px;
+  }
+  
+  .mwo-hud-bar {
+    padding: 12px 16px;
+  }
+  
+  .mwo-cta-stack,
+  .mwo-utility-row {
+    max-width: 100%;
+  }
+  
+  .mwo-btn-play-online {
+    font-size: 16px;
+    padding: 14px 20px;
+  }
+}

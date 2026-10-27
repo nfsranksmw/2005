@@ -6,27 +6,45 @@
 function initUniversalGlitchSystem() {
   const targetSelectors = [
     '.nav-link', '.nav-link-glitch', '.navbar-item', '.dropdown-menu a', '.submenu-item', '.dropdown-glitch-item',
-    'button:not(.no-glitch)', '.btn:not(.no-glitch)', '.glitch-nfs-btn', '.showcase-card-btn',
+    'button:not(.no-glitch)', '.btn:not(.no-glitch)', '.glitch-nfs-btn',
     '.track-filter-pill', '.setup-pill', '.week-tab', '.group-tab',
     '.sidebar-category-item', '.sidebar-btn', '.filter-pill-btn',
-    '.champ-leaderboard-btn', '.stage-action-btn', 'button[data-open-route-lb]',
+    '.champ-leaderboard-btn', '.stage-action-btn',
+    '.stitch-video-btn', '.stitch-leaderboard-btn',
     '.btn-uiverse-create', '.btn-back-to-tracks', '.create-dropdown-item',
     '.btn-filter-group', '.btn-filter-group-routes', '.btn-leaderboard',
     '.past-bracket-btn', '.pagination-btn', '.standings-pagination-btn',
-    '.btn-export-standings', '.btn-submit-homologation',
-    // Catálogo oficial, leaderboard, video, semanas, standings, grupos & rivales, Hall of Fame
-    '.uiverse-baboon-btn', '.btn-video-glitch', '.btn-glitch-racing',
+    '.btn-export-standings',
+    // Catálogo oficial, semanas, standings, grupos & rivales, Hall of Fame
     '.champ-filter-group-btn', '.torneo-group-pill', '.glitch-pill-btn',
-    '.v7-dossier-btn-orange', '.v7-btn-export-csv', '.v7-btn-audit-wrs', '.v7-epoch-btn',
     '.tuning-filter-btn', '.member-filter-chip', '.theme-stage-btn', '.btn-map-control',
     'button[data-champ-week]', 'button[data-season-week]', 'button[data-season-id]', 'button[data-season-mode]',
     'button[data-season-subview]', 'button[data-standings-mode]', 'button[data-champ-group-tab]',
-    'button[data-select-champ-group]', 'button[data-lb-tab]', 'button[data-open-route-lb]',
+    'button[data-select-champ-group]', 'button[data-lb-tab]',
     'button[data-cockpit-filter]', 'button[data-torneo-tab]', 'button[data-hof-tab]', 'button[data-tel-type]',
     'button[data-select-pilot]', 'button[data-toggle-ch-done]', 'button[data-torneo-jump]',
     'button[data-routes-cat]', 'button[data-routes-district]', 'button[data-home-cat]',
-    'button[data-cockpit-select-rank]', 'a.btn-video-glitch', '.v7-roster-item'
+    'button[data-cockpit-select-rank]', '.v7-roster-item'
   ];
+
+  const whiteCtaSelectors = [
+    '.btn-nfs-white-cta',
+    '.btn-table-video',
+    '.v7-group-footer-btn',
+    '#view-download .btn-download-primary',
+    '#view-download .btn-download-radmin',
+    '#view-download .btn-download-fix',
+    '.nfsmwo-floating-cta'
+  ];
+
+  // Asegurar que los botones principales de las secciones web, tarjetas y tablas tengan el estilo blanco/negro "JUGAR EN LÍNEA"
+  document.querySelectorAll(whiteCtaSelectors.join(', ')).forEach(el => {
+    el.classList.remove('glitch-nfs-btn', 'btn-squid-orange');
+    el.classList.add('no-glitch');
+    if (!el.classList.contains('btn-nfs-white-cta')) {
+      el.classList.add('btn-nfs-white-cta');
+    }
+  });
 
   document.querySelectorAll(targetSelectors.join(', ')).forEach(el => {
     if (
@@ -34,6 +52,13 @@ function initUniversalGlitchSystem() {
       el.tagName === 'SELECT' ||
       el.tagName === 'TR' ||
       el.classList.contains('no-glitch') ||
+      el.classList.contains('btn-nfs-white-cta') ||
+      el.classList.contains('stitch-video-btn') ||
+      el.classList.contains('stitch-leaderboard-btn') ||
+      el.classList.contains('btn-table-video') ||
+      el.classList.contains('v7-group-footer-btn') ||
+      el.classList.contains('nfsmwo-floating-minimize') ||
+      el.classList.contains('nfsmwo-floating-pill') ||
       el.classList.contains('modal-close-btn') ||
       el.classList.contains('nfs-sub-modal-close') ||
       el.classList.contains('btn-mobile-drawer-close') ||
@@ -103,3 +128,21 @@ window.initUniversalGlitchSystem = initUniversalGlitchSystem;
 window.applyGlitchEffectToAllButtons = initUniversalGlitchSystem;
 window.initAllInteractiveButtons = initUniversalGlitchSystem;
 window.initGlitchDataText = initUniversalGlitchSystem;
+
+/**
+ * Alterna entre el estado expandido y minimizado de la publicidad flotante de web.nfsmwo.com en Home
+ */
+window.toggleNfsmwoPromo = function (event) {
+  if (event) event.stopPropagation();
+  const card = document.getElementById('nfsmwo-floating-card');
+  const pill = document.getElementById('nfsmwo-floating-pill');
+  if (!card || !pill) return;
+  const isMinimized = card.style.display === 'none';
+  if (isMinimized) {
+    card.style.display = 'flex';
+    pill.style.display = 'none';
+  } else {
+    card.style.display = 'none';
+    pill.style.display = 'inline-flex';
+  }
+};

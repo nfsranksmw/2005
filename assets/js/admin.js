@@ -854,7 +854,7 @@ async function approveSubmission(subKey) {
             }).catch(e => console.warn("Discord notify error:", e));
         }
 
-        showToast(`✓ ¡Récord homologado! Asignado puesto ${assignedRank} en ${finalRoute}. Publicado en Discord (ES / EN).`, "success");
+        showToast(`✓ ¡Récord homologado! Asignado puesto ${assignedRank} en ${finalRoute}. Publicado en Discord #verified-runs ✅ (1 pin EN/ES).`, "success");
     } catch (err) {
         console.error("Error homologando solicitud:", err);
         showToast(`Error al homologar: ${err.message}`, "error");
@@ -1053,7 +1053,7 @@ async function loadLeaderboardTab() {
             const videoLink = row.videoUrl || row.video || row.yt || '';
 
             const videoCellHtml = videoLink ? 
-                `<button type="button" class="admin-btn admin-btn-outline admin-btn-sm" onclick="openVideoPreview('${escapeHtml(videoLink)}')" title="Ver video de la carrera" style="padding: 4px 8px; font-size: 11px;">▶ Ver</button>` :
+                `<button type="button" class="admin-btn admin-btn-outline admin-btn-sm btn-nfs-white-cta" onclick="openVideoPreview('${escapeHtml(videoLink)}')" title="Ver video de la carrera" style="padding: 4px 10px; font-size: 11px;">▶ VIDEO</button>` :
                 `<span style="color: var(--text-muted); font-size: 11px;">--</span>`;
 
             html += `
@@ -1067,6 +1067,9 @@ async function loadLeaderboardTab() {
                     <td style="text-align: center;">${videoCellHtml}</td>
                     <td>
                         <div style="display: flex; gap: 6px; justify-content: center;">
+                            <button type="button" class="admin-btn admin-btn-outline admin-btn-sm" onclick="sendLeaderboardRowToDiscord(${idx})" title="Enviar anuncio de récord verificado a Discord #verified-runs ✅ (1 solo pin bilingüe EN/ES)" style="padding: 4px 8px; font-size: 11.5px; border-color: rgba(88, 101, 242, 0.5); color: #818cf8;">
+                                📢 Discord
+                            </button>
                             <button type="button" class="admin-btn admin-btn-outline admin-btn-sm" onclick="openEditLeaderboardModal(${idx})" title="Editar todos los parámetros de este tiempo" style="padding: 4px 8px; font-size: 11.5px;">
                                 ✏️ Editar
                             </button>
@@ -1214,9 +1217,53 @@ function openEditLeaderboardModal(rowIndex) {
     document.getElementById('modal-lb-video').value = rec.videoUrl || rec.video || rec.yt || '';
 
     const notifyDiscordCheck = document.getElementById('modal-lb-notify-discord');
-    if (notifyDiscordCheck) notifyDiscordCheck.checked = false;
+    if (notifyDiscordCheck) notifyDiscordCheck.checked = true;
 
     modal.style.display = 'flex';
+}
+
+/**
+ * Envía directamente desde la tabla de Leaderboards un récord aprobado a Discord #verified-runs ✅ (1 solo pin bilingüe EN/ES)
+ */
+async function sendLeaderboardRowToDiscord(rowIndex) {
+    if (!currentLbRecords || !currentLbRecords[rowIndex] || !currentLbRoute) {
+        showToast("Registro no encontrado", "error");
+        return;
+    }
+    if (!window.NFS_DISCORD_NOTIFIER) {
+        showToast("El conector de Discord no está disponible", "error");
+        return;
+    }
+
+    const rec = currentLbRecords[rowIndex];
+    const rankStr = rec.rank || `#${rowIndex + 1}`;
+    const catFormatted = (currentLbCategory || 'junkman').replace(/_/g, ' ').toUpperCase();
+    const videoUrl = rec.videoUrl || rec.video || rec.yt || '';
+
+    showToast(`📡 Enviando récord de ${rec.driver} a Discord #verified-runs ✅...`, "info");
+
+    const ok = await window.NFS_DISCORD_NOTIFIER.notifyApproval({
+        driver: rec.driver || 'Unknown',
+        route: currentLbRoute.name,
+        category: catFormatted,
+        categoryKey: currentLbCategory,
+        time: rec.time || '--:--.---',
+        car: rec.car || 'BMW M3 GTR',
+        rank: rankStr,
+        device: rec.device || 'Teclado',
+        gearbox: rec.gearbox || 'Manual',
+        date: rec.date || new Date().toISOString().split('T')[0],
+        videoUrl: videoUrl,
+        isUpdate: false,
+        actionType: 'verify',
+        moderator: currentUser ? (currentUser.displayName || currentUser.email) : 'Comisaría Oficial'
+    });
+
+    if (ok) {
+        showToast(`✓ Récord de ${rec.driver} (${rec.time}) publicado en Discord #verified-runs ✅ (1 pin EN/ES).`, "success");
+    } else {
+        showToast(`⚠️ No se pudo publicar en Discord. Verifica la conexión al Webhook.`, "error");
+    }
 }
 
 /**
@@ -1431,7 +1478,7 @@ async function saveLeaderboardEntry(event) {
         }
 
         closeLeaderboardEntryModal();
-        const discordToast = notifyDiscord ? " • Publicado en Discord (ES / EN)" : "";
+        const discordToast = notifyDiscord ? " • Publicado en Discord #verified-runs ✅ (1 pin EN/ES)" : "";
         showToast(`✓ Registro guardado. Puesto asignado: ${assignedRank} en ${routeVal}${discordToast}.`, "success");
 
         // Sincronizar vista si cambió de pista o categoría

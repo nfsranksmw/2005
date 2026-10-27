@@ -10,8 +10,9 @@
   const enTranslations = {
     // Navigation & Global Header
     "nav.home": "HOME",
+    "nav.nfsmwo_web": "NFSMWO WEB",
     "nav.leaderboards": "LEADERBOARDS",
-    "nav.routes": "ROUTES & CIRCUITS",
+    "nav.routes": "LEADERBOARD",
     "nav.challenges_tournament": "CHALLENGES & TOURNAMENT",
     "nav.weekly_challenges": "Weekly Challenges",
     "nav.blacklist_groups": "Blacklist Groups & Rivals",
@@ -245,8 +246,9 @@
   const esTranslations = {
     // Navigation & Global Header
     "nav.home": "INICIO",
+    "nav.nfsmwo_web": "NFSMWO WEB",
     "nav.leaderboards": "TABLAS DE CLASIFICACIÓN",
-    "nav.routes": "RUTAS & CIRCUITOS",
+    "nav.routes": "LEADERBOARD",
     "nav.challenges_tournament": "DESAFÍOS & TORNEO",
     "nav.weekly_challenges": "Desafíos Semanales",
     "nav.blacklist_groups": "Grupos y Rivales Blacklist",
@@ -484,7 +486,7 @@
     { en: "PRODUCED BY & POWERED BY", es: "PRODUCIDO Y PATROCINADO POR" },
     { en: "HOME", es: "INICIO" },
     { en: "LEADERBOARDS", es: "TABLAS DE CLASIFICACIÓN" },
-    { en: "ROUTES & CIRCUITS", es: "RUTAS & CIRCUITOS" },
+    { en: "LEADERBOARD", es: "LEADERBOARD" },
     { en: "CHALLENGES & TOURNAMENT", es: "DESAFÍOS & TORNEO" },
     { en: "Weekly Challenges", es: "Desafíos Semanales" },
     { en: "Blacklist Groups & Rivals", es: "Grupos y Rivales Blacklist" },
