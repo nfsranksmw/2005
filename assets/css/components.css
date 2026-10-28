@@ -3867,14 +3867,14 @@ html body :is(.btn-table-video):not(#_) {
    NFSMWO OFFICIAL TYPOGRAPHY SYSTEM (HERO & CLASSIFICATION BANNERS)
    ========================================================================== */
 
-/* 1. Home Hero Headline - Centered, Chunky, High-Impact Chivo 900 Italic */
+/* 1. Home Hero Headline - Centered, Chunky, High-Impact Chivo 900 Italic with Speed Motion Effect */
 .hero-title.nfs-graffiti-title-block {
   font-family: 'Chivo', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
   text-transform: uppercase !important;
   font-style: italic !important;
   line-height: 0.94 !important;
   letter-spacing: -0.03em !important;
-  margin: 0 auto 22px auto !important;
+  margin: 0 auto 16px auto !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
@@ -3886,27 +3886,69 @@ html body :is(.btn-table-video):not(#_) {
   user-select: none !important;
 }
 
+/* Line 1: NEED FOR SPEED (Mucho más grande, casi al tamaño de Most Wanted) */
 .hero-title.nfs-graffiti-title-block .nfs-title-prefix {
-  display: block !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: clamp(10px, 1.8vw, 18px) !important;
   font-family: 'Chivo', 'Montserrat', sans-serif !important;
-  font-size: clamp(26px, 4.2vw, 48px) !important;
+  font-size: clamp(30px, 7.4vw, 82px) !important;
   font-weight: 900 !important;
   font-style: italic !important;
-  letter-spacing: -0.03em !important;
-  color: #64748b !important;
-  -webkit-text-fill-color: #64748b !important;
-  -webkit-text-stroke: 0.6px #64748b !important;
-  text-shadow: 0 10px 25px rgba(0, 0, 0, 0.9) !important;
+  line-height: 0.98 !important;
+  letter-spacing: -0.025em !important;
   text-align: center !important;
-  margin: 0 auto 4px auto !important;
+  margin: 0 auto 6px auto !important;
 }
 
+/* NEED FOR in crisp light grey */
+.hero-title.nfs-graffiti-title-block .nfs-word-needfor {
+  color: #e2e8f0 !important;
+  -webkit-text-fill-color: #e2e8f0 !important;
+  -webkit-text-stroke: 0.5px #e2e8f0 !important;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.9) !important;
+}
+
+/* SPEED in light grey transitioning to light orange with aerodynamic speed motion blur & streak */
+.hero-title.nfs-graffiti-title-block .nfs-word-speed {
+  position: relative !important;
+  display: inline-block !important;
+  background: linear-gradient(92deg, #f8fafc 0%, #cbd5e1 22%, #ffc078 60%, #ff922b 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  letter-spacing: 0.03em !important;
+  transform: skewX(-4deg) !important;
+  filter:
+    drop-shadow(-3px 0 2px rgba(255, 192, 120, 0.65))
+    drop-shadow(-8px 0 6px rgba(255, 146, 43, 0.45))
+    drop-shadow(-16px 0 14px rgba(255, 146, 43, 0.25))
+    drop-shadow(0 0 24px rgba(255, 146, 43, 0.5)) !important;
+}
+
+/* Aerodynamic speed wind streak line behind SPEED */
+.hero-title.nfs-graffiti-title-block .nfs-word-speed::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: -28px !important;
+  right: -32px !important;
+  height: 2.5px !important;
+  background: linear-gradient(90deg, transparent, rgba(255, 209, 153, 0.6) 35%, rgba(255, 146, 43, 0.85) 70%, transparent 100%) !important;
+  filter: blur(0.5px) !important;
+  pointer-events: none !important;
+  z-index: -1 !important;
+}
+
+/* Line 2: MOST WANTED in brilliant white 3D */
 .hero-title.nfs-graffiti-title-block .nfs-title-main {
   display: block !important;
   font-family: 'Chivo', 'Montserrat', sans-serif !important;
-  font-size: clamp(52px, 8.8vw, 98px) !important;
+  font-size: clamp(36px, 8.6vw, 96px) !important;
   font-weight: 900 !important;
   font-style: italic !important;
+  line-height: 0.95 !important;
   letter-spacing: -0.02em !important;
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
@@ -3915,22 +3957,39 @@ html body :is(.btn-table-video):not(#_) {
     0 0 35px rgba(255, 255, 255, 0.4),
     0 10px 30px rgba(0, 0, 0, 0.9) !important;
   text-align: center !important;
-  margin: 0 auto 4px auto !important;
+  margin: 0 auto 6px auto !important;
 }
 
+/* Line 3: ROCKPORT WORLD RECORDS in light grey & light orange */
 .hero-title.nfs-graffiti-title-block .nfs-title-sub {
-  display: block !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
   font-family: 'Chivo', 'Montserrat', sans-serif !important;
-  font-size: clamp(20px, 3.4vw, 38px) !important;
+  font-size: clamp(15px, 3.4vw, 38px) !important;
   font-weight: 900 !important;
   font-style: italic !important;
-  letter-spacing: -0.02em !important;
-  color: #64748b !important;
-  -webkit-text-fill-color: #64748b !important;
-  -webkit-text-stroke: 0.5px #64748b !important;
-  text-shadow: 0 10px 25px rgba(0, 0, 0, 0.9) !important;
+  letter-spacing: -0.01em !important;
   text-align: center !important;
   margin: 0 auto !important;
+}
+
+/* ROCKPORT in light grey */
+.hero-title.nfs-graffiti-title-block .nfs-word-rockport {
+  color: #e2e8f0 !important;
+  -webkit-text-fill-color: #e2e8f0 !important;
+  -webkit-text-stroke: 0.5px #e2e8f0 !important;
+  text-shadow: 0 4px 14px rgba(0, 0, 0, 0.9) !important;
+}
+
+/* WORLD RECORDS in light orange with warm glow */
+.hero-title.nfs-graffiti-title-block .nfs-word-records {
+  background: linear-gradient(90deg, #f8fafc 0%, #cbd5e1 20%, #ffc078 60%, #ff922b 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  filter: drop-shadow(0 0 16px rgba(255, 146, 43, 0.5)) !important;
 }
 
 /* 2. Classification Table Banners (Circuito, Sprint, Drag & Routes Catalog) */
