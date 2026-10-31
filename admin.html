@@ -424,7 +424,7 @@
                         <p>Modifica los 5 Grupos de carrera y edita los 8 desafíos oficiales de cada semana con sus
                             ganadores: Ganador Oro 🥇, Ganador Silver 🥈 y Ganador Bronce 🥉.</p>
                     </div>
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
                         <button type="button" class="admin-btn admin-btn-primary" onclick="saveChampionshipAdmin()">
                             💾 Guardar Cambios en RTDB
                         </button>
@@ -437,6 +437,18 @@
                             title="Recargar">
                             🔄 Actualizar
                         </button>
+                        <!-- BOTÓN OFICIAL: CERRAR EVENTO / REABRIR EVENTO -->
+                        <button type="button" class="admin-btn" id="btn-toggle-close-championship"
+                            style="background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%); color: #ffffff; border: 1px solid #ef4444; font-weight: 800; box-shadow: 0 4px 14px rgba(185, 28, 28, 0.4);"
+                            onclick="toggleCloseChampionshipEvent()" title="Cerrar oficialmente el campeonato y consagrar al Campeón">
+                            <span id="btn-champ-close-icon">🔒</span> <span id="btn-champ-close-text">Cerrar Evento</span>
+                        </button>
+                        <!-- BADGE DE ESTADO DEL EVENTO -->
+                        <div id="champ-event-status-pill"
+                            style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 20px; font-family: var(--font-mono, monospace); font-size: 11px; font-weight: 800; background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.4); color: #4ade80;">
+                            <span id="champ-event-status-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 8px #4ade80;"></span>
+                            <span id="champ-event-status-label">EVENTO EN CURSO (Finaliza 01 Nov)</span>
+                        </div>
                     </div>
                 </div>
 

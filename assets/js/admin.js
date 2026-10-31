@@ -2686,6 +2686,9 @@ async function loadChampionshipAdmin() {
         cachedChampWeeksData = normalizeChampionshipWeeksData(JSON.parse(JSON.stringify(defaults)));
     }
 
+    // Cargar y sincronizar estado oficial de cierre del evento
+    await loadChampionshipEventStatusAdmin();
+
     // Renderizar de inmediato para que nunca quede la pantalla en blanco
     selectChampionshipAdminWeek(currentChampAdminWeek);
     await syncChampionshipWinnersInternal();
@@ -5837,7 +5840,241 @@ window.recalcAndPublishSeasonStandings = recalcAndPublishSeasonStandings;
 window.openAddSeasonPilotModal = openAddSeasonPilotModal;
 window.editSeasonPilot = editSeasonPilot;
 window.deleteSeasonPilot = deleteSeasonPilot;
+// ============================================================================
+// GESTIÓN DEL CIERRE OFICIAL DEL CAMPEONATO PLAYLIST 2026 (COMISARÍA POLICIAL)
+// ============================================================================
+let cachedChampionshipEventStatus = null;
+
+function isEventOfficiallyClosed(statusObj) {
+    if (statusObj && typeof statusObj.isClosed === 'boolean') {
+        return statusObj.isClosed;
+    }
+    // Cierre por fecha oficial: 1 de Noviembre 2026
+    const now = new Date();
+    const closingDate = new Date('2026-11-01T00:00:00Z');
+    return now >= closingDate;
+}
+
+async function loadChampionshipEventStatusAdmin() {
+    const btn = document.getElementById('btn-toggle-close-championship');
+    const iconSpan = document.getElementById('btn-champ-close-icon');
+    const textSpan = document.getElementById('btn-champ-close-text');
+    const pill = document.getElementById('champ-event-status-pill');
+    const dot = document.getElementById('champ-event-status-dot');
+    const label = document.getElementById('champ-event-status-label');
+
+    // 1. Cargar desde localStorage para feedback instantáneo (0ms)
+    try {
+        const local = localStorage.getItem('nfs_championship_event_status_v1');
+        if (local) {
+            cachedChampionshipEventStatus = JSON.parse(local);
+        }
+    } catch (e) {}
+
+    // 2. Cargar desde Firebase RTDB
+    try {
+        const remote = await rtdbGet('records/championship_event_status');
+        if (remote && typeof remote === 'object') {
+            cachedChampionshipEventStatus = remote;
+            try {
+                localStorage.setItem('nfs_championship_event_status_v1', JSON.stringify(remote));
+            } catch (eStore) {}
+        }
+    } catch (eRtdb) {}
+
+    const isClosed = isEventOfficiallyClosed(cachedChampionshipEventStatus);
+
+    if (isClosed) {
+        if (btn) {
+            btn.style.background = 'linear-gradient(135deg, #d97706 0%, #b45309 100%)';
+            btn.style.borderColor = '#f59e0b';
+            btn.style.boxShadow = '0 4px 14px rgba(217, 119, 6, 0.4)';
+        }
+        if (iconSpan) iconSpan.textContent = '🔓';
+        if (textSpan) textSpan.textContent = 'Reabrir Evento';
+        if (pill) {
+            pill.style.background = 'rgba(239, 68, 68, 0.2)';
+            pill.style.borderColor = 'rgba(239, 68, 68, 0.5)';
+            pill.style.color = '#fca5a5';
+        }
+        if (dot) {
+            dot.style.background = '#ef4444';
+            dot.style.boxShadow = '0 0 8px #ef4444';
+        }
+        if (label) label.textContent = '🏆 EVENTO CERRADO // CAMPEÓN CONSAGRADO';
+    } else {
+        if (btn) {
+            btn.style.background = 'linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%)';
+            btn.style.borderColor = '#ef4444';
+            btn.style.boxShadow = '0 4px 14px rgba(185, 28, 28, 0.4)';
+        }
+        if (iconSpan) iconSpan.textContent = '🔒';
+        if (textSpan) textSpan.textContent = 'Cerrar Evento';
+        if (pill) {
+            pill.style.background = 'rgba(34, 197, 94, 0.15)';
+            pill.style.borderColor = 'rgba(34, 197, 94, 0.4)';
+            pill.style.color = '#4ade80';
+        }
+        if (dot) {
+            dot.style.background = '#4ade80';
+            dot.style.boxShadow = '0 0 8px #4ade80';
+        }
+        if (label) label.textContent = 'EVENTO EN CURSO (Finaliza 01 Nov)';
+    }
+
+    return cachedChampionshipEventStatus;
+}
+
+async function toggleCloseChampionshipEvent() {
+    const isCurrentlyClosed = isEventOfficiallyClosed(cachedChampionshipEventStatus);
+
+    if (!isCurrentlyClosed) {
+        const confirmed = confirm(
+            "¿Confirmas el CIERRE OFICIAL del evento Playlist 2026?\n\n" +
+            "• Se cerrará el cuadro de clasificación general.\n" +
+            "• Se consagrará al Campeón del Evento, 2° y 3° lugar.\n" +
+            "• Se activará la ventana flotante emblemática con confeti y podio en la web pública."
+        );
+        if (!confirmed) return;
+
+        showToast("Cerrando el evento y consolidando al Campeón...", "info");
+
+        // 1. Sincronizar victorias y puntos
+        await syncChampionshipWinnersInternal();
+
+        // 2. Obtener lista ordenada de pilotos clasificados
+        let drivers = [];
+        try {
+            const raw = localStorage.getItem('nfs_blacklist_championship_2026_v6') || 
+                        localStorage.getItem('nfs_blacklist_championship_2026_v5') || 
+                        localStorage.getItem('nfs_blacklist_championship_2026_v4');
+            if (raw) drivers = JSON.parse(raw);
+        } catch (e) {}
+        if (!drivers || drivers.length === 0) {
+            drivers = getChampionshipDefaultDrivers();
+        }
+
+        const enrolledRanks = [1, 3, 4, 5, 6, 7, 8, 10, 14, 15];
+        const activeDrivers = drivers.filter(d => {
+            if (!d || d.eliminated || d.isEliminated || d.deleted) return false;
+            const nameStr = String(d.name || d.alias || '').trim().toLowerCase();
+            return enrolledRanks.includes(Number(d.rank)) || nameStr.includes('flow') || nameStr.includes('kayine');
+        });
+
+        // Ordenamiento oficial Rockport ($ REP > PTS > P1 > P2 > P3 > P4 > Rank)
+        activeDrivers.sort((a, b) => {
+            const rA = (typeof a._numericRep === 'number') ? a._numericRep : (parseInt(String(a.rep || '0').replace(/[^0-9]/g, ''), 10) || 0);
+            const rB = (typeof b._numericRep === 'number') ? b._numericRep : (parseInt(String(b.rep || '0').replace(/[^0-9]/g, ''), 10) || 0);
+            if (rB !== rA) return rB - rA;
+            const ptsA = a.totalPts || a.points || 0;
+            const ptsB = b.totalPts || b.points || 0;
+            if (ptsB !== ptsA) return ptsB - ptsA;
+            return Number(a.rank) - Number(b.rank);
+        });
+
+        const champ = activeDrivers[0] || { rank: 1, name: "SRTxAvenger™", alias: "Avenger", points: 2030, rep: "5.150.000", car: "Porsche Carrera GT" };
+        const runner = activeDrivers[1] || { rank: 15, name: "KAYINE", alias: "Kayine", points: 1980, rep: "4.920.000", car: "Lotus Elise" };
+        const third = activeDrivers[2] || { rank: 3, name: "Ronnie", alias: "Ronnie", points: 1850, rep: "4.650.000", car: "Aston Martin DB9" };
+
+        const newStatus = {
+            isClosed: true,
+            closedAt: new Date().toISOString(),
+            closedBy: "Admin Comisaría Rockport",
+            officialEndDate: "2026-11-01T00:00:00Z",
+            champion: {
+                rank: champ.rank,
+                name: champ.name,
+                alias: champ.alias || champ.name,
+                points: champ.totalPts || champ.points || 2030,
+                rep: champ.rep || "5.150.000",
+                car: champ.car || "Porsche Carrera GT"
+            },
+            runnerUp: {
+                rank: runner.rank,
+                name: runner.name,
+                alias: runner.alias || runner.name,
+                points: runner.totalPts || runner.points || 1980,
+                rep: runner.rep || "4.920.000",
+                car: runner.car || "Lotus Elise"
+            },
+            thirdPlace: {
+                rank: third.rank,
+                name: third.name,
+                alias: third.alias || third.name,
+                points: third.totalPts || third.points || 1850,
+                rep: third.rep || "4.650.000",
+                car: third.car || "Aston Martin DB9"
+            }
+        };
+
+        cachedChampionshipEventStatus = newStatus;
+
+        try {
+            localStorage.setItem('nfs_championship_event_status_v1', JSON.stringify(newStatus));
+        } catch (eStore) {}
+
+        try {
+            await rtdbPut('records/championship_event_status', newStatus);
+        } catch (eRtdb) {
+            console.warn("Aviso al guardar estado del evento en RTDB:", eRtdb);
+        }
+
+        try {
+            if (typeof BroadcastChannel !== 'undefined') {
+                const bc = new BroadcastChannel('nfs_championship_sync');
+                bc.postMessage({ type: 'CHAMPIONSHIP_EVENT_CLOSED', status: newStatus });
+                bc.close();
+            }
+        } catch (eBc) {}
+
+        await loadChampionshipEventStatusAdmin();
+        showToast("✓ ¡Evento CERRADO con éxito! El Campeón Playlist 2026 se refleja en la web.", "success");
+
+    } else {
+        const confirmed = confirm(
+            "¿Deseas REABRIR el evento del campeonato Playlist 2026?\n\n" +
+            "El cuadro volverá a estar en progreso y la web volverá al modo en curso."
+        );
+        if (!confirmed) return;
+
+        showToast("Reabriendo evento del campeonato...", "info");
+
+        const reopenedStatus = {
+            isClosed: false,
+            reopenedAt: new Date().toISOString(),
+            reopenedBy: "Admin Comisaría Rockport",
+            officialEndDate: "2026-11-01T00:00:00Z"
+        };
+
+        cachedChampionshipEventStatus = reopenedStatus;
+
+        try {
+            localStorage.setItem('nfs_championship_event_status_v1', JSON.stringify(reopenedStatus));
+        } catch (eStore) {}
+
+        try {
+            await rtdbPut('records/championship_event_status', reopenedStatus);
+        } catch (eRtdb) {
+            console.warn("Aviso al reabrir en RTDB:", eRtdb);
+        }
+
+        try {
+            if (typeof BroadcastChannel !== 'undefined') {
+                const bc = new BroadcastChannel('nfs_championship_sync');
+                bc.postMessage({ type: 'CHAMPIONSHIP_EVENT_REOPENED', status: reopenedStatus });
+                bc.close();
+            }
+        } catch (eBc) {}
+
+        await loadChampionshipEventStatusAdmin();
+        showToast("✓ ¡Evento REABIERTO! El cuadro está nuevamente en progreso.", "info");
+    }
+}
+
 window.loadChampionshipAdmin = loadChampionshipAdmin;
+window.toggleCloseChampionshipEvent = toggleCloseChampionshipEvent;
+window.loadChampionshipEventStatusAdmin = loadChampionshipEventStatusAdmin;
+window.isEventOfficiallyClosed = isEventOfficiallyClosed;
 window.selectChampionshipAdminWeek = selectChampionshipAdminWeek;
 window.renderChampionshipAdminGroups = renderChampionshipAdminGroups;
 window.renderChampionshipAdminChallenges = renderChampionshipAdminChallenges;

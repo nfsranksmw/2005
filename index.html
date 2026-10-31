@@ -767,39 +767,75 @@
       </div>
     </section>
 
-    <!-- FLOATING PROMO WIDGET IN HOME SECTION: PLAY ONLINE AT WEB.NFSMWO.COM -->
-    <aside class="nfsmwo-home-floating-promo" id="nfsmwo-home-floating-promo" aria-label="Jugar Need for Speed Most Wanted en Línea desde el Navegador">
-      <div class="nfsmwo-floating-card" id="nfsmwo-floating-card">
-        <button type="button" class="nfsmwo-floating-minimize" id="nfsmwo-floating-min-btn" onclick="toggleNfsmwoPromo(event)" title="Minimizar / Expandir anuncio" aria-label="Minimizar anuncio">
-          <span>—</span>
-        </button>
+    <!-- ========================================================================
+         NFSMWO FLOATING DRAWER WIDGET IN HOME (BARRA TIPO DISCORD // EXPANDIBLE)
+         ======================================================================== -->
+    <div class="nfsmwo-floating-wrapper" id="nfsmwo-floating-container" aria-label="Acceso Need for Speed Most Wanted Web">
+      <button type="button" class="nfsmwo-floating-trigger" id="nfsmwo-floating-btn" onclick="toggleNfsmwoFloatingDrawer(event)" aria-expanded="false" aria-controls="nfsmwo-floating-panel" title="Abrir Need for Speed Most Wanted Web">
+        <span class="nfsmwo-trigger-icon">
+          <span class="nfsmwo-pulse-dot"></span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+          </svg>
+        </span>
+        <span class="nfsmwo-trigger-label">NFSMWO Web &bull; Jugar y Votar</span>
+        <span class="nfsmwo-trigger-label-mobile">NFSMWO</span>
+        <span class="nfsmwo-trigger-arrow">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7 14l5-5 5 5z" />
+          </svg>
+        </span>
+      </button>
 
-        <div class="nfsmwo-floating-top">
-          <span class="nfsmwo-live-pill">
-            <span class="nfsmwo-live-dot"></span>
-            <span>BROWSER EDITION • PARTNER</span>
-          </span>
-          <span class="nfsmwo-domain-tag">web.nfsmwo.com</span>
+      <div class="nfsmwo-floating-panel" id="nfsmwo-floating-panel" role="dialog" aria-modal="true" aria-labelledby="nfsmwo-panel-title">
+        <div class="nfsmwo-floating-header">
+          <div class="nfsmwo-floating-badge">
+            <span class="nfsmwo-pulse-dot"></span>
+            <span>BROWSER EDITION &bull; PARTNER</span>
+          </div>
+          <button type="button" class="nfsmwo-floating-close" onclick="toggleNfsmwoFloatingDrawer(event, false)" title="Cerrar ventana">&times;</button>
         </div>
 
         <div class="nfsmwo-floating-body">
-          <div class="nfsmwo-floating-title">NEED FOR SPEED™ MOST WANTED WEB</div>
+          <div class="nfsmwo-floating-brand">
+            <div class="nfsmwo-floating-icon-box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+              </svg>
+            </div>
+            <div>
+              <h3 id="nfsmwo-panel-title" class="nfsmwo-floating-title">NEED FOR SPEED&trade; MOST WANTED WEB</h3>
+              <div class="nfsmwo-floating-domain">web.nfsmwo.com &bull; Online Edition</div>
+            </div>
+          </div>
+
           <p class="nfsmwo-floating-desc">
-            Apoya el proyecto comunitario y juega en línea directamente desde tu navegador sin descargas.
+            Apoya el proyecto comunitario oficial. Juega directamente desde tu navegador sin descargas o suma tu voto en línea para respaldar la comunidad.
           </p>
+
+          <div class="nfsmwo-floating-features">
+            <div class="nfsmwo-feat-item">
+              <span>🏎️</span>
+              <div>
+                <strong>Juego Directo en Web</strong>
+                <small>Sin instalaciones ni descargas pesadas</small>
+              </div>
+            </div>
+            <div class="nfsmwo-feat-item">
+              <span>⭐</span>
+              <div>
+                <strong>Vota por la Comunidad</strong>
+                <small>Ayuda a crecer el servidor oficial</small>
+              </div>
+            </div>
+          </div>
+
+          <a href="https://web.nfsmwo.com/" target="_blank" rel="noopener noreferrer" class="btn-nfs-white-cta nfsmwo-panel-cta" title="Votar y Jugar en Línea en web.nfsmwo.com">
+            <span>VOTAR EN LÍNEA &bull; JUGAR AHORA</span>
+          </a>
         </div>
-
-        <a href="https://web.nfsmwo.com/" target="_blank" rel="noopener noreferrer" class="btn-nfs-white-cta nfsmwo-play-btn">
-          <span>JUGAR EN LÍNEA</span>
-        </a>
       </div>
-
-      <!-- Minimized Pill State -->
-      <button type="button" class="nfsmwo-floating-pill" id="nfsmwo-floating-pill" onclick="toggleNfsmwoPromo(event)" style="display: none;" aria-label="Abrir acceso a Jugar en Línea">
-        <span class="nfsmwo-live-dot"></span>
-        <span>🎮 JUGAR EN LÍNEA (WEB.NFSMWO.COM)</span>
-      </button>
-    </aside>
+    </div>
 
     <!-- HOME CATALOG LAYOUT: LEFT SIDEBAR (OFFICIAL CARS ONLY) + BENTO LIVE FIREBASE + CARS GRID -->
     <div class="uiverse-catalog-layout" id="uiverse-catalog-anchor">
@@ -1741,6 +1777,11 @@
              SUBPAGE 1: TABLA GENERAL DE STANDINGS (TOP 15 BLACKLIST 2026)
              ================================================================== -->
         <div class="torneo-tab-panel is-active" id="torneo-panel-standings">
+          <!-- BANNER FLOTANTE EMBLEMÁTICO // GANADOR DEL EVENTO PLAYLIST 2026 CHAMPION -->
+          <div class="champ-celebration-hero-wrapper" id="champ-celebration-hero" style="display: none;" role="region" aria-label="Celebración del Campeón Playlist 2026">
+            <!-- Dynamic celebration showcase with confetti, crown & podium injected by app-cloner.js -->
+          </div>
+
           <!-- 4-Block Championship KPI Grid from V7 -->
           <div class="nfs-kpi-grid">
             <div class="nfs-kpi-card kpi-gold">

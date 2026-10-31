@@ -130,19 +130,51 @@ window.initAllInteractiveButtons = initUniversalGlitchSystem;
 window.initGlitchDataText = initUniversalGlitchSystem;
 
 /**
- * Alterna entre el estado expandido y minimizado de la publicidad flotante de web.nfsmwo.com en Home
+ * ============================================================================
+ * NFSMWO FLOATING DRAWER WIDGET (ESTILO DISCORD PILL // SESIÓN INICIO)
+ * ============================================================================
  */
-window.toggleNfsmwoPromo = function (event) {
-  if (event) event.stopPropagation();
-  const card = document.getElementById('nfsmwo-floating-card');
-  const pill = document.getElementById('nfsmwo-floating-pill');
-  if (!card || !pill) return;
-  const isMinimized = card.style.display === 'none';
-  if (isMinimized) {
-    card.style.display = 'flex';
-    pill.style.display = 'none';
-  } else {
-    card.style.display = 'none';
-    pill.style.display = 'inline-flex';
+function toggleNfsmwoFloatingDrawer(event, forceState) {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
   }
-};
+  const container = document.getElementById('nfsmwo-floating-container');
+  const trigger = document.getElementById('nfsmwo-floating-btn');
+  if (!container) return;
+
+  const isOpen = container.classList.contains('open');
+  const nextState = forceState !== undefined ? forceState : !isOpen;
+
+  if (nextState) {
+    container.classList.add('open');
+    if (trigger) trigger.setAttribute('aria-expanded', 'true');
+  } else {
+    container.classList.remove('open');
+    if (trigger) trigger.setAttribute('aria-expanded', 'false');
+  }
+}
+
+// Cierre al hacer click fuera del contenedor de NFSMWO
+document.addEventListener('click', function (e) {
+  const container = document.getElementById('nfsmwo-floating-container');
+  if (container && container.classList.contains('open')) {
+    if (!container.contains(e.target)) {
+      toggleNfsmwoFloatingDrawer(null, false);
+    }
+  }
+});
+
+// Cierre al presionar la tecla Escape
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') {
+    const container = document.getElementById('nfsmwo-floating-container');
+    if (container && container.classList.contains('open')) {
+      toggleNfsmwoFloatingDrawer(null, false);
+    }
+  }
+});
+
+// Exposición global
+window.toggleNfsmwoFloatingDrawer = toggleNfsmwoFloatingDrawer;
+window.toggleNfsmwoPromo = toggleNfsmwoFloatingDrawer;

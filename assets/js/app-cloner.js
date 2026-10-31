@@ -699,6 +699,12 @@ document.addEventListener("DOMContentLoaded", () => {
       if (typeof window.focusMapDistrict === "function") window.focusMapDistrict("all");
     }
 
+    // Control de visibilidad del drawer flotante de NFSMWO Web (solo visible en Home)
+    const nfsmwoContainer = document.getElementById("nfsmwo-floating-container");
+    if (nfsmwoContainer) {
+      nfsmwoContainer.style.display = (cleanId === "view-elements") ? "block" : "none";
+    }
+
     closeMobileDrawer();
     window.scrollTo({ top: 0, behavior: "smooth" });
 
@@ -2578,7 +2584,9 @@ document.addEventListener("DOMContentLoaded", () => {
     champGroupIdx: 0,
     cockpitFilter: "all",
     cockpitSearch: "",
-    activeCockpitRank: 1
+    activeCockpitRank: 1,
+    eventStatus: null,
+    champHeroMinimized: false
   };
   window.torneoState = torneoState;
 
@@ -3525,6 +3533,21 @@ document.addEventListener("DOMContentLoaded", () => {
       item.standingPos = idx + 1;
     });
 
+    // Renderizar Vitrina Emblemática del Campeón si el evento está cerrado
+    const isClosedEvent = isChampionshipOfficiallyClosed();
+    renderChampionCelebrationShowcase(displayList, isClosedEvent);
+
+    // Ajustar títulos y badges en los KPIs si el cuadro está cerrado definitivamente
+    const weekLabelEl = document.getElementById("bl-standings-week-label");
+    const kpiLeaderCard = document.querySelector("#torneo-panel-standings .kpi-gold .nfs-kpi-label");
+    if (isClosedEvent) {
+      if (weekLabelEl) weekLabelEl.textContent = "TEMPORADA 2026 FINALIZADA • CUADRO OFICIAL DEFINITIVO";
+      if (kpiLeaderCard) kpiLeaderCard.textContent = "👑 OFICIAL CHAMPION 2026";
+    } else {
+      if (weekLabelEl) weekLabelEl.textContent = "Semana 4 de 4 en Progreso • 8 Rutas";
+      if (kpiLeaderCard) kpiLeaderCard.textContent = "CURRENT LEADER (#1)";
+    }
+
     // Render Official Standings Table (Única vista oficial: 11 Columnas V7 Blacklist - Sin Vehículo y con $ REP alineado a la derecha)
     if (standingsTbody) {
       standingsTbody.innerHTML = displayList
@@ -4375,6 +4398,14 @@ document.addEventListener("DOMContentLoaded", () => {
         } else if (ev.data.type === "DRIVER_DELETED") {
           loadRemoteChampionshipWeeksData();
           loadRemoteChampionshipStandings();
+        } else if (ev.data.type === "CHAMPIONSHIP_EVENT_CLOSED" || ev.data.type === "CHAMPIONSHIP_EVENT_STATUS_UPDATED" || ev.data.type === "CHAMPIONSHIP_EVENT_REOPENED") {
+          if (ev.data.status) {
+            torneoState.eventStatus = ev.data.status;
+            try {
+              localStorage.setItem("nfs_championship_event_status_v1", JSON.stringify(ev.data.status));
+            } catch (eStore) {}
+          }
+          renderBlacklistUI();
         }
       };
     }
@@ -4399,12 +4430,223 @@ document.addEventListener("DOMContentLoaded", () => {
           const parsed = JSON.parse(ev.newValue);
           applyCustomSeasonsData(parsed);
           renderSeasonChallenges();
+        } else if (ev.key === "nfs_championship_event_status_v1") {
+          try {
+            torneoState.eventStatus = JSON.parse(ev.newValue);
+            renderBlacklistUI();
+          } catch (eParse) {}
         }
       } catch (err) {}
     });
   } catch (e) {}
 
-  async function loadRemoteChampionshipWeeksData() {
+  // --------------------------------------------------------------------------
+  // ESTADO OFICIAL DEL EVENTO & VERIFICACIÓN DE CIERRE DEL CAMPEONATO 2026
+  // --------------------------------------------------------------------------
+  function isChampionshipOfficiallyClosed() {
+    const s = torneoState.eventStatus;
+    if (s && typeof s.isClosed === "boolean") {
+      return s.isClosed;
+    }
+    // Cierre por fecha oficial: 1 de Noviembre 2026 00:00:00Z
+    const now = new Date();
+    const closingDate = new Date("2026-11-01T00:00:00Z");
+    return now >= closingDate;
+  }
+  window.isChampionshipOfficiallyClosed = isChampionshipOfficiallyClosed;
+
+  async function loadRemoteChampionshipEventStatus() {
+    // 1. Cargar desde localStorage para respuesta instantánea (0ms)
+    try {
+      const local = localStorage.getItem("nfs_championship_event_status_v1");
+      if (local) {
+        torneoState.eventStatus = JSON.parse(local);
+      }
+    } catch (e) {}
+
+    // 2. Cargar desde Firebase RTDB
+    try {
+      const url = `${FIREBASE_DB_BASE_URL}/records/championship_event_status.json?_t=${Date.now()}`;
+      const res = await fetch(url);
+      if (res.ok) {
+        const data = await res.json();
+        if (data && typeof data === "object") {
+          torneoState.eventStatus = data;
+          try {
+            localStorage.setItem("nfs_championship_event_status_v1", JSON.stringify(data));
+          } catch (eStore) {}
+        }
+      }
+    } catch (e) {}
+  }
+  window.loadRemoteChampionshipEventStatus = loadRemoteChampionshipEventStatus;
+
+  // Toggle para minimizar o expandir el banner de celebración del campeón
+  window.toggleChampHeroShowcase = function(minimize) {
+    torneoState.champHeroMinimized = (minimize !== undefined) ? minimize : !torneoState.champHeroMinimized;
+    renderBlacklistUI();
+  };
+
+  // Generador de Confeti festivo y adornitos para la vitrina emblemática
+  function generateChampConfettiHTML() {
+    const colors = ["#fbbf24", "#f59e0b", "#38bdf8", "#c084fc", "#ffffff", "#f97316", "#00ffa3", "#ef4444"];
+    let html = "";
+    for (let i = 0; i < 28; i++) {
+      const left = ((i * 3.6) + (Math.sin(i) * 2)).toFixed(1);
+      const color = colors[i % colors.length];
+      const duration = (2.6 + ((i % 5) * 0.6)).toFixed(1);
+      const delay = ((i % 7) * 0.4).toFixed(1);
+      const sizeW = (i % 3 === 0) ? 8 : (i % 3 === 1) ? 11 : 6;
+      const sizeH = (i % 2 === 0) ? 14 : 9;
+      const isCircle = (i % 4 === 0);
+      const radius = isCircle ? "50%" : "2px";
+      html += `<span class="champ-confetti-particle" style="left: ${left}%; background-color: ${color}; width: ${sizeW}px; height: ${sizeH}px; border-radius: ${radius}; animation-duration: ${duration}s; animation-delay: ${delay}s;"></span>`;
+    }
+    return html;
+  }
+
+  // Renderizador de la Vitrina Emblemática del Campeón con Confeti y Podio
+  function renderChampionCelebrationShowcase(displayList, isClosed) {
+    const heroEl = document.getElementById("champ-celebration-hero");
+    if (!heroEl) return;
+
+    if (!isClosed) {
+      heroEl.style.display = "none";
+      heroEl.innerHTML = "";
+      return;
+    }
+
+    if (!displayList || displayList.length === 0) {
+      heroEl.style.display = "none";
+      return;
+    }
+
+    const champItem = displayList[0];
+    const runnerItem = displayList[1] || null;
+    const thirdItem = displayList[2] || null;
+
+    const champDriver = champItem.driver;
+    const champPts = (champItem.totalPts || 0).toLocaleString("es-ES");
+    const champRepNum = (typeof champDriver._numericRep === "number") ? champDriver._numericRep : (parseInt(String(champDriver.rep || "0").replace(/[^0-9]/g, ""), 10) || 0);
+    const champRep = champRepNum.toLocaleString("es-ES");
+    const champCar = champDriver.car || "Porsche Carrera GT";
+    const champAvatar = getDriverAvatar(champDriver);
+    const rawAlias = String(champDriver.alias || champDriver.name || "").trim().replace(/^["']+|["']+$/g, '');
+    const champAlias = rawAlias || champDriver.name;
+    const cleanChampName = String(champDriver.name).replace(/™/g, "").trim();
+
+    // Si el usuario eligió minimizar la vitrina para inspeccionar tablas numéricas:
+    if (torneoState.champHeroMinimized) {
+      heroEl.innerHTML = `
+        <div class="champ-celebration-minimized-bar">
+          <div class="champ-minimized-title">
+            <span style="font-size: 20px;">👑</span>
+            <span>GANADOR DEL EVENTO: <strong>${escapeHtml(champDriver.name)}</strong> (${champPts} PTS &bull; $${champRep} REP) &bull; CUADRO OFICIAL FINALIZADO</span>
+          </div>
+          <button type="button" class="champ-minimized-expand-btn" onclick="toggleChampHeroShowcase(false)">
+            Ver Celebración Completa &darr;
+          </button>
+        </div>
+      `;
+      heroEl.style.display = "block";
+      return;
+    }
+
+    // Vitrina Emblemática Completa con Confeti, Corona, Laureles y Podio
+    heroEl.innerHTML = `
+      <div class="champ-confetti-canvas-container" aria-hidden="true">
+        ${generateChampConfettiHTML()}
+      </div>
+
+      <div class="champ-celebration-inner">
+        <!-- Top Banner Header -->
+        <div class="champ-celebration-top-bar">
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <div class="champ-badge-ribbon">
+              <span>👑</span>
+              <span>GANADOR DEL EVENTO PLAYLIST 2026 CHAMPION</span>
+              <span>👑</span>
+            </div>
+            <div class="champ-closed-status-tag">
+              <span>🏆</span>
+              <span>CUADRO OFICIAL FINALIZADO &bull; TEMPORADA CLAUSURADA</span>
+            </div>
+          </div>
+          <button type="button" class="champ-hero-toggle-btn" onclick="toggleChampHeroShowcase(true)" title="Ocultar vitrina para ver tablas">
+            Ocultar Vitrina ✕
+          </button>
+        </div>
+
+        <!-- Showcase Body: Campeón + Subcampeones -->
+        <div class="champ-showcase-grid">
+          <!-- Tarjeta del Campeón (#1) -->
+          <div class="champ-winner-card">
+            <div class="champ-avatar-container">
+              <span class="champ-crown-icon" title="Campeón Supremo 2026">👑</span>
+              <img src="${escapeHtml(champAvatar)}" alt="${escapeHtml(champDriver.name)}" class="champ-avatar-img" />
+              <span class="champ-rank-number-one" title="Primer Lugar Oficial">#1</span>
+            </div>
+
+            <div class="champ-winner-info">
+              <div class="champ-winner-headline">
+                <span>✨</span>
+                <span>CAMPEÓN OFICIAL ROCKPORT 2026</span>
+                <span>✨</span>
+              </div>
+              <h2 class="champ-winner-name">${escapeHtml(champDriver.name)}</h2>
+              <div class="champ-winner-meta">
+                BL #${champDriver.rank} &bull; "${escapeHtml(champAlias)}" &bull; Vehículo: ${escapeHtml(champCar)}
+              </div>
+
+              <div class="champ-winner-kpi-row">
+                <div class="champ-winner-kpi-item">
+                  <span class="champ-winner-kpi-label">Puntaje Oficial</span>
+                  <span class="champ-winner-kpi-val" style="color: #fbbf24;">${champPts} PTS</span>
+                </div>
+                <div class="champ-winner-kpi-item">
+                  <span class="champ-winner-kpi-label">Bolsa de Recompensa</span>
+                  <span class="champ-winner-kpi-val rep-gold">$${champRep} REP</span>
+                </div>
+                <div class="champ-winner-kpi-item">
+                  <span class="champ-winner-kpi-label">Victorias P1</span>
+                  <span class="champ-winner-kpi-val" style="color: #38bdf8;">${(champDriver.victories && champDriver.victories.p1) || 0} OROS</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Podio de Honor: Segundo y Tercer Lugar -->
+          <div class="champ-podium-runners-box">
+            ${runnerItem ? `
+              <div class="champ-runner-card silver">
+                <div class="champ-runner-medal" title="Subcampeón de Plata">🥈</div>
+                <div>
+                  <div class="champ-runner-rank-tag">SUBCAMPEÓN #2</div>
+                  <div class="champ-runner-name">${escapeHtml(runnerItem.driver.name)}</div>
+                  <div class="champ-runner-pts">${(runnerItem.totalPts || 0).toLocaleString("es-ES")} PTS &bull; $${(((typeof runnerItem.driver._numericRep === "number") ? runnerItem.driver._numericRep : (parseInt(String(runnerItem.driver.rep || "0").replace(/[^0-9]/g, ""), 10) || 0))).toLocaleString("es-ES")} REP</div>
+                </div>
+              </div>
+            ` : ''}
+
+            ${thirdItem ? `
+              <div class="champ-runner-card bronze">
+                <div class="champ-runner-medal" title="Tercer Lugar de Bronce">🥉</div>
+                <div>
+                  <div class="champ-runner-rank-tag">TERCER PUESTO #3</div>
+                  <div class="champ-runner-name">${escapeHtml(thirdItem.driver.name)}</div>
+                  <div class="champ-runner-pts">${(thirdItem.totalPts || 0).toLocaleString("es-ES")} PTS &bull; $${(((typeof thirdItem.driver._numericRep === "number") ? thirdItem.driver._numericRep : (parseInt(String(thirdItem.driver.rep || "0").replace(/[^0-9]/g, ""), 10) || 0))).toLocaleString("es-ES")} REP</div>
+                </div>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      </div>
+    `;
+
+    heroEl.style.display = "block";
+  }
+
+    async function loadRemoteChampionshipWeeksData() {
     try {
       localStorage.removeItem("nfs_championship_weeks_data_v3");
       const cached = localStorage.getItem("nfs_championship_weeks_data_v4");
@@ -4439,6 +4681,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     mergeRegisteredParticipantsWithBlacklist();
     await loadRemoteChampionshipStandings();
+    await loadRemoteChampionshipEventStatus();
     syncBlacklistWithRotationsAndStandings();
     renderBlacklistUI();
     renderChampionshipGroupsAndRoutes();
