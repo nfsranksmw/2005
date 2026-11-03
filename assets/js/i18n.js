@@ -20,9 +20,9 @@
     "nav.register": "Tournament Registration",
     "nav.tutorial": "Tournament Tutorial",
     "nav.past_tournaments": "Past Tournaments (Challonge)",
-    "nav.halloffame": "HALL OF FAME",
+    "nav.halloffame": "TOP RANKED",
     "nav.telemetry": "TELEMETRY",
-    "nav.telemetria_hof": "HALL OF FAME",
+    "nav.telemetria_hof": "TOP RANKED",
     "nav.community": "COMMUNITY",
     "nav.all_tracks": "All Tracks",
     "nav.circuits": "Circuits",
@@ -39,6 +39,7 @@
     "nav.discord": "DISCORD",
     "nav.discord_members": "Discord Members",
     "nav.telemetry_subtitle": "BLACK EDITION TELEMETRY",
+    "nav.blacklist_2026": "BLACKLIST 2026",
 
     // Section 1: Home (#view-home)
     "home.season_badge": "SEASON 2026",
@@ -53,7 +54,7 @@
     "home.blacklist_rivals": "BLACKLIST RIVALS",
     "home.tickrate_freq": "TICKRATE FREQUENCY",
     "home.btn_explorer_rankings": "EXPLORER RANKINGS",
-    "home.btn_hall_of_fame": "HALL OF FAME",
+    "home.btn_hall_of_fame": "TOP RANKED",
     "home.btn_discord_server": "DISCORD SERVER",
     "home.revival_badge": "SEASON 2026 // BLACKLIST 15 CHALLENGE",
     "home.revival_title": "RELIVE THE LEGEND OF THE 15 BLACKLIST DRIVERS. BECOME #1.",
@@ -187,13 +188,13 @@
     "dossier.filter_all": "ALL",
 
     // Section 12: Hall of Fame (#view-halloffame / #view-spotlight)
-    "halloffame.title": "ROCKPORT HALL OF FAME",
+    "halloffame.title": "ROCKPORT TOP RANKED",
     "halloffame.subtitle": "Honoring the fastest drivers, undefeated champions, and legacy record holders.",
     "hof.hud_drivers": "REGISTERED DRIVERS",
     "hof.hud_routes": "AUDITED ROUTES",
     "hof.hud_leader": "CURRENT GLOBAL LEADER",
     "hof.roll_of_honor": "OFFICIAL ROLL OF HONOR",
-    "hof.main_title": "ROCKPORT ALL-TIME LEADERBOARD",
+    "hof.main_title": "ROCKPORT ALL-TIME TOP RANKED",
     "hof.main_sub": "Consolidated all-time ranking of drivers with the highest number of World Records (WRs), podiums and overall score across all 86 Rockport routes.",
     "hof.tab_global": "👑 Top Global (86)",
     "hof.tab_circuits": "🏎️ Top Circuits (29)",
@@ -204,7 +205,7 @@
     "hof.filter_all_tiers": "All Tiers",
     "hof.btn_export": "EXPORT CSV",
     "hof.col_rank": "RANK",
-    "hof.col_driver": "DRIVER & CREW",
+    "hof.col_driver": "DRIVER",
     "hof.col_achievements": "ACHIEVEMENTS & PODIUMS",
     "hof.col_points": "FIA POINTS",
     "hof.col_best_pos": "BEST POSITION",
@@ -256,9 +257,9 @@
     "nav.register": "Inscripción al Torneo",
     "nav.tutorial": "Tutorial del Torneo",
     "nav.past_tournaments": "Torneos Pasados (Challonge)",
-    "nav.halloffame": "SALÓN DE LA FAMA",
+    "nav.halloffame": "TOP RANKED",
     "nav.telemetry": "TELEMETRÍA",
-    "nav.telemetria_hof": "SALÓN DE LA FAMA",
+    "nav.telemetria_hof": "TOP RANKED",
     "nav.community": "COMUNIDAD",
     "nav.all_tracks": "Todas las Pistas",
     "nav.circuits": "Circuitos",
@@ -275,6 +276,7 @@
     "nav.discord": "DISCORD",
     "nav.discord_members": "Miembros de Discord",
     "nav.telemetry_subtitle": "TELEMETRÍA BLACK EDITION",
+    "nav.blacklist_2026": "BLACKLIST 2026",
 
     // Section 1: Home (#view-home)
     "home.season_badge": "TEMPORADA 2026",
@@ -289,7 +291,7 @@
     "home.blacklist_rivals": "RIVALES BLACKLIST",
     "home.tickrate_freq": "FRECUENCIA TICKRATE",
     "home.btn_explorer_rankings": "CLASIFICACIONES DE EXPLORADORES",
-    "home.btn_hall_of_fame": "SALÓN DE LA FAMA",
+    "home.btn_hall_of_fame": "TOP RANKED",
     "home.btn_discord_server": "SERVIDOR DISCORD",
     "home.revival_badge": "TEMPORADA 2026 // RETO LISTA NEGRA 15",
     "home.revival_title": "REVIVE LA LEYENDA DE LOS 15 CORREDORES DE LA BLACKLIST. CONVIÉRTETE EN EL #1.",
@@ -423,13 +425,13 @@
     "dossier.filter_all": "TODOS",
 
     // Section 12: Hall of Fame (#view-halloffame / #view-spotlight)
-    "halloffame.title": "SALÓN DE LA FAMA DE ROCKPORT",
+    "halloffame.title": "TOP RANKED DE ROCKPORT",
     "halloffame.subtitle": "Homenaje a los pilotos más veloces, campeones invictos y plusmarquistas históricos.",
     "hof.hud_drivers": "PILOTOS REGISTRADOS",
     "hof.hud_routes": "RUTAS AUDITADAS",
     "hof.hud_leader": "LÍDER GLOBAL VIGENTE",
     "hof.roll_of_honor": "CUADRO DE HONOR OFICIAL",
-    "hof.main_title": "SALÓN DE LA FAMA DE ROCKPORT",
+    "hof.main_title": "ROCKPORT ALL-TIME TOP RANKED",
     "hof.main_sub": "Clasificación histórica consolidada de pilotos con mayor número de Récords Mundiales (WRs), podios y puntuación general en las 86 rutas de Rockport.",
     "hof.tab_global": "👑 Top Global (86)",
     "hof.tab_circuits": "🏎️ Top Circuito (29)",
@@ -440,7 +442,7 @@
     "hof.filter_all_tiers": "Todos los rangos",
     "hof.btn_export": "EXPORTAR CSV",
     "hof.col_rank": "RANGO",
-    "hof.col_driver": "PILOTO Y ESCUDERÍA",
+    "hof.col_driver": "PILOTO",
     "hof.col_achievements": "LOGROS Y PODIOS",
     "hof.col_points": "PUNTOS FIA",
     "hof.col_best_pos": "MEJOR PUESTO",
@@ -494,9 +496,9 @@
     { en: "Tournament Registration", es: "Inscripción al Torneo" },
     { en: "Tournament Tutorial", es: "Tutorial del Torneo" },
     { en: "Past Tournaments (Challonge)", es: "Torneos Pasados (Challonge)" },
-    { en: "HALL OF FAME", es: "SALÓN DE LA FAMA" },
+    { en: "TOP RANKED", es: "TOP RANKED" },
     { en: "TELEMETRY", es: "TELEMETRÍA" },
-    { en: "TELEMETRY & HALL OF FAME", es: "TELEMETRÍA & SALÓN DE LA FAMA" },
+    { en: "TELEMETRY & TOP RANKED", es: "TELEMETRÍA & TOP RANKED" },
     { en: "COMMUNITY", es: "COMUNIDAD" },
     { en: "Tuning Guides", es: "Guías de Tuning" },
     { en: "Official Rules", es: "Reglamento Oficial" },
@@ -681,7 +683,7 @@
     { en: "RIVAL STRENGTHS", es: "FORTALEZAS DEL RIVAL" },
 
     // Hall of Fame view texts
-    { en: "ROCKPORT HALL OF FAME", es: "SALÓN DE LA FAMA DE ROCKPORT" },
+    { en: "ROCKPORT TOP RANKED", es: "TOP RANKED DE ROCKPORT" },
     {
       en: "Honoring the fastest drivers, undefeated champions, and legacy record holders.",
       es: "Homenaje a los pilotos más veloces, campeones invictos y plusmarquistas históricos."
@@ -691,7 +693,7 @@
     { en: "AUDITED ROUTES", es: "RUTAS AUDITADAS" },
     { en: "CURRENT GLOBAL LEADER", es: "LÍDER GLOBAL VIGENTE" },
     { en: "OFFICIAL ROLL OF HONOR", es: "CUADRO DE HONOR OFICIAL" },
-    { en: "ROCKPORT ALL-TIME LEADERBOARD", es: "SALÓN DE LA FAMA DE ROCKPORT" },
+    { en: "ROCKPORT ALL-TIME TOP RANKED", es: "TOP RANKED HISTÓRICO DE ROCKPORT" },
     {
       en: "Consolidated all-time ranking of drivers with the highest number of World Records (WRs), podiums and overall score across all 86 Rockport routes.",
       es: "Clasificación histórica consolidada de pilotos con mayor número de Récords Mundiales (WRs), podios y puntuación general en las 86 rutas de Rockport."
@@ -757,8 +759,8 @@
     { en: "SEND RECORD FOR REVIEW", es: "ENVIAR REGISTRO A REVISIÓN" },
 
     // Additional Navigation & Shared UI
-    { en: "HALL OF FAME", es: "HALL DE LA FAMA" },
-    { en: "SALÓN DE LA FAMA", es: "HALL OF FAME" },
+    { en: "TOP RANKED", es: "TOP RANKED" },
+    { en: "TOP RANKED", es: "TOP RANKED" },
     { en: "Driver Dossiers (1 - 15)", es: "Dossiers de Pilotos (1 - 15)" },
 
     // Routes & Circuits Catalog

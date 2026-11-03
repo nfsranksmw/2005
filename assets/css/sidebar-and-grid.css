@@ -3207,11 +3207,13 @@ body.light-stages .element-stage {
 
 /* #4, #5, #6... in muted sans-serif matching image */
 .lb-rank-num {
-  font-family: var(--font-sans, 'Plus Jakarta Sans', sans-serif);
-  font-size: 14px;
-  font-weight: 600;
-  color: #71717a;
-  letter-spacing: -0.01em;
+  font-family: 'Orbitron', 'Chakra Petch', sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  color: #ffffff !important;
+  letter-spacing: 0.03em !important;
+  line-height: 1 !important;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.3) !important;
 }
 
 /* User / Pilot Cell matching reference image */
@@ -5696,18 +5698,27 @@ body.light-stages .element-stage {
   margin-bottom: 14px;
 }
 .v7-hof-title {
-  font-family: var(--font-heading);
-  font-size: 24px;
-  font-weight: 900;
-  color: #ffffff;
-  letter-spacing: 0.02em;
-  margin-top: 4px;
+  font-family: 'Chivo', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-size: clamp(30px, 4.2vw, 50px) !important;
+  font-weight: 900 !important;
+  font-style: italic !important;
+  text-transform: uppercase !important;
+  letter-spacing: -0.025em !important;
+  line-height: 1.04 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-text-stroke: 0.8px #ffffff !important;
+  text-shadow:
+    0 0 35px rgba(255, 255, 255, 0.4),
+    0 10px 30px rgba(0, 0, 0, 0.95) !important;
+  margin-top: 6px !important;
+  margin-bottom: 8px !important;
 }
 .v7-hof-sub {
-  font-size: 12px;
-  color: #94a3b8;
-  max-width: 620px;
-  line-height: 1.45;
+  font-size: 14px !important;
+  color: #94a3b8 !important;
+  max-width: 680px !important;
+  line-height: 1.5 !important;
 }
 .v7-hof-epoch-pills {
   display: inline-flex;
@@ -5772,37 +5783,59 @@ body.light-stages .element-stage {
   border-color: #ffb800;
   color: #ffb800;
 }
+/* OFFICIAL NFS CYBER RANK NUMBERS (Matches Reference Image Exactly) */
+.nfs-cyber-rank-num,
 .v7-hof-rank-pill {
-  width: 30px;
-  height: 30px;
-  border-radius: 6px;
+  width: auto !important;
+  height: auto !important;
+  padding: 0 4px !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 800;
+  font-family: 'Orbitron', 'Chakra Petch', sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.03em !important;
+  line-height: 1 !important;
+  user-select: none;
+  white-space: nowrap;
 }
+
+.nfs-cyber-rank-num.rank-1,
 .v7-hof-rank-1 {
-  background: #ffb800;
-  color: #0b0a12;
-  font-weight: 900;
-  box-shadow: 0 0 10px rgba(255, 184, 0, 0.4);
+  color: #ffcc22 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  text-shadow: 0 0 12px rgba(255, 204, 34, 0.5) !important;
 }
+
+.nfs-cyber-rank-num.rank-2,
 .v7-hof-rank-2 {
-  background: #cbd5e1;
-  color: #0f172a;
-  font-weight: 900;
+  color: #d4dae0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  text-shadow: 0 0 10px rgba(212, 218, 224, 0.4) !important;
 }
+
+.nfs-cyber-rank-num.rank-3,
 .v7-hof-rank-3 {
-  background: #d97706;
-  color: #fff;
-  font-weight: 900;
+  color: #e08a4a !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  text-shadow: 0 0 12px rgba(224, 138, 74, 0.5) !important;
 }
+
+.nfs-cyber-rank-num.rank-rest,
 .v7-hof-rank-rest {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #94a3b8;
+  color: #ffffff !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.3) !important;
 }
 .v7-device-tag {
   display: inline-flex;
@@ -5916,3 +5949,287 @@ tr:hover .esports-mirror-cash::after {
   text-transform: uppercase;
 }
 
+
+/* ==========================================================================
+   CHAMPIONSHIP STANDINGS // PREMIOS PRINCIPALES (CARTELES DE JUEGOS OFICIALES)
+   1.º Avenger - The Crew Motorfest
+   2.º Nebula - WRC Generations
+   3.º ZimanX - Mad Max
+   ========================================================================== */
+.champ-prizes-section {
+  background: linear-gradient(180deg, rgba(17, 15, 26, 0.85) 0%, rgba(9, 8, 14, 0.95) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  padding: 22px 24px 26px 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.champ-prizes-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #ffcc22, #38bdf8, transparent);
+  opacity: 0.6;
+}
+
+.champ-prizes-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.champ-prizes-title-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.champ-prizes-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Orbitron', 'Chakra Petch', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #ffcc22;
+  text-transform: uppercase;
+}
+
+.champ-prizes-heading {
+  font-family: var(--font-display, 'Chivo', sans-serif);
+  font-size: 20px;
+  font-weight: 900;
+  font-style: italic;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-transform: uppercase;
+}
+
+.champ-prizes-meta {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.champ-prizes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.champ-prize-card {
+  background: rgba(13, 12, 20, 0.75);
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+  backdrop-filter: blur(12px);
+}
+
+.champ-prize-card:hover {
+  transform: translateY(-5px);
+}
+
+.champ-prize-card.gold-tier {
+  border: 1.5px solid rgba(255, 204, 34, 0.6);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 24px rgba(255, 204, 34, 0.15);
+}
+.champ-prize-card.gold-tier:hover {
+  border-color: #ffcc22;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 32px rgba(255, 204, 34, 0.3);
+}
+
+.champ-prize-card.silver-tier {
+  border: 1.5px solid rgba(212, 218, 224, 0.5);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(212, 218, 224, 0.12);
+}
+.champ-prize-card.silver-tier:hover {
+  border-color: #d4dae0;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 28px rgba(212, 218, 224, 0.25);
+}
+
+.champ-prize-card.bronze-tier {
+  border: 1.5px solid rgba(224, 138, 74, 0.55);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(224, 138, 74, 0.15);
+}
+.champ-prize-card.bronze-tier:hover {
+  border-color: #e08a4a;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 28px rgba(224, 138, 74, 0.3);
+}
+
+.champ-prize-poster-wrap {
+  position: relative;
+  width: 100%;
+  height: 310px;
+  background: #050409;
+  overflow: hidden;
+}
+
+.champ-prize-poster-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.champ-prize-card:hover .champ-prize-poster-img {
+  transform: scale(1.04);
+}
+
+.champ-prize-poster-wrap::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 85px;
+  background: linear-gradient(0deg, rgba(13, 12, 20, 1) 0%, rgba(13, 12, 20, 0.6) 50%, transparent 100%);
+  pointer-events: none;
+}
+
+.champ-prize-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-family: 'Orbitron', 'Chakra Petch', sans-serif;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+}
+
+.gold-tier .champ-prize-badge {
+  background: rgba(255, 204, 34, 0.92);
+  color: #0b0a12;
+  border: 1px solid #ffe680;
+  box-shadow: 0 0 16px rgba(255, 204, 34, 0.5);
+}
+
+.silver-tier .champ-prize-badge {
+  background: rgba(226, 232, 240, 0.92);
+  color: #0b0a12;
+  border: 1px solid #ffffff;
+  box-shadow: 0 0 14px rgba(226, 232, 240, 0.4);
+}
+
+.bronze-tier .champ-prize-badge {
+  background: rgba(224, 138, 74, 0.92);
+  color: #ffffff;
+  border: 1px solid #ffaa66;
+  box-shadow: 0 0 14px rgba(224, 138, 74, 0.45);
+}
+
+.champ-prize-body {
+  padding: 16px 18px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  z-index: 1;
+}
+
+.champ-prize-game-title {
+  font-family: var(--font-display, 'Chivo', sans-serif);
+  font-size: 18px;
+  font-weight: 900;
+  font-style: italic;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.champ-prize-type-label {
+  font-family: var(--font-mono, monospace);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.gold-tier .champ-prize-type-label { color: #ffcc22; }
+.silver-tier .champ-prize-type-label { color: #cbd5e1; }
+.bronze-tier .champ-prize-type-label { color: #f97316; }
+
+.champ-prize-winner-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.champ-prize-winner-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.champ-prize-pilot-name {
+  font-family: var(--font-display, 'Chivo', sans-serif);
+  font-size: 16px;
+  font-weight: 900;
+  font-style: italic;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+
+.champ-prize-pilot-sub {
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  color: #94a3b8;
+}
+
+.champ-prize-rank-pill {
+  font-family: 'Orbitron', 'Chakra Petch', sans-serif;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+.gold-tier .champ-prize-rank-pill { color: #ffcc22; }
+.silver-tier .champ-prize-rank-pill { color: #d4dae0; }
+.bronze-tier .champ-prize-rank-pill { color: #e08a4a; }
+
+@media (max-width: 960px) {
+  .champ-prizes-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .champ-prize-poster-wrap {
+    height: 250px;
+  }
+}

@@ -485,6 +485,9 @@ async function prefetchGlobalLeaderboards() {
         if (typeof window.renderHallOfFameView === "function") {
           window.renderHallOfFameView();
         }
+        if (typeof window.renderBlacklistView === "function") {
+          window.renderBlacklistView();
+        }
         return data;
       }
     }
@@ -651,7 +654,363 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  function switchView(targetViewId, subTab) {
+  
+  // ==========================================================================
+  // CUSTOM URL ROUTER & DEEP LINKING (SPA Clean URLs for Rockport 2026)
+  // Supports nfsmwstranks.online/most-wanted-online, /leaderboard,
+  // /leaderboard-circuito, /top-ranked, /blacklist-2026, /telemetria,
+  // /challenger-torneo, /comunidades, etc.
+  // ==========================================================================
+  function getAppBasePath() {
+    if (typeof window === "undefined" || !window.location) return "";
+    const loc = window.location;
+    if (loc.hostname && loc.hostname.indexOf("github.io") !== -1) {
+      const parts = loc.pathname.split("/").filter(Boolean);
+      if (parts.length > 0) {
+        return "/" + parts[0];
+      }
+    }
+    return "";
+  }
+
+  function getCleanPathFromUrl() {
+    if (typeof window === "undefined" || !window.location) return "/";
+    const loc = window.location;
+
+    // Check if redirected from 404.html query string: ?/my-route
+    if (loc.search && loc.search.startsWith("?/")) {
+      const raw = loc.search.slice(2).split("&")[0];
+      return "/" + raw.replace(/^\/+/, "");
+    }
+
+    // Check sessionStorage from directory stubs
+    if (typeof sessionStorage !== "undefined") {
+      const stored = sessionStorage.getItem("nfs_initial_route");
+      if (stored) {
+        sessionStorage.removeItem("nfs_initial_route");
+        return stored;
+      }
+    }
+
+    // Check file: protocol hash
+    if (loc.protocol === "file:" && loc.hash) {
+      const h = loc.hash.replace(/^#\/?/, "");
+      if (h.startsWith("view-")) {
+        // legacy view hash, let resolveRoute map it
+        return "/" + h;
+      } else if (h) {
+        return "/" + h;
+      }
+    }
+
+    // Check standard hash
+    if (loc.hash && loc.hash.startsWith("#/")) {
+      return loc.hash.slice(1);
+    }
+
+    let p = loc.pathname || "/";
+    const base = getAppBasePath();
+    if (base && p.startsWith(base)) {
+      p = p.slice(base.length) || "/";
+    }
+    p = p.replace(/\/index\.html$/i, "") || "/";
+    if (!p.startsWith("/")) p = "/" + p;
+    if (p.length > 1 && p.endsWith("/")) p = p.slice(0, -1);
+    return p;
+  }
+
+  function resolveRoute(pathStr) {
+    const raw = (pathStr || "/").toLowerCase().trim();
+    const p = raw.replace(/\/+$/, "") || "/";
+
+    // 1. Home
+    if (p === "/" || p === "/home" || p === "/inicio" || p === "/view-elements") {
+      return { view: "view-elements", canonical: "/" };
+    }
+
+    // 2. NFS Most Wanted Ranks Online Web
+    if (
+      p === "/most-wanted-online" ||
+      p === "/most-wanted-ranks-online-web" ||
+      p === "/nfsmwo" ||
+      p === "/nfsmwo-web" ||
+      p === "/online" ||
+      p === "/view-nfsmwo"
+    ) {
+      return { view: "view-nfsmwo", canonical: "/most-wanted-online" };
+    }
+
+    // 3. Leaderboard & Categories
+    if (p === "/leaderboard-circuito" || p === "/circuito" || p === "/circuits") {
+      return { view: "view-challenges", cat: "Circuito", canonical: "/leaderboard-circuito" };
+    }
+    if (p === "/leaderboard-sprint" || p === "/sprint" || p === "/sprints") {
+      return { view: "view-challenges", cat: "Sprint", canonical: "/leaderboard-sprint" };
+    }
+    if (p === "/leaderboard-drag" || p === "/drag") {
+      return { view: "view-challenges", cat: "Drag", canonical: "/leaderboard-drag" };
+    }
+    if (p === "/leaderboard-downtown-rockport" || p === "/downtown-rockport") {
+      return { view: "view-challenges", district: "Downtown Rockport", canonical: "/leaderboard-downtown-rockport" };
+    }
+    if (p === "/leaderboard-camden-beach" || p === "/camden-beach") {
+      return { view: "view-challenges", district: "Camden Beach", canonical: "/leaderboard-camden-beach" };
+    }
+    if (p === "/leaderboard-rosewood" || p === "/rosewood") {
+      return { view: "view-challenges", district: "Rosewood", canonical: "/leaderboard-rosewood" };
+    }
+    if (p === "/leaderboard-rockport-turnpike" || p === "/rockport-turnpike") {
+      return { view: "view-challenges", district: "Rockport Turnpike", canonical: "/leaderboard-rockport-turnpike" };
+    }
+    if (
+      p === "/leaderboard" ||
+      p === "/leaderboards" ||
+      p === "/rutas" ||
+      p === "/tracks" ||
+      p === "/all-tracks" ||
+      p === "/view-challenges" ||
+      p === "/view-leaderboard"
+    ) {
+      return { view: "view-challenges", cat: "all", canonical: "/leaderboard" };
+    }
+
+    // 4. Top Ranked
+    if (
+      p === "/top-ranked" ||
+      p === "/top-ranks" ||
+      p === "/topranked" ||
+      p === "/salon-de-la-fama" ||
+      p === "/hall-of-fame" ||
+      p === "/view-spotlight"
+    ) {
+      return { view: "view-spotlight", canonical: "/top-ranked" };
+    }
+
+    // 5. Blacklist 2026 / Blacklist 96
+    if (
+      p === "/blacklist-2026" ||
+      p === "/blacklist-96" ||
+      p === "/blacklist" ||
+      p === "/blacklist2026" ||
+      p === "/blacklist-torneo" ||
+      p === "/view-blacklist"
+    ) {
+      return { view: "view-blacklist", canonical: "/blacklist-2026" };
+    }
+
+    // 6. Telemetría
+    if (
+      p === "/telemetria" ||
+      p === "/telemetry" ||
+      p === "/telemetry-dossier" ||
+      p === "/expediente-telemetria" ||
+      p === "/view-telemetry"
+    ) {
+      return { view: "view-telemetry", canonical: "/telemetria" };
+    }
+
+    // 7. Challenger Torneo & Subtabs
+    if (
+      p === "/challenger-torneo/weekly-challenges" ||
+      p === "/challenger-torneo-challenges" ||
+      p === "/weekly-challenges"
+    ) {
+      return { view: "view-blog", torneoTab: "seasons", canonical: "/challenger-torneo/weekly-challenges" };
+    }
+    if (
+      p === "/challenger-torneo/groups" ||
+      p === "/challenger-torneo-groups" ||
+      p === "/blacklist-groups" ||
+      p === "/groups"
+    ) {
+      return { view: "view-blog", torneoTab: "groups", canonical: "/challenger-torneo/groups" };
+    }
+    if (
+      p === "/challenger-torneo/standings" ||
+      p === "/championship-standings" ||
+      p === "/standings"
+    ) {
+      return { view: "view-blog", torneoTab: "standings", canonical: "/challenger-torneo" };
+    }
+    if (
+      p === "/challenger-torneo/register" ||
+      p === "/tournament-registration" ||
+      p === "/inscripcion"
+    ) {
+      return { view: "view-blog", torneoTab: "register", canonical: "/challenger-torneo/register" };
+    }
+    if (
+      p === "/challenger-torneo/tutorial" ||
+      p === "/tournament-tutorial" ||
+      p === "/tutorial"
+    ) {
+      return { view: "view-blog", torneoTab: "tutorial", canonical: "/challenger-torneo/tutorial" };
+    }
+    if (
+      p === "/challenger-torneo/past-tournaments" ||
+      p === "/past-tournaments"
+    ) {
+      return { view: "view-blog", torneoTab: "past-tournaments", canonical: "/challenger-torneo/past-tournaments" };
+    }
+    if (
+      p === "/challenger-torneo/rules" ||
+      p === "/reglamento-torneo" ||
+      p === "/torneo-rules"
+    ) {
+      return { view: "view-blog", torneoTab: "rules", canonical: "/challenger-torneo/rules" };
+    }
+    if (
+      p === "/challenger-torneo" ||
+      p === "/torneo" ||
+      p === "/challenges-tournament" ||
+      p === "/tournament" ||
+      p === "/view-blog"
+    ) {
+      return { view: "view-blog", torneoTab: "standings", canonical: "/challenger-torneo" };
+    }
+
+    // 8. Comunidades & Subpages
+    if (p === "/comunidades/guias" || p === "/guias" || p === "/guides" || p === "/view-guides") {
+      return { view: "view-guides", canonical: "/comunidades/guias" };
+    }
+    if (p === "/comunidades/homologacion" || p === "/homologacion" || p === "/submit" || p === "/records" || p === "/view-submit") {
+      return { view: "view-submit", canonical: "/comunidades/homologacion" };
+    }
+    if (p === "/comunidades/reglamento" || p === "/reglamento" || p === "/rules" || p === "/view-rules") {
+      return { view: "view-rules", canonical: "/comunidades/reglamento" };
+    }
+    if (p === "/comunidades/mapa" || p === "/mapa" || p === "/map" || p === "/view-map") {
+      return { view: "view-map", canonical: "/comunidades/mapa" };
+    }
+    if (p === "/comunidades/descargas" || p === "/descargas" || p === "/download" || p === "/downloads" || p === "/view-download") {
+      return { view: "view-download", canonical: "/comunidades/descargas" };
+    }
+    if (p === "/comunidades/pilotos" || p === "/pilotos" || p === "/members" || p === "/view-members") {
+      return { view: "view-members", canonical: "/comunidades/pilotos" };
+    }
+    if (
+      p === "/comunidades" ||
+      p === "/comunidades/tuning" ||
+      p === "/community" ||
+      p === "/comunidad" ||
+      p === "/tuning" ||
+      p === "/view-tuning"
+    ) {
+      return { view: "view-tuning", canonical: "/comunidades" };
+    }
+
+    return null;
+  }
+
+  function computeCanonicalRoute(viewId, subTab, options = {}) {
+    const cleanId = (viewId || "view-elements").startsWith("view-")
+      ? viewId
+      : `view-${viewId}`;
+
+    if (cleanId === "view-elements") return "/";
+    if (cleanId === "view-nfsmwo") return "/most-wanted-online";
+    if (cleanId === "view-challenges") {
+      const cat = options.cat || (typeof routesViewState !== "undefined" ? routesViewState.cat : "all");
+      const dist = options.district || (typeof routesViewState !== "undefined" ? routesViewState.district : "all");
+      if (cat === "Circuito") return "/leaderboard-circuito";
+      if (cat === "Sprint") return "/leaderboard-sprint";
+      if (cat === "Drag") return "/leaderboard-drag";
+      if (dist && dist !== "all") {
+        return "/leaderboard-" + dist.toLowerCase().replace(/\s+/g, "-");
+      }
+      return "/leaderboard";
+    }
+    if (cleanId === "view-spotlight") return "/top-ranked";
+    if (cleanId === "view-blacklist") return "/blacklist-2026";
+    if (cleanId === "view-telemetry") return "/telemetria";
+    if (cleanId === "view-blog") {
+      const tab = subTab || (typeof torneoState !== "undefined" ? torneoState.activeTab : "standings");
+      if (tab === "seasons") return "/challenger-torneo/weekly-challenges";
+      if (tab === "groups") return "/challenger-torneo/groups";
+      if (tab === "register") return "/challenger-torneo/register";
+      if (tab === "tutorial") return "/challenger-torneo/tutorial";
+      if (tab === "past-tournaments") return "/challenger-torneo/past-tournaments";
+      if (tab === "rules") return "/challenger-torneo/rules";
+      return "/challenger-torneo";
+    }
+    if (cleanId === "view-tuning") return "/comunidades";
+    if (cleanId === "view-guides") return "/comunidades/guias";
+    if (cleanId === "view-submit") return "/comunidades/homologacion";
+    if (cleanId === "view-rules") return "/comunidades/reglamento";
+    if (cleanId === "view-map") return "/comunidades/mapa";
+    if (cleanId === "view-download") return "/comunidades/descargas";
+    if (cleanId === "view-members") return "/comunidades/pilotos";
+    return "/";
+  }
+
+  function updateBrowserUrl(canonicalPath, replace = false) {
+    if (typeof window === "undefined" || !window.history) return;
+    try {
+      const loc = window.location;
+      if (loc.protocol === "file:") {
+        const fileHash = canonicalPath === "/" ? "" : "#" + canonicalPath;
+        if (replace) {
+          window.history.replaceState({ route: canonicalPath }, "", loc.pathname + fileHash);
+        } else if (loc.hash !== fileHash) {
+          window.history.pushState({ route: canonicalPath }, "", loc.pathname + fileHash);
+        }
+      } else {
+        const fullUrl = getAppBasePath() + canonicalPath;
+        if (loc.pathname !== fullUrl || loc.search.startsWith("?/")) {
+          if (replace) {
+            window.history.replaceState({ route: canonicalPath }, "", fullUrl);
+          } else {
+            window.history.pushState({ route: canonicalPath }, "", fullUrl);
+          }
+        }
+      }
+    } catch (err) {
+      console.warn("Router updateBrowserUrl error:", err);
+    }
+  }
+
+  function handleUrlRouting(isInitial = false) {
+    const rawPath = getCleanPathFromUrl();
+    const route = resolveRoute(rawPath);
+
+    if (route) {
+      if (route.cat) {
+        routesViewState.cat = route.cat;
+        routesViewState.district = "all";
+        document.querySelectorAll("[data-routes-cat]").forEach((b) => {
+          b.classList.toggle("is-active", b.dataset.routesCat === route.cat);
+        });
+        document.querySelectorAll("[data-routes-district]").forEach((b) => {
+          b.classList.toggle("is-active", b.dataset.routesDistrict === "all");
+        });
+        if (typeof updateRoutesBannerTitle === "function") {
+          updateRoutesBannerTitle(route.cat);
+        }
+        if (typeof renderRoutesCatalog === "function") {
+          renderRoutesCatalog();
+        }
+      } else if (route.district) {
+        routesViewState.district = route.district;
+        document.querySelectorAll("[data-routes-district]").forEach((b) => {
+          b.classList.toggle("is-active", b.dataset.routesDistrict === route.district);
+        });
+        if (typeof renderRoutesCatalog === "function") {
+          renderRoutesCatalog();
+        }
+      }
+
+      if (route.torneoTab) {
+        switchTorneoTab(route.torneoTab, { skipUrlSync: true });
+      }
+
+      switchView(route.view, route.torneoTab, { skipUrlSync: true });
+      updateBrowserUrl(route.canonical, true);
+      return true;
+    }
+    return false;
+  }
+
+  function switchView(targetViewId, subTab, options = {}) {
     if (!targetViewId) return;
     const cleanId = targetViewId.startsWith("view-") ? targetViewId : `view-${targetViewId}`;
     const allSections = document.querySelectorAll(".view-section");
@@ -667,7 +1026,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "view-map", "view-download", "view-members"
     ].includes(cleanId);
     const isTelemetriaHofView = [
-      "view-spotlight", "view-telemetry"
+      "view-spotlight", "view-telemetry", "view-blacklist"
     ].includes(cleanId);
 
     const navTarget = cleanId === "view-leaderboard" ? "view-challenges" : cleanId;
@@ -686,6 +1045,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (cleanId === "view-blog" && typeof switchTorneoTab === "function") {
       switchTorneoTab(subTab || torneoState.activeTab || "standings");
+    } else if (cleanId === "view-blacklist" && typeof window.renderBlacklistView === "function") {
+      window.renderBlacklistView();
     }
 
     // Community Sections Dynamic Inits
@@ -712,6 +1073,11 @@ document.addEventListener("DOMContentLoaded", () => {
       window.initAllInteractiveButtons();
     } else if (typeof window.applyGlitchEffectToAllButtons === "function") {
       window.applyGlitchEffectToAllButtons();
+    }
+
+    if (!options || options.skipUrlSync !== true) {
+      const targetPath = computeCanonicalRoute(cleanId, subTab, options);
+      updateBrowserUrl(targetPath, options && options.replaceUrl === true);
     }
   }
   window.switchView = switchView;
@@ -1365,7 +1731,7 @@ document.addEventListener("DOMContentLoaded", () => {
         b.classList.toggle("is-active", b.dataset.routesDistrict === "all");
       });
       updateRoutesBannerTitle(cat);
-      switchView("view-challenges");
+      switchView("view-challenges", null, { cat: cat });
       closeAllDropdowns();
       renderRoutesCatalog();
     });
@@ -1378,7 +1744,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll("[data-routes-district]").forEach((b) => {
         b.classList.toggle("is-active", b.dataset.routesDistrict === dist);
       });
-      switchView("view-challenges");
+      switchView("view-challenges", null, { district: dist });
       closeAllDropdowns();
       renderRoutesCatalog();
     });
@@ -1447,54 +1813,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function renderLeaderboardPositionBadge(rankNum) {
-    if (rankNum === 1) {
-      return `
-        <div class="lb-position-cell">
-          <span class="lb-trophy-badge lb-gold" title="1º Lugar - Campeón &amp; Récord Mundial">
-            <svg class="lb-trophy-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
-              <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
-              <path d="M4 22h16"></path>
-              <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
-              <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
-              <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
-            </svg>
-          </span>
-        </div>`;
-    }
-    if (rankNum === 2) {
-      return `
-        <div class="lb-position-cell">
-          <span class="lb-trophy-badge lb-silver" title="2º Lugar - Subcampeón">
-            <svg class="lb-trophy-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
-              <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
-              <path d="M4 22h16"></path>
-              <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
-              <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
-              <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
-            </svg>
-          </span>
-        </div>`;
-    }
-    if (rankNum === 3) {
-      return `
-        <div class="lb-position-cell">
-          <span class="lb-trophy-badge lb-bronze" title="3º Lugar - Podio">
-            <svg class="lb-trophy-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
-              <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
-              <path d="M4 22h16"></path>
-              <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
-              <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
-              <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
-            </svg>
-          </span>
-        </div>`;
-    }
+    const num = parseInt(rankNum, 10) || 1;
+    const colorClass = num === 1 ? "rank-1" : num === 2 ? "rank-2" : num === 3 ? "rank-3" : "rank-rest";
     return `
       <div class="lb-position-cell">
-        <span class="lb-rank-num">#${rankNum}</span>
+        <span class="nfs-cyber-rank-num ${colorClass}"># ${num}</span>
       </div>`;
   }
 
@@ -2023,7 +2346,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (discipline === "Circuito") headingEl.textContent = "TOP CIRCUITO • 29 PISTAS HOMOLOGADAS";
       else if (discipline === "Sprint") headingEl.textContent = "TOP SPRINT • 46 TRAZADOS PUNTO A PUNTO";
       else if (discipline === "Drag") headingEl.textContent = "TOP DRAG • 11 PISTAS DE ACELERACIÓN";
-      else headingEl.textContent = "ROCKPORT ALL-TIME GLOBAL LEADERBOARD";
+      else headingEl.textContent = "ROCKPORT ALL-TIME TOP RANKED";
     }
     if (subHeadingEl) {
       if (discipline === "Circuito") subHeadingEl.textContent = "Líderes de vuelta rápida y tiempos totales en los 29 circuitos cerrados de Rockport City validados a 128Hz.";
@@ -2120,7 +2443,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (list.length === 0) {
       hofTbody.innerHTML = `
         <tr>
-          <td colspan="8" style="text-align: center; padding: 40px; color: #94a3b8; font-family: var(--font-mono);">
+          <td colspan="7" style="text-align: center; padding: 40px; color: #94a3b8; font-family: var(--font-mono);">
             ${isEn ? "🏁 No registered drivers found for the selected filters." : "🏁 No se encontraron pilotos registrados para los filtros seleccionados."}
           </td>
         </tr>
@@ -2138,21 +2461,43 @@ document.addEventListener("DOMContentLoaded", () => {
           const puestoClass = d.bestPos === 1 ? "hof-puesto-p1" : d.bestPos === 2 ? "hof-puesto-p2" : d.bestPos === 3 ? "hof-puesto-p3" : d.bestPos === 4 ? "hof-puesto-p4" : d.bestPos === 5 ? "hof-puesto-p5" : "hof-puesto-rest";
           const puestoLabel = d.bestPos === 1 ? "P1 (WR)" : d.bestPos === 999 ? "--" : `P${d.bestPos}`;
 
-          // Medals or non-podium best-position pill (P1, P2, P3 Badges estilo Championship Standings)
+          // Medals or non-podium best-position boxes (Grandes y detallados // P1, P2, P3 Cards)
           let medalsHtml = "";
           if (d.wrs > 0 || d.silver > 0 || d.bronze > 0) {
             medalsHtml = `
-              <div class="hof-medals-wrap" style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
-                ${d.wrs > 0 ? `<span class="stitch-num v7-p1-gold-cell" style="display: inline-flex; align-items: center; justify-content: center; min-width: 34px; padding: 2px 7px; border-radius: 5px; background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%); color: #09090b; font-weight: 900; font-size: 11px; box-shadow: 0 0 10px rgba(245, 158, 11, 0.35); gap: 4px;" title="${d.wrs} ${isEn ? 'World Records (P1)' : 'Récords Mundiales (P1)'}"><span style="font-size: 8.5px; opacity: 0.85; font-weight: 800;">P1</span> ${d.wrs} WR</span>` : ''}
-                ${d.silver > 0 ? `<span class="stitch-num v7-p2-silver-cell" style="display: inline-flex; align-items: center; justify-content: center; min-width: 30px; padding: 2px 7px; border-radius: 5px; background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(148, 163, 184, 0.35); color: #e2e8f0; font-weight: 800; font-size: 11px; gap: 4px;" title="${d.silver} ${isEn ? 'Second Places (P2)' : 'Segundos Lugares (P2)'}"><span style="font-size: 8.5px; color: #94a3b8; font-weight: 800;">P2</span> ${d.silver}</span>` : ''}
-                ${d.bronze > 0 ? `<span class="stitch-num v7-p3-bronze-cell" style="display: inline-flex; align-items: center; justify-content: center; min-width: 30px; padding: 2px 7px; border-radius: 5px; background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(249, 115, 22, 0.35); color: #fb923c; font-weight: 800; font-size: 11px; gap: 4px;" title="${d.bronze} ${isEn ? 'Third Places (P3)' : 'Terceros Lugares (P3)'}"><span style="font-size: 8.5px; color: #f97316; font-weight: 800;">P3</span> ${d.bronze}</span>` : ''}
+              <div class="hof-podium-boxes-grid">
+                ${d.wrs > 0 ? `
+                  <div class="hof-podium-box p1-gold-box" title="${d.wrs} ${isEn ? 'World Records (P1)' : 'Récords Mundiales (P1)'}">
+                    <span class="hof-podium-box-tag">P1 WR</span>
+                    <span class="hof-podium-box-count">${d.wrs}</span>
+                    <span class="hof-podium-box-sub">RECORD</span>
+                  </div>
+                ` : ''}
+                ${d.silver > 0 ? `
+                  <div class="hof-podium-box p2-silver-box" title="${d.silver} ${isEn ? 'Second Places (P2)' : 'Segundos Lugares (P2)'}">
+                    <span class="hof-podium-box-tag">P2</span>
+                    <span class="hof-podium-box-count">${d.silver}</span>
+                    <span class="hof-podium-box-sub">SILVER</span>
+                  </div>
+                ` : ''}
+                ${d.bronze > 0 ? `
+                  <div class="hof-podium-box p3-bronze-box" title="${d.bronze} ${isEn ? 'Third Places (P3)' : 'Terceros Lugares (P3)'}">
+                    <span class="hof-podium-box-tag">P3</span>
+                    <span class="hof-podium-box-count">${d.bronze}</span>
+                    <span class="hof-podium-box-sub">BRONZE</span>
+                  </div>
+                ` : ''}
               </div>
             `;
           } else {
             medalsHtml = `
-              <span class="hof-best-pos-pill" title="${isEn ? 'Best historic position achieved: P' + bestPosVal : 'Mejor posición histórica lograda: P' + bestPosVal}">
-                ⭐ ${isEn ? 'BEST' : 'MEJOR'}: P${bestPosVal}
-              </span>
+              <div class="hof-podium-boxes-grid">
+                <div class="hof-podium-box p-best-box" title="${isEn ? 'Best historic position achieved: P' + bestPosVal : 'Mejor posición histórica lograda: P' + bestPosVal}">
+                  <span class="hof-podium-box-tag">${isEn ? 'BEST POS' : 'MEJOR'}</span>
+                  <span class="hof-podium-box-count">P${bestPosVal}</span>
+                  <span class="hof-podium-box-sub">TOP RECORD</span>
+                </div>
+              </div>
             `;
           }
 
@@ -2161,20 +2506,15 @@ document.addEventListener("DOMContentLoaded", () => {
           return `
             <tr data-open-pilot="${escapeHtml(d.name)}" style="cursor: pointer;" title="${isEn ? 'View Telemetry Dossier of' : 'Ver Expediente de Telemetría de'} ${escapeHtml(d.name)}">
               <td style="text-align: center;">
-                <span class="v7-hof-rank-pill ${rankClass}">#${String(rankNum).padStart(2, "0")}</span>
+                <span class="nfs-cyber-rank-num ${rankNum === 1 ? 'rank-1' : rankNum === 2 ? 'rank-2' : rankNum === 3 ? 'rank-3' : 'rank-rest'}"># ${rankNum}</span>
               </td>
               <td>
-                <div class="lb-user-cell">
-                  <div class="lb-avatar-box" style="background: ${getDriverAvatarBg(d.name)}; color: #ffffff;">
+                <div class="hof-driver-cell" style="display: flex; align-items: center; gap: 14px;">
+                  <div class="lb-avatar-box hof-avatar-lg" style="background: ${getDriverAvatarBg(d.name)}; color: #ffffff; width: 42px; height: 42px; border-radius: 10px; font-size: 15px; font-weight: 900; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25); flex-shrink: 0;">
                     ${escapeHtml(initials)}
                   </div>
-                  <div class="lb-user-info">
-                    <div class="nfs-driver-link lb-user-name" data-open-pilot="${escapeHtml(d.name)}" style="font-family: var(--font-heading); font-size: 14px; font-weight: 800; color: #ffffff;">${escapeHtml(d.name)}</div>
-                    <div style="font-family: var(--font-mono); font-size: 10px; color: #94a3b8; display: flex; align-items: center; gap: 4px;">
-                      <span>${escapeHtml(d.country)}</span>
-                      <span style="opacity: 0.4;">•</span>
-                      <span style="color: #cbd5e1;">${escapeHtml(d.team || "Rockport Racing")}</span>
-                    </div>
+                  <div class="nfs-driver-link hof-driver-name" data-open-pilot="${escapeHtml(d.name)}" style="font-family: var(--font-display, 'Chivo', sans-serif); font-size: 19px; font-weight: 900; font-style: italic; color: #ffffff; letter-spacing: -0.01em; line-height: 1.1; text-transform: uppercase; text-shadow: 0 2px 8px rgba(0,0,0,0.6);">
+                    ${escapeHtml(d.name)}
                   </div>
                 </div>
               </td>
@@ -2201,16 +2541,6 @@ document.addEventListener("DOMContentLoaded", () => {
               </td>
               <td>
                 <span class="v7-tier-pill tier-${d.tierKey}">${escapeHtml(d.tierLabel)}</span>
-              </td>
-              <td style="text-align: right;">
-                <div style="display: inline-flex; gap: 6px; justify-content: flex-end;">
-                  ${(() => {
-                    const firstVidRec = (d.records || []).find((r) => r.videoUrl && r.videoUrl !== "#" && String(r.videoUrl).startsWith("http"));
-                    const vidHref = firstVidRec ? firstVidRec.videoUrl : `https://www.youtube.com/results?search_query=${encodeURIComponent("NFS Most Wanted " + d.name + " WR")}`;
-                    return `<a href="${escapeHtml(vidHref)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="btn-nfs-white-cta btn-table-video no-glitch" style="padding: 5px 12px; font-size: 11px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;" title="Ver Video de ${escapeHtml(d.name)}"><span>VIDEO</span></a>`;
-                  })()}
-                  <button type="button" class="v7-btn-audit-wrs btn-nfs-white-cta" data-open-pilot="${escapeHtml(d.name)}" title="${isEn ? 'View Complete Telemetry Dossier' : 'Ver Expediente de Telemetría Completo'}">${isEn ? 'DOSSIER' : 'EXPEDIENTE'} &nearr;</button>
-                </div>
               </td>
             </tr>
           `;
@@ -2300,6 +2630,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (typeof window.renderHallOfFameView === "function") {
           window.renderHallOfFameView();
         }
+        if (typeof window.renderBlacklistView === "function") {
+          window.renderBlacklistView();
+        }
       }
     };
   } catch (err) {}
@@ -2315,6 +2648,9 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("languageChanged", () => {
     if (typeof renderHallOfFameView === "function") {
       renderHallOfFameView();
+    }
+    if (typeof renderBlacklistView === "function") {
+      renderBlacklistView();
     }
   });
 
@@ -2515,13 +2851,268 @@ document.addEventListener("DOMContentLoaded", () => {
   // Ctrl+K Shortcut to Search Pilots
   window.addEventListener("keydown", (e) => {
     if ((e.ctrlKey || e.metaKey) && (e.key === "k" || e.key === "K")) {
-      const s = document.getElementById("hof-driver-search");
+      const s = document.getElementById("hof-driver-search") || document.getElementById("blacklist-driver-search");
       if (s) {
         e.preventDefault();
         s.focus();
       }
     }
   });
+
+  // ==========================================================================
+  // BLACKLIST 2026 TORNEO ENGINE (#view-blacklist)
+  // TOP 8 PARTICIPANTS FROM CHAMPIONSHIP STANDINGS (EXCLUDING FLOW & KAJI)
+  // COLUMNS: RANK, PILOTO, P1 VICTORIAS, P2 SEGUNDO, P3 TERCERO, TOTAL POINTS, DINERO RECOMPENSA
+  // ==========================================================================
+  const blacklistState = {
+    search: ""
+  };
+
+  function renderBlacklistView() {
+    const tbody = document.getElementById("blacklist-main-tbody");
+    if (!tbody) return;
+
+    // Source: Official Blacklist Championship Drivers
+    const allDrivers = (typeof currentBlacklistDrivers !== "undefined" && Array.isArray(currentBlacklistDrivers) && currentBlacklistDrivers.length)
+      ? currentBlacklistDrivers
+      : (typeof DEFAULT_BLACKLIST_DRIVERS !== "undefined" ? DEFAULT_BLACKLIST_DRIVERS : []);
+
+    // Filter strictly to the 8 official tournament participants
+    // Exclude placeholders, eliminated, and explicitly exclude Flow (#14) and Kaji/Kayine (#15)
+    let participants = allDrivers.filter((d) => {
+      if (!d || d.eliminated || d.isEliminated || d.deleted || d.isPlaceholder) return false;
+      const nameStr = String(d.name || d.alias || "").trim().toLowerCase();
+      if (nameStr.startsWith("open") || nameStr.startsWith("plaza") || nameStr.startsWith("cpu_") || nameStr === "por disputar" || nameStr === "en espera") return false;
+      if (d.rank === 14 || d.rank === 15 || nameStr.includes("flow") || nameStr.includes("kayine") || nameStr.includes("kaji")) return false;
+
+      // The 8 official tournament participants: ranks 1, 3, 4, 5, 6, 7, 8, 10
+      const ENROLLED_TOP8_RANKS = [1, 3, 4, 5, 6, 7, 8, 10];
+      return ENROLLED_TOP8_RANKS.includes(Number(d.rank));
+    });
+
+    // Sort strictly by Official Championship General Classification:
+    // 1. Dinero de recompensa en Bolsa ($ REP)
+    // 2. Puntos Totales (PTS)
+    // 3. Victorias (P1)
+    // 4. Segundos Lugares (P2)
+    // 5. Terceros Lugares (P3)
+    // 6. Rango original de desempate
+    participants.sort((a, b) => {
+      const rA = (typeof a._numericRep === "number") ? a._numericRep : (parseInt(String(a.rep || "0").replace(/[^0-9]/g, ""), 10) || 0);
+      const rB = (typeof b._numericRep === "number") ? b._numericRep : (parseInt(String(b.rep || "0").replace(/[^0-9]/g, ""), 10) || 0);
+      if (rB !== rA) return rB - rA;
+
+      const ptsA = calculateDriverPoints(a);
+      const ptsB = calculateDriverPoints(b);
+      if (ptsB !== ptsA) return ptsB - ptsA;
+
+      const p1A = (a.victories && a.victories.p1) || 0;
+      const p1B = (b.victories && b.victories.p1) || 0;
+      if (p1B !== p1A) return p1B - p1A;
+
+      const p2A = (a.victories && a.victories.p2) || 0;
+      const p2B = (b.victories && b.victories.p2) || 0;
+      if (p2B !== p2A) return p2B - p2A;
+
+      const p3A = (a.victories && a.victories.p3) || 0;
+      const p3B = (b.victories && b.victories.p3) || 0;
+      if (p3B !== p3A) return p3B - p3A;
+
+      return Number(a.rank) - Number(b.rank);
+    });
+
+    // Search filter
+    let list = participants;
+    if (blacklistState.search) {
+      const q = blacklistState.search.toLowerCase();
+      list = list.filter(d => (d.name && d.name.toLowerCase().includes(q)) || (d.alias && d.alias.toLowerCase().includes(q)));
+    }
+
+    const isEn = (typeof window !== "undefined" && window.getCurrentLanguage ? window.getCurrentLanguage() : "es") === "en";
+
+    if (!list.length) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" style="text-align: center; padding: 48px; color: #94a3b8;">
+            <div style="font-size: 28px; margin-bottom: 8px;">🏁</div>
+            <div style="font-size: 15px; font-weight: 700; color: #f1f5f9;">${isEn ? 'No participating drivers match your search' : 'No se encontraron pilotos participantes con esa búsqueda'}</div>
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    const maxPts = Math.max(...participants.map((d) => calculateDriverPoints(d)), 1);
+
+    tbody.innerHTML = list.map((d) => {
+      const origPos = participants.indexOf(d) + 1;
+      const v = d.victories || { p1: 0, p2: 0, p3: 0, p4: 0 };
+      const totalPts = calculateDriverPoints(d);
+      const repNum = (typeof d._numericRep === "number") ? d._numericRep : (parseInt(String(d.rep || "0").replace(/[^0-9]/g, ""), 10) || 0);
+      const ptsBonus = d.pointsBonusCash || (Math.floor(totalPts / 1000) * 500000);
+
+      let rankClass = "rank-other";
+      let rankGlow = "";
+      if (origPos === 1) {
+        rankClass = "rank-1";
+        rankGlow = "box-shadow: 0 0 16px rgba(253, 224, 71, 0.45); border-color: #fde047; color: #fde047;";
+      } else if (origPos === 2) {
+        rankClass = "rank-2";
+        rankGlow = "box-shadow: 0 0 14px rgba(226, 232, 240, 0.35); border-color: #e2e8f0; color: #ffffff;";
+      } else if (origPos === 3) {
+        rankClass = "rank-3";
+        rankGlow = "box-shadow: 0 0 14px rgba(251, 146, 60, 0.35); border-color: #fb923c; color: #fb923c;";
+      }
+
+      const initials = (d.name || "UN").slice(0, 2).toUpperCase();
+      const ptsPct = Math.min(100, Math.max(8, Math.round((totalPts / maxPts) * 100)));
+      const avatarSrc = (typeof getDriverAvatar === "function") ? getDriverAvatar(d) : "";
+
+      return `
+        <tr data-open-pilot="${escapeHtml(d.name)}" style="cursor: pointer;" title="${isEn ? 'View Telemetry Dossier of' : 'Ver Expediente de Telemetría de'} ${escapeHtml(d.name)}">
+          <!-- 1. RANK -->
+          <td style="text-align: center;">
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+              <span class="nfs-cyber-rank-num ${origPos === 1 ? 'rank-1' : origPos === 2 ? 'rank-2' : origPos === 3 ? 'rank-3' : 'rank-rest'}"># ${origPos}</span>
+            </div>
+          </td>
+
+          <!-- 2. PILOTO (Solo avatar y nombre del piloto grande) -->
+          <td>
+            <div class="hof-driver-cell" style="display: flex; align-items: center; gap: 14px;">
+              ${avatarSrc ? `
+                <img src="${escapeHtml(avatarSrc)}" alt="${escapeHtml(d.name)}" style="width: 42px; height: 42px; border-radius: 10px; object-fit: cover; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 4px 12px rgba(0,0,0,0.5); flex-shrink: 0;" loading="lazy" />
+              ` : `
+                <div class="lb-avatar-box hof-avatar-lg" style="background: ${getDriverAvatarBg(d.name)}; color: #ffffff; width: 42px; height: 42px; border-radius: 10px; font-size: 15px; font-weight: 900; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25); flex-shrink: 0;">
+                  ${escapeHtml(initials)}
+                </div>
+              `}
+              <div class="nfs-driver-link hof-driver-name" data-open-pilot="${escapeHtml(d.name)}" style="font-family: var(--font-display, 'Chivo', sans-serif); font-size: 19px; font-weight: 900; font-style: italic; color: #ffffff; letter-spacing: -0.01em; line-height: 1.1; text-transform: uppercase; text-shadow: 0 2px 8px rgba(0,0,0,0.6);">
+                ${escapeHtml(d.name)}
+              </div>
+            </div>
+          </td>
+
+          <!-- 3. P1 VICTORIAS -->
+          <td style="text-align: center;">
+            <div class="hof-podium-box p1-gold-box" style="margin: 0 auto;" title="${v.p1 || 0} ${isEn ? 'First Places (P1)' : 'Victorias en Primer Lugar (P1)'}">
+              <span class="hof-podium-box-tag">P1</span>
+              <span class="hof-podium-box-count">${v.p1 || 0}</span>
+              <span class="hof-podium-box-sub">VICTORIAS</span>
+            </div>
+          </td>
+
+          <!-- 4. P2 SEGUNDO -->
+          <td style="text-align: center;">
+            <div class="hof-podium-box p2-silver-box" style="margin: 0 auto;" title="${v.p2 || 0} ${isEn ? 'Second Places (P2)' : 'Segundos Lugares (P2)'}">
+              <span class="hof-podium-box-tag">P2</span>
+              <span class="hof-podium-box-count">${v.p2 || 0}</span>
+              <span class="hof-podium-box-sub">SEGUNDO</span>
+            </div>
+          </td>
+
+          <!-- 5. P3 TERCERO -->
+          <td style="text-align: center;">
+            <div class="hof-podium-box p3-bronze-box" style="margin: 0 auto;" title="${v.p3 || 0} ${isEn ? 'Third Places (P3)' : 'Terceros Lugares (P3)'}">
+              <span class="hof-podium-box-tag">P3</span>
+              <span class="hof-podium-box-count">${v.p3 || 0}</span>
+              <span class="hof-podium-box-sub">BRONCE</span>
+            </div>
+          </td>
+
+          <!-- 6. TOTAL POINTS -->
+          <td style="text-align: right;">
+            <div class="hof-points-cell" style="display: flex; flex-direction: column; align-items: flex-end;">
+              <span style="font-family: var(--font-display, 'Chivo', sans-serif); font-size: 19px; font-weight: 900; font-style: italic; color: #fde047; text-shadow: 0 0 16px rgba(253, 224, 71, 0.4);">
+                ${totalPts.toLocaleString('es-ES')} <span style="font-size: 11px; font-weight: 800; color: #facc15;">PTS</span>
+              </span>
+              <div class="hof-points-bar-wrap" style="width: 120px; height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; margin-top: 4px; overflow: hidden;">
+                <div class="hof-points-bar-fill" style="width: ${ptsPct}%; height: 100%; background: linear-gradient(90deg, #f59e0b, #fde047); border-radius: 2px;"></div>
+              </div>
+            </div>
+          </td>
+
+          <!-- 7. DINERO DE RECOMPENSA -->
+          <td style="text-align: right;">
+            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px;">
+              <div style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.45); box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);">
+                <span style="font-size: 12px;">💰</span>
+                <span style="font-family: 'Chivo', 'Montserrat', var(--font-mono), monospace; font-size: 16px; font-weight: 900; font-style: italic; color: #00ffa3; letter-spacing: 0.02em;">
+                  $${repNum.toLocaleString('es-ES')} <span style="font-size: 10px; font-weight: 800; color: #34d399;">REP</span>
+                </span>
+              </div>
+              ${ptsBonus > 0 ? `
+                <span style="font-family: var(--font-mono); font-size: 9.5px; color: #38bdf8; font-weight: 800; margin-top: 1px;">
+                  +$${ptsBonus.toLocaleString('es-ES')} PTS
+                </span>
+              ` : ''}
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  window.renderBlacklistView = renderBlacklistView;
+
+  // Search Listener for Blacklist View
+  const blSearch = document.getElementById("blacklist-driver-search");
+  if (blSearch) {
+    blSearch.addEventListener("input", (e) => {
+      blacklistState.search = e.target.value.trim();
+      renderBlacklistView();
+    });
+  }
+
+  // Blacklist CSV Export (Top 8 Official Championship Participants)
+  const blExportBtn = document.getElementById("btn-blacklist-export-csv");
+  if (blExportBtn) {
+    blExportBtn.addEventListener("click", () => {
+      const allDrivers = (typeof currentBlacklistDrivers !== "undefined" && Array.isArray(currentBlacklistDrivers) && currentBlacklistDrivers.length)
+        ? currentBlacklistDrivers
+        : (typeof DEFAULT_BLACKLIST_DRIVERS !== "undefined" ? DEFAULT_BLACKLIST_DRIVERS : []);
+
+      const ENROLLED_TOP8_RANKS = [1, 3, 4, 5, 6, 7, 8, 10];
+      const participants = allDrivers.filter(d => ENROLLED_TOP8_RANKS.includes(Number(d.rank)));
+
+      participants.sort((a, b) => {
+        const rA = (typeof a._numericRep === "number") ? a._numericRep : (parseInt(String(a.rep || "0").replace(/[^0-9]/g, ""), 10) || 0);
+        const rB = (typeof b._numericRep === "number") ? b._numericRep : (parseInt(String(b.rep || "0").replace(/[^0-9]/g, ""), 10) || 0);
+        if (rB !== rA) return rB - rA;
+        const ptsA = calculateDriverPoints(a);
+        const ptsB = calculateDriverPoints(b);
+        if (ptsB !== ptsA) return ptsB - ptsA;
+        return (b.victories && b.victories.p1 || 0) - (a.victories && a.victories.p1 || 0);
+      });
+
+      const csvRows = [
+        ["Rank", "Piloto", "P1_Victorias", "P2_Segundo", "P3_Tercero", "Total_Puntos", "Dinero_Recompensa_REP", "Bonus_PTS_Cash"].join(",")
+      ];
+      participants.forEach((d, idx) => {
+        const v = d.victories || { p1: 0, p2: 0, p3: 0 };
+        const repNum = (typeof d._numericRep === "number") ? d._numericRep : (parseInt(String(d.rep || "0").replace(/[^0-9]/g, ""), 10) || 0);
+        const pts = calculateDriverPoints(d);
+        const bonus = d.pointsBonusCash || (Math.floor(pts / 1000) * 500000);
+        csvRows.push([
+          idx + 1,
+          `"${d.name}"`,
+          v.p1 || 0,
+          v.p2 || 0,
+          v.p3 || 0,
+          pts,
+          repNum,
+          bonus
+        ].join(","));
+      });
+      const blob = new Blob([csvRows.join("\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Blacklist_2026_Torneo_Top8_${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  }
 
   // ==========================================================================
   // 4.6 CHALLENGER Y TORNEOS (#view-blog): V7 FULL ENGINE + FIREBASE SYNC
@@ -3253,8 +3844,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  function switchTorneoTab(tabId) {
-    if (!tabId) tabId = "standings";
+  function switchTorneoTab(tabId, options = {}) {
+    if (!tabId || tabId === "dossiers") tabId = "standings";
     torneoState.activeTab = tabId;
 
     // Ensure view-blog is active without recursive clobbering
@@ -3342,6 +3933,11 @@ document.addEventListener("DOMContentLoaded", () => {
       window.initAllInteractiveButtons();
     } else if (typeof window.applyGlitchEffectToAllButtons === "function") {
       window.applyGlitchEffectToAllButtons();
+    }
+
+    if (!options || options.skipUrlSync !== true) {
+      const targetPath = computeCanonicalRoute("view-blog", tabId, options);
+      updateBrowserUrl(targetPath, options && options.replaceUrl === true);
     }
   }
 
@@ -3548,83 +4144,92 @@ document.addEventListener("DOMContentLoaded", () => {
       if (kpiLeaderCard) kpiLeaderCard.textContent = "CURRENT LEADER (#1)";
     }
 
-    // Render Official Standings Table (Única vista oficial: 11 Columnas V7 Blacklist - Sin Vehículo y con $ REP alineado a la derecha)
+    // Render Official Standings Table (Diseño idéntico a Blacklist 2026 Torneo: 7 Columnas Oficiales, sin logotipo y con 10 pilotos oficiales)
     if (standingsTbody) {
+      const maxPts = Math.max(...displayList.map(item => item.totalPts), 1);
+
       standingsTbody.innerHTML = displayList
-        .map(({ driver: d, standingPos, groupInfo, totalPts }) => {
-          const rankClass =
-            standingPos === 1 ? "rank-1" : standingPos === 2 ? "rank-2" : standingPos === 3 ? "rank-3" : "";
+        .map(({ driver: d, standingPos, totalPts }) => {
           const v = d.victories || { p1: 0, p2: 0, p3: 0, p4: 0 };
-          const bt = d.bestTimes || { first: 0, second: 0, third: 0 };
-          const bonusPts =
-            typeof d.bonusPts === "number"
-              ? d.bonusPts
-              : bt.first * 100 + bt.second * 50 + bt.third * 20;
           const cleanName = String(d.name).replace(/™/g, "").trim();
+          const repNum = (typeof d._numericRep === "number") ? d._numericRep : (parseInt(String(d.rep || "0").replace(/[^0-9]/g, ""), 10) || 0);
           const ptsBonus = d.pointsBonusCash || (Math.floor(totalPts / 1000) * 500000);
+          const ptsPct = Math.min(100, Math.max(8, Math.round((totalPts / maxPts) * 100)));
 
           return `
-            <tr data-standing-rank="${d.rank}">
+            <tr data-standing-rank="${d.rank}" data-open-pilot="${escapeHtml(cleanName)}" style="cursor: pointer;" title="Ver expediente de telemetría de ${escapeHtml(d.name)}">
+              <!-- 1. RANK -->
               <td style="text-align: center;">
-                <span class="nfs-rank-pill ${rankClass}">#${standingPos}</span>
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                  <span class="nfs-cyber-rank-num ${standingPos === 1 ? 'rank-1' : standingPos === 2 ? 'rank-2' : standingPos === 3 ? 'rank-3' : 'rank-rest'}"># ${standingPos}</span>
+                </div>
               </td>
+
+              <!-- 2. PILOTO (Sin logotipo, solo nombre en tipografía grande y Blacklist # abajo) -->
               <td>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                  <img src="${escapeHtml(getDriverAvatar(d))}" alt="${escapeHtml(d.name)}" style="width: 38px; height: 38px; border-radius: 8px; object-fit: cover; border: 1px solid rgba(255,255,255,0.15);" loading="lazy" />
-                  <div>
-                    <div class="nfs-driver-link" data-open-pilot="${escapeHtml(cleanName)}" style="font-size: 15px; font-weight: 800;">${escapeHtml(d.name)}</div>
-                    <div style="font-family: var(--font-mono); font-size: 10.5px; color: #ffae00;">
-                      BL #${d.rank} &bull; "${escapeHtml(d.alias)}"
-                    </div>
+                <div class="hof-driver-cell" style="display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 2px;">
+                  <div class="nfs-driver-link hof-driver-name" data-open-pilot="${escapeHtml(cleanName)}" style="font-family: var(--font-display, 'Chivo', sans-serif); font-size: 19px; font-weight: 900; font-style: italic; color: #ffffff; letter-spacing: -0.01em; line-height: 1.1; text-transform: uppercase; text-shadow: 0 2px 8px rgba(0,0,0,0.6);">
+                    ${escapeHtml(d.name)}
+                  </div>
+                  <div style="font-family: 'Orbitron', var(--font-mono), monospace; font-size: 11px; font-weight: 800; color: #ffae00; margin-top: 3px; letter-spacing: 0.05em; text-transform: uppercase;">
+                    BLACKLIST #${d.rank}
                   </div>
                 </div>
               </td>
+
+              <!-- 3. P1 (1ER LUGAR) -->
               <td style="text-align: center;">
-                <span class="nfs-type-pill type-circuito">${escapeHtml(groupInfo.label)}</span>
-              </td>
-              <td style="text-align: center;">
-                <span class="stitch-num" style="display: inline-flex; flex-direction: column; align-items: center; justify-content: center; min-width: 34px; padding: 3px 7px; border-radius: 5px; background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%); color: #09090b; font-weight: 900; font-size: 12px; box-shadow: 0 0 10px rgba(245, 158, 11, 0.35);">
-                  <span style="font-size: 8px; font-weight: 800; opacity: 0.85; line-height: 1;">P1</span>${v.p1}
-                </span>
-              </td>
-              <td style="text-align: center;">
-                <span class="stitch-num" style="display: inline-flex; flex-direction: column; align-items: center; justify-content: center; min-width: 34px; padding: 3px 7px; border-radius: 5px; background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(148, 163, 184, 0.35); color: #e2e8f0; font-weight: 800; font-size: 12px;">
-                  <span style="font-size: 8px; color: #94a3b8; line-height: 1;">P2</span>${v.p2}
-                </span>
-              </td>
-              <td style="text-align: center;">
-                <span class="stitch-num" style="display: inline-flex; flex-direction: column; align-items: center; justify-content: center; min-width: 34px; padding: 3px 7px; border-radius: 5px; background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(249, 115, 22, 0.35); color: #fb923c; font-weight: 800; font-size: 12px;">
-                  <span style="font-size: 8px; color: #94a3b8; line-height: 1;">P3</span>${v.p3}
-                </span>
-              </td>
-              <td style="text-align: center;">
-                <span class="stitch-num" style="display: inline-flex; flex-direction: column; align-items: center; justify-content: center; min-width: 34px; padding: 3px 7px; border-radius: 5px; background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(148, 163, 184, 0.2); color: #94a3b8; font-weight: 700; font-size: 12px;">
-                  <span style="font-size: 8px; color: #64748b; line-height: 1;">P4</span>${v.p4}
-                </span>
-              </td>
-              <td style="text-align: center;">
-                <span class="stitch-num" style="font-size: 12.5px; font-weight: 800; color: #38bdf8;">+${bonusPts} PTS</span>
-                <div class="stitch-num" style="font-size: 9.5px; color: var(--text-muted);">🥇${bt.first} 🥈${bt.second} 🥉${bt.third}</div>
-              </td>
-              <td style="text-align: right;">
-                <span class="stitch-num" style="font-size: 15px; font-weight: 900; color: #fde047;">${totalPts.toLocaleString("es-ES")} PTS</span>
-              </td>
-              <td style="text-align: right;">
-                <div class="esports-mirror-cash" title="Bolsa de Recompensa Rockport: Incluye +$500.000 por cada 1.000 PTS">
-                  <span class="esports-cash-label">REP CASH</span>
-                  <span class="esports-cash-val">$${escapeHtml(d.rep || "0")}</span>
-                  ${ptsBonus > 0 ? `<span style="font-size: 8.5px; color: #00ffa3; font-weight: 700; display: block; margin-top: 1px;">+$${ptsBonus.toLocaleString('es-ES')} PTS</span>` : ''}
+                <div class="hof-podium-box p1-gold-box" style="margin: 0 auto;" title="${v.p1 || 0} Victorias en Primer Lugar (P1)">
+                  <span class="hof-podium-box-tag">P1</span>
+                  <span class="hof-podium-box-count">${v.p1 || 0}</span>
+                  <span class="hof-podium-box-sub">VICTORIAS</span>
                 </div>
               </td>
+
+              <!-- 4. P2 (2DO LUGAR) -->
+              <td style="text-align: center;">
+                <div class="hof-podium-box p2-silver-box" style="margin: 0 auto;" title="${v.p2 || 0} Segundos Lugares (P2)">
+                  <span class="hof-podium-box-tag">P2</span>
+                  <span class="hof-podium-box-count">${v.p2 || 0}</span>
+                  <span class="hof-podium-box-sub">SEGUNDO</span>
+                </div>
+              </td>
+
+              <!-- 5. P3 (3ER LUGAR) -->
+              <td style="text-align: center;">
+                <div class="hof-podium-box p3-bronze-box" style="margin: 0 auto;" title="${v.p3 || 0} Terceros Lugares (P3)">
+                  <span class="hof-podium-box-tag">P3</span>
+                  <span class="hof-podium-box-count">${v.p3 || 0}</span>
+                  <span class="hof-podium-box-sub">BRONCE</span>
+                </div>
+              </td>
+
+              <!-- 6. TOTAL POINTS -->
               <td style="text-align: right;">
-                <div style="display: flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap;">
-                  ${
-                    d.youtube
-                      ? `<a href="${escapeHtml(d.youtube)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="btn-nfs-white-cta btn-table-video no-glitch" style="padding: 5px 12px; font-size: 11px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;" title="Ver Canal / Video Oficial"><span>VIDEO</span></a>`
-                      : ""
-                  }
-                  <button type="button" class="uiverse-baboon-btn stage-action-btn btn-sm btn-nfs-white-cta" data-text="Ficha" data-open-dossier-rank="${d.rank}" title="Abrir Ficha Técnica Cockpit"><span class="text">Ficha</span></button>
-                  <button type="button" class="uiverse-baboon-btn stage-action-btn btn-sm btn-nfs-white-cta" data-text="Records →" data-open-pilot="${escapeHtml(cleanName)}" title="Ver Telemetría del Piloto"><span class="text">Records &rarr;</span></button>
+                <div class="hof-points-cell" style="display: flex; flex-direction: column; align-items: flex-end;">
+                  <span style="font-family: var(--font-display, 'Chivo', sans-serif); font-size: 19px; font-weight: 900; font-style: italic; color: #fde047; text-shadow: 0 0 16px rgba(253, 224, 71, 0.4);">
+                    ${totalPts.toLocaleString('es-ES')} <span style="font-size: 11px; font-weight: 800; color: #facc15;">PTS</span>
+                  </span>
+                  <div class="hof-points-bar-wrap" style="width: 120px; height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; margin-top: 4px; overflow: hidden;">
+                    <div class="hof-points-bar-fill" style="width: ${ptsPct}%; height: 100%; background: linear-gradient(90deg, #f59e0b, #fde047); border-radius: 2px;"></div>
+                  </div>
+                </div>
+              </td>
+
+              <!-- 7. DINERO RECOMPENSA -->
+              <td style="text-align: right;">
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px;">
+                  <div style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.45); box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);">
+                    <span style="font-size: 12px;">💰</span>
+                    <span style="font-family: 'Chivo', 'Montserrat', var(--font-mono), monospace; font-size: 16px; font-weight: 900; font-style: italic; color: #00ffa3; letter-spacing: 0.02em;">
+                      $${repNum.toLocaleString('es-ES')} <span style="font-size: 10px; font-weight: 800; color: #34d399;">REP</span>
+                    </span>
+                  </div>
+                  ${ptsBonus > 0 ? `
+                    <span style="font-family: var(--font-mono); font-size: 9.5px; color: #38bdf8; font-weight: 800; margin-top: 1px;">
+                      +$${ptsBonus.toLocaleString('es-ES')} PTS
+                    </span>
+                  ` : ''}
                 </div>
               </td>
             </tr>
@@ -4521,9 +5126,9 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const champItem = displayList[0];
-    const runnerItem = displayList[1] || null;
-    const thirdItem = displayList[2] || null;
+    const champItem = displayList.find(x => String(x.driver.name || "").toLowerCase().includes("avenger")) || displayList[0];
+    const runnerItem = displayList.find(x => String(x.driver.name || "").toLowerCase().includes("nebula")) || displayList[1] || null;
+    const thirdItem = displayList.find(x => String(x.driver.name || "").toLowerCase().includes("lea4speed0")) || displayList.find(x => String(x.driver.name || "").toLowerCase().includes("zimanx")) || displayList[2] || null;
 
     const champDriver = champItem.driver;
     const champPts = (champItem.totalPts || 0).toLocaleString("es-ES");
@@ -5712,40 +6317,38 @@ document.addEventListener("DOMContentLoaded", () => {
   // Prefetch all 86 track leaderboards from Firebase RTDB in the background, then refresh Hall of Fame & Telemetry
   prefetchGlobalLeaderboards().then(() => {
     renderHallOfFameView();
+    renderBlacklistView();
     renderTelemetryDossierView(telemetryState.pilotName);
   });
 
-  // Handle direct hash navigation on initial page load (e.g., #view-blog, #view-challenges)
-  if (window.location.hash) {
-    const rawHash = window.location.hash.replace("#", "").trim();
-    if (rawHash) {
-      const parts = rawHash.split("?");
-      const targetView = parts[0];
-      const params = new URLSearchParams(parts[1] || "");
-      const tabParam = params.get("tab") || "";
-      if (document.getElementById(targetView) && typeof switchView === "function") {
-        switchView(targetView, tabParam);
+  // Listen to browser Back and Forward navigation buttons
+  window.addEventListener("popstate", () => {
+    handleUrlRouting(false);
+  });
+
+  // Handle direct custom route navigation on initial page load
+  const handled = handleUrlRouting(true);
+  if (!handled) {
+    // Fallback search params if present
+    const searchParams = new URLSearchParams(window.location.search);
+    const qView = searchParams.get("view");
+    const qTab = searchParams.get("tab");
+    const qCat = searchParams.get("cat");
+    if (qCat && (qCat === "Circuito" || qCat === "Sprint" || qCat === "Drag")) {
+      routesViewState.cat = qCat;
+      document.querySelectorAll("[data-routes-cat]").forEach((b) => {
+        b.classList.toggle("is-active", b.dataset.routesCat === qCat);
+      });
+      if (typeof updateRoutesBannerTitle === "function") {
+        updateRoutesBannerTitle(qCat);
+      }
+      if (typeof renderRoutesCatalog === "function") {
+        renderRoutesCatalog();
       }
     }
-  }
-  const searchParams = new URLSearchParams(window.location.search);
-  const qView = searchParams.get("view");
-  const qTab = searchParams.get("tab");
-  const qCat = searchParams.get("cat");
-  if (qCat && (qCat === "Circuito" || qCat === "Sprint" || qCat === "Drag")) {
-    routesViewState.cat = qCat;
-    document.querySelectorAll("[data-routes-cat]").forEach((b) => {
-      b.classList.toggle("is-active", b.dataset.routesCat === qCat);
-    });
-    if (typeof updateRoutesBannerTitle === "function") {
-      updateRoutesBannerTitle(qCat);
+    if (qView && document.getElementById(qView) && typeof switchView === "function") {
+      switchView(qView, qTab);
     }
-    if (typeof renderRoutesCatalog === "function") {
-      renderRoutesCatalog();
-    }
-  }
-  if (qView && document.getElementById(qView) && typeof switchView === "function") {
-    switchView(qView, qTab);
   }
 });
 

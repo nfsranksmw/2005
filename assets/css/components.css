@@ -3248,7 +3248,7 @@ html body :is(.leaderboard-banner-wrapper, .lb-video-banner) #lb-hero-route-titl
    HALL OF FAME (TOP GLOBAL / CIRCUITO / SPRINT / DRAG) HUD & TABLE STYLING
    ========================================================================== */
 .hof-hud-metrics-strip {
-  display: grid !important;
+  display: none !important;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)) !important;
   gap: 14px !important;
   margin-bottom: 22px !important;
@@ -4591,4 +4591,302 @@ html body :is(.leaderboard-banner-wrapper, .lb-video-banner, .routes-catalog-her
   border-color: #ff7b00 !important;
   color: #ffffff !important;
   box-shadow: 0 0 14px rgba(255, 123, 0, 0.45), 0 0 4px rgba(124, 58, 237, 0.35) !important;
+}
+
+
+/* ==========================================================================
+   TOP RANKED (EX SALÓN DE LA FAMA) - REFINED DRIVER & PODIUM BOXES
+   ========================================================================== */
+.hof-hud-metrics-strip {
+  display: none !important;
+}
+
+/* Driver Cell in Top Ranked */
+.hof-driver-cell {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+}
+
+.hof-avatar-lg {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 10px !important;
+  font-family: var(--font-display, 'Chivo', sans-serif) !important;
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.02em !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  flex-shrink: 0 !important;
+}
+
+.hof-driver-name {
+  font-family: 'Chivo', 'Montserrat', var(--font-display), sans-serif !important;
+  font-size: 19px !important;
+  font-weight: 900 !important;
+  font-style: italic !important;
+  letter-spacing: -0.01em !important;
+  color: #ffffff !important;
+  text-transform: uppercase !important;
+  line-height: 1.15 !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7) !important;
+  cursor: pointer !important;
+  transition: color 0.2s ease, transform 0.2s ease !important;
+}
+
+.hof-driver-name:hover {
+  color: #ffb800 !important;
+  transform: translateX(3px) !important;
+}
+
+/* Podium Boxes Grid & Cards */
+.hof-podium-boxes-grid {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-wrap: nowrap !important;
+}
+
+.hof-podium-box {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 55px !important;
+  height: 52px !important;
+  padding: 4px 8px !important;
+  border-radius: 8px !important;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease !important;
+  text-align: center !important;
+  user-select: none !important;
+}
+
+.hof-podium-box:hover {
+  transform: translateY(-2px) scale(1.05) !important;
+}
+
+/* P1 Gold Box (World Records) */
+.hof-podium-box.p1-gold-box {
+  background: linear-gradient(145deg, #fbbf24 0%, #f59e0b 100%) !important;
+  border: 1px solid rgba(254, 240, 138, 0.75) !important;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+  color: #09090b !important;
+}
+
+.hof-podium-box.p1-gold-box .hof-podium-box-tag {
+  font-family: var(--font-display, 'Chivo', sans-serif) !important;
+  font-size: 9.5px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.05em !important;
+  color: #09090b !important;
+  opacity: 0.9 !important;
+  line-height: 1 !important;
+  margin-bottom: 2px !important;
+}
+
+.hof-podium-box.p1-gold-box .hof-podium-box-count {
+  font-family: 'Outfit', 'Inter', var(--font-display), sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  color: #09090b !important;
+}
+
+.hof-podium-box.p1-gold-box .hof-podium-box-sub {
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 7.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.06em !important;
+  color: #451a03 !important;
+  line-height: 1 !important;
+  margin-top: 2px !important;
+  text-transform: uppercase !important;
+}
+
+/* P2 Silver Box */
+.hof-podium-box.p2-silver-box {
+  background: linear-gradient(145deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%) !important;
+  border: 1px solid rgba(203, 213, 225, 0.45) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+}
+
+.hof-podium-box.p2-silver-box .hof-podium-box-tag {
+  font-family: var(--font-display, 'Chivo', sans-serif) !important;
+  font-size: 9.5px !important;
+  font-weight: 900 !important;
+  color: #94a3b8 !important;
+  line-height: 1 !important;
+  margin-bottom: 2px !important;
+}
+
+.hof-podium-box.p2-silver-box .hof-podium-box-count {
+  font-family: 'Outfit', 'Inter', var(--font-display), sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  color: #f8fafc !important;
+}
+
+.hof-podium-box.p2-silver-box .hof-podium-box-sub {
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 7.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.05em !important;
+  color: #64748b !important;
+  line-height: 1 !important;
+  margin-top: 2px !important;
+  text-transform: uppercase !important;
+}
+
+/* P3 Bronze Box */
+.hof-podium-box.p3-bronze-box {
+  background: linear-gradient(145deg, rgba(45, 25, 15, 0.95) 0%, rgba(20, 14, 10, 0.98) 100%) !important;
+  border: 1px solid rgba(251, 146, 60, 0.45) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+}
+
+.hof-podium-box.p3-bronze-box .hof-podium-box-tag {
+  font-family: var(--font-display, 'Chivo', sans-serif) !important;
+  font-size: 9.5px !important;
+  font-weight: 900 !important;
+  color: #fb923c !important;
+  line-height: 1 !important;
+  margin-bottom: 2px !important;
+}
+
+.hof-podium-box.p3-bronze-box .hof-podium-box-count {
+  font-family: 'Outfit', 'Inter', var(--font-display), sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  color: #fdba74 !important;
+}
+
+.hof-podium-box.p3-bronze-box .hof-podium-box-sub {
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 7.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.06em !important;
+  color: #ea580c !important;
+  line-height: 1 !important;
+  margin-top: 2px !important;
+  text-transform: uppercase !important;
+}
+
+/* Best Position Non-Podium Box */
+.hof-podium-box.p-best-box {
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.9) 0%, rgba(10, 15, 30, 0.95) 100%) !important;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+  min-width: 68px !important;
+}
+
+.hof-podium-box.p-best-box .hof-podium-box-tag {
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 8.5px !important;
+  font-weight: 800 !important;
+  color: #38bdf8 !important;
+  line-height: 1 !important;
+  margin-bottom: 2px !important;
+}
+
+.hof-podium-box.p-best-box .hof-podium-box-count {
+  font-family: 'Outfit', 'Inter', var(--font-display), sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  color: #38bdf8 !important;
+}
+
+.hof-podium-box.p-best-box .hof-podium-box-sub {
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 7px !important;
+  font-weight: 800 !important;
+  color: #64748b !important;
+  margin-top: 2px !important;
+  text-transform: uppercase !important;
+}
+
+/* Table Column Widths & Alignments */
+#hof-cyber-table td {
+  vertical-align: middle !important;
+  padding: 12px 14px !important;
+}
+
+
+/* ==========================================================================
+   TOP RANKED TITLE: NEED FOR SPEED MOST WANTED HERO TYPOGRAPHY
+   ========================================================================== */
+.v7-hof-title,
+#hof-main-heading {
+  font-family: 'Chivo', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-size: clamp(30px, 4.2vw, 50px) !important;
+  font-weight: 900 !important;
+  font-style: italic !important;
+  text-transform: uppercase !important;
+  letter-spacing: -0.025em !important;
+  line-height: 1.04 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-text-stroke: 0.8px #ffffff !important;
+  text-shadow:
+    0 0 35px rgba(255, 255, 255, 0.4),
+    0 10px 30px rgba(0, 0, 0, 0.95) !important;
+  margin-top: 6px !important;
+  margin-bottom: 8px !important;
+}
+
+.v7-hof-sub,
+#hof-main-subheading {
+  font-size: 14px !important;
+  color: #94a3b8 !important;
+  max-width: 680px !important;
+  line-height: 1.5 !important;
+  margin-top: 4px !important;
+}
+
+/* ==========================================================================
+   OFFICIAL NFS CYBER RANK NUMBERS (Matches Reference Image Exactly)
+   # 1 (#ffcc22), # 2 (#d4dae0), # 3 (#e08a4a), # 4+ (#ffffff)
+   Font: Orbitron 900 / Chakra Petch 700, no background box/border.
+   ========================================================================== */
+.nfs-cyber-rank-num {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-family: 'Orbitron', 'Chakra Petch', sans-serif !important;
+  font-weight: 900 !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
+  letter-spacing: 0.03em !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  user-select: none !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 4px !important;
+}
+
+.nfs-cyber-rank-num.rank-1 {
+  color: #ffcc22 !important;
+  text-shadow: 0 0 12px rgba(255, 204, 34, 0.5) !important;
+}
+
+.nfs-cyber-rank-num.rank-2 {
+  color: #d4dae0 !important;
+  text-shadow: 0 0 10px rgba(212, 218, 224, 0.4) !important;
+}
+
+.nfs-cyber-rank-num.rank-3 {
+  color: #e08a4a !important;
+  text-shadow: 0 0 12px rgba(224, 138, 74, 0.5) !important;
+}
+
+.nfs-cyber-rank-num.rank-rest {
+  color: #ffffff !important;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.3) !important;
 }
