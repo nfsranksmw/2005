@@ -11,7 +11,7 @@
   <!-- Google Fonts: Outfit, Chakra Petch, Montserrat, Chivo, Rajdhani, Plus Jakarta Sans, Inter & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Chakra+Petch:ital,wght@0,600;0,700;1,700&family=Chivo:ital,wght@0,700;0,800;0,900;1,800;1,900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&family=Montserrat:wght@800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Chakra+Petch:ital,wght@0,600;0,700;1,700&family=Chivo:ital,wght@0,700;0,800;0,900;1,800;1,900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&family=Montserrat:wght@800;900&family=Orbitron:wght@700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet" />
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <!-- Modular Uiverse Stylesheets -->
@@ -26,6 +26,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
   <!-- NFSMWO Web Dedicated Stylesheet -->
   <link rel="stylesheet" href="assets/css/nfsmwo-web.css?v=20261027_v11" />
+  <!-- Single Page Apps for GitHub Pages & Custom Domain SPA Deep-Linking -->
+  <script>
+    (function(l) {
+      if (l.search[1] === '/') {
+        var decoded = l.search.slice(1).split('&').map(function(s) { 
+          return s.replace(/~and~/g, '&');
+        }).join('?');
+        var pathSegmentsToKeep = (l.hostname.indexOf('github.io') !== -1 && l.pathname.split('/').filter(Boolean).length > 0) ? 1 : 0;
+        var repoPrefix = l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/');
+        if (!repoPrefix.endsWith('/')) repoPrefix += '/';
+        var cleanPath = repoPrefix + decoded.slice(1);
+        window.history.replaceState(null, null, cleanPath + l.hash);
+      }
+    }(window.location));
+  </script>
 </head>
 <body>
 
@@ -168,6 +183,54 @@
               </div>
             </li>
 
+            <!-- 4. HALL OF FAME & TELEMETRÍA (DROPDOWN UNIFICADO) -->
+            <li class="nav-item has-megamenu" id="nav-item-telemetria">
+              <button type="button" class="nav-link nav-link-glitch" id="btn-telemetria-trigger" data-view-target="view-spotlight" data-text="TOP RANKED" aria-expanded="false">
+                <span data-i18n="nav.telemetria_hof">TOP RANKED</span>
+                <svg class="nav-chevron" viewBox="0 0 24 24">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+
+              <div class="elements-mega-menu nav-dropdown-menu" id="telemetria-mega-menu" role="menu" aria-label="Menú de Telemetría y Top Ranked">
+                <div class="mega-menu-grid submenu-grid">
+                  <!-- 1. SALÓN DE LA FAMA -->
+                  <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-view-target="view-spotlight" data-text="TOP RANKED">
+                    <span class="uiverse-menu-icon-box submenu-icon">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="8" r="7" stroke="#ffb800" stroke-width="1.8" fill="rgba(255,184,0,0.2)"></circle>
+                        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></polyline>
+                        <circle cx="12" cy="8" r="2.5" fill="#ff7b00"></circle>
+                      </svg>
+                    </span>
+                    <span class="submenu-label" data-i18n="nav.halloffame">TOP RANKED</span>
+                  </button>
+
+                  <!-- 2. BLACKLIST 2026 TORNEO -->
+                  <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-view-target="view-blacklist" data-text="BLACKLIST 2026">
+                    <span class="uiverse-menu-icon-box submenu-icon" style="border-color: rgba(255, 59, 48, 0.5); background: rgba(255, 59, 48, 0.12);">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke="#ff3b30" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255,59,48,0.25)"></polygon>
+                        <circle cx="12" cy="12" r="2.5" fill="#ff7b00"></circle>
+                      </svg>
+                    </span>
+                    <span class="submenu-label">BLACKLIST 2026</span>
+                  </button>
+
+                  <!-- 2. EXPEDIENTE DE TELEMETRÍA -->
+                  <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-view-target="view-telemetry" data-text="TELEMETRY DOSSIER">
+                    <span class="uiverse-menu-icon-box submenu-icon">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="#e2e8f0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <circle cx="12" cy="12" r="3" stroke="#ff7b00" stroke-width="1.8" fill="rgba(255,123,0,0.2)"></circle>
+                      </svg>
+                    </span>
+                    <span class="submenu-label" data-i18n="nav.telemetry_dossier">TELEMETRY DOSSIER</span>
+                  </button>
+                </div>
+              </div>
+            </li>
+
             <!-- 3. CHALLENGES & TOURNAMENT (Interactive Dropdown with Amber #FFB800 Highlight & 7 V7 Options) -->
             <li class="nav-item has-megamenu" id="nav-item-torneo">
               <button type="button" class="nav-link nav-link-glitch" id="btn-torneo-trigger" data-view-target="view-blog" data-text="CHALLENGES & TOURNAMENT" aria-expanded="false">
@@ -217,19 +280,6 @@
                     <span class="submenu-label" data-i18n="nav.standings">Championship Standings</span>
                   </button>
 
-                  <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-torneo-nav="dossiers" onclick="switchTorneoTab('dossiers');">
-                    <span class="uiverse-menu-icon-box submenu-icon">
-                      <svg viewBox="0 0 24 24" fill="none">
-                        <rect x="3" y="4" width="18" height="16" rx="2" stroke="#ffffff" stroke-width="1.8"></rect>
-                        <circle cx="9" cy="10" r="2.5" stroke="#e2e8f0" stroke-width="1.6" fill="rgba(255, 255, 255, )"></circle>
-                        <path d="M15 8h3" stroke="#ff7b00" stroke-width="1.8" stroke-linecap="round"></path>
-                        <path d="M15 12h3" stroke="#e2e8f0" stroke-width="1.8" stroke-linecap="round"></path>
-                        <path d="M6 16h12" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"></path>
-                      </svg>
-                    </span>
-                    <span class="submenu-label" data-i18n="nav.dossiers">Driver Dossiers</span>
-                  </button>
-
                   <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-torneo-nav="register" onclick="switchTorneoTab('register');">
                     <span class="uiverse-menu-icon-box submenu-icon">
                       <svg viewBox="0 0 24 24" fill="none">
@@ -273,43 +323,6 @@
                     <span class="submenu-label" data-i18n="nav.rules">Official Rules</span>
                   </button>
 
-                </div>
-              </div>
-            </li>
-
-            <!-- 4. HALL OF FAME & TELEMETRÍA (DROPDOWN UNIFICADO) -->
-            <li class="nav-item has-megamenu" id="nav-item-telemetria">
-              <button type="button" class="nav-link nav-link-glitch" id="btn-telemetria-trigger" data-view-target="view-spotlight" data-text="HALL OF FAME" aria-expanded="false">
-                <span data-i18n="nav.telemetria_hof">HALL OF FAME</span>
-                <svg class="nav-chevron" viewBox="0 0 24 24">
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-              </button>
-
-              <div class="elements-mega-menu nav-dropdown-menu" id="telemetria-mega-menu" role="menu" aria-label="Menú de Telemetría y Salón de la Fama">
-                <div class="mega-menu-grid submenu-grid">
-                  <!-- 1. SALÓN DE LA FAMA -->
-                  <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-view-target="view-spotlight" data-text="HALL OF FAME">
-                    <span class="uiverse-menu-icon-box submenu-icon">
-                      <svg viewBox="0 0 24 24" fill="none">
-                        <circle cx="12" cy="8" r="7" stroke="#ffb800" stroke-width="1.8" fill="rgba(255,184,0,0.2)"></circle>
-                        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></polyline>
-                        <circle cx="12" cy="8" r="2.5" fill="#ff7b00"></circle>
-                      </svg>
-                    </span>
-                    <span class="submenu-label" data-i18n="nav.halloffame">HALL OF FAME</span>
-                  </button>
-
-                  <!-- 2. EXPEDIENTE DE TELEMETRÍA -->
-                  <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-view-target="view-telemetry" data-text="TELEMETRY DOSSIER">
-                    <span class="uiverse-menu-icon-box submenu-icon">
-                      <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="#e2e8f0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-                        <circle cx="12" cy="12" r="3" stroke="#ff7b00" stroke-width="1.8" fill="rgba(255,123,0,0.2)"></circle>
-                      </svg>
-                    </span>
-                    <span class="submenu-label" data-i18n="nav.telemetry_dossier">TELEMETRY DOSSIER</span>
-                  </button>
                 </div>
               </div>
             </li>
@@ -569,6 +582,35 @@
         </div>
 
         <!-- 3. Challenges & Tournament Accordion -->
+        <div class="mobile-nav-accordion" id="mobile-acc-telemetria">
+          <button type="button" class="mobile-accordion-trigger" aria-expanded="false">
+            <span class="mobile-nav-link-left">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+              <span data-i18n="nav.telemetria_hof">TOP RANKED</span>
+            </span>
+            <span class="mobile-acc-right">
+              <span class="mobile-acc-count">2 SECCIONES</span>
+              <svg class="mobile-acc-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </button>
+          <div class="mobile-accordion-content">
+            <button type="button" class="mobile-subnav-item" data-view-target="view-spotlight">
+              <span>🏆 TOP RANKED</span>
+              <span class="mobile-sub-tag">WRs &amp; Podios</span>
+            </button>
+            <button type="button" class="mobile-subnav-item" data-view-target="view-blacklist">
+              <span>⚡ BLACKLIST 2026 TORNEO</span>
+              <span class="mobile-sub-tag" style="color: #ff4d4f; border-color: rgba(255,77,79,0.4);">Top 10 Rivales</span>
+            </button>
+            <button type="button" class="mobile-subnav-item" data-view-target="view-telemetry">
+              <span>📊 EXPEDIENTE DE TELEMETRÍA</span>
+              <span class="mobile-sub-tag">128Hz Live</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 6. Comunidad Accordion -->
+
         <div class="mobile-nav-accordion" id="mobile-acc-torneo">
           <button type="button" class="mobile-accordion-trigger" aria-expanded="false">
             <span class="mobile-nav-link-left">
@@ -576,7 +618,7 @@
               <span data-i18n="nav.challenges_tournament">CHALLENGES &amp; TOURNAMENT</span>
             </span>
             <span class="mobile-acc-right">
-              <span class="mobile-acc-count">7 SECCIONES</span>
+              <span class="mobile-acc-count">6 SECCIONES</span>
               <svg class="mobile-acc-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </span>
           </button>
@@ -592,10 +634,6 @@
             <button type="button" class="mobile-subnav-item is-active" data-torneo-nav="standings">
               <span>🏆 Championship Standings</span>
               <span class="mobile-sub-tag">15 BL</span>
-            </button>
-            <button type="button" class="mobile-subnav-item" data-torneo-nav="dossiers">
-              <span>🪪 Driver Dossiers (1 - 15)</span>
-              <span class="mobile-sub-tag">Fichas</span>
             </button>
             <button type="button" class="mobile-subnav-item" data-torneo-nav="register">
               <span>👤 Tournament Registration</span>
@@ -617,30 +655,7 @@
         </div>
 
         <!-- 4. Hall of Fame & Telemetría Accordion -->
-        <div class="mobile-nav-accordion" id="mobile-acc-telemetria">
-          <button type="button" class="mobile-accordion-trigger" aria-expanded="false">
-            <span class="mobile-nav-link-left">
-              <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
-              <span data-i18n="nav.telemetria_hof">HALL OF FAME</span>
-            </span>
-            <span class="mobile-acc-right">
-              <span class="mobile-acc-count">2 SECCIONES</span>
-              <svg class="mobile-acc-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
-            </span>
-          </button>
-          <div class="mobile-accordion-content">
-            <button type="button" class="mobile-subnav-item" data-view-target="view-spotlight">
-              <span>🏆 SALÓN DE LA FAMA</span>
-              <span class="mobile-sub-tag">WRs &amp; Podios</span>
-            </button>
-            <button type="button" class="mobile-subnav-item" data-view-target="view-telemetry">
-              <span>📊 EXPEDIENTE DE TELEMETRÍA</span>
-              <span class="mobile-sub-tag">128Hz Live</span>
-            </button>
-          </div>
-        </div>
 
-        <!-- 6. Comunidad Accordion -->
         <div class="mobile-nav-accordion" id="mobile-acc-comunidad">
           <button type="button" class="mobile-accordion-trigger" aria-expanded="false">
             <span class="mobile-nav-link-left">
@@ -1512,40 +1527,10 @@
        ======================================================================== -->
 
   <!-- 4.1 SALÓN DE LA FAMA (#view-spotlight) -->
-  <section id="view-spotlight" class="view-section" aria-label="Salón de la Fama">
+  <section id="view-spotlight" class="view-section" aria-label="Top Ranked">
     <div class="secondary-view-wrap">
 
-      <!-- Telemetry Summary HUD Strip (Motorsport Premier Style) -->
-      <div class="hof-hud-metrics-strip" id="hof-hud-metrics-strip">
-        <div class="hof-hud-card">
-          <div class="hof-hud-icon"><i class="fa-solid fa-users" style="color: #ff7b00;"></i></div>
-          <div class="hof-hud-data">
-            <span class="hof-hud-label" data-i18n="hof.hud_drivers">REGISTERED DRIVERS</span>
-            <span class="hof-hud-value" id="hof-hud-total-drivers">142 Drivers</span>
-          </div>
-        </div>
-        <div class="hof-hud-card">
-          <div class="hof-hud-icon"><i class="fa-solid fa-route" style="color: #06b6d4;"></i></div>
-          <div class="hof-hud-data">
-            <span class="hof-hud-label" data-i18n="hof.hud_routes">AUDITED ROUTES</span>
-            <span class="hof-hud-value" id="hof-hud-total-routes">86 (29C • 46S • 11D)</span>
-          </div>
-        </div>
-        <div class="hof-hud-card">
-          <div class="hof-hud-icon"><i class="fa-solid fa-bolt" style="color: #22c55e;"></i></div>
-          <div class="hof-hud-data">
-            <span class="hof-hud-label">FIREBASE RTDB</span>
-            <span class="hof-hud-value" id="hof-hud-sync-status" style="color: #22c55e;">LIVE 128Hz ✓</span>
-          </div>
-        </div>
-        <div class="hof-hud-card">
-          <div class="hof-hud-icon"><i class="fa-solid fa-trophy" style="color: #fde047;"></i></div>
-          <div class="hof-hud-data">
-            <span class="hof-hud-label" data-i18n="hof.hud_leader">CURRENT GLOBAL LEADER</span>
-            <span class="hof-hud-value" id="hof-hud-leader-name">ARS3N (76 WRs)</span>
-          </div>
-        </div>
-      </div>
+      <!-- HUD Metrics Strip removed per user request to free up vertical space -->
 
       <!-- Clean Header & Discipline Selector -->
       <div class="v7-hof-header-wrap">
@@ -1554,7 +1539,7 @@
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
               <span class="v7-tier-pill" style="background: rgba(255, 123, 0, 0.18); border: 1px solid rgba(255, 123, 0, 0.5); color: #ff7b00; font-weight: 800;" data-i18n="hof.roll_of_honor">OFFICIAL ROLL OF HONOR</span>
             </div>
-            <h2 class="v7-hof-title" id="hof-main-heading" data-i18n="hof.main_title">ROCKPORT ALL-TIME LEADERBOARD</h2>
+            <h2 class="v7-hof-title" id="hof-main-heading" data-i18n="hof.main_title">ROCKPORT ALL-TIME TOP RANKED</h2>
             <p class="v7-hof-sub" id="hof-main-subheading" data-i18n="hof.main_sub">
               Consolidated all-time ranking of drivers with the highest number of World Records (WRs), podiums and overall score across all 86 Rockport routes.
             </p>
@@ -1573,6 +1558,9 @@
             </button>
             <button type="button" class="filter-pill-btn glitch-nfs-btn" data-hof-discipline="Drag" data-text="🎯 Top Drag (11)">
               <span>🎯 Top Drag (11)</span>
+            </button>
+            <button type="button" class="filter-pill-btn glitch-nfs-btn" data-view-target="view-blacklist" data-text="⚡ Blacklist 2026 (10)" style="border-color: rgba(255, 59, 48, 0.55); color: #ff4d4f;">
+              <span>⚡ Blacklist 2026 (10)</span>
             </button>
           </div>
         </div>
@@ -1608,18 +1596,91 @@
         <table class="nfs-uiverse-table" id="hof-cyber-table">
           <thead>
             <tr>
-              <th style="width: 80px; text-align: center;" data-i18n="hof.col_rank">RANK</th>
-              <th data-i18n="hof.col_driver">DRIVER &amp; CREW</th>
-              <th style="min-width: 170px;" data-i18n="hof.col_achievements">ACHIEVEMENTS &amp; PODIUMS</th>
+              <th style="width: 76px; text-align: center;" data-i18n="hof.col_rank">RANK</th>
+              <th data-i18n="hof.col_driver">DRIVER</th>
+              <th style="min-width: 200px;" data-i18n="hof.col_achievements">ACHIEVEMENTS &amp; PODIUMS</th>
               <th style="min-width: 130px;" data-i18n="hof.col_points">FIA POINTS</th>
               <th style="text-align: center; width: 110px;" data-i18n="hof.col_best_pos">BEST POSITION</th>
               <th data-i18n="hof.col_vehicle">CAR &amp; HARDWARE</th>
               <th data-i18n="hof.col_tier">HONOR TIER</th>
-              <th style="text-align: right; width: 120px;" data-i18n="hof.col_audit">AUDIT / DOSSIER</th>
             </tr>
           </thead>
           <tbody id="hof-main-tbody">
             <!-- Populated dynamically by renderHallOfFameView() in app-cloner.js -->
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       4.1.B BLACKLIST 2026 TORNEO (#view-blacklist)
+       Top 10 Drivers Ranked by Victories (P1 WR), Second Places (P2) & Third Places (P3)
+       ======================================================================== -->
+  <section id="view-blacklist" class="view-section" aria-label="Blacklist 2026 Torneo">
+    <div class="secondary-view-wrap">
+
+      <!-- Clean Header & Discipline Selector -->
+      <div class="v7-hof-header-wrap">
+        <div class="v7-hof-top-bar">
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap;">
+              <span class="v7-tier-pill" style="background: rgba(255, 45, 85, 0.18); border: 1px solid rgba(255, 45, 85, 0.55); color: #ff2d55; font-weight: 800; letter-spacing: 0.08em;">
+                TEMPORADA 2026 // BLACKLIST 15
+              </span>
+              <span class="v7-tier-pill" style="background: rgba(255, 123, 0, 0.18); border: 1px solid rgba(255, 123, 0, 0.5); color: #ff7b00; font-weight: 800; letter-spacing: 0.08em;">
+                TOP 8 PARTICIPANTES OFICIALES
+              </span>
+            </div>
+            <h2 class="v7-hof-title" id="blacklist-main-heading">BLACKLIST 2026 TORNEO</h2>
+            <p class="v7-hof-sub" id="blacklist-main-subheading">
+              Clasificación general del Campeonato Blacklist 2026 con los 8 pilotos participantes por Victorias P1, P2, P3, Puntos Totales y Bolsa de Recompensa.
+            </p>
+          </div>
+
+          <!-- Navigation Pills -->
+          <div class="v7-hof-discipline-nav catalog-filter-pills" id="blacklist-discipline-pills">
+            <button type="button" class="filter-pill-btn glitch-nfs-btn is-active" data-text="⚡ Blacklist Top 8">
+              <span>⚡ Blacklist Top 8</span>
+            </button>
+            <button type="button" class="filter-pill-btn glitch-nfs-btn" data-view-target="view-spotlight" data-text="🏆 Ver Todo el Top Ranked">
+              <span>🏆 Ver Todo el Top Ranked</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter and Search Row with CSV Export -->
+        <div class="v7-hof-controls-row">
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; flex: 1;">
+            <div style="position: relative; min-width: 280px;">
+              <input type="text" id="blacklist-driver-search" class="nfs-lb-input" placeholder="🔍 Buscar piloto participante... Ctrl K" style="width: 100%; padding-left: 12px;" />
+            </div>
+            <span style="font-family: var(--font-mono); font-size: 11px; color: #94a3b8;">// 8 Pilotos Participantes Homologados</span>
+          </div>
+          <button type="button" class="v7-btn-export-csv btn-nfs-white-cta" id="btn-blacklist-export-csv" title="Descargar clasificación Blacklist 2026 en CSV">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span>EXPORT CSV</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Clean Table (Identical 7 Columns to Top Ranked) -->
+      <div class="nfs-table-wrap">
+        <table class="nfs-uiverse-table" id="blacklist-cyber-table">
+          <thead>
+            <tr>
+              <th style="width: 82px; text-align: center;">RANK</th>
+              <th>PILOTO</th>
+              <th style="width: 120px; text-align: center;">P1 (1ER LUGAR)</th>
+              <th style="width: 120px; text-align: center;">P2 (2DO LUGAR)</th>
+              <th style="width: 120px; text-align: center;">P3 (3ER LUGAR)</th>
+              <th style="min-width: 150px; text-align: right;">TOTAL POINTS</th>
+              <th style="min-width: 180px; text-align: right;">DINERO RECOMPENSA</th>
+            </tr>
+          </thead>
+          <tbody id="blacklist-main-tbody">
+            <!-- Populated dynamically by renderBlacklistView() in app-cloner.js -->
           </tbody>
         </table>
       </div>
@@ -1683,23 +1744,6 @@
                   <span data-i18n="nav.blacklist_groups">Blacklist Groups &amp; Rivals</span>
                 </span>
                 <span class="sidebar-badge-count">4G</span>
-              </button>
-            </li>
-            <li>
-              <button type="button" class="sidebar-btn glitch-nfs-btn" data-text="Driver Dossiers" data-torneo-tab="dossiers" onclick="switchTorneoTab('dossiers');">
-                <span class="sidebar-btn-left">
-                  <span class="uiverse-menu-icon-box">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <rect x="3" y="4" width="18" height="16" rx="2" stroke="#ffffff" stroke-width="1.8"></rect>
-                      <circle cx="9" cy="10" r="2.5" stroke="#e2e8f0" stroke-width="1.6" fill="rgba(255,255,255,0.25)"></circle>
-                      <path d="M15 8h3" stroke="#ff7b00" stroke-width="1.8" stroke-linecap="round"></path>
-                      <path d="M15 12h3" stroke="#e2e8f0" stroke-width="1.8" stroke-linecap="round"></path>
-                      <path d="M6 16h12" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"></path>
-                    </svg>
-                  </span>
-                  <span data-i18n="nav.dossiers">Driver Dossiers</span>
-                </span>
-                <span class="sidebar-badge-count">15</span>
               </button>
             </li>
             <li>
@@ -1782,27 +1826,92 @@
             <!-- Dynamic celebration showcase with confetti, crown & podium injected by app-cloner.js -->
           </div>
 
-          <!-- 4-Block Championship KPI Grid from V7 -->
-          <div class="nfs-kpi-grid">
-            <div class="nfs-kpi-card kpi-gold">
-              <div class="nfs-kpi-label">CURRENT LEADER (#1)</div>
-              <div class="nfs-kpi-value" id="bl-standings-leader">Avenger (2.030 PTS)</div>
-              <div class="nfs-kpi-meta" id="bl-standings-leader-car">Porsche Carrera GT &amp; Lotus Elise</div>
+          <!-- VITRINA DE PREMIOS OFICIALES // CARTELES DE JUEGOS DEL PODIO -->
+          <div class="champ-prizes-section" id="champ-prizes-showcase">
+            <div class="champ-prizes-header">
+              <div class="champ-prizes-title-box">
+                <div class="champ-prizes-tag">
+                  <span>🎁</span>
+                  <span>PREMIOS OFICIALES // PLAYLIST 2026 CHAMPIONSHIP</span>
+                </div>
+                <h3 class="champ-prizes-heading">
+                  <span>PORTADAS &amp; CARTELES DE PREMIOS OFICIALES</span>
+                </h3>
+              </div>
+              <div class="champ-prizes-meta">
+                Entrega de Juegos Completos para los Ganadores del Podio Oficial
+              </div>
             </div>
-            <div class="nfs-kpi-card kpi-orange">
-              <div class="nfs-kpi-label">TOTAL REP POT ($ REP)</div>
-              <div class="nfs-kpi-value" id="bl-standings-rep">$51.810.000 REP</div>
-              <div class="nfs-kpi-meta">Distribuido en 10 pilotos oficiales inscritos</div>
-            </div>
-            <div class="nfs-kpi-card kpi-purple">
-              <div class="nfs-kpi-label">OFFICIAL SEASON</div>
-              <div class="nfs-kpi-value">CHAMPIONSHIP 2026</div>
-              <div class="nfs-kpi-meta" id="bl-standings-week-label">Semana 4 de 4 en Progreso &bull; 8 Rutas</div>
-            </div>
-            <div class="nfs-kpi-card kpi-white">
-              <div class="nfs-kpi-label">COMPETING DRIVERS</div>
-              <div class="nfs-kpi-value" id="bl-standings-pilots-count">10 PILOTOS</div>
-              <div class="nfs-kpi-meta">Pilotos Oficiales Inscritos &bull; Firebase Live</div>
+
+            <div class="champ-prizes-grid">
+              <!-- 1st Place: Avenger - The Crew Motorfest -->
+              <div class="champ-prize-card gold-tier">
+                <div class="champ-prize-poster-wrap">
+                  <span class="champ-prize-badge">👑 1.º Lugar // Oro</span>
+                  <img src="assets/img/prizes/prize-1st-the-crew-motorfest.png" alt="The Crew Motorfest - Premio 1.º Lugar" class="champ-prize-poster-img" loading="lazy" />
+                </div>
+                <div class="champ-prize-body">
+                  <div>
+                    <div class="champ-prize-type-label">Premio al Campeón Supremo</div>
+                    <h4 class="champ-prize-game-title">The Crew Motorfest</h4>
+                  </div>
+                  <div class="champ-prize-winner-box">
+                    <div class="champ-prize-winner-left">
+                      <div>
+                        <div class="champ-prize-pilot-name">AVENGER</div>
+                        <div class="champ-prize-pilot-sub">Ganador del Evento Playlist 2026</div>
+                      </div>
+                    </div>
+                    <div class="champ-prize-rank-pill"># 1</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2nd Place: Nebula - WRC Generations -->
+              <div class="champ-prize-card silver-tier">
+                <div class="champ-prize-poster-wrap">
+                  <span class="champ-prize-badge">🥈 2.º Lugar // Plata</span>
+                  <img src="assets/img/prizes/prize-2nd-wrc-generations.png" alt="WRC Generations - Premio 2.º Lugar" class="champ-prize-poster-img" loading="lazy" />
+                </div>
+                <div class="champ-prize-body">
+                  <div>
+                    <div class="champ-prize-type-label">Premio al Subcampeón</div>
+                    <h4 class="champ-prize-game-title">WRC Generations</h4>
+                  </div>
+                  <div class="champ-prize-winner-box">
+                    <div class="champ-prize-winner-left">
+                      <div>
+                        <div class="champ-prize-pilot-name">NEBULA</div>
+                        <div class="champ-prize-pilot-sub">Subcampeón Oficial de Rockport</div>
+                      </div>
+                    </div>
+                    <div class="champ-prize-rank-pill"># 2</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3rd Place: Lea4Speed0 - Mad Max -->
+              <div class="champ-prize-card bronze-tier">
+                <div class="champ-prize-poster-wrap">
+                  <span class="champ-prize-badge">🥉 3.º Lugar // Bronce</span>
+                  <img src="assets/img/prizes/prize-3rd-mad-max.png" alt="Mad Max - Premio 3.º Lugar" class="champ-prize-poster-img" loading="lazy" />
+                </div>
+                <div class="champ-prize-body">
+                  <div>
+                    <div class="champ-prize-type-label">Premio al 3.º Lugar</div>
+                    <h4 class="champ-prize-game-title">Mad Max</h4>
+                  </div>
+                  <div class="champ-prize-winner-box">
+                    <div class="champ-prize-winner-left">
+                      <div>
+                        <div class="champ-prize-pilot-name">LEA4SPEED0</div>
+                        <div class="champ-prize-pilot-sub">Ganador Oficial del 3.º Puesto // Rockport 2026</div>
+                      </div>
+                    </div>
+                    <div class="champ-prize-rank-pill"># 3</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -1824,7 +1933,7 @@
 
               <!-- Filtros de Clasificación Oficial Rockport -->
               <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
-                <select id="filter-standings-group" class="nfs-lb-select" aria-label="Filtrar por Grupo">
+                <select id="filter-standings-group" class="nfs-lb-select" aria-label="Filtrar por Grupo" style="display: none;">
                   <option value="all">Todos los Grupos</option>
                   <option value="alpha">Grupo Alpha (Líderes)</option>
                   <option value="beta">Grupo Beta (Aspirantes)</option>
@@ -1841,22 +1950,18 @@
               </div>
             </div>
 
-            <!-- TABLA OFICIAL COMPLETA (11 Columnas V7 Blacklist - Sin Fichas Horizontales, Solo Tabla Oficial) -->
+            <!-- TABLA OFICIAL BLACKLIST 2026 TORNEO (7 Columnas Oficiales - 10 Pilotos con Flow y Kayine) -->
             <div class="nfs-table-wrap" id="standings-table-wrapper" style="display: block;">
               <table class="nfs-uiverse-table">
                 <thead>
                   <tr>
-                    <th style="width: 68px; text-align: center;">#</th>
-                    <th>Piloto &amp; Escudería</th>
-                    <th style="text-align: center;">Grupo</th>
-                    <th style="text-align: center; width: 64px;">P1</th>
-                    <th style="text-align: center; width: 64px;">P2</th>
-                    <th style="text-align: center; width: 64px;">P3</th>
-                    <th style="text-align: center; width: 64px;">P4</th>
-                    <th style="text-align: center;">Time Bonus</th>
-                    <th style="text-align: right;">Total Points</th>
-                    <th style="text-align: right;">Recompensa ($ REP)</th>
-                    <th style="text-align: right;">Estado / Dossier</th>
+                    <th style="width: 82px; text-align: center;">RANK</th>
+                    <th>PILOTO</th>
+                    <th style="width: 120px; text-align: center;">P1 (1ER LUGAR)</th>
+                    <th style="width: 120px; text-align: center;">P2 (2DO LUGAR)</th>
+                    <th style="width: 120px; text-align: center;">P3 (3ER LUGAR)</th>
+                    <th style="min-width: 150px; text-align: right;">TOTAL POINTS</th>
+                    <th style="min-width: 180px; text-align: right;">DINERO RECOMPENSA</th>
                   </tr>
                 </thead>
                 <tbody id="torneo-standings-tbody">
@@ -2005,52 +2110,6 @@
 
           <div class="nfs-challenges-grid" id="champ-routes-results-grid">
             <!-- Populated from window.CHAMPIONSHIP_WEEKS_DATA[w].challenges + groupsResults -->
-          </div>
-        </div>
-
-        <!-- ==================================================================
-             SUBPAGE 4: FICHA TÉCNICA (MASTER-DETAIL COCKPIT + 15 DOSSIERS)
-             ================================================================== -->
-        <div class="torneo-tab-panel" id="torneo-panel-dossiers">
-          <!-- Master-Detail Interactive Tactical Cockpit from V7 -->
-          <div class="v7-dossier-cockpit-layout" style="margin-bottom: 28px;">
-            <!-- Left Roster Sidebar (1 - 15) -->
-            <div class="v7-roster-panel">
-              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
-                <span style="font-family: var(--font-mono); font-size: 12px; font-weight: 800; color: #fff;">● BLACKLIST ROSTER (1 - 15)</span>
-                <span class="creator-slug" id="roster-active-badge">10 ACTIVOS</span>
-              </div>
-              <input type="search" id="cockpit-roster-search" class="nfs-lb-input" placeholder="Filtrar rival o auto..." style="width: 100%; margin-bottom: 10px;" />
-              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 12px;">
-                <button type="button" class="filter-pill-btn glitch-nfs-btn is-active" data-text="TODOS" data-cockpit-filter="all" style="padding: 5px 6px; font-size: 10.5px;">TODOS</button>
-                <button type="button" class="filter-pill-btn glitch-nfs-btn" data-text="ALPHA" data-cockpit-filter="alpha" style="padding: 5px 6px; font-size: 10.5px;">ALPHA</button>
-                <button type="button" class="filter-pill-btn glitch-nfs-btn" data-text="BETA" data-cockpit-filter="beta" style="padding: 5px 6px; font-size: 10.5px;">BETA</button>
-                <button type="button" class="filter-pill-btn glitch-nfs-btn" data-text="DELTA" data-cockpit-filter="delta" style="padding: 5px 6px; font-size: 10.5px;">DELTA</button>
-              </div>
-              <div id="cockpit-roster-items" class="v7-roster-scroll-list">
-                <!-- Populated dynamically with all 15 Blacklist slots -->
-              </div>
-            </div>
-
-            <!-- Right Tactical Workstation Detail Panel -->
-            <div class="v7-cockpit-detail-panel" id="cockpit-detail-workstation">
-              <!-- Populated dynamically by updateBlacklistTacticalCard() -->
-            </div>
-          </div>
-
-          <!-- Quick Switch Dossier Pills -->
-          <div class="nfs-torneo-controls-card" style="margin-bottom: 22px;">
-            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
-              <span style="font-family: var(--font-mono); font-size: 11.5px; font-weight: 800; color: #fde047;">⚡ QUICK SWITCH COCKPIT: SELECCIONAR DOSSIER (1 - 15)</span>
-              <span style="font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary);">TELEMETRÍA 128HZ EN TIEMPO REAL</span>
-            </div>
-            <div class="catalog-filter-pills" id="cockpit-quick-switch-pills" style="margin-bottom: 0;"></div>
-          </div>
-
-          <!-- Full Grid of All 15 Blacklist Dossier Cards -->
-          <h3 style="font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 14px;">Catálogo Completo de Expedientes Blacklist (Plazas #1 a #15)</h3>
-          <div class="nfs-dossiers-grid" id="torneo-dossiers-grid">
-            <!-- Populated from sorted Blacklist drivers -->
           </div>
         </div>
 
@@ -4234,7 +4293,7 @@
           <li><a href="#view-challenges" data-view-target="view-challenges">86 Official Tracks</a></li>
           <li><a href="#view-elements" data-view-target="view-elements">Official Cars (10)</a></li>
           <li><a href="#view-blog" data-view-target="view-blog">Blacklist 2026 Roster</a></li>
-          <li><a href="#view-spotlight" data-view-target="view-spotlight">Rockport Hall of Fame</a></li>
+          <li><a href="#view-spotlight" data-view-target="view-spotlight">Top Ranked</a></li>
         </ul>
       </div>
 
