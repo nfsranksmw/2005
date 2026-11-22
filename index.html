@@ -11,7 +11,7 @@
   <!-- Google Fonts: Outfit, Chakra Petch, Montserrat, Chivo, Rajdhani, Plus Jakarta Sans, Inter & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Chakra+Petch:ital,wght@0,600;0,700;1,700&family=Chivo:ital,wght@0,700;0,800;0,900;1,800;1,900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&family=Montserrat:wght@800;900&family=Orbitron:wght@700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Syncopate:wght@700&family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,700;1,800;1,900&family=Outfit:wght@400;500;600;700;800;900&family=Chakra+Petch:ital,wght@0,600;0,700;1,700&family=Chivo:ital,wght@0,700;0,800;0,900;1,800;1,900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&family=Montserrat:wght@800;900&family=Orbitron:wght@700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet" />
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <!-- Modular Uiverse Stylesheets -->
@@ -67,12 +67,50 @@
               </a>
             </li>
 
-            <!-- 2. NFSMWO WEB (Play in Browser) -->
-            <li class="nav-item">
-              <a href="#view-nfsmwo" class="nav-link nav-link-glitch" id="nav-link-nfsmwo" data-view-target="view-nfsmwo" data-text="NFSMWO WEB">
+            <!-- 2. NEED FOR SPEED ONLINE (Dropdown: Most Wanted, Carbon, Underground 2) -->
+            <li class="nav-item has-megamenu" id="nav-item-nfs-online">
+              <button type="button" class="nav-link nav-link-glitch" id="btn-nfs-online-trigger" data-view-target="view-nfsmwo" data-text="NEED FOR SPEED ONLINE" aria-expanded="false">
                 <span style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981; margin-right: 6px; vertical-align: middle;"></span>
-                <span data-i18n="nav.nfsmwo_web">NFSMWO WEB</span>
-              </a>
+                <span data-i18n="nav.nfs_online">NEED FOR SPEED ONLINE</span>
+                <svg class="nav-chevron" viewBox="0 0 24 24">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+
+              <div class="elements-mega-menu nav-dropdown-menu" id="nfs-online-mega-menu" role="menu" aria-label="Need for Speed Web Online">
+                <div class="mega-menu-grid submenu-grid" style="grid-template-columns: 1fr !important;">
+
+                  <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-view-target="view-nfsmwo" data-text="NFS MOST WANTED ONLINE">
+                    <span class="uiverse-menu-icon-box submenu-icon" style="border-color: rgba(255, 184, 0, 0.55); background: rgba(255, 184, 0, 0.14);">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" stroke="#ffb800" stroke-width="1.8" stroke-linejoin="round" fill="rgba(255,184,0,0.25)"></polygon>
+                      </svg>
+                    </span>
+                    <span class="submenu-label">NFS MOST WANTED ONLINE</span>
+                  </button>
+
+                  <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-view-target="view-nfsc-online" data-text="NFS CARBON ONLINE">
+                    <span class="uiverse-menu-icon-box submenu-icon" style="border-color: rgba(56, 189, 248, 0.55); background: rgba(56, 189, 248, 0.14);">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="9" stroke="#38bdf8" stroke-width="1.8" fill="rgba(56,189,248,0.2)"></circle>
+                        <polygon points="10 8 16 12 10 16 10 8" fill="#38bdf8"></polygon>
+                      </svg>
+                    </span>
+                    <span class="submenu-label">NFS CARBON ONLINE</span>
+                  </button>
+
+                  <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-view-target="view-nfsu2-online" data-text="NFS UNDERGROUND 2 ONLINE">
+                    <span class="uiverse-menu-icon-box submenu-icon" style="border-color: rgba(217, 70, 239, 0.55); background: rgba(217, 70, 239, 0.16);">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2L19 7v10l-7 5-7-5V7l7-5z" stroke="#e879f9" stroke-width="1.8" fill="rgba(217,70,239,0.22)"></path>
+                        <circle cx="12" cy="12" r="2.5" fill="#22d3ee"></circle>
+                      </svg>
+                    </span>
+                    <span class="submenu-label">NFS UNDERGROUND 2 ONLINE</span>
+                  </button>
+
+                </div>
+              </div>
             </li>
 
             <!-- 3. ROUTES & CIRCUITS (with Floating Mega-Menu) -->
@@ -134,59 +172,14 @@
                     <span class="submenu-label" data-i18n="nav.drag">Drag</span>
                   </button>
 
-                  <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-routes-district="Downtown Rockport" data-text="Downtown Rockport">
-                    <span class="uiverse-menu-icon-box submenu-icon">
-                      <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M3 21h18" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"></path>
-                        <path d="M5 21V9l6-4v16" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round"></path>
-                        <path d="M11 21V11l8-4v14" stroke="#e2e8f0" stroke-width="1.8" stroke-linejoin="round"></path>
-                        <circle cx="15" cy="5" r="1.5" fill="#ff7b00"></circle>
-                      </svg>
-                    </span>
-                    <span class="submenu-label">Downtown Rockport</span>
-                  </button>
-
-                  <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-routes-district="Camden Beach" data-text="Camden Beach">
-                    <span class="uiverse-menu-icon-box submenu-icon">
-                      <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M2 15c3.5-2 6.5 2 10 0s6.5-2 10 0" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"></path>
-                        <path d="M2 19c3.5-2 6.5 2 10 0s6.5-2 10 0" stroke="#e2e8f0" stroke-width="1.8" stroke-linecap="round"></path>
-                        <circle cx="16" cy="7" r="3.5" stroke="#ff7b00" stroke-width="1.8" fill="rgba(255,123,0,0.3)"></circle>
-                      </svg>
-                    </span>
-                    <span class="submenu-label">Camden Beach</span>
-                  </button>
-
-                  <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-routes-district="Rosewood" data-text="Rosewood">
-                    <span class="uiverse-menu-icon-box submenu-icon">
-                      <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2L6 10h4v6h4v-6h4L12 2z" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round" fill="rgba(255, 255, 255, )"></path>
-                        <path d="M12 16v6" stroke="#e2e8f0" stroke-width="1.8" stroke-linecap="round"></path>
-                        <circle cx="12" cy="7" r="1.5" fill="#ff7b00"></circle>
-                      </svg>
-                    </span>
-                    <span class="submenu-label">Rosewood</span>
-                  </button>
-
-                  <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-routes-district="Rockport Turnpike" data-text="Rockport Turnpike">
-                    <span class="uiverse-menu-icon-box submenu-icon">
-                      <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M4 20L9 4l6 16" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-                        <path d="M12 7v3m0 4v3" stroke="#ff7b00" stroke-width="2" stroke-linecap="round"></path>
-                        <path d="M2 20h20" stroke="#e2e8f0" stroke-width="1.8" stroke-linecap="round"></path>
-                      </svg>
-                    </span>
-                    <span class="submenu-label">Rockport Turnpike</span>
-                  </button>
-
                 </div>
               </div>
             </li>
 
             <!-- 4. HALL OF FAME & TELEMETRÍA (DROPDOWN UNIFICADO) -->
             <li class="nav-item has-megamenu" id="nav-item-telemetria">
-              <button type="button" class="nav-link nav-link-glitch" id="btn-telemetria-trigger" data-view-target="view-spotlight" data-text="TOP RANKED" aria-expanded="false">
-                <span data-i18n="nav.telemetria_hof">TOP RANKED</span>
+              <button type="button" class="nav-link nav-link-glitch" id="btn-telemetria-trigger" data-view-target="view-spotlight" data-text="RANKED" aria-expanded="false">
+                <span data-i18n="nav.telemetria_hof">RANKED</span>
                 <svg class="nav-chevron" viewBox="0 0 24 24">
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
@@ -218,14 +211,14 @@
                   </button>
 
                   <!-- 2. EXPEDIENTE DE TELEMETRÍA -->
-                  <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-view-target="view-telemetry" data-text="TELEMETRY DOSSIER">
+                  <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-view-target="view-telemetry" data-text="DRIVER DOSSIER">
                     <span class="uiverse-menu-icon-box submenu-icon">
                       <svg viewBox="0 0 24 24" fill="none">
                         <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="#e2e8f0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
                         <circle cx="12" cy="12" r="3" stroke="#ff7b00" stroke-width="1.8" fill="rgba(255,123,0,0.2)"></circle>
                       </svg>
                     </span>
-                    <span class="submenu-label" data-i18n="nav.telemetry_dossier">TELEMETRY DOSSIER</span>
+                    <span class="submenu-label" data-i18n="nav.telemetry_dossier">DRIVER DOSSIER</span>
                   </button>
                 </div>
               </div>
@@ -244,27 +237,6 @@
               <div class="elements-mega-menu nav-dropdown-menu" role="menu" aria-label="Subpáginas de Challenges & Tournament">
                 <div class="mega-menu-grid submenu-grid">
 
-                  <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-torneo-nav="seasons" onclick="switchTorneoTab('seasons');">
-                    <span class="uiverse-menu-icon-box submenu-icon">
-                      <svg viewBox="0 0 24 24" fill="none">
-                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round" fill="rgba(255, 255, 255, )"></polygon>
-                        <polygon points="12 6 6 13 11 13 10 18 16 11 12 11 12 6" fill="#ff7b00"></polygon>
-                      </svg>
-                    </span>
-                    <span class="submenu-label" data-i18n="nav.weekly_challenges">Weekly Challenges</span>
-                  </button>
-
-                  <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-torneo-nav="groups" onclick="switchTorneoTab('groups');">
-                    <span class="uiverse-menu-icon-box submenu-icon">
-                      <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M14.5 17.5 3 6V3h3l11.5 11.5" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-                        <path d="M9.5 6.5 21 18v3h-3L6.5 9.5" stroke="#e2e8f0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-                        <circle cx="12" cy="12" r="2" fill="#ff7b00"></circle>
-                      </svg>
-                    </span>
-                    <span class="submenu-label" data-i18n="nav.blacklist_groups">Blacklist Groups &amp; Rivals</span>
-                  </button>
-
                   <button type="button" class="mega-item submenu-item dropdown-glitch-item is-active" data-torneo-nav="standings" onclick="switchTorneoTab('standings');">
                     <span class="uiverse-menu-icon-box submenu-icon">
                       <svg viewBox="0 0 24 24" fill="none">
@@ -280,6 +252,17 @@
                     <span class="submenu-label" data-i18n="nav.standings">Championship Standings</span>
                   </button>
 
+                  <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-torneo-nav="groups" onclick="switchTorneoTab('groups');">
+                    <span class="uiverse-menu-icon-box submenu-icon">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M14.5 17.5 3 6V3h3l11.5 11.5" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <path d="M9.5 6.5 21 18v3h-3L6.5 9.5" stroke="#e2e8f0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <circle cx="12" cy="12" r="2" fill="#ff7b00"></circle>
+                      </svg>
+                    </span>
+                    <span class="submenu-label" data-i18n="nav.blacklist_groups">Blacklist Groups &amp; Rivals</span>
+                  </button>
+
                   <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-torneo-nav="register" onclick="switchTorneoTab('register');">
                     <span class="uiverse-menu-icon-box submenu-icon">
                       <svg viewBox="0 0 24 24" fill="none">
@@ -291,15 +274,14 @@
                     <span class="submenu-label" data-i18n="nav.register">Tournament Registration</span>
                   </button>
 
-                  <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-torneo-nav="tutorial" onclick="switchTorneoTab('tutorial');">
+                  <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-torneo-nav="seasons" onclick="switchTorneoTab('seasons');">
                     <span class="uiverse-menu-icon-box submenu-icon">
                       <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" stroke="#e2e8f0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-                        <circle cx="12" cy="7" r="2" fill="#ff7b00"></circle>
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round" fill="rgba(255, 255, 255, )"></polygon>
+                        <polygon points="12 6 6 13 11 13 10 18 16 11 12 11 12 6" fill="#ff7b00"></polygon>
                       </svg>
                     </span>
-                    <span class="submenu-label" data-i18n="nav.tutorial">Tournament Tutorial</span>
+                    <span class="submenu-label" data-i18n="nav.weekly_challenges">Weekly Challenges</span>
                   </button>
 
                   <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-torneo-nav="past-tournaments" onclick="switchTorneoTab('past-tournaments');">
@@ -362,26 +344,14 @@
                   </button>
 
                   <!-- 3. REGLAS -->
-                  <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-view-target="view-rules" data-text="RULES (Sporting Code)">
+                  <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-view-target="view-rules" data-text="Rules">
                     <span class="uiverse-menu-icon-box submenu-icon">
                       <svg viewBox="0 0 24 24" fill="none">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255, 255, 255, )"></path>
                         <polyline points="9 12 11 14 15 10" stroke="#ff7b00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
                       </svg>
                     </span>
-                    <span class="submenu-label" data-i18n="nav.rules_sporting">RULES (Sporting Code)</span>
-                  </button>
-
-                  <!-- 4. TÁCTICA DE MAPAS -->
-                  <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-view-target="view-map" data-text="TACTICAL MAP (GPS)">
-                    <span class="uiverse-menu-icon-box submenu-icon">
-                      <svg viewBox="0 0 24 24" fill="none">
-                        <circle cx="12" cy="12" r="9" stroke="#ffffff" stroke-width="1.8"></circle>
-                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" stroke="#e2e8f0" stroke-width="1.8"></path>
-                        <circle cx="12" cy="12" r="3" fill="#ff7b00"></circle>
-                      </svg>
-                    </span>
-                    <span class="submenu-label" data-i18n="nav.map">TACTICAL MAP (GPS)</span>
+                    <span class="submenu-label" data-i18n="nav.rules_sporting">Rules</span>
                   </button>
 
                   <!-- 5. CENTRO DE DESCARGA -->
@@ -523,14 +493,33 @@
           <span class="mobile-nav-badge">OFICIAL</span>
         </a>
 
-        <!-- 2. NFSMWO WEB (Online Web) -->
-        <a href="#view-nfsmwo" class="mobile-nav-link" data-view-target="view-nfsmwo">
-          <span class="mobile-nav-link-left">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-            <span data-i18n="nav.nfsmwo_web">NFSMWO WEB</span>
-          </span>
-          <span class="mobile-nav-badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4);">ONLINE</span>
-        </a>
+        <!-- 1.5 Need for Speed Online Accordion -->
+        <div class="mobile-nav-accordion" id="mobile-acc-nfs-online">
+          <button type="button" class="mobile-accordion-trigger" aria-expanded="false">
+            <span class="mobile-nav-link-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+              <span>NEED FOR SPEED ONLINE</span>
+            </span>
+            <span class="mobile-acc-right">
+              <span class="mobile-acc-count" style="color: #10b981;">3 JUEGOS</span>
+              <svg class="mobile-acc-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </button>
+          <div class="mobile-accordion-content">
+            <button type="button" class="mobile-subnav-item" data-view-target="view-nfsmwo">
+              <span>⚡ NFS Most Wanted Online</span>
+              <span class="mobile-sub-tag" style="color: #ffb800;">MW</span>
+            </button>
+            <button type="button" class="mobile-subnav-item" data-view-target="view-nfsc-online">
+              <span>🔷 NFS Carbon Online</span>
+              <span class="mobile-sub-tag" style="color: #38bdf8;">CARBON</span>
+            </button>
+            <button type="button" class="mobile-subnav-item" data-view-target="view-nfsu2-online">
+              <span>🟣 NFS Underground 2 Online</span>
+              <span class="mobile-sub-tag" style="color: #e879f9;">U2 NEON</span>
+            </button>
+          </div>
+        </div>
 
         <!-- 2. Routes & Circuits Accordion -->
         <div class="mobile-nav-accordion" id="mobile-acc-routes">
@@ -561,23 +550,6 @@
               <span>🚦 Drags (Aceleración)</span>
               <span class="mobile-sub-tag">11</span>
             </button>
-            <div class="mobile-subnav-divider">DISTRITOS DE ROCKPORT</div>
-            <button type="button" class="mobile-subnav-item" data-routes-district="Downtown Rockport" data-view-target="view-challenges">
-              <span>🏙️ Downtown Rockport</span>
-              <span class="mobile-sub-tag">Sector 1</span>
-            </button>
-            <button type="button" class="mobile-subnav-item" data-routes-district="Camden Beach" data-view-target="view-challenges">
-              <span>🏖️ Camden Beach</span>
-              <span class="mobile-sub-tag">Sector 2</span>
-            </button>
-            <button type="button" class="mobile-subnav-item" data-routes-district="Rosewood" data-view-target="view-challenges">
-              <span>🌲 Rosewood</span>
-              <span class="mobile-sub-tag">Sector 3</span>
-            </button>
-            <button type="button" class="mobile-subnav-item" data-routes-district="Rockport Turnpike" data-view-target="view-challenges">
-              <span>🛣️ Rockport Turnpike</span>
-              <span class="mobile-sub-tag">Sector 4</span>
-            </button>
           </div>
         </div>
 
@@ -586,7 +558,7 @@
           <button type="button" class="mobile-accordion-trigger" aria-expanded="false">
             <span class="mobile-nav-link-left">
               <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
-              <span data-i18n="nav.telemetria_hof">TOP RANKED</span>
+              <span data-i18n="nav.telemetria_hof">RANKED</span>
             </span>
             <span class="mobile-acc-right">
               <span class="mobile-acc-count">2 SECCIONES</span>
@@ -603,7 +575,7 @@
               <span class="mobile-sub-tag" style="color: #ff4d4f; border-color: rgba(255,77,79,0.4);">Top 10 Rivales</span>
             </button>
             <button type="button" class="mobile-subnav-item" data-view-target="view-telemetry">
-              <span>📊 EXPEDIENTE DE TELEMETRÍA</span>
+              <span>📊 DRIVER DOSSIER</span>
               <span class="mobile-sub-tag">128Hz Live</span>
             </button>
           </div>
@@ -623,32 +595,28 @@
             </span>
           </button>
           <div class="mobile-accordion-content">
-            <button type="button" class="mobile-subnav-item" data-torneo-nav="seasons">
-              <span>⚡ Weekly Challenges</span>
-              <span class="mobile-sub-tag">32 Retos</span>
+            <button type="button" class="mobile-subnav-item is-active" data-torneo-nav="standings">
+              <span>🏆 Championship Standings</span>
+              <span class="mobile-sub-tag">15 BL</span>
             </button>
             <button type="button" class="mobile-subnav-item" data-torneo-nav="groups">
               <span>⚔️ Blacklist Groups &amp; Rivals</span>
               <span class="mobile-sub-tag">4 Grupos</span>
             </button>
-            <button type="button" class="mobile-subnav-item is-active" data-torneo-nav="standings">
-              <span>🏆 Championship Standings</span>
-              <span class="mobile-sub-tag">15 BL</span>
-            </button>
             <button type="button" class="mobile-subnav-item" data-torneo-nav="register">
               <span>👤 Tournament Registration</span>
               <span class="mobile-sub-tag open-tag">Inscripción</span>
             </button>
-            <button type="button" class="mobile-subnav-item" data-torneo-nav="tutorial">
-              <span>📖 Tournament Tutorial</span>
-              <span class="mobile-sub-tag">Guía V7</span>
+            <button type="button" class="mobile-subnav-item" data-torneo-nav="seasons">
+              <span>⚡ Weekly Challenges</span>
+              <span class="mobile-sub-tag">32 Retos</span>
             </button>
             <button type="button" class="mobile-subnav-item" data-torneo-nav="past-tournaments">
               <span>🕒 Past Tournaments (Challonge)</span>
               <span class="mobile-sub-tag">Histórico</span>
             </button>
             <button type="button" class="mobile-subnav-item" data-torneo-nav="rules">
-              <span>🛡️ Reglamento Oficial</span>
+              <span>🛡️ Rules</span>
               <span class="mobile-sub-tag">v1.3</span>
             </button>
           </div>
@@ -679,10 +647,6 @@
             <button type="button" class="mobile-subnav-item" data-view-target="view-rules">
               <span>🛡️ REGLAS (Código Deportivo)</span>
               <span class="mobile-sub-tag">v1.3</span>
-            </button>
-            <button type="button" class="mobile-subnav-item" data-view-target="view-map">
-              <span>🗺️ TÁCTICA DE MAPAS (GPS)</span>
-              <span class="mobile-sub-tag">Live Sat</span>
             </button>
             <button type="button" class="mobile-subnav-item" data-view-target="view-download">
               <span>💾 CENTRO DE DESCARGA</span>
@@ -1437,26 +1401,13 @@
         <div class="rc-banner-content-wrap">
           <!-- Left Side: Tag Badge, Two-Line Title & Description -->
           <div class="rc-banner-left">
-            <!-- Top Pill Badge -->
-            <div class="rc-banner-tag">
-              <i class="fa-solid fa-cube text-brand-cyan"></i>
-              <span class="rc-tag-text">ROCKPORT CITY HOMOLOGATED CIRCUIT DATABASE</span>
-              <span class="rc-tag-dot">•</span>
-              <span class="rc-tag-network" id="lb-hero-tag-network">CIRCUITO • OFFICIAL LEADERBOARD</span>
-            </div>
-
-            <!-- Main Title: Line 1 Slate Gray + Line 2 Pure White 3D Glow -->
+            <!-- Main Title: Leaderboard Modality + Route Name -->
             <h1 class="rc-banner-title lb-hero-main-title" id="lb-hero-route-title">
               <span class="rc-title-line-white lb-title-prefix" id="lb-hero-prefix">LEADERBOARD • CIRCUITO</span>
               <span class="rc-title-line-gradient lb-title-line-gradient" id="lb-hero-main">
                 <span class="lb-title-route-name" id="lb-hero-route-name">CITY PERIMETER</span>
               </span>
             </h1>
-
-            <!-- Subtitle Description -->
-            <p class="rc-banner-desc" id="lb-hero-desc">
-              Tabla oficial de tiempos y telemetría de Rockport City auditada a 128Hz. Comparativas directas contra el World Record vigente y verificación de juego limpio.
-            </p>
           </div>
 
           <!-- Banner World Record (WR) Card - Bottom Right -->
@@ -1473,25 +1424,10 @@
 
       <!-- ACTIVE TRACK FIREBASE LEADERBOARD PANEL -->
       <div class="nfs-Leaderboard-panel" id="routes-active-leaderboard-panel">
-        <!-- Modality Tabs & Filter Controls -->
+        <!-- Modality Tabs (Filtros inferiores eliminados por diseño limpio) -->
         <div class="nfs-lb-controls setup-filters-row">
           <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;" id="lb-modality-tabs">
             <!-- Populated dynamically for Circuito / Sprint / Drag -->
-          </div>
-
-          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-            <select id="lb-quick-route-switcher" class="nfs-lb-select" aria-label="Cambiar de Pista">
-              <!-- Populated dynamically with all 86 tracks -->
-            </select>
-            <input type="search" id="lb-driver-search" class="nfs-lb-input" placeholder="Filtrar piloto..." />
-            <select id="lb-car-select" class="nfs-lb-select" aria-label="Filtrar por auto">
-              <option value="all">Todos los Autos</option>
-            </select>
-            <select id="lb-gearbox-select" class="nfs-lb-select" aria-label="Filtrar por transmisión">
-              <option value="all">Manual &amp; Auto</option>
-              <option value="Manual">Manual</option>
-              <option value="Auto">Automática</option>
-            </select>
           </div>
         </div>
 
@@ -1625,14 +1561,6 @@
       <div class="v7-hof-header-wrap">
         <div class="v7-hof-top-bar">
           <div>
-            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap;">
-              <span class="v7-tier-pill" style="background: rgba(255, 45, 85, 0.18); border: 1px solid rgba(255, 45, 85, 0.55); color: #ff2d55; font-weight: 800; letter-spacing: 0.08em;">
-                TEMPORADA 2026 // BLACKLIST 15
-              </span>
-              <span class="v7-tier-pill" style="background: rgba(255, 123, 0, 0.18); border: 1px solid rgba(255, 123, 0, 0.5); color: #ff7b00; font-weight: 800; letter-spacing: 0.08em;">
-                TOP 8 PARTICIPANTES OFICIALES
-              </span>
-            </div>
             <h2 class="v7-hof-title" id="blacklist-main-heading">BLACKLIST 2026 TORNEO</h2>
             <p class="v7-hof-sub" id="blacklist-main-subheading">
               Clasificación general del Campeonato Blacklist 2026 con los 8 pilotos participantes por Victorias P1, P2, P3, Puntos Totales y Bolsa de Recompensa.
@@ -1759,21 +1687,6 @@
                   <span data-i18n="nav.register">Tournament Registration</span>
                 </span>
                 <span class="sidebar-badge-count">OPEN</span>
-              </button>
-            </li>
-            <li>
-              <button type="button" class="sidebar-btn glitch-nfs-btn" data-text="Tournament Tutorial" data-torneo-tab="tutorial" onclick="switchTorneoTab('tutorial');">
-                <span class="sidebar-btn-left">
-                  <span class="uiverse-menu-icon-box">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-                      <path d="M22 3h-6a4 4 0 0 1 3-3h7z" stroke="#e2e8f0" stroke-width="1.8" stroke-linecap="round"></path>
-                      <circle cx="12" cy="7" r="2" fill="#ff7b00"></circle>
-                    </svg>
-                  </span>
-                  <span data-i18n="nav.tutorial">Tournament Tutorial</span>
-                </span>
-                <span class="sidebar-badge-count">GUIDE</span>
               </button>
             </li>
             <li>
@@ -2339,96 +2252,6 @@
         </div>
 
         <!-- ==================================================================
-             SUBPAGE 7: TOURNAMENT TUTORIAL (#torneo-panel-tutorial)
-             ================================================================== -->
-        <div class="torneo-tab-panel" id="torneo-panel-tutorial">
-          <!-- Video Tutorial Embed Card -->
-          <div class="nfs-torneo-controls-card" style="margin-bottom: 24px;">
-            <div style="position: relative; width: 100%; aspect-ratio: 16/9; max-height: 480px; border-radius: 12px; overflow: hidden; background: #000; box-shadow: 0 12px 30px rgba(0,0,0,0.8); margin-bottom: 18px; border: 1px solid rgba(255, 184, 0, 0.25);">
-              <iframe style="width: 100%; height: 100%; border: none;" src="https://www.youtube.com/embed/0w_KsV6fAfg?rel=0&amp;modestbranding=1" title="Official Video Tutorial - NFSRANKS Tournament 2026" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-            <div style="display: flex; flex-direction: column; gap: 6px;">
-              <div style="display: inline-flex; align-items: center; gap: 8px; color: #ffb800; font-family: var(--font-mono); font-size: 11.5px; font-weight: 800; text-transform: uppercase;">
-                <span>▶ VIDEO GUÍA OFICIAL &bull; REGLAMENTO Y PROCEDIMIENTO DE TELEMETRÍA 128HZ</span>
-              </div>
-              <h3 style="font-size: 19px; font-weight: 800; color: #fff;">
-                Procedimiento Oficial de Competición y Homologación
-              </h3>
-              <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.55;">
-                En este video explicativo se detallan los requisitos de grabación sin cortes en YouTube a 60 FPS, verificación de inicio y fin de tramo, cronometraje Avidemux frame-by-frame y el sistema de puntuación en vivo sincronizado con Firebase Realtime Database.
-              </p>
-            </div>
-          </div>
-
-          <!-- 4-Step Cards Grid -->
-          <div class="nfs-kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin-bottom: 24px;">
-            <div class="nfs-kpi-card kpi-purple" style="display: flex; flex-direction: column; justify-content: space-between;">
-              <div>
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
-                  <span class="info-card-badge" style="background: rgba(255, 255, 255, ); color: #c084fc;">PASO 01</span>
-                  <span style="font-size: 20px;">📝</span>
-                </div>
-                <h4 style="font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 6px;">Inscripción Oficial</h4>
-                <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 14px;">
-                  Entra a la sección de Registro de Torneo, ingresa tu Nick, vehículo y canal de YouTube para reservar tu plaza en la parrilla oficial.
-                </p>
-              </div>
-              <button type="button" class="btn-nfs-white-cta" data-torneo-tab="register" data-text="Ir a Inscripción →" style="width: 100%; padding: 10px 14px; font-size: 11.5px;">
-                <span>IR A INSCRIPCIÓN &rarr;</span>
-              </button>
-            </div>
-
-            <div class="nfs-kpi-card kpi-orange" style="display: flex; flex-direction: column; justify-content: space-between;">
-              <div>
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
-                  <span class="info-card-badge" style="background: rgba(249,115,22,0.25); color: #fb923c;">PASO 02</span>
-                  <span style="font-size: 20px;">🏁</span>
-                </div>
-                <h4 style="font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 6px;">Formato de 4 Semanas</h4>
-                <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 14px;">
-                  Compite en 2 Circuitos y 2 Sprints semanales con autos Junkman y BMW M3 GTR según las restricciones y bonos de cada ronda.
-                </p>
-              </div>
-              <button type="button" class="btn-nfs-white-cta" data-torneo-tab="seasons" data-text="Ver Desafíos Semanales →" style="width: 100%; padding: 10px 14px; font-size: 11.5px;">
-                <span>VER DESAFÍOS SEMANALES &rarr;</span>
-              </button>
-            </div>
-
-            <div class="nfs-kpi-card kpi-white" style="display: flex; flex-direction: column; justify-content: space-between;">
-              <div>
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
-                  <span class="info-card-badge" style="background: rgba(255,255,255,0.15); color: #fff;">PASO 03</span>
-                  <span style="font-size: 20px;">📹</span>
-                </div>
-                <h4 style="font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 6px;">Grabación 60 FPS</h4>
-                <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 14px;">
-                  Graba tu carrera completa a 60 FPS continuos con audio original del juego sin cortes y sube el video a YouTube como prueba oficial.
-                </p>
-              </div>
-              <button type="button" class="btn-nfs-white-cta" data-torneo-tab="rules" data-text="Ver Reglamento →" style="width: 100%; padding: 10px 14px; font-size: 11.5px;">
-                <span>VER REGLAMENTO &rarr;</span>
-              </button>
-            </div>
-
-            <div class="nfs-kpi-card kpi-gold" style="display: flex; flex-direction: column; justify-content: space-between;">
-              <div>
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
-                  <span class="info-card-badge" style="background: rgba(234,179,8,0.25); color: #fde047;">PASO 04</span>
-                  <span style="font-size: 20px;">🏆</span>
-                </div>
-                <h4 style="font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 6px;">Homologación &amp; Puntos</h4>
-                <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 14px;">
-                  Los jueces arbitran tu tiempo cuadro por cuadro y lo sincronizan en Firebase RTDB para sumar puntos oficiales a tu clasificación en la Blacklist.
-                </p>
-              </div>
-              <button type="button" class="btn-nfs-white-cta" data-torneo-tab="standings" data-text="Ver Standings →" style="width: 100%; padding: 10px 14px; font-size: 11.5px;">
-                <span>VER STANDINGS &rarr;</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- ==================================================================
              SUBPAGE 8: PAST TOURNAMENTS (CHALLONGE ARCHIVE) (#torneo-panel-past-tournaments)
              ================================================================== -->
         <div class="torneo-tab-panel" id="torneo-panel-past-tournaments">
@@ -2518,37 +2341,10 @@
   <section id="view-telemetry" class="view-section" aria-label="Expediente de Pilotos y Telemetría">
     <div class="secondary-view-wrap">
 
-      <!-- Telemetry Hero Header -->
-      <div class="nfs-section-hero">
-        <div class="nfs-section-hero-badge">
-          <span class="nfs-pulse-dot"></span>
-          <span>CENTRAL DE TELEMETRÍA 128HZ // EXPEDIENTE OFICIAL DE PILOTOS</span>
-        </div>
-        <h2 class="nfs-section-hero-title">
-          <span class="title-white">Expediente de Pilotos</span>
-          <span class="title-neon-purple-orange"> &amp; Telemetría de Récords</span>
-        </h2>
-        <p class="nfs-section-hero-sub">
-          Busca cualquier piloto de la base de datos para inspeccionar su ficha técnica, estadísticas de dominio por disciplina y todos sus récords registrados en las 86 pistas de Rockport.
-        </p>
-      </div>
-
-      <!-- Pilot Search & Quick Selector Bar -->
-      <div class="nfs-torneo-controls-card" style="margin-bottom: 22px;">
-        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
-          <div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 280px;">
-            <input type="text" id="telemetry-pilot-search-input" class="nfs-lb-input" placeholder="Buscar piloto por nombre (ej. Lea4Speed0, ARS3N, 13MwRR, SRTxAvenger, ZimanX)..." style="flex: 1; padding: 10px 14px; font-size: 13.5px;" />
-            <button type="button" id="telemetry-pilot-search-btn" class="btn-nfs-white-cta" data-text="Buscar Piloto"><span>BUSCAR PILOTO</span></button>
-          </div>
-          <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary);">
-            PILOTOS DESTACADOS:
-          </div>
-        </div>
-
-        <!-- Quick Pilot Pills -->
-        <div class="catalog-filter-pills" id="telemetry-quick-pilots" style="margin-top: 14px; margin-bottom: 0;">
-          <!-- Populated dynamically with top pilots -->
-        </div>
+      <!-- Pilot Search Bar (Single Line Orange & White) -->
+      <div class="telemetry-single-search-bar">
+        <input type="text" id="telemetry-pilot-search-input" class="telemetry-search-input-clean" placeholder="Buscar piloto por nombre (ej. Lea4Speed0, ARS3N, 13MwRR, SRTxAvenger, ZimanX)..." />
+        <button type="button" id="telemetry-pilot-search-btn" class="telemetry-search-btn-orange" data-text="BUSCAR PILOTO"><span>BUSCAR PILOTO</span></button>
       </div>
 
       <!-- Pilot Dossier Cockpit Card -->
@@ -2558,13 +2354,9 @@
 
       <!-- Pilot All Records Table -->
       <div class="nfs-Leaderboard-panel" style="margin-top: 24px;">
-        <div class="nfs-lb-header">
+        <div class="nfs-lb-header" style="border-bottom: none; padding-bottom: 8px;">
           <div>
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
-              <span class="nfs-type-pill type-circuito" id="telemetry-table-badge">HISTORIAL DE TIEMPOS VERIFICADOS</span>
-              <span class="nfs-district-tag" id="telemetry-table-sub">SINCRONIZADO CON FIREBASE RTDB</span>
-            </div>
-            <h3 style="font-size: 20px; font-weight: 800; color: #ffffff;" id="telemetry-table-title">Récords Registrados del Piloto</h3>
+            <h3 id="telemetry-table-title" class="pilot-recent-races-heading">Carreras recientes</h3>
           </div>
 
           <div class="catalog-filter-pills" id="telemetry-type-pills" style="margin-bottom: 0;">
@@ -2593,15 +2385,11 @@
           <table class="nfs-uiverse-table">
             <thead>
               <tr>
-                <th>Pos</th>
-                <th>Pista / Ruta Oficial</th>
-                <th>Disciplina</th>
-                <th>Categoría</th>
-                <th>Tiempo Oficial</th>
-                <th>Vehículo &amp; Setup</th>
-                <th>Periférico</th>
-                <th>Transmisión</th>
-                <th style="text-align: right;">Acciones</th>
+                <th style="width: 78px;">Puesto</th>
+                <th>Carrera</th>
+                <th>Coche</th>
+                <th style="text-align: right;">Tiempo</th>
+                <th style="text-align: right;">Fecha / Enlace</th>
               </tr>
             </thead>
             <tbody id="telemetry-records-tbody">
@@ -2947,340 +2735,89 @@
   </section>
 
   <!-- ========================================================================
-       COMMUNITY SECTION 4: ROCKPORT SATELLITE GPS MAP (#view-map)
-       ======================================================================== -->
-  <section id="view-map" class="view-section" aria-label="Táctica de Mapas Satelital GPS Live">
-    <div class="tracker-section-header">
-      <div class="tracker-header-badge">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-      </div>
-      <div class="tracker-header-content">
-        <div class="tracker-header-sup">SATELLITE TELEMETRY // ROCKPORT CITY GPS</div>
-        <h2 class="tracker-header-title">
-          <span class="title-main">ROCKPORT MAP LIVE</span>
-          <span class="title-accent">// VIRTUAL GPS</span>
-        </h2>
-        <p class="tracker-header-desc">Official high-resolution geographical map of Rockport City (2005). Explore topography, districts, blocked routes, and police pursuit layouts.</p>
-      </div>
-    </div>
-
-    <div class="map-live-container">
-      <!-- Live Telemetry HUD Bar -->
-      <div class="map-telemetry-bar">
-        <div class="map-telemetry-item">
-          <span class="map-pulse-live"></span>
-          <span style="color: #94a3b8;">SATELLITE STATUS:</span>
-          <span style="color: #22c55e; font-weight: 800;">ONLINE • 100% COVERAGE</span>
-        </div>
-        <div class="map-telemetry-item">
-          <span style="color: #94a3b8;">COORDINATES:</span>
-          <span style="color: #38bdf8;">ROCKPORT METRO (42° 21' N, 71° 04' W)</span>
-        </div>
-        <div class="map-telemetry-item">
-          <span style="color: #94a3b8;">POLICE CONDITION:</span>
-          <span style="color: #ff7b00; font-weight: 800;">HEAT LEVEL 1 TO 5 (ACTIVE)</span>
-        </div>
-        <div class="map-telemetry-item">
-          <span style="color: #94a3b8;">ACTIVE SECTOR:</span>
-          <span id="active-district-indicator" style="color: #f59e0b; font-weight: 800;">FULL MAP (GLOBAL)</span>
-        </div>
-      </div>
-
-      <!-- Controls Toolbar -->
-      <div class="map-controls-toolbar">
-        <div class="map-controls-group">
-          <button type="button" class="btn-map-control" onclick="zoomMap(0.25)" title="Acercar mapa">
-            <span>🔍+</span> <span>Zoom In</span>
-          </button>
-          <button type="button" class="btn-map-control" onclick="zoomMap(-0.25)" title="Alejar mapa">
-            <span>🔍-</span> <span>Zoom Out</span>
-          </button>
-          <button type="button" class="btn-map-control" onclick="resetMapZoom()" title="Restablecer a 100%">
-            <span>🔄</span> <span>Reset (100%)</span>
-          </button>
-          <button type="button" class="btn-map-control" onclick="toggleMapFullscreen()" title="Pantalla completa">
-            <span>⛶</span> <span>Fullscreen</span>
-          </button>
-        </div>
-
-        <div class="map-controls-group">
-          <button type="button" class="btn-map-control" onclick="focusMapDistrict('all')">
-            <span>🌐 Todo el Mapa</span>
-          </button>
-          <button type="button" class="btn-map-control" onclick="focusMapDistrict('rosewood')">
-            <span>🌲 Rosewood</span>
-          </button>
-          <button type="button" class="btn-map-control" onclick="focusMapDistrict('downtown')">
-            <span>🏙️ Downtown Rockport</span>
-          </button>
-          <button type="button" class="btn-map-control" onclick="focusMapDistrict('camden')">
-            <span>🏖️ Camden Beach</span>
-          </button>
-          <span class="map-zoom-badge" id="map-zoom-level">ZOOM: 100%</span>
-        </div>
-      </div>
-
-      <!-- Interactive Map Pan Viewport -->
-      <div class="map-viewport-wrapper" id="map-viewport-wrapper">
-        <div class="map-pan-container" id="map-pan-container">
-          <div class="map-stage" id="map-stage">
-            <img id="rockport-map-img" src="assets/img/rockport-map-live.jpg" alt="Rockport City Live GPS Satellite Map" class="rockport-map-image" loading="lazy" />
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========================================================================
        COMMUNITY SECTION 5: PC DVD DOWNLOAD CENTER (#view-download)
        ======================================================================== -->
   <section id="view-download" class="view-section" aria-label="Centro Oficial de Descargas PC DVD">
-    <div class="download-container">
-      <div class="tracker-section-header">
-        <div class="tracker-header-badge">
-          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+    <div class="dl-vertical-container">
+
+      <!-- 1. HERO CARD: CARÁTULA OFICIAL BLACK EDITION + DESCARGA ESTILO RELÁMPAGO -->
+      <div class="dl-hero-card">
+        <div class="dl-cover-wrap">
+          <img src="assets/img/nfsmw-black-edition-cover.jpg" alt="Need for Speed Most Wanted Black Edition PC DVD Cover" class="dl-cover-img" />
         </div>
-        <div class="tracker-header-content">
-          <div class="tracker-header-sup">OFFICIAL INSTALLATION ARCHIVE // PC DVD EDITION</div>
-          <h1 class="tracker-header-title">
-            <span class="title-main">NEED FOR SPEED: MOST WANTED</span>
-            <span class="title-accent">// (2005) PC EDITION</span>
-          </h1>
-          <p class="tracker-header-desc">Official direct download of the full PC version in ISO image format. Includes Official Patch v1.3 and preconfigured No-CD Crack by ZimanX.</p>
+
+        <div class="dl-hero-info">
+          <div class="dl-eyebrow">OFFICIAL ARCHIVE // GOOGLE DRIVE DIRECT</div>
+          <h1 class="dl-main-title">NEED FOR SPEED: MOST WANTED <span class="dl-edition-tag">BLACK EDITION</span></h1>
+
+          <ul class="dl-clean-list">
+            <li><span class="dl-check">⚡</span> <strong>ISO Original PC DVD (Black Edition)</strong> — Copia 1:1 limpia con música completa.</li>
+            <li><span class="dl-check">⚡</span> <strong>Parche Oficial v1.3 Integrado</strong> — Requerido para homologación de récords y online.</li>
+            <li><span class="dl-check">⚡</span> <strong>Crack No-CD Preconfigurado</strong> — Listo para jugar sin montar unidades virtuales.</li>
+            <li><span class="dl-check">⚡</span> <strong>Verificado 100% Libre de Malware</strong> — Auditado por comisarios de NFSRanks.</li>
+          </ul>
+
+          <a href="https://drive.google.com/file/d/1FrgMIa0UMiE6-Nr_R6QkDlElJOlqSsID/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="dl-btn-lightning">
+            <span class="dl-bolt-icon">⚡</span>
+            <span>DESCARGAR ISO BLACK EDITION (GOOGLE DRIVE)</span>
+          </a>
         </div>
       </div>
 
-      <div class="download-grid">
-        <!-- Primary Card: Download Box -->
-        <div class="download-card-primary">
-          <div class="download-card-header">
-            <div class="download-icon-box">💿</div>
-            <div>
-              <div class="download-file-tag">GOOGLE DRIVE DIRECT CLOUD • HIGH SPEED</div>
-              <h2 class="download-file-name">Descarga ISO NFS Most Wanted (Música, PC, DVD, Google Drive)</h2>
-              <span class="download-file-meta">Versión Oficial v1.3 • Idioma: Inglés (ENG) con Música Completa • Formato: Imagen ISO comprimida (Google Drive)</span>
-            </div>
-          </div>
+      <!-- 2. FICHA TÉCNICA Y REQUISITOS (VERTICAL) -->
+      <div class="dl-section-card">
+        <h2 class="dl-section-heading">FICHA TÉCNICA Y REQUISITOS</h2>
+        <ul class="dl-specs-vertical-list">
+          <li><span class="dl-spec-key">SISTEMA OPERATIVO</span><span class="dl-spec-val">Windows 7 / 8.1 / 10 / 11 (32 &amp; 64 bit)</span></li>
+          <li><span class="dl-spec-key">PROCESADOR (CPU)</span><span class="dl-spec-val">Intel Core 2 Duo / AMD Athlon 64 X2 (1.4 GHz+)</span></li>
+          <li><span class="dl-spec-key">MEMORIA RAM</span><span class="dl-spec-val">1 GB RAM (2 GB recomendado para 60+ FPS)</span></li>
+          <li><span class="dl-spec-key">TARJETA GRÁFICA</span><span class="dl-spec-val">DirectX 9.0c compatible (32 MB VRAM+)</span></li>
+          <li><span class="dl-spec-key">ALMACENAMIENTO</span><span class="dl-spec-val">3.0 GB de espacio libre en disco</span></li>
+          <li><span class="dl-spec-key">VERSIÓN OFICIAL</span><span class="dl-spec-val">v1.3 Official Black Edition (ENG)</span></li>
+          <li><span class="dl-spec-key">INSTALACIÓN RÁPIDA</span><span class="dl-spec-val">1. Descomprimir .RAR &rarr; 2. Montar .ISO y ejecutar setup.exe &rarr; 3. Copiar Crack v1.3</span></li>
+        </ul>
+      </div>
 
-          <div class="download-features-list">
-            <div class="feat-item">
-              <span class="feat-icon">✓</span>
-              <div class="feat-text">
-                <strong>Instalación Limpia Original (PC DVD)</strong>
-                <p>Copia 1:1 fiel al disco original sin modificaciones invasivas, 100% legal y compatible para torneos oficiales.</p>
-              </div>
-            </div>
-            <div class="feat-item">
-              <span class="feat-icon">✓</span>
-              <div class="feat-text">
-                <strong>Parche Oficial v1.3 Integrado</strong>
-                <p>La actualización obligatoria de EA Sports requerida para homologación de tiempos, telemetría y partidas online.</p>
-              </div>
-            </div>
-            <div class="feat-item">
-              <span class="feat-icon">✓</span>
-              <div class="feat-text">
-                <strong>Crack No-CD Preconfigurado por ZimanX</strong>
-                <p>Ejecutable optimizado para iniciar el juego sin necesidad de montar unidades virtuales ni disco físico en la unidad óptica.</p>
-              </div>
-            </div>
-            <div class="feat-item">
-              <span class="feat-icon">✓</span>
-              <div class="feat-text">
-                <strong>100% Libre de Virus y Malware</strong>
-                <p>Archivo escaneado y verificado en VirusTotal por el equipo de moderadores y comisarios de NFSRANKSMW.</p>
-              </div>
-            </div>
+      <!-- 3. RADMIN VPN (SECCIÓN VERTICAL) -->
+      <div class="dl-section-card dl-card-radmin">
+        <div class="dl-card-top-row">
+          <div>
+            <div class="dl-eyebrow" style="color: #38bdf8;">CLIENTE VPN OFICIAL // MULTIJUGADOR</div>
+            <h2 class="dl-section-heading" style="margin-bottom: 0;">RADMIN VPN (INSTALADOR OFICIAL)</h2>
           </div>
-
-          <a href="https://drive.google.com/file/d/1FrgMIa0UMiE6-Nr_R6QkDlElJOlqSsID/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-download-primary btn-nfs-white-cta">
-            <span>DESCARGA ISO NFS MOST WANTED (MÚSICA, PC, DVD, GOOGLE DRIVE)</span>
+          <a href="https://www.radmin-vpn.com/es/" target="_blank" rel="noopener noreferrer" class="dl-btn-lightning dl-btn-radmin">
+            <span class="dl-bolt-icon">⚡</span>
+            <span>DESCARGAR RADMIN VPN</span>
           </a>
         </div>
 
-        <!-- Technical Specs & Requirements -->
-        <div class="download-card-specs">
-          <h3 class="specs-title">FICHA TÉCNICA Y REQUISITOS</h3>
-          <table class="specs-table">
-            <tbody>
-              <tr>
-                <td>SISTEMA OPERATIVO</td>
-                <td>Windows 7 / 8.1 / 10 / 11 (32 &amp; 64 bit)</td>
-              </tr>
-              <tr>
-                <td>PROCESADOR (CPU)</td>
-                <td>Intel Core 2 Duo / AMD Athlon 64 X2 (1.4 GHz+)</td>
-              </tr>
-              <tr>
-                <td>MEMORIA RAM</td>
-                <td>1 GB RAM (2 GB recomendado para 60 FPS)</td>
-              </tr>
-              <tr>
-                <td>TARJETA GRÁFICA</td>
-                <td>DirectX 9.0c compatible (32 MB VRAM+)</td>
-              </tr>
-              <tr>
-                <td>ALMACENAMIENTO</td>
-                <td>3.0 GB de espacio libre en disco (SSD recomendado)</td>
-              </tr>
-              <tr>
-                <td>VERSIÓN DE JUEGO</td>
-                <td>v1.3 Official Black Edition</td>
-              </tr>
-              <tr>
-                <td>MOD ONLINE COMPATIBLE</td>
-                <td>LAN / Tunngle / Radmin VPN</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <div class="tuning-protip-box">
-            <strong>💡 GUÍA RÁPIDA DE INSTALACIÓN:</strong>
-            <p style="margin: 4px 0 0; font-size: 11.5px;">1. Descomprime el archivo .rar con WinRAR o 7-Zip.<br />2. Monta el archivo .ISO y ejecuta <code>setup.exe</code>.<br />3. Copia el ejecutable del crack v1.3 en la carpeta de instalación.</p>
-          </div>
-        </div>
+        <ul class="dl-clean-list" style="margin-top: 16px;">
+          <li><span class="dl-check" style="color: #38bdf8;">•</span> <strong>Conexión LAN Virtual a 100 Mbps:</strong> Latencia ultrabaja y sin límite de jugadores.</li>
+          <li><span class="dl-check" style="color: #38bdf8;">•</span> <strong>Plug &amp; Play sin abrir puertos:</strong> Funciona directo sin configurar el router.</li>
+          <li><span class="dl-check" style="color: #38bdf8;">•</span> <strong>Red Oficial NFSRANKSMW:</strong> Salas activas de Circuito, Sprint y Drag vía Discord.</li>
+        </ul>
       </div>
 
-      <!-- ====================================================================
-           MULTIPLAYER & ONLINE GAMING HUB (RADMIN VPN + FIX LAN)
-           Nuevo Modo Oficial para Jugar Online en Need for Speed: Most Wanted
-           ==================================================================== -->
-      <div class="download-multiplayer-section">
-        <div class="multiplayer-banner-header">
-          <div class="multiplayer-badge-announcement">
-            <span class="live-pulse-dot"></span>
-            <span>NUEVO MODO OFICIAL ONLINE // MULTIJUGADOR COMPETITIVO</span>
+      <!-- 4. FIX LAN MULTIPLAYER (SECCIÓN VERTICAL) -->
+      <div class="dl-section-card dl-card-fix">
+        <div class="dl-card-top-row">
+          <div>
+            <div class="dl-eyebrow" style="color: #ffae00;">PARCHE OBLIGATORIO // GITHUB RELEASE v1.0.0</div>
+            <h2 class="dl-section-heading" style="margin-bottom: 0;">FIX LAN MULTIPLAYER</h2>
           </div>
-          <h2 class="multiplayer-section-title">
-            <span>RADMIN VPN &amp; FIX LAN MULTIPLAYER</span>
-            <span class="title-sub">// Conéctate a las Salas Oficiales de Rockport</span>
-          </h2>
-          <p class="multiplayer-section-desc">
-            Radmin VPN es el software oficial adoptado por la comunidad NFSRanks para crear y unirse a salas de carreras online sin necesidad de abrir puertos en tu router. Junto con el Fix LAN obligatorio instalado dentro de la carpeta raíz del juego, podrás ver todos los servidores de la comunidad y disputar carreras multijugador con latencia ultra baja.
-          </p>
+          <a href="https://github.com/nfsranksmw/Fix-LAN-para-Radmin-VPN/releases/tag/v1.0.0" target="_blank" rel="noopener noreferrer" class="dl-btn-lightning">
+            <span class="dl-bolt-icon">⚡</span>
+            <span>DESCARGAR FIX LAN</span>
+          </a>
         </div>
 
-        <div class="download-multiplayer-grid">
-          <!-- CARD 1: RADMIN VPN CLIENT -->
-          <div class="download-card-online card-radmin">
-            <div class="download-card-header">
-              <div class="download-icon-box radmin-icon-box">
-                <!-- Radmin VPN Official Vector Logo -->
-                <svg viewBox="0 0 64 64" fill="none" class="radmin-logo-svg" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="64" height="64" rx="14" fill="#0b1b33" stroke="rgba(0,162,237,0.4)" stroke-width="1.5"></rect>
-                  <g transform="translate(6, 6) scale(0.8125)">
-                    <!-- Isometric Network Cube / Interconnected Blocks -->
-                    <path d="M32 6L54 18V44L32 56L10 44V18L32 6Z" fill="#0d284d" stroke="#00a2ed" stroke-width="2.5"></path>
-                    <path d="M32 6L54 18L32 30L10 18L32 6Z" fill="#00b4d8" opacity="0.95"></path>
-                    <path d="M10 18L32 30V56L10 44V18Z" fill="#0077b6"></path>
-                    <path d="M32 30L54 18V44L32 56V30Z" fill="#023e8a"></path>
-                    <!-- VPN Network Nodes -->
-                    <circle cx="32" cy="18" r="4.5" fill="#ffffff" stroke="#ff7b00" stroke-width="2"></circle>
-                    <circle cx="21" cy="38" r="4" fill="#00a2ed" stroke="#ffffff" stroke-width="1.5"></circle>
-                    <circle cx="43" cy="38" r="4" fill="#e2e8f0" stroke="#ffffff" stroke-width="1.5"></circle>
-                    <!-- Connections -->
-                    <path d="M32 18L21 38" stroke="#ffffff" stroke-width="2" stroke-linecap="round"></path>
-                    <path d="M32 18L43 38" stroke="#ffffff" stroke-width="2" stroke-linecap="round"></path>
-                    <path d="M21 38H43" stroke="#00a2ed" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 3"></path>
-                  </g>
-                </svg>
-              </div>
-              <div style="flex: 1;">
-                <div class="download-file-tag radmin-tag">CLIENTE VPN OFICIAL • 100% GRATUITO</div>
-                <h3 class="download-file-name" style="color: #38bdf8;">Radmin VPN (Instalador Oficial)</h3>
-                <span class="download-file-meta">Versión Oficial Windows • Idioma: Español / Multilenguaje • Sin Límite de Jugadores</span>
-              </div>
-            </div>
-
-            <div class="online-announcement-box">
-              <span class="announcement-tag">📢 NUEVO MODO OFICIAL ONLINE</span>
-              <p>Radmin VPN es la plataforma recomendada y homologada para todos los torneos y carreras multijugador de NFSRanks. Reemplaza a las antiguas herramientas con cero lag y conexión directa P2P.</p>
-            </div>
-
-            <div class="download-features-list">
-              <div class="feat-item">
-                <span class="feat-icon" style="color: #38bdf8;">✓</span>
-                <div class="feat-text">
-                  <strong>Conexión LAN Virtual a 100 Mbps</strong>
-                  <p>Ping ultrabajo, sin caídas ni restricciones de ancho de banda para carreras fluidas.</p>
-                </div>
-              </div>
-              <div class="feat-item">
-                <span class="feat-icon" style="color: #38bdf8;">✓</span>
-                <div class="feat-text">
-                  <strong>Sin Apertura de Puertos (Plug &amp; Play)</strong>
-                  <p>Funciona de inmediato sin necesidad de tocar la configuración del router ni firewall.</p>
-                </div>
-              </div>
-              <div class="feat-item">
-                <span class="feat-icon" style="color: #38bdf8;">✓</span>
-                <div class="feat-text">
-                  <strong>Red Oficial de la Comunidad NFSRANKSMW</strong>
-                  <p>Únete a las salas de Discord donde organizamos lobbies de Circuito, Sprint y Drag.</p>
-                </div>
-              </div>
-            </div>
-
-            <a href="https://www.radmin-vpn.com/es/" target="_blank" rel="noopener noreferrer" class="btn-download-radmin btn-nfs-white-cta">
-              <span>DESCARGAR E INSTALAR RADMIN VPN (SITIO OFICIAL)</span>
-            </a>
-          </div>
-
-          <!-- CARD 2: FIX LAN MULTIPLAYER -->
-          <div class="download-card-online card-fix-lan">
-            <div class="download-card-header">
-              <div class="download-icon-box fix-icon-box">
-                <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#ff7b00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
-                  <circle cx="12" cy="12" r="3" fill="#e2e8f0"></circle>
-                </svg>
-              </div>
-              <div style="flex: 1;">
-                <div class="download-file-tag fix-tag">PARCHE OBLIGATORIO • GITHUB RELEASE</div>
-                <h3 class="download-file-name" style="color: #ffae00;">Fix LAN para Radmin VPN</h3>
-                <span class="download-file-meta">Release Oficial v1.0.0 • GitHub Open Source • Archivos ZIP / DLLs</span>
-              </div>
-            </div>
-
-            <!-- Crucial installation alert requested by user -->
-            <div class="fix-instruction-alert">
-              <div class="alert-icon">⚠️</div>
-              <div class="alert-body">
-                <strong>INSTRUCCIÓN OBLIGATORIA DE INSTALACIÓN:</strong>
-                <p>Deben descomprimir e instalar los archivos de este fix <u>DENTRO DE LA CARPETA RAÍZ DEL JUEGO</u> (en el mismo directorio donde se encuentra el ejecutable <code>speed.exe</code> de Need for Speed Most Wanted).</p>
-              </div>
-            </div>
-
-            <div class="download-features-list">
-              <div class="feat-item">
-                <span class="feat-icon" style="color: #ffae00;">✓</span>
-                <div class="feat-text">
-                  <strong>Visibilidad Total de Servidores LAN</strong>
-                  <p>Corrige el fallo del juego que impedía ver las partidas creadas en redes virtuales Radmin.</p>
-                </div>
-              </div>
-              <div class="feat-item">
-                <span class="feat-icon" style="color: #ffae00;">✓</span>
-                <div class="feat-text">
-                  <strong>Compatibilidad con Windows 10 y 11</strong>
-                  <p>Adapta los protocolos de socket IPX/TCP de 2005 para los adaptadores de red modernos.</p>
-                </div>
-              </div>
-              <div class="feat-item">
-                <span class="feat-icon" style="color: #ffae00;">✓</span>
-                <div class="feat-text">
-                  <strong>Sincronización a 60 FPS / 128Hz</strong>
-                  <p>Evita el temblor o desincronización de los autos oponentes durante los sprints competitivos.</p>
-                </div>
-              </div>
-            </div>
-
-            <a href="https://github.com/nfsranksmw/Fix-LAN-para-Radmin-VPN/releases/tag/v1.0.0" target="_blank" rel="noopener noreferrer" class="btn-download-fix btn-nfs-white-cta">
-              <span>DESCARGAR FIX LAN ONLINE (GITHUB RELEASE v1.0.0)</span>
-            </a>
-          </div>
-        </div>
+        <ul class="dl-clean-list" style="margin-top: 16px;">
+          <li><span class="dl-check">⚠️</span> <strong>Ubicación obligatoria:</strong> Descomprimir e instalar dentro de la carpeta raíz del juego (junto a <code>speed.exe</code>).</li>
+          <li><span class="dl-check">•</span> <strong>Visibilidad total de salas:</strong> Corrige el fallo que ocultaba partidas creadas en Radmin VPN.</li>
+          <li><span class="dl-check">•</span> <strong>Soporte Windows 10 / 11 y 60+ FPS:</strong> Adapta sockets IPX/TCP modernos y evita desincronización.</li>
+        </ul>
       </div>
+
     </div>
   </section>
 
@@ -3493,7 +3030,7 @@
             <option value="latam">🇲🇽 Región: LATAM (México)</option>
           </select>
 
-          <a href="https://web.nfsmwo.com/" target="_blank" rel="noopener noreferrer" class="mwo-util-btn" title="Abrir en pestaña nueva">
+          <a href="https://web.nfsmwo.com/?utm_source=nfsmwo.com&utm_medium=hero&utm_campaign=mwo-website" target="_blank" rel="noopener noreferrer" class="mwo-util-btn" title="Abrir en pestaña nueva">
             <span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span>
             <span>WEB.NFSMWO.COM</span>
           </a>
@@ -3936,6 +3473,240 @@
         <div class="mwo-modal-actions">
           <button type="button" id="launcherCancelBtn" class="mwo-btn-cancel">CANCELAR</button>
           <button type="button" id="btnLaunchNow" class="mwo-btn-launch-modal">ENTRAR AHORA</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       4A-2. NEED FOR SPEED CARBON ONLINE WEB (#view-nfsc-online)
+       Tema Oficial Palmont City Azul Eléctrico / Cian con enlace a https://nfscrb.xyz/
+       ======================================================================== -->
+  <section id="view-nfsc-online" class="view-section nfsmwo-web-section nfsc-theme" aria-label="Need for Speed Carbon Online Web">
+    <div class="mwo-hero-stage nfsc-hero-stage">
+      <div class="mwo-hero-bg nfsc-hero-bg"></div>
+      <div class="mwo-hero-vignette"></div>
+      <div class="mwo-hero-radial nfsc-hero-radial"></div>
+
+      <div class="mwo-hud-bar">
+        <div class="mwo-hud-pill nfsc-hud-pill">
+          <span class="mwo-hud-ping-dot" style="background: #38bdf8; box-shadow: 0 0 8px #38bdf8;"></span>
+          <span>PALMONT SERVERS: <strong style="color: #ffffff;">ONLINE</strong></span>
+          <span style="color: #64748b;">•</span>
+          <span style="color: #bae6fd; font-weight: 700;">CANYON DUEL &amp; CREW WARS</span>
+        </div>
+        <div class="mwo-hud-right">
+          <div class="mwo-hud-item">
+            <span class="material-symbols-outlined" style="font-size: 16px; color: #38bdf8;">speed</span>
+            <span>MOTOR: <strong>WEBGL 2.0 / 60 FPS</strong></span>
+          </div>
+          <div class="mwo-hud-item">
+            <span class="material-symbols-outlined" style="font-size: 16px; color: #38bdf8;">sports_esports</span>
+            <span>MANDO: <strong>PLUG &amp; PLAY</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mwo-hero-core">
+        <div class="mwo-stencil-badge nfsc-stencil-badge">
+          <span>🔷 PALMONT CITY TERRITORY PROTOCOL // NFSCRB.XYZ</span>
+        </div>
+
+        <div class="mwo-title-wrapper">
+          <h1 class="mwo-title-nfs" style="color: #bae6fd;">NEED FOR SPEED</h1>
+          <div class="mwo-title-mw-row">
+            <span class="mwo-title-mw nfsc-title-carbon">CARBON</span>
+            <span class="mwo-title-online-badge nfsc-online-badge">ONLINE WEB</span>
+          </div>
+        </div>
+
+        <p class="mwo-hero-desc">
+          Conquista los cañones de Palmont City directo desde tu navegador. Compite en Duelos de Cañón, Guerras de Bandas (Crew Wars) y carreras nocturnas con física original, Autos Tuner/Exotic/Muscle y soporte completo de mando.
+        </p>
+
+        <div class="mwo-cta-stack">
+          <a href="https://nfscrb.xyz/" target="_blank" rel="noopener noreferrer" class="mwo-btn-play-online nfsc-btn-play" style="text-decoration: none;">
+            <span class="material-symbols-outlined" style="font-size: 26px;">sports_motorsports</span>
+            <span>JUGAR CARBON ONLINE AHORA</span>
+          </a>
+
+          <a href="https://nfscrb.xyz/" target="_blank" rel="noopener noreferrer" class="mwo-btn-single nfsc-btn-single" style="text-decoration: none;">
+            <span class="material-symbols-outlined" style="font-size: 20px; color: #38bdf8;">directions_car</span>
+            <span>MODO HISTORIA &amp; CANYON DUELS (UN JUGADOR)</span>
+          </a>
+        </div>
+
+        <div class="mwo-utility-row">
+          <a href="https://nfscrb.xyz/" target="_blank" rel="noopener noreferrer" class="mwo-util-btn nfsc-util-btn">
+            <span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span>
+            <span>HTTPS://NFSCRB.XYZ/</span>
+          </a>
+          <a href="https://discord.gg/pgP45wSN8K" target="_blank" rel="noopener noreferrer" class="mwo-discord-wide-btn">
+            <span class="material-symbols-outlined" style="font-size: 18px; color: #5865f2;">forum</span>
+            <span>SALAS DE CARBON EN DISCORD</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carbon Highlights Strip -->
+    <div class="mwo-section-servers nfsc-section-strip">
+      <div class="mwo-container">
+        <div class="mwo-servers-header">
+          <div>
+            <div class="mwo-section-tag" style="color: #38bdf8;">
+              <span class="material-symbols-outlined" style="font-size: 14px; color: #38bdf8;">hub</span>
+              <span>MODOS DE JUEGO DISPONIBLES EN NAVEGADOR</span>
+            </div>
+            <h2 class="mwo-section-title">PALMONT CITY // SALAS Y DISCIPLINAS</h2>
+          </div>
+          <a href="https://nfscrb.xyz/" target="_blank" rel="noopener noreferrer" class="mwo-btn-autojoin nfsc-btn-autojoin" style="text-decoration: none;">ENTRAR A NFSCRB.XYZ</a>
+        </div>
+
+        <div class="mwo-servers-grid">
+          <div class="mwo-server-card nfsc-card">
+            <div class="mwo-server-card-top">
+              <span class="mwo-server-mode-tag" style="color: #38bdf8;">CANYON DUEL // 1V1</span>
+              <span class="mwo-server-ping"><span class="mwo-hud-ping-dot" style="background:#38bdf8;"></span><span>ONLINE</span></span>
+            </div>
+            <h3 class="mwo-server-name">ETERNITY PASS CANYON</h3>
+            <p class="mwo-adv-text" style="margin-top: 8px;">Duelos extremos al borde del precipicio en Palmont. Persigue y adelanta al líder en dos mangas.</p>
+          </div>
+
+          <div class="mwo-server-card nfsc-card">
+            <div class="mwo-server-card-top">
+              <span class="mwo-server-mode-tag" style="color: #38bdf8;">CREW WARS // CIRCUITO</span>
+              <span class="mwo-server-ping"><span class="mwo-hud-ping-dot" style="background:#38bdf8;"></span><span>ONLINE</span></span>
+            </div>
+            <h3 class="mwo-server-name">SILVERON &amp; DOWNTOWN</h3>
+            <p class="mwo-adv-text" style="margin-top: 8px;">Defiende tu territorio en circuitos nocturnos con autos Exotic, Muscle y Tuner de alto nivel.</p>
+          </div>
+
+          <div class="mwo-server-card nfsc-card">
+            <div class="mwo-server-card-top">
+              <span class="mwo-server-mode-tag" style="color: #38bdf8;">DRIFT // TOUGE</span>
+              <span class="mwo-server-ping"><span class="mwo-hud-ping-dot" style="background:#38bdf8;"></span><span>ONLINE</span></span>
+            </div>
+            <h3 class="mwo-server-name">SAN JUAN &amp; KNIFE'S EDGE</h3>
+            <p class="mwo-adv-text" style="margin-top: 8px;">Acumula multiplicadores de derrape en las curvas cerradas de montaña sin chocar las barreras.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       4A-3. NEED FOR SPEED UNDERGROUND 2 ONLINE WEB (#view-nfsu2-online)
+       Estilo Neón Bayview Magenta / Violeta / Cian con enlace a https://nfsu2.xyz/
+       ======================================================================== -->
+  <section id="view-nfsu2-online" class="view-section nfsmwo-web-section nfsu2-theme" aria-label="Need for Speed Underground 2 Online Web">
+    <div class="mwo-hero-stage nfsu2-hero-stage">
+      <div class="mwo-hero-bg nfsu2-hero-bg"></div>
+      <div class="mwo-hero-vignette"></div>
+      <div class="mwo-hero-radial nfsu2-hero-radial"></div>
+
+      <div class="mwo-hud-bar">
+        <div class="mwo-hud-pill nfsu2-hud-pill">
+          <span class="mwo-hud-ping-dot" style="background: #e879f9; box-shadow: 0 0 10px #e879f9;"></span>
+          <span>BAYVIEW SERVERS: <strong style="color: #ffffff;">ONLINE</strong></span>
+          <span style="color: #64748b;">•</span>
+          <span style="color: #f5d0fe; font-weight: 700;">NEON TUNING &amp; STREET X</span>
+        </div>
+        <div class="mwo-hud-right">
+          <div class="mwo-hud-item">
+            <span class="material-symbols-outlined" style="font-size: 16px; color: #22d3ee;">speed</span>
+            <span>MOTOR: <strong>WEBGL 2.0 / 60 FPS</strong></span>
+          </div>
+          <div class="mwo-hud-item">
+            <span class="material-symbols-outlined" style="font-size: 16px; color: #e879f9;">sports_esports</span>
+            <span>MANDO: <strong>PLUG &amp; PLAY</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mwo-hero-core">
+        <div class="mwo-stencil-badge nfsu2-stencil-badge">
+          <span>🟣 BAYVIEW UNDERGROUND PROTOCOL // NFSU2.XYZ</span>
+        </div>
+
+        <div class="mwo-title-wrapper">
+          <h1 class="mwo-title-nfs" style="color: #22d3ee; text-shadow: 0 0 18px rgba(34,211,238,0.5);">NEED FOR SPEED</h1>
+          <div class="mwo-title-mw-row">
+            <span class="mwo-title-mw nfsu2-title-neon">UNDERGROUND 2</span>
+            <span class="mwo-title-online-badge nfsu2-online-badge">NEON WEB</span>
+          </div>
+        </div>
+
+        <p class="mwo-hero-desc">
+          Vuelve a las noches iluminadas con neón de Bayview directo en tu navegador. Personaliza tu auto con luces neón, kits anchos y nitroso purgado mientras compites en Drift, Drag, Street X y Circuitos URL.
+        </p>
+
+        <div class="mwo-cta-stack">
+          <a href="https://nfsu2.xyz/" target="_blank" rel="noopener noreferrer" class="mwo-btn-play-online nfsu2-btn-play" style="text-decoration: none;">
+            <span class="material-symbols-outlined" style="font-size: 26px;">sports_motorsports</span>
+            <span>JUGAR UNDERGROUND 2 ONLINE</span>
+          </a>
+
+          <a href="https://nfsu2.xyz/" target="_blank" rel="noopener noreferrer" class="mwo-btn-single nfsu2-btn-single" style="text-decoration: none;">
+            <span class="material-symbols-outlined" style="font-size: 20px; color: #e879f9;">directions_car</span>
+            <span>MODO HISTORIA BAYVIEW (UN JUGADOR)</span>
+          </a>
+        </div>
+
+        <div class="mwo-utility-row">
+          <a href="https://nfsu2.xyz/" target="_blank" rel="noopener noreferrer" class="mwo-util-btn nfsu2-util-btn">
+            <span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span>
+            <span>HTTPS://NFSU2.XYZ/</span>
+          </a>
+          <a href="https://discord.gg/pgP45wSN8K" target="_blank" rel="noopener noreferrer" class="mwo-discord-wide-btn">
+            <span class="material-symbols-outlined" style="font-size: 18px; color: #5865f2;">forum</span>
+            <span>COMUNIDAD UNDERGROUND 2 EN DISCORD</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Underground 2 Neon Highlights Strip -->
+    <div class="mwo-section-servers nfsu2-section-strip">
+      <div class="mwo-container">
+        <div class="mwo-servers-header">
+          <div>
+            <div class="mwo-section-tag" style="color: #e879f9;">
+              <span class="material-symbols-outlined" style="font-size: 14px; color: #22d3ee;">hub</span>
+              <span>BAYVIEW NIGHTS // MODALIDADES NEÓN EN VIVO</span>
+            </div>
+            <h2 class="mwo-section-title">BAYVIEW // CIRCUITOS &amp; STREET X</h2>
+          </div>
+          <a href="https://nfsu2.xyz/" target="_blank" rel="noopener noreferrer" class="mwo-btn-autojoin nfsu2-btn-autojoin" style="text-decoration: none;">ENTRAR A NFSU2.XYZ</a>
+        </div>
+
+        <div class="mwo-servers-grid">
+          <div class="mwo-server-card nfsu2-card">
+            <div class="mwo-server-card-top">
+              <span class="mwo-server-mode-tag" style="color: #e879f9;">URL // AIRPORT CIRCUIT</span>
+              <span class="mwo-server-ping"><span class="mwo-hud-ping-dot" style="background:#22d3ee;"></span><span>ONLINE</span></span>
+            </div>
+            <h3 class="mwo-server-name">BAYVIEW INTERNATIONAL</h3>
+            <p class="mwo-adv-text" style="margin-top: 8px;">Pistas rápidas de la Underground Racing League con curvas de alta velocidad y adelantamientos al límite.</p>
+          </div>
+
+          <div class="mwo-server-card nfsu2-card">
+            <div class="mwo-server-card-top">
+              <span class="mwo-server-mode-tag" style="color: #22d3ee;">DRIFT // BEACON HILL</span>
+              <span class="mwo-server-ping"><span class="mwo-hud-ping-dot" style="background:#e879f9;"></span><span>ONLINE</span></span>
+            </div>
+            <h3 class="mwo-server-name">JACKSON HEIGHTS TOUGE</h3>
+            <p class="mwo-adv-text" style="margin-top: 8px;">Encadena derrapes con neón bajo la lluvia en las colinas de Bayview con puntuación multiplicada.</p>
+          </div>
+
+          <div class="mwo-server-card nfsu2-card">
+            <div class="mwo-server-card-top">
+              <span class="mwo-server-mode-tag" style="color: #e879f9;">DRAG // COAL HARBOR</span>
+              <span class="mwo-server-ping"><span class="mwo-hud-ping-dot" style="background:#22d3ee;"></span><span>ONLINE</span></span>
+            </div>
+            <h3 class="mwo-server-name">BAYVIEW BRIDGE 1/4 MILLA</h3>
+            <p class="mwo-adv-text" style="margin-top: 8px;">Cambios perfectos y óxido nitroso en rectas de alta velocidad evitando el tráfico urbano.</p>
+          </div>
         </div>
       </div>
     </div>
