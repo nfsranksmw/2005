@@ -1431,3 +1431,205 @@
     padding: 14px 20px;
   }
 }
+
+/* ==========================================================================
+   NEED FOR SPEED CARBON ONLINE (AZUL PALMONT) & UNDERGROUND 2 (NEÓN BAYVIEW)
+   ========================================================================== */
+
+/* --- CARBON: PALMONT BLUE THEME --- */
+.nfsc-theme .nfsc-hero-stage {
+  background: radial-gradient(circle at 50% 25%, #0a1f3d 0%, #040914 70%, #02050b 100%);
+}
+.nfsc-theme .nfsc-hero-bg {
+  background-image: linear-gradient(135deg, rgba(14, 165, 233, 0.22) 0%, rgba(2, 6, 23, 0.92) 100%);
+}
+.nfsc-theme .nfsc-hero-radial {
+  background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.2) 0%, transparent 68%);
+}
+.nfsc-theme .nfsc-stencil-badge {
+  border-color: rgba(56, 189, 248, 0.45);
+  background: rgba(14, 165, 233, 0.14);
+  color: #7dd3fc;
+}
+.nfsc-theme .nfsc-title-carbon {
+  color: #ffffff;
+  text-shadow: 0 0 28px rgba(56, 189, 248, 0.65), 0 8px 24px rgba(0, 0, 0, 0.9);
+}
+.nfsc-theme .nfsc-online-badge {
+  background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+  color: #ffffff;
+  box-shadow: 0 0 22px rgba(56, 189, 248, 0.55);
+}
+.nfsc-theme .nfsc-btn-play {
+  background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 34px rgba(56, 189, 248, 0.5), 0 8px 24px rgba(0, 0, 0, 0.7) !important;
+}
+.nfsc-theme .nfsc-btn-play * {
+  color: #ffffff !important;
+}
+.nfsc-theme .nfsc-btn-play:hover {
+  background: linear-gradient(135deg, #7dd3fc 0%, #0ea5e9 100%) !important;
+  box-shadow: 0 0 48px rgba(56, 189, 248, 0.75), 0 10px 28px rgba(0, 0, 0, 0.8) !important;
+}
+.nfsc-theme .nfsc-btn-single {
+  border-color: rgba(56, 189, 248, 0.35);
+}
+.nfsc-theme .nfsc-btn-single:hover {
+  border-color: #38bdf8;
+  background: rgba(14, 165, 233, 0.12);
+}
+.nfsc-theme .nfsc-util-btn {
+  border-color: rgba(56, 189, 248, 0.35);
+  color: #bae6fd;
+}
+.nfsc-theme .nfsc-btn-autojoin {
+  background: #0284c7;
+  color: #ffffff;
+  border-color: #38bdf8;
+}
+.nfsc-theme .nfsc-card {
+  border-color: rgba(56, 189, 248, 0.25);
+  background: rgba(6, 14, 30, 0.85);
+}
+.nfsc-theme .nfsc-card:hover {
+  border-color: #38bdf8;
+  box-shadow: 0 0 28px rgba(56, 189, 248, 0.25);
+}
+
+/* --- UNDERGROUND 2: BAYVIEW NEON THEME --- */
+.nfsu2-theme .nfsu2-hero-stage {
+  background: radial-gradient(circle at 50% 25%, #230938 0%, #0c0418 70%, #05020a 100%);
+}
+.nfsu2-theme .nfsu2-hero-bg {
+  background-image: linear-gradient(135deg, rgba(217, 70, 239, 0.22) 0%, rgba(34, 211, 238, 0.12) 50%, rgba(10, 4, 22, 0.94) 100%);
+}
+.nfsu2-theme .nfsu2-hero-radial {
+  background: radial-gradient(ellipse at center, rgba(232, 121, 249, 0.24) 0%, rgba(34, 211, 238, 0.12) 45%, transparent 72%);
+}
+.nfsu2-theme .nfsu2-stencil-badge {
+  border-color: rgba(232, 121, 249, 0.5);
+  background: rgba(217, 70, 239, 0.14);
+  color: #f5d0fe;
+  box-shadow: 0 0 18px rgba(217, 70, 239, 0.25);
+}
+.nfsu2-theme .nfsu2-title-neon {
+  color: #ffffff;
+  text-shadow:
+    0 0 16px rgba(232, 121, 249, 0.9),
+    0 0 38px rgba(217, 70, 239, 0.7),
+    0 0 60px rgba(34, 211, 238, 0.45);
+}
+.nfsu2-theme .nfsu2-online-badge {
+  background: linear-gradient(135deg, #e879f9 0%, #22d3ee 100%);
+  color: #090312;
+  box-shadow: 0 0 26px rgba(232, 121, 249, 0.65);
+}
+.nfsu2-theme .nfsu2-btn-play {
+  background: linear-gradient(135deg, #d946ef 0%, #9333ea 55%, #06b6d4 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(245, 208, 254, 0.6) !important;
+  box-shadow: 0 0 34px rgba(217, 70, 239, 0.6), 0 0 18px rgba(34, 211, 238, 0.35) !important;
+}
+.nfsu2-theme .nfsu2-btn-play * {
+  color: #ffffff !important;
+}
+.nfsu2-theme .nfsu2-btn-play:hover {
+  box-shadow: 0 0 50px rgba(232, 121, 249, 0.85), 0 0 28px rgba(34, 211, 238, 0.55) !important;
+}
+.nfsu2-theme .nfsu2-btn-single {
+  border-color: rgba(232, 121, 249, 0.4);
+  box-shadow: 0 0 14px rgba(217, 70, 239, 0.15);
+}
+.nfsu2-theme .nfsu2-btn-single:hover {
+  border-color: #22d3ee;
+  background: rgba(217, 70, 239, 0.14);
+}
+.nfsu2-theme .nfsu2-util-btn {
+  border-color: rgba(34, 211, 238, 0.45);
+  color: #a5f3fc;
+}
+.nfsu2-theme .nfsu2-btn-autojoin {
+  background: linear-gradient(135deg, #d946ef, #06b6d4);
+  color: #ffffff;
+  border-color: #f0abfc;
+}
+.nfsu2-theme .nfsu2-card {
+  border-color: rgba(232, 121, 249, 0.35);
+  background: rgba(14, 6, 28, 0.88);
+  box-shadow: 0 0 20px rgba(217, 70, 239, 0.12);
+}
+.nfsu2-theme .nfsu2-card:hover {
+  border-color: #22d3ee;
+  box-shadow: 0 0 30px rgba(232, 121, 249, 0.35), 0 0 18px rgba(34, 211, 238, 0.25);
+}
+
+.nfsc-theme .mwo-title-mw-row,
+.nfsu2-theme .mwo-title-mw-row {
+  gap: 14px !important;
+  align-items: center !important;
+}
+.nfsc-theme .mwo-title-online-badge,
+.nfsu2-theme .mwo-title-online-badge {
+  position: static !important;
+  transform: none !important;
+  margin-left: 0 !important;
+}
+
+/* ==========================================================================
+   MOST WANTED ONLINE BUTTONS: CARBON STYLE IN VIBRANT ORANGE
+   ========================================================================== */
+#view-nfsmwo .mwo-btn-play-online {
+  background: linear-gradient(135deg, #ff9500 0%, #ff5e00 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 10px !important;
+  box-shadow: 0 0 34px rgba(255, 123, 0, 0.55), 0 8px 24px rgba(0, 0, 0, 0.7) !important;
+}
+
+#view-nfsmwo .mwo-btn-play-online * {
+  color: #ffffff !important;
+}
+
+#view-nfsmwo .mwo-btn-play-online:hover {
+  background: linear-gradient(135deg, #ffb038 0%, #ff7300 100%) !important;
+  box-shadow: 0 0 48px rgba(255, 149, 0, 0.8), 0 10px 28px rgba(0, 0, 0, 0.8) !important;
+}
+
+#view-nfsmwo .mwo-btn-single {
+  background: rgba(16, 16, 22, 0.9) !important;
+  border: 1px solid rgba(255, 123, 0, 0.4) !important;
+  border-radius: 10px !important;
+  color: #ffffff !important;
+}
+
+#view-nfsmwo .mwo-btn-single:hover {
+  border-color: #ff7b00 !important;
+  background: rgba(255, 123, 0, 0.14) !important;
+}
+
+/* ==========================================================================
+   MOST WANTED ONLINE: AMBIENT ORANGE ILLUMINATED AURA (MATCHING CARBON/U2)
+   ========================================================================== */
+#view-nfsmwo .mwo-hero-stage {
+  background: radial-gradient(circle at 50% 25%, rgba(255, 123, 0, 0.26) 0%, #160a03 55%, #050302 100%) !important;
+  box-shadow: inset 0 0 110px rgba(255, 123, 0, 0.16) !important;
+}
+
+#view-nfsmwo .mwo-hero-radial {
+  background: radial-gradient(ellipse at center, rgba(255, 136, 0, 0.30) 0%, rgba(255, 94, 0, 0.12) 45%, transparent 72%) !important;
+}
+
+#view-nfsmwo .mwo-title-mw {
+  text-shadow:
+    0 0 24px rgba(255, 149, 0, 0.72),
+    0 0 55px rgba(255, 94, 0, 0.42),
+    0 8px 24px rgba(0, 0, 0, 0.9) !important;
+}
+
+#view-nfsmwo .mwo-stencil-badge {
+  border-color: rgba(255, 149, 0, 0.45) !important;
+  background: rgba(255, 123, 0, 0.14) !important;
+  color: #fed7aa !important;
+  box-shadow: 0 0 18px rgba(255, 123, 0, 0.22) !important;
+}

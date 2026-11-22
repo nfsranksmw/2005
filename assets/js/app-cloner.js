@@ -565,6 +565,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const comunidadMenuTrigger = document.getElementById("btn-comunidad-trigger");
   const telemetriaMenuNavItem = document.getElementById("nav-item-telemetria");
   const telemetriaMenuTrigger = document.getElementById("btn-telemetria-trigger");
+  const nfsOnlineMenuNavItem = document.getElementById("nav-item-nfs-online");
+  const nfsOnlineMenuTrigger = document.getElementById("btn-nfs-online-trigger");
   const createMenuWrapper = document.getElementById("create-menu-wrapper");
   const createMenuBtn = document.getElementById("btn-create-trigger");
   const viewSections = document.querySelectorAll(".view-section");
@@ -740,6 +742,16 @@ document.addEventListener("DOMContentLoaded", () => {
       return { view: "view-nfsmwo", canonical: "/most-wanted-online" };
     }
 
+    // 2b. NFS Carbon Online Web
+    if (p === "/carbon-online" || p === "/nfs-carbon-online" || p === "/view-nfsc-online") {
+      return { view: "view-nfsc-online", canonical: "/carbon-online" };
+    }
+
+    // 2c. NFS Underground 2 Online Web
+    if (p === "/underground-2-online" || p === "/nfs-underground-2-online" || p === "/view-nfsu2-online") {
+      return { view: "view-nfsu2-online", canonical: "/underground-2-online" };
+    }
+
     // 3. Leaderboard & Categories
     if (p === "/leaderboard-circuito" || p === "/circuito" || p === "/circuits") {
       return { view: "view-challenges", cat: "Circuito", canonical: "/leaderboard-circuito" };
@@ -880,7 +892,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return { view: "view-rules", canonical: "/comunidades/reglamento" };
     }
     if (p === "/comunidades/mapa" || p === "/mapa" || p === "/map" || p === "/view-map") {
-      return { view: "view-map", canonical: "/comunidades/mapa" };
+      return { view: "view-tuning", canonical: "/comunidades" };
     }
     if (p === "/comunidades/descargas" || p === "/descargas" || p === "/download" || p === "/downloads" || p === "/view-download") {
       return { view: "view-download", canonical: "/comunidades/descargas" };
@@ -909,6 +921,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (cleanId === "view-elements") return "/";
     if (cleanId === "view-nfsmwo") return "/most-wanted-online";
+    if (cleanId === "view-nfsc-online") return "/carbon-online";
+    if (cleanId === "view-nfsu2-online") return "/underground-2-online";
     if (cleanId === "view-challenges") {
       const cat = options.cat || (typeof routesViewState !== "undefined" ? routesViewState.cat : "all");
       const dist = options.district || (typeof routesViewState !== "undefined" ? routesViewState.district : "all");
@@ -937,7 +951,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (cleanId === "view-guides") return "/comunidades/guias";
     if (cleanId === "view-submit") return "/comunidades/homologacion";
     if (cleanId === "view-rules") return "/comunidades/reglamento";
-    if (cleanId === "view-map") return "/comunidades/mapa";
+    if (cleanId === "view-map") return "/comunidades";
     if (cleanId === "view-download") return "/comunidades/descargas";
     if (cleanId === "view-members") return "/comunidades/pilotos";
     return "/";
@@ -1039,6 +1053,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (telemetriaMenuTrigger) {
       telemetriaMenuTrigger.classList.toggle("is-active", isTelemetriaHofView);
     }
+    const isNfsOnlineView = ["view-nfsmwo", "view-nfsc-online", "view-nfsu2-online"].includes(cleanId);
+    if (nfsOnlineMenuTrigger) {
+      nfsOnlineMenuTrigger.classList.toggle("is-active", isNfsOnlineView);
+    }
     document.querySelectorAll(".mobile-nav-link").forEach((link) => {
       link.classList.toggle("is-active", link.dataset.viewTarget === navTarget);
     });
@@ -1084,7 +1102,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Helper: Close all mega-menus across the board
   function closeAllDropdowns(immediate = false) {
-    const navItems = [megaMenuNavItem, torneoMenuNavItem, telemetriaMenuNavItem, comunidadMenuNavItem];
+    const navItems = [nfsOnlineMenuNavItem, megaMenuNavItem, torneoMenuNavItem, telemetriaMenuNavItem, comunidadMenuNavItem];
     navItems.forEach((nav) => {
       if (nav) {
         nav.classList.remove("dropdown-open");
@@ -1099,6 +1117,27 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   window.closeAllDropdowns = closeAllDropdowns;
   window.closeTorneoDropdown = closeAllDropdowns;
+
+  if (nfsOnlineMenuTrigger && nfsOnlineMenuNavItem) {
+    nfsOnlineMenuTrigger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const willOpen = !nfsOnlineMenuNavItem.classList.contains("dropdown-open");
+      nfsOnlineMenuNavItem.classList.remove("dropdown-closed");
+      switchView("view-nfsmwo");
+      if (willOpen) {
+        nfsOnlineMenuNavItem.classList.add("dropdown-open");
+      } else {
+        nfsOnlineMenuNavItem.classList.remove("dropdown-open");
+      }
+      [megaMenuNavItem, torneoMenuNavItem, comunidadMenuNavItem, telemetriaMenuNavItem].forEach((nav) => {
+        if (nav) {
+          nav.classList.remove("dropdown-open");
+          nav.classList.remove("dropdown-closed");
+        }
+      });
+      if (createMenuWrapper) createMenuWrapper.classList.remove("is-open");
+    });
+  }
 
   if (megaMenuTrigger && megaMenuNavItem) {
     megaMenuTrigger.addEventListener("click", (e) => {
@@ -1242,7 +1281,8 @@ document.addEventListener("DOMContentLoaded", () => {
       el.id === "btn-elements-trigger" ||
       el.id === "btn-torneo-trigger" ||
       el.id === "btn-comunidad-trigger" ||
-      el.id === "btn-telemetria-trigger"
+      el.id === "btn-telemetria-trigger" ||
+      el.id === "btn-nfs-online-trigger"
     ) return;
     el.addEventListener("click", (e) => {
       e.preventDefault();
@@ -1262,7 +1302,8 @@ document.addEventListener("DOMContentLoaded", () => {
       targetEl.id === "btn-elements-trigger" ||
       targetEl.id === "btn-torneo-trigger" ||
       targetEl.id === "btn-comunidad-trigger" ||
-      targetEl.id === "btn-telemetria-trigger"
+      targetEl.id === "btn-telemetria-trigger" ||
+      targetEl.id === "btn-nfs-online-trigger"
     ) return;
     const target = targetEl.dataset.viewTarget;
     if (target) {
@@ -1888,14 +1929,20 @@ document.addEventListener("DOMContentLoaded", () => {
           ? row.pts
           : (f1Points[index] || 0);
 
+        const activeTabLower = String(activeLeaderboardState.tab || "").toLowerCase();
+        const setupSubLabel = activeTabLower.includes("bmw")
+          ? "No Junkman"
+          : activeTabLower.includes("stock")
+            ? "No Junkman"
+            : "Junkman";
+
         return `
-          <tr data-open-pilot="${escapeHtml(row.driver)}" style="cursor: pointer;" title="Haz clic para abrir el Expediente de Telemetría de ${escapeHtml(row.driver)}">
+          <tr class="${rankNum === 1 ? 'lb-row-rank-1' : rankNum === 2 ? 'lb-row-rank-2' : rankNum === 3 ? 'lb-row-rank-3' : 'lb-row-rank-rest'}" data-open-pilot="${escapeHtml(row.driver)}" style="cursor: pointer;" title="Haz clic para abrir el Expediente de Telemetría de ${escapeHtml(row.driver)}">
             <td style="width: 56px; text-align: center;">
               ${renderLeaderboardPositionBadge(rankNum)}
             </td>
             <td>
               <div class="lb-user-cell">
-                ${getDriverAvatarBadge(row.driver, known)}
                 <div class="lb-user-info">
                   <div class="nfs-driver-link lb-user-name" data-open-pilot="${escapeHtml(row.driver)}">${escapeHtml(row.driver)}</div>
                 </div>
@@ -1910,8 +1957,8 @@ document.addEventListener("DOMContentLoaded", () => {
               <span class="stitch-delta-val stitch-num" style="color: ${deltaColor};">${deltaText}</span>
             </td>
             <td>
-              <div style="font-size: 13.5px; font-weight: 700; color: #ffffff;">${escapeHtml(row.car)}</div>
-              <div style="font-family: var(--font-mono); font-size: 11px; font-weight: 600; color: #71717a;">${escapeHtml(row.setup || known.setup)}</div>
+              <div class="lb-car-main">${escapeHtml(row.car)}</div>
+              <div class="lb-car-sub">${setupSubLabel}</div>
             </td>
             <td>
               <span class="creator-slug">${escapeHtml(row.device || "DualSense")}</span>
@@ -2504,16 +2551,13 @@ document.addEventListener("DOMContentLoaded", () => {
           const initials = d.name.slice(0, 2).toUpperCase();
 
           return `
-            <tr data-open-pilot="${escapeHtml(d.name)}" style="cursor: pointer;" title="${isEn ? 'View Telemetry Dossier of' : 'Ver Expediente de Telemetría de'} ${escapeHtml(d.name)}">
+            <tr class="${rankNum === 1 ? 'lb-row-rank-1' : rankNum === 2 ? 'lb-row-rank-2' : rankNum === 3 ? 'lb-row-rank-3' : 'lb-row-rank-rest'}" data-open-pilot="${escapeHtml(d.name)}" style="cursor: pointer;" title="${isEn ? 'View Telemetry Dossier of' : 'Ver Expediente de Telemetría de'} ${escapeHtml(d.name)}">
               <td style="text-align: center;">
                 <span class="nfs-cyber-rank-num ${rankNum === 1 ? 'rank-1' : rankNum === 2 ? 'rank-2' : rankNum === 3 ? 'rank-3' : 'rank-rest'}"># ${rankNum}</span>
               </td>
               <td>
-                <div class="hof-driver-cell" style="display: flex; align-items: center; gap: 14px;">
-                  <div class="lb-avatar-box hof-avatar-lg" style="background: ${getDriverAvatarBg(d.name)}; color: #ffffff; width: 42px; height: 42px; border-radius: 10px; font-size: 15px; font-weight: 900; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25); flex-shrink: 0;">
-                    ${escapeHtml(initials)}
-                  </div>
-                  <div class="nfs-driver-link hof-driver-name" data-open-pilot="${escapeHtml(d.name)}" style="font-family: var(--font-display, 'Chivo', sans-serif); font-size: 19px; font-weight: 900; font-style: italic; color: #ffffff; letter-spacing: -0.01em; line-height: 1.1; text-transform: uppercase; text-shadow: 0 2px 8px rgba(0,0,0,0.6);">
+                <div class="hof-driver-cell" style="display: flex; align-items: center;">
+                  <div class="nfs-driver-link hof-driver-name hof-driver-flat" data-open-pilot="${escapeHtml(d.name)}">
                     ${escapeHtml(d.name)}
                   </div>
                 </div>
@@ -2977,18 +3021,14 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
           </td>
 
-          <!-- 2. PILOTO (Solo avatar y nombre del piloto grande) -->
+          <!-- 2. PILOTO (Sin escudo, solo nombre y Blacklist #1..#8 abajo) -->
           <td>
-            <div class="hof-driver-cell" style="display: flex; align-items: center; gap: 14px;">
-              ${avatarSrc ? `
-                <img src="${escapeHtml(avatarSrc)}" alt="${escapeHtml(d.name)}" style="width: 42px; height: 42px; border-radius: 10px; object-fit: cover; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 4px 12px rgba(0,0,0,0.5); flex-shrink: 0;" loading="lazy" />
-              ` : `
-                <div class="lb-avatar-box hof-avatar-lg" style="background: ${getDriverAvatarBg(d.name)}; color: #ffffff; width: 42px; height: 42px; border-radius: 10px; font-size: 15px; font-weight: 900; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25); flex-shrink: 0;">
-                  ${escapeHtml(initials)}
-                </div>
-              `}
+            <div class="hof-driver-cell" style="display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 2px;">
               <div class="nfs-driver-link hof-driver-name" data-open-pilot="${escapeHtml(d.name)}" style="font-family: var(--font-display, 'Chivo', sans-serif); font-size: 19px; font-weight: 900; font-style: italic; color: #ffffff; letter-spacing: -0.01em; line-height: 1.1; text-transform: uppercase; text-shadow: 0 2px 8px rgba(0,0,0,0.6);">
                 ${escapeHtml(d.name)}
+              </div>
+              <div style="font-family: 'Orbitron', var(--font-mono), monospace; font-size: 11px; font-weight: 800; color: #ffae00; margin-top: 3px; letter-spacing: 0.05em; text-transform: uppercase;">
+                BLACKLIST #${origPos}
               </div>
             </div>
           </td>
@@ -3845,7 +3885,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function switchTorneoTab(tabId, options = {}) {
-    if (!tabId || tabId === "dossiers") tabId = "standings";
+    if (!tabId || tabId === "dossiers" || tabId === "tutorial") tabId = "standings";
     torneoState.activeTab = tabId;
 
     // Ensure view-blog is active without recursive clobbering
@@ -4172,7 +4212,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     ${escapeHtml(d.name)}
                   </div>
                   <div style="font-family: 'Orbitron', var(--font-mono), monospace; font-size: 11px; font-weight: 800; color: #ffae00; margin-top: 3px; letter-spacing: 0.05em; text-transform: uppercase;">
-                    BLACKLIST #${d.rank}
+                    BLACKLIST #${standingPos}
                   </div>
                 </div>
               </td>
@@ -5164,24 +5204,6 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
 
       <div class="champ-celebration-inner">
-        <!-- Top Banner Header -->
-        <div class="champ-celebration-top-bar">
-          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-            <div class="champ-badge-ribbon">
-              <span>👑</span>
-              <span>GANADOR DEL EVENTO PLAYLIST 2026 CHAMPION</span>
-              <span>👑</span>
-            </div>
-            <div class="champ-closed-status-tag">
-              <span>🏆</span>
-              <span>CUADRO OFICIAL FINALIZADO &bull; TEMPORADA CLAUSURADA</span>
-            </div>
-          </div>
-          <button type="button" class="champ-hero-toggle-btn" onclick="toggleChampHeroShowcase(true)" title="Ocultar vitrina para ver tablas">
-            Ocultar Vitrina ✕
-          </button>
-        </div>
-
         <!-- Showcase Body: Campeón + Subcampeones -->
         <div class="champ-showcase-grid">
           <!-- Tarjeta del Campeón (#1) -->
@@ -5206,15 +5228,15 @@ document.addEventListener("DOMContentLoaded", () => {
               <div class="champ-winner-kpi-row">
                 <div class="champ-winner-kpi-item">
                   <span class="champ-winner-kpi-label">Puntaje Oficial</span>
-                  <span class="champ-winner-kpi-val" style="color: #fbbf24;">${champPts} PTS</span>
+                  <span class="champ-winner-kpi-val" style="color: #fde047;">${champPts} <span style="font-size: 12px; color: #facc15;">PTS</span></span>
                 </div>
                 <div class="champ-winner-kpi-item">
                   <span class="champ-winner-kpi-label">Bolsa de Recompensa</span>
-                  <span class="champ-winner-kpi-val rep-gold">$${champRep} REP</span>
+                  <span class="champ-winner-kpi-val rep-gold">$${champRep} <span style="font-size: 12px;">REP</span></span>
                 </div>
                 <div class="champ-winner-kpi-item">
                   <span class="champ-winner-kpi-label">Victorias P1</span>
-                  <span class="champ-winner-kpi-val" style="color: #38bdf8;">${(champDriver.victories && champDriver.victories.p1) || 0} OROS</span>
+                  <span class="champ-winner-kpi-val" style="color: #38bdf8;">${(champDriver.victories && champDriver.victories.p1) || 0} <span style="font-size: 12px;">OROS</span></span>
                 </div>
               </div>
             </div>
@@ -5228,7 +5250,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div>
                   <div class="champ-runner-rank-tag">SUBCAMPEÓN #2</div>
                   <div class="champ-runner-name">${escapeHtml(runnerItem.driver.name)}</div>
-                  <div class="champ-runner-pts">${(runnerItem.totalPts || 0).toLocaleString("es-ES")} PTS &bull; $${(((typeof runnerItem.driver._numericRep === "number") ? runnerItem.driver._numericRep : (parseInt(String(runnerItem.driver.rep || "0").replace(/[^0-9]/g, ""), 10) || 0))).toLocaleString("es-ES")} REP</div>
+                  <div class="champ-runner-pts"><span style="color: #fde047;">${(runnerItem.totalPts || 0).toLocaleString("es-ES")} PTS</span> &bull; <span style="color: #00ffa3;">$${(((typeof runnerItem.driver._numericRep === "number") ? runnerItem.driver._numericRep : (parseInt(String(runnerItem.driver.rep || "0").replace(/[^0-9]/g, ""), 10) || 0))).toLocaleString("es-ES")} REP</span></div>
                 </div>
               </div>
             ` : ''}
@@ -5239,7 +5261,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div>
                   <div class="champ-runner-rank-tag">TERCER PUESTO #3</div>
                   <div class="champ-runner-name">${escapeHtml(thirdItem.driver.name)}</div>
-                  <div class="champ-runner-pts">${(thirdItem.totalPts || 0).toLocaleString("es-ES")} PTS &bull; $${(((typeof thirdItem.driver._numericRep === "number") ? thirdItem.driver._numericRep : (parseInt(String(thirdItem.driver.rep || "0").replace(/[^0-9]/g, ""), 10) || 0))).toLocaleString("es-ES")} REP</div>
+                  <div class="champ-runner-pts"><span style="color: #fde047;">${(thirdItem.totalPts || 0).toLocaleString("es-ES")} PTS</span> &bull; <span style="color: #00ffa3;">$${(((typeof thirdItem.driver._numericRep === "number") ? thirdItem.driver._numericRep : (parseInt(String(thirdItem.driver.rep || "0").replace(/[^0-9]/g, ""), 10) || 0))).toLocaleString("es-ES")} REP</span></div>
                 </div>
               </div>
             ` : ''}
@@ -6051,46 +6073,78 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    // Render Pilot Cockpit Header Card
+    // Render Pilot Cockpit Header Card (Modelo Esports Profile: 13MwRR Reference)
     const cockpitEl = document.getElementById("telemetry-pilot-cockpit");
     if (cockpitEl) {
       const initials = activePilot.name.slice(0, 2).toUpperCase();
+      const globalRank = sortedDrivers.findIndex((d) => d.name === activePilot.name) + 1;
+      const totalRaces = activePilot.records ? activePilot.records.length : 0;
+      const winPct = totalRaces > 0 ? Math.round((activePilot.wrs / totalRaces) * 100) : 0;
+      const carEntries = Object.entries(activePilot.carCounts || {}).sort((a, b) => b[1] - a[1]);
+      const topCarName = carEntries.length > 0 ? carEntries[0][0] : (activePilot.signatureCar || "Carrera GT");
+      const topCarCount = carEntries.length > 0 ? carEntries[0][1] : totalRaces;
+
       cockpitEl.innerHTML = `
-        <div class="nfs-cockpit-grid">
-          <div class="nfs-cockpit-pilot-box">
-            <div class="nfs-cockpit-avatar">${escapeHtml(initials)}</div>
-            <div>
-              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px;">
-                <span class="nfs-type-pill" style="border-color: ${activePilot.tierColor}; color: ${activePilot.tierColor};">${activePilot.tierLabel}</span>
-                <span class="creator-slug">VERIFICADO 128HZ FIREBASE</span>
+        <div class="pilot-dossier-shell">
+          <!-- Top Profile Row -->
+          <div class="pilot-dossier-header">
+            <div class="pilot-dossier-identity">
+              <div class="pilot-dossier-avatar-box">${escapeHtml(initials)}</div>
+              <div class="pilot-dossier-name-block">
+                <h2 class="pilot-dossier-username">${escapeHtml(activePilot.name)}</h2>
               </div>
-              <h3 style="font-size: 28px; font-weight: 900; color: #ffffff; letter-spacing: -0.02em;">${escapeHtml(activePilot.name)}</h3>
-              <div style="font-family: var(--font-mono); font-size: 12px; color: #c4b5fd; margin-top: 3px;">
-                ${escapeHtml(activePilot.country)} &bull; Escudería: <strong>${escapeHtml(activePilot.team)}</strong>
-              </div>
-              <div style="font-family: var(--font-mono); font-size: 11.5px; color: #ffae00; margin-top: 4px;">
-                Auto Insignia: <strong>${escapeHtml(activePilot.signatureCar)}</strong> &bull; Hardware: ${escapeHtml(activePilot.device)} (${escapeHtml(activePilot.gearbox)})
-              </div>
+            </div>
+
+            <div class="pilot-dossier-actions">
+              <button type="button" class="pilot-btn-primary" onclick="switchView('view-spotlight')">
+                <span>VER TOP RANKED</span>
+              </button>
+              <button type="button" class="pilot-btn-secondary" onclick="document.getElementById('telemetry-records-tbody')?.scrollIntoView({behavior:'smooth'})">
+                <span>VER CARRERAS</span>
+              </button>
             </div>
           </div>
 
-          <div class="nfs-cockpit-stats-grid">
-            <div class="nfs-cockpit-stat-box">
-              <div class="nfs-cockpit-stat-val" style="color: #fde047;">${activePilot.wrs}</div>
-              <div class="nfs-cockpit-stat-lbl">Récords Mundiales (#1)</div>
+          <!-- Navigation Tabs Strip -->
+          <div class="pilot-dossier-tabs">
+            <button type="button" class="pilot-dossier-tab is-active">RESUMEN</button>
+            <button type="button" class="pilot-dossier-tab" onclick="document.getElementById('telemetry-records-tbody')?.scrollIntoView({behavior:'smooth'})">CARRERAS (${totalRaces})</button>
+            <button type="button" class="pilot-dossier-tab" onclick="switchView('view-leaderboard')">LEADERBOARD</button>
+          </div>
+
+          <!-- 5-Column Stats Strip -->
+          <div class="pilot-dossier-stats-bar">
+            <div class="pilot-stat-col">
+              <div class="pilot-stat-label">Puntuación FIA</div>
+              <div class="pilot-stat-value pilot-stat-gold">${(activePilot.points || 0).toLocaleString('es-ES')} <sup class="pilot-stat-rank">#${globalRank}</sup></div>
             </div>
-            <div class="nfs-cockpit-stat-box">
-              <div class="nfs-cockpit-stat-val" style="color: #e2e8f0;">${activePilot.totalPodiums}</div>
-              <div class="nfs-cockpit-stat-lbl">Total Podios (🥇${activePilot.wrs} 🥈${activePilot.silver} 🥉${activePilot.bronze})</div>
+            <div class="pilot-stat-col">
+              <div class="pilot-stat-label">Carreras</div>
+              <div class="pilot-stat-value">${totalRaces}</div>
             </div>
-            <div class="nfs-cockpit-stat-box">
-              <div class="nfs-cockpit-stat-val" style="color: #ffae00;">${activePilot.byType.Circuito} / ${activePilot.byType.Sprint} / ${activePilot.byType.Drag}</div>
-              <div class="nfs-cockpit-stat-lbl">WRs Cir / Spr / Drag</div>
+            <div class="pilot-stat-col">
+              <div class="pilot-stat-label">Victorias (Pro Records)</div>
+              <div class="pilot-stat-value">${activePilot.wrs}</div>
             </div>
-            <div class="nfs-cockpit-stat-box">
-              <div class="nfs-cockpit-stat-val" style="color: #34d399;">${activePilot.records.length}</div>
-              <div class="nfs-cockpit-stat-lbl">Registros en Pista</div>
+            <div class="pilot-stat-col">
+              <div class="pilot-stat-label">Porcentaje de victorias</div>
+              <div class="pilot-stat-value">${winPct} %</div>
             </div>
+            <div class="pilot-stat-col">
+              <div class="pilot-stat-label">Coche más usado</div>
+              <div class="pilot-stat-value pilot-stat-car">${escapeHtml(topCarName)}</div>
+              <div class="pilot-stat-sub">${topCarCount} carreras</div>
+            </div>
+          </div>
+
+          <!-- Sobre el piloto / Resumen técnico -->
+          <div class="pilot-dossier-about">
+            <h3 class="pilot-about-title">Sobre el piloto</h3>
+            <ul class="pilot-about-list">
+              <li>- Piloto oficial homologado en <strong>Rockport City 128Hz</strong> (${escapeHtml(activePilot.country)})</li>
+              <li>- Podios acumulados: <strong>${activePilot.totalPodiums}</strong> (🥇 ${activePilot.wrs} WRs &bull; 🥈 ${activePilot.silver} P2 &bull; 🥉 ${activePilot.bronze} P3)</li>
+              <li>- Desglose por disciplina: <strong>${activePilot.byType.Circuito}</strong> Circuito &bull; <strong>${activePilot.byType.Sprint}</strong> Sprint &bull; <strong>${activePilot.byType.Drag}</strong> Drag</li>
+            </ul>
           </div>
         </div>
       `;
@@ -6098,7 +6152,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const tableTitleEl = document.getElementById("telemetry-table-title");
     if (tableTitleEl) {
-      tableTitleEl.textContent = `Expediente de Récords Registrados: ${activePilot.name}`;
+      tableTitleEl.textContent = `Carreras recientes`;
     }
 
     renderTelemetryRecordsTable(activePilot);
@@ -6129,51 +6183,39 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (filtered.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 26px; color: var(--text-secondary);">No se encontraron registros para los filtros seleccionados en el expediente de ${escapeHtml(activePilot.name)}.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 26px; color: var(--text-secondary);">No se encontraron registros para los filtros seleccionados en el expediente de ${escapeHtml(activePilot.name)}.</td></tr>`;
       return;
     }
 
     tbody.innerHTML = filtered
       .map((rec) => {
-        const rankClass = rec.rank === 1 ? "rank-1" : rec.rank === 2 ? "rank-2" : rec.rank === 3 ? "rank-3" : "";
-        const typeClass = (rec.type || "Circuito").toLowerCase();
-        const timeColor = rec.rank === 1 ? "#fde047" : rec.rank === 2 ? "#e2e8f0" : rec.rank === 3 ? "#fdba74" : "#34d399";
+        const posColor = rec.rank === 1 ? "#fbbf24" : rec.rank === 2 ? "#e2e8f0" : rec.rank === 3 ? "#fb923c" : "#cbd5e1";
+        const typeIcon = rec.type === "Circuito" ? "↻" : rec.type === "Drag" ? "⚡" : "⚑";
+        const hasVid = rec.videoUrl && rec.videoUrl !== "#" && String(rec.videoUrl).startsWith("http");
 
         return `
-          <tr>
-            <td style="width: 56px; text-align: center;">
-              ${renderLeaderboardPositionBadge(rec.rank)}
+          <tr class="pilot-recent-row" data-open-route-lb="${escapeHtml(rec.route)}" style="cursor: pointer;">
+            <td>
+              <span class="pilot-recent-pos" style="color: ${posColor};">${rec.rank}.°</span>
             </td>
             <td>
-              <div class="nfs-driver-link" data-open-route-lb="${escapeHtml(rec.route)}">${escapeHtml(rec.route)}</div>
+              <div class="pilot-recent-route-title" data-open-route-lb="${escapeHtml(rec.route)}">${escapeHtml(rec.route)}</div>
+              <div class="pilot-recent-route-sub">${typeIcon} ${escapeHtml(rec.type)}, ${escapeHtml(rec.category)}</div>
             </td>
             <td>
-              <span class="nfs-type-pill type-${typeClass}">${escapeHtml(rec.type)}</span>
-            </td>
-            <td>
-              <span style="font-family: var(--font-mono); font-size: 11.5px; color: #c4b5fd;">${escapeHtml(rec.category)}</span>
-            </td>
-            <td>
-              <span class="stitch-num" style="font-size: 14.5px; font-weight: 800; color: ${timeColor};">${formatStitchTimeHtml(rec.time)}</span>
-            </td>
-            <td>
-              <div style="font-weight: 700; color: #fff;">${escapeHtml(rec.car)}</div>
-              <div style="font-family: var(--font-mono); font-size: 10.5px; color: var(--text-secondary);">${escapeHtml(rec.setup)}</div>
-            </td>
-            <td>
-              <span class="creator-slug">${escapeHtml(rec.device)}</span>
-            </td>
-            <td>
-              <span class="creator-slug">${escapeHtml(rec.gearbox)}</span>
+              <div class="pilot-recent-car">${escapeHtml(rec.car || "-")}</div>
             </td>
             <td style="text-align: right;">
-              <div style="display: inline-flex; gap: 6px; justify-content: flex-end;">
+              <span class="pilot-recent-time ${rec.rank === 1 ? 'is-wr' : ''}">${escapeHtml(rec.time)}</span>
+            </td>
+            <td style="text-align: right;" onclick="event.stopPropagation();">
+              <div style="display: inline-flex; align-items: center; gap: 10px; justify-content: flex-end;">
+                <span class="pilot-recent-when">${escapeHtml(rec.date || "Verificado")}</span>
                 ${
-                  rec.videoUrl && rec.videoUrl !== "#" && String(rec.videoUrl).startsWith("http")
-                    ? `<a href="${escapeHtml(rec.videoUrl)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="btn-nfs-white-cta btn-table-video no-glitch" style="padding: 5px 12px; font-size: 11px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;"><span>VIDEO</span></a>`
+                  hasVid
+                    ? `<a href="${escapeHtml(rec.videoUrl)}" target="_blank" rel="noopener noreferrer" class="pilot-recent-video-link">VIDEO</a>`
                     : ""
                 }
-                <button type="button" class="uiverse-baboon-btn stage-action-btn btn-sm btn-nfs-white-cta" data-text="Leaderboard →" data-open-route-lb="${escapeHtml(rec.route)}"><span class="text">Leaderboard &rarr;</span></button>
               </div>
             </td>
           </tr>

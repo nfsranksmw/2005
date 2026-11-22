@@ -4,12 +4,13 @@
  */
 
 (function () {
-  const OFFICIAL_WEB_URL = "https://web.nfsmwo.com/";
+  const OFFICIAL_WEB_URL = "https://web.nfsmwo.com/?utm_source=nfsmwo.com&utm_medium=hero&utm_campaign=mwo-website";
 
   function openOfficialGame(serverParam) {
     let url = OFFICIAL_WEB_URL;
     if (serverParam) {
-      url += "?server=" + encodeURIComponent(serverParam);
+      const sep = url.includes("?") ? "&" : "?";
+      url += sep + "server=" + encodeURIComponent(serverParam);
     }
     window.open(url, "_blank", "noopener,noreferrer");
   }
@@ -17,7 +18,7 @@
   function initNfsmwoLauncher() {
     const modal = document.getElementById("gameLauncherModal");
     const btnPlay = document.getElementById("btnPlayOnline");
-    const btnSingle = document.getElementById("btnSinglePlayer");
+    const btnSingle = document.getElementById("btnSingleplayer") || document.getElementById("btnSinglePlayer");
     const btnDirect = document.getElementById("btnLaunchDirect");
     const btnQuickMatch = document.getElementById("btnQuickMatch");
     const btnClose = document.getElementById("btnCloseModal");
@@ -79,7 +80,7 @@
     if (btnPlay) {
       btnPlay.addEventListener("click", (e) => {
         e.preventDefault();
-        openLauncher(true);
+        openOfficialGame();
       });
     }
 
@@ -100,7 +101,7 @@
     if (btnSingle) {
       btnSingle.addEventListener("click", (e) => {
         e.preventDefault();
-        openOfficialGame("story");
+        openOfficialGame("singleplayer");
       });
     }
 

@@ -6078,22 +6078,30 @@ tr:hover .esports-mirror-cash::after {
 .champ-prize-poster-wrap {
   position: relative;
   width: 100%;
-  height: 310px;
-  background: #050409;
+  aspect-ratio: 3 / 4;
+  max-height: 460px;
+  background: radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.06) 0%, #050409 82%);
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 12px 6px 12px;
+  box-sizing: border-box;
 }
 
 .champ-prize-poster-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center top;
+  object-fit: contain;
+  object-position: center center;
   display: block;
+  border-radius: 10px;
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.75));
   transition: transform 0.4s ease;
 }
 
 .champ-prize-card:hover .champ-prize-poster-img {
-  transform: scale(1.04);
+  transform: scale(1.03);
 }
 
 .champ-prize-poster-wrap::after {
@@ -6102,8 +6110,8 @@ tr:hover .esports-mirror-cash::after {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 85px;
-  background: linear-gradient(0deg, rgba(13, 12, 20, 1) 0%, rgba(13, 12, 20, 0.6) 50%, transparent 100%);
+  height: 36px;
+  background: linear-gradient(0deg, rgba(13, 12, 20, 0.95) 0%, transparent 100%);
   pointer-events: none;
 }
 
@@ -6230,6 +6238,7 @@ tr:hover .esports-mirror-cash::after {
     gap: 16px;
   }
   .champ-prize-poster-wrap {
-    height: 250px;
+    aspect-ratio: 3 / 4;
+    max-height: 360px;
   }
 }

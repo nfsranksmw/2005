@@ -1549,8 +1549,8 @@ html body :is(.leaderboard-banner-wrapper, .lb-video-banner) {
   display: flex !important;
   align-items: center !important;
   justify-content: flex-start !important;
-  min-height: 280px !important;
-  padding: 36px 40px !important;
+  min-height: 175px !important;
+  padding: 22px 36px !important;
 }
 
 /* 1. Botón volver a rutas arriba a la derecha */
@@ -4212,9 +4212,11 @@ html body :is(.btn-table-video):not(#_) {
 
 .champ-winner-kpi-val {
   font-family: var(--font-display, 'Chivo', sans-serif) !important;
-  font-size: 18px !important;
+  font-size: 20px !important;
   font-weight: 900 !important;
-  color: #ffffff !important;
+  font-style: italic !important;
+  letter-spacing: -0.01em !important;
+  text-shadow: 0 0 14px rgba(251, 191, 36, 0.32) !important;
 }
 
 .champ-winner-kpi-val.rep-gold {
@@ -4271,11 +4273,14 @@ html body :is(.btn-table-video):not(#_) {
 }
 
 .champ-runner-pts {
-  font-family: var(--font-mono, monospace) !important;
-  font-size: 11.5px !important;
-  font-weight: 800 !important;
+  font-family: var(--font-display, 'Chivo', sans-serif) !important;
+  font-size: 13.5px !important;
+  font-weight: 900 !important;
+  font-style: italic !important;
+  letter-spacing: -0.01em !important;
   color: #fde047 !important;
-  margin-top: 2px !important;
+  margin-top: 3px !important;
+  text-shadow: 0 0 10px rgba(253, 224, 71, 0.25) !important;
 }
 
 /* Botón Minimizado de Consulta rápida */
@@ -4889,4 +4894,1422 @@ html body :is(.leaderboard-banner-wrapper, .lb-video-banner, .routes-catalog-her
 .nfs-cyber-rank-num.rank-rest {
   color: #ffffff !important;
   text-shadow: 0 0 8px rgba(255, 255, 255, 0.3) !important;
+}
+
+/* ==========================================================================
+   LEADERBOARD COMPACT BANNER & MOTORSPORT CONDENSED TYPOGRAPHY
+   (40% menos altura en banner de video + Tipografía más grande para Título & WR)
+   ========================================================================== */
+html body #view-leaderboard :is(.leaderboard-banner-wrapper, .lb-video-banner, .rc-stitch-banner) {
+  min-height: 165px !important;
+  padding: 18px 34px !important;
+  border-radius: 16px !important;
+}
+
+html body #view-leaderboard :is(.leaderboard-banner-wrapper, .lb-video-banner) .btn-back-to-tracks:not(#_) {
+  top: 12px !important;
+  right: 20px !important;
+  padding: 5px 12px !important;
+  font-size: 12px !important;
+}
+
+html body #view-leaderboard :is(.leaderboard-banner-wrapper, .lb-video-banner) .rc-banner-content-wrap {
+  gap: 24px !important;
+  align-items: center !important;
+}
+
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner) #lb-hero-route-title {
+  margin-bottom: 0 !important;
+}
+
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner) #lb-hero-route-title .lb-title-prefix {
+  font-family: 'Barlow Condensed', 'Chivo', sans-serif !important;
+  font-size: clamp(18px, 2.0vw, 22px) !important;
+  font-weight: 800 !important;
+  font-style: italic !important;
+  letter-spacing: 0.08em !important;
+  margin-bottom: 2px !important;
+}
+
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner) #lb-hero-route-title .lb-title-route-name {
+  font-family: 'Barlow Condensed', 'Chivo', sans-serif !important;
+  font-size: clamp(2.6rem, 4.4vw, 3.9rem) !important;
+  font-weight: 900 !important;
+  font-style: italic !important;
+  letter-spacing: 0.02em !important;
+  line-height: 0.94 !important;
+}
+
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner) .lb-banner-wr-card {
+  padding: 10px 20px !important;
+  margin-top: 24px !important;
+}
+
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner) .lb-banner-wr-badge-label {
+  font-family: 'Barlow Condensed', sans-serif !important;
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.1em !important;
+}
+
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner) .lb-banner-wr-time {
+  font-family: 'Barlow Condensed', 'Outfit', sans-serif !important;
+  font-size: 38px !important;
+  font-weight: 900 !important;
+  font-style: italic !important;
+  line-height: 1.0 !important;
+  color: #ff8c1a !important;
+  letter-spacing: 0.02em !important;
+  margin: 2px 0 !important;
+}
+
+html body :is(.leaderboard-banner-wrapper, .lb-video-banner) .lb-banner-wr-holder {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+}
+
+/* Tabla de Clasificación: Títulos de columna, Números, Pilotos y Tiempos Naranja */
+.lb-clean-table thead th {
+  font-family: 'Barlow Condensed', 'Outfit', sans-serif !important;
+  font-size: 13.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.09em !important;
+  text-transform: uppercase !important;
+}
+
+.lb-clean-table .nfs-cyber-rank-num {
+  font-family: 'Barlow Condensed', 'Orbitron', sans-serif !important;
+  font-size: 21px !important;
+  font-weight: 800 !important;
+  font-style: italic !important;
+  letter-spacing: 0.02em !important;
+}
+
+.lb-clean-table .lb-user-name {
+  font-family: 'Barlow Condensed', 'Chivo', sans-serif !important;
+  font-size: 21px !important;
+  font-weight: 800 !important;
+  font-style: italic !important;
+  letter-spacing: 0.03em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  line-height: 1.15 !important;
+}
+
+.lb-clean-table .lb-time-val,
+.lb-clean-table .stitch-time-display,
+.lb-clean-table .stitch-time-main,
+.lb-clean-table .stitch-time-ms {
+  font-family: 'Barlow Condensed', 'Outfit', sans-serif !important;
+  font-feature-settings: "tnum" 1 !important;
+  font-variant-numeric: tabular-nums !important;
+  font-size: 21px !important;
+  font-weight: 800 !important;
+  font-style: italic !important;
+  letter-spacing: 0.025em !important;
+  color: #ff8c1a !important;
+  text-shadow: 0 0 12px rgba(255, 140, 26, 0.28) !important;
+}
+
+.lb-clean-table .lb-wr-glow .stitch-time-main,
+.lb-clean-table .lb-wr-glow .stitch-time-ms,
+.lb-clean-table .lb-time-val.lb-wr-glow {
+  color: #ff7b00 !important;
+  text-shadow: 0 0 16px rgba(255, 123, 0, 0.55) !important;
+}
+
+.lb-clean-table .stitch-delta-val {
+  font-family: 'Barlow Condensed', 'Outfit', sans-serif !important;
+  font-feature-settings: "tnum" 1 !important;
+  font-variant-numeric: tabular-nums !important;
+  font-size: 15.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.03em !important;
+}
+
+/* ==========================================================================
+   DOWNLOAD CENTER REDESIGN (#view-download) - VERTICAL, COVER ART & LIGHTNING
+   ========================================================================== */
+.dl-vertical-container {
+  max-width: 1080px;
+  margin: 28px auto 60px auto;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.dl-hero-card {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 28px;
+  align-items: center;
+  background: rgba(12, 12, 18, 0.88);
+  border: 1px solid rgba(255, 184, 0, 0.35);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.65), 0 0 30px rgba(255, 184, 0, 0.08);
+  backdrop-filter: blur(12px);
+}
+
+.dl-cover-wrap {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1.5px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.85);
+  background: #050508;
+}
+
+.dl-cover-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.dl-hero-info {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.dl-eyebrow {
+  font-family: var(--font-mono, monospace);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #ffb800;
+  text-transform: uppercase;
+}
+
+.dl-main-title {
+  font-family: 'Barlow Condensed', 'Chivo', sans-serif;
+  font-size: clamp(2rem, 3.4vw, 2.9rem);
+  font-weight: 900;
+  font-style: italic;
+  color: #ffffff;
+  line-height: 1.02;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.dl-edition-tag {
+  color: #ffb800;
+}
+
+.dl-clean-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dl-clean-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 15px;
+  line-height: 1.45;
+  color: #e2e8f0;
+}
+
+.dl-clean-list li strong {
+  color: #ffffff;
+}
+
+.dl-check {
+  color: #ffb800;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+/* Estilo Relámpago CTA */
+.dl-btn-lightning {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 26px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #ffcc00 0%, #ff7b00 100%);
+  color: #09080d !important;
+  font-family: 'Barlow Condensed', 'Chivo', sans-serif;
+  font-size: 19px;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid #ffe066;
+  box-shadow: 0 0 26px rgba(255, 165, 0, 0.45), 0 8px 20px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  align-self: flex-start;
+  margin-top: 4px;
+}
+
+.dl-btn-lightning::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: skewX(-22deg);
+  transition: left 0.45s ease;
+}
+
+.dl-btn-lightning:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 38px rgba(255, 184, 0, 0.75), 0 12px 26px rgba(0, 0, 0, 0.75);
+}
+
+.dl-btn-lightning:hover::after {
+  left: 140%;
+}
+
+.dl-btn-lightning.dl-btn-radmin {
+  background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+  color: #ffffff !important;
+  border-color: #7dd3fc;
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.4), 0 8px 20px rgba(0, 0, 0, 0.6);
+}
+
+.dl-btn-lightning.dl-btn-radmin:hover {
+  box-shadow: 0 0 36px rgba(56, 189, 248, 0.7), 0 12px 26px rgba(0, 0, 0, 0.75);
+}
+
+.dl-section-card {
+  background: rgba(12, 12, 18, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 24px 26px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+.dl-card-radmin {
+  border-color: rgba(56, 189, 248, 0.35);
+}
+
+.dl-card-fix {
+  border-color: rgba(255, 174, 0, 0.35);
+}
+
+.dl-section-heading {
+  font-family: 'Barlow Condensed', 'Chivo', sans-serif;
+  font-size: 24px;
+  font-weight: 900;
+  font-style: italic;
+  color: #ffffff;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  margin: 0 0 16px 0;
+}
+
+.dl-card-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.dl-specs-vertical-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dl-specs-vertical-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  flex-wrap: wrap;
+}
+
+.dl-spec-key {
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  font-weight: 800;
+  color: #ffb800;
+  letter-spacing: 0.06em;
+}
+
+.dl-spec-val {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+@media (max-width: 780px) {
+  .dl-hero-card {
+    grid-template-columns: 1fr;
+  }
+  .dl-cover-wrap {
+    max-width: 240px;
+    margin: 0 auto;
+  }
+  .dl-btn-lightning {
+    width: 100%;
+  }
+}
+
+/* ==========================================================================
+   COMMUNITY UNIFIED VERTICAL LAYOUT & DOWNLOAD CENTER TYPOGRAPHY
+   (#view-tuning Vertical, #view-rules Vertical, #view-submit Oficial Homologación)
+   ========================================================================== */
+#view-tuning,
+#view-rules,
+#view-submit {
+  max-width: 1080px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-top: 86px !important;
+}
+
+#view-tuning .tracker-section-header,
+#view-rules .tracker-section-header,
+#view-submit .tracker-section-header {
+  padding-bottom: 14px !important;
+}
+
+#view-tuning .tracker-header-sup,
+#view-rules .tracker-header-sup,
+#view-submit .tracker-header-sup {
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 11.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.12em !important;
+  color: #ffb800 !important;
+  text-transform: uppercase !important;
+}
+
+#view-tuning .tracker-header-title,
+#view-rules .tracker-header-title,
+#view-submit .tracker-header-title {
+  font-family: 'Barlow Condensed', 'Chivo', sans-serif !important;
+  font-size: clamp(2.1rem, 3.6vw, 3.0rem) !important;
+  font-weight: 900 !important;
+  font-style: italic !important;
+  letter-spacing: 0.02em !important;
+  text-transform: uppercase !important;
+  line-height: 1.0 !important;
+}
+
+#view-tuning .tracker-header-desc,
+#view-rules .tracker-header-desc,
+#view-submit .tracker-header-desc {
+  font-size: 15px !important;
+  line-height: 1.45 !important;
+  color: #cbd5e1 !important;
+}
+
+/* Tuning: Todo en vertical (1 columna) + Tipografía Download Center */
+#view-tuning .tuning-hub-container {
+  max-width: 1080px !important;
+  padding: 0 !important;
+}
+
+#view-tuning .tuning-cars-grid,
+#view-tuning #tuning-cars-container {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 20px !important;
+}
+
+#view-tuning .tuning-car-card {
+  width: 100% !important;
+  background: rgba(12, 12, 18, 0.88) !important;
+  border: 1px solid rgba(255, 184, 0, 0.25) !important;
+  border-radius: 16px !important;
+  padding: 22px 24px !important;
+}
+
+#view-tuning .tuning-car-name,
+#view-tuning .tuning-car-card h3 {
+  font-family: 'Barlow Condensed', 'Chivo', sans-serif !important;
+  font-size: 26px !important;
+  font-weight: 900 !important;
+  font-style: italic !important;
+  letter-spacing: 0.03em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+}
+
+#view-tuning .tuning-car-card p,
+#view-tuning .tuning-car-card li,
+#view-tuning .tuning-slider-label {
+  font-size: 14.5px !important;
+  line-height: 1.45 !important;
+}
+
+/* Rules: Vertical + Tipografía Download Center */
+#view-rules .rules-pro-container {
+  max-width: 1080px !important;
+  padding: 0 !important;
+}
+
+#view-rules .rules-cards-grid {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 20px !important;
+}
+
+#view-rules .rules-moderator-title,
+#view-rules .rule-header-title {
+  font-family: 'Barlow Condensed', 'Chivo', sans-serif !important;
+  font-size: 24px !important;
+  font-weight: 900 !important;
+  font-style: italic !important;
+  letter-spacing: 0.03em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+}
+
+#view-rules .rule-card-pro {
+  background: rgba(12, 12, 18, 0.88) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  border-radius: 16px !important;
+  padding: 22px 24px !important;
+}
+
+#view-rules .rule-item-check {
+  font-size: 15px !important;
+  line-height: 1.45 !important;
+  color: #e2e8f0 !important;
+}
+
+/* Oficial Homologation / Moderación (#view-submit): Tipografía Download Center */
+#view-submit .homologation-container {
+  max-width: 1080px !important;
+  background: rgba(12, 12, 18, 0.88) !important;
+  border: 1px solid rgba(255, 184, 0, 0.3) !important;
+  border-radius: 18px !important;
+  padding: 28px !important;
+}
+
+#view-submit .homologation-container .title {
+  font-family: 'Barlow Condensed', 'Chivo', sans-serif !important;
+  font-size: 32px !important;
+  font-weight: 900 !important;
+  font-style: italic !important;
+  letter-spacing: 0.03em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+}
+
+#view-submit .homologation-container .subtitle {
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.1em !important;
+  color: #ffb800 !important;
+  text-transform: uppercase !important;
+}
+
+#view-submit .input-group label {
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.06em !important;
+  color: #ffb800 !important;
+  text-transform: uppercase !important;
+}
+
+#view-submit .btn-submit-homologation {
+  font-family: 'Barlow Condensed', 'Chivo', sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 900 !important;
+  font-style: italic !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+}
+
+/* ==========================================================================
+   PILOT DOSSIER PROFILE MODEL (#view-telemetry)
+   (Basado en imagen modelo: Perfil Esports Oscuro + 5-Col Stats + Lista Carreras)
+   ========================================================================== */
+#view-telemetry .nfs-telemetry-cockpit-card {
+  background: #0a0a0d !important;
+  border: 1px solid rgba(255, 255, 255, 0.09) !important;
+  border-radius: 14px !important;
+  padding: 28px 30px !important;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.7) !important;
+}
+
+.pilot-dossier-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.pilot-dossier-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.pilot-dossier-identity {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.pilot-dossier-avatar-box {
+  width: 82px;
+  height: 82px;
+  border-radius: 6px;
+  background: #202026;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Montserrat', 'Barlow Condensed', sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.pilot-dossier-username {
+  font-family: 'Montserrat', 'Chivo', sans-serif !important;
+  font-size: clamp(26px, 3vw, 34px) !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.02em !important;
+  color: #4f86f7 !important;
+  margin: 0 !important;
+  line-height: 1.05 !important;
+}
+
+.pilot-dossier-clan {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #60a5fa;
+  margin-top: 4px;
+}
+
+.pilot-dossier-submeta {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+
+.pilot-dossier-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pilot-btn-primary {
+  padding: 10px 18px;
+  background: #ffffff;
+  color: #09090b;
+  border: 1px solid #ffffff;
+  border-radius: 4px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.18s ease, background-color 0.18s ease;
+}
+
+.pilot-btn-primary:hover {
+  background: #e2e8f0;
+  transform: translateY(-1px);
+}
+
+.pilot-btn-secondary {
+  padding: 10px 18px;
+  background: #141418;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.pilot-btn-secondary:hover {
+  border-color: #ffffff;
+  background: #1e1e24;
+}
+
+.pilot-dossier-tabs {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.pilot-dossier-tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 10px 2px;
+  margin-bottom: -1px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.18s ease, border-color 0.18s ease;
+}
+
+.pilot-dossier-tab:hover {
+  color: #ffffff;
+}
+
+.pilot-dossier-tab.is-active {
+  color: #ffffff;
+  border-bottom-color: #ffffff;
+}
+
+.pilot-dossier-stats-bar {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 18px;
+  background: #111115;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 20px 24px;
+}
+
+.pilot-stat-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pilot-stat-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #94a3b8;
+}
+
+.pilot-stat-value {
+  font-family: 'Montserrat', 'Barlow Condensed', sans-serif;
+  font-size: 26px;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1.1;
+}
+
+.pilot-stat-value.pilot-stat-gold {
+  color: #fbbf24;
+}
+
+.pilot-stat-rank {
+  font-size: 13px;
+  font-weight: 800;
+  color: #cbd5e1;
+  margin-left: 3px;
+}
+
+.pilot-stat-value.pilot-stat-car {
+  font-size: 18px;
+  line-height: 1.25;
+}
+
+.pilot-stat-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.pilot-dossier-about {
+  padding-top: 4px;
+}
+
+.pilot-about-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0 0 10px 0;
+}
+
+.pilot-about-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: #cbd5e1;
+}
+
+/* Tipografía Motorsport en la Lista de Carreras del Expediente (#view-telemetry) */
+#view-telemetry #telemetry-table-title {
+  font-family: 'Barlow Condensed', 'Chivo', sans-serif !important;
+  font-size: 26px !important;
+  font-weight: 900 !important;
+  font-style: italic !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.02em !important;
+}
+
+#view-telemetry .nfs-uiverse-table thead th {
+  font-family: 'Barlow Condensed', 'Outfit', sans-serif !important;
+  font-size: 13.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.09em !important;
+  text-transform: uppercase !important;
+}
+
+#view-telemetry #telemetry-records-tbody td:nth-child(5) span,
+#view-telemetry #telemetry-records-tbody .stitch-time-main,
+#view-telemetry #telemetry-records-tbody .stitch-time-ms {
+  font-family: 'Barlow Condensed', 'Outfit', sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 800 !important;
+  font-style: italic !important;
+  color: #ff8c1a !important;
+}
+
+@media (max-width: 900px) {
+  .pilot-dossier-stats-bar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ==========================================================================
+   EXACT PILOT DOSSIER & "CARRERAS RECIENTES" TYPOGRAPHY (MICHROMA + INTER)
+   ========================================================================== */
+.pilot-dossier-username {
+  font-family: 'Michroma', 'Syncopate', sans-serif !important;
+  font-size: clamp(22px, 2.6vw, 29px) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+  color: #4f86f7 !important;
+}
+
+.pilot-dossier-tab {
+  font-family: 'Michroma', 'Montserrat', sans-serif !important;
+  font-size: 11.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+}
+
+.pilot-stat-value {
+  font-family: 'Michroma', 'Montserrat', sans-serif !important;
+  font-size: 23px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.01em !important;
+}
+
+.pilot-stat-value.pilot-stat-car {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}
+
+.pilot-about-title,
+.pilot-recent-races-heading {
+  font-family: 'Michroma', 'Montserrat', sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  letter-spacing: 0.02em !important;
+  text-transform: none !important;
+  font-style: normal !important;
+  margin: 0 !important;
+}
+
+#view-telemetry .nfs-Leaderboard-panel {
+  background: #0a0a0d !important;
+  border: 1px solid rgba(255, 255, 255, 0.09) !important;
+  border-radius: 14px !important;
+  padding: 24px 28px !important;
+}
+
+#view-telemetry .nfs-uiverse-table {
+  border-collapse: collapse !important;
+}
+
+#view-telemetry .nfs-uiverse-table thead th {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: #94a3b8 !important;
+  text-transform: none !important;
+  letter-spacing: 0.01em !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  padding: 10px 14px !important;
+}
+
+#view-telemetry #telemetry-records-tbody tr.pilot-recent-row:nth-child(even) {
+  background: rgba(255, 255, 255, 0.035) !important;
+}
+
+#view-telemetry #telemetry-records-tbody tr.pilot-recent-row:hover {
+  background: rgba(255, 255, 255, 0.075) !important;
+}
+
+#view-telemetry #telemetry-records-tbody td {
+  padding: 14px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
+}
+
+.pilot-recent-pos {
+  font-family: 'Michroma', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+}
+
+.pilot-recent-route-title {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  line-height: 1.25 !important;
+}
+
+.pilot-recent-route-sub {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12.5px !important;
+  font-weight: 500 !important;
+  color: #94a3b8 !important;
+  margin-top: 3px !important;
+}
+
+.pilot-recent-car {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: #e2e8f0 !important;
+}
+
+.pilot-recent-time {
+  font-family: 'Michroma', sans-serif !important;
+  font-size: 14.5px !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+}
+
+.pilot-recent-time.is-wr {
+  color: #4ade80 !important;
+}
+
+.pilot-recent-when {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  color: #94a3b8 !important;
+}
+
+.pilot-recent-video-link {
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.pilot-recent-video-link:hover {
+  background: #ffffff;
+  color: #09090b;
+}
+
+/* ==========================================================================
+   HEAVY BOLD WEIGHT & PURE WHITE PILOT NAME (OSKARGTR MODEL)
+   ========================================================================== */
+.pilot-dossier-username {
+  font-family: 'Michroma', 'Syncopate', sans-serif !important;
+  font-size: clamp(28px, 3.2vw, 36px) !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.03em !important;
+  color: #ffffff !important;
+  -webkit-text-stroke: 1.5px #ffffff !important;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.75) !important;
+}
+
+.pilot-dossier-tab {
+  font-family: 'Michroma', 'Montserrat', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.07em !important;
+  -webkit-text-stroke: 0.45px currentColor !important;
+}
+
+.pilot-stat-value {
+  font-family: 'Michroma', 'Montserrat', sans-serif !important;
+  font-size: 25px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.02em !important;
+  -webkit-text-stroke: 1.15px currentColor !important;
+}
+
+.pilot-stat-value.pilot-stat-car {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 16.5px !important;
+  font-weight: 800 !important;
+  -webkit-text-stroke: 0 !important;
+}
+
+.pilot-about-title,
+.pilot-recent-races-heading {
+  font-family: 'Michroma', 'Montserrat', sans-serif !important;
+  font-size: 21px !important;
+  font-weight: 900 !important;
+  color: #ffffff !important;
+  -webkit-text-stroke: 0.9px #ffffff !important;
+}
+
+.pilot-recent-pos {
+  font-family: 'Michroma', sans-serif !important;
+  font-size: 16.5px !important;
+  font-weight: 900 !important;
+  -webkit-text-stroke: 0.65px currentColor !important;
+}
+
+/* ==========================================================================
+   TOP RANKED FLAT PROFESSIONAL DESIGN & PILOT DOSSIER TYPOGRAPHY (MICHROMA + INTER)
+   ========================================================================== */
+#view-spotlight .nfs-table-wrap {
+  background: #0a0a0d !important;
+  border: 1px solid rgba(255, 255, 255, 0.09) !important;
+  border-radius: 6px !important;
+}
+
+#view-spotlight #hof-main-table {
+  border-collapse: collapse !important;
+}
+
+#view-spotlight #hof-main-table thead th {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #94a3b8 !important;
+  letter-spacing: 0.04em !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+#view-spotlight #hof-main-tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.03) !important;
+}
+
+#view-spotlight #hof-main-tbody tr:hover {
+  background: rgba(255, 255, 255, 0.07) !important;
+}
+
+#view-spotlight #hof-main-tbody td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.045) !important;
+}
+
+#view-spotlight .nfs-cyber-rank-num {
+  font-family: 'Michroma', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
+  -webkit-text-stroke: 0.65px currentColor !important;
+}
+
+#view-spotlight .hof-driver-name.hof-driver-flat {
+  font-family: 'Michroma', sans-serif !important;
+  font-size: 17px !important;
+  font-weight: 900 !important;
+  font-style: normal !important;
+  color: #ffffff !important;
+  letter-spacing: 0.02em !important;
+  line-height: 1.2 !important;
+  text-transform: none !important;
+  -webkit-text-stroke: 0.65px #ffffff !important;
+  text-shadow: none !important;
+}
+
+/* Flat Podiums with Michroma numbers */
+#view-spotlight .hof-podium-box {
+  border-radius: 3px !important;
+  box-shadow: none !important;
+  padding: 6px 12px !important;
+}
+
+#view-spotlight .hof-podium-box-count {
+  font-family: 'Michroma', sans-serif !important;
+  font-size: 17px !important;
+  font-weight: 900 !important;
+  -webkit-text-stroke: 0.6px currentColor !important;
+}
+
+#view-spotlight .hof-podium-box-tag,
+#view-spotlight .hof-podium-box-sub {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+}
+
+/* FIA Points in Michroma */
+#view-spotlight .hof-points-num {
+  font-family: 'Michroma', sans-serif !important;
+  font-size: 16.5px !important;
+  font-weight: 900 !important;
+  font-style: normal !important;
+  -webkit-text-stroke: 0.5px currentColor !important;
+}
+
+#view-spotlight .hof-points-pts-label {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  -webkit-text-stroke: 0 !important;
+}
+
+#view-spotlight .hof-points-bar-wrap,
+#view-spotlight .hof-points-bar-fill {
+  border-radius: 1px !important;
+}
+
+/* Flat Best Position & Honor Tier & Car/Hardware */
+#view-spotlight .hof-puesto-pill {
+  border-radius: 3px !important;
+  font-family: 'Michroma', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.03em !important;
+  padding: 5px 10px !important;
+}
+
+#view-spotlight #hof-main-tbody td:nth-child(6) > div:first-child {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #ffffff !important;
+}
+
+#view-spotlight .v7-device-tag {
+  border-radius: 3px !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+}
+
+#view-spotlight .v7-tier-pill {
+  border-radius: 3px !important;
+  font-family: 'Michroma', sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.04em !important;
+  padding: 6px 10px !important;
+}
+
+/* ==========================================================================
+   SINGLE-LINE ORANGE & WHITE PILOT SEARCH BAR (#view-telemetry)
+   ========================================================================== */
+.telemetry-single-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 8px 10px;
+  background: #0a0a0d;
+  border: 1px solid rgba(255, 123, 0, 0.45);
+  border-radius: 6px;
+}
+
+.telemetry-search-input-clean {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #ffffff !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 10px;
+}
+
+.telemetry-search-input-clean::placeholder {
+  color: rgba(255, 255, 255, 0.52);
+}
+
+.telemetry-search-btn-orange {
+  flex-shrink: 0;
+  padding: 10px 20px;
+  background: #ff7b00 !important;
+  background-color: #ff7b00 !important;
+  color: #ffffff !important;
+  border: 1px solid #ff9500 !important;
+  border-radius: 4px;
+  font-family: 'Michroma', 'Montserrat', sans-serif;
+  font-size: 11.5px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.telemetry-search-btn-orange:hover {
+  background: #ff9500;
+  box-shadow: 0 0 18px rgba(255, 123, 0, 0.45);
+}
+
+/* ==========================================================================
+   LEADERBOARD TABLE: TOP RANKED TYPOGRAPHY (MICHROMA + INTER) & DOSSIER BUTTONS
+   (Aplicado a todas las rutas de Circuito, Sprint y Drag)
+   ========================================================================== */
+#view-leaderboard .nfs-Leaderboard-panel {
+  background: #0a0a0d !important;
+  border: 1px solid rgba(255, 255, 255, 0.09) !important;
+  border-radius: 6px !important;
+}
+
+#view-leaderboard #lb-modality-tabs {
+  gap: 10px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+  padding-bottom: 10px !important;
+  width: 100% !important;
+}
+
+#view-leaderboard #lb-modality-tabs .filter-pill-btn {
+  background: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border-radius: 4px !important;
+  padding: 8px 14px !important;
+  font-family: 'Michroma', 'Montserrat', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  color: #cbd5e1 !important;
+  -webkit-text-stroke: 0.4px currentColor !important;
+  box-shadow: none !important;
+}
+
+#view-leaderboard #lb-modality-tabs .filter-pill-btn:hover {
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+#view-leaderboard #lb-modality-tabs .filter-pill-btn.is-active,
+#view-leaderboard #lb-modality-tabs .filter-pill-btn.active {
+  color: #ffffff !important;
+  border: 1.5px solid #ff7b00 !important;
+  background: rgba(255, 123, 0, 0.12) !important;
+  box-shadow: 0 0 12px rgba(255, 123, 0, 0.2) !important;
+}
+
+#view-leaderboard #lb-modality-tabs .btn-hover-arrow {
+  display: none !important;
+}
+
+#view-leaderboard .lb-clean-table {
+  border-collapse: collapse !important;
+}
+
+#view-leaderboard .lb-clean-table thead th {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #94a3b8 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+#view-leaderboard #routes-leaderboard-tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.03) !important;
+}
+
+#view-leaderboard #routes-leaderboard-tbody tr:hover {
+  background: rgba(255, 255, 255, 0.07) !important;
+}
+
+#view-leaderboard #routes-leaderboard-tbody td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.045) !important;
+}
+
+#view-leaderboard .lb-clean-table .nfs-cyber-rank-num {
+  font-family: 'Michroma', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
+  font-style: normal !important;
+  -webkit-text-stroke: 0.65px currentColor !important;
+}
+
+#view-leaderboard .lb-clean-table .lb-user-name {
+  font-family: 'Michroma', sans-serif !important;
+  font-size: 17px !important;
+  font-weight: 900 !important;
+  font-style: normal !important;
+  color: #ffffff !important;
+  letter-spacing: 0.02em !important;
+  line-height: 1.2 !important;
+  text-transform: none !important;
+  -webkit-text-stroke: 0.65px #ffffff !important;
+  text-shadow: none !important;
+}
+
+#view-leaderboard .lb-clean-table .lb-time-val,
+#view-leaderboard .lb-clean-table .stitch-time-display,
+#view-leaderboard .lb-clean-table .stitch-time-main,
+#view-leaderboard .lb-clean-table .stitch-time-ms {
+  font-family: 'Michroma', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
+  font-style: normal !important;
+  letter-spacing: 0.02em !important;
+  -webkit-text-stroke: 0.45px currentColor !important;
+  color: #ff8c1a !important;
+  text-shadow: 0 0 12px rgba(255, 140, 26, 0.25) !important;
+}
+
+#view-leaderboard .lb-clean-table .lb-wr-glow .stitch-time-main,
+#view-leaderboard .lb-clean-table .lb-wr-glow .stitch-time-ms,
+#view-leaderboard .lb-clean-table .lb-time-val.lb-wr-glow {
+  color: #ff7b00 !important;
+}
+
+#view-leaderboard .lb-clean-table .stitch-delta-val {
+  font-family: 'Michroma', 'Inter', sans-serif !important;
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+}
+
+#view-leaderboard .lb-clean-table .creator-slug,
+#view-leaderboard .lb-clean-table .btn-table-video {
+  border-radius: 3px !important;
+}
+
+/* ==========================================================================
+   BALANCED TABLE SIZES & MEDAL COLORS (GOLD #1, SILVER #2, BRONZE #3, WHITE #4+)
+   ========================================================================== */
+#view-leaderboard .lb-clean-table .nfs-cyber-rank-num,
+#view-spotlight .nfs-cyber-rank-num {
+  font-size: 14px !important;
+  -webkit-text-stroke: 0.4px currentColor !important;
+}
+
+#view-leaderboard .lb-clean-table .lb-user-name,
+#view-spotlight .hof-driver-name.hof-driver-flat {
+  font-size: 13.5px !important;
+  -webkit-text-stroke: 0.35px currentColor !important;
+  letter-spacing: 0.02em !important;
+}
+
+#view-leaderboard .lb-clean-table .lb-time-val,
+#view-leaderboard .lb-clean-table .stitch-time-display,
+#view-leaderboard .lb-clean-table .stitch-time-main,
+#view-leaderboard .lb-clean-table .stitch-time-ms {
+  font-size: 13.5px !important;
+  -webkit-text-stroke: 0.3px currentColor !important;
+  color: #ffffff !important;
+  text-shadow: none !important;
+}
+
+#view-leaderboard .lb-clean-table .stitch-delta-val {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+}
+
+/* Rank 1: Dorado (Gold) para Piloto y Tiempo */
+#view-leaderboard .lb-clean-table tr.lb-row-rank-1 .lb-user-name,
+#view-spotlight #hof-main-table tr.lb-row-rank-1 .hof-driver-name,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-1 .lb-time-val,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-1 .stitch-time-display,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-1 .stitch-time-main,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-1 .stitch-time-ms {
+  color: #fbbf24 !important;
+  text-shadow: 0 0 12px rgba(251, 191, 36, 0.35) !important;
+}
+
+/* Rank 2: Plata (Silver) para Piloto y Tiempo */
+#view-leaderboard .lb-clean-table tr.lb-row-rank-2 .lb-user-name,
+#view-spotlight #hof-main-table tr.lb-row-rank-2 .hof-driver-name,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-2 .lb-time-val,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-2 .stitch-time-display,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-2 .stitch-time-main,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-2 .stitch-time-ms {
+  color: #cbd5e1 !important;
+  text-shadow: 0 0 10px rgba(203, 213, 225, 0.25) !important;
+}
+
+/* Rank 3: Bronce (Bronze) para Piloto y Tiempo */
+#view-leaderboard .lb-clean-table tr.lb-row-rank-3 .lb-user-name,
+#view-spotlight #hof-main-table tr.lb-row-rank-3 .hof-driver-name,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-3 .lb-time-val,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-3 .stitch-time-display,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-3 .stitch-time-main,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-3 .stitch-time-ms {
+  color: #e08a4a !important;
+  text-shadow: 0 0 10px rgba(224, 138, 74, 0.25) !important;
+}
+
+/* Rank 4+: Blanco Puro para Piloto y Tiempo */
+#view-leaderboard .lb-clean-table tr.lb-row-rank-rest .lb-user-name,
+#view-spotlight #hof-main-table tr.lb-row-rank-rest .hof-driver-name,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-rest .lb-time-val,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-rest .stitch-time-display,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-rest .stitch-time-main,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-rest .stitch-time-ms {
+  color: #ffffff !important;
+  text-shadow: none !important;
+}
+
+/* === LEADERBOARD UNIFORM VEHICLE / DEVICE / TRANSMISSION / DATE TYPOGRAPHY === */
+#view-leaderboard .lb-clean-table .lb-car-main,
+#view-leaderboard .lb-clean-table td:nth-child(6) .creator-slug,
+#view-leaderboard .lb-clean-table td:nth-child(7) .creator-slug,
+#view-leaderboard .lb-clean-table td:nth-child(8) .stitch-date-val {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  line-height: 1.35 !important;
+  letter-spacing: 0.01em !important;
+  color: #e2e8f0 !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+#view-leaderboard .lb-clean-table .lb-car-main {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+#view-leaderboard .lb-clean-table .lb-car-sub {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  color: #94a3b8 !important;
+  margin-top: 2px;
 }
