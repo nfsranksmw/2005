@@ -11,7 +11,7 @@
   <!-- Google Fonts: Outfit, Chakra Petch, Montserrat, Chivo, Rajdhani, Plus Jakarta Sans, Inter & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Syncopate:wght@700&family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,700;1,800;1,900&family=Outfit:wght@400;500;600;700;800;900&family=Chakra+Petch:ital,wght@0,600;0,700;1,700&family=Chivo:ital,wght@0,700;0,800;0,900;1,800;1,900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&family=Montserrat:wght@800;900&family=Orbitron:wght@700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Rubik+Distressed&family=Michroma&family=Syncopate:wght@700&family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,700;1,800;1,900&family=Outfit:wght@400;500;600;700;800;900&family=Chakra+Petch:ital,wght@0,600;0,700;1,700&family=Chivo:ital,wght@0,700;0,800;0,900;1,800;1,900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&family=Montserrat:wght@800;900&family=Orbitron:wght@700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet" />
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <!-- Modular Uiverse Stylesheets -->
@@ -293,16 +293,6 @@
                       </svg>
                     </span>
                     <span class="submenu-label" data-i18n="nav.past_tournaments">Past Tournaments</span>
-                  </button>
-
-                  <button type="button" class="mega-item submenu-item dropdown-glitch-item" data-torneo-nav="rules" onclick="switchTorneoTab('rules');">
-                    <span class="uiverse-menu-icon-box submenu-icon">
-                      <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255, 255, 255, )"></path>
-                        <polyline points="9 12 11 14 15 10" stroke="#ff7b00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
-                      </svg>
-                    </span>
-                    <span class="submenu-label" data-i18n="nav.rules">Official Rules</span>
                   </button>
 
                 </div>
@@ -590,7 +580,7 @@
               <span data-i18n="nav.challenges_tournament">CHALLENGES &amp; TOURNAMENT</span>
             </span>
             <span class="mobile-acc-right">
-              <span class="mobile-acc-count">6 SECCIONES</span>
+              <span class="mobile-acc-count">5 SECCIONES</span>
               <svg class="mobile-acc-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </span>
           </button>
@@ -614,10 +604,6 @@
             <button type="button" class="mobile-subnav-item" data-torneo-nav="past-tournaments">
               <span>🕒 Past Tournaments (Challonge)</span>
               <span class="mobile-sub-tag">Histórico</span>
-            </button>
-            <button type="button" class="mobile-subnav-item" data-torneo-nav="rules">
-              <span>🛡️ Rules</span>
-              <span class="mobile-sub-tag">v1.3</span>
             </button>
           </div>
         </div>
@@ -816,75 +802,8 @@
       </div>
     </div>
 
-    <!-- HOME CATALOG LAYOUT: LEFT SIDEBAR (OFFICIAL CARS ONLY) + BENTO LIVE FIREBASE + CARS GRID -->
-    <div class="uiverse-catalog-layout" id="uiverse-catalog-anchor">
-
-      <!-- Left Sidebar in Home: Official Cars Only -->
-      <aside class="catalog-sidebar" aria-label="Home Categories">
-        <div>
-          <div class="sidebar-heading">Ecosistema NFSMW</div>
-          <ul class="sidebar-list">
-
-            <li>
-              <button type="button" class="sidebar-btn glitch-nfs-btn is-active" data-home-cat="showcase" data-text="Plataforma Móvil">
-                <span class="sidebar-btn-left">
-                  <span class="uiverse-menu-icon-box">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <rect x="5" y="2" width="14" height="20" rx="3" stroke="#ffffff" stroke-width="1.8"></rect>
-                      <line x1="12" y1="18" x2="12.01" y2="18" stroke="#ff7b00" stroke-width="2" stroke-linecap="round"></line>
-                    </svg>
-                  </span>
-                  <span>Plataforma Móvil</span>
-                </span>
-                <span class="sidebar-badge-count">PRO</span>
-              </button>
-            </li>
-
-            <li>
-              <button type="button" class="sidebar-btn glitch-nfs-btn" data-view-target="view-challenges" data-text="Rutas & Circuitos">
-                <span class="sidebar-btn-left">
-                  <span class="uiverse-menu-icon-box">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <rect x="3" y="3" width="7" height="7" rx="1.5" stroke="#ffffff" stroke-width="1.8"></rect>
-                      <circle cx="6.5" cy="6.5" r="1.5" fill="#e2e8f0"></circle>
-                      <rect x="14" y="3" width="7" height="7" rx="1.5" stroke="#ff7b00" stroke-width="1.8"></rect>
-                      <rect x="3" y="14" width="7" height="7" rx="1.5" stroke="#ff7b00" stroke-width="1.8"></rect>
-                      <rect x="14" y="14" width="7" height="7" rx="1.5" stroke="#ffffff" stroke-width="1.8"></rect>
-                      <circle cx="17.5" cy="17.5" r="1.5" fill="#e2e8f0"></circle>
-                    </svg>
-                  </span>
-                  <span>Rutas &amp; Circuitos</span>
-                </span>
-                <span class="sidebar-badge-count">86</span>
-              </button>
-            </li>
-
-            <li>
-              <button type="button" class="sidebar-btn glitch-nfs-btn" data-view-target="view-blog" onclick="switchTorneoTab('standings');" data-text="Torneo Blacklist">
-                <span class="sidebar-btn-left">
-                  <span class="uiverse-menu-icon-box">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" stroke="#e2e8f0" stroke-width="1.6" stroke-linecap="round"></path>
-                      <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" stroke="#e2e8f0" stroke-width="1.6" stroke-linecap="round"></path>
-                      <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" stroke="#ffffff" stroke-width="1.8" fill="rgba(255, 255, 255, )"></path>
-                      <path d="M4 22h16" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"></path>
-                      <polygon points="12 4 13 6.5 15.5 6.5 13.5 8 14.2 10.5 12 9 9.8 10.5 10.5 8 8.5 6.5 11 6.5 12 4" fill="#ff7b00"></polygon>
-                    </svg>
-                  </span>
-                  <span>Torneo Blacklist</span>
-                </span>
-                <span class="sidebar-badge-count">15</span>
-              </button>
-            </li>
-
-          </ul>
-        </div>
-
-        <div class="sidebar-bottom-card">
-          <strong>Firebase Realtime DB</strong>
-          <span>nfsranks-blacklist-default-rtdb sincronizado en vivo con las 86 pistas.</span>
-        </div>
-      </aside>
+    <!-- HOME CATALOG LAYOUT: FULL-WIDTH BENTO LIVE FIREBASE + CARS GRID -->
+    <div class="uiverse-catalog-layout uiverse-no-sidebar" id="uiverse-catalog-anchor">
 
       <!-- Main Home Content Area -->
       <main class="catalog-main">
@@ -938,9 +857,6 @@
               <h3 class="home-showcase-title">
                 TELEMETRÍA, RUTAS &amp; COMPETENCIA OFICIAL
               </h3>
-              <p class="home-showcase-desc">
-                Explora el ecosistema completo sincronizado a 128Hz con análisis de sectores, trazados oficiales y radar de distritos.
-              </p>
             </div>
             <div class="home-showcase-header-right">
               <a href="#view-challenges" class="btn-uiverse-create btn-nfs-white-cta" data-view-target="view-challenges" data-text="VER LAS 86 PISTAS →">
@@ -1052,163 +968,7 @@
        3. RUTAS Y CIRCUITOS VIEW (#view-challenges): FULL 86 TRACKS + FIREBASE LEADERBOARDS
        ======================================================================== -->
   <section id="view-challenges" class="view-section" aria-label="Rutas y Circuitos">
-    <div class="uiverse-catalog-layout">
-
-      <!-- Left Sidebar for Rutas y Circuitos -->
-      <aside class="catalog-sidebar" aria-label="Filtros de Rutas y Circuitos">
-        <div>
-          <div class="sidebar-heading">Categorías de Pista</div>
-          <ul class="sidebar-list">
-            <li>
-              <button type="button" class="sidebar-btn glitch-nfs-btn is-active" data-routes-cat="all" data-text="Todas las Rutas">
-                <span class="sidebar-btn-left">
-                  <span class="uiverse-menu-icon-box">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <rect x="3" y="3" width="7" height="7" rx="1.5" stroke="#ffffff" stroke-width="1.8"></rect>
-                      <circle cx="6.5" cy="6.5" r="1.5" fill="#e2e8f0"></circle>
-                      <rect x="14" y="3" width="7" height="7" rx="1.5" stroke="#ff7b00" stroke-width="1.8"></rect>
-                      <rect x="3" y="14" width="7" height="7" rx="1.5" stroke="#ff7b00" stroke-width="1.8"></rect>
-                      <rect x="14" y="14" width="7" height="7" rx="1.5" stroke="#ffffff" stroke-width="1.8"></rect>
-                      <circle cx="17.5" cy="17.5" r="1.5" fill="#e2e8f0"></circle>
-                    </svg>
-                  </span>
-                  <span>Todas las Rutas</span>
-                </span>
-                <span class="sidebar-badge-count">86</span>
-              </button>
-            </li>
-            <li>
-              <button type="button" class="sidebar-btn glitch-nfs-btn" data-routes-cat="Circuito" data-text="Circuitos">
-                <span class="sidebar-btn-left">
-                  <span class="uiverse-menu-icon-box">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <path d="M21.5 2v6h-6" stroke="#ff7b00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-                      <path d="M21.34 15.57a10 10 0 1 1-.57-8.38l5.23-5.23" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-                      <circle cx="12" cy="12" r="3" stroke="#e2e8f0" stroke-width="1.6" fill="rgba(255,255,255,0.2)"></circle>
-                    </svg>
-                  </span>
-                  <span>Circuitos</span>
-                </span>
-                <span class="sidebar-badge-count">29</span>
-              </button>
-            </li>
-            <li>
-              <button type="button" class="sidebar-btn glitch-nfs-btn" data-routes-cat="Sprint" data-text="Sprint">
-                <span class="sidebar-btn-left">
-                  <span class="uiverse-menu-icon-box">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round" fill="rgba(255,255,255,0.25)"></polygon>
-                      <polygon points="12 5 6 13 11 13 10 19 17 11 12 11 12 5" fill="#ff7b00"></polygon>
-                    </svg>
-                  </span>
-                  <span>Sprint</span>
-                </span>
-                <span class="sidebar-badge-count">46</span>
-              </button>
-            </li>
-            <li>
-              <button type="button" class="sidebar-btn glitch-nfs-btn" data-routes-cat="Drag" data-text="Drag">
-                <span class="sidebar-btn-left">
-                  <span class="uiverse-menu-icon-box">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <rect x="2" y="7" width="20" height="10" rx="5" stroke="#ffffff" stroke-width="1.8"></rect>
-                      <circle cx="8" cy="12" r="2.5" fill="#e2e8f0"></circle>
-                      <circle cx="16" cy="12" r="2.5" fill="#ff7b00"></circle>
-                    </svg>
-                  </span>
-                  <span>Drag</span>
-                </span>
-                <span class="sidebar-badge-count">11</span>
-              </button>
-            </li>
-          </ul>
-
-          <div class="sidebar-heading" style="margin-top: 22px;">Distritos de Rockport</div>
-          <ul class="sidebar-list">
-            <li>
-              <button type="button" class="sidebar-btn glitch-nfs-btn is-active" data-routes-district="all" data-text="Todos los Sectores">
-                <span class="sidebar-btn-left">
-                  <span class="uiverse-menu-icon-box">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <circle cx="12" cy="12" r="9" stroke="#ffffff" stroke-width="1.8"></circle>
-                      <path d="M12 3a9 9 0 0 0 0 18" stroke="#e2e8f0" stroke-width="1.8"></path>
-                      <circle cx="12" cy="12" r="2" fill="#ff7b00"></circle>
-                    </svg>
-                  </span>
-                  <span>Todos los Sectores</span>
-                </span>
-                <span class="sidebar-badge-count">86</span>
-              </button>
-            </li>
-            <li>
-              <button type="button" class="sidebar-btn glitch-nfs-btn" data-routes-district="Downtown Rockport" data-text="Downtown Rockport">
-                <span class="sidebar-btn-left">
-                  <span class="uiverse-menu-icon-box">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <path d="M3 21h18" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"></path>
-                      <path d="M5 21V9l6-4v16" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round"></path>
-                      <path d="M11 21V11l8-4v14" stroke="#e2e8f0" stroke-width="1.8" stroke-linejoin="round"></path>
-                      <circle cx="15" cy="5" r="1.5" fill="#ff7b00"></circle>
-                    </svg>
-                  </span>
-                  <span>Downtown Rockport</span>
-                </span>
-                <span class="sidebar-badge-count">S1</span>
-              </button>
-            </li>
-            <li>
-              <button type="button" class="sidebar-btn glitch-nfs-btn" data-routes-district="Camden Beach" data-text="Camden Beach">
-                <span class="sidebar-btn-left">
-                  <span class="uiverse-menu-icon-box">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <path d="M2 15c3.5-2 6.5 2 10 0s6.5-2 10 0" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"></path>
-                      <path d="M2 19c3.5-2 6.5 2 10 0s6.5-2 10 0" stroke="#e2e8f0" stroke-width="1.8" stroke-linecap="round"></path>
-                      <circle cx="16" cy="7" r="3.5" stroke="#ff7b00" stroke-width="1.8" fill="rgba(255,123,0,0.3)"></circle>
-                    </svg>
-                  </span>
-                  <span>Camden Beach</span>
-                </span>
-                <span class="sidebar-badge-count">S2</span>
-              </button>
-            </li>
-            <li>
-              <button type="button" class="sidebar-btn glitch-nfs-btn" data-routes-district="Rosewood" data-text="Rosewood">
-                <span class="sidebar-btn-left">
-                  <span class="uiverse-menu-icon-box">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <path d="M12 2L6 10h4v6h4v-6h4L12 2z" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round" fill="rgba(255,255,255,0.2)"></path>
-                      <path d="M12 16v6" stroke="#e2e8f0" stroke-width="1.8" stroke-linecap="round"></path>
-                      <circle cx="12" cy="7" r="1.5" fill="#ff7b00"></circle>
-                    </svg>
-                  </span>
-                  <span>Rosewood</span>
-                </span>
-                <span class="sidebar-badge-count">S3</span>
-              </button>
-            </li>
-            <li>
-              <button type="button" class="sidebar-btn glitch-nfs-btn" data-routes-district="Rockport Turnpike" data-text="Rockport Turnpike">
-                <span class="sidebar-btn-left">
-                  <span class="uiverse-menu-icon-box">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <path d="M4 20L9 4l6 16" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-                      <path d="M12 7v3m0 4v3" stroke="#ff7b00" stroke-width="2" stroke-linecap="round"></path>
-                      <path d="M2 20h20" stroke="#e2e8f0" stroke-width="1.8" stroke-linecap="round"></path>
-                    </svg>
-                  </span>
-                  <span>Rockport Turnpike</span>
-                </span>
-                <span class="sidebar-badge-count">S4</span>
-              </button>
-            </li>
-          </ul>
-        </div>
-
-        <div class="sidebar-bottom-card">
-          <strong>Telemetría 128Hz</strong>
-          <span>Selecciona cualquier pista para consultar su Leaderboard en Firebase Realtime DB.</span>
-        </div>
-      </aside>
+    <div class="uiverse-catalog-layout uiverse-no-sidebar">
 
       <!-- Main Area for Rutas y Circuitos (Catalog & Filters Only) -->
       <main class="catalog-main" style="padding-top: calc(var(--navbar-height) + 28px);">
@@ -1616,116 +1376,9 @@
     </div>
   </section>
 
-  <!-- 4.2 CHALLENGER Y TORNEOS (#view-blog): SAME SIDEBAR + MAIN LAYOUT AS RUTAS Y CIRCUITOS -->
+  <!-- 4.2 CHALLENGER Y TORNEOS (#view-blog): FULL-WIDTH MAIN LAYOUT (NO SIDEBAR) -->
   <section id="view-blog" class="view-section" aria-label="Challenger y Torneos">
-    <div class="uiverse-catalog-layout">
-
-      <!-- Left Sidebar for Challenger y Torneos (Exact same style as Rutas y Circuitos) -->
-      <aside class="catalog-sidebar" aria-label="Subpáginas de Challenger y Torneos">
-        <div>
-          <div class="sidebar-heading" data-i18n="nav.challenges_tournament">Challenges &amp; Tournaments</div>
-          <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary); margin: -4px 0 12px 2px;">Switch Tournament / Subpages:</div>
-          <ul class="sidebar-list">
-            <li>
-              <button type="button" class="sidebar-btn glitch-nfs-btn is-active" data-text="Championship Standings" data-torneo-tab="standings" onclick="switchTorneoTab('standings');">
-                <span class="sidebar-btn-left">
-                  <span class="uiverse-menu-icon-box">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" stroke="#e2e8f0" stroke-width="1.6" stroke-linecap="round"></path>
-                      <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" stroke="#e2e8f0" stroke-width="1.6" stroke-linecap="round"></path>
-                      <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" stroke="#ffffff" stroke-width="1.8" fill="rgba(255,255,255,0.2)"></path>
-                      <path d="M4 22h16" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"></path>
-                      <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" stroke="#e2e8f0" stroke-width="1.6"></path>
-                      <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" stroke="#e2e8f0" stroke-width="1.6"></path>
-                      <polygon points="12 4 13 6.5 15.5 6.5 13.5 8 14.2 10.5 12 9 9.8 10.5 10.5 8 8.5 6.5 11 6.5 12 4" fill="#ff7b00"></polygon>
-                    </svg>
-                  </span>
-                  <span data-i18n="nav.standings">Championship Standings</span>
-                </span>
-                <span class="sidebar-badge-count" id="sidebar-standings-badge-count">10</span>
-              </button>
-            </li>
-            <li>
-              <button type="button" class="sidebar-btn glitch-nfs-btn" data-text="Weekly Challenges" data-torneo-tab="seasons" onclick="switchTorneoTab('seasons');">
-                <span class="sidebar-btn-left">
-                  <span class="uiverse-menu-icon-box">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round" fill="rgba(255,255,255,0.25)"></polygon>
-                      <polygon points="12 6 6 13 11 13 10 18 16 11 12 11 12 6" fill="#ff7b00"></polygon>
-                    </svg>
-                  </span>
-                  <span data-i18n="nav.weekly_challenges">Weekly Challenges</span>
-                </span>
-                <span class="sidebar-badge-count">32</span>
-              </button>
-            </li>
-            <li>
-              <button type="button" class="sidebar-btn glitch-nfs-btn" data-text="Blacklist Groups &amp; Rivals" data-torneo-tab="groups" onclick="switchTorneoTab('groups');">
-                <span class="sidebar-btn-left">
-                  <span class="uiverse-menu-icon-box">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <path d="M14.5 17.5 3 6V3h3l11.5 11.5" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-                      <path d="M9.5 6.5 21 18v3h-3L6.5 9.5" stroke="#e2e8f0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-                      <circle cx="12" cy="12" r="2" fill="#ff7b00"></circle>
-                    </svg>
-                  </span>
-                  <span data-i18n="nav.blacklist_groups">Blacklist Groups &amp; Rivals</span>
-                </span>
-                <span class="sidebar-badge-count">4G</span>
-              </button>
-            </li>
-            <li>
-              <button type="button" class="sidebar-btn glitch-nfs-btn" data-text="Tournament Registration" data-torneo-tab="register" onclick="switchTorneoTab('register');">
-                <span class="sidebar-btn-left">
-                  <span class="uiverse-menu-icon-box">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"></path>
-                      <circle cx="9" cy="7" r="4" stroke="#e2e8f0" stroke-width="1.8" fill="rgba(255,255,255,0.2)"></circle>
-                      <polyline points="15 11 17 13 22 8" stroke="#ff7b00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
-                    </svg>
-                  </span>
-                  <span data-i18n="nav.register">Tournament Registration</span>
-                </span>
-                <span class="sidebar-badge-count">OPEN</span>
-              </button>
-            </li>
-            <li>
-              <button type="button" class="sidebar-btn glitch-nfs-btn" data-text="Past Tournaments (Challonge)" data-torneo-tab="past-tournaments" onclick="switchTorneoTab('past-tournaments');">
-                <span class="sidebar-btn-left">
-                  <span class="uiverse-menu-icon-box">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <circle cx="12" cy="12" r="9" stroke="#ffffff" stroke-width="1.8"></circle>
-                      <polyline points="12 7 12 12 15 15" stroke="#ff7b00" stroke-width="2" stroke-linecap="round"></polyline>
-                      <path d="M3 12a9 9 0 0 1 9-9" stroke="#e2e8f0" stroke-width="2" stroke-linecap="round"></path>
-                    </svg>
-                  </span>
-                  <span data-i18n="nav.past_tournaments">Past Tournaments (Challonge)</span>
-                </span>
-                <span class="sidebar-badge-count">ARCHIVE</span>
-              </button>
-            </li>
-            <li>
-              <button type="button" class="sidebar-btn glitch-nfs-btn" data-text="Official Rules" data-torneo-tab="rules" onclick="switchTorneoTab('rules');">
-                <span class="sidebar-btn-left">
-                  <span class="uiverse-menu-icon-box">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255, 255, 255, )"></path>
-                      <polyline points="9 12 11 14 15 10" stroke="#ff7b00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
-                    </svg>
-                  </span>
-                  <span data-i18n="nav.rules">Official Rules</span>
-                </span>
-                <span class="sidebar-badge-count">v1.3</span>
-              </button>
-            </li>
-          </ul>
-        </div>
-
-        <div class="sidebar-bottom-card">
-          <strong id="sidebar-torneo-rep-summary">Bolsa: $51.810.000 REP</strong>
-          <span id="sidebar-torneo-leader-summary">Líder actual: SRTxAvenger™ (#1 Blacklist) &bull; Homologación 128Hz.</span>
-        </div>
-      </aside>
+    <div class="uiverse-catalog-layout uiverse-no-sidebar">
 
       <!-- Main Area for Challenger y Torneos Subpages -->
       <main class="catalog-main" style="padding-top: calc(var(--navbar-height) + 28px);">
@@ -2708,6 +2361,54 @@
         </div>
 
         <!-- Card 4 -->
+        <div class="rule-card-pro">
+          <div class="rule-card-header">
+            <div class="rule-header-title">
+              <span>🚗</span> <span>Categorías de Competición &amp; Torneo</span>
+            </div>
+            <span class="rule-status-badge badge-official">CATEGORÍAS</span>
+          </div>
+          <div class="rule-items-list">
+            <div class="rule-item-check">
+              <span>✓</span>
+              <span><strong>Categoría Junkman:</strong> Permite todos los vehículos con piezas Ultimate y mejoras especiales Junkman (Single Lap, Fast Lap, Sprint y Drag).</span>
+            </div>
+            <div class="rule-item-check">
+              <span>✓</span>
+              <span><strong>Categoría BMW M3 GTR NO NOS:</strong> Exclusiva para el BMW M3 GTR Bonus. El uso de óxido nitroso (NOS) está estrictamente prohibido en esta modalidad.</span>
+            </div>
+            <div class="rule-item-check">
+              <span>✓</span>
+              <span><strong>Vuelta Rápida &amp; Rotación Semanal:</strong> Los tiempos de Fast Lap cuentan a partir de la segunda vuelta lanzada. En torneos semanales Blacklist es obligatorio respetar el vehículo asignado.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="rule-card-pro">
+          <div class="rule-card-header">
+            <div class="rule-header-title">
+              <span>⏱️</span> <span>YouTube, Timebug &amp; Puntos del Torneo</span>
+            </div>
+            <span class="rule-status-badge badge-official">128HZ AUDIT</span>
+          </div>
+          <div class="rule-items-list">
+            <div class="rule-item-check">
+              <span>✓</span>
+              <span><strong>Formato YouTube Oficial:</strong> Título <code>NFS MW + [Pista] + [Tiempo] + [Piloto]</code> con el enlace oficial <code>https://nfsranksmw.github.io/2005/</code> en la descripción y HUD 100% visible (720p/1080p @ 60FPS).</span>
+            </div>
+            <div class="rule-item-check">
+              <span>✓</span>
+              <span><strong>Umbral de Timebug (2 FPS):</strong> Se declara Timebug cuando la discrepancia entre el cronómetro del juego y Avidemux supera los <strong>2 FPS (6 centésimas)</strong>.</span>
+            </div>
+            <div class="rule-item-check">
+              <span>✓</span>
+              <span><strong>Fórmula del Campeonato 2026:</strong> Podios de grupo: <strong>P1 = 25 PTS, P2 = 18 PTS, P3 = 15 PTS, P4 = 12 PTS</strong>, más bonos de mejor tiempo (<strong>1º +100, 2º +50, 3º +20 PTS</strong>) y reputación (<code>$ REP / 10.000</code>).</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
         <div class="rule-card-pro">
           <div class="rule-card-header">
             <div class="rule-header-title">
