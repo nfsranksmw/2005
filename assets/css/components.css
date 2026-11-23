@@ -6313,3 +6313,3418 @@ html body :is(.leaderboard-banner-wrapper, .lb-video-banner) .lb-banner-wr-holde
   color: #94a3b8 !important;
   margin-top: 2px;
 }
+
+/* ==========================================================================
+   NO SIDEBAR FULL-WIDTH LAYOUT + NFSMW BLACK EDITION ROUTE CARDS
+   ========================================================================== */
+.catalog-sidebar {
+  display: none !important;
+}
+
+.uiverse-catalog-layout,
+.uiverse-catalog-layout.uiverse-no-sidebar {
+  display: block !important;
+  width: 100% !important;
+  max-width: 1920px !important;
+  margin: 0 auto !important;
+}
+
+.uiverse-catalog-layout.uiverse-no-sidebar > .catalog-main,
+.catalog-main {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  padding: 24px 36px 60px !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 768px) {
+  .uiverse-catalog-layout.uiverse-no-sidebar > .catalog-main,
+  .catalog-main {
+    padding: 18px 16px 48px !important;
+  }
+}
+
+/* NFSMW Black Edition Track Visualization Cards (Circuito, Sprint, Drag & All) */
+.uiverse-cosmic-card.nfsmw-track-card,
+.stitch-track-card.nfsmw-track-card,
+.stitch-track-card.element-card.nfsmw-track-card {
+  background:
+    radial-gradient(85% 65% at 82% 24%, rgba(255, 183, 3, 0.30) 0%, rgba(255, 183, 3, 0.08) 38%, transparent 64%),
+    radial-gradient(75% 60% at 22% 78%, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.04) 40%, transparent 62%),
+    linear-gradient(158deg, #101014 0%, #050507 52%, #020203 100%) !important;
+  border: 1px solid rgba(255, 183, 3, 0.34) !important;
+  border-radius: 16px !important;
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.stitch-track-card.nfsmw-track-card .stitch-badge-circuito {
+  color: #ffb703 !important;
+  background-color: rgba(255, 183, 3, 0.14) !important;
+  border: 1px solid rgba(255, 183, 3, 0.65) !important;
+}
+
+.stitch-track-card.nfsmw-track-card .stitch-badge-sprint {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.10) !important;
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+}
+
+.stitch-track-card.nfsmw-track-card .stitch-badge-drag {
+  color: #ff9f1c !important;
+  background-color: rgba(255, 159, 28, 0.14) !important;
+  border: 1px solid rgba(255, 159, 28, 0.65) !important;
+}
+
+.uiverse-cosmic-card.nfsmw-track-card:hover,
+.stitch-track-card.nfsmw-track-card:hover {
+  border-color: rgba(255, 183, 3, 0.85) !important;
+  box-shadow:
+    0 18px 42px -8px rgba(255, 183, 3, 0.36),
+    0 0 24px rgba(255, 255, 255, 0.08),
+    inset 0 1px 1px rgba(255, 255, 255, 0.18) !important;
+  transform: translateY(-4px) !important;
+}
+
+.stitch-track-card.nfsmw-track-card .glow-border-top {
+  left: 6% !important;
+  right: 6% !important;
+  height: 2px !important;
+  background: linear-gradient(90deg, transparent 0%, #ffb703 32%, #ffffff 68%, transparent 100%) !important;
+  z-index: 4 !important;
+}
+
+.stitch-track-card.nfsmw-track-card .stitch-card-dot {
+  background-color: #ffb703 !important;
+  box-shadow: 0 0 8px #ffb703 !important;
+}
+
+.stitch-track-card.nfsmw-track-card .stitch-card-brand-text {
+  color: #e2e8f0 !important;
+  letter-spacing: 0.1em !important;
+}
+
+/* Yellow & White Silhouettes Overlay */
+.nfsmw-silhouette-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.nfsmw-silhouette-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 0.95;
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.35s ease;
+}
+
+.nfsmw-track-card:hover .nfsmw-silhouette-svg {
+  transform: scale(1.04) translateX(-4px);
+  opacity: 1;
+}
+
+/* High-Contrast Monochrome & Yellow-Rimmed Car Silhouette */
+.stitch-track-card.nfsmw-track-card .stitch-car-backdrop {
+  right: -10px !important;
+  bottom: 48px !important;
+  width: 64% !important;
+  height: 54% !important;
+  opacity: 0.25 !important;
+  filter: grayscale(100%) contrast(1.45) brightness(0.92) drop-shadow(0 0 14px rgba(255, 183, 3, 0.34)) !important;
+  z-index: 1 !important;
+}
+
+.stitch-track-card.nfsmw-track-card:hover .stitch-car-backdrop {
+  opacity: 0.38 !important;
+  transform: scale(1.06) translateX(-6px) !important;
+}
+
+/* Billowing Black Smoke Atmospheric Layer */
+.nfsmw-smoke-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.nfsmw-smoke-plume {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.nfsmw-smoke-plume.plume-1 {
+  width: 245px;
+  height: 185px;
+  top: -30px;
+  left: -38px;
+  background: radial-gradient(circle at 46% 48%, #000000 0%, rgba(0, 0, 0, 0.96) 42%, rgba(8, 8, 10, 0.72) 66%, transparent 86%);
+  filter: blur(10px);
+  transform: rotate(-18deg);
+}
+
+.nfsmw-smoke-plume.plume-2 {
+  width: 270px;
+  height: 195px;
+  bottom: -36px;
+  right: -28px;
+  background: radial-gradient(circle at 48% 50%, #000000 0%, rgba(0, 0, 0, 0.96) 46%, rgba(10, 10, 12, 0.68) 68%, transparent 88%);
+  filter: blur(12px);
+  transform: rotate(16deg);
+}
+
+.nfsmw-smoke-plume.plume-3 {
+  width: 290px;
+  height: 155px;
+  top: 26%;
+  left: 14%;
+  background:
+    radial-gradient(ellipse at 32% 45%, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.55) 50%, transparent 78%),
+    radial-gradient(ellipse at 68% 55%, rgba(0, 0, 0, 0.88) 0%, rgba(12, 12, 15, 0.5) 52%, transparent 82%);
+  filter: blur(14px);
+  transform: rotate(-12deg);
+}
+
+.nfsmw-smoke-vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.36) 0%, rgba(0, 0, 0, 0.1) 42%, rgba(0, 0, 0, 0.8) 100%),
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.018) 0px, rgba(255, 255, 255, 0.018) 1px, transparent 1px, transparent 7px);
+}
+
+/* NFSMW Black Edition Track Title Typography (Matches Reference Image) */
+.stitch-track-card.nfsmw-track-card h4.nfsmw-route-heading,
+.uiverse-cosmic-card.nfsmw-track-card h4.nfsmw-route-heading {
+  font-family: 'Anton', 'Barlow Condensed', 'Impact', sans-serif !important;
+  font-style: italic !important;
+  font-weight: 400 !important;
+  font-size: 27px !important;
+  line-height: 1.05 !important;
+  letter-spacing: 0.03em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  margin: 0 0 8px 0 !important;
+  padding-right: 4px !important;
+  text-align: left !important;
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.96) !important;
+}
+
+.stitch-track-card.nfsmw-track-card h4.nfsmw-route-heading .nfsmw-title-white {
+  color: #ffffff !important;
+}
+
+.stitch-track-card.nfsmw-track-card h4.nfsmw-route-heading .nfsmw-title-yellow {
+  color: #ffb703 !important;
+  text-shadow:
+    0 0 16px rgba(255, 183, 3, 0.35),
+    0 3px 12px rgba(0, 0, 0, 0.96) !important;
+}
+
+.stitch-track-card.nfsmw-track-card:hover h4.nfsmw-route-heading {
+  color: #ffffff !important;
+}
+
+/* Telemetry Box & WR Pill (Smoky Black + Yellow/White Accents) */
+.stitch-track-card.nfsmw-track-card .stitch-telemetry-box.nfsmw-telemetry-box {
+  background: rgba(5, 5, 7, 0.84) !important;
+  border: 1px solid rgba(255, 255, 255, 0.13) !important;
+  border-left: 3px solid #ffb703 !important;
+  border-radius: 12px !important;
+  padding: 13px 15px !important;
+  margin-bottom: 16px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+.stitch-track-card.nfsmw-track-card .nfsmw-wr-time-pill {
+  display: inline-block !important;
+  font-size: 14.5px !important;
+  font-weight: 800 !important;
+  color: #ffb703 !important;
+  background: rgba(0, 0, 0, 0.94) !important;
+  border: 1px solid rgba(255, 183, 3, 0.85) !important;
+  border-radius: 8px !important;
+  padding: 5px 12px !important;
+  letter-spacing: 0.02em !important;
+  box-shadow:
+    0 0 14px rgba(255, 183, 3, 0.32),
+    inset 0 0 8px rgba(255, 183, 3, 0.12) !important;
+}
+
+.stitch-track-card.nfsmw-track-card .stitch-card-footer.nfsmw-card-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.10) !important;
+  padding-top: 13px !important;
+}
+
+.stitch-track-card.nfsmw-track-card .stitch-rank-badge.nfsmw-rank-badge {
+  background: rgba(255, 183, 3, 0.11) !important;
+  border: 1px solid rgba(255, 183, 3, 0.45) !important;
+  border-radius: 8px !important;
+  padding: 5px 10px !important;
+}
+
+.stitch-track-card.nfsmw-track-card .stitch-leaderboard-btn {
+  border-color: rgba(255, 183, 3, 0.55) !important;
+  color: #ffffff !important;
+}
+
+.stitch-track-card.nfsmw-track-card .stitch-leaderboard-btn:hover {
+  border-color: #ffb703 !important;
+  color: #ffb703 !important;
+  box-shadow: 0 0 12px rgba(255, 183, 3, 0.32) !important;
+}
+
+/* ==========================================================================
+   NFSMW BLACK EDITION SMOKE & SILHOUETTES: TOP RANKED, BLACKLIST & AUXILIARY
+   ========================================================================== */
+
+/* Shared NFSMW Smoke & Yellow/White Silhouettes Banner Surface (Top Ranked & Blacklist) */
+#view-spotlight .v7-hof-header-wrap,
+#view-blacklist .v7-hof-header-wrap {
+  position: relative !important;
+  overflow: hidden !important;
+  padding: 26px 26px 22px !important;
+  border-radius: 14px !important;
+  background:
+    radial-gradient(80% 70% at 88% 18%, rgba(255, 183, 3, 0.24) 0%, rgba(255, 183, 3, 0.06) 40%, transparent 66%),
+    radial-gradient(65% 60% at 14% 85%, rgba(255, 255, 255, 0.12) 0%, transparent 56%),
+    linear-gradient(155deg, #0d0d11 0%, #050507 58%, #020203 100%) !important;
+  border: 1px solid rgba(255, 183, 3, 0.32) !important;
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10) !important;
+  margin-bottom: 18px !important;
+}
+
+/* Top Split Yellow -> White Accent Line + Diagonal Silhouette Slashes */
+#view-spotlight .v7-hof-header-wrap::before,
+#view-blacklist .v7-hof-header-wrap::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  background:
+    linear-gradient(90deg, transparent 0%, #ffb703 28%, #ffffff 72%, transparent 100%) top / 100% 2px no-repeat,
+    linear-gradient(118deg, transparent 54%, rgba(255, 183, 3, 0.14) 54%, rgba(255, 183, 3, 0.14) 61%, transparent 61%),
+    linear-gradient(118deg, transparent 64%, rgba(255, 255, 255, 0.09) 64%, rgba(255, 255, 255, 0.09) 66.5%, transparent 66.5%),
+    linear-gradient(118deg, transparent 70%, rgba(255, 183, 3, 0.08) 70%, rgba(255, 183, 3, 0.08) 72%, transparent 72%) !important;
+}
+
+/* Billowing Pitch-Black Smoke Plumes Layer */
+#view-spotlight .v7-hof-header-wrap::after,
+#view-blacklist .v7-hof-header-wrap::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: -20px !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+  background:
+    radial-gradient(ellipse 340px 210px at 14% 25%, rgba(0, 0, 0, 0.94) 0%, rgba(0, 0, 0, 0.72) 48%, transparent 78%),
+    radial-gradient(ellipse 380px 230px at 84% 78%, rgba(0, 0, 0, 0.96) 0%, rgba(4, 4, 6, 0.78) 50%, transparent 80%),
+    radial-gradient(ellipse 320px 180px at 52% 45%, rgba(0, 0, 0, 0.62) 0%, rgba(0, 0, 0, 0.35) 54%, transparent 82%) !important;
+  filter: blur(12px) !important;
+}
+
+#view-spotlight .v7-hof-header-wrap > *,
+#view-blacklist .v7-hof-header-wrap > * {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* NFSMW Condensed Italic Headings on Top Ranked & Blacklist 2026 */
+#view-spotlight .v7-hof-title,
+#view-blacklist .v7-hof-title {
+  font-family: 'Anton', 'Barlow Condensed', 'Chivo', sans-serif !important;
+  font-style: italic !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.03em !important;
+  -webkit-text-stroke: 0 !important;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.96), 0 0 24px rgba(255, 183, 3, 0.22) !important;
+}
+
+/* Smoky Filter Controls Row (Search, Car/Tier Selects, Export CSV) */
+#view-spotlight .v7-hof-controls-row,
+#view-blacklist .v7-hof-controls-row {
+  background:
+    radial-gradient(80% 100% at 92% 50%, rgba(255, 183, 3, 0.09) 0%, transparent 60%),
+    rgba(5, 5, 7, 0.90) !important;
+  border: 1px solid rgba(255, 255, 255, 0.11) !important;
+  border-left: 3px solid #ffb703 !important;
+  border-radius: 10px !important;
+  padding: 12px 16px !important;
+  margin-bottom: 0 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Smoky Ranked & Blacklist Table Containers + Standings Table */
+#view-spotlight .nfs-table-wrap,
+#view-blacklist .nfs-table-wrap,
+#view-blog #standings-table-wrapper.nfs-table-wrap,
+#view-leaderboard .nfs-table-wrap {
+  position: relative !important;
+  background:
+    radial-gradient(75% 45% at 90% 8%, rgba(255, 183, 3, 0.14) 0%, transparent 62%),
+    radial-gradient(65% 45% at 10% 92%, rgba(255, 255, 255, 0.06) 0%, transparent 58%),
+    linear-gradient(180deg, #09090c 0%, #050507 55%, #030304 100%) !important;
+  border: 1px solid rgba(255, 183, 3, 0.28) !important;
+  border-top: 2px solid rgba(255, 183, 3, 0.72) !important;
+  border-radius: 10px !important;
+  box-shadow:
+    0 18px 44px rgba(0, 0, 0, 0.88),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+#view-spotlight #hof-main-tbody tr:hover,
+#view-blacklist #blacklist-main-tbody tr:hover,
+#view-blog #torneo-standings-tbody tr:hover {
+  background: linear-gradient(90deg, rgba(255, 183, 3, 0.10) 0%, rgba(255, 255, 255, 0.04) 65%, transparent 100%) !important;
+}
+
+/* Driver Dossier & Auxiliary Panels NFSMW Smoke Backdrop Polish */
+#view-telemetry .telemetry-single-search-bar {
+  background:
+    radial-gradient(60% 100% at 95% 50%, rgba(255, 183, 3, 0.12) 0%, transparent 65%),
+    rgba(6, 6, 8, 0.92) !important;
+  border-color: rgba(255, 183, 3, 0.45) !important;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.75) !important;
+}
+
+#view-telemetry .nfs-telemetry-cockpit-card {
+  position: relative !important;
+  background:
+    radial-gradient(85% 45% at 88% 8%, rgba(255, 183, 3, 0.14) 0%, transparent 56%),
+    radial-gradient(65% 40% at 12% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 52%),
+    linear-gradient(180deg, #09090c 0%, #050507 100%) !important;
+  border: 1px solid rgba(255, 183, 3, 0.28) !important;
+  border-top: 2px solid rgba(255, 183, 3, 0.72) !important;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.85) !important;
+}
+
+/* Auxiliary Floating Widgets (NFSMWO & Discord Drawer Triggers) */
+.nfsmwo-floating-trigger,
+.discord-floating-trigger {
+  background:
+    radial-gradient(90% 100% at 85% 50%, rgba(255, 183, 3, 0.18) 0%, transparent 65%),
+    rgba(7, 7, 9, 0.94) !important;
+  border-color: rgba(255, 183, 3, 0.45) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.82), 0 0 16px rgba(255, 183, 3, 0.18) !important;
+}
+
+/* ==========================================================================
+   COMPREHENSIVE MOBILE & TABLET RESPONSIVENESS (ALL SECTIONS)
+   ========================================================================== */
+html,
+body {
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+.view-section,
+.secondary-view-wrap {
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+}
+
+.nfs-table-wrap,
+.discord-table-scroll {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  box-sizing: border-box !important;
+}
+
+.nfs-lb-select,
+.nfs-lb-input {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Tablet & Small Laptop Adjustments (<= 960px) */
+@media (max-width: 960px) {
+  .nfs-home-bento {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .home-showcase-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .rc-banner-content-wrap {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 20px !important;
+  }
+
+  .rc-banner-metrics-card {
+    width: 100% !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 14px !important;
+  }
+
+  .rc-banner-metrics-card .rc-metric-sep {
+    display: none !important;
+  }
+
+  .champ-prizes-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .members-stats-bar {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+  }
+}
+
+/* Mobile Viewports (<= 768px) */
+@media (max-width: 768px) {
+  .secondary-view-wrap {
+    padding: 76px 14px 48px !important;
+  }
+
+  .uiverse-catalog-layout.uiverse-no-sidebar > .catalog-main,
+  .catalog-main {
+    padding: 74px 14px 48px !important;
+  }
+
+  #view-elements.view-section .uiverse-catalog-layout.uiverse-no-sidebar > .catalog-main {
+    padding-top: 18px !important;
+  }
+
+  .nfsmwo-web-section {
+    padding-top: 64px !important;
+  }
+
+  /* Hero Section Mobile Fit */
+  .hero-section {
+    padding: 84px 14px 36px !important;
+    min-height: auto !important;
+  }
+
+  .hero-badge-pill {
+    max-width: 100% !important;
+    white-space: normal !important;
+    text-align: center !important;
+    font-size: 10.5px !important;
+    line-height: 1.35 !important;
+    padding: 6px 12px !important;
+  }
+
+  .hero-title {
+    font-size: clamp(28px, 9.2vw, 48px) !important;
+    line-height: 1.05 !important;
+  }
+
+  .hero-subtitle {
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+  }
+
+  .hero-search-pill {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding: 4px 4px 4px 12px !important;
+  }
+
+  .hero-search-input {
+    min-width: 0 !important;
+    font-size: 13px !important;
+  }
+
+  .hero-search-btn {
+    padding: 8px 14px !important;
+    font-size: 12px !important;
+  }
+
+  /* Track Leaderboard Banner: stop back button overlapping title */
+  #view-leaderboard .lb-video-banner {
+    padding: 20px 16px !important;
+    min-height: auto !important;
+  }
+
+  html body #view-leaderboard :is(.leaderboard-banner-wrapper, .lb-video-banner) .btn-back-to-tracks:not(#_),
+  #view-leaderboard .btn-back-to-tracks {
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    margin-bottom: 12px !important;
+    align-self: flex-start !important;
+    display: inline-flex !important;
+  }
+
+  #view-leaderboard .lb-banner-flex,
+  #view-leaderboard .lb-video-banner-content {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+  }
+
+  #view-leaderboard .lb-banner-wr-card {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  #view-leaderboard .nfs-lb-header,
+  #view-leaderboard .nfs-lb-filters-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+
+  #view-leaderboard .nfs-lb-filters-row > *,
+  #view-leaderboard #lb-driver-search,
+  #view-leaderboard #lb-car-select,
+  #view-leaderboard #lb-gearbox-select {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* Top Ranked & Blacklist Header / Controls Mobile */
+  #view-spotlight .v7-hof-header-wrap,
+  #view-blacklist .v7-hof-header-wrap {
+    padding: 18px 14px 16px !important;
+  }
+
+  #view-spotlight .v7-hof-title,
+  #view-blacklist .v7-hof-title {
+    font-size: clamp(23px, 6.8vw, 34px) !important;
+  }
+
+  #view-spotlight .v7-hof-discipline-nav,
+  #view-blacklist .v7-hof-discipline-nav {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    width: 100% !important;
+  }
+
+  #view-spotlight .v7-hof-discipline-nav .filter-pill-btn,
+  #view-blacklist .v7-hof-discipline-nav .filter-pill-btn {
+    font-size: 11px !important;
+    padding: 6px 10px !important;
+  }
+
+  #view-spotlight .v7-hof-controls-row,
+  #view-blacklist .v7-hof-controls-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 12px !important;
+    gap: 10px !important;
+  }
+
+  #view-spotlight .v7-hof-controls-row > div,
+  #view-blacklist .v7-hof-controls-row > div {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  #view-spotlight .v7-hof-controls-row > div > div,
+  #view-blacklist .v7-hof-controls-row > div > div,
+  #hof-car-filter,
+  #hof-tier-filter,
+  #btn-hof-export-csv,
+  #btn-blacklist-export-csv {
+    width: 100% !important;
+    min-width: 0 !important;
+    justify-content: center !important;
+  }
+
+  /* Driver Dossier (#view-telemetry) Mobile */
+  #view-telemetry .telemetry-single-search-bar {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    padding: 10px !important;
+    border-radius: 10px !important;
+  }
+
+  #view-telemetry .telemetry-search-input-clean {
+    width: 100% !important;
+    min-width: 0 !important;
+    font-size: 13px !important;
+  }
+
+  #view-telemetry .telemetry-search-btn-orange {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  #view-telemetry .nfs-telemetry-cockpit-card {
+    padding: 18px 14px !important;
+  }
+
+  #view-telemetry .pilot-dossier-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+
+  #view-telemetry .pilot-dossier-identity {
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  #view-telemetry .pilot-dossier-avatar {
+    width: 56px !important;
+    height: 56px !important;
+    font-size: 20px !important;
+  }
+
+  #view-telemetry .pilot-dossier-name {
+    font-size: clamp(22px, 6.8vw, 32px) !important;
+    word-break: break-word !important;
+  }
+
+  #view-telemetry .pilot-dossier-tabs {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  #view-telemetry .pilot-dossier-tab-btn {
+    font-size: 11px !important;
+    padding: 7px 12px !important;
+  }
+
+  #view-telemetry .pilot-stats-strip {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 14px !important;
+    padding: 16px 14px !important;
+  }
+
+  #view-telemetry .pilot-stat-value {
+    font-size: 22px !important;
+  }
+
+  #view-telemetry .telemetry-filter-controls,
+  #view-telemetry #telemetry-route-filter,
+  #view-telemetry #telemetry-rank-filter {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* Challenges & Tournament (#view-blog) & Download & Community Mobile */
+  #view-blog .nfs-lb-header {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+  }
+
+  #view-blog #filter-standings-sort {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .dl-hero-card {
+    flex-direction: column !important;
+    padding: 18px 14px !important;
+  }
+
+  .dl-main-title {
+    font-size: clamp(22px, 6.5vw, 32px) !important;
+  }
+
+  .tracker-section-header {
+    padding: 76px 14px 20px !important;
+  }
+
+  .tracker-header-title {
+    font-size: clamp(24px, 7vw, 36px) !important;
+  }
+
+  /* Online Web Titles & Promo Footer (#view-nfsmwo, #view-nfsc-online, #view-nfsu2-online) */
+  .mwo-title-nfs {
+    font-size: clamp(22px, 6.5vw, 44px) !important;
+  }
+
+  .mwo-title-mw {
+    font-size: clamp(26px, 8vw, 54px) !important;
+  }
+
+  .mwo-title-online-badge {
+    position: static !important;
+    display: inline-block !important;
+    margin-top: 8px !important;
+    font-size: 11px !important;
+  }
+
+  .mwo-promo-left {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+  }
+}
+
+/* Narrow Phone Viewports (<= 640px) */
+@media (max-width: 640px) {
+  /* Navbar: Admin is inside Mobile Drawer, keep Brand + Hamburger ultra-clean */
+  .btn-uiverse-admin {
+    display: none !important;
+  }
+
+  .navbar-wrap {
+    padding: 0 12px !important;
+  }
+
+  .brand-logo-text {
+    font-size: 14px !important;
+    white-space: nowrap !important;
+  }
+
+  /* Routes Banner & Catalog Toolbar */
+  .rc-stitch-banner {
+    padding: 18px 14px !important;
+  }
+
+  .rc-banner-tag {
+    flex-wrap: wrap !important;
+    font-size: 9.5px !important;
+    padding: 5px 10px !important;
+  }
+
+  .catalog-toolbar {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+  }
+
+  .toolbar-left {
+    gap: 6px !important;
+  }
+
+  #routes-catalog-search {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .stitch-track-card.nfsmw-track-card {
+    min-height: 295px !important;
+    padding: 18px 16px !important;
+  }
+
+  .stitch-track-card.nfsmw-track-card h4.nfsmw-route-heading {
+    font-size: 23px !important;
+  }
+
+  .members-stats-bar {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Compact Bottom Floating Triggers so they never collide on 390px screens */
+  .nfsmwo-floating-wrapper {
+    left: 10px !important;
+    bottom: 10px !important;
+    max-width: calc(46vw - 10px) !important;
+  }
+
+  .discord-floating-wrapper {
+    right: 10px !important;
+    bottom: 10px !important;
+    max-width: calc(48vw - 10px) !important;
+  }
+
+  .nfsmwo-floating-trigger,
+  .discord-floating-trigger {
+    padding: 8px 10px !important;
+    font-size: 10.5px !important;
+    gap: 6px !important;
+    max-width: 100% !important;
+  }
+
+  .nfsmwo-floating-trigger span,
+  .discord-floating-trigger span {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+}
+
+/* ==========================================================================
+   NFSMW BLACKLIST LEADERBOARD 1:1 THEME
+   Applied to: Route Leaderboards (#view-leaderboard), Top Ranked (#view-spotlight),
+   Blacklist 2026 Torneo (#view-blacklist), & Champion Standings (#view-blog)
+   ========================================================================== */
+
+/* 1. Banner Titles with Black Ink-Splatter Brush Halo & Crisp White Stencil Typography */
+#view-leaderboard .lb-video-banner .lb-hero-main-title,
+#view-leaderboard .lb-video-banner .lb-hero-main-title *,
+#view-spotlight .v7-hof-header-wrap .v7-hof-title,
+#view-blacklist .v7-hof-header-wrap .v7-hof-title {
+  font-style: normal !important;
+}
+
+#view-leaderboard #lb-hero-route-name,
+#view-leaderboard .lb-title-line-gradient,
+#view-spotlight #hof-main-heading,
+#view-blacklist #blacklist-main-heading,
+#view-blog #bl-standings-title {
+  position: relative !important;
+  display: inline-block !important;
+  font-family: 'Anton', 'Barlow Condensed', 'Impact', sans-serif !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.045em !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-text-stroke: 0 !important;
+  padding: 8px 34px 10px 18px !important;
+  margin-left: -12px !important;
+  background:
+    radial-gradient(ellipse 92% 68% at 47% 52%, #000000 0%, rgba(0, 0, 0, 0.96) 52%, rgba(0, 0, 0, 0.52) 74%, transparent 90%),
+    radial-gradient(circle 16px at 6% 86%, #000000 0%, rgba(0, 0, 0, 0.88) 45%, transparent 100%),
+    radial-gradient(circle 12px at 94% 20%, #000000 0%, rgba(0, 0, 0, 0.88) 45%, transparent 100%),
+    radial-gradient(circle 10px at 87% 90%, #000000 0%, rgba(0, 0, 0, 0.88) 45%, transparent 100%),
+    radial-gradient(circle 8px at 22% 94%, #000000 0%, transparent 100%),
+    radial-gradient(circle 7px at 64% 93%, #000000 0%, transparent 100%) !important;
+  text-shadow:
+    0 3px 0 #000000,
+    0 0 16px rgba(0, 0, 0, 1),
+    0 0 32px rgba(0, 0, 0, 0.98) !important;
+  filter: none !important;
+}
+
+#view-leaderboard #lb-hero-prefix {
+  font-family: 'Barlow Condensed', 'Inter', sans-serif !important;
+  font-style: normal !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.14em !important;
+  color: #d4d4d8 !important;
+  -webkit-text-fill-color: #d4d4d8 !important;
+  -webkit-text-stroke: 0 !important;
+  background: rgba(0, 0, 0, 0.72) !important;
+  padding: 3px 10px !important;
+  display: inline-block !important;
+  width: fit-content !important;
+}
+
+/* 2. Leaderboard / Ranked / Blacklist / Standings Buttons Typography */
+#view-leaderboard .btn-back-to-tracks,
+#view-leaderboard #lb-modality-tabs .filter-pill-btn,
+#view-leaderboard .btn-table-video,
+#view-spotlight #hof-discipline-pills .filter-pill-btn,
+#view-spotlight .v7-btn-export-csv,
+#view-blacklist #blacklist-discipline-pills .filter-pill-btn,
+#view-blacklist .v7-btn-export-csv,
+#view-blog #torneo-panel-standings .filter-pill-btn {
+  font-family: 'Barlow Condensed', 'Inter', sans-serif !important;
+  font-size: 13.5px !important;
+  font-weight: 700 !important;
+  font-style: normal !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  border-radius: 3px !important;
+  background: rgba(12, 12, 15, 0.92) !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  color: #f3f4f6 !important;
+}
+
+#view-leaderboard #lb-modality-tabs .filter-pill-btn.is-active,
+#view-leaderboard #lb-modality-tabs .filter-pill-btn.active,
+#view-leaderboard #lb-modality-tabs .filter-pill-btn:hover,
+#view-leaderboard .btn-back-to-tracks:hover,
+#view-leaderboard .btn-table-video:hover,
+#view-spotlight #hof-discipline-pills .filter-pill-btn.is-active,
+#view-spotlight #hof-discipline-pills .filter-pill-btn:hover,
+#view-blacklist #blacklist-discipline-pills .filter-pill-btn.is-active,
+#view-blacklist #blacklist-discipline-pills .filter-pill-btn:hover {
+  border-color: #c4d628 !important;
+  background: rgba(164, 180, 28, 0.26) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 14px rgba(196, 214, 40, 0.28) !important;
+}
+
+/* 3. Blacklist Leaderboard Table Shell + Crisp White L-Corner Brackets */
+#view-leaderboard .nfs-table-wrap,
+#view-spotlight .nfs-table-wrap,
+#view-blacklist .nfs-table-wrap,
+#view-blog #standings-table-wrapper.nfs-table-wrap {
+  position: relative !important;
+  background: rgba(10, 10, 12, 0.92) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  border-radius: 2px !important;
+  box-shadow: 0 22px 54px rgba(0, 0, 0, 0.92) !important;
+}
+
+#view-leaderboard .nfs-table-wrap::after,
+#view-spotlight .nfs-table-wrap::after,
+#view-blacklist .nfs-table-wrap::after,
+#view-blog #standings-table-wrapper.nfs-table-wrap::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  z-index: 4 !important;
+  background:
+    linear-gradient(#ffffff, #ffffff) top left / 14px 2px no-repeat,
+    linear-gradient(#ffffff, #ffffff) top left / 2px 14px no-repeat,
+    linear-gradient(#ffffff, #ffffff) top right / 14px 2px no-repeat,
+    linear-gradient(#ffffff, #ffffff) top right / 2px 14px no-repeat,
+    linear-gradient(#ffffff, #ffffff) bottom left / 14px 2px no-repeat,
+    linear-gradient(#ffffff, #ffffff) bottom left / 2px 14px no-repeat,
+    linear-gradient(#ffffff, #ffffff) bottom right / 14px 2px no-repeat,
+    linear-gradient(#ffffff, #ffffff) bottom right / 2px 14px no-repeat !important;
+}
+
+/* 4. Table Headers & Vertical Column Hairline Dividers */
+#view-leaderboard .lb-clean-table thead th,
+#view-spotlight #hof-cyber-table thead th,
+#view-blacklist #blacklist-cyber-table thead th,
+#view-blog #standings-table-wrapper table thead th {
+  font-family: 'Barlow Condensed', 'Inter', sans-serif !important;
+  font-size: 13.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.09em !important;
+  text-transform: uppercase !important;
+  color: #f4f4f5 !important;
+  background: rgba(18, 18, 22, 0.96) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.28) !important;
+  padding: 12px 14px !important;
+}
+
+#view-leaderboard .lb-clean-table thead th:not(:last-child),
+#view-leaderboard .lb-clean-table tbody td:not(:last-child),
+#view-spotlight #hof-cyber-table thead th:not(:last-child),
+#view-spotlight #hof-cyber-table tbody td:not(:last-child),
+#view-blacklist #blacklist-cyber-table thead th:not(:last-child),
+#view-blacklist #blacklist-cyber-table tbody td:not(:last-child),
+#view-blog #standings-table-wrapper table thead th:not(:last-child),
+#view-blog #standings-table-wrapper table tbody td:not(:last-child) {
+  border-right: 1px solid rgba(255, 255, 255, 0.09) !important;
+}
+
+/* 5. Base Matte Black Rows with Crisp White Text */
+#view-leaderboard .lb-clean-table tbody tr,
+#view-spotlight #hof-main-tbody tr,
+#view-blacklist #blacklist-main-tbody tr,
+#view-blog #torneo-standings-tbody tr {
+  background: rgba(11, 11, 14, 0.92) !important;
+  transition: background 0.16s ease, box-shadow 0.16s ease !important;
+}
+
+#view-leaderboard .lb-clean-table tbody tr:nth-child(even),
+#view-spotlight #hof-main-tbody tr:nth-child(even),
+#view-blacklist #blacklist-main-tbody tr:nth-child(even),
+#view-blog #torneo-standings-tbody tr:nth-child(even) {
+  background: rgba(18, 18, 22, 0.92) !important;
+}
+
+#view-leaderboard .lb-clean-table tbody td,
+#view-spotlight #hof-main-tbody td,
+#view-blacklist #blacklist-main-tbody td,
+#view-blog #torneo-standings-tbody td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.13) !important;
+}
+
+/* 6. Signature NFSMW Yellow-Green Highlight Bar on Player Row Hover */
+#view-leaderboard .lb-clean-table tbody tr:hover,
+#view-spotlight #hof-main-tbody tr:hover,
+#view-blacklist #blacklist-main-tbody tr:hover,
+#view-blog #torneo-standings-tbody tr:hover {
+  background-color: rgba(132, 148, 22, 0.48) !important;
+  box-shadow:
+    inset 0 2px 0 rgba(226, 240, 68, 0.96),
+    inset 0 -2px 0 rgba(226, 240, 68, 0.96),
+    0 0 24px rgba(186, 202, 34, 0.34) !important;
+}
+
+#view-leaderboard .lb-clean-table tbody tr:hover td,
+#view-spotlight #hof-main-tbody tr:hover td,
+#view-blacklist #blacklist-main-tbody tr:hover td,
+#view-blog #torneo-standings-tbody tr:hover td {
+  background:
+    repeating-linear-gradient(125deg, rgba(0, 0, 0, 0.10) 0px, rgba(0, 0, 0, 0.10) 2px, transparent 2px, transparent 8px),
+    linear-gradient(180deg, rgba(164, 180, 28, 0.46) 0%, rgba(108, 120, 16, 0.42) 55%, rgba(154, 170, 24, 0.48) 100%) !important;
+  border-top: 1px solid rgba(226, 240, 68, 0.9) !important;
+  border-bottom: 1px solid rgba(226, 240, 68, 0.9) !important;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.94) !important;
+}
+
+#view-leaderboard .lb-clean-table tbody tr:hover td:first-child,
+#view-spotlight #hof-main-tbody tr:hover td:first-child,
+#view-blacklist #blacklist-main-tbody tr:hover td:first-child,
+#view-blog #torneo-standings-tbody tr:hover td:first-child {
+  background:
+    linear-gradient(90deg, rgba(206, 222, 42, 0.72) 0%, rgba(156, 172, 24, 0.50) 100%) !important;
+  box-shadow: inset 3px 0 0 #ffffff !important;
+}
+
+#view-leaderboard .lb-clean-table tbody tr:hover td:last-child,
+#view-spotlight #hof-main-tbody tr:hover td:last-child,
+#view-blacklist #blacklist-main-tbody tr:hover td:last-child,
+#view-blog #torneo-standings-tbody tr:hover td:last-child {
+  background:
+    linear-gradient(90deg, rgba(156, 172, 24, 0.50) 0%, rgba(206, 222, 42, 0.72) 100%) !important;
+  box-shadow: inset -3px 0 0 #ffffff !important;
+}
+
+/* 7. Zero-Padded Condensed Rank Numbers (01, 02, 03...) */
+#view-leaderboard .lb-clean-table .nfs-cyber-rank-num,
+#view-spotlight .nfs-cyber-rank-num,
+#view-blacklist .nfs-cyber-rank-num,
+#view-blog #standings-table-wrapper .nfs-cyber-rank-num {
+  font-family: 'Barlow Condensed', 'Inter', sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 800 !important;
+  font-style: normal !important;
+  letter-spacing: 0.03em !important;
+  -webkit-text-stroke: 0 !important;
+}
+
+/* 8. Gold (1st), Silver (2nd), Bronze (3rd), White (4th+) on Text Only (No Medals) */
+/* 1st Place: Gold */
+#view-leaderboard .lb-clean-table tr.lb-row-rank-1 .nfs-cyber-rank-num,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-1 .lb-user-name,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-1 .lb-time-val,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-1 .stitch-time-display,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-1 .stitch-time-main,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-1 .stitch-time-ms,
+#view-spotlight #hof-cyber-table tr.lb-row-rank-1 .nfs-cyber-rank-num,
+#view-spotlight #hof-cyber-table tr.lb-row-rank-1 .hof-driver-name,
+#view-spotlight #hof-cyber-table tr.lb-row-rank-1 .hof-points-num,
+#view-blacklist #blacklist-cyber-table tr.lb-row-rank-1 .nfs-cyber-rank-num,
+#view-blacklist #blacklist-cyber-table tr.lb-row-rank-1 .hof-driver-name,
+#view-blacklist #blacklist-cyber-table tr.lb-row-rank-1 .hof-points-cell > span:first-child,
+#view-blog #standings-table-wrapper tr.lb-row-rank-1 .nfs-cyber-rank-num,
+#view-blog #standings-table-wrapper tr.lb-row-rank-1 .hof-driver-name,
+#view-blog #standings-table-wrapper tr.lb-row-rank-1 .hof-points-cell > span:first-child {
+  color: #fbbf24 !important;
+  -webkit-text-stroke: 0 !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9), 0 0 12px rgba(251, 191, 36, 0.35) !important;
+}
+
+/* 2nd Place: Silver */
+#view-leaderboard .lb-clean-table tr.lb-row-rank-2 .nfs-cyber-rank-num,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-2 .lb-user-name,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-2 .lb-time-val,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-2 .stitch-time-display,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-2 .stitch-time-main,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-2 .stitch-time-ms,
+#view-spotlight #hof-cyber-table tr.lb-row-rank-2 .nfs-cyber-rank-num,
+#view-spotlight #hof-cyber-table tr.lb-row-rank-2 .hof-driver-name,
+#view-spotlight #hof-cyber-table tr.lb-row-rank-2 .hof-points-num,
+#view-blacklist #blacklist-cyber-table tr.lb-row-rank-2 .nfs-cyber-rank-num,
+#view-blacklist #blacklist-cyber-table tr.lb-row-rank-2 .hof-driver-name,
+#view-blacklist #blacklist-cyber-table tr.lb-row-rank-2 .hof-points-cell > span:first-child,
+#view-blog #standings-table-wrapper tr.lb-row-rank-2 .nfs-cyber-rank-num,
+#view-blog #standings-table-wrapper tr.lb-row-rank-2 .hof-driver-name,
+#view-blog #standings-table-wrapper tr.lb-row-rank-2 .hof-points-cell > span:first-child {
+  color: #d4dbe6 !important;
+  -webkit-text-stroke: 0 !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85) !important;
+}
+
+/* 3rd Place: Bronze */
+#view-leaderboard .lb-clean-table tr.lb-row-rank-3 .nfs-cyber-rank-num,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-3 .lb-user-name,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-3 .lb-time-val,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-3 .stitch-time-display,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-3 .stitch-time-main,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-3 .stitch-time-ms,
+#view-spotlight #hof-cyber-table tr.lb-row-rank-3 .nfs-cyber-rank-num,
+#view-spotlight #hof-cyber-table tr.lb-row-rank-3 .hof-driver-name,
+#view-spotlight #hof-cyber-table tr.lb-row-rank-3 .hof-points-num,
+#view-blacklist #blacklist-cyber-table tr.lb-row-rank-3 .nfs-cyber-rank-num,
+#view-blacklist #blacklist-cyber-table tr.lb-row-rank-3 .hof-driver-name,
+#view-blacklist #blacklist-cyber-table tr.lb-row-rank-3 .hof-points-cell > span:first-child,
+#view-blog #standings-table-wrapper tr.lb-row-rank-3 .nfs-cyber-rank-num,
+#view-blog #standings-table-wrapper tr.lb-row-rank-3 .hof-driver-name,
+#view-blog #standings-table-wrapper tr.lb-row-rank-3 .hof-points-cell > span:first-child {
+  color: #e08a4a !important;
+  -webkit-text-stroke: 0 !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85) !important;
+}
+
+/* 4th+ Place: Pure White */
+#view-leaderboard .lb-clean-table tr.lb-row-rank-rest .nfs-cyber-rank-num,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-rest .lb-user-name,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-rest .lb-time-val,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-rest .stitch-time-display,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-rest .stitch-time-main,
+#view-leaderboard .lb-clean-table tr.lb-row-rank-rest .stitch-time-ms,
+#view-spotlight #hof-cyber-table tr.lb-row-rank-rest .nfs-cyber-rank-num,
+#view-spotlight #hof-cyber-table tr.lb-row-rank-rest .hof-driver-name,
+#view-spotlight #hof-cyber-table tr.lb-row-rank-rest .hof-points-num,
+#view-blacklist #blacklist-cyber-table tr.lb-row-rank-rest .nfs-cyber-rank-num,
+#view-blacklist #blacklist-cyber-table tr.lb-row-rank-rest .hof-driver-name,
+#view-blacklist #blacklist-cyber-table tr.lb-row-rank-rest .hof-points-cell > span:first-child,
+#view-blog #standings-table-wrapper tr.lb-row-rank-rest .nfs-cyber-rank-num,
+#view-blog #standings-table-wrapper tr.lb-row-rank-rest .hof-driver-name,
+#view-blog #standings-table-wrapper tr.lb-row-rank-rest .hof-points-cell > span:first-child {
+  color: #ffffff !important;
+  -webkit-text-stroke: 0 !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85) !important;
+}
+
+/* Uniform Clean Typography inside Blacklist & Champion Standings Driver Names */
+#view-blacklist #blacklist-cyber-table .hof-driver-name,
+#view-blog #standings-table-wrapper .hof-driver-name,
+#view-spotlight #hof-cyber-table .hof-driver-name.hof-driver-flat,
+#view-leaderboard .lb-clean-table .lb-user-name {
+  font-family: 'Barlow Condensed', 'Inter', sans-serif !important;
+  font-style: normal !important;
+  font-weight: 700 !important;
+  font-size: 16.5px !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+}
+
+/* Override mobile banner title padding so ink halo never overflows 390px */
+@media (max-width: 768px) {
+  #view-leaderboard #lb-hero-route-name,
+  #view-leaderboard .lb-title-line-gradient,
+  #view-spotlight #hof-main-heading,
+  #view-blacklist #blacklist-main-heading,
+  #view-blog #bl-standings-title {
+    margin-left: 0 !important;
+    padding: 4px 12px 6px 8px !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* ==========================================================================
+   NFSMW TACTICAL GPS ROUTE CARDS (CIRCUITO, SPRINT & DRAG — 1:1 REFERENCE)
+   ========================================================================== */
+.uiverse-cosmic-card.nfsmw-tactical-card,
+.stitch-track-card.nfsmw-tactical-card,
+.stitch-track-card.element-card.nfsmw-tactical-card {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  padding: 10px !important;
+  min-height: 392px !important;
+  border-radius: 3px !important;
+  background:
+    radial-gradient(85% 65% at 50% 45%, #16181c 0%, #0b0c0e 72%, #050507 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.90) !important;
+  overflow: hidden !important;
+  cursor: pointer !important;
+  transition: transform 0.24s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.24s ease, box-shadow 0.24s ease !important;
+}
+
+.uiverse-cosmic-card.nfsmw-tactical-card:hover,
+.stitch-track-card.nfsmw-tactical-card:hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(196, 214, 40, 0.85) !important;
+  box-shadow:
+    0 22px 48px rgba(0, 0, 0, 0.94),
+    0 0 24px rgba(186, 202, 34, 0.28) !important;
+}
+
+/* 4 Crisp White L-Shaped Reticle Brackets on Outer Corners */
+.nfsmw-tac-corners {
+  position: absolute;
+  inset: 4px;
+  pointer-events: none;
+  z-index: 6;
+  background:
+    linear-gradient(#ffffff, #ffffff) top left / 14px 2.5px no-repeat,
+    linear-gradient(#ffffff, #ffffff) top left / 2.5px 14px no-repeat,
+    linear-gradient(#ffffff, #ffffff) top right / 14px 2.5px no-repeat,
+    linear-gradient(#ffffff, #ffffff) top right / 2.5px 14px no-repeat,
+    linear-gradient(#ffffff, #ffffff) bottom left / 14px 2.5px no-repeat,
+    linear-gradient(#ffffff, #ffffff) bottom left / 2.5px 14px no-repeat,
+    linear-gradient(#ffffff, #ffffff) bottom right / 14px 2.5px no-repeat,
+    linear-gradient(#ffffff, #ffffff) bottom right / 2.5px 14px no-repeat;
+}
+
+/* Top Acid Olive-Yellow Grunge Header with Barbed Wire & Graffiti */
+.nfsmw-tac-header {
+  position: relative;
+  width: 100%;
+  min-height: 82px;
+  padding: 15px 14px 13px;
+  background:
+    radial-gradient(circle 42px at 14% 78%, rgba(0, 0, 0, 0.42) 0%, transparent 100%),
+    radial-gradient(circle 54px at 84% 28%, rgba(0, 0, 0, 0.36) 0%, transparent 100%),
+    repeating-linear-gradient(128deg, rgba(0, 0, 0, 0.12) 0px, rgba(0, 0, 0, 0.12) 2px, transparent 2px, transparent 7px),
+    linear-gradient(118deg, #98a224 0%, #687016 34%, #3c420b 66%, #a6b22a 100%);
+  border-bottom: 2px solid #090a07;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.nfsmw-tac-header-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.nfsmw-tac-header-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: 8px;
+  border-left: 2px solid rgba(232, 224, 152, 0.55);
+}
+
+.nfsmw-tac-modality-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nfsmw-tac-helmet-icon {
+  width: 13px;
+  height: 13px;
+  color: #ffffff;
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
+}
+
+.nfsmw-tac-modality-label {
+  font-family: 'Barlow Condensed', 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #f3ebb8;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+}
+
+.stitch-track-card.nfsmw-tactical-card h4.nfsmw-tac-title {
+  font-family: 'Anton', 'Barlow Condensed', 'Impact', sans-serif !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 24px !important;
+  line-height: 1.06 !important;
+  letter-spacing: 0.03em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  margin: 0 !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: 84% !important;
+  text-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.95),
+    0 4px 12px rgba(0, 0, 0, 0.9) !important;
+}
+
+.stitch-track-card.nfsmw-tactical-card:hover h4.nfsmw-tac-title {
+  color: #ffffff !important;
+}
+
+/* Middle Tactical GPS Map Box */
+.nfsmw-tac-map-box {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background:
+    radial-gradient(75% 75% at 50% 48%, #1d2025 0%, #121417 65%, #0c0d10 100%);
+  padding: 6px 6px 4px;
+  overflow: hidden;
+}
+
+.nfsmw-tac-map-svg {
+  width: 100%;
+  height: 196px;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.nfsmw-tactical-card:hover .nfsmw-tac-map-svg {
+  transform: scale(1.03);
+}
+
+/* Micro Ruler Scale Strip */
+.nfsmw-tac-ruler-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 10px 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.nfsmw-tac-ruler-left {
+  display: flex;
+  flex-direction: column;
+  width: 92px;
+  flex-shrink: 0;
+}
+
+.nfsmw-tac-ruler-ticks {
+  display: block;
+  height: 5px;
+  width: 100%;
+  background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.45) 0px, rgba(255, 255, 255, 0.45) 1px, transparent 1px, transparent 6px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.nfsmw-tac-ruler-nums {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 7.5px;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 2px;
+}
+
+.nfsmw-tac-ruler-right {
+  min-width: 0;
+  text-align: right;
+}
+
+.nfsmw-tac-ruler-district {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  color: #9ca3af;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+/* Bottom Footer Bar: DRIVER: RAZOR | RECORD: 02:14.88 */
+.nfsmw-tac-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 9px 10px 8px;
+  background: #0b0c0e;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.nfsmw-tac-driver-wrap {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+.nfsmw-tac-driver-badge {
+  width: 18px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 2px;
+  color: #d4d4d8;
+  font-size: 9px;
+  flex-shrink: 0;
+}
+
+.nfsmw-tac-label {
+  font-family: 'Barlow Condensed', 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #cbd5e1;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.stitch-track-card.nfsmw-tactical-card .nfsmw-tac-driver-val {
+  font-family: 'Barlow Condensed', 'Inter', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.03em !important;
+  color: #ffffff !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.nfsmw-tac-record-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.nfsmw-tac-record-label {
+  font-family: 'Barlow Condensed', 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #d8c57c;
+  text-transform: uppercase;
+}
+
+.stitch-track-card.nfsmw-tactical-card .nfsmw-tac-record-val {
+  font-family: 'Barlow Condensed', 'JetBrains Mono', monospace !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em !important;
+  color: #ffffff !important;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Micro Sub-bar for Vehicle + Video / Rank Quick Links */
+.nfsmw-tac-subbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 10px 4px;
+  background: #08090b;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.stitch-track-card.nfsmw-tactical-card .nfsmw-tac-car-val {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: #9ca3af !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.nfsmw-tac-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.nfsmw-tac-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  font-family: 'Barlow Condensed', 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #e5e7eb;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.16s ease;
+}
+
+.nfsmw-tac-btn:hover,
+.nfsmw-tac-btn-primary:hover {
+  background: rgba(164, 180, 28, 0.28);
+  border-color: #c4d628;
+  color: #ffffff;
+}
+
+.nfsmw-tac-btn-primary {
+  border-color: rgba(196, 214, 40, 0.55);
+  color: #f3ebb8;
+}
+
+@media (max-width: 640px) {
+  .stitch-track-card.nfsmw-tactical-card {
+    min-height: 360px !important;
+    padding: 8px !important;
+  }
+
+  .stitch-track-card.nfsmw-tactical-card h4.nfsmw-tac-title {
+    font-size: 22px !important;
+  }
+
+  .nfsmw-tac-map-svg {
+    height: 178px;
+  }
+}
+
+/* ==========================================================================
+   ROCKPORT 2005 INDUSTRIAL ATMOSPHERE & BLACKLIST LEADERBOARD (PURE CSS)
+   Scope: #view-leaderboard (Circuito/Sprint/Drag), #view-spotlight (Top Ranked),
+          #view-blacklist (Blacklist 2026), #view-blog (Champions Standings)
+   Strict Integrity: Visual/CSS transformation only — zero DOM/data changes.
+   ========================================================================== */
+
+@keyframes rockportSmokeDrift {
+  0% {
+    transform: translate3d(-1.5%, 0%, 0) scale(1);
+    opacity: 0.78;
+  }
+  50% {
+    transform: translate3d(1.5%, -1.5%, 0) scale(1.04);
+    opacity: 0.92;
+  }
+  100% {
+    transform: translate3d(-1.5%, 0%, 0) scale(1);
+    opacity: 0.78;
+  }
+}
+
+/* 1. Industrial Rockport 2005 Sepia-Olive Sky + Bridge/Urban Silhouettes + Smoke */
+#view-leaderboard,
+#view-spotlight,
+#view-blacklist,
+#view-blog {
+  position: relative !important;
+  background-color: #161512 !important;
+  background-image:
+    radial-gradient(ellipse 90% 55% at 52% 0%, rgba(72, 68, 52, 0.55) 0%, transparent 68%),
+    radial-gradient(ellipse 75% 48% at 12% 100%, rgba(10, 10, 8, 0.92) 0%, transparent 72%),
+    radial-gradient(ellipse 75% 48% at 88% 100%, rgba(10, 10, 8, 0.92) 0%, transparent 72%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 480' preserveAspectRatio='none'%3E%3Cg fill='%230d0d0a' fill-opacity='0.72'%3E%3Cpolygon points='0,480 0,250 110,250 110,180 210,180 210,290 360,290 360,210 470,210 470,320 690,320 690,260 840,260 840,310 1040,310 1040,220 1190,220 1190,280 1320,280 1320,190 1440,190 1440,480'/%3E%3Cpath d='M0 285 L520 335 L520 352 L0 302 Z'/%3E%3Cpath d='M920 338 L1440 278 L1440 296 L920 356 Z'/%3E%3Crect x='140' y='300' width='22' height='180'/%3E%3Crect x='340' y='318' width='20' height='162'/%3E%3Crect x='1090' y='320' width='20' height='160'/%3E%3Crect x='1280' y='296' width='24' height='184'/%3E%3C/g%3E%3C/svg%3E"),
+    linear-gradient(180deg, #2b2922 0%, #23211b 28%, #1a1915 62%, #12110e 100%) !important;
+  background-repeat: no-repeat !important;
+  background-size: 100% 100%, 100% 100%, 100% 100%, cover, 100% 100% !important;
+  background-position: center !important;
+  background-attachment: fixed !important;
+}
+
+#view-leaderboard::before,
+#view-spotlight::before,
+#view-blacklist::before,
+#view-blog::before {
+  content: "" !important;
+  position: fixed !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  background:
+    radial-gradient(ellipse 520px 260px at 66% 10%, rgba(12, 12, 10, 0.72) 0%, rgba(18, 17, 14, 0.35) 52%, transparent 80%),
+    radial-gradient(ellipse 680px 290px at 14% 92%, rgba(210, 210, 198, 0.14) 0%, rgba(16, 16, 14, 0.65) 55%, transparent 85%),
+    radial-gradient(ellipse 680px 290px at 86% 90%, rgba(205, 204, 190, 0.12) 0%, rgba(12, 12, 10, 0.72) 55%, transparent 85%),
+    radial-gradient(ellipse 100% 100% at 50% 50%, transparent 48%, rgba(0, 0, 0, 0.78) 100%) !important;
+  animation: rockportSmokeDrift 18s ease-in-out infinite !important;
+}
+
+#view-leaderboard .leaderboard-page-bg-overlay {
+  background:
+    radial-gradient(ellipse 100% 100% at 50% 50%, rgba(28, 26, 21, 0.72) 0%, rgba(12, 12, 10, 0.94) 100%) !important;
+}
+
+#view-leaderboard > *,
+#view-spotlight > *,
+#view-blacklist > *,
+#view-blog > * {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* 2. Strict 0px Border Radius Across All 4 Views (Zero Rounded Modern Corners) */
+#view-leaderboard :is(.lb-video-banner, .lb-banner-wr-card, .nfs-Leaderboard-panel, .nfs-table-wrap, .filter-pill-btn, .btn-back-to-tracks, .btn-table-video, .nfs-lb-input, .nfs-lb-select, .nfs-cyber-rank-num),
+#view-spotlight :is(.v7-hof-header-wrap, .v7-hof-controls-row, .nfs-table-wrap, .filter-pill-btn, .v7-btn-export-csv, .nfs-lb-input, .nfs-lb-select, .hof-podium-box, .hof-puesto-pill, .v7-device-tag, .v7-tier-pill, .nfs-cyber-rank-num),
+#view-blacklist :is(.v7-hof-header-wrap, .v7-hof-controls-row, .nfs-table-wrap, .filter-pill-btn, .v7-btn-export-csv, .nfs-lb-input, .nfs-lb-select, .hof-podium-box, .nfs-cyber-rank-num),
+#view-blog #torneo-panel-standings :is(.nfs-Leaderboard-panel, .nfs-table-wrap, .nfs-lb-select, .hof-podium-box, .nfs-cyber-rank-num, .filter-pill-btn) {
+  border-radius: 0px !important;
+}
+
+/* 3. Exact Condensed Industrial Numerics (Barlow Condensed + Tabular Nums + Crisp Shadow) */
+#view-leaderboard :is(.nfs-cyber-rank-num, .lb-time-val, .stitch-time-display, .stitch-time-main, .stitch-time-ms, .stitch-delta-val, .stitch-date-val, .lb-banner-wr-time),
+#view-spotlight :is(.nfs-cyber-rank-num, .hof-podium-box-count, .hof-points-num, .hof-puesto-pill),
+#view-blacklist :is(.nfs-cyber-rank-num, .hof-podium-box-count, .hof-points-cell > span:first-child, td:last-child span),
+#view-blog #torneo-panel-standings :is(.nfs-cyber-rank-num, .hof-podium-box-count, .hof-points-cell > span:first-child, td:last-child span) {
+  font-family: 'Barlow Condensed', 'Chakra Petch', 'Rajdhani', sans-serif !important;
+  font-variant-numeric: tabular-nums !important;
+  text-transform: uppercase !important;
+  font-style: normal !important;
+  -webkit-text-stroke: 0 !important;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.92) !important;
+}
+
+/* Bright White High-Contrast Time, Delta, Date & Score Values */
+#view-leaderboard .lb-clean-table :is(.lb-time-val, .stitch-time-display, .stitch-time-main, .stitch-time-ms) {
+  font-size: 20px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.03em !important;
+  color: #f5f5f5 !important;
+}
+
+#view-leaderboard .lb-clean-table .stitch-delta-val {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.03em !important;
+}
+
+#view-leaderboard .lb-clean-table td:nth-child(8) .stitch-date-val {
+  font-family: 'Barlow Condensed', 'Chakra Petch', 'Rajdhani', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  color: #f5f5f5 !important;
+  font-variant-numeric: tabular-nums !important;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.92) !important;
+}
+
+#view-spotlight .hof-points-num,
+#view-blacklist .hof-points-cell > span:first-child,
+#view-blog #standings-table-wrapper .hof-points-cell > span:first-child {
+  font-size: 21px !important;
+  font-weight: 800 !important;
+  color: #f5f5f5 !important;
+}
+
+/* 4. Solid Rectangular RANK Boxes (01 Cream-Olive #d4d798 / Dark #141410; 02+ Steel Gray #4d4d4b / White #ffffff) */
+#view-leaderboard .lb-clean-table tr:not(.lb-row-rank-1) .nfs-cyber-rank-num,
+#view-spotlight #hof-cyber-table tr:not(.lb-row-rank-1) .nfs-cyber-rank-num,
+#view-blacklist #blacklist-cyber-table tr:not(.lb-row-rank-1) .nfs-cyber-rank-num,
+#view-blog #standings-table-wrapper tr:not(.lb-row-rank-1) .nfs-cyber-rank-num,
+#view-leaderboard .lb-clean-table .nfs-cyber-rank-num,
+#view-spotlight #hof-cyber-table .nfs-cyber-rank-num,
+#view-blacklist #blacklist-cyber-table .nfs-cyber-rank-num,
+#view-blog #standings-table-wrapper .nfs-cyber-rank-num {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 44px !important;
+  height: 36px !important;
+  padding: 0 8px !important;
+  background: #4d4d4b !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(0, 0, 0, 0.55) !important;
+  font-size: 22px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.02em !important;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.9) !important;
+}
+
+/* Ensure 02+ Time, Driver & Points stay crisp high-contrast white (#f5f5f5 / #ffffff) */
+#view-leaderboard .lb-clean-table tr:not(.lb-row-rank-1) :is(.lb-time-val, .stitch-time-display, .stitch-time-main, .stitch-time-ms),
+#view-leaderboard .lb-clean-table tr:not(.lb-row-rank-1) .lb-user-name,
+#view-spotlight #hof-cyber-table tr:not(.lb-row-rank-1) :is(.hof-driver-name, .hof-points-num),
+#view-blacklist #blacklist-cyber-table tr:not(.lb-row-rank-1) :is(.hof-driver-name, .hof-points-cell > span:first-child),
+#view-blog #standings-table-wrapper tr:not(.lb-row-rank-1) :is(.hof-driver-name, .hof-points-cell > span:first-child) {
+  color: #f5f5f5 !important;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.92) !important;
+}
+
+/* Rank 01 Solid Cream-Olive Box (#d4d798) with Dark Heavy Numeral (#141410) */
+#view-leaderboard .lb-clean-table tr.lb-row-rank-1 .nfs-cyber-rank-num,
+#view-spotlight #hof-cyber-table tr.lb-row-rank-1 .nfs-cyber-rank-num,
+#view-blacklist #blacklist-cyber-table tr.lb-row-rank-1 .nfs-cyber-rank-num,
+#view-blog #standings-table-wrapper tr.lb-row-rank-1 .nfs-cyber-rank-num {
+  min-width: 48px !important;
+  height: 48px !important;
+  background: linear-gradient(180deg, #dde0a4 0%, #d4d798 55%, #b8bc78 100%) !important;
+  color: #141410 !important;
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 3px 8px rgba(0, 0, 0, 0.7) !important;
+  font-size: 26px !important;
+  font-weight: 800 !important;
+  text-shadow: none !important;
+}
+
+/* 5. Table Container with Tactical White L-Brackets & Compact Header Band */
+#view-leaderboard .nfs-table-wrap,
+#view-spotlight .nfs-table-wrap,
+#view-blacklist .nfs-table-wrap,
+#view-blog #standings-table-wrapper.nfs-table-wrap {
+  position: relative !important;
+  background: rgba(15, 15, 14, 0.86) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+  box-shadow: 0 22px 54px rgba(0, 0, 0, 0.92) !important;
+}
+
+#view-leaderboard .nfs-table-wrap::after,
+#view-spotlight .nfs-table-wrap::after,
+#view-blacklist .nfs-table-wrap::after,
+#view-blog #standings-table-wrapper.nfs-table-wrap::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  z-index: 6 !important;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)) top left / 16px 2px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)) top left / 2px 16px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)) top right / 16px 2px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)) top right / 2px 16px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)) bottom left / 16px 2px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)) bottom left / 2px 16px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)) bottom right / 16px 2px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)) bottom right / 2px 16px no-repeat !important;
+}
+
+#view-leaderboard .lb-clean-table thead th,
+#view-spotlight #hof-cyber-table thead th,
+#view-blacklist #blacklist-cyber-table thead th,
+#view-blog #standings-table-wrapper table thead th {
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  background: rgba(15, 15, 15, 0.90) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22) !important;
+  padding: 10px 14px !important;
+}
+
+/* 6. Standard Rows (02+): Translucent Dark Charcoal Bars + Subtle Vertical Dividers + Olive Hover */
+#view-leaderboard .lb-clean-table tbody tr:not(.lb-row-rank-1),
+#view-spotlight #hof-main-tbody tr:not(.lb-row-rank-1),
+#view-blacklist #blacklist-main-tbody tr:not(.lb-row-rank-1),
+#view-blog #torneo-standings-tbody tr:not(.lb-row-rank-1) {
+  background: rgba(20, 20, 20, 0.84) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+}
+
+#view-leaderboard .lb-clean-table tbody tr:not(.lb-row-rank-1):nth-child(even),
+#view-spotlight #hof-main-tbody tr:not(.lb-row-rank-1):nth-child(even),
+#view-blacklist #blacklist-main-tbody tr:not(.lb-row-rank-1):nth-child(even),
+#view-blog #torneo-standings-tbody tr:not(.lb-row-rank-1):nth-child(even) {
+  background: rgba(26, 26, 25, 0.86) !important;
+}
+
+#view-leaderboard .lb-clean-table tbody tr:not(.lb-row-rank-1) td,
+#view-spotlight #hof-main-tbody tr:not(.lb-row-rank-1) td,
+#view-blacklist #blacklist-main-tbody tr:not(.lb-row-rank-1) td,
+#view-blog #torneo-standings-tbody tr:not(.lb-row-rank-1) td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+#view-leaderboard .lb-clean-table tbody tr:not(.lb-row-rank-1):hover td,
+#view-spotlight #hof-main-tbody tr:not(.lb-row-rank-1):hover td,
+#view-blacklist #blacklist-main-tbody tr:not(.lb-row-rank-1):hover td,
+#view-blog #torneo-standings-tbody tr:not(.lb-row-rank-1):hover td {
+  background: rgba(115, 120, 42, 0.28) !important;
+  border-top: 1px solid rgba(212, 215, 152, 0.45) !important;
+  border-bottom: 1px solid rgba(212, 215, 152, 0.45) !important;
+}
+
+#view-leaderboard .lb-clean-table tbody tr:not(.lb-row-rank-1):hover td:first-child,
+#view-spotlight #hof-main-tbody tr:not(.lb-row-rank-1):hover td:first-child,
+#view-blacklist #blacklist-main-tbody tr:not(.lb-row-rank-1):hover td:first-child,
+#view-blog #torneo-standings-tbody tr:not(.lb-row-rank-1):hover td:first-child {
+  box-shadow: inset 3px 0 0 #d4d798 !important;
+}
+
+/* 7. HIGHLIGHTED ROW #01 ("MOST WANTED / LEADER" — RAZOR STYLE) */
+#view-leaderboard .lb-clean-table tbody tr.lb-row-rank-1 td,
+#view-spotlight #hof-main-tbody tr.lb-row-rank-1 td,
+#view-blacklist #blacklist-main-tbody tr.lb-row-rank-1 td,
+#view-blog #torneo-standings-tbody tr.lb-row-rank-1 td {
+  padding-top: 16px !important;
+  padding-bottom: 16px !important;
+  border-top: 1px solid rgba(212, 215, 152, 0.85) !important;
+  border-bottom: 1px solid rgba(212, 215, 152, 0.85) !important;
+  border-right: 1px solid rgba(0, 0, 0, 0.22) !important;
+  background-color: rgba(72, 76, 24, 0.90) !important;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='12' viewBox='0 0 160 12'%3E%3Cpath d='M0 6 Q40 2 80 7 T160 5' stroke='%230b0b08' stroke-width='1.8' fill='none'/%3E%3Cg stroke='%230b0b08' stroke-width='1.5' stroke-linecap='round'%3E%3Cline x1='24' y1='1' x2='32' y2='10'/%3E%3Cline x1='32' y1='1' x2='24' y2='10'/%3E%3Cline x1='84' y1='2' x2='92' y2='11'/%3E%3Cline x1='92' y1='2' x2='84' y2='11'/%3E%3Cline x1='138' y1='1' x2='146' y2='10'/%3E%3Cline x1='146' y1='1' x2='138' y2='10'/%3E%3C/g%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='12' viewBox='0 0 160 12'%3E%3Cpath d='M0 6 Q40 10 80 5 T160 7' stroke='%230b0b08' stroke-width='1.8' fill='none'/%3E%3Cg stroke='%230b0b08' stroke-width='1.5' stroke-linecap='round'%3E%3Cline x1='38' y1='1' x2='46' y2='10'/%3E%3Cline x1='46' y1='1' x2='38' y2='10'/%3E%3Cline x1='106' y1='2' x2='114' y2='11'/%3E%3Cline x1='114' y1='2' x2='106' y2='11'/%3E%3C/g%3E%3C/svg%3E"),
+    repeating-linear-gradient(125deg, rgba(0, 0, 0, 0.12) 0px, rgba(0, 0, 0, 0.12) 2px, transparent 2px, transparent 8px),
+    linear-gradient(180deg, rgba(115, 120, 42, 0.92) 0%, rgba(72, 76, 24, 0.88) 62%, rgba(45, 48, 16, 0.92) 100%) !important;
+  background-repeat: repeat-x, repeat-x, repeat, no-repeat !important;
+  background-position: top left, bottom left, center, center !important;
+  background-size: 160px 12px, 160px 12px, auto, 100% 100% !important;
+}
+
+/* Row #01 Left White-Cream L-Brackets + Bright Olive Start */
+#view-leaderboard .lb-clean-table tbody tr.lb-row-rank-1 td:first-child,
+#view-spotlight #hof-main-tbody tr.lb-row-rank-1 td:first-child,
+#view-blacklist #blacklist-main-tbody tr.lb-row-rank-1 td:first-child,
+#view-blog #torneo-standings-tbody tr.lb-row-rank-1 td:first-child {
+  background-image:
+    linear-gradient(#eef0b8, #eef0b8),
+    linear-gradient(#eef0b8, #eef0b8),
+    linear-gradient(#eef0b8, #eef0b8),
+    linear-gradient(#eef0b8, #eef0b8),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='12' viewBox='0 0 160 12'%3E%3Cpath d='M0 6 Q40 2 80 7 T160 5' stroke='%230b0b08' stroke-width='1.8' fill='none'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='12' viewBox='0 0 160 12'%3E%3Cpath d='M0 6 Q40 10 80 5 T160 7' stroke='%230b0b08' stroke-width='1.8' fill='none'/%3E%3C/svg%3E"),
+    linear-gradient(90deg, rgba(132, 138, 50, 0.96) 0%, rgba(92, 97, 32, 0.90) 100%) !important;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat-x, repeat-x, no-repeat !important;
+  background-position: top left, top left, bottom left, bottom left, top left, bottom left, center !important;
+  background-size: 14px 2px, 2px 14px, 14px 2px, 2px 14px, 160px 12px, 160px 12px, 100% 100% !important;
+}
+
+/* Row #01 Right White-Cream L-Brackets + Dark Spray/Skull Stencil Accent */
+#view-leaderboard .lb-clean-table tbody tr.lb-row-rank-1 td:last-child,
+#view-spotlight #hof-main-tbody tr.lb-row-rank-1 td:last-child,
+#view-blacklist #blacklist-main-tbody tr.lb-row-rank-1 td:last-child,
+#view-blog #torneo-standings-tbody tr.lb-row-rank-1 td:last-child {
+  background-image:
+    linear-gradient(#eef0b8, #eef0b8),
+    linear-gradient(#eef0b8, #eef0b8),
+    linear-gradient(#eef0b8, #eef0b8),
+    linear-gradient(#eef0b8, #eef0b8),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='130' height='74' viewBox='0 0 130 74'%3E%3Cg stroke='%230b0b08' stroke-width='2.2' fill='none' opacity='0.78'%3E%3Cpath d='M36 12 L52 30 L64 10 L76 32 L92 14'/%3E%3Cpath d='M86 38 C82 36 81 29 84 24 C88 20 98 20 102 24 C105 29 104 36 100 38 L100 45 L86 45 Z' fill='rgba(196,204,76,0.28)'/%3E%3Ccircle cx='89.5' cy='31' r='2.3' fill='%230b0b08'/%3E%3Ccircle cx='96.5' cy='31' r='2.3' fill='%230b0b08'/%3E%3C/g%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='12' viewBox='0 0 160 12'%3E%3Cpath d='M0 6 Q40 2 80 7 T160 5' stroke='%230b0b08' stroke-width='1.8' fill='none'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='12' viewBox='0 0 160 12'%3E%3Cpath d='M0 6 Q40 10 80 5 T160 7' stroke='%230b0b08' stroke-width='1.8' fill='none'/%3E%3C/svg%3E"),
+    linear-gradient(90deg, rgba(64, 68, 22, 0.90) 0%, rgba(112, 118, 38, 0.94) 100%) !important;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat-x, repeat-x, no-repeat !important;
+  background-position: top right, top right, bottom right, bottom right, right center, top left, bottom left, center !important;
+  background-size: 14px 2px, 2px 14px, 14px 2px, 2px 14px, 120px 70px, 160px 12px, 160px 12px, 100% 100% !important;
+}
+
+/* Row #01 High-Contrast White & Cream-Gold Text */
+#view-leaderboard .lb-clean-table tbody tr.lb-row-rank-1 .lb-user-name,
+#view-spotlight #hof-main-tbody tr.lb-row-rank-1 .hof-driver-name,
+#view-blacklist #blacklist-main-tbody tr.lb-row-rank-1 .hof-driver-name,
+#view-blog #torneo-standings-tbody tr.lb-row-rank-1 .hof-driver-name {
+  color: #ffffff !important;
+  font-size: 19px !important;
+  font-weight: 800 !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95) !important;
+}
+
+#view-leaderboard .lb-clean-table tbody tr.lb-row-rank-1 :is(.lb-time-val, .stitch-time-display, .stitch-time-main, .stitch-time-ms),
+#view-spotlight #hof-main-tbody tr.lb-row-rank-1 .hof-points-num,
+#view-blacklist #blacklist-main-tbody tr.lb-row-rank-1 .hof-points-cell > span:first-child,
+#view-blog #torneo-standings-tbody tr.lb-row-rank-1 .hof-points-cell > span:first-child {
+  color: #f4f2c6 !important;
+  font-size: 22px !important;
+  font-weight: 800 !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95) !important;
+}
+
+/* 8. HUD Keycap Controls & Buttons (1px solid rgba(255,255,255,0.75), 0px radius) */
+#view-leaderboard :is(.btn-back-to-tracks, #lb-modality-tabs .filter-pill-btn, .btn-table-video),
+#view-spotlight :is(#hof-discipline-pills .filter-pill-btn, .v7-btn-export-csv),
+#view-blacklist :is(#blacklist-discipline-pills .filter-pill-btn, .v7-btn-export-csv),
+#view-blog #torneo-panel-standings .filter-pill-btn {
+  background: rgba(12, 12, 11, 0.92) !important;
+  border: 1px solid rgba(255, 255, 255, 0.75) !important;
+  color: #ffffff !important;
+  border-radius: 0px !important;
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.09em !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9) !important;
+}
+
+#view-leaderboard :is(#lb-modality-tabs .filter-pill-btn.is-active, #lb-modality-tabs .filter-pill-btn.active, .filter-pill-btn:hover, .btn-back-to-tracks:hover, .btn-table-video:hover),
+#view-spotlight :is(#hof-discipline-pills .filter-pill-btn.is-active, .filter-pill-btn:hover, .v7-btn-export-csv:hover),
+#view-blacklist :is(#blacklist-discipline-pills .filter-pill-btn.is-active, .filter-pill-btn:hover, .v7-btn-export-csv:hover) {
+  background: rgba(115, 120, 42, 0.85) !important;
+  border-color: #d4d798 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 14px rgba(212, 215, 152, 0.25) !important;
+}
+
+/* ==========================================================================
+   UPGRADE: DISTRESSED BANNER TITLES, LARGER DRIVER NAMES, PILOT PHOTO FRAMES
+   & ENLARGED TACTICAL ROUTE CARD TITLES / DRIVER / RECORD
+   ========================================================================== */
+
+/* 1. Distressed Blacklist Stencil Typography on Video Banner & All Leaderboard/Ranked Titles */
+html body #view-leaderboard .lb-video-banner #lb-hero-route-title .lb-title-prefix,
+html body #view-leaderboard .lb-video-banner #lb-hero-route-title .rc-title-line-white,
+html body #view-leaderboard .lb-video-banner #lb-hero-route-title #lb-hero-prefix,
+html body #view-challenges .rc-stitch-banner #routes-catalog-banner-title #rc-banner-prefix,
+#view-leaderboard #lb-hero-prefix,
+#view-challenges #rc-banner-prefix {
+  font-family: 'Rubik Distressed', 'Anton', 'Barlow Condensed', sans-serif !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: clamp(16px, 2vw, 22px) !important;
+  letter-spacing: 0.08em !important;
+  color: #e4e6c3 !important;
+  -webkit-text-fill-color: #e4e6c3 !important;
+  -webkit-text-stroke: 0 !important;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.78) 78%, transparent 100%) !important;
+  padding: 4px 20px 5px 12px !important;
+  text-shadow: 0 2px 0 #000000, 0 0 12px #000000 !important;
+}
+
+html body #view-leaderboard .lb-video-banner #lb-hero-route-title .lb-title-route-name,
+html body #view-leaderboard .lb-video-banner #lb-hero-route-title .lb-title-line-gradient,
+html body #view-leaderboard .lb-video-banner #lb-hero-route-title #lb-hero-main,
+html body #view-leaderboard .lb-video-banner #lb-hero-route-title #lb-hero-route-name,
+html body #view-challenges .rc-stitch-banner #routes-catalog-banner-title #rc-banner-main,
+#view-leaderboard #lb-hero-route-name,
+#view-leaderboard .lb-title-line-gradient,
+#view-challenges #rc-banner-main,
+#view-spotlight #hof-main-heading,
+#view-blacklist #blacklist-main-heading,
+#view-blog #bl-standings-title {
+  font-family: 'Rubik Distressed', 'Anton', 'Barlow Condensed', sans-serif !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.05em !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-text-stroke: 0 !important;
+  text-transform: uppercase !important;
+  background:
+    radial-gradient(ellipse 96% 74% at 48% 52%, #000000 0%, rgba(0, 0, 0, 0.96) 58%, rgba(0, 0, 0, 0.48) 78%, transparent 94%),
+    radial-gradient(circle 14px at 8% 88%, #000000 0%, transparent 100%),
+    radial-gradient(circle 10px at 92% 18%, #000000 0%, transparent 100%),
+    radial-gradient(circle 9px at 84% 92%, #000000 0%, transparent 100%) !important;
+  text-shadow:
+    0 3px 0 #000000,
+    0 0 14px rgba(0, 0, 0, 1),
+    0 6px 22px rgba(0, 0, 0, 0.95) !important;
+}
+
+/* 2. Larger, Prominent Driver Names Across All 4 Tables */
+#view-leaderboard .lb-clean-table .lb-user-name,
+#view-spotlight #hof-cyber-table .hof-driver-name,
+#view-spotlight #hof-cyber-table .hof-driver-name.hof-driver-flat,
+#view-blacklist #blacklist-cyber-table .hof-driver-name,
+#view-blog #standings-table-wrapper .hof-driver-name {
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-size: 22px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.04em !important;
+  line-height: 1.1 !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.92) !important;
+}
+
+#view-leaderboard .lb-clean-table tbody tr.lb-row-rank-1 .lb-user-name,
+#view-spotlight #hof-cyber-table tbody tr.lb-row-rank-1 .hof-driver-name,
+#view-blacklist #blacklist-cyber-table tbody tr.lb-row-rank-1 .hof-driver-name,
+#view-blog #standings-table-wrapper tbody tr.lb-row-rank-1 .hof-driver-name {
+  font-size: 25px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.045em !important;
+  color: #ffffff !important;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.96) !important;
+}
+
+/* 3. Photo-Style Pilot Portrait Frame to the Left of Every Driver (Rows 02+ & Tilted Polaroid on Row 01) */
+#view-leaderboard .lb-clean-table .lb-user-cell,
+#view-spotlight #hof-cyber-table .hof-driver-cell,
+#view-blacklist #blacklist-cyber-table .hof-driver-cell,
+#view-blog #standings-table-wrapper .hof-driver-cell {
+  position: relative !important;
+  padding-left: 46px !important;
+  min-height: 38px !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+#view-leaderboard .lb-clean-table .lb-user-cell,
+#view-spotlight #hof-cyber-table .hof-driver-cell {
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+}
+
+#view-leaderboard .lb-clean-table .lb-user-cell::before,
+#view-spotlight #hof-cyber-table .hof-driver-cell::before,
+#view-blacklist #blacklist-cyber-table .hof-driver-cell::before,
+#view-blog #standings-table-wrapper .hof-driver-cell::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 34px !important;
+  height: 38px !important;
+  background-color: #1c1d1b !important;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 44'%3E%3Crect width='40' height='44' fill='%23232522'/%3E%3Ccircle cx='20' cy='15' r='7.2' fill='%23b6b8ae'/%3E%3Cpath d='M7 42 C8 30 13 25 20 25 C27 25 32 30 33 42 Z' fill='%23b6b8ae'/%3E%3C/svg%3E") !important;
+  background-size: cover !important;
+  background-position: center !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.52) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.8), inset 0 0 6px rgba(0, 0, 0, 0.65) !important;
+  border-radius: 0px !important;
+  pointer-events: none !important;
+}
+
+/* Row #01 Tilted Polaroid Street-Racer Photo Frame (Exact Razor Style) */
+#view-leaderboard .lb-clean-table tbody tr.lb-row-rank-1 .lb-user-cell,
+#view-spotlight #hof-cyber-table tbody tr.lb-row-rank-1 .hof-driver-cell,
+#view-blacklist #blacklist-cyber-table tbody tr.lb-row-rank-1 .hof-driver-cell,
+#view-blog #standings-table-wrapper tbody tr.lb-row-rank-1 .hof-driver-cell {
+  padding-left: 58px !important;
+  min-height: 48px !important;
+}
+
+#view-leaderboard .lb-clean-table tbody tr.lb-row-rank-1 .lb-user-cell::before,
+#view-spotlight #hof-cyber-table tbody tr.lb-row-rank-1 .hof-driver-cell::before,
+#view-blacklist #blacklist-cyber-table tbody tr.lb-row-rank-1 .hof-driver-cell::before,
+#view-blog #standings-table-wrapper tbody tr.lb-row-rank-1 .hof-driver-cell::before {
+  width: 44px !important;
+  height: 48px !important;
+  transform: translateY(-50%) rotate(-3deg) !important;
+  border: 2px solid #f2f2e8 !important;
+  background-color: #141412 !important;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 48'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23d8dac8'/%3E%3Cstop offset='1' stop-color='%23787a6c'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='44' height='48' fill='url(%23g)'/%3E%3Cpath d='M13 15 Q22 8 31 15 L33 17 L11 17 Z' fill='%2310110e'/%3E%3Ccircle cx='22' cy='21' r='6.5' fill='%23151612'/%3E%3Cpath d='M6 48 C8 34 14 29 22 29 C30 29 36 34 38 48 Z' fill='%2310110e'/%3E%3C/svg%3E") !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9) !important;
+}
+
+/* 4. Enlarged Route Titles, Driver Photo, Driver Name & Record on Tactical Route Cards (Circuito, Sprint, Drag) */
+.stitch-track-card.nfsmw-tactical-card h4.nfsmw-tac-title {
+  font-family: 'Rubik Distressed', 'Anton', 'Barlow Condensed', sans-serif !important;
+  font-size: 27px !important;
+  line-height: 1.08 !important;
+  letter-spacing: 0.03em !important;
+  max-width: 92% !important;
+}
+
+.nfsmw-tac-footer {
+  padding: 11px 10px 10px !important;
+  gap: 10px !important;
+}
+
+.nfsmw-tac-driver-badge {
+  width: 24px !important;
+  height: 26px !important;
+  font-size: 11px !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.55) !important;
+  background: #1d1e1c !important;
+  border-radius: 0px !important;
+}
+
+.nfsmw-tac-label,
+.nfsmw-tac-record-label {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+}
+
+.stitch-track-card.nfsmw-tactical-card .nfsmw-tac-driver-val {
+  font-size: 20px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.03em !important;
+  color: #ffffff !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9) !important;
+}
+
+.stitch-track-card.nfsmw-tactical-card .nfsmw-tac-record-val {
+  font-size: 21px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em !important;
+  color: #ffffff !important;
+  font-variant-numeric: tabular-nums !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9) !important;
+}
+
+@media (max-width: 640px) {
+  .stitch-track-card.nfsmw-tactical-card h4.nfsmw-tac-title {
+    font-size: 23px !important;
+  }
+
+  .stitch-track-card.nfsmw-tactical-card .nfsmw-tac-driver-val,
+  .stitch-track-card.nfsmw-tactical-card .nfsmw-tac-record-val {
+    font-size: 17px !important;
+  }
+}
+
+/* ==========================================================================
+   UNIFIED ROCKPORT 2005 THEME: WR BANNER CARD, DRIVER DOSSIER,
+   MAIN NAVBAR, DROPDOWNS, MOBILE DRAWER & ALL FILTER BUTTONS
+   ========================================================================== */
+
+/* 1. World Record (WR) Box on Video Banner (#view-leaderboard .lb-banner-wr-card) */
+#view-leaderboard .lb-banner-wr-card,
+#view-leaderboard #lb-hero-wr-card {
+  position: relative !important;
+  border-radius: 0px !important;
+  background:
+    linear-gradient(90deg, rgba(115, 120, 42, 0.22) 0%, rgba(16, 16, 14, 0.92) 55%, rgba(12, 12, 10, 0.96) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  border-left: 3px solid #d4d798 !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.88) !important;
+  padding: 14px 20px !important;
+}
+
+#view-leaderboard .lb-banner-wr-card::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: -1px !important;
+  pointer-events: none !important;
+  background:
+    linear-gradient(#ffffff, #ffffff) top right / 12px 2px no-repeat,
+    linear-gradient(#ffffff, #ffffff) top right / 2px 12px no-repeat,
+    linear-gradient(#ffffff, #ffffff) bottom right / 12px 2px no-repeat,
+    linear-gradient(#ffffff, #ffffff) bottom right / 2px 12px no-repeat !important;
+}
+
+#view-leaderboard .lb-banner-wr-badge-label {
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: #d4d798 !important;
+}
+
+#view-leaderboard .lb-banner-wr-dot {
+  background: #d4d798 !important;
+  box-shadow: 0 0 8px #d4d798 !important;
+  border-radius: 0px !important;
+}
+
+#view-leaderboard .lb-banner-wr-time,
+#view-leaderboard #lb-hero-wr-time {
+  font-family: 'Barlow Condensed', 'Chakra Petch', 'Rajdhani', sans-serif !important;
+  font-size: 36px !important;
+  font-weight: 800 !important;
+  font-style: normal !important;
+  font-variant-numeric: tabular-nums !important;
+  letter-spacing: 0.03em !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.96) !important;
+}
+
+#view-leaderboard .lb-banner-wr-holder,
+#view-leaderboard #lb-hero-wr-holder {
+  font-family: 'Barlow Condensed', 'Inter', sans-serif !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  color: #e4e6c3 !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.92) !important;
+}
+
+/* 2. Driver Dossier (#view-telemetry): Rockport 2005 Theme, Leaderboard Pilot Typography & Recent Races Table */
+#view-telemetry {
+  position: relative !important;
+  background-color: #161512 !important;
+  background-image:
+    radial-gradient(ellipse 90% 55% at 52% 0%, rgba(72, 68, 52, 0.55) 0%, transparent 68%),
+    radial-gradient(ellipse 75% 48% at 12% 100%, rgba(10, 10, 8, 0.92) 0%, transparent 72%),
+    radial-gradient(ellipse 75% 48% at 88% 100%, rgba(10, 10, 8, 0.92) 0%, transparent 72%),
+    linear-gradient(180deg, #2b2922 0%, #23211b 28%, #1a1915 62%, #12110e 100%) !important;
+  background-attachment: fixed !important;
+}
+
+#view-telemetry :is(.telemetry-single-search-bar, .telemetry-search-btn-orange, .nfs-telemetry-cockpit-card, .pilot-dossier-avatar, .pilot-dossier-tab-btn, .pilot-stats-strip, .nfs-Leaderboard-panel, .nfs-table-wrap, .filter-pill-btn, .nfs-lb-input, .nfs-lb-select, .btn-table-video, .pilot-dossier-action-btn) {
+  border-radius: 0px !important;
+}
+
+#view-telemetry .telemetry-single-search-bar {
+  background: rgba(15, 15, 14, 0.90) !important;
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+  border-left: 3px solid #d4d798 !important;
+}
+
+#view-telemetry .telemetry-search-btn-orange {
+  background: rgba(115, 120, 42, 0.90) !important;
+  border: 1px solid #d4d798 !important;
+  color: #ffffff !important;
+  font-family: 'Rubik Distressed', 'Barlow Condensed', sans-serif !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.06em !important;
+}
+
+#view-telemetry .telemetry-search-btn-orange:hover {
+  background: #d4d798 !important;
+  color: #141410 !important;
+}
+
+#view-telemetry .nfs-telemetry-cockpit-card {
+  background: rgba(16, 16, 15, 0.88) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  border-top: 2px solid #d4d798 !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+#view-telemetry .pilot-dossier-avatar {
+  border: 2px solid #f2f2e8 !important;
+  background: #1c1d1b !important;
+  transform: rotate(-2deg) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.88) !important;
+  font-family: 'Barlow Condensed', sans-serif !important;
+  font-weight: 800 !important;
+}
+
+/* Pilot Name in Driver Dossier matching Leaderboard Driver Typography */
+#view-telemetry .pilot-dossier-username,
+#view-telemetry .pilot-dossier-name {
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-size: clamp(34px, 4.2vw, 48px) !important;
+  font-weight: 800 !important;
+  font-style: normal !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  -webkit-text-stroke: 0 !important;
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.95) !important;
+}
+
+#view-telemetry .pilot-dossier-tab-btn,
+#view-telemetry .pilot-dossier-action-btn {
+  font-family: 'Rubik Distressed', 'Barlow Condensed', sans-serif !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.06em !important;
+  background: rgba(12, 12, 11, 0.92) !important;
+  border: 1px solid rgba(255, 255, 255, 0.65) !important;
+  color: #ffffff !important;
+}
+
+#view-telemetry .pilot-dossier-tab-btn.is-active,
+#view-telemetry .pilot-dossier-tab-btn:hover,
+#view-telemetry .pilot-dossier-action-btn:hover {
+  background: rgba(115, 120, 42, 0.88) !important;
+  border-color: #d4d798 !important;
+  color: #ffffff !important;
+}
+
+#view-telemetry .pilot-stats-strip {
+  background: rgba(12, 12, 11, 0.88) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  border-left: 3px solid #d4d798 !important;
+}
+
+#view-telemetry .pilot-stat-value {
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-weight: 800 !important;
+  font-variant-numeric: tabular-nums !important;
+  -webkit-text-stroke: 0 !important;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.92) !important;
+}
+
+#view-telemetry .pilot-about-title,
+#view-telemetry #telemetry-table-title {
+  font-family: 'Rubik Distressed', 'Anton', 'Barlow Condensed', sans-serif !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  -webkit-text-stroke: 0 !important;
+  text-shadow: 0 3px 0 #000000, 0 0 12px #000000 !important;
+}
+
+/* Driver Dossier Recent Races Table (Exact Rockport 2005 Blacklist Leaderboard Table Style) */
+#view-telemetry .nfs-Leaderboard-panel {
+  background: rgba(14, 14, 13, 0.88) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+}
+
+#view-telemetry .nfs-table-wrap {
+  position: relative !important;
+  background: rgba(15, 15, 14, 0.86) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  backdrop-filter: blur(4px) !important;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.90) !important;
+}
+
+#view-telemetry .nfs-table-wrap::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  z-index: 6 !important;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)) top left / 16px 2px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)) top left / 2px 16px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)) top right / 16px 2px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)) top right / 2px 16px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)) bottom left / 16px 2px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)) bottom left / 2px 16px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)) bottom right / 16px 2px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)) bottom right / 2px 16px no-repeat !important;
+}
+
+#view-telemetry .nfs-uiverse-table thead th {
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  background: rgba(15, 15, 15, 0.90) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+#view-telemetry #telemetry-records-tbody tr {
+  background: rgba(20, 20, 20, 0.84) !important;
+}
+
+#view-telemetry #telemetry-records-tbody tr:nth-child(even) {
+  background: rgba(26, 26, 25, 0.86) !important;
+}
+
+#view-telemetry #telemetry-records-tbody td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+#view-telemetry #telemetry-records-tbody tr:hover td {
+  background: rgba(115, 120, 42, 0.28) !important;
+  border-top: 1px solid rgba(212, 215, 152, 0.45) !important;
+  border-bottom: 1px solid rgba(212, 215, 152, 0.45) !important;
+}
+
+#view-telemetry #telemetry-records-tbody tr:hover td:first-child {
+  box-shadow: inset 3px 0 0 #d4d798 !important;
+}
+
+#view-telemetry .pilot-recent-pos {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 40px !important;
+  height: 32px !important;
+  background: #4d4d4b !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-size: 19px !important;
+  font-weight: 800 !important;
+  font-variant-numeric: tabular-nums !important;
+  -webkit-text-stroke: 0 !important;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.9) !important;
+}
+
+#view-telemetry #telemetry-records-tbody td:nth-child(4) span,
+#view-telemetry #telemetry-records-tbody td:nth-child(5) span,
+#view-telemetry #telemetry-records-tbody .stitch-time-main,
+#view-telemetry #telemetry-records-tbody .stitch-time-ms {
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-size: 21px !important;
+  font-weight: 800 !important;
+  font-variant-numeric: tabular-nums !important;
+  color: #f5f5f5 !important;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.92) !important;
+}
+
+/* 3. Main Top Navigation Menu, Dropdowns & Mobile Drawer (NFSMW Distressed Stencil Theme) */
+.uiverse-navbar {
+  background: linear-gradient(180deg, rgba(16, 16, 14, 0.97) 0%, rgba(10, 10, 9, 0.97) 100%) !important;
+  border-bottom: 1px solid rgba(212, 215, 152, 0.32) !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.85) !important;
+}
+
+.brand-logo-text {
+  font-family: 'Rubik Distressed', 'Anton', 'Barlow Condensed', sans-serif !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.05em !important;
+  color: #ffffff !important;
+  text-shadow: 0 2px 0 #000000, 0 0 10px rgba(212, 215, 152, 0.22) !important;
+}
+
+.uiverse-nav-list .nav-link {
+  font-family: 'Rubik Distressed', 'Anton', 'Barlow Condensed', sans-serif !important;
+  font-weight: 400 !important;
+  font-size: 13px !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  color: #f3f4ef !important;
+  border-radius: 0px !important;
+  border: 1px solid rgba(255, 255, 255, 0.24) !important;
+  background: rgba(16, 16, 14, 0.86) !important;
+  padding: 0 12px !important;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.92) !important;
+}
+
+.uiverse-nav-list .nav-link:hover,
+.uiverse-nav-list .nav-link.is-active,
+.nav-item.dropdown-open > .nav-link {
+  background: rgba(115, 120, 42, 0.88) !important;
+  border-color: #d4d798 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 14px rgba(212, 215, 152, 0.24) !important;
+}
+
+/* Navbar Dropdown Mega-Menus */
+.elements-mega-menu,
+.nav-dropdown-menu,
+.create-dropdown-menu {
+  border-radius: 0px !important;
+  background: rgba(14, 14, 12, 0.97) !important;
+  border: 1px solid rgba(212, 215, 152, 0.55) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.92) !important;
+}
+
+.elements-mega-menu .mega-item,
+.elements-mega-menu .submenu-item,
+.create-dropdown-menu .create-dropdown-item {
+  border-radius: 0px !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  background: rgba(22, 22, 19, 0.88) !important;
+  font-family: 'Rubik Distressed', 'Barlow Condensed', sans-serif !important;
+  font-weight: 400 !important;
+  font-size: 13px !important;
+  letter-spacing: 0.04em !important;
+  color: #f4f4ee !important;
+}
+
+.elements-mega-menu .mega-item:hover,
+.elements-mega-menu .submenu-item:hover,
+.elements-mega-menu .submenu-item.is-active,
+.create-dropdown-menu .create-dropdown-item:hover {
+  background: rgba(115, 120, 42, 0.85) !important;
+  border-color: #d4d798 !important;
+  color: #ffffff !important;
+}
+
+/* Right Navbar Action Buttons (Admin, Language, Submit Record) */
+.btn-uiverse-admin,
+.btn-lang-selector,
+.btn-uiverse-create,
+.btn-mobile-nav-toggle {
+  border-radius: 0px !important;
+  font-family: 'Rubik Distressed', 'Barlow Condensed', sans-serif !important;
+  font-weight: 400 !important;
+  font-size: 12.5px !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  background: rgba(14, 14, 12, 0.94) !important;
+  border: 1px solid rgba(255, 255, 255, 0.65) !important;
+  color: #ffffff !important;
+}
+
+.btn-uiverse-admin:hover,
+.btn-lang-selector:hover,
+.btn-uiverse-create:hover,
+.btn-mobile-nav-toggle:hover {
+  background: rgba(115, 120, 42, 0.88) !important;
+  border-color: #d4d798 !important;
+  color: #ffffff !important;
+}
+
+@media (max-width: 1380px) and (min-width: 1091px) {
+  .uiverse-nav-list .nav-link {
+    font-size: 11.5px !important;
+    padding: 0 8px !important;
+  }
+}
+
+/* Mobile Navigation Drawer NFSMW Theme */
+.mobile-nav-drawer {
+  background: linear-gradient(180deg, #171612 0%, #0c0c0a 100%) !important;
+  border-left: 2px solid #d4d798 !important;
+}
+
+.mobile-nav-drawer :is(.mobile-nav-link, .mobile-accordion-trigger, .mobile-subnav-item, .mobile-quick-action-btn, .lang-opt-btn) {
+  border-radius: 0px !important;
+  font-family: 'Rubik Distressed', 'Barlow Condensed', sans-serif !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.05em !important;
+}
+
+.mobile-nav-drawer .mobile-quick-action-btn.submit-btn {
+  background: rgba(115, 120, 42, 0.92) !important;
+  border: 1px solid #d4d798 !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+.mobile-nav-drawer :is(.mobile-nav-link.is-active, .mobile-subnav-item.is-active, .mobile-nav-link:hover, .mobile-subnav-item:hover) {
+  background: rgba(115, 120, 42, 0.78) !important;
+  border-color: #d4d798 !important;
+  color: #ffffff !important;
+}
+
+/* 4. Global Filter Buttons Across All Sections (Routes, Leaderboard, Ranked, Blacklist, Dossier) */
+html body .filter-pill-btn,
+html body .filter-pill-btn.glitch-nfs-btn,
+html body #view-challenges .catalog-toolbar .filter-pill-btn,
+html body #view-challenges .catalog-toolbar .filter-pill-btn.glitch-nfs-btn,
+#view-leaderboard #lb-modality-tabs .filter-pill-btn,
+#view-spotlight #hof-discipline-pills .filter-pill-btn,
+#view-blacklist #blacklist-discipline-pills .filter-pill-btn,
+#view-telemetry #telemetry-type-pills .filter-pill-btn,
+#view-blog .filter-pill-btn {
+  border-radius: 0px !important;
+  font-family: 'Rubik Distressed', 'Barlow Condensed', sans-serif !important;
+  font-weight: 400 !important;
+  font-size: 13px !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  background: rgba(14, 14, 12, 0.92) !important;
+  border: 1px solid rgba(255, 255, 255, 0.65) !important;
+  color: #f4f4ee !important;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.9) !important;
+}
+
+html body .filter-pill-btn.is-active,
+html body .filter-pill-btn.active,
+html body .filter-pill-btn:hover,
+html body #view-challenges .catalog-toolbar .filter-pill-btn.glitch-nfs-btn.is-active,
+html body #view-challenges .catalog-toolbar .filter-pill-btn.glitch-nfs-btn:hover,
+#view-telemetry #telemetry-type-pills .filter-pill-btn.is-active,
+#view-telemetry #telemetry-type-pills .filter-pill-btn:hover {
+  background: rgba(115, 120, 42, 0.90) !important;
+  border-color: #d4d798 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 14px rgba(212, 215, 152, 0.25) !important;
+}
+
+/* ==========================================================================
+   TOP RANKED, BLACKLIST 2026 & CHAMPION STANDINGS:
+   PHOTO-STYLE P1/P2/P3 BOXES, POINTS BANNER (NO BAR), BEST POSITION PHOTO
+   FRAME & NFSMW HONOR TIER PLAQUES
+   ========================================================================== */
+
+/* 1. P1, P2, P3 & Best Position Boxes in NFSMW Photo-Frame Tactical Style */
+#view-spotlight .hof-podium-box,
+#view-blacklist .hof-podium-box,
+#view-blog #standings-table-wrapper .hof-podium-box {
+  position: relative !important;
+  border-radius: 0px !important;
+  min-width: 60px !important;
+  padding: 6px 10px !important;
+  background: #1a1b19 !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.55) !important;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.85), inset 0 0 0 2px rgba(0, 0, 0, 0.65) !important;
+  gap: 1px !important;
+}
+
+#view-spotlight .hof-podium-box.p1-gold-box,
+#view-blacklist .hof-podium-box.p1-gold-box,
+#view-blog #standings-table-wrapper .hof-podium-box.p1-gold-box {
+  background: linear-gradient(180deg, rgba(115, 120, 42, 0.65) 0%, rgba(24, 26, 12, 0.94) 100%) !important;
+  border-color: #d4d798 !important;
+}
+
+#view-spotlight .hof-podium-box.p2-silver-box,
+#view-blacklist .hof-podium-box.p2-silver-box,
+#view-blog #standings-table-wrapper .hof-podium-box.p2-silver-box {
+  background: linear-gradient(180deg, rgba(84, 86, 82, 0.62) 0%, rgba(22, 23, 21, 0.94) 100%) !important;
+  border-color: rgba(236, 238, 232, 0.72) !important;
+}
+
+#view-spotlight .hof-podium-box.p3-bronze-box,
+#view-blacklist .hof-podium-box.p3-bronze-box,
+#view-blog #standings-table-wrapper .hof-podium-box.p3-bronze-box {
+  background: linear-gradient(180deg, rgba(108, 78, 46, 0.58) 0%, rgba(24, 18, 12, 0.94) 100%) !important;
+  border-color: rgba(212, 166, 114, 0.72) !important;
+}
+
+#view-spotlight .hof-podium-box .hof-podium-box-tag,
+#view-blacklist .hof-podium-box .hof-podium-box-tag,
+#view-blog #standings-table-wrapper .hof-podium-box .hof-podium-box-tag {
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  color: #e4e6c3 !important;
+  text-transform: uppercase !important;
+}
+
+#view-spotlight .hof-podium-box .hof-podium-box-count,
+#view-blacklist .hof-podium-box .hof-podium-box-count,
+#view-blog #standings-table-wrapper .hof-podium-box .hof-podium-box-count {
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-size: 22px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  color: #ffffff !important;
+  font-variant-numeric: tabular-nums !important;
+  -webkit-text-stroke: 0 !important;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.92) !important;
+}
+
+#view-spotlight .hof-podium-box .hof-podium-box-sub,
+#view-blacklist .hof-podium-box .hof-podium-box-sub,
+#view-blog #standings-table-wrapper .hof-podium-box .hof-podium-box-sub {
+  font-family: 'Barlow Condensed', sans-serif !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+
+/* 2. Points Column: Hide Progress Bar & Render Clean NFSMW Numeral Banner */
+#view-spotlight .hof-points-bar-wrap,
+#view-blacklist .hof-points-bar-wrap,
+#view-blog #standings-table-wrapper .hof-points-bar-wrap {
+  display: none !important;
+}
+
+#view-spotlight .hof-points-cell > div:first-child {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 6px 12px !important;
+  background: rgba(15, 15, 13, 0.92) !important;
+  border: 1px solid rgba(255, 255, 255, 0.42) !important;
+  border-left: 3px solid #d4d798 !important;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.8) !important;
+}
+
+#view-spotlight .hof-points-num {
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-size: 23px !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  font-variant-numeric: tabular-nums !important;
+  -webkit-text-stroke: 0 !important;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.92) !important;
+}
+
+#view-spotlight .hof-points-pts-label {
+  font-family: 'Barlow Condensed', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #d4d798 !important;
+  letter-spacing: 0.06em !important;
+}
+
+#view-blacklist .hof-points-cell > span:first-child,
+#view-blog #standings-table-wrapper .hof-points-cell > span:first-child {
+  display: inline-flex !important;
+  align-items: baseline !important;
+  gap: 5px !important;
+  padding: 6px 14px !important;
+  background: rgba(15, 15, 13, 0.92) !important;
+  border: 1px solid rgba(255, 255, 255, 0.42) !important;
+  border-left: 3px solid #d4d798 !important;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.8) !important;
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-size: 23px !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  font-variant-numeric: tabular-nums !important;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.92) !important;
+}
+
+/* 3. Best Position (.hof-puesto-pill) in Photo-Frame Style */
+#view-spotlight .hof-puesto-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 68px !important;
+  padding: 8px 12px !important;
+  border-radius: 0px !important;
+  background: #1c1d1b !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.65) !important;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.85), inset 0 0 0 2px rgba(0, 0, 0, 0.65) !important;
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-size: 17px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.05em !important;
+  color: #ffffff !important;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.92) !important;
+}
+
+#view-spotlight .hof-puesto-pill.hof-puesto-p1 {
+  background: linear-gradient(180deg, rgba(115, 120, 42, 0.7) 0%, rgba(24, 26, 12, 0.95) 100%) !important;
+  border-color: #d4d798 !important;
+  color: #f4f2c6 !important;
+}
+
+/* 4. Honor Tier Plaques (Absolute Legend, Grandmaster, WR Holder...) in NFSMW Framed Style */
+#view-spotlight .v7-tier-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 0px !important;
+  padding: 7px 14px !important;
+  background: rgba(14, 14, 12, 0.94) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.55) !important;
+  border-left: 3px solid #d4d798 !important;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.85), inset 0 0 0 1px rgba(0, 0, 0, 0.7) !important;
+  font-family: 'Rubik Distressed', 'Barlow Condensed', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.07em !important;
+  text-transform: uppercase !important;
+  color: #f4f4ee !important;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.92) !important;
+}
+
+#view-spotlight .v7-tier-pill.tier-legend {
+  background: linear-gradient(90deg, rgba(115, 120, 42, 0.45) 0%, rgba(18, 19, 12, 0.94) 100%) !important;
+  border-color: #d4d798 !important;
+  color: #f4f2c6 !important;
+}
+
+#view-spotlight .v7-tier-pill.tier-master {
+  background: linear-gradient(90deg, rgba(84, 88, 82, 0.48) 0%, rgba(16, 17, 15, 0.94) 100%) !important;
+  border-color: rgba(236, 238, 232, 0.78) !important;
+  border-left-color: #ffffff !important;
+  color: #ffffff !important;
+}
+
+#view-spotlight .v7-tier-pill.tier-holder {
+  background: linear-gradient(90deg, rgba(108, 84, 44, 0.42) 0%, rgba(18, 16, 12, 0.94) 100%) !important;
+  border-color: rgba(212, 175, 114, 0.75) !important;
+  border-left-color: #d4b072 !important;
+  color: #efe2c4 !important;
+}
+
+/* 5. Blacklist 2026 & Champion Standings Reward Box (Dinero Recompensa) in Matching NFSMW Plaque */
+#view-blacklist #blacklist-main-tbody td:last-child > div > div:first-child,
+#view-blog #torneo-standings-tbody td:last-child > div > div:first-child {
+  border-radius: 0px !important;
+  background: rgba(14, 14, 12, 0.94) !important;
+  border: 1.5px solid #d4d798 !important;
+  border-left: 3px solid #d4d798 !important;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.85) !important;
+  padding: 6px 12px !important;
+}
+
+#view-blacklist #blacklist-main-tbody td:last-child > div > div:first-child span,
+#view-blog #torneo-standings-tbody td:last-child > div > div:first-child span {
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-style: normal !important;
+  font-weight: 800 !important;
+  color: #f5f5f5 !important;
+  font-variant-numeric: tabular-nums !important;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.92) !important;
+}
+
+/* ============================================================================
+   HOME SHOWCASE (TELEMETRÍA, RUTAS & COMPETENCIA OFICIAL),
+   COMMUNITY TUNING, OFFICIAL TIME REGISTRATION & RULES
+   — NFSMW ROCKPORT 2005 UNIFIED VISUAL THEME —
+   ============================================================================ */
+
+/* --- 1. HOME 3-COLUMN SHOWCASE (#view-elements .home-showcase-section) --- */
+#view-elements .home-showcase-section {
+  border-radius: 0px !important;
+}
+
+#view-elements .home-showcase-tag {
+  border-radius: 0px !important;
+  background: rgba(14, 14, 12, 0.94) !important;
+  border: 1.5px solid #d4d798 !important;
+  border-left: 3px solid #d4d798 !important;
+  color: #d4d798 !important;
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 12px !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  padding: 5px 12px !important;
+}
+
+#view-elements .home-showcase-tag i {
+  color: #d4d798 !important;
+}
+
+#view-elements .home-showcase-title {
+  font-family: 'Rubik Distressed', Impact, 'Anton', sans-serif !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  font-size: clamp(26px, 3.2vw, 42px) !important;
+  line-height: 1.08 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  background: none !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow:
+    0 3px 0 rgba(0, 0, 0, 0.95),
+    0 6px 18px rgba(0, 0, 0, 0.92),
+    0 0 22px rgba(212, 215, 152, 0.22) !important;
+  margin-top: 10px !important;
+  margin-bottom: 0 !important;
+}
+
+#view-elements .home-showcase-desc {
+  display: none !important;
+}
+
+#view-elements .home-showcase-header-right .btn-uiverse-create {
+  border-radius: 0px !important;
+  background: #d4d798 !important;
+  color: #141410 !important;
+  border: 1.5px solid #f2f4c8 !important;
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 14px !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.85) !important;
+}
+
+#view-elements .home-showcase-header-right .btn-uiverse-create:hover {
+  background: #ffffff !important;
+  color: #11110e !important;
+}
+
+/* 3-Column Showcase Cards — Rockport 2005 Matte Charcoal & Olive */
+#view-elements .home-showcase-card,
+#view-elements .home-showcase-card.showcase-card-violet,
+#view-elements .home-showcase-card.showcase-card-cyan,
+#view-elements .home-showcase-card.showcase-card-amber {
+  border-radius: 0px !important;
+  background: linear-gradient(180deg, rgba(22, 22, 18, 0.96) 0%, rgba(12, 12, 10, 0.98) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border-top: 3px solid #d4d798 !important;
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.82),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  position: relative;
+}
+
+#view-elements .home-showcase-card:hover {
+  border-color: #d4d798 !important;
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.9),
+    0 0 18px rgba(212, 215, 152, 0.16) !important;
+}
+
+#view-elements .home-showcase-card .showcase-card-ambient {
+  background: radial-gradient(circle at 50% 0%, rgba(212, 215, 152, 0.14), transparent 70%) !important;
+}
+
+#view-elements .home-showcase-card .glow-border-top {
+  background: linear-gradient(90deg, transparent, #d4d798, transparent) !important;
+}
+
+#view-elements .home-showcase-card .showcase-pill,
+#view-elements .home-showcase-card .showcase-pill.pill-violet,
+#view-elements .home-showcase-card .showcase-pill.pill-cyan,
+#view-elements .home-showcase-card .showcase-pill.pill-amber {
+  border-radius: 0px !important;
+  background: rgba(14, 14, 12, 0.94) !important;
+  border: 1px solid #d4d798 !important;
+  border-left: 3px solid #d4d798 !important;
+  color: #e6e9b0 !important;
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 12px !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+}
+
+#view-elements .home-showcase-card .showcase-pill i {
+  color: #d4d798 !important;
+}
+
+#view-elements .home-showcase-card .showcase-pill-badge,
+#view-elements .home-showcase-card .showcase-pill-badge.badge-cyan,
+#view-elements .home-showcase-card .showcase-pill-badge.badge-amber {
+  border-radius: 0px !important;
+  background: #4d4d4b !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  color: #ffffff !important;
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 12px !important;
+  letter-spacing: 0.1em !important;
+  font-variant-numeric: tabular-nums !important;
+}
+
+/* Harmonize 3-Column Showcase Images with Rockport 2005 Olive/Sepia Industrial Grade */
+#view-elements .home-showcase-card .showcase-img-wrap {
+  border-radius: 0px !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.18) !important;
+  background: #0d0d0b !important;
+  position: relative;
+  overflow: hidden;
+}
+
+#view-elements .home-showcase-card .showcase-img-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(212, 215, 152, 0.08) 0%, rgba(14, 14, 11, 0.16) 55%, rgba(10, 10, 8, 0.58) 100%);
+  pointer-events: none;
+}
+
+#view-elements .home-showcase-card .showcase-card-img {
+  border-radius: 0px !important;
+  filter: sepia(0.32) saturate(0.78) contrast(1.12) brightness(0.92) hue-rotate(8deg) !important;
+  transition: transform 0.35s ease, filter 0.35s ease !important;
+}
+
+#view-elements .home-showcase-card:hover .showcase-card-img {
+  filter: sepia(0.22) saturate(0.92) contrast(1.16) brightness(0.98) hue-rotate(6deg) !important;
+}
+
+#view-elements .home-showcase-card .showcase-item-title {
+  font-family: 'Rubik Distressed', Impact, 'Anton', sans-serif !important;
+  font-weight: 400 !important;
+  font-size: 19px !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95) !important;
+}
+
+#view-elements .home-showcase-card .showcase-item-sub {
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 13.5px !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  color: #b7ba9c !important;
+}
+
+#view-elements .home-showcase-card .showcase-card-btn {
+  border-radius: 0px !important;
+  background: rgba(14, 14, 12, 0.94) !important;
+  border: 1.5px solid #d4d798 !important;
+  color: #f5f5f5 !important;
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 13px !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+}
+
+#view-elements .home-showcase-card:hover .showcase-card-btn {
+  background: #d4d798 !important;
+  color: #141410 !important;
+}
+
+/* --- 2. UNIFIED TRACKER SECTION HEADER (TUNING, OFFICIAL TIME, RULES) --- */
+#view-tuning .tracker-section-header,
+#view-submit .tracker-section-header,
+#view-rules .tracker-section-header {
+  border-radius: 0px !important;
+  background: linear-gradient(95deg, rgba(16, 16, 13, 0.96) 0%, rgba(34, 34, 24, 0.92) 55%, rgba(14, 14, 12, 0.96) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  border-left: 4px solid #d4d798 !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.82) !important;
+}
+
+#view-tuning .tracker-header-badge,
+#view-submit .tracker-header-badge,
+#view-rules .tracker-header-badge {
+  border-radius: 0px !important;
+  background: #d4d798 !important;
+  border: 1.5px solid #f4f6cb !important;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.85) !important;
+}
+
+#view-tuning .tracker-header-badge svg,
+#view-submit .tracker-header-badge svg,
+#view-rules .tracker-header-badge svg {
+  stroke: #141410 !important;
+  color: #141410 !important;
+}
+
+#view-tuning .tracker-header-sup,
+#view-submit .tracker-header-sup,
+#view-rules .tracker-header-sup {
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 13px !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: #d4d798 !important;
+}
+
+#view-tuning .tracker-header-title,
+#view-submit .tracker-header-title,
+#view-rules .tracker-header-title {
+  font-family: 'Rubik Distressed', Impact, 'Anton', sans-serif !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  font-size: clamp(26px, 3.2vw, 42px) !important;
+  line-height: 1.08 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 3px 0 rgba(0, 0, 0, 0.95), 0 6px 16px rgba(0, 0, 0, 0.9) !important;
+}
+
+#view-tuning .tracker-header-title .title-main,
+#view-submit .tracker-header-title .title-main,
+#view-rules .tracker-header-title .title-main {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: none !important;
+}
+
+#view-tuning .tracker-header-title .title-accent,
+#view-submit .tracker-header-title .title-accent,
+#view-rules .tracker-header-title .title-accent {
+  color: #d4d798 !important;
+  -webkit-text-fill-color: #d4d798 !important;
+  background: none !important;
+}
+
+#view-tuning .tracker-header-desc,
+#view-submit .tracker-header-desc,
+#view-rules .tracker-header-desc {
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 15.5px !important;
+  letter-spacing: 0.04em !important;
+  color: #d2d4c2 !important;
+}
+
+/* --- 3. COMMUNITY: TUNING (#view-tuning) NFSMW ROCKPORT 2005 --- */
+#view-tuning .tuning-controls-bar {
+  border-radius: 0px !important;
+  background: rgba(15, 15, 13, 0.94) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border-left: 3px solid #d4d798 !important;
+}
+
+#view-tuning .tuning-search-input {
+  border-radius: 0px !important;
+  background: rgba(10, 10, 9, 0.96) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  letter-spacing: 0.04em !important;
+}
+
+#view-tuning .tuning-search-input:focus {
+  border-color: #d4d798 !important;
+  box-shadow: 0 0 0 1px rgba(212, 215, 152, 0.35) !important;
+}
+
+#view-tuning .tuning-filter-btn {
+  border-radius: 0px !important;
+  background: rgba(18, 18, 15, 0.94) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+  color: #f5f5f5 !important;
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 14px !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  font-variant-numeric: tabular-nums !important;
+}
+
+#view-tuning .tuning-filter-btn span {
+  color: inherit !important;
+}
+
+#view-tuning .tuning-filter-btn:hover {
+  border-color: #d4d798 !important;
+  color: #d4d798 !important;
+}
+
+#view-tuning #tuning-filter-bar .tuning-filter-btn.active {
+  background: #d4d798 !important;
+  border-color: #f4f6cb !important;
+  color: #141410 !important;
+}
+
+#view-tuning .tuning-sliders-header span:last-child,
+#view-tuning .tuning-protip-box strong {
+  color: #d4d798 !important;
+}
+
+#view-tuning .tuning-car-card {
+  border-radius: 0px !important;
+  background: linear-gradient(180deg, rgba(20, 20, 17, 0.96) 0%, rgba(11, 11, 10, 0.98) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border-top: 3px solid #d4d798 !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.85) !important;
+}
+
+#view-tuning .tuning-car-card:hover {
+  border-color: #d4d798 !important;
+}
+
+#view-tuning .tuning-car-hero {
+  border-radius: 0px !important;
+  border-bottom: 1.5px solid rgba(212, 215, 152, 0.32) !important;
+}
+
+#view-tuning .tuning-car-img {
+  filter: contrast(1.08) saturate(0.88) sepia(0.16) !important;
+}
+
+#view-tuning .tuning-badge-main,
+#view-tuning .tuning-badge-drivetrain {
+  border-radius: 0px !important;
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 12px !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+}
+
+#view-tuning .tuning-badge-main {
+  background: #d4d798 !important;
+  color: #141410 !important;
+  border: 1px solid #f4f6cb !important;
+}
+
+#view-tuning .tuning-badge-drivetrain {
+  background: rgba(14, 14, 12, 0.92) !important;
+  color: #f5f5f5 !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+}
+
+#view-tuning .tuning-car-title {
+  font-family: 'Rubik Distressed', Impact, 'Anton', sans-serif !important;
+  font-weight: 400 !important;
+  font-size: 22px !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.95) !important;
+}
+
+#view-tuning .tuning-car-engine {
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 13.5px !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: #d4d798 !important;
+}
+
+#view-tuning .tuning-car-desc {
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 15px !important;
+  color: #d4d6c8 !important;
+  line-height: 1.4 !important;
+}
+
+#view-tuning .tuning-sliders-box,
+#view-tuning .tuning-protip-box {
+  border-radius: 0px !important;
+  background: rgba(10, 10, 9, 0.92) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-left: 3px solid #d4d798 !important;
+}
+
+#view-tuning .tuning-sliders-header {
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 13px !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: #d4d798 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+#view-tuning .tuning-slider-name {
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 13.5px !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: #e6e7dc !important;
+}
+
+#view-tuning .tuning-slider-track,
+#view-tuning .tuning-slider-fill {
+  border-radius: 0px !important;
+}
+
+#view-tuning .tuning-slider-track {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+#view-tuning .tuning-slider-fill {
+  background-color: #d4d798 !important;
+}
+
+#view-tuning .tuning-slider-val {
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 15px !important;
+  font-variant-numeric: tabular-nums !important;
+  color: #ffffff !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9) !important;
+}
+
+#view-tuning .tuning-protip-box {
+  color: #d8dac8 !important;
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 14.5px !important;
+}
+
+/* --- 4. COMMUNITY: OFFICIAL TIME REGISTRATION (#view-submit) NFSMW ROCKPORT 2005 --- */
+#view-submit .homologation-container.form-container {
+  border-radius: 0px !important;
+  background: linear-gradient(180deg, rgba(20, 20, 17, 0.96) 0%, rgba(12, 12, 10, 0.98) 100%) !important;
+  border: 1.5px solid rgba(212, 215, 152, 0.35) !important;
+  border-top: 3px solid #d4d798 !important;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.88) !important;
+}
+
+#view-submit .homologation-container .title {
+  font-family: 'Rubik Distressed', Impact, 'Anton', sans-serif !important;
+  font-weight: 400 !important;
+  font-size: clamp(24px, 2.8vw, 34px) !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  text-shadow: 0 3px 0 rgba(0, 0, 0, 0.95), 0 5px 14px rgba(0, 0, 0, 0.9) !important;
+}
+
+#view-submit .homologation-container .subtitle {
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 14px !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  color: #d4d798 !important;
+}
+
+#view-submit .input-group label {
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 14px !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: #e4e6cc !important;
+}
+
+#view-submit .input-group input,
+#view-submit .input-group select {
+  border-radius: 0px !important;
+  background: rgba(10, 10, 9, 0.96) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  letter-spacing: 0.04em !important;
+  font-variant-numeric: tabular-nums !important;
+}
+
+#view-submit .input-group input:focus,
+#view-submit .input-group select:focus {
+  border-color: #d4d798 !important;
+  box-shadow: 0 0 0 1px rgba(212, 215, 152, 0.4) !important;
+}
+
+#view-submit .btn-submit-homologation {
+  border-radius: 0px !important;
+  background: #d4d798 !important;
+  border: 1.5px solid #f4f6cb !important;
+  color: #141410 !important;
+  font-family: 'Rubik Distressed', Impact, 'Anton', sans-serif !important;
+  font-weight: 400 !important;
+  font-size: 18px !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.85) !important;
+}
+
+#view-submit .btn-submit-homologation:hover {
+  background: #ffffff !important;
+  color: #11110e !important;
+}
+
+/* --- 5. COMMUNITY: UNIFIED OFFICIAL RULES (#view-rules) NFSMW ROCKPORT 2005 --- */
+#view-rules .rules-moderator-banner {
+  border-radius: 0px !important;
+  background: linear-gradient(90deg, rgba(132, 138, 48, 0.28) 0%, rgba(18, 18, 15, 0.96) 62%, rgba(12, 12, 10, 0.98) 100%) !important;
+  border: 1.5px solid #d4d798 !important;
+  border-left: 4px solid #d4d798 !important;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.85) !important;
+}
+
+#view-rules .rules-moderator-title {
+  font-family: 'Rubik Distressed', Impact, 'Anton', sans-serif !important;
+  font-weight: 400 !important;
+  font-size: 20px !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95) !important;
+}
+
+#view-rules .rules-moderator-sub {
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 15px !important;
+  color: #d4d6c4 !important;
+}
+
+#view-rules .mod-badge-pill {
+  border-radius: 0px !important;
+  background: rgba(12, 12, 10, 0.95) !important;
+  border: 1.5px solid #d4d798 !important;
+  color: #f5f5f5 !important;
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 14px !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+}
+
+#view-rules .rule-card-pro {
+  border-radius: 0px !important;
+  background: linear-gradient(180deg, rgba(20, 20, 17, 0.96) 0%, rgba(12, 12, 10, 0.98) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border-top: 3px solid #d4d798 !important;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.84) !important;
+}
+
+#view-rules .rule-card-pro:hover {
+  border-color: #d4d798 !important;
+}
+
+#view-rules .rule-card-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+#view-rules .rule-header-title {
+  font-family: 'Rubik Distressed', Impact, 'Anton', sans-serif !important;
+  font-weight: 400 !important;
+  font-size: 18px !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.92) !important;
+}
+
+#view-rules .rule-status-badge {
+  border-radius: 0px !important;
+  background: rgba(14, 14, 12, 0.95) !important;
+  border: 1.5px solid #d4d798 !important;
+  color: #d4d798 !important;
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 11.5px !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+}
+
+#view-rules .rule-item-check {
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 15.5px !important;
+  line-height: 1.42 !important;
+  color: #dcdecb !important;
+}
+
+#view-rules .rule-item-check > span:first-child {
+  color: #d4d798 !important;
+  font-weight: 900 !important;
+}
+
+#view-rules .rule-item-check strong {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.03em !important;
+}
+
+#view-rules .rule-item-check code {
+  border-radius: 0px !important;
+  background: rgba(212, 215, 152, 0.12) !important;
+  border: 1px solid rgba(212, 215, 152, 0.35) !important;
+  color: #f2f4c8 !important;
+  padding: 1px 5px !important;
+  font-family: 'Barlow Condensed', monospace !important;
+  font-weight: 700 !important;
+}
+
+
+
+
+
+
+
+
+

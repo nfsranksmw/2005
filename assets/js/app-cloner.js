@@ -1394,133 +1394,319 @@ document.addEventListener("DOMContentLoaded", () => {
     return `<span class="stitch-num stitch-time-display"><span class="stitch-time-main">${escapeHtml(clean)}</span></span>`;
   }
 
-  // 4.3 Build Route Card HTML (Uiverse Cosmic Glass Design for Circuito, Sprint & Drag - Expanded Vertical Size)
+  // 4.3 Build Tactical NFSMW Route GPS Map SVG (Deterministic per Route & Modality)
+  function buildTacticalRouteMapSvg(routeName, rawType) {
+    const typeLower = String(rawType || "Circuito").toLowerCase();
+    let hash = 0;
+    const str = String(routeName || "Rockport");
+    for (let i = 0; i < str.length; i++) {
+      hash = ((hash << 5) - hash + str.charCodeAt(i)) | 0;
+    }
+    const seed = Math.abs(hash);
+
+    const circuitPresets = [
+      {
+        d: "M58 118 L58 66 Q58 50 76 46 L112 36 Q132 32 142 52 L152 68 Q166 84 192 72 L212 60 Q232 52 238 78 L244 106 L262 134 L274 156 Q284 174 266 188 L252 194 Q236 198 224 182 L212 170 Q196 164 176 164 L152 164 Q138 164 128 182 L116 196 Q102 204 92 188 L88 170 L98 148 Q102 132 82 132 L72 132 Q58 132 58 118 Z",
+        flag: [58, 108],
+        pts: [[84, 44, "S1", 76, 30], [238, 86, "S2", 252, 86], [270, 152, "S3", 284, 152], [208, 170, "S4", 206, 192]]
+      },
+      {
+        d: "M66 140 L62 84 Q62 56 90 50 L164 42 Q196 38 220 56 L262 88 Q276 104 264 128 L244 166 Q230 190 198 188 L138 184 Q112 182 96 166 L74 154 Q66 148 66 140 Z",
+        flag: [64, 114],
+        pts: [[112, 48, "S1", 104, 34], [248, 78, "S2", 262, 74], [246, 162, "S3", 262, 168], [136, 184, "S4", 132, 204]]
+      },
+      {
+        d: "M64 102 Q66 64 102 58 L148 54 Q174 54 186 78 L198 98 Q214 114 236 96 L252 78 Q270 72 272 98 L268 158 Q264 186 232 186 L166 184 Q146 184 134 164 L120 144 Q104 134 84 140 Q62 144 64 102 Z",
+        flag: [64, 108],
+        pts: [[118, 56, "S1", 112, 42], [254, 78, "S2", 268, 70], [266, 164, "S3", 280, 170], [148, 180, "S4", 142, 200]]
+      },
+      {
+        d: "M74 156 L58 106 Q54 74 84 62 L144 42 Q178 34 204 52 L254 88 Q276 106 266 134 L238 176 Q218 196 184 186 L154 176 Q136 172 118 182 Q88 192 74 156 Z",
+        flag: [62, 122],
+        pts: [[114, 52, "S1", 104, 38], [238, 76, "S2", 252, 70], [248, 162, "S3", 262, 168], [116, 182, "S4", 112, 202]]
+      },
+      {
+        d: "M62 128 L68 74 Q74 48 104 48 L224 48 Q260 48 264 82 L268 124 Q268 148 240 152 L204 154 Q186 156 178 174 Q168 194 140 192 L92 186 Q60 180 62 128 Z",
+        flag: [64, 112],
+        pts: [[138, 48, "S1", 136, 34], [264, 86, "S2", 278, 86], [230, 152, "S3", 238, 170], [108, 188, "S4", 104, 206]]
+      },
+      {
+        d: "M58 134 Q56 96 86 78 L126 52 Q156 36 188 52 L226 70 Q268 88 266 126 Q264 166 226 178 L178 190 Q144 196 122 176 L98 158 Q62 162 58 134 Z",
+        flag: [60, 124],
+        pts: [[118, 58, "S1", 108, 42], [236, 76, "S2", 250, 70], [252, 156, "S3", 266, 164], [148, 190, "S4", 146, 208]]
+      }
+    ];
+
+    const sprintPresets = [
+      {
+        d: "M52 178 L66 126 Q74 96 106 94 L144 92 Q168 90 176 66 Q184 44 214 48 L266 58",
+        flag: [52, 176],
+        pts: [[84, 102, "S1", 72, 86], [156, 86, "S2", 158, 106], [198, 48, "S3", 198, 34], [262, 58, "S4", 268, 44]]
+      },
+      {
+        d: "M54 64 L106 58 Q138 56 144 86 L152 128 Q158 158 192 154 L236 148 Q262 144 270 172",
+        flag: [54, 64],
+        pts: [[114, 58, "S1", 112, 42], [148, 106, "S2", 164, 104], [196, 154, "S3", 196, 174], [268, 168, "S4", 274, 152]]
+      },
+      {
+        d: "M52 156 Q86 154 96 122 L112 78 Q126 46 164 56 L204 72 Q226 82 232 112 L242 152 Q248 176 274 176",
+        flag: [54, 156],
+        pts: [[98, 118, "S1", 80, 112], [148, 54, "S2", 148, 38], [228, 98, "S3", 244, 94], [270, 174, "S4", 268, 194]]
+      },
+      {
+        d: "M56 184 Q78 164 106 164 L152 162 Q184 160 190 128 L198 92 Q204 60 242 54 L272 48",
+        flag: [58, 182],
+        pts: [[108, 164, "S1", 104, 184], [184, 148, "S2", 200, 154], [202, 80, "S3", 184, 72], [268, 48, "S4", 268, 34]]
+      },
+      {
+        d: "M54 96 L94 74 Q124 58 144 88 L168 124 Q188 152 222 130 L270 96",
+        flag: [54, 96],
+        pts: [[108, 68, "S1", 104, 52], [156, 106, "S2", 140, 120], [206, 138, "S3", 210, 158], [268, 96, "S4", 268, 80]]
+      },
+      {
+        d: "M56 138 L94 148 Q126 156 138 126 L158 76 Q172 46 206 54 L236 62 Q264 70 266 106 L268 148",
+        flag: [56, 138],
+        pts: [[116, 148, "S1", 112, 168], [156, 82, "S2", 138, 76], [226, 60, "S3", 228, 44], [268, 144, "S4", 276, 162]]
+      }
+    ];
+
+    const dragPresets = [
+      {
+        d: "M48 166 L112 138 L188 106 L274 68",
+        flag: [50, 165],
+        pts: [[94, 146, "S1", 86, 130], [154, 120, "S2", 148, 104], [216, 94, "S3", 210, 78], [270, 70, "S4", 266, 54]]
+      },
+      {
+        d: "M48 118 L122 118 Q160 118 192 106 L274 88",
+        flag: [50, 118],
+        pts: [[98, 118, "S1", 94, 102], [158, 116, "S2", 156, 136], [216, 100, "S3", 214, 84], [270, 88, "S4", 268, 72]]
+      },
+      {
+        d: "M52 74 L126 104 L198 134 L272 166",
+        flag: [54, 75],
+        pts: [[102, 94, "S1", 108, 78], [162, 119, "S2", 168, 104], [222, 144, "S3", 228, 128], [268, 164, "S4", 266, 184]]
+      },
+      {
+        d: "M46 138 L124 128 Q166 122 204 128 L274 118",
+        flag: [48, 138],
+        pts: [[98, 132, "S1", 94, 116], [162, 124, "S2", 160, 108], [220, 126, "S3", 220, 146], [270, 118, "S4", 268, 102]]
+      }
+    ];
+
+    const pool = typeLower.includes("drag")
+      ? dragPresets
+      : typeLower.includes("sprint")
+        ? sprintPresets
+        : circuitPresets;
+    const preset = pool[seed % pool.length];
+    const [fx, fy] = preset.flag;
+
+    const nodesSvg = preset.pts
+      .map(
+        ([cx, cy, label, lx, ly]) => `
+        <circle cx="${cx}" cy="${cy}" r="5.5" fill="#e8d59a" stroke="#0c0d0f" stroke-width="2.2" />
+        <text x="${lx}" y="${ly}" fill="#ffffff" font-family="'Barlow Condensed', 'Inter', sans-serif" font-size="13" font-weight="800" text-anchor="middle" letter-spacing="0.04em">${label}</text>
+      `
+      )
+      .join("");
+
+    return `
+      <svg viewBox="0 0 320 226" class="nfsmw-tac-map-svg" aria-hidden="true">
+        <!-- Tactical Radar Grid -->
+        <g stroke="rgba(255,255,255,0.065)" stroke-width="1">
+          <line x1="16" y1="14" x2="304" y2="14" />
+          <line x1="16" y1="64" x2="304" y2="64" />
+          <line x1="16" y1="114" x2="304" y2="114" />
+          <line x1="16" y1="164" x2="304" y2="164" />
+          <line x1="16" y1="212" x2="304" y2="212" />
+          <line x1="16" y1="14" x2="16" y2="212" />
+          <line x1="88" y1="14" x2="88" y2="212" />
+          <line x1="160" y1="14" x2="160" y2="212" />
+          <line x1="232" y1="14" x2="232" y2="212" />
+          <line x1="304" y1="14" x2="304" y2="212" />
+        </g>
+
+        <!-- Inner Tactical Reticle Brackets & Crosshairs -->
+        <g stroke="rgba(255,255,255,0.28)" stroke-width="1.4" fill="none">
+          <polyline points="16,28 16,14 30,14" />
+          <polyline points="290,14 304,14 304,28" />
+          <polyline points="16,198 16,212 30,212" />
+          <polyline points="290,212 304,212 304,198" />
+          <line x1="154" y1="14" x2="166" y2="14" />
+          <line x1="160" y1="14" x2="160" y2="22" />
+          <line x1="154" y1="212" x2="166" y2="212" />
+          <line x1="160" y1="204" x2="160" y2="212" />
+          <line x1="16" y1="114" x2="24" y2="114" />
+          <line x1="296" y1="114" x2="304" y2="114" />
+        </g>
+        <g stroke="rgba(255,255,255,0.22)" stroke-width="1">
+          <line x1="32" y1="22" x2="32" y2="34" /><line x1="26" y1="28" x2="38" y2="28" />
+          <line x1="286" y1="22" x2="286" y2="34" /><line x1="280" y1="28" x2="292" y2="28" />
+          <line x1="32" y1="192" x2="32" y2="204" /><line x1="26" y1="198" x2="38" y2="198" />
+          <line x1="160" y1="108" x2="160" y2="120" /><line x1="154" y1="114" x2="166" y2="114" />
+        </g>
+
+        <!-- Faint Rockport City Street Mesh Backdrop -->
+        <g stroke="rgba(255,255,255,0.085)" stroke-width="2.2" fill="none" stroke-linecap="round">
+          <path d="M40 82 Q96 76 140 94 T248 86" />
+          <path d="M52 146 Q116 126 168 136 T272 132" />
+          <path d="M96 42 Q112 96 106 154 T132 198" />
+          <path d="M148 48 Q162 104 146 156 T174 196" />
+          <path d="M196 52 Q212 108 198 164 T222 194" />
+          <path d="M74 108 L184 96 L246 118" />
+          <path d="M84 166 L162 152 L226 172" />
+        </g>
+
+        <!-- Glowing Cream-Gold Track Route (Outer Halo + Main Path + Center Groove) -->
+        <path d="${preset.d}" fill="none" stroke="rgba(236, 214, 146, 0.24)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="${preset.d}" fill="none" stroke="rgba(248, 232, 180, 0.45)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="${preset.d}" fill="none" stroke="#f5e7bd" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="${preset.d}" fill="none" stroke="#23211a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+
+        <!-- Checkered Start/Finish Flag -->
+        <g transform="translate(${fx - 10}, ${fy - 8})">
+          <rect x="0" y="0" width="2.2" height="16" fill="#ffffff" />
+          <rect x="3.5" y="1" width="18" height="12" fill="#0d0e10" stroke="#ffffff" stroke-width="0.9" />
+          <rect x="4" y="1.5" width="4.2" height="4" fill="#ffffff" />
+          <rect x="12.4" y="1.5" width="4.2" height="4" fill="#ffffff" />
+          <rect x="8.2" y="5.5" width="4.2" height="4" fill="#ffffff" />
+          <rect x="16.6" y="5.5" width="4.2" height="4" fill="#ffffff" />
+          <rect x="4" y="9.5" width="4.2" height="3.2" fill="#ffffff" />
+          <rect x="12.4" y="9.5" width="4.2" height="3.2" fill="#ffffff" />
+        </g>
+
+        <!-- Sector Waypoint Nodes (S1 - S4) -->
+        ${nodesSvg}
+      </svg>
+    `;
+  }
+
+  // 4.3 Build Route Card HTML (NFSMW Tactical GPS Blacklist Route Card — Reference 1:1)
   function createRouteCardHTML(route, idx) {
     const meta = getStitchRouteMetadata(route);
     const wr = getRouteWRData(route);
     const rKey = sanitizeFirebaseKey(route.name);
     const rawType = (route.type || "Circuito").trim();
-    const typeLower = rawType.toLowerCase();
     const typeUpper = rawType.toUpperCase();
     const distanciaPista = meta.laps || route.distance || "2 Vueltas (5.4 km)";
-    const carImage = getCarImageForName(wr.car, idx);
-
-    // Modality badge styling: circuito (amber), sprint (cyan), drag (pink)
-    let badgeClass = "stitch-badge-circuito";
-    let badgeInline = "color: #f59e0b; background-color: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.4);";
-    if (typeLower.includes("circ")) {
-      badgeClass = "stitch-badge-circuito";
-      badgeInline = "color: #f59e0b; background-color: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.4);";
-    } else if (typeLower.includes("sprint")) {
-      badgeClass = "stitch-badge-sprint";
-      badgeInline = "color: #06b6d4; background-color: rgba(6, 182, 212, 0.12); border: 1px solid rgba(6, 182, 212, 0.4);";
-    } else if (typeLower.includes("drag")) {
-      badgeClass = "stitch-badge-drag";
-      badgeInline = "color: #ec4899; background-color: rgba(236, 72, 153, 0.12); border: 1px solid rgba(236, 72, 153, 0.4);";
-    }
+    const mapSvg = buildTacticalRouteMapSvg(route.name, rawType);
+    const videoUrl = wr.videoUrl || ("https://www.youtube.com/results?search_query=" + encodeURIComponent("NFSMW " + route.name + " WR " + wr.driver));
 
     return `
-      <article class="uiverse-cosmic-card stitch-track-card element-card track-card group"
+      <article class="uiverse-cosmic-card stitch-track-card nfsmw-track-card nfsmw-tactical-card element-card track-card group"
         data-purpose="track-card"
-        style="cursor: pointer; position: relative; display: flex; flex-direction: column; justify-content: space-between; min-height: 335px; padding: 24px 22px; border-radius: 20px; overflow: hidden; box-sizing: border-box; background: radial-gradient(120% 120% at 50% 0%, rgba(28, 27, 34, 0.88) 0%, rgba(11, 11, 14, 0.98) 100%); border: 1px solid rgba(255, 255, 255, 0.09);"
         data-open-route-lb="${escapeHtml(route.name)}"
         data-route-name="${escapeHtml(route.name)}"
         data-route-type="${escapeHtml(route.type)}"
         data-route-district="${escapeHtml(meta.district)}"
         data-search="${escapeHtml((route.name + " " + route.type + " " + meta.district + " " + wr.driver + " " + wr.car).toLowerCase())}">
 
-        <!-- Glowing border top simulation -->
-        <div class="glow-border-top"></div>
+        <!-- 4 Crisp White L-Corner Brackets -->
+        <span class="nfsmw-tac-corners" aria-hidden="true"></span>
 
-        <!-- Subtle Car Silhouette / Backdrop for Live Updates -->
-        <div class="track-car-backdrop stitch-car-backdrop" data-wr-car-backdrop="${rKey}" style="background-image: url('${escapeHtml(carImage)}');"></div>
+        <!-- TOP OLIVE-YELLOW GRUNGE HEADER WITH BARBED WIRE & GRAFFITI -->
+        <div class="nfsmw-tac-header">
+          <!-- Barbed Wire Top & Bottom + Graffiti & Skull SVG -->
+          <svg viewBox="0 0 360 96" preserveAspectRatio="none" class="nfsmw-tac-header-art" aria-hidden="true">
+            <!-- Top barbed wire -->
+            <path d="M0 10 Q45 5 90 11 T180 9 T270 12 T360 8" stroke="#090a07" stroke-width="2" fill="none" />
+            <g stroke="#090a07" stroke-width="1.6" stroke-linecap="round">
+              <line x1="28" y1="4" x2="36" y2="14" /><line x1="36" y1="4" x2="28" y2="14" />
+              <line x1="88" y1="6" x2="96" y2="16" /><line x1="96" y1="6" x2="88" y2="16" />
+              <line x1="154" y1="4" x2="162" y2="14" /><line x1="162" y1="4" x2="154" y2="14" />
+              <line x1="216" y1="6" x2="224" y2="16" /><line x1="224" y1="6" x2="216" y2="16" />
+              <line x1="286" y1="5" x2="294" y2="15" /><line x1="294" y1="5" x2="286" y2="15" />
+              <line x1="334" y1="4" x2="342" y2="14" /><line x1="342" y1="4" x2="334" y2="14" />
+            </g>
+            <!-- Bottom barbed wire -->
+            <path d="M0 86 Q55 91 110 85 T220 88 T360 84" stroke="#090a07" stroke-width="2" fill="none" />
+            <g stroke="#090a07" stroke-width="1.6" stroke-linecap="round">
+              <line x1="34" y1="81" x2="42" y2="91" /><line x1="42" y1="81" x2="34" y2="91" />
+              <line x1="106" y1="80" x2="114" y2="90" /><line x1="114" y1="80" x2="106" y2="90" />
+              <line x1="184" y1="82" x2="192" y2="92" /><line x1="192" y1="82" x2="184" y2="92" />
+              <line x1="258" y1="80" x2="266" y2="90" /><line x1="266" y1="80" x2="258" y2="90" />
+              <line x1="322" y1="80" x2="330" y2="90" /><line x1="330" y1="80" x2="322" y2="90" />
+            </g>
+            <!-- Right-side street graffiti strokes & skull silhouette -->
+            <g stroke="rgba(255,255,255,0.72)" stroke-width="2" fill="none" stroke-linecap="round">
+              <path d="M214 28 L234 12 L240 34 L256 14 L274 30" />
+              <line x1="210" y1="22" x2="278" y2="24" />
+            </g>
+            <g stroke="#090a07" stroke-width="2.6" fill="none" stroke-linecap="round">
+              <path d="M286 14 L298 34 L312 12 L322 36 L340 14 L348 34" />
+              <path d="M276 48 L302 38 L292 60" />
+            </g>
+            <!-- Mini NFSMW Skull Icon Bottom-Right -->
+            <g transform="translate(318, 48)" fill="none" stroke="#090a07" stroke-width="2.2">
+              <path d="M6 18 C2 16 1 9 4 4 C8 0 18 0 22 4 C25 9 24 16 20 18 L20 25 L6 25 Z" fill="rgba(180,194,40,0.35)" />
+              <circle cx="9.5" cy="12" r="2.6" fill="#090a07" />
+              <circle cx="16.5" cy="12" r="2.6" fill="#090a07" />
+              <line x1="10" y1="21" x2="10" y2="25" />
+              <line x1="13" y1="21" x2="13" y2="25" />
+              <line x1="16" y1="21" x2="16" y2="25" />
+            </g>
+          </svg>
 
-        <div style="width: 100%;">
-          <!-- Card Header: NFSRANKS.ONLINE + Modality Badge -->
-          <div class="stitch-card-header" style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 14px;">
-            <div class="stitch-card-brand" style="display: flex; align-items: center; gap: 8px;">
-              <span class="stitch-card-dot w-2 h-2 rounded-full bg-cosmic-emerald animate-pulse" style="width: 8px; height: 8px; border-radius: 50%; background-color: #10b981; box-shadow: 0 0 8px #10b981; display: inline-block;"></span>
-              <span class="stitch-card-brand-text" style="font-family: var(--font-mono, 'JetBrains Mono', monospace); font-size: 11px; font-weight: 800; letter-spacing: 0.08em; color: #cbd5e1; text-transform: uppercase;">NFSRANKS.ONLINE</span>
+          <div class="nfsmw-tac-header-inner">
+            <div class="nfsmw-tac-modality-row">
+              <svg class="nfsmw-tac-helmet-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <circle cx="12" cy="8" r="4.5"></circle>
+                <path d="M5 19c0-3.5 3.1-6 7-6s7 2.5 7 6v1H5v-1z"></path>
+              </svg>
+              <span class="nfsmw-tac-modality-label">${escapeHtml(typeUpper)}</span>
             </div>
-            <span class="stitch-badge-modality ${badgeClass}" style="${badgeInline} font-family: var(--font-mono, 'JetBrains Mono', monospace); font-size: 10px; font-weight: 800; letter-spacing: 0.1em; padding: 3px 10px; border-radius: 6px; text-transform: uppercase; display: inline-block;">
-              ${escapeHtml(typeUpper)}
-            </span>
+            <h4 class="stitch-card-title nfsmw-tac-title" title="${escapeHtml(route.name)}">
+              ${escapeHtml(route.name)}
+            </h4>
           </div>
+        </div>
 
-          <!-- Track Title -->
-          <h4 class="stitch-card-title" style="font-family: var(--font-sans, 'Inter', sans-serif); font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: #ffffff; margin: 0 0 8px 0; line-height: 1.25; text-align: left;">
-            ${escapeHtml(route.name)}
-          </h4>
-
-          <!-- Subtitle: District + Distance / Laps (Justified between left and right) -->
-          <div class="stitch-card-subtitle justify-between flex items-center" style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 18px; font-family: var(--font-mono, 'JetBrains Mono', monospace); font-size: 11.5px; width: 100%;">
-            <div class="stitch-card-district" style="display: flex; align-items: center; gap: 6px; min-width: 0;">
-              <i class="fa-solid fa-location-dot text-cosmic-cyan" style="color: #06b6d4; font-size: 12px; flex-shrink: 0;"></i>
-              <span style="color: #cbd5e1; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(meta.district)}</span>
+        <!-- MIDDLE TACTICAL GPS MAP CANVAS -->
+        <div class="nfsmw-tac-map-box">
+          ${mapSvg}
+          <!-- Micro Telemetry Scale Bar -->
+          <div class="nfsmw-tac-ruler-bar" aria-hidden="true">
+            <div class="nfsmw-tac-ruler-left">
+              <span class="nfsmw-tac-ruler-ticks"></span>
+              <div class="nfsmw-tac-ruler-nums"><span>0</span><span>50</span><span>100</span></div>
             </div>
-            <div class="stitch-card-distance" style="display: flex; align-items: center; gap: 6px; text-align: right; flex-shrink: 0;">
-              <span style="color: #64748b;">•</span>
-              <span style="color: #94a3b8; font-weight: 500;">${escapeHtml(distanciaPista)}</span>
-            </div>
-          </div>
-
-          <!-- Telemetry Box (PILOTO WR, TIEMPO WR, VEHÍCULO) - Expanded Space -->
-          <div class="stitch-telemetry-box" style="background: rgba(0, 0, 0, 0.65); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 14px 16px; margin-bottom: 18px; font-family: var(--font-mono, 'JetBrains Mono', monospace); display: flex; flex-direction: column; gap: 10px; width: 100%; box-sizing: border-box;">
-            <div class="stitch-telemetry-upper" style="display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); width: 100%;">
-              <div class="stitch-telemetry-driver-col" style="display: flex; flex-direction: column; gap: 4px; text-align: left;">
-                <span class="stitch-telemetry-label" style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #94a3b8;">PILOTO WR</span>
-                <div class="stitch-telemetry-driver-row" style="display: flex; align-items: center; gap: 6px;">
-                  <i class="fa-solid fa-crown" style="color: #f59e0b; font-size: 12px;"></i>
-                  <span class="driver-name" data-metric="driver" data-wr-driver="${rKey}" style="font-size: 15px; font-weight: 800; color: #ffffff; letter-spacing: 0.02em;">
-                    ${escapeHtml(wr.driver)}
-                  </span>
-                </div>
-              </div>
-              <div class="stitch-telemetry-time-col" style="display: flex; flex-direction: column; align-items: flex-end; text-align: right;">
-                <span class="stitch-telemetry-label" style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #94a3b8; margin-bottom: 4px;">TIEMPO WR</span>
-                <span class="stitch-num record-time border-orange-500"
-                  data-metric="time"
-                  data-wr-time="${rKey}"
-                  style="display: inline-block; font-size: 14.5px; font-weight: 800; color: #ffffff; background: rgba(10, 10, 14, 0.85); border: 1px solid #ff7a00; border-radius: 10px; padding: 5px 12px; letter-spacing: 0.02em; box-shadow: 0 0 14px rgba(255, 122, 0, 0.45), inset 0 0 8px rgba(255, 122, 0, 0.15);">
-                  ${escapeHtml(wr.time)}
-                </span>
-              </div>
-            </div>
-            <div class="stitch-telemetry-lower" style="display: flex; flex-direction: column; text-align: left; gap: 3px; width: 100%;">
-              <span class="stitch-telemetry-label" style="font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #94a3b8;">VEHÍCULO</span>
-              <span class="vehicle-model" data-metric="car" data-wr-car="${rKey}" style="font-size: 13.5px; font-weight: 700; color: #f1f5f9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;">
-                ${escapeHtml(wr.car)}
-              </span>
+            <div class="nfsmw-tac-ruler-right">
+              <span class="nfsmw-tac-ruler-district">${escapeHtml(meta.district)} &bull; ${escapeHtml(distanciaPista)}</span>
             </div>
           </div>
         </div>
 
-        <!-- Card Actions Footer -->
-        <div class="stitch-card-footer" style="display: flex; align-items: center; justify-content: space-between; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.08); width: 100%; box-sizing: border-box;">
-          <div class="stitch-rank-badge" style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 8px; border-radius: 8px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); color: #fbbf24; font-family: var(--font-mono, 'JetBrains Mono', monospace); flex-shrink: 0;">
-            <i class="fa-solid fa-trophy" style="color: #f59e0b; font-size: 13px;"></i>
-            <div style="display: flex; flex-direction: column; text-align: left; line-height: 1.1; gap: 1px;">
-              <span style="font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #d97706;">RANK</span>
-              <span style="font-size: 11px; font-weight: 800; color: #fbbf24;">#1 WR</span>
-            </div>
+        <!-- BOTTOM DRIVER & RECORD BAR (EXACT REFERENCE FOOTER) -->
+        <div class="nfsmw-tac-footer">
+          <div class="nfsmw-tac-driver-wrap">
+            <span class="nfsmw-tac-driver-badge" aria-hidden="true">
+              <i class="fa-solid fa-user"></i>
+            </span>
+            <span class="nfsmw-tac-label">DRIVER:</span>
+            <span class="driver-name nfsmw-tac-driver-val" data-metric="driver" data-wr-driver="${rKey}">${escapeHtml(wr.driver)}</span>
           </div>
-          <div class="stitch-footer-actions" style="display: flex; align-items: center; gap: 6px;">
-            <a href="${escapeHtml(wr.videoUrl || 'https://www.youtube.com/results?search_query=' + encodeURIComponent('NFSMW ' + route.name + ' WR ' + wr.driver))}"
+          <div class="nfsmw-tac-record-wrap">
+            <span class="nfsmw-tac-record-label">RECORD:</span>
+            <span class="stitch-num record-time nfsmw-tac-record-val" data-metric="time" data-wr-time="${rKey}">${escapeHtml(wr.time)}</span>
+          </div>
+        </div>
+
+        <!-- COMPACT SUB-BAR: VEHICLE + VIDEO / LEADERBOARD ACTIONS -->
+        <div class="nfsmw-tac-subbar">
+          <span class="vehicle-model nfsmw-tac-car-val" data-metric="car" data-wr-car="${rKey}">${escapeHtml(wr.car)}</span>
+          <div class="nfsmw-tac-actions">
+            <a href="${escapeHtml(videoUrl)}"
               target="_blank" rel="noopener noreferrer"
               onclick="event.stopPropagation();"
-              class="stage-action-btn btn-sm glitch-nfs-btn stitch-video-btn"
+              class="nfsmw-tac-btn"
               title="Ver Video del World Record (${escapeHtml(wr.driver)})"
-              data-wr-video="${rKey}"
-              data-text="VIDEO">
-              <i class="fa-solid fa-play" style="font-size: 8px;"></i>
-              <span>VIDEO</span>
+              data-wr-video="${rKey}">
+              <i class="fa-solid fa-play" style="font-size: 8px;"></i> VIDEO
             </a>
-            <button type="button" class="stage-action-btn btn-sm glitch-nfs-btn stitch-leaderboard-btn"
+            <button type="button" class="nfsmw-tac-btn nfsmw-tac-btn-primary"
               data-open-route-lb="${escapeHtml(route.name)}"
-              data-text="LEADERBOARD"
               onclick="event.stopPropagation(); abrirLeaderboard('${escapeHtml(route.name)}')">
-              <span>LEADERBOARD</span>
-              <i class="fa-solid fa-arrow-right" style="font-size: 8px;"></i>
+              RANK <i class="fa-solid fa-arrow-right" style="font-size: 8px;"></i>
             </button>
           </div>
         </div>
@@ -1856,9 +2042,10 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderLeaderboardPositionBadge(rankNum) {
     const num = parseInt(rankNum, 10) || 1;
     const colorClass = num === 1 ? "rank-1" : num === 2 ? "rank-2" : num === 3 ? "rank-3" : "rank-rest";
+    const paddedRank = String(num).padStart(2, "0");
     return `
       <div class="lb-position-cell">
-        <span class="nfs-cyber-rank-num ${colorClass}"># ${num}</span>
+        <span class="nfs-cyber-rank-num ${colorClass}">${paddedRank}</span>
       </div>`;
   }
 
@@ -2553,7 +2740,7 @@ document.addEventListener("DOMContentLoaded", () => {
           return `
             <tr class="${rankNum === 1 ? 'lb-row-rank-1' : rankNum === 2 ? 'lb-row-rank-2' : rankNum === 3 ? 'lb-row-rank-3' : 'lb-row-rank-rest'}" data-open-pilot="${escapeHtml(d.name)}" style="cursor: pointer;" title="${isEn ? 'View Telemetry Dossier of' : 'Ver Expediente de Telemetría de'} ${escapeHtml(d.name)}">
               <td style="text-align: center;">
-                <span class="nfs-cyber-rank-num ${rankNum === 1 ? 'rank-1' : rankNum === 2 ? 'rank-2' : rankNum === 3 ? 'rank-3' : 'rank-rest'}"># ${rankNum}</span>
+                <span class="nfs-cyber-rank-num ${rankNum === 1 ? 'rank-1' : rankNum === 2 ? 'rank-2' : rankNum === 3 ? 'rank-3' : 'rank-rest'}">${String(rankNum).padStart(2, "0")}</span>
               </td>
               <td>
                 <div class="hof-driver-cell" style="display: flex; align-items: center;">
@@ -3013,11 +3200,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const avatarSrc = (typeof getDriverAvatar === "function") ? getDriverAvatar(d) : "";
 
       return `
-        <tr data-open-pilot="${escapeHtml(d.name)}" style="cursor: pointer;" title="${isEn ? 'View Telemetry Dossier of' : 'Ver Expediente de Telemetría de'} ${escapeHtml(d.name)}">
+        <tr class="${origPos === 1 ? 'lb-row-rank-1' : origPos === 2 ? 'lb-row-rank-2' : origPos === 3 ? 'lb-row-rank-3' : 'lb-row-rank-rest'}" data-open-pilot="${escapeHtml(d.name)}" style="cursor: pointer;" title="${isEn ? 'View Telemetry Dossier of' : 'Ver Expediente de Telemetría de'} ${escapeHtml(d.name)}">
           <!-- 1. RANK -->
           <td style="text-align: center;">
             <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-              <span class="nfs-cyber-rank-num ${origPos === 1 ? 'rank-1' : origPos === 2 ? 'rank-2' : origPos === 3 ? 'rank-3' : 'rank-rest'}"># ${origPos}</span>
+              <span class="nfs-cyber-rank-num ${origPos === 1 ? 'rank-1' : origPos === 2 ? 'rank-2' : origPos === 3 ? 'rank-3' : 'rank-rest'}">${String(origPos).padStart(2, "0")}</span>
             </div>
           </td>
 
@@ -4197,11 +4384,11 @@ document.addEventListener("DOMContentLoaded", () => {
           const ptsPct = Math.min(100, Math.max(8, Math.round((totalPts / maxPts) * 100)));
 
           return `
-            <tr data-standing-rank="${d.rank}" data-open-pilot="${escapeHtml(cleanName)}" style="cursor: pointer;" title="Ver expediente de telemetría de ${escapeHtml(d.name)}">
+            <tr class="${standingPos === 1 ? 'lb-row-rank-1' : standingPos === 2 ? 'lb-row-rank-2' : standingPos === 3 ? 'lb-row-rank-3' : 'lb-row-rank-rest'}" data-standing-rank="${d.rank}" data-open-pilot="${escapeHtml(cleanName)}" style="cursor: pointer;" title="Ver expediente de telemetría de ${escapeHtml(d.name)}">
               <!-- 1. RANK -->
               <td style="text-align: center;">
                 <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                  <span class="nfs-cyber-rank-num ${standingPos === 1 ? 'rank-1' : standingPos === 2 ? 'rank-2' : standingPos === 3 ? 'rank-3' : 'rank-rest'}"># ${standingPos}</span>
+                  <span class="nfs-cyber-rank-num ${standingPos === 1 ? 'rank-1' : standingPos === 2 ? 'rank-2' : standingPos === 3 ? 'rank-3' : 'rank-rest'}">${String(standingPos).padStart(2, "0")}</span>
                 </div>
               </td>
 
