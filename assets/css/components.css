@@ -1357,7 +1357,7 @@ html body :is(
   button[data-select-pilot], button[data-toggle-ch-done], button[data-torneo-jump],
   button[data-routes-cat], button[data-routes-district], button[data-home-cat],
   button[data-cockpit-select-rank], .v7-roster-item
-):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch) {
+):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch):not(.mw-tac-btn--silver) {
   position: relative !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -1383,7 +1383,7 @@ html body :is(
 html body :is(
   .stage-action-btn.btn-sm,
   .btn-sm.glitch-nfs-btn
-):not(#_):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch) {
+):not(#_):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch):not(.mw-tac-btn--silver) {
   padding: 4px 10px !important;
   font-size: 11px !important;
   letter-spacing: -0.015em !important;
@@ -1401,7 +1401,7 @@ html body :is(
   button[data-season-subview], button[data-standings-mode], button[data-champ-group-tab],
   button[data-select-champ-group], button[data-lb-tab], button[data-open-route-lb],
   button[data-routes-cat], button[data-routes-district], button[data-home-cat]
-):not(#_):not(.mega-item):not(.sidebar-btn):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch) > *:not(svg):not(.squid-layer) {
+):not(#_):not(.mega-item):not(.sidebar-btn):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch):not(.mw-tac-btn--silver) > *:not(svg):not(.squid-layer) {
   color: #ffffff !important;
   transform: none !important;
 }
@@ -1425,7 +1425,7 @@ html body :is(
   button[data-select-pilot], button[data-toggle-ch-done], button[data-torneo-jump],
   button[data-routes-cat], button[data-routes-district], button[data-home-cat],
   button[data-cockpit-select-rank], .v7-roster-item
-):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch)::after {
+):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch):not(.mw-tac-btn--silver)::after {
   --move1: inset(50% 50% 50% 50%);
   --move2: inset(31% 0 40% 0);
   --move3: inset(39% 0 15% 0);
@@ -1468,7 +1468,7 @@ html body :is(
   button[data-select-pilot], button[data-toggle-ch-done], button[data-torneo-jump],
   button[data-routes-cat], button[data-routes-district], button[data-home-cat],
   button[data-cockpit-select-rank], .v7-roster-item
-):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch):hover {
+):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch):not(.mw-tac-btn--silver):hover {
   background-color: #0d0e13 !important;
   border-color: #ff7b00 !important;
   color: #ffffff !important;
@@ -1489,7 +1489,7 @@ html body :is(
   button[data-select-pilot], button[data-toggle-ch-done], button[data-torneo-jump],
   button[data-routes-cat], button[data-routes-district], button[data-home-cat],
   button[data-cockpit-select-rank], .v7-roster-item
-):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch):hover::after {
+):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch):not(.mw-tac-btn--silver):hover::after {
   opacity: 1 !important;
   animation: glitch-orange-purple 0.75s infinite steps(2, end) !important;
   border: 1px solid #ff9500 !important;
@@ -1507,7 +1507,7 @@ html body :is(
   button[data-select-champ-group], button[data-lb-tab], button[data-torneo-tab], button[data-hof-tab],
   button[data-tel-type], button[data-select-pilot],
   button[data-routes-cat], button[data-routes-district], button[data-home-cat]
-):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch):is(.is-active, .active, .is-selected, .selected) {
+):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch):not(.mw-tac-btn--silver):is(.is-active, .active, .is-selected, .selected) {
   background-color: #121318 !important;
   border-color: #ff7b00 !important;
   box-shadow: 0 0 10px rgba(255, 123, 0, 0.35) !important;
@@ -1524,17 +1524,17 @@ html body :is(
   button[data-select-champ-group], button[data-lb-tab], button[data-torneo-tab], button[data-hof-tab],
   button[data-tel-type], button[data-select-pilot],
   button[data-routes-cat], button[data-routes-district], button[data-home-cat]
-):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch):is(.is-active, .active, .is-selected, .selected):hover::after {
+):not(#_):not(.mega-item):not(.sidebar-btn):not(.nav-link):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch):not(.mw-tac-btn--silver):is(.is-active, .active, .is-selected, .selected):hover::after {
   opacity: 1 !important;
   animation: glitch-orange-purple 0.75s infinite steps(2, end) !important;
 }
 
 /* Iconos SVG y flechas dentro de los botones */
-html body :is(.filter-pill-btn, .stage-action-btn, .uiverse-baboon-btn, .champ-filter-group-btn):not(#_):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch) .btn-hover-arrow {
+html body :is(.filter-pill-btn, .stage-action-btn, .uiverse-baboon-btn, .champ-filter-group-btn):not(#_):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch):not(.mw-tac-btn--silver) .btn-hover-arrow {
   color: #ffffff !important;
   transform: none !important;
 }
-html body :is(.filter-pill-btn, .stage-action-btn, .uiverse-baboon-btn, .champ-filter-group-btn):not(#_):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch):hover .btn-hover-arrow {
+html body :is(.filter-pill-btn, .stage-action-btn, .uiverse-baboon-btn, .champ-filter-group-btn):not(#_):not(.btn-nfs-white-cta):not(.btn-table-video):not(.no-glitch):not(.mw-tac-btn--silver):hover .btn-hover-arrow {
   color: #ff7b00 !important;
 }
 
@@ -9720,11 +9720,3271 @@ html body #view-challenges .catalog-toolbar .filter-pill-btn.glitch-nfs-btn:hove
   font-weight: 700 !important;
 }
 
+/* ==========================================================================
+   LEADERBOARD COLUMN HEADERS — NFS MOST WANTED RIVETED TACTICAL METAL PLATES
+   (RANK, DRIVER, TIME, DELTA, CAR, DEVICE, GEARBOX, DATE, VIDEO)
+   Applies to all route leaderboards (Circuito, Sprint & Drag)
+   ========================================================================== */
+#view-leaderboard .lb-clean-table thead,
+#view-leaderboard .lb-clean-table thead tr.lb-mw-header-row {
+  background: transparent !important;
+  border: none !important;
+}
 
+#view-leaderboard .lb-clean-table thead th.lb-mw-th {
+  background: transparent !important;
+  border: none !important;
+  border-bottom: none !important;
+  border-right: none !important;
+  padding: 4px 3px 12px 3px !important;
+  vertical-align: middle !important;
+  overflow: visible !important;
+}
 
+/* Outer Wrapper with 4 Tactical L-Brackets (┌ ┐ └ ┘) */
+#view-leaderboard .lb-mw-th-wrap {
+  position: relative !important;
+  padding: 4px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  background-image:
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc) !important;
+  background-repeat: no-repeat !important;
+  background-size:
+    9px 2px, 2px 9px,
+    9px 2px, 2px 9px,
+    9px 2px, 2px 9px,
+    9px 2px, 2px 9px !important;
+  background-position:
+    top left, top left,
+    top right, top right,
+    bottom left, bottom left,
+    bottom right, bottom right !important;
+  transition: transform 0.18s ease, filter 0.18s ease !important;
+}
 
+#view-leaderboard .lb-mw-th-wrap--rank {
+  background-image:
+    linear-gradient(#ebe355, #ebe355),
+    linear-gradient(#ebe355, #ebe355),
+    linear-gradient(#ebe355, #ebe355),
+    linear-gradient(#ebe355, #ebe355),
+    linear-gradient(#ebe355, #ebe355),
+    linear-gradient(#ebe355, #ebe355),
+    linear-gradient(#ebe355, #ebe355),
+    linear-gradient(#ebe355, #ebe355) !important;
+}
 
+/* Subtle Acid-Yellow Paint Drip on RANK Plate Bottom-Right */
+#view-leaderboard .lb-mw-th-wrap--rank::after {
+  content: "" !important;
+  position: absolute !important;
+  right: 9px !important;
+  bottom: -11px !important;
+  width: 18px !important;
+  height: 16px !important;
+  pointer-events: none !important;
+  z-index: 3 !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 16'%3E%3Cpath d='M2 0h14v2.5c-1.8 0-2.5 1.1-2.5 3v6.8c0 1.4-1.1 2.4-2.1 2.4s-2.1-1-2.1-2.4V5.5c0-1.6-1-2.5-2.3-2.5S5.1 4.1 5.1 5.6v2.1c0 .9-.7 1.6-1.5 1.6S2 8.6 2 7.7V0z' fill='%23c4bc29' stroke='%2318190d' stroke-width='0.7'/%3E%3C/svg%3E") !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+}
 
+/* Inner Riveted Gunmetal Steel Plate */
+#view-leaderboard .lb-mw-th-plate {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  min-height: 38px !important;
+  padding: 6px 11px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  border-radius: 1px !important;
+  color: #f0f3f7 !important;
+  background-color: #1a1d21 !important;
+  background-image:
+    radial-gradient(circle at 6px 6px, #6c737d 0px, #3b4047 1.5px, #0b0d10 2.3px, transparent 2.8px),
+    radial-gradient(circle at calc(100% - 6px) 6px, #6c737d 0px, #3b4047 1.5px, #0b0d10 2.3px, transparent 2.8px),
+    radial-gradient(circle at 6px calc(100% - 6px), #6c737d 0px, #3b4047 1.5px, #0b0d10 2.3px, transparent 2.8px),
+    radial-gradient(circle at calc(100% - 6px) calc(100% - 6px), #6c737d 0px, #3b4047 1.5px, #0b0d10 2.3px, transparent 2.8px),
+    repeating-linear-gradient(128deg, rgba(255, 255, 255, 0.025) 0px, rgba(255, 255, 255, 0.025) 1px, transparent 1px, transparent 6px),
+    repeating-linear-gradient(-38deg, rgba(0, 0, 0, 0.18) 0px, rgba(0, 0, 0, 0.18) 2px, transparent 2px, transparent 9px),
+    linear-gradient(180deg, #2d3138 0%, #1d2025 48%, #131519 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.85),
+    0 4px 10px rgba(0, 0, 0, 0.8) !important;
+  white-space: nowrap !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
 
+#view-leaderboard .lb-mw-th:hover .lb-mw-th-plate:not(.lb-mw-th-plate--rank) {
+  border-color: rgba(212, 215, 152, 0.45) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.85),
+    0 0 12px rgba(212, 215, 152, 0.16),
+    0 4px 10px rgba(0, 0, 0, 0.85) !important;
+}
 
+/* Highlighted RANK Plate — NFS Most Wanted Distressed Olive/Yellow + Barbed Wire */
+#view-leaderboard .lb-mw-th-plate--rank {
+  color: #0d0e0a !important;
+  border: 1px solid rgba(245, 238, 122, 0.78) !important;
+  background-color: #b7b027 !important;
+  background-image:
+    radial-gradient(circle at 6px 6px, #474410 0px, #1e1d07 1.6px, #e9e26e 2.4px, transparent 2.9px),
+    radial-gradient(circle at calc(100% - 6px) 6px, #474410 0px, #1e1d07 1.6px, #e9e26e 2.4px, transparent 2.9px),
+    radial-gradient(circle at 6px calc(100% - 6px), #474410 0px, #1e1d07 1.6px, #e9e26e 2.4px, transparent 2.9px),
+    radial-gradient(circle at calc(100% - 6px) calc(100% - 6px), #474410 0px, #1e1d07 1.6px, #e9e26e 2.4px, transparent 2.9px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='10' viewBox='0 0 90 10'%3E%3Cpath d='M0 5 Q22 2 45 6 T90 4' stroke='%23161708' stroke-width='1.3' fill='none' opacity='0.82'/%3E%3Cg stroke='%23161708' stroke-width='1.1' stroke-linecap='round' opacity='0.85'%3E%3Cline x1='18' y1='1' x2='24' y2='8'/%3E%3Cline x1='24' y1='1' x2='18' y2='8'/%3E%3Cline x1='62' y1='2' x2='68' y2='9'/%3E%3Cline x1='68' y1='2' x2='62' y2='9'/%3E%3C/g%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='10' viewBox='0 0 90 10'%3E%3Cpath d='M0 5 Q22 8 45 4 T90 6' stroke='%23161708' stroke-width='1.3' fill='none' opacity='0.82'/%3E%3Cg stroke='%23161708' stroke-width='1.1' stroke-linecap='round' opacity='0.85'%3E%3Cline x1='30' y1='1' x2='36' y2='8'/%3E%3Cline x1='36' y1='1' x2='30' y2='8'/%3E%3Cline x1='74' y1='1' x2='80' y2='8'/%3E%3Cline x1='80' y1='1' x2='74' y2='8'/%3E%3C/g%3E%3C/svg%3E"),
+    repeating-linear-gradient(125deg, rgba(0, 0, 0, 0.11) 0px, rgba(0, 0, 0, 0.11) 2px, transparent 2px, transparent 7px),
+    linear-gradient(180deg, #dfd742 0%, #beb62a 48%, #8f881a 100%) !important;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat-x, repeat-x, repeat, no-repeat !important;
+  background-position: top left, top right, bottom left, bottom right, top left, bottom left, center, center !important;
+  background-size: auto, auto, auto, auto, 90px 10px, 90px 10px, auto, 100% 100% !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 210, 0.45),
+    inset 0 -1px 0 rgba(30, 28, 6, 0.75),
+    0 0 14px rgba(215, 208, 56, 0.22),
+    0 4px 10px rgba(0, 0, 0, 0.85) !important;
+}
+
+/* Header Plate Icons */
+#view-leaderboard .lb-mw-th-icon {
+  width: 17px !important;
+  height: 17px !important;
+  flex-shrink: 0 !important;
+  color: #f2f5f8 !important;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.85)) !important;
+}
+
+#view-leaderboard .lb-mw-th-plate--rank .lb-mw-th-icon {
+  width: 18px !important;
+  height: 18px !important;
+  color: #0d0e0a !important;
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 200, 0.35)) !important;
+}
+
+/* Header Plate Labels */
+#view-leaderboard .lb-mw-th-label {
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  line-height: 1 !important;
+  color: #f0f3f7 !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.92) !important;
+  white-space: nowrap !important;
+}
+
+#view-leaderboard .lb-mw-th-plate--rank .lb-mw-th-label {
+  color: #0d0e0a !important;
+  font-weight: 900 !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 200, 0.4) !important;
+}
+
+/* Compact Responsive Sizing on Narrow Viewports */
+@media (max-width: 1200px) {
+  #view-leaderboard .lb-mw-th-plate {
+    padding: 5px 8px !important;
+    gap: 5px !important;
+    min-height: 34px !important;
+  }
+  #view-leaderboard .lb-mw-th-label {
+    font-size: 12.5px !important;
+  }
+  #view-leaderboard .lb-mw-th-icon {
+    width: 15px !important;
+    height: 15px !important;
+  }
+}
+
+/* ==========================================================================
+   NFS MOST WANTED TACTICAL RIVETED NAVIGATION, FILTER & BACK BUTTONS (.mw-tac-btn)
+   (ALL TRACK, CIRCUITO, SPRINT, DRAG, ESC // BACK, 1 // FILTER, EXPORT CSV)
+   Hover & Active State: Olive-Green Distressed Plate + Barbed Wire + Checkered Corner + Hand Icon
+   ========================================================================== */
+.catalog-toolbar .toolbar-left,
+#hof-discipline-pills,
+#blacklist-discipline-pills,
+#lb-modality-tabs,
+#telemetry-type-pills {
+  gap: 12px !important;
+}
+
+button.mw-tac-btn,
+#view-challenges button.mw-tac-btn,
+#view-leaderboard button.mw-tac-btn,
+#view-spotlight button.mw-tac-btn,
+#view-blacklist button.mw-tac-btn,
+#view-telemetry button.mw-tac-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  min-height: 38px !important;
+  padding: 7px 15px !important;
+  margin: 4px !important;
+  border-radius: 1px !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  color: #f0f3f7 !important;
+  background-color: #1a1d21 !important;
+  background-image:
+    radial-gradient(circle at 6px 6px, #6c737d 0px, #3b4047 1.5px, #0b0d10 2.3px, transparent 2.8px),
+    radial-gradient(circle at calc(100% - 6px) 6px, #6c737d 0px, #3b4047 1.5px, #0b0d10 2.3px, transparent 2.8px),
+    radial-gradient(circle at 6px calc(100% - 6px), #6c737d 0px, #3b4047 1.5px, #0b0d10 2.3px, transparent 2.8px),
+    radial-gradient(circle at calc(100% - 6px) calc(100% - 6px), #6c737d 0px, #3b4047 1.5px, #0b0d10 2.3px, transparent 2.8px),
+    repeating-linear-gradient(128deg, rgba(255, 255, 255, 0.025) 0px, rgba(255, 255, 255, 0.025) 1px, transparent 1px, transparent 6px),
+    repeating-linear-gradient(-38deg, rgba(0, 0, 0, 0.18) 0px, rgba(0, 0, 0, 0.18) 2px, transparent 2px, transparent 9px),
+    linear-gradient(180deg, #2d3138 0%, #1d2025 48%, #131519 100%) !important;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat, repeat, no-repeat !important;
+  background-position: top left, top right, bottom left, bottom right, center, center, center !important;
+  background-size: auto, auto, auto, auto, auto, auto, 100% 100% !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.85),
+    0 4px 12px rgba(0, 0, 0, 0.8) !important;
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  cursor: pointer !important;
+  overflow: visible !important;
+  clip-path: none !important;
+  transition:
+    background 0.22s ease,
+    border-color 0.22s ease,
+    color 0.2s ease,
+    box-shadow 0.22s ease,
+    transform 0.18s cubic-bezier(0.2, 0.85, 0.25, 1) !important;
+}
+
+button.mw-tac-btn:not(.btn-back-to-tracks) {
+  position: relative !important;
+}
+
+/* Outer Tactical L-Brackets (┌ ┐ └ ┘) */
+button.mw-tac-btn::before {
+  content: "" !important;
+  position: absolute !important;
+  top: -5px !important;
+  right: -5px !important;
+  bottom: -5px !important;
+  left: -5px !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
+  opacity: 0.88 !important;
+  background: none !important;
+  background-image:
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc) !important;
+  background-repeat: no-repeat !important;
+  background-size:
+    10px 2px, 2px 10px,
+    10px 2px, 2px 10px,
+    10px 2px, 2px 10px,
+    10px 2px, 2px 10px !important;
+  background-position:
+    top left, top left,
+    top right, top right,
+    bottom left, bottom left,
+    bottom right, bottom right !important;
+  animation: none !important;
+  transition: all 0.2s cubic-bezier(0.2, 0.85, 0.25, 1) !important;
+}
+
+/* Top-Left Checkered Flag Accent (Revealed on Hover / Active) */
+button.mw-tac-btn::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 24px !important;
+  height: 16px !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+  opacity: 0 !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='16' viewBox='0 0 24 16'%3E%3Crect x='0' y='0' width='6' height='5' fill='%230d0e0a'/%3E%3Crect x='12' y='0' width='6' height='5' fill='%230d0e0a'/%3E%3Crect x='6' y='5' width='6' height='5' fill='%230d0e0a'/%3E%3Crect x='18' y='5' width='6' height='5' fill='%230d0e0a' opacity='0.55'/%3E%3Crect x='0' y='10' width='6' height='5' fill='%230d0e0a' opacity='0.7'/%3E%3C/svg%3E") !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  animation: none !important;
+  transition: opacity 0.2s ease !important;
+}
+
+/* ACTIVE & HOVER STATE — Acid Olive-Green/Yellow Distressed Plate + Barbed Wire + White L-Brackets + Hand */
+button.mw-tac-btn:hover,
+button.mw-tac-btn.is-active,
+button.mw-tac-btn.active,
+#view-challenges button.mw-tac-btn:hover,
+#view-challenges button.mw-tac-btn.is-active,
+#view-leaderboard button.mw-tac-btn:hover,
+#view-leaderboard button.mw-tac-btn.is-active,
+#view-leaderboard button.mw-tac-btn.active,
+#view-spotlight button.mw-tac-btn:hover,
+#view-spotlight button.mw-tac-btn.is-active,
+#view-blacklist button.mw-tac-btn:hover,
+#view-blacklist button.mw-tac-btn.is-active,
+#view-telemetry button.mw-tac-btn:hover,
+#view-telemetry button.mw-tac-btn.is-active {
+  color: #0b0c08 !important;
+  border-color: rgba(244, 239, 128, 0.85) !important;
+  background-color: #b7b327 !important;
+  background-image:
+    radial-gradient(circle at 6px 6px, #474510 0px, #1e1d07 1.6px, #ece672 2.4px, transparent 2.9px),
+    radial-gradient(circle at calc(100% - 6px) 6px, #474510 0px, #1e1d07 1.6px, #ece672 2.4px, transparent 2.9px),
+    radial-gradient(circle at 6px calc(100% - 6px), #474510 0px, #1e1d07 1.6px, #ece672 2.4px, transparent 2.9px),
+    radial-gradient(circle at calc(100% - 6px) calc(100% - 6px), #474510 0px, #1e1d07 1.6px, #ece672 2.4px, transparent 2.9px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='10' viewBox='0 0 90 10'%3E%3Cpath d='M0 5 Q22 2 45 6 T90 4' stroke='%23161708' stroke-width='1.3' fill='none' opacity='0.85'/%3E%3Cg stroke='%23161708' stroke-width='1.1' stroke-linecap='round' opacity='0.88'%3E%3Cline x1='18' y1='1' x2='24' y2='8'/%3E%3Cline x1='24' y1='1' x2='18' y2='8'/%3E%3Cline x1='62' y1='2' x2='68' y2='9'/%3E%3Cline x1='68' y1='2' x2='62' y2='9'/%3E%3C/g%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='10' viewBox='0 0 90 10'%3E%3Cpath d='M0 5 Q22 8 45 4 T90 6' stroke='%23161708' stroke-width='1.3' fill='none' opacity='0.85'/%3E%3Cg stroke='%23161708' stroke-width='1.1' stroke-linecap='round' opacity='0.88'%3E%3Cline x1='30' y1='1' x2='36' y2='8'/%3E%3Cline x1='36' y1='1' x2='30' y2='8'/%3E%3Cline x1='74' y1='1' x2='80' y2='8'/%3E%3Cline x1='80' y1='1' x2='74' y2='8'/%3E%3C/g%3E%3C/svg%3E"),
+    repeating-linear-gradient(125deg, rgba(0, 0, 0, 0.11) 0px, rgba(0, 0, 0, 0.11) 2px, transparent 2px, transparent 7px),
+    linear-gradient(180deg, #dfd943 0%, #bbb729 48%, #898519 100%) !important;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat-x, repeat-x, repeat, no-repeat !important;
+  background-position: top left, top right, bottom left, bottom right, top left, bottom left, center, center !important;
+  background-size: auto, auto, auto, auto, 90px 10px, 90px 10px, auto, 100% 100% !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 215, 0.5),
+    inset 0 -1px 0 rgba(30, 28, 6, 0.8),
+    0 0 18px rgba(215, 210, 58, 0.34),
+    0 5px 14px rgba(0, 0, 0, 0.85) !important;
+  transform: translateY(-1px) !important;
+}
+
+button.mw-tac-btn:hover::before,
+button.mw-tac-btn.is-active::before,
+button.mw-tac-btn.active::before {
+  top: -6px !important;
+  right: -6px !important;
+  bottom: -6px !important;
+  left: -6px !important;
+  opacity: 1 !important;
+  background-image:
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff) !important;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.45)) !important;
+}
+
+button.mw-tac-btn:hover::after,
+button.mw-tac-btn.is-active::after,
+button.mw-tac-btn.active::after {
+  opacity: 1 !important;
+}
+
+/* Label Typography Inside Tactical Button */
+.mw-tac-btn .mw-tac-label {
+  position: relative !important;
+  z-index: 2 !important;
+  color: #f0f3f7 !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.92) !important;
+  transition: color 0.18s ease, text-shadow 0.18s ease !important;
+}
+
+.mw-tac-btn:hover .mw-tac-label,
+.mw-tac-btn.is-active .mw-tac-label,
+.mw-tac-btn.active .mw-tac-label {
+  color: #0b0c08 !important;
+  font-weight: 900 !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 210, 0.45) !important;
+}
+
+/* Dual-Icon Slot: Default Discipline/Action Icon -> Racing Hand ("La Manito") on Hover/Active */
+.mw-tac-btn .mw-tac-icon-slot {
+  position: relative !important;
+  z-index: 2 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 19px !important;
+  height: 19px !important;
+  flex-shrink: 0 !important;
+}
+
+.mw-tac-btn .mw-icon-default,
+.mw-tac-btn .mw-icon-hand {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 19px !important;
+  height: 19px !important;
+  transition: opacity 0.2s ease, transform 0.22s cubic-bezier(0.2, 0.85, 0.25, 1) !important;
+}
+
+.mw-tac-btn .mw-icon-default {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+  color: #f2f5f8 !important;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.85)) !important;
+}
+
+.mw-tac-btn .mw-icon-hand {
+  opacity: 0 !important;
+  transform: scale(0.65) rotate(-14deg) !important;
+  color: #0b0c08 !important;
+}
+
+.mw-tac-btn:hover .mw-icon-default,
+.mw-tac-btn.is-active .mw-icon-default,
+.mw-tac-btn.active .mw-icon-default {
+  opacity: 0 !important;
+  transform: scale(0.65) !important;
+}
+
+.mw-tac-btn:hover .mw-icon-hand,
+.mw-tac-btn.is-active .mw-icon-hand,
+.mw-tac-btn.active .mw-icon-hand {
+  opacity: 1 !important;
+  transform: scale(1.12) rotate(0deg) !important;
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 210, 0.4)) !important;
+}
+
+/* Tactical Filter Dropdown Wrapper (.mw-tac-select-wrap) for Top Ranked & Telemetry */
+.mw-tac-select-wrap {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  margin: 4px !important;
+}
+
+.mw-tac-select-wrap::before {
+  content: "" !important;
+  position: absolute !important;
+  top: -4px !important;
+  right: -4px !important;
+  bottom: -4px !important;
+  left: -4px !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
+  background-image:
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc) !important;
+  background-repeat: no-repeat !important;
+  background-size:
+    9px 2px, 2px 9px,
+    9px 2px, 2px 9px,
+    9px 2px, 2px 9px,
+    9px 2px, 2px 9px !important;
+  background-position:
+    top left, top left,
+    top right, top right,
+    bottom left, bottom left,
+    bottom right, bottom right !important;
+  transition: all 0.2s ease !important;
+}
+
+.mw-tac-select-wrap:hover::before,
+.mw-tac-select-wrap:focus-within::before {
+  top: -5px !important;
+  right: -5px !important;
+  bottom: -5px !important;
+  left: -5px !important;
+  background-image:
+    linear-gradient(#ebe355, #ebe355),
+    linear-gradient(#ebe355, #ebe355),
+    linear-gradient(#ebe355, #ebe355),
+    linear-gradient(#ebe355, #ebe355),
+    linear-gradient(#ebe355, #ebe355),
+    linear-gradient(#ebe355, #ebe355),
+    linear-gradient(#ebe355, #ebe355),
+    linear-gradient(#ebe355, #ebe355) !important;
+}
+
+.mw-tac-select-icon {
+  position: absolute !important;
+  left: 11px !important;
+  width: 15px !important;
+  height: 15px !important;
+  color: #f0f3f7 !important;
+  pointer-events: none !important;
+  z-index: 3 !important;
+  transition: color 0.18s ease !important;
+}
+
+.mw-tac-select-wrap:hover .mw-tac-select-icon {
+  color: #0b0c08 !important;
+}
+
+select.mw-tac-select {
+  min-height: 38px !important;
+  padding: 6px 28px 6px 32px !important;
+  border-radius: 1px !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  background-color: #1a1d21 !important;
+  background-image:
+    radial-gradient(circle at 5px 5px, #6c737d 0px, #3b4047 1.4px, #0b0d10 2.1px, transparent 2.6px),
+    radial-gradient(circle at calc(100% - 5px) 5px, #6c737d 0px, #3b4047 1.4px, #0b0d10 2.1px, transparent 2.6px),
+    radial-gradient(circle at 5px calc(100% - 5px), #6c737d 0px, #3b4047 1.4px, #0b0d10 2.1px, transparent 2.6px),
+    radial-gradient(circle at calc(100% - 5px) calc(100% - 5px), #6c737d 0px, #3b4047 1.4px, #0b0d10 2.1px, transparent 2.6px),
+    linear-gradient(180deg, #2d3138 0%, #1d2025 48%, #131519 100%) !important;
+  color: #f0f3f7 !important;
+  font-family: 'Barlow Condensed', 'Chakra Petch', sans-serif !important;
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.mw-tac-select-wrap:hover select.mw-tac-select {
+  color: #0b0c08 !important;
+  border-color: rgba(244, 239, 128, 0.85) !important;
+  background-color: #b7b327 !important;
+  background-image:
+    linear-gradient(180deg, #dfd943 0%, #bbb729 48%, #898519 100%) !important;
+}
+
+select.mw-tac-select option {
+  background-color: #15171b !important;
+  color: #f0f3f7 !important;
+}
+
+/* ==========================================================================
+   NFS MOST WANTED WHITE-METALLIC TACTICAL MAIN NAVBAR & DROPDOWN SUBMENUS
+   (Brushed Steel 4-Rivet Plates + White L-Brackets -> White Metallic + Black Barbed Wire + White Paint Drip)
+   ========================================================================== */
+
+/* 1. Navbar List Spacing */
+.uiverse-navbar .uiverse-nav-list {
+  gap: 12px !important;
+}
+
+/* 2. Primary Navbar Buttons — Brushed Dark Steel with 4 Rivets & White Outer L-Brackets */
+html body .uiverse-navbar .nav-link:not(#_),
+html body .uiverse-navbar .nav-link-glitch:not(#_) {
+  position: relative !important;
+  height: 40px !important;
+  padding: 0 16px !important;
+  border-radius: 1px !important;
+  border: 1px solid rgba(255, 255, 255, 0.24) !important;
+  background-color: #181a1d !important;
+  background-image:
+    radial-gradient(circle at 6px 6px, #7b828b 0px, #3b4047 1.4px, #0b0c0e 2.1px, transparent 2.7px),
+    radial-gradient(circle at calc(100% - 6px) 6px, #7b828b 0px, #3b4047 1.4px, #0b0c0e 2.1px, transparent 2.7px),
+    radial-gradient(circle at 6px calc(100% - 6px), #7b828b 0px, #3b4047 1.4px, #0b0c0e 2.1px, transparent 2.7px),
+    radial-gradient(circle at calc(100% - 6px) calc(100% - 6px), #7b828b 0px, #3b4047 1.4px, #0b0c0e 2.1px, transparent 2.7px),
+    repeating-linear-gradient(125deg, rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 6px),
+    repeating-linear-gradient(-40deg, rgba(0, 0, 0, 0.22) 0px, rgba(0, 0, 0, 0.22) 2px, transparent 2px, transparent 10px),
+    linear-gradient(180deg, #2b2f34 0%, #1b1e22 50%, #111316 100%) !important;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat, repeat, no-repeat !important;
+  background-position: top left, top right, bottom left, bottom right, center, center, center !important;
+  background-size: auto, auto, auto, auto, auto, auto, 100% 100% !important;
+  color: #f4f7fa !important;
+  font-family: 'Barlow Condensed', 'Anton', sans-serif !important;
+  font-size: 15.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.88),
+    0 5px 14px rgba(0, 0, 0, 0.82) !important;
+  overflow: visible !important;
+  transition:
+    background 0.22s ease,
+    border-color 0.22s ease,
+    color 0.2s ease,
+    box-shadow 0.22s ease,
+    transform 0.18s ease !important;
+}
+
+/* Outer White-Silver L-Brackets (┌ ┐ └ ┘) on Primary Navbar Buttons */
+html body .uiverse-navbar .nav-link:not(#_)::before,
+html body .uiverse-navbar .nav-link-glitch:not(#_)::before {
+  content: "" !important;
+  position: absolute !important;
+  top: -5px !important;
+  right: -5px !important;
+  bottom: -5px !important;
+  left: -5px !important;
+  pointer-events: none !important;
+  z-index: 3 !important;
+  opacity: 0.84 !important;
+  background-image:
+    linear-gradient(#dce1e7, #dce1e7),
+    linear-gradient(#dce1e7, #dce1e7),
+    linear-gradient(#dce1e7, #dce1e7),
+    linear-gradient(#dce1e7, #dce1e7),
+    linear-gradient(#dce1e7, #dce1e7),
+    linear-gradient(#dce1e7, #dce1e7),
+    linear-gradient(#dce1e7, #dce1e7),
+    linear-gradient(#dce1e7, #dce1e7) !important;
+  background-repeat: no-repeat !important;
+  background-size:
+    10px 2px, 2px 10px,
+    10px 2px, 2px 10px,
+    10px 2px, 2px 10px,
+    10px 2px, 2px 10px !important;
+  background-position:
+    top left, top left,
+    top right, top right,
+    bottom left, bottom left,
+    bottom right, bottom right !important;
+  transition: all 0.2s cubic-bezier(0.2, 0.85, 0.25, 1) !important;
+}
+
+/* Bottom-Right White Paint Drip (Revealed on Hover / Active / Open) */
+html body .uiverse-navbar .nav-link:not(#_)::after,
+html body .uiverse-navbar .nav-link-glitch:not(#_)::after {
+  content: "" !important;
+  clip-path: none !important;
+  position: absolute !important;
+  inset: auto !important;
+  top: auto !important;
+  left: auto !important;
+  right: 4px !important;
+  bottom: -15px !important;
+  width: 38px !important;
+  height: 17px !important;
+  pointer-events: none !important;
+  z-index: 5 !important;
+  opacity: 0 !important;
+  border: none !important;
+  background-color: transparent !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='20' viewBox='0 0 44 20'%3E%3Cpath d='M2 0h40v3c-3 0-4 2-5 5-.6 1.8-2.2 1.8-2.6 0-.5-2-1.8-3-3.4-2.5-1.2.4-1.8 2.8-2 6.8-.2 3.2-1.2 6.7-2.6 6.7s-2.2-3.4-2.4-7.4c-.2-3.2-1-5.6-2.4-6-1.6-.4-2.6 1.6-3.2 4.6-.4 2-1.8 2.2-2.2.2-.6-2.6-2-4.4-4.2-4.8C7.4 5.2 6 3 2 3V0z' fill='%23f3f6f9'/%3E%3Ccircle cx='39' cy='11' r='1.3' fill='%23f3f6f9'/%3E%3Ccircle cx='12' cy='10' r='1.1' fill='%23f3f6f9'/%3E%3C/svg%3E") !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  text-shadow: none !important;
+  animation: none !important;
+  transform: translateY(-3px) !important;
+  transition: opacity 0.2s ease, transform 0.22s ease !important;
+}
+
+.uiverse-navbar .nav-link > span,
+.uiverse-navbar .nav-link > svg {
+  position: relative !important;
+  z-index: 4 !important;
+}
+
+/* Primary Navbar White-Metallic Hover / Active / Open State + Black Barbed Wire + Black Text */
+html body .uiverse-navbar .nav-link:not(#_):hover,
+html body .uiverse-navbar .nav-link-glitch:not(#_):hover,
+html body .uiverse-navbar .nav-link:not(#_).is-active,
+html body .uiverse-navbar .nav-link:not(#_).active,
+html body .uiverse-navbar .nav-item.has-megamenu:hover > .nav-link:not(#_),
+html body .uiverse-navbar .nav-item.has-megamenu.dropdown-open > .nav-link:not(#_) {
+  color: #0d0f12 !important;
+  border-color: rgba(255, 255, 255, 0.96) !important;
+  background-color: #eceff3 !important;
+  background-image:
+    radial-gradient(circle at 6px 6px, #525860 0px, #1d2024 1.5px, #ffffff 2.3px, transparent 2.9px),
+    radial-gradient(circle at calc(100% - 6px) 6px, #525860 0px, #1d2024 1.5px, #ffffff 2.3px, transparent 2.9px),
+    radial-gradient(circle at 6px calc(100% - 6px), #525860 0px, #1d2024 1.5px, #ffffff 2.3px, transparent 2.9px),
+    radial-gradient(circle at calc(100% - 6px) calc(100% - 6px), #525860 0px, #1d2024 1.5px, #ffffff 2.3px, transparent 2.9px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='110' height='11' viewBox='0 0 110 11'%3E%3Cpath d='M0 5.5 Q27 2 55 6.5 T110 4.5' stroke='%23101214' stroke-width='1.45' fill='none' opacity='0.92'/%3E%3Cg stroke='%23101214' stroke-width='1.2' stroke-linecap='round' opacity='0.94'%3E%3Cline x1='20' y1='1.2' x2='26' y2='9'/%3E%3Cline x1='26' y1='1.2' x2='20' y2='9'/%3E%3Cline x1='74' y1='2' x2='80' y2='9.5'/%3E%3Cline x1='80' y1='2' x2='74' y2='9.5'/%3E%3C/g%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='110' height='11' viewBox='0 0 110 11'%3E%3Cpath d='M0 5.5 Q27 9 55 4.5 T110 6.5' stroke='%23101214' stroke-width='1.45' fill='none' opacity='0.92'/%3E%3Cg stroke='%23101214' stroke-width='1.2' stroke-linecap='round' opacity='0.94'%3E%3Cline x1='34' y1='1.2' x2='40' y2='9'/%3E%3Cline x1='40' y1='1.2' x2='34' y2='9'/%3E%3Cline x1='86' y1='1.5' x2='92' y2='9.2'/%3E%3Cline x1='92' y1='1.5' x2='86' y2='9.2'/%3E%3C/g%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='48' viewBox='0 0 64 48'%3E%3Cpath d='M12 0 L64 38 M24 0 L64 26' stroke='%23101214' stroke-width='1.3' fill='none' opacity='0.78'/%3E%3Cg stroke='%23101214' stroke-width='1.15' opacity='0.82'%3E%3Cline x1='34' y1='12' x2='42' y2='20'/%3E%3Cline x1='42' y1='12' x2='34' y2='20'/%3E%3Cline x1='48' y1='22' x2='56' y2='30'/%3E%3Cline x1='56' y1='22' x2='48' y2='30'/%3E%3C/g%3E%3C/svg%3E"),
+    repeating-linear-gradient(122deg, rgba(0, 0, 0, 0.07) 0px, rgba(0, 0, 0, 0.07) 1px, transparent 1px, transparent 6px),
+    linear-gradient(180deg, #ffffff 0%, #eaeef2 44%, #cfd5dc 78%, #e2e6eb 100%) !important;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat-x, repeat-x, no-repeat, repeat, no-repeat !important;
+  background-position: top left, top right, bottom left, bottom right, top left, bottom left, top right, center, center !important;
+  background-size: auto, auto, auto, auto, 110px 11px, 110px 11px, 64px 48px, auto, 100% 100% !important;
+  text-shadow: none !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(40, 45, 52, 0.65),
+    0 0 20px rgba(255, 255, 255, 0.34),
+    0 6px 18px rgba(0, 0, 0, 0.85) !important;
+  transform: translateY(-1px) !important;
+}
+
+html body .uiverse-navbar .nav-link:not(#_):hover::before,
+html body .uiverse-navbar .nav-link:not(#_).is-active::before,
+html body .uiverse-navbar .nav-link:not(#_).active::before,
+html body .uiverse-navbar .nav-item.has-megamenu:hover > .nav-link:not(#_)::before,
+html body .uiverse-navbar .nav-item.has-megamenu.dropdown-open > .nav-link:not(#_)::before {
+  top: -6px !important;
+  right: -6px !important;
+  bottom: -6px !important;
+  left: -6px !important;
+  opacity: 1 !important;
+  background-image:
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff) !important;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.55)) !important;
+}
+
+html body .uiverse-navbar .nav-link:not(#_):hover::after,
+html body .uiverse-navbar .nav-link-glitch:not(#_):hover::after,
+html body .uiverse-navbar .nav-link:not(#_).is-active::after,
+html body .uiverse-navbar .nav-link:not(#_).active::after,
+html body .uiverse-navbar .nav-item.has-megamenu:hover > .nav-link:not(#_)::after,
+html body .uiverse-navbar .nav-item.has-megamenu.dropdown-open > .nav-link:not(#_)::after {
+  display: block !important;
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  animation: none !important;
+}
+
+html body .uiverse-navbar .nav-link:not(#_):hover .nav-chevron,
+html body .uiverse-navbar .nav-link:not(#_).is-active .nav-chevron,
+html body .uiverse-navbar .nav-link:not(#_).active .nav-chevron,
+html body .uiverse-navbar .nav-item.has-megamenu:hover > .nav-link:not(#_) .nav-chevron,
+html body .uiverse-navbar .nav-item.has-megamenu.dropdown-open > .nav-link:not(#_) .nav-chevron,
+html body .uiverse-navbar .nav-link:not(#_):hover span,
+html body .uiverse-navbar .nav-link:not(#_).is-active span,
+html body .uiverse-navbar .nav-link:not(#_).active span,
+html body .uiverse-navbar .nav-item.has-megamenu:hover > .nav-link:not(#_) span,
+html body .uiverse-navbar .nav-item.has-megamenu.dropdown-open > .nav-link:not(#_) span {
+  color: #0d0f12 !important;
+  filter: none !important;
+}
+
+/* 3. Dropdown Submenu Container — Tactical Brushed Steel Tree Panel + White Outer L-Brackets */
+.uiverse-navbar .elements-mega-menu,
+.uiverse-navbar .nav-dropdown-menu {
+  top: calc(100% + 14px) !important;
+  left: 0 !important;
+  min-width: 330px !important;
+  width: max-content !important;
+  max-width: 420px !important;
+  padding: 16px 16px 18px 28px !important;
+  border-radius: 1px !important;
+  border: 1px solid rgba(255, 255, 255, 0.24) !important;
+  background-color: rgba(16, 18, 21, 0.97) !important;
+  background-image:
+    repeating-linear-gradient(-42deg, rgba(255, 255, 255, 0.024) 0px, rgba(255, 255, 255, 0.024) 6px, transparent 6px, transparent 16px),
+    linear-gradient(180deg, rgba(30, 34, 39, 0.98) 0%, rgba(15, 17, 20, 0.99) 100%) !important;
+  box-shadow:
+    0 22px 48px rgba(0, 0, 0, 0.92),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
+  overflow: visible !important;
+}
+
+/* Outer White L-Brackets + Left Vertical Tree Connector Line */
+.uiverse-navbar .elements-mega-menu::before,
+.uiverse-navbar .nav-dropdown-menu::before {
+  content: "" !important;
+  position: absolute !important;
+  top: -16px !important;
+  left: -5px !important;
+  right: -5px !important;
+  bottom: -5px !important;
+  height: auto !important;
+  pointer-events: none !important;
+  background-image:
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(180deg, #ffffff 0%, rgba(220, 226, 232, 0.55) 45%, rgba(220, 226, 232, 0.25) 100%) !important;
+  background-repeat: no-repeat !important;
+  background-size:
+    12px 2px, 2px 12px,
+    12px 2px, 2px 12px,
+    12px 2px, 2px 12px,
+    12px 2px, 2px 12px,
+    2px calc(100% - 28px) !important;
+  background-position:
+    0 11px, 0 11px,
+    100% 11px, 100% 11px,
+    0 100%, 0 100%,
+    100% 100%, 100% 100%,
+    16px 0 !important;
+}
+
+/* Hover Bridge so cursor never drops menu while moving from navbar button to dropdown */
+.uiverse-navbar .elements-mega-menu::after,
+.uiverse-navbar .nav-dropdown-menu::after {
+  content: "" !important;
+  position: absolute !important;
+  top: -16px !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 16px !important;
+  background: transparent !important;
+  pointer-events: auto !important;
+}
+
+/* Single-Column Numbered Tactical Stack (01 //, 02 //, 03 //, ...) */
+.uiverse-navbar .mega-menu-grid,
+.uiverse-navbar .submenu-grid {
+  display: flex !important;
+  flex-direction: column !important;
+  grid-template-columns: 1fr !important;
+  gap: 10px !important;
+  counter-reset: mw-sub-idx !important;
+}
+
+/* 4. Individual Submenu Row Items — Brushed Steel 4-Rivet Plates + White Outer L-Brackets */
+html body .uiverse-navbar .mega-item:not(#_),
+html body .uiverse-navbar .submenu-item:not(#_),
+html body .uiverse-navbar .dropdown-glitch-item:not(#_) {
+  position: relative !important;
+  counter-increment: mw-sub-idx !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 11px !important;
+  width: 100% !important;
+  padding: 11px 18px 11px 16px !important;
+  border-radius: 1px !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  background-color: #181a1d !important;
+  background-image:
+    radial-gradient(circle at 6px 6px, #7b828b 0px, #3b4047 1.4px, #0b0c0e 2.1px, transparent 2.7px),
+    radial-gradient(circle at calc(100% - 6px) 6px, #7b828b 0px, #3b4047 1.4px, #0b0c0e 2.1px, transparent 2.7px),
+    radial-gradient(circle at 6px calc(100% - 6px), #7b828b 0px, #3b4047 1.4px, #0b0c0e 2.1px, transparent 2.7px),
+    radial-gradient(circle at calc(100% - 6px) calc(100% - 6px), #7b828b 0px, #3b4047 1.4px, #0b0c0e 2.1px, transparent 2.7px),
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc),
+    linear-gradient(#cfd5dc, #cfd5dc),
+    repeating-linear-gradient(125deg, rgba(255, 255, 255, 0.025) 0px, rgba(255, 255, 255, 0.025) 1px, transparent 1px, transparent 6px),
+    linear-gradient(180deg, #2b2f34 0%, #1b1e22 50%, #111316 100%) !important;
+  background-repeat: no-repeat !important;
+  background-size:
+    auto, auto, auto, auto,
+    8px 1.5px, 1.5px 8px,
+    8px 1.5px, 1.5px 8px,
+    8px 1.5px, 1.5px 8px,
+    8px 1.5px, 1.5px 8px,
+    auto, 100% 100% !important;
+  background-position:
+    top left, top right, bottom left, bottom right,
+    top left, top left,
+    top right, top right,
+    bottom left, bottom left,
+    bottom right, bottom right,
+    center, center !important;
+  color: #f4f7fa !important;
+  overflow: visible !important;
+  transition: all 0.2s ease !important;
+}
+
+/* Numbered Prefix "01 //" (and "> 01 //" on Hover / Active) */
+html body .uiverse-navbar .mega-item:not(#_)::before,
+html body .uiverse-navbar .submenu-item:not(#_)::before {
+  content: "0" counter(mw-sub-idx) " //" !important;
+  position: relative !important;
+  z-index: 3 !important;
+  font-family: 'Barlow Condensed', 'Anton', sans-serif !important;
+  font-size: 15.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.08em !important;
+  color: #aeb6c0 !important;
+  flex-shrink: 0 !important;
+  min-width: 38px !important;
+  transition: color 0.18s ease !important;
+}
+
+/* Bottom-Right White Paint Drip Inside Submenu Items (Revealed on Hover / Active) */
+html body .uiverse-navbar .mega-item:not(#_)::after,
+html body .uiverse-navbar .submenu-item:not(#_)::after,
+html body .uiverse-navbar .dropdown-glitch-item:not(#_)::after {
+  content: "" !important;
+  clip-path: none !important;
+  position: absolute !important;
+  inset: auto !important;
+  top: auto !important;
+  left: auto !important;
+  right: 6px !important;
+  bottom: -11px !important;
+  width: 34px !important;
+  height: 14px !important;
+  pointer-events: none !important;
+  z-index: 5 !important;
+  opacity: 0 !important;
+  border: none !important;
+  background-color: transparent !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='20' viewBox='0 0 44 20'%3E%3Cpath d='M2 0h40v3c-3 0-4 2-5 5-.6 1.8-2.2 1.8-2.6 0-.5-2-1.8-3-3.4-2.5-1.2.4-1.8 2.8-2 6.8-.2 3.2-1.2 6.7-2.6 6.7s-2.2-3.4-2.4-7.4c-.2-3.2-1-5.6-2.4-6-1.6-.4-2.6 1.6-3.2 4.6-.4 2-1.8 2.2-2.2.2-.6-2.6-2-4.4-4.2-4.8C7.4 5.2 6 3 2 3V0z' fill='%23f3f6f9'/%3E%3Ccircle cx='39' cy='11' r='1.3' fill='%23f3f6f9'/%3E%3Ccircle cx='12' cy='10' r='1.1' fill='%23f3f6f9'/%3E%3C/svg%3E") !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  text-shadow: none !important;
+  animation: none !important;
+  transform: translateY(-2px) !important;
+  transition: opacity 0.2s ease, transform 0.2s ease !important;
+}
+
+.uiverse-navbar .mega-item .submenu-label,
+.uiverse-navbar .submenu-item .submenu-label {
+  position: relative !important;
+  z-index: 3 !important;
+  font-family: 'Barlow Condensed', 'Anton', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: #f4f7fa !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9) !important;
+}
+
+.uiverse-navbar .mega-item .uiverse-menu-icon-box,
+.uiverse-navbar .submenu-item .uiverse-menu-icon-box {
+  position: relative !important;
+  z-index: 3 !important;
+  width: 24px !important;
+  height: 24px !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 1px !important;
+  color: #f4f7fa !important;
+}
+
+/* Submenu Row White-Metallic Hover & Active State + Black Barbed Wire + Black Text/Icon + White Paint Drip */
+html body .uiverse-navbar .mega-item:not(#_):hover,
+html body .uiverse-navbar .submenu-item:not(#_):hover,
+html body .uiverse-navbar .mega-item:not(#_).is-active,
+html body .uiverse-navbar .submenu-item:not(#_).is-active,
+html body .uiverse-navbar .dropdown-glitch-item:not(#_):hover,
+html body .uiverse-navbar .dropdown-glitch-item:not(#_).is-active {
+  color: #0d0f12 !important;
+  border-color: rgba(255, 255, 255, 0.96) !important;
+  background-color: #eceff3 !important;
+  background-image:
+    radial-gradient(circle at 6px 6px, #525860 0px, #1d2024 1.5px, #ffffff 2.3px, transparent 2.9px),
+    radial-gradient(circle at calc(100% - 6px) 6px, #525860 0px, #1d2024 1.5px, #ffffff 2.3px, transparent 2.9px),
+    radial-gradient(circle at 6px calc(100% - 6px), #525860 0px, #1d2024 1.5px, #ffffff 2.3px, transparent 2.9px),
+    radial-gradient(circle at calc(100% - 6px) calc(100% - 6px), #525860 0px, #1d2024 1.5px, #ffffff 2.3px, transparent 2.9px),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='110' height='11' viewBox='0 0 110 11'%3E%3Cpath d='M0 5.5 Q27 2 55 6.5 T110 4.5' stroke='%23101214' stroke-width='1.45' fill='none' opacity='0.92'/%3E%3Cg stroke='%23101214' stroke-width='1.2' stroke-linecap='round' opacity='0.94'%3E%3Cline x1='20' y1='1.2' x2='26' y2='9'/%3E%3Cline x1='26' y1='1.2' x2='20' y2='9'/%3E%3Cline x1='74' y1='2' x2='80' y2='9.5'/%3E%3Cline x1='80' y1='2' x2='74' y2='9.5'/%3E%3C/g%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='110' height='11' viewBox='0 0 110 11'%3E%3Cpath d='M0 5.5 Q27 9 55 4.5 T110 6.5' stroke='%23101214' stroke-width='1.45' fill='none' opacity='0.92'/%3E%3Cg stroke='%23101214' stroke-width='1.2' stroke-linecap='round' opacity='0.94'%3E%3Cline x1='34' y1='1.2' x2='40' y2='9'/%3E%3Cline x1='40' y1='1.2' x2='34' y2='9'/%3E%3Cline x1='86' y1='1.5' x2='92' y2='9.2'/%3E%3Cline x1='92' y1='1.5' x2='86' y2='9.2'/%3E%3C/g%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='48' viewBox='0 0 64 48'%3E%3Cpath d='M12 0 L64 38 M24 0 L64 26' stroke='%23101214' stroke-width='1.3' fill='none' opacity='0.78'/%3E%3Cg stroke='%23101214' stroke-width='1.15' opacity='0.82'%3E%3Cline x1='34' y1='12' x2='42' y2='20'/%3E%3Cline x1='42' y1='12' x2='34' y2='20'/%3E%3Cline x1='48' y1='22' x2='56' y2='30'/%3E%3Cline x1='56' y1='22' x2='48' y2='30'/%3E%3C/g%3E%3C/svg%3E"),
+    linear-gradient(180deg, #ffffff 0%, #eaeef2 44%, #cfd5dc 78%, #e2e6eb 100%) !important;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat-x, repeat-x, no-repeat, no-repeat !important;
+  background-size:
+    auto, auto, auto, auto,
+    10px 2px, 2px 10px,
+    10px 2px, 2px 10px,
+    10px 2px, 2px 10px,
+    10px 2px, 2px 10px,
+    110px 11px, 110px 11px, 64px 48px, 100% 100% !important;
+  background-position:
+    top left, top right, bottom left, bottom right,
+    top left, top left,
+    top right, top right,
+    bottom left, bottom left,
+    bottom right, bottom right,
+    top left, bottom left, top right, center !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(40, 45, 52, 0.65),
+    0 0 18px rgba(255, 255, 255, 0.3),
+    0 6px 16px rgba(0, 0, 0, 0.82) !important;
+  text-shadow: none !important;
+  transform: translateX(2px) !important;
+}
+
+html body .uiverse-navbar .mega-item:not(#_):hover::before,
+html body .uiverse-navbar .submenu-item:not(#_):hover::before,
+html body .uiverse-navbar .mega-item:not(#_).is-active::before,
+html body .uiverse-navbar .submenu-item:not(#_).is-active::before {
+  content: "> 0" counter(mw-sub-idx) " //" !important;
+  color: #0d0f12 !important;
+  text-shadow: none !important;
+}
+
+html body .uiverse-navbar .mega-item:not(#_):hover::after,
+html body .uiverse-navbar .submenu-item:not(#_):hover::after,
+html body .uiverse-navbar .mega-item:not(#_).is-active::after,
+html body .uiverse-navbar .submenu-item:not(#_).is-active::after,
+html body .uiverse-navbar .dropdown-glitch-item:not(#_):hover::after,
+html body .uiverse-navbar .dropdown-glitch-item:not(#_).is-active::after {
+  display: block !important;
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  animation: none !important;
+}
+
+html body .uiverse-navbar .mega-item:not(#_):hover .submenu-label,
+html body .uiverse-navbar .submenu-item:not(#_):hover .submenu-label,
+html body .uiverse-navbar .mega-item:not(#_).is-active .submenu-label,
+html body .uiverse-navbar .submenu-item:not(#_).is-active .submenu-label,
+html body .uiverse-navbar .dropdown-glitch-item:not(#_):hover .submenu-label,
+html body .uiverse-navbar .dropdown-glitch-item:not(#_).is-active .submenu-label {
+  color: #0d0f12 !important;
+  text-shadow: none !important;
+}
+
+html body .uiverse-navbar .mega-item:not(#_):hover .uiverse-menu-icon-box,
+html body .uiverse-navbar .submenu-item:not(#_):hover .uiverse-menu-icon-box,
+html body .uiverse-navbar .mega-item:not(#_).is-active .uiverse-menu-icon-box,
+html body .uiverse-navbar .submenu-item:not(#_).is-active .uiverse-menu-icon-box {
+  border-color: rgba(13, 15, 18, 0.72) !important;
+  background: #0d0f12 !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35) !important;
+}
+
+html body .uiverse-navbar .mega-item:not(#_):hover svg,
+html body .uiverse-navbar .submenu-item:not(#_):hover svg {
+  filter: none !important;
+}
+
+/* ==========================================================================
+   BLACKLIST LEADERBOARD TYPOGRAPHY (1:1 REFERENCE) & RANK #1 POLAROID PHOTO
+   Applies to all Route Leaderboards, Top Ranked, Blacklist 2026 & Champions
+   ========================================================================== */
+
+/* 1. Solid Bold Condensed White Typography + Black Spray-Paint Splatter Backdrop */
+html body #view-leaderboard .lb-video-banner #lb-hero-route-title .lb-title-prefix,
+html body #view-leaderboard .lb-video-banner #lb-hero-route-title .rc-title-line-white,
+html body #view-leaderboard .lb-video-banner #lb-hero-route-title #lb-hero-prefix,
+html body #view-challenges .rc-stitch-banner #routes-catalog-banner-title #rc-banner-prefix,
+#view-leaderboard #lb-hero-prefix,
+#view-challenges #rc-banner-prefix {
+  font-family: 'Anton', 'Barlow Condensed', Impact, sans-serif !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: clamp(20px, 2.5vw, 32px) !important;
+  line-height: 1.08 !important;
+  letter-spacing: 0.045em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-text-stroke: 0 !important;
+  display: inline-block !important;
+  padding: 6px 24px 6px 14px !important;
+  margin-bottom: 6px !important;
+  background-color: transparent !important;
+  background-image:
+    radial-gradient(ellipse 96% 80% at 48% 52%, rgba(0, 0, 0, 0.96) 0%, rgba(0, 0, 0, 0.9) 62%, rgba(0, 0, 0, 0.45) 82%, transparent 98%),
+    radial-gradient(circle 6px at 96% 24%, #000000 0%, transparent 100%),
+    radial-gradient(circle 4px at 92% 78%, #000000 0%, transparent 100%),
+    radial-gradient(circle 5px at 4% 84%, #000000 0%, transparent 100%) !important;
+  text-shadow:
+    0 2px 0 #000000,
+    0 0 14px rgba(0, 0, 0, 1),
+    0 4px 18px rgba(0, 0, 0, 0.95) !important;
+}
+
+html body #view-leaderboard .lb-video-banner #lb-hero-route-title .lb-title-route-name,
+html body #view-leaderboard .lb-video-banner #lb-hero-route-title .lb-title-line-gradient,
+html body #view-leaderboard .lb-video-banner #lb-hero-route-title #lb-hero-main,
+html body #view-leaderboard .lb-video-banner #lb-hero-route-title #lb-hero-route-name,
+html body #view-challenges .rc-stitch-banner #routes-catalog-banner-title #rc-banner-main,
+#view-leaderboard #lb-hero-route-name,
+#view-leaderboard .lb-title-line-gradient,
+#view-challenges #rc-banner-main,
+#view-spotlight #hof-main-heading,
+#view-blacklist #blacklist-main-heading,
+#view-blog #bl-standings-title {
+  font-family: 'Anton', 'Barlow Condensed', Impact, sans-serif !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.045em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-text-stroke: 0 !important;
+  background-color: transparent !important;
+  background-image:
+    radial-gradient(ellipse 96% 78% at 48% 52%, rgba(0, 0, 0, 0.96) 0%, rgba(0, 0, 0, 0.92) 60%, rgba(0, 0, 0, 0.48) 80%, transparent 96%),
+    radial-gradient(circle 10px at 95% 22%, #000000 0%, transparent 100%),
+    radial-gradient(circle 7px at 90% 84%, #000000 0%, transparent 100%),
+    radial-gradient(circle 8px at 6% 86%, #000000 0%, transparent 100%) !important;
+  text-shadow:
+    0 3px 0 #000000,
+    0 0 16px rgba(0, 0, 0, 1),
+    0 6px 22px rgba(0, 0, 0, 0.96) !important;
+}
+
+#view-spotlight #hof-main-heading,
+#view-blacklist #blacklist-main-heading,
+#view-blog #bl-standings-title {
+  display: inline-block !important;
+  padding: 6px 24px 8px 14px !important;
+}
+
+/* 2. Authentic #1 Blacklist Driver Polaroid Photograph (rank1-pilot-polaroid.png) */
+#view-leaderboard .lb-clean-table tbody tr.lb-row-rank-1 .lb-user-cell,
+#view-spotlight #hof-cyber-table tbody tr.lb-row-rank-1 .hof-driver-cell,
+#view-blacklist #blacklist-cyber-table tbody tr.lb-row-rank-1 .hof-driver-cell,
+#view-blog #standings-table-wrapper tbody tr.lb-row-rank-1 .hof-driver-cell {
+  position: relative !important;
+  padding-left: 66px !important;
+  min-height: 54px !important;
+}
+
+#view-leaderboard .lb-clean-table tbody tr.lb-row-rank-1 .lb-user-cell::before,
+#view-spotlight #hof-cyber-table tbody tr.lb-row-rank-1 .hof-driver-cell::before,
+#view-blacklist #blacklist-cyber-table tbody tr.lb-row-rank-1 .hof-driver-cell::before,
+#view-blog #standings-table-wrapper tbody tr.lb-row-rank-1 .hof-driver-cell::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 2px !important;
+  top: 50% !important;
+  width: 52px !important;
+  height: 56px !important;
+  transform: translateY(-50%) rotate(-3deg) !important;
+  border: none !important;
+  border-radius: 1px !important;
+  background-color: #141412 !important;
+  background-image: url("../img/rank1-pilot-polaroid.png") !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.92), 0 0 0 1px rgba(255, 255, 255, 0.22) !important;
+  z-index: 2 !important;
+}
+
+/* ==========================================================================
+   ROUTE CARDS TOP HEADER — 1:1 EXACT MATCH TO REFERENCE (CIRCUITO / SPRINT / DRAG)
+   Clean Bold Condensed White Title + Cream-Gold Modality + Racing Pilot Icon + Left L-Brackets
+   ========================================================================== */
+.stitch-track-card.nfsmw-tactical-card .nfsmw-tac-header {
+  min-height: 92px !important;
+  padding: 15px 14px 14px 12px !important;
+  background:
+    radial-gradient(ellipse 68% 92% at 28% 54%, rgba(28, 30, 12, 0.72) 0%, rgba(36, 38, 16, 0.45) 55%, transparent 90%),
+    repeating-linear-gradient(128deg, rgba(0, 0, 0, 0.08) 0px, rgba(0, 0, 0, 0.08) 2px, transparent 2px, transparent 7px),
+    linear-gradient(96deg, #4b4d22 0%, #5e6226 38%, #8f942c 72%, #c4c83a 100%) !important;
+}
+
+.stitch-track-card.nfsmw-tactical-card .nfsmw-tac-header-inner {
+  position: relative !important;
+  z-index: 2 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  gap: 3px !important;
+  padding: 5px 4px 5px 13px !important;
+  border-left: none !important;
+  background-image:
+    linear-gradient(#d8d08e, #d8d08e),
+    linear-gradient(#d8d08e, #d8d08e),
+    linear-gradient(#d8d08e, #d8d08e),
+    linear-gradient(#d8d08e, #d8d08e) !important;
+  background-repeat: no-repeat !important;
+  background-size:
+    10px 2px, 2px 10px,
+    10px 2px, 2px 10px !important;
+  background-position:
+    top left, top left,
+    bottom left, bottom left !important;
+}
+
+.stitch-track-card.nfsmw-tactical-card .nfsmw-tac-modality-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  margin-bottom: 1px !important;
+}
+
+.stitch-track-card.nfsmw-tactical-card .nfsmw-tac-helmet-icon {
+  width: 20px !important;
+  height: 21px !important;
+  color: #f4f6f2 !important;
+  flex-shrink: 0 !important;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.85)) !important;
+}
+
+.stitch-track-card.nfsmw-tactical-card .nfsmw-tac-modality-label {
+  font-family: 'Barlow Condensed', 'Inter', sans-serif !important;
+  font-style: normal !important;
+  font-size: 16.5px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: #d6ce8c !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.85) !important;
+}
+
+.stitch-track-card.nfsmw-tactical-card h4.nfsmw-tac-title {
+  font-family: 'Barlow Condensed', 'Anton', 'Impact', sans-serif !important;
+  font-style: normal !important;
+  font-weight: 800 !important;
+  font-size: 29px !important;
+  line-height: 1.02 !important;
+  letter-spacing: 0.025em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  margin: 0 !important;
+  text-align: left !important;
+  max-width: 90% !important;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.78) !important;
+}
+
+@media (max-width: 640px) {
+  .stitch-track-card.nfsmw-tactical-card h4.nfsmw-tac-title {
+    font-size: 24px !important;
+  }
+  .stitch-track-card.nfsmw-tactical-card .nfsmw-tac-modality-label {
+    font-size: 15px !important;
+  }
+}
+
+/* ==========================================================================
+   ROUTERS LEADERBOARDS BANNER LAYOUT (#view-challenges .rc-stitch-banner)
+   Left: Large ROUTERS + LEADERBOARDS | Right: Compact Stats + Subtitle Below
+   ========================================================================== */
+#view-challenges .rc-stitch-banner .rc-banner-content-wrap {
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 28px !important;
+}
+
+#view-challenges .rc-stitch-banner .rc-banner-left {
+  max-width: 740px !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+
+#view-challenges .rc-stitch-banner #routes-catalog-banner-title {
+  margin: 0 !important;
+  gap: 8px !important;
+}
+
+html body #view-challenges .rc-stitch-banner #routes-catalog-banner-title #rc-banner-prefix,
+#view-challenges #rc-banner-prefix {
+  font-family: 'Anton', 'Barlow Condensed', Impact, sans-serif !important;
+  font-size: clamp(32px, 4vw, 52px) !important;
+  line-height: 1.02 !important;
+  letter-spacing: 0.05em !important;
+  margin-bottom: 4px !important;
+  padding: 4px 24px 6px 14px !important;
+}
+
+html body #view-challenges .rc-stitch-banner #routes-catalog-banner-title #rc-banner-main,
+#view-challenges #rc-banner-main {
+  font-family: 'Anton', 'Barlow Condensed', Impact, sans-serif !important;
+  font-size: clamp(46px, 5.8vw, 76px) !important;
+  line-height: 1 !important;
+  letter-spacing: 0.04em !important;
+  padding: 6px 28px 8px 14px !important;
+}
+
+/* Right Column: Minimal 2-Metric Stats (Rutas & Pilotos) + Description Below */
+#view-challenges .rc-banner-right {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  max-width: 440px !important;
+  flex: 0 1 440px !important;
+  margin-left: auto !important;
+}
+
+#view-challenges .rc-banner-metrics-card.rc-banner-metrics-compact {
+  padding: 10px 20px !important;
+  gap: 18px !important;
+  border-radius: 12px !important;
+  background: rgba(10, 11, 14, 0.78) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.68) !important;
+}
+
+#view-challenges .rc-banner-metrics-compact .rc-metric-item {
+  min-width: 58px !important;
+  align-items: center !important;
+}
+
+#view-challenges .rc-banner-metrics-compact .rc-metric-header {
+  margin-bottom: 3px !important;
+}
+
+#view-challenges .rc-banner-metrics-compact .rc-metric-label {
+  font-size: 9.5px !important;
+}
+
+#view-challenges .rc-banner-metrics-compact .rc-metric-number {
+  font-size: 22px !important;
+  line-height: 1.05 !important;
+}
+
+#view-challenges .rc-banner-metrics-compact .rc-unit {
+  font-size: 11.5px !important;
+}
+
+#view-challenges .rc-banner-metrics-compact .rc-metric-sep {
+  height: 28px !important;
+}
+
+#view-challenges .rc-banner-right .rc-banner-desc {
+  text-align: right !important;
+  font-size: 12.5px !important;
+  line-height: 1.48 !important;
+  color: #cbd5e1 !important;
+  max-width: 460px !important;
+  padding: 8px 14px !important;
+  background: rgba(10, 11, 14, 0.62) !important;
+  border-right: 2px solid rgba(212, 215, 152, 0.55) !important;
+  border-radius: 6px !important;
+}
+
+@media (max-width: 1180px) {
+  #view-challenges .rc-banner-right {
+    align-items: flex-start !important;
+    margin-left: 0 !important;
+    max-width: 100% !important;
+  }
+  #view-challenges .rc-banner-right .rc-banner-desc {
+    text-align: left !important;
+    border-right: none !important;
+    border-left: 2px solid rgba(212, 215, 152, 0.55) !important;
+  }
+}
+
+/* ==========================================================================
+   TOP RANKED (#view-spotlight) & BLACKLIST (#view-blacklist) INDUSTRIAL BANNER
+   + PROMINENT NEED FOR SPEED MOST WANTED WATERMARK OVERLAY
+   ========================================================================== */
+#view-spotlight .v7-hof-header-wrap,
+#view-blacklist .v7-hof-header-wrap {
+  position: relative !important;
+  background-color: #10120e !important;
+  background-image:
+    linear-gradient(180deg, rgba(10, 11, 9, 0.4) 0%, rgba(12, 13, 10, 0.66) 65%, rgba(10, 11, 9, 0.88) 100%),
+    url("../img/top-ranked-industrial-bg.jpg") !important;
+  background-size: cover !important;
+  background-position: center top !important;
+  background-repeat: no-repeat !important;
+  border: 1px solid rgba(212, 215, 152, 0.24) !important;
+  border-top: 2px solid rgba(212, 215, 152, 0.45) !important;
+  border-radius: 6px !important;
+  padding: 26px 26px 22px !important;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.85) !important;
+  overflow: hidden !important;
+}
+
+/* Prominent Need for Speed Most Wanted Shadow/Watermark Logo Over Industrial Backdrop */
+#view-spotlight .v7-hof-header-wrap::before,
+#view-blacklist .v7-hof-header-wrap::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background-image: url("../img/nfsmw-ranked-watermark.png") !important;
+  background-repeat: no-repeat !important;
+  background-position: center 46% !important;
+  background-size: min(680px, 64%) auto !important;
+  mix-blend-mode: screen !important;
+  opacity: 0.3 !important;
+  filter: contrast(1.25) drop-shadow(0 6px 18px rgba(0, 0, 0, 0.95)) !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+
+#view-spotlight .v7-hof-header-wrap::after,
+#view-blacklist .v7-hof-header-wrap::after {
+  display: none !important;
+}
+
+#view-spotlight .v7-hof-header-wrap > *,
+#view-blacklist .v7-hof-header-wrap > * {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+#view-spotlight #hof-main-heading,
+#view-blacklist #blacklist-main-heading {
+  font-size: clamp(28px, 3.6vw, 44px) !important;
+  line-height: 1.06 !important;
+  margin: 0 !important;
+}
+
+/* ==========================================================================
+   LEADERBOARD POLISH: CLEARER BANNER DESCRIPTION, BANNER-MATCHED TABLE FONT
+   & ZERO-COLLISION WR CARD POSITIONING BELOW BACK BUTTON
+   ========================================================================== */
+
+/* 1. Clearer, High-Readability Description on Right of #view-challenges Video Banner */
+#view-challenges .rc-banner-right .rc-banner-desc {
+  font-family: 'Barlow Condensed', 'Inter', sans-serif !important;
+  font-size: 17px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.03em !important;
+  line-height: 1.42 !important;
+  color: #f3f6ec !important;
+  max-width: 450px !important;
+  padding: 12px 18px !important;
+  background: rgba(10, 12, 10, 0.78) !important;
+  border-right: 3px solid #d4d798 !important;
+  border-radius: 4px !important;
+  text-align: right !important;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95) !important;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.65) !important;
+}
+
+/* 2. Restore Original Compact Height & Zero-Collision Right-Side Layout in #view-leaderboard */
+html body #view-leaderboard .lb-video-banner.rc-stitch-banner {
+  min-height: 165px !important;
+  padding: 18px 34px !important;
+  align-items: center !important;
+}
+
+html body #view-leaderboard .lb-video-banner .btn-back-to-tracks:not(#_) {
+  position: absolute !important;
+  top: 12px !important;
+  right: 20px !important;
+  bottom: auto !important;
+  min-height: 30px !important;
+  padding: 5px 12px !important;
+  font-size: 11.5px !important;
+  z-index: 15 !important;
+}
+
+html body #view-leaderboard .lb-video-banner .rc-banner-content-wrap {
+  align-items: center !important;
+  padding-top: 0 !important;
+  padding-right: 250px !important;
+}
+
+html body #view-leaderboard .lb-video-banner #lb-hero-wr-card,
+html body #view-leaderboard .lb-video-banner .lb-banner-wr-card {
+  position: absolute !important;
+  right: 20px !important;
+  bottom: 12px !important;
+  top: auto !important;
+  margin: 0 !important;
+  padding: 8px 18px !important;
+  z-index: 10 !important;
+}
+
+html body #view-leaderboard .lb-video-banner .lb-banner-wr-badge-label {
+  font-size: 11.5px !important;
+  line-height: 1.15 !important;
+}
+
+html body #view-leaderboard .lb-video-banner .lb-banner-wr-time {
+  font-size: 32px !important;
+  line-height: 1 !important;
+  margin: 2px 0 !important;
+}
+
+html body #view-leaderboard .lb-video-banner .lb-banner-wr-holder {
+  font-size: 12.5px !important;
+  line-height: 1.15 !important;
+}
+
+@media (max-width: 768px) {
+  html body #view-leaderboard .lb-video-banner.rc-stitch-banner {
+    min-height: auto !important;
+    padding: 18px 16px !important;
+  }
+
+  html body #view-leaderboard .lb-video-banner .rc-banner-content-wrap {
+    padding-right: 0 !important;
+  }
+
+  html body #view-leaderboard .lb-video-banner .btn-back-to-tracks:not(#_) {
+    position: static !important;
+    margin-bottom: 12px !important;
+  }
+
+  html body #view-leaderboard .lb-video-banner #lb-hero-wr-card,
+  html body #view-leaderboard .lb-video-banner .lb-banner-wr-card {
+    position: static !important;
+    width: 100% !important;
+    margin-top: 12px !important;
+  }
+}
+
+/* 3. Leaderboard Table Typography Matched to Video Banner (Anton / Barlow Condensed Clean Solid) */
+#view-leaderboard .lb-clean-table .lb-mw-th-label,
+#view-leaderboard .lb-clean-table .nfs-cyber-rank-num,
+#view-leaderboard .lb-clean-table .lb-user-name,
+#view-leaderboard .lb-clean-table .lb-time-val,
+#view-leaderboard .lb-clean-table .stitch-time-display,
+#view-leaderboard .lb-clean-table .stitch-time-main,
+#view-leaderboard .lb-clean-table .stitch-time-ms,
+#view-leaderboard .lb-clean-table .stitch-delta-val,
+#view-leaderboard .lb-clean-table .lb-car-main {
+  font-family: 'Anton', 'Barlow Condensed', Impact, sans-serif !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+}
+
+#view-leaderboard .lb-clean-table .lb-mw-th-label {
+  font-size: 14.5px !important;
+  letter-spacing: 0.07em !important;
+}
+
+#view-leaderboard .lb-clean-table .nfs-cyber-rank-num {
+  font-size: 22px !important;
+}
+
+#view-leaderboard .lb-clean-table .lb-user-name {
+  font-size: 21px !important;
+}
+
+#view-leaderboard .lb-clean-table tbody tr.lb-row-rank-1 .lb-user-name {
+  font-size: 24px !important;
+}
+
+#view-leaderboard .lb-clean-table .lb-time-val,
+#view-leaderboard .lb-clean-table .stitch-time-display,
+#view-leaderboard .lb-clean-table .stitch-time-main,
+#view-leaderboard .lb-clean-table .stitch-time-ms {
+  font-size: 20px !important;
+  letter-spacing: 0.03em !important;
+}
+
+#view-leaderboard .lb-clean-table .stitch-delta-val {
+  font-size: 15.5px !important;
+  letter-spacing: 0.04em !important;
+}
+
+#view-leaderboard .lb-clean-table .lb-car-main {
+  font-size: 16.5px !important;
+  letter-spacing: 0.035em !important;
+}
+
+#view-leaderboard .lb-clean-table .creator-slug,
+#view-leaderboard .lb-clean-table .stitch-date-val {
+  font-family: 'Barlow Condensed', 'Anton', sans-serif !important;
+  font-style: normal !important;
+  font-weight: 700 !important;
+  font-size: 14.5px !important;
+  letter-spacing: 0.05em !important;
+}
+
+/* ==========================================================================
+   WHITE-METALLIC TACTICAL FILTER & LEADERBOARD SESSION BUTTONS
+   (GLOBAL & TRACK FILTERS + LEADERBOARD SESSIONS — REFERENCE 1:1)
+   ========================================================================== */
+
+#view-challenges .catalog-toolbar .toolbar-left,
+#view-leaderboard #lb-modality-tabs,
+#view-spotlight #hof-discipline-pills,
+#view-blacklist #blacklist-discipline-pills,
+#view-telemetry #telemetry-type-pills {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 14px !important;
+}
+
+/* Prevent #view-challenges Banner From Collapsing Under Fixed Top Main Navbar */
+html body #view-challenges .uiverse-catalog-layout.uiverse-no-sidebar > .catalog-main,
+html body #view-challenges .catalog-main {
+  padding-top: calc(var(--navbar-height, 64px) + 34px) !important;
+}
+
+/* Clean Single-Line Banner Title Fit (ROUTERS + CIRCUIT/SPRINT/DRAG LEADERBOARDS) */
+html body #view-challenges .rc-stitch-banner #routes-catalog-banner-title #rc-banner-prefix,
+#view-challenges #rc-banner-prefix {
+  font-size: clamp(24px, 3vw, 38px) !important;
+  line-height: 1.04 !important;
+  white-space: nowrap !important;
+}
+
+html body #view-challenges .rc-stitch-banner #routes-catalog-banner-title #rc-banner-main,
+#view-challenges #rc-banner-main {
+  font-size: clamp(32px, 4.2vw, 54px) !important;
+  line-height: 1.02 !important;
+  white-space: nowrap !important;
+}
+
+@media (max-width: 900px) {
+  html body #view-challenges .rc-stitch-banner #routes-catalog-banner-title #rc-banner-main,
+  #view-challenges #rc-banner-main {
+    white-space: normal !important;
+  }
+}
+
+/* White-Metallic Select Dropdowns in Ranked Sections (Zero Olive/Green Hover) */
+#view-spotlight .mw-tac-select-wrap:hover::before,
+#view-spotlight .mw-tac-select-wrap:focus-within::before,
+#view-telemetry .mw-tac-select-wrap:hover::before,
+#view-telemetry .mw-tac-select-wrap:focus-within::before {
+  background-image:
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff) !important;
+}
+
+#view-spotlight .mw-tac-select-wrap:hover select.mw-tac-select,
+#view-telemetry .mw-tac-select-wrap:hover select.mw-tac-select {
+  color: #0d0f12 !important;
+  border-color: rgba(255, 255, 255, 0.95) !important;
+  background-color: #eceff3 !important;
+  background-image:
+    linear-gradient(180deg, #ffffff 0%, #eaeef2 48%, #cfd5dc 100%) !important;
+}
+
+/* Base Inactive Plate — Brushed Dark Distressed Steel with 4 Rivets & Outer L-Brackets (ALL VIEWS & FILTER BARS) */
+html body #view-elements :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_),
+html body #view-challenges :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_),
+html body #view-leaderboard :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_),
+html body #view-spotlight :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_),
+html body #view-blacklist :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_),
+html body #view-blog :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_),
+html body #view-telemetry :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_),
+html body #view-tuning :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_),
+html body #view-members :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_),
+html body :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_) {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 11px !important;
+  min-height: 44px !important;
+  padding: 8px 18px !important;
+  margin: 4px !important;
+  border-radius: 1px !important;
+  border: 1px solid rgba(255, 255, 255, 0.24) !important;
+  color: #f4f7fa !important;
+  background-color: #181a1d !important;
+  background-image:
+    radial-gradient(circle at 7px 7px, #7b828b 0px, #3b4047 1.6px, #0b0c0e 2.4px, transparent 3px),
+    radial-gradient(circle at calc(100% - 7px) 7px, #7b828b 0px, #3b4047 1.6px, #0b0c0e 2.4px, transparent 3px),
+    radial-gradient(circle at 7px calc(100% - 7px), #7b828b 0px, #3b4047 1.6px, #0b0c0e 2.4px, transparent 3px),
+    radial-gradient(circle at calc(100% - 7px) calc(100% - 7px), #7b828b 0px, #3b4047 1.6px, #0b0c0e 2.4px, transparent 3px),
+    repeating-linear-gradient(125deg, rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 6px),
+    repeating-linear-gradient(-40deg, rgba(0, 0, 0, 0.24) 0px, rgba(0, 0, 0, 0.24) 2px, transparent 2px, transparent 10px),
+    linear-gradient(180deg, #2b2f34 0%, #1b1e22 50%, #111316 100%) !important;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat, repeat, no-repeat !important;
+  background-position: top left, top right, bottom left, bottom right, center, center, center !important;
+  background-size: auto, auto, auto, auto, auto, auto, 100% 100% !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.9),
+    0 6px 16px rgba(0, 0, 0, 0.85) !important;
+  font-family: 'Barlow Condensed', 'Anton', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  text-shadow: none !important;
+  overflow: visible !important;
+}
+
+/* Ensure Bracket & Paint Drip Never Clip on Filter Toolbars Across All Views */
+#view-challenges .catalog-toolbar,
+#view-challenges .catalog-toolbar .toolbar-left,
+#view-spotlight .v7-hof-discipline-nav,
+#view-blacklist .v7-hof-discipline-nav,
+#view-leaderboard #lb-modality-tabs,
+#view-telemetry #telemetry-type-pills,
+#view-telemetry #telemetry-quick-pilots,
+#view-blog .catalog-filter-pills,
+#view-tuning #tuning-filter-bar,
+#view-members #members-filter-bar {
+  overflow: visible !important;
+}
+
+/* Keep Back Button in #view-leaderboard Video Banner Compact Without Colliding With WR Card */
+html body #view-leaderboard .lb-video-banner .btn-back-to-tracks.mw-tac-btn--silver:not(#_) {
+  min-height: 30px !important;
+  padding: 5px 12px !important;
+  font-size: 12px !important;
+  gap: 7px !important;
+  margin: 0 !important;
+}
+
+html body #view-leaderboard .lb-video-banner .btn-back-to-tracks.mw-tac-btn--silver:not(#_)::after {
+  bottom: -10px !important;
+  width: 28px !important;
+  height: 12px !important;
+}
+
+/* Session Variant (Junkman Single/Fast Lap, BMW M3 GTR Single/Fast Lap) */
+html body #view-leaderboard button.mw-tac-btn.mw-tac-btn--silver.mw-tac-btn--session:not(#_),
+html body button.mw-tac-btn.mw-tac-btn--silver.mw-tac-btn--session:not(#_) {
+  min-height: 56px !important;
+  padding: 8px 20px !important;
+  gap: 13px !important;
+}
+
+/* Outer White-Silver L-Brackets */
+html body #view-elements :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_)::before,
+html body #view-challenges :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_)::before,
+html body #view-leaderboard :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_)::before,
+html body #view-spotlight :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_)::before,
+html body #view-blacklist :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_)::before,
+html body #view-blog :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_)::before,
+html body #view-telemetry :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_)::before,
+html body #view-tuning :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_)::before,
+html body #view-members :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_)::before,
+html body :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_)::before {
+  content: "" !important;
+  position: absolute !important;
+  top: -6px !important;
+  right: -6px !important;
+  bottom: -6px !important;
+  left: -6px !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
+  opacity: 0.85 !important;
+  background-repeat: no-repeat !important;
+  background-position:
+    top left, top left,
+    top right, top right,
+    bottom left, bottom left,
+    bottom right, bottom right !important;
+  background-image:
+    linear-gradient(#dce1e7, #dce1e7),
+    linear-gradient(#dce1e7, #dce1e7),
+    linear-gradient(#dce1e7, #dce1e7),
+    linear-gradient(#dce1e7, #dce1e7),
+    linear-gradient(#dce1e7, #dce1e7),
+    linear-gradient(#dce1e7, #dce1e7),
+    linear-gradient(#dce1e7, #dce1e7),
+    linear-gradient(#dce1e7, #dce1e7) !important;
+  background-size:
+    12px 2px, 2px 12px,
+    12px 2px, 2px 12px,
+    12px 2px, 2px 12px,
+    12px 2px, 2px 12px !important;
+}
+
+/* Bottom-Right White Paint Drip (Revealed on Hover / Active) */
+html body #view-elements :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_)::after,
+html body #view-challenges :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_)::after,
+html body #view-leaderboard :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_)::after,
+html body #view-spotlight :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_)::after,
+html body #view-blacklist :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_)::after,
+html body #view-blog :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_)::after,
+html body #view-telemetry :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_)::after,
+html body #view-tuning :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_)::after,
+html body #view-members :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_)::after,
+html body :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_)::after {
+  content: "" !important;
+  position: absolute !important;
+  top: auto !important;
+  left: auto !important;
+  right: 4px !important;
+  bottom: -17px !important;
+  width: 44px !important;
+  height: 20px !important;
+  clip-path: none !important;
+  animation: none !important;
+  pointer-events: none !important;
+  z-index: 3 !important;
+  opacity: 0 !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='20' viewBox='0 0 44 20'%3E%3Cpath d='M2 0h40v3c-3 0-4 2-5 5-.6 1.8-2.2 1.8-2.6 0-.5-2-1.8-3-3.4-2.5-1.2.4-1.8 2.8-2 6.8-.2 3.2-1.2 6.7-2.6 6.7s-2.2-3.4-2.4-7.4c-.2-3.2-1-5.6-2.4-6-1.6-.4-2.6 1.6-3.2 4.6-.4 2-1.8 2.2-2.2.2-.6-2.6-2-4.4-4.2-4.8C7.4 5.2 6 3 2 3V0z' fill='%23f3f6f9'/%3E%3Ccircle cx='39' cy='11' r='1.3' fill='%23f3f6f9'/%3E%3Ccircle cx='12' cy='10' r='1.1' fill='%23f3f6f9'/%3E%3C/svg%3E") !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  transition: opacity 0.2s ease, transform 0.22s ease !important;
+  transform: translateY(-3px) !important;
+}
+
+/* Unified Typography & Icon Slot Across All Silver Filter & Nav Buttons */
+html body :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_) :is(.mw-tac-label, span:not(.mw-tac-icon-slot)) {
+  font-family: 'Barlow Condensed', 'Anton', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  line-height: 1.05 !important;
+  color: #f4f7fa !important;
+  text-shadow: none !important;
+}
+
+html body :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_) .mw-tac-icon-slot {
+  width: 24px !important;
+  height: 22px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  color: #f4f7fa !important;
+}
+
+html body button.mw-tac-btn.mw-tac-btn--silver.mw-tac-btn--session:not(#_) .mw-tac-icon-slot {
+  width: 30px !important;
+  height: 26px !important;
+}
+
+html body :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_) .mw-tac-icon-slot svg.mw-icon-default {
+  position: static !important;
+  width: 100% !important;
+  height: 100% !important;
+  opacity: 1 !important;
+  transform: none !important;
+  display: block !important;
+}
+
+html body button.mw-tac-btn.mw-tac-btn--silver:not(#_) .mw-tac-label--stacked {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  text-align: left !important;
+  line-height: 1.04 !important;
+  gap: 2px !important;
+}
+
+html body button.mw-tac-btn.mw-tac-btn--silver:not(#_) .mw-tac-line1 {
+  font-family: 'Barlow Condensed', 'Anton', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.06em !important;
+}
+
+html body button.mw-tac-btn.mw-tac-btn--silver:not(#_) .mw-tac-line2 {
+  font-family: 'Barlow Condensed', 'Anton', sans-serif !important;
+  font-size: 14.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.07em !important;
+  opacity: 0.92 !important;
+}
+
+/* HOVER & ACTIVE STATE — Bright White-Metallic Distressed Plate + Black Barbed Wire + White Paint Drip (Beats All Green/Glitch Rules) */
+html body #view-elements :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active),
+html body #view-challenges :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active),
+html body #view-leaderboard :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active),
+html body #view-spotlight :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active),
+html body #view-blacklist :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active),
+html body #view-blog :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active),
+html body #view-telemetry :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active),
+html body #view-tuning :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active),
+html body #view-members :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active),
+html body :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active) {
+  color: #0d0f12 !important;
+  border-color: rgba(255, 255, 255, 0.96) !important;
+  background-color: #eceff3 !important;
+  background-image:
+    radial-gradient(circle at 7px 7px, #525860 0px, #1d2024 1.7px, #ffffff 2.5px, transparent 3.1px),
+    radial-gradient(circle at calc(100% - 7px) 7px, #525860 0px, #1d2024 1.7px, #ffffff 2.5px, transparent 3.1px),
+    radial-gradient(circle at 7px calc(100% - 7px), #525860 0px, #1d2024 1.7px, #ffffff 2.5px, transparent 3.1px),
+    radial-gradient(circle at calc(100% - 7px) calc(100% - 7px), #525860 0px, #1d2024 1.7px, #ffffff 2.5px, transparent 3.1px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='110' height='11' viewBox='0 0 110 11'%3E%3Cpath d='M0 5.5 Q27 2 55 6.5 T110 4.5' stroke='%23101214' stroke-width='1.45' fill='none' opacity='0.92'/%3E%3Cg stroke='%23101214' stroke-width='1.2' stroke-linecap='round' opacity='0.94'%3E%3Cline x1='20' y1='1.2' x2='26' y2='9'/%3E%3Cline x1='26' y1='1.2' x2='20' y2='9'/%3E%3Cline x1='74' y1='2' x2='80' y2='9.5'/%3E%3Cline x1='80' y1='2' x2='74' y2='9.5'/%3E%3C/g%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='110' height='11' viewBox='0 0 110 11'%3E%3Cpath d='M0 5.5 Q27 9 55 4.5 T110 6.5' stroke='%23101214' stroke-width='1.45' fill='none' opacity='0.92'/%3E%3Cg stroke='%23101214' stroke-width='1.2' stroke-linecap='round' opacity='0.94'%3E%3Cline x1='34' y1='1.2' x2='40' y2='9'/%3E%3Cline x1='40' y1='1.2' x2='34' y2='9'/%3E%3Cline x1='86' y1='1.5' x2='92' y2='9.2'/%3E%3Cline x1='92' y1='1.5' x2='86' y2='9.2'/%3E%3C/g%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='48' viewBox='0 0 64 48'%3E%3Cpath d='M12 0 L64 38 M24 0 L64 26' stroke='%23101214' stroke-width='1.3' fill='none' opacity='0.78'/%3E%3Cg stroke='%23101214' stroke-width='1.15' opacity='0.82'%3E%3Cline x1='34' y1='12' x2='42' y2='20'/%3E%3Cline x1='42' y1='12' x2='34' y2='20'/%3E%3Cline x1='48' y1='22' x2='56' y2='30'/%3E%3Cline x1='56' y1='22' x2='48' y2='30'/%3E%3C/g%3E%3C/svg%3E"),
+    repeating-linear-gradient(122deg, rgba(0, 0, 0, 0.07) 0px, rgba(0, 0, 0, 0.07) 1px, transparent 1px, transparent 6px),
+    linear-gradient(180deg, #ffffff 0%, #eaeef2 44%, #cfd5dc 78%, #e2e6eb 100%) !important;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat-x, repeat-x, no-repeat, repeat, no-repeat !important;
+  background-position: top left, top right, bottom left, bottom right, top left, bottom left, top right, center, center !important;
+  background-size: auto, auto, auto, auto, 110px 11px, 110px 11px, 64px 48px, auto, 100% 100% !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(40, 45, 52, 0.65),
+    0 0 22px rgba(255, 255, 255, 0.34),
+    0 8px 20px rgba(0, 0, 0, 0.88) !important;
+  text-shadow: none !important;
+  transform: translateY(-1px) !important;
+}
+
+html body #view-elements :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active)::before,
+html body #view-challenges :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active)::before,
+html body #view-leaderboard :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active)::before,
+html body #view-spotlight :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active)::before,
+html body #view-blacklist :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active)::before,
+html body #view-blog :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active)::before,
+html body #view-telemetry :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active)::before,
+html body #view-tuning :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active)::before,
+html body #view-members :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active)::before,
+html body :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active)::before {
+  top: -7px !important;
+  right: -7px !important;
+  bottom: -7px !important;
+  left: -7px !important;
+  opacity: 1 !important;
+  background-image:
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff) !important;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.55)) !important;
+}
+
+html body #view-elements :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active)::after,
+html body #view-challenges :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active)::after,
+html body #view-leaderboard :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active)::after,
+html body #view-spotlight :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active)::after,
+html body #view-blacklist :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active)::after,
+html body #view-blog :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active)::after,
+html body #view-telemetry :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active)::after,
+html body #view-tuning :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active)::after,
+html body #view-members :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active)::after,
+html body :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active)::after {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+html body #view-elements :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active) :is(.mw-tac-icon-slot, .mw-tac-label, span),
+html body #view-challenges :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active) :is(.mw-tac-icon-slot, .mw-tac-label, span),
+html body #view-leaderboard :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active) :is(.mw-tac-icon-slot, .mw-tac-label, span),
+html body #view-spotlight :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active) :is(.mw-tac-icon-slot, .mw-tac-label, span),
+html body #view-blacklist :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active) :is(.mw-tac-icon-slot, .mw-tac-label, span),
+html body #view-blog :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active) :is(.mw-tac-icon-slot, .mw-tac-label, span),
+html body #view-telemetry :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active) :is(.mw-tac-icon-slot, .mw-tac-label, span),
+html body #view-tuning :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active) :is(.mw-tac-icon-slot, .mw-tac-label, span),
+html body #view-members :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active) :is(.mw-tac-icon-slot, .mw-tac-label, span),
+html body :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active) :is(.mw-tac-icon-slot, .mw-tac-label, span) {
+  color: #0d0f12 !important;
+  text-shadow: none !important;
+}
+
+html body :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(:hover, .is-active, .active) .mw-tac-icon-slot svg.mw-icon-default {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Larger, Bold Blacklist 2026 Title (Subtitle Removed) */
+#view-blacklist #blacklist-main-heading {
+  font-size: clamp(44px, 5.6vw, 68px) !important;
+  line-height: 1.0 !important;
+  letter-spacing: 0.04em !important;
+  margin: 0 !important;
+}
+
+/* ==========================================================================
+   FINAL POLISH: IMPOSING ROUTERS BANNER, CONTROLS-BAR BACK BUTTON,
+   PODIUM GOLD/SILVER/BRONZE NAMES & TIMES + LARGER TIME TYPOGRAPHY
+   ========================================================================== */
+
+/* 1. #view-challenges Video Banner: Balanced Compact Height + Imposing Left Title */
+html body #view-challenges .section-video-banner.rc-stitch-banner {
+  min-height: 220px !important;
+  padding: 26px 40px !important;
+  align-items: center !important;
+}
+
+html body #view-challenges .rc-stitch-banner .rc-banner-left {
+  max-width: none !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+
+html body #view-challenges .rc-stitch-banner .rc-banner-right {
+  flex: 0 1 380px !important;
+  max-width: 380px !important;
+}
+
+html body #view-challenges .rc-stitch-banner #routes-catalog-banner-title {
+  gap: 6px !important;
+  margin: 0 !important;
+}
+
+html body #view-challenges .rc-stitch-banner #routes-catalog-banner-title #rc-banner-prefix,
+#view-challenges #rc-banner-prefix {
+  font-size: clamp(32px, 3.8vw, 50px) !important;
+  line-height: 1.0 !important;
+  letter-spacing: 0.06em !important;
+  padding: 5px 28px 6px 16px !important;
+  margin-bottom: 4px !important;
+  white-space: nowrap !important;
+}
+
+html body #view-challenges .rc-stitch-banner #routes-catalog-banner-title #rc-banner-main,
+#view-challenges #rc-banner-main {
+  font-size: clamp(44px, 5.4vw, 72px) !important;
+  line-height: 0.98 !important;
+  letter-spacing: 0.045em !important;
+  padding: 7px 34px 9px 16px !important;
+  white-space: nowrap !important;
+}
+
+@media (max-width: 1024px) {
+  html body #view-challenges .rc-stitch-banner #routes-catalog-banner-title #rc-banner-main,
+  #view-challenges #rc-banner-main {
+    font-size: clamp(32px, 4.8vw, 52px) !important;
+    white-space: normal !important;
+  }
+}
+
+/* 2. #view-leaderboard Video Banner (Clean Left Title + Right WR Card, Back Button in Controls Row) */
+html body #view-leaderboard .lb-video-banner.rc-stitch-banner {
+  min-height: 165px !important;
+  padding: 20px 34px !important;
+  align-items: center !important;
+}
+
+html body #view-leaderboard .lb-video-banner .rc-banner-content-wrap {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 24px !important;
+  padding-top: 0 !important;
+  padding-right: 0 !important;
+}
+
+html body #view-leaderboard .lb-video-banner .rc-banner-left {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  align-items: flex-start !important;
+  text-align: left !important;
+}
+
+html body #view-leaderboard .lb-video-banner #lb-hero-route-title {
+  align-items: flex-start !important;
+  text-align: left !important;
+  margin: 0 !important;
+}
+
+html body #view-leaderboard .lb-video-banner #lb-hero-wr-card,
+html body #view-leaderboard .lb-video-banner .lb-banner-wr-card {
+  position: static !important;
+  right: auto !important;
+  bottom: auto !important;
+  top: auto !important;
+  flex-shrink: 0 !important;
+  margin: 0 !important;
+  padding: 10px 20px !important;
+}
+
+/* Back Button Placed Inline on Same Row at Right End of Session Controls Row */
+html body #view-leaderboard .nfs-lb-controls.setup-filters-row {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: nowrap !important;
+  gap: 16px !important;
+  width: 100% !important;
+  overflow: visible !important;
+}
+
+html body #view-leaderboard #lb-modality-tabs {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  width: auto !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+  gap: 12px !important;
+}
+
+html body #view-leaderboard .nfs-lb-controls .btn-back-to-tracks.mw-tac-btn--silver:not(#_) {
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  margin: 4px 0 4px auto !important;
+  min-height: 54px !important;
+  padding: 8px 18px !important;
+  font-size: 14.5px !important;
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+}
+
+html body #view-leaderboard .nfs-lb-controls .btn-back-to-tracks.mw-tac-btn--silver:not(#_)::after {
+  bottom: -17px !important;
+  width: 44px !important;
+  height: 20px !important;
+}
+
+@media (max-width: 1024px) {
+  html body #view-leaderboard .nfs-lb-controls.setup-filters-row {
+    flex-wrap: wrap !important;
+  }
+}
+
+@media (max-width: 768px) {
+  html body #view-leaderboard .lb-video-banner .rc-banner-content-wrap {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  html body #view-leaderboard .nfs-lb-controls .btn-back-to-tracks.mw-tac-btn--silver:not(#_) {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+}
+
+/* 3. Balanced, Crisp Time Typography Across ALL Route Leaderboards */
+html body #view-leaderboard .lb-clean-table .lb-time-cell {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+}
+
+html body #view-leaderboard .lb-clean-table .lb-time-val,
+html body #view-leaderboard .lb-clean-table .stitch-time-display,
+html body #view-leaderboard .lb-clean-table .stitch-time-main,
+html body #view-leaderboard .lb-clean-table .stitch-time-ms {
+  font-family: 'Anton', 'Barlow Condensed', Impact, sans-serif !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 22px !important;
+  line-height: 1.08 !important;
+  letter-spacing: 0.035em !important;
+  font-variant-numeric: tabular-nums !important;
+}
+
+html body #view-leaderboard .lb-clean-table tbody tr:is(.lb-row-rank-1, .lb-row-rank-2, .lb-row-rank-3) :is(.lb-time-val, .stitch-time-display, .stitch-time-main, .stitch-time-ms) {
+  font-size: 23.5px !important;
+}
+
+/* 4. Podium Colors (1st = GOLD, 2nd = SILVER, 3rd = BRONZE) for BOTH Name & Record Time/Score Across ALL Tables */
+
+/* 1st Place — GOLD (#ffd700) */
+html body #view-leaderboard .lb-clean-table tbody tr.lb-row-rank-1 .lb-user-name,
+html body #view-leaderboard .lb-clean-table tbody tr.lb-row-rank-1 :is(.lb-time-val, .stitch-time-display, .stitch-time-main, .stitch-time-ms),
+html body #view-spotlight #hof-main-tbody tr.lb-row-rank-1 .hof-driver-name,
+html body #view-spotlight #hof-main-tbody tr.lb-row-rank-1 .hof-points-num,
+html body #view-blacklist #blacklist-main-tbody tr.lb-row-rank-1 .hof-driver-name,
+html body #view-blacklist #blacklist-main-tbody tr.lb-row-rank-1 .hof-points-cell > span:first-child,
+html body #view-blog #torneo-standings-tbody tr.lb-row-rank-1 .hof-driver-name,
+html body #view-blog #torneo-standings-tbody tr.lb-row-rank-1 .hof-points-cell > span:first-child {
+  color: #ffd700 !important;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.96), 0 0 14px rgba(255, 215, 0, 0.42) !important;
+}
+
+/* 2nd Place — SILVER (#e2e8f0) */
+html body #view-leaderboard .lb-clean-table tbody tr.lb-row-rank-2 .lb-user-name,
+html body #view-leaderboard .lb-clean-table tbody tr.lb-row-rank-2 :is(.lb-time-val, .stitch-time-display, .stitch-time-main, .stitch-time-ms),
+html body #view-spotlight #hof-main-tbody tr.lb-row-rank-2 .hof-driver-name,
+html body #view-spotlight #hof-main-tbody tr.lb-row-rank-2 .hof-points-num,
+html body #view-blacklist #blacklist-main-tbody tr.lb-row-rank-2 .hof-driver-name,
+html body #view-blacklist #blacklist-main-tbody tr.lb-row-rank-2 .hof-points-cell > span:first-child,
+html body #view-blog #torneo-standings-tbody tr.lb-row-rank-2 .hof-driver-name,
+html body #view-blog #torneo-standings-tbody tr.lb-row-rank-2 .hof-points-cell > span:first-child {
+  color: #e5ebf3 !important;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.96), 0 0 12px rgba(226, 232, 240, 0.32) !important;
+}
+
+/* 3rd Place — BRONZE (#e08a42) */
+html body #view-leaderboard .lb-clean-table tbody tr.lb-row-rank-3 .lb-user-name,
+html body #view-leaderboard .lb-clean-table tbody tr.lb-row-rank-3 :is(.lb-time-val, .stitch-time-display, .stitch-time-main, .stitch-time-ms),
+html body #view-spotlight #hof-main-tbody tr.lb-row-rank-3 .hof-driver-name,
+html body #view-spotlight #hof-main-tbody tr.lb-row-rank-3 .hof-points-num,
+html body #view-blacklist #blacklist-main-tbody tr.lb-row-rank-3 .hof-driver-name,
+html body #view-blacklist #blacklist-main-tbody tr.lb-row-rank-3 .hof-points-cell > span:first-child,
+html body #view-blog #torneo-standings-tbody tr.lb-row-rank-3 .hof-driver-name,
+html body #view-blog #torneo-standings-tbody tr.lb-row-rank-3 .hof-points-cell > span:first-child {
+  color: #e08a42 !important;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.96), 0 0 12px rgba(224, 138, 66, 0.34) !important;
+}
+
+/* ==========================================================================
+   DRIVER DOSSIER (#view-telemetry) OVERHAUL:
+   TACTICAL TABS, LARGE BOLD FIA/CAREER STATS, REORDERED COLUMNS & PODIUM COLORS
+   ========================================================================== */
+
+/* 1. White-Metallic Tactical Tabs (RESUMEN, CARRERAS, LEADERBOARD) */
+#view-telemetry .pilot-dossier-tabs {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 14px !important;
+  border-bottom: none !important;
+  padding: 6px 0 !important;
+  overflow: visible !important;
+}
+
+/* 2. Large, High-Impact Stats (Puntuación FIA, Carreras, Victorias, Porcentaje) */
+#view-telemetry .pilot-dossier-stats-bar {
+  padding: 24px 28px !important;
+  gap: 20px !important;
+}
+
+#view-telemetry .pilot-stat-label {
+  font-family: 'Barlow Condensed', 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: #aeb8c4 !important;
+  margin-bottom: 4px !important;
+}
+
+#view-telemetry .pilot-stat-value {
+  font-family: 'Anton', 'Barlow Condensed', Impact, sans-serif !important;
+  font-size: clamp(34px, 3.6vw, 48px) !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.03em !important;
+  line-height: 1.0 !important;
+  color: #ffffff !important;
+  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.92) !important;
+  font-variant-numeric: tabular-nums !important;
+}
+
+#view-telemetry .pilot-stat-value.pilot-stat-gold {
+  color: #ffd700 !important;
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.95), 0 0 18px rgba(255, 215, 0, 0.36) !important;
+}
+
+#view-telemetry .pilot-stat-rank {
+  font-family: 'Barlow Condensed', sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  color: #e2e8f0 !important;
+  margin-left: 5px !important;
+}
+
+#view-telemetry .pilot-stat-value.pilot-stat-car {
+  font-family: 'Barlow Condensed', 'Anton', sans-serif !important;
+  font-size: 23px !important;
+  font-weight: 800 !important;
+  line-height: 1.15 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+}
+
+/* 3. Recent Races Table — Neutralize Legacy nth-child(5) Color & Apply Podium Gold/Silver/Bronze/White */
+#view-telemetry #telemetry-records-tbody td:nth-child(5) span.pilot-recent-when {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  font-style: normal !important;
+  color: #94a3b8 !important;
+}
+
+#view-telemetry #telemetry-records-tbody .pilot-recent-pos,
+#view-telemetry #telemetry-records-tbody .pilot-recent-time {
+  font-family: 'Anton', 'Barlow Condensed', Impact, sans-serif !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 21px !important;
+  letter-spacing: 0.04em !important;
+  font-variant-numeric: tabular-nums !important;
+}
+
+/* Rank #1 -> GOLD (#ffd700) */
+#view-telemetry #telemetry-records-tbody tr.pilot-rank-1 .pilot-recent-pos,
+#view-telemetry #telemetry-records-tbody tr.pilot-rank-1 .pilot-recent-time,
+#view-telemetry #telemetry-records-tbody tr.pilot-rank-1 .pilot-recent-time.is-wr {
+  color: #ffd700 !important;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.96), 0 0 12px rgba(255, 215, 0, 0.42) !important;
+}
+
+/* Rank #2 -> SILVER (#e5ebf3) */
+#view-telemetry #telemetry-records-tbody tr.pilot-rank-2 .pilot-recent-pos,
+#view-telemetry #telemetry-records-tbody tr.pilot-rank-2 .pilot-recent-time {
+  color: #e5ebf3 !important;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.96), 0 0 10px rgba(226, 232, 240, 0.3) !important;
+}
+
+/* Rank #3 -> BRONZE (#e08a42) */
+#view-telemetry #telemetry-records-tbody tr.pilot-rank-3 .pilot-recent-pos,
+#view-telemetry #telemetry-records-tbody tr.pilot-rank-3 .pilot-recent-time {
+  color: #e08a42 !important;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.96), 0 0 10px rgba(224, 138, 66, 0.32) !important;
+}
+
+/* Rank #4+ -> WHITE (#ffffff) */
+#view-telemetry #telemetry-records-tbody tr.pilot-rank-rest .pilot-recent-pos,
+#view-telemetry #telemetry-records-tbody tr.pilot-rank-rest .pilot-recent-time {
+  color: #ffffff !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.92) !important;
+}
+
+/* ==========================================================================
+   CHAMPION STANDING & CHALLENGES / TOURNAMENT (#view-blog) MOST WANTED OVERHAUL
+   1. Fix upward collapse under fixed .uiverse-navbar across all subpages
+      (Champion Standing, Torneo Registrado, Semana de Challenger, Torneos Posteriores)
+   2. Enlarge #bl-standings-title in Anton Most Wanted stencil style
+   3. Apply Most Wanted industrial steel/watermark theme (preserving Ficha & Tarjetas)
+   ========================================================================== */
+
+/* 1. Navbar Clearance Across All #view-blog Subpages */
+html body #view-blog .uiverse-catalog-layout.uiverse-no-sidebar > .catalog-main,
+html body #view-blog .catalog-main {
+  padding-top: calc(var(--navbar-height, 64px) + 42px) !important;
+  padding-bottom: 64px !important;
+}
+
+@media (max-width: 768px) {
+  html body #view-blog .uiverse-catalog-layout.uiverse-no-sidebar > .catalog-main,
+  html body #view-blog .catalog-main {
+    padding-top: calc(var(--navbar-height, 64px) + 28px) !important;
+  }
+}
+
+/* 2. Champion Standing Celebration Hero Banner -> NFSMW Industrial Theme */
+html body #view-blog #champ-celebration-hero.champ-celebration-hero-wrapper {
+  position: relative !important;
+  margin-top: 0 !important;
+  margin-bottom: 26px !important;
+  background-color: #10120e !important;
+  background-image:
+    linear-gradient(135deg, rgba(10, 11, 9, 0.52) 0%, rgba(12, 13, 10, 0.78) 62%, rgba(8, 9, 8, 0.94) 100%),
+    url("../img/top-ranked-industrial-bg.jpg") !important;
+  background-size: cover !important;
+  background-position: center 30% !important;
+  background-repeat: no-repeat !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  border-top: 2px solid rgba(255, 255, 255, 0.48) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.88) !important;
+  overflow: hidden !important;
+}
+
+html body #view-blog #champ-celebration-hero.champ-celebration-hero-wrapper::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background-image: url("../img/nfsmw-ranked-watermark.png") !important;
+  background-repeat: no-repeat !important;
+  background-position: 78% 48% !important;
+  background-size: min(560px, 52%) auto !important;
+  mix-blend-mode: screen !important;
+  opacity: 0.26 !important;
+  filter: contrast(1.2) drop-shadow(0 6px 18px rgba(0, 0, 0, 0.95)) !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+
+html body #view-blog #champ-celebration-hero.champ-celebration-hero-wrapper::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 8px !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
+  background-repeat: no-repeat !important;
+  background-position:
+    top left, top left,
+    top right, top right,
+    bottom left, bottom left,
+    bottom right, bottom right !important;
+  background-image:
+    linear-gradient(rgba(220, 225, 231, 0.65), rgba(220, 225, 231, 0.65)),
+    linear-gradient(rgba(220, 225, 231, 0.65), rgba(220, 225, 231, 0.65)),
+    linear-gradient(rgba(220, 225, 231, 0.65), rgba(220, 225, 231, 0.65)),
+    linear-gradient(rgba(220, 225, 231, 0.65), rgba(220, 225, 231, 0.65)),
+    linear-gradient(rgba(220, 225, 231, 0.65), rgba(220, 225, 231, 0.65)),
+    linear-gradient(rgba(220, 225, 231, 0.65), rgba(220, 225, 231, 0.65)),
+    linear-gradient(rgba(220, 225, 231, 0.65), rgba(220, 225, 231, 0.65)),
+    linear-gradient(rgba(220, 225, 231, 0.65), rgba(220, 225, 231, 0.65)) !important;
+  background-size:
+    16px 2px, 2px 16px,
+    16px 2px, 2px 16px,
+    16px 2px, 2px 16px,
+    16px 2px, 2px 16px !important;
+}
+
+html body #view-blog #champ-celebration-hero > * {
+  position: relative !important;
+  z-index: 3 !important;
+}
+
+html body #view-blog #champ-celebration-hero .champ-badge-ribbon {
+  background: linear-gradient(135deg, #f3f6f9 0%, #cbd5e1 100%) !important;
+  color: #090a0c !important;
+  border: 1px solid #ffffff !important;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.7) !important;
+  font-family: 'Barlow Condensed', 'Anton', sans-serif !important;
+  letter-spacing: 0.08em !important;
+  font-size: 13px !important;
+}
+
+html body #view-blog #champ-celebration-hero .champ-winner-kpi-val.rep-gold {
+  color: #fde047 !important;
+  text-shadow: 0 2px 12px rgba(253, 224, 71, 0.4) !important;
+}
+
+html body #view-blog #champ-celebration-hero .champ-celebration-minimized-bar {
+  background: linear-gradient(180deg, rgba(22, 24, 20, 0.96) 0%, rgba(10, 11, 9, 0.98) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.78) !important;
+}
+
+/* 3. General Classification Panel & Large Most Wanted Title */
+html body #view-blog #torneo-panel-standings .nfs-Leaderboard-panel {
+  background: linear-gradient(180deg, #0d0e0b 0%, #060706 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  border-top: 2px solid rgba(255, 255, 255, 0.34) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.88) !important;
+  margin-bottom: 28px !important;
+  overflow: hidden !important;
+}
+
+html body #view-blog #torneo-panel-standings .nfs-lb-header {
+  padding: 20px 24px 16px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background:
+    linear-gradient(90deg, rgba(16, 18, 14, 0.94) 0%, rgba(10, 11, 9, 0.86) 100%),
+    url("../img/top-ranked-industrial-bg.jpg") center / cover no-repeat !important;
+}
+
+html body #view-blog #bl-standings-title {
+  font-size: clamp(32px, 4.1vw, 52px) !important;
+  line-height: 1.04 !important;
+  letter-spacing: 0.04em !important;
+  margin: 0 !important;
+  padding: 8px 28px 10px 14px !important;
+}
+
+@media (max-width: 768px) {
+  html body #view-blog #bl-standings-title {
+    font-size: clamp(23px, 6.2vw, 34px) !important;
+    padding: 6px 14px 8px 10px !important;
+  }
+}
+
+/* 4. Prize Covers Showcase (Moved Below Standings Table) -> Most Wanted Steel */
+html body #view-blog #champ-prizes-showcase.champ-prizes-section {
+  background-color: #0b0c09 !important;
+  background-image:
+    linear-gradient(180deg, rgba(14, 16, 12, 0.94) 0%, rgba(7, 8, 7, 0.98) 100%),
+    url("../img/top-ranked-industrial-bg.jpg") !important;
+  background-size: cover !important;
+  background-position: center bottom !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border-top: 2px solid rgba(255, 255, 255, 0.34) !important;
+  border-radius: 6px !important;
+  margin-top: 0 !important;
+  margin-bottom: 28px !important;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.85) !important;
+}
+
+html body #view-blog #champ-prizes-showcase.champ-prizes-section::before {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent) !important;
+  opacity: 0.5 !important;
+}
+
+html body #view-blog #champ-prizes-showcase .champ-prizes-tag {
+  font-family: 'Barlow Condensed', sans-serif !important;
+  font-size: 13px !important;
+  letter-spacing: 0.12em !important;
+  color: #d4d8de !important;
+}
+
+html body #view-blog #champ-prizes-showcase .champ-prizes-heading {
+  font-family: 'Anton', 'Barlow Condensed', Impact, sans-serif !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: clamp(24px, 2.8vw, 34px) !important;
+  letter-spacing: 0.04em !important;
+  color: #ffffff !important;
+  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.9) !important;
+}
+
+html body #view-blog #champ-prizes-showcase .champ-prize-card {
+  background: linear-gradient(180deg, rgba(16, 17, 14, 0.92) 0%, rgba(8, 9, 8, 0.98) 100%) !important;
+  border-radius: 6px !important;
+}
+
+/* 5. Top Control Bars in Semana de Challenger & Torneos Posteriores (Preserve Cards) */
+html body #view-blog .nfs-torneo-controls-card {
+  background: linear-gradient(180deg, rgba(16, 17, 14, 0.96) 0%, rgba(8, 9, 8, 0.98) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border-top: 2px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.82) !important;
+}
+
+html body #view-blog .nfs-torneo-controls-card .nfs-sub-heading {
+  font-family: 'Anton', 'Barlow Condensed', Impact, sans-serif !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  font-size: clamp(22px, 2.4vw, 30px) !important;
+}
+
+/* ==========================================================================
+   CROSS-BROWSER, MULTI-RESOLUTION (<=1080p, 1080p, 1440p, 4K),
+   TABLET & MOBILE PORTRAIT APP-STYLE OPTIMIZATION
+   Targets: Chrome, Edge, Firefox, Brave
+   ========================================================================== */
+
+/* 1. Cross-Browser Base & Static Fast-Load Banner Foundations */
+html {
+  background-color: #000000 !important;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.24) #070708;
+}
+
+body {
+  background-color: #000000 !important;
+}
+
+/* Mobile/Tablet: Keep Static Banners Rock-Solid With Zero Video/Tilt Overhead */
+@media (max-width: 1024px) {
+  html body #view-elements .hero-bg-stage {
+    inset: 0 !important;
+    transform: none !important;
+    transition: none !important;
+    will-change: auto !important;
+  }
+
+  html body #view-elements .hero-bg-video,
+  html body #view-leaderboard .leaderboard-page-bg-video {
+    transform: none !important;
+    will-change: auto !important;
+  }
+
+  html body .section-video-banner .section-bg-video,
+  html body #view-leaderboard .banner-video-bg,
+  html body .section-video-banner:hover .section-bg-video,
+  html body .leaderboard-banner-wrapper:hover .banner-video-bg,
+  html body .lb-video-banner:hover .section-bg-video {
+    transform: translate(-50%, -50%) !important;
+    will-change: auto !important;
+  }
+}
+
+/* Smooth Static Fallback / Desktop Video Layering */
+html body #view-elements .hero-bg-video {
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+html body .desktop-banner-video {
+  transition: opacity 0.35s ease !important;
+}
+
+/* Compact, Focused Hero Proportions so Core Elements Fit Cleanly Above the Fold */
+html body #view-elements .uiverse-hero {
+  min-height: clamp(460px, 60vh, 620px) !important;
+  padding: calc(var(--navbar-height, 64px) + 38px) 20px 44px !important;
+}
+
+/* Mobile Vertical App Drawer Override (Takes Precedence Over Legacy Olive Style) */
+html body #mobile-nav-drawer.mobile-nav-drawer {
+  background: linear-gradient(180deg, #0b0c0e 0%, #050507 100%) !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.18) !important;
+  scrollbar-width: thin;
+}
+
+html body #mobile-nav-drawer :is(.mobile-nav-link, .mobile-accordion-trigger) {
+  border-radius: 8px !important;
+  font-family: 'Barlow Condensed', 'Inter', sans-serif !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.05em !important;
+  color: #f1f5f9 !important;
+}
+
+html body #mobile-nav-drawer .mobile-subnav-item {
+  border-radius: 6px !important;
+  font-family: var(--font-sans, 'Plus Jakarta Sans', sans-serif) !important;
+  font-weight: 700 !important;
+}
+
+html body #mobile-nav-drawer :is(.mobile-nav-link.is-active, .mobile-nav-link:hover) {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  border-left: 3px solid #ffffff !important;
+  color: #ffffff !important;
+}
+
+html body #mobile-nav-drawer :is(.mobile-subnav-item.is-active, .mobile-subnav-item.active) {
+  background: #f3f6f9 !important;
+  border-color: #ffffff !important;
+  color: #090a0c !important;
+}
+
+html body #mobile-nav-drawer .mobile-quick-action-btn.submit-btn {
+  background: #f3f6f9 !important;
+  border: 1px solid #ffffff !important;
+  border-radius: 6px !important;
+  color: #090a0c !important;
+  font-family: 'Barlow Condensed', 'Anton', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+}
+
+/* 2. Resolutions < 1920x1080p (Full-Screen Edge-to-Edge Optimization) */
+@media (max-width: 1879px) {
+  html body > .view-section {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-left: none !important;
+    border-right: none !important;
+    box-shadow: none !important;
+    background-color: #070708 !important;
+  }
+
+  html body .uiverse-navbar .navbar-wrap,
+  html body .uiverse-catalog-layout,
+  html body .uiverse-catalog-layout.uiverse-no-sidebar,
+  html body #view-leaderboard .secondary-view-wrap,
+  html body .secondary-view-wrap {
+    max-width: 100% !important;
+  }
+
+  html body .uiverse-catalog-layout.uiverse-no-sidebar > .catalog-main,
+  html body .catalog-main {
+    padding-left: clamp(16px, 2.2vw, 32px) !important;
+    padding-right: clamp(16px, 2.2vw, 32px) !important;
+  }
+}
+
+/* Laptop / Compact Desktop Tune (1181px - 1440px, e.g. 1366x768 & 1440x900) */
+@media (max-width: 1440px) and (min-width: 1181px) {
+  html body .uiverse-navbar :is(.nav-link, .nav-link-glitch).mw-tac-btn.mw-tac-btn--silver:not(#_) {
+    min-height: 36px !important;
+    padding: 5px 10px !important;
+    font-size: 13px !important;
+    margin: 2px !important;
+    gap: 6px !important;
+  }
+}
+
+/* 3. Standard 1920x1080p Monitor (Subtle, Clean Black Side Bands + Full Stage Fit) */
+@media (min-width: 1880px) {
+  html,
+  body {
+    background-color: #000000 !important;
+  }
+
+  html body .uiverse-navbar .navbar-wrap {
+    max-width: 1780px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  html body > .view-section {
+    max-width: 1780px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    min-height: 100vh !important;
+    background-color: #070708 !important;
+    border-left: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
+    box-shadow: 0 0 80px rgba(0, 0, 0, 0.96) !important;
+  }
+
+  html body .uiverse-catalog-layout,
+  html body .uiverse-catalog-layout.uiverse-no-sidebar {
+    max-width: 100% !important;
+  }
+
+  html body #view-leaderboard .secondary-view-wrap,
+  html body #view-spotlight .secondary-view-wrap,
+  html body #view-blacklist .secondary-view-wrap,
+  html body #view-telemetry .secondary-view-wrap,
+  html body .secondary-view-wrap {
+    max-width: min(1680px, 100%) !important;
+  }
+}
+
+/* 4. QHD / 1440p ("1040p") Monitors (2200px - 3099px): Ideal Proportions + Clean Black Bands */
+@media (min-width: 2200px) and (max-width: 3099px) {
+  html {
+    zoom: 1.24;
+  }
+
+  html body .uiverse-navbar .navbar-wrap,
+  html body > .view-section {
+    max-width: 1740px !important;
+  }
+}
+
+/* 5. 4K UHD Monitors (>= 3100px, e.g. 3840x2160): Large Ideal UI + Clean Black Bands */
+@media (min-width: 3100px) {
+  html {
+    zoom: 1.68;
+  }
+
+  html body .uiverse-navbar .navbar-wrap,
+  html body > .view-section {
+    max-width: 1720px !important;
+  }
+}
+
+/* 6. Tablet Responsive Layout (681px - 1199px) */
+@media (max-width: 1199px) and (min-width: 681px) {
+  html body .secondary-view-wrap {
+    padding: calc(var(--navbar-height, 64px) + 22px) 18px 54px !important;
+    max-width: 100% !important;
+  }
+
+  html body #view-challenges .uiverse-catalog-layout.uiverse-no-sidebar > .catalog-main,
+  html body #view-blog .uiverse-catalog-layout.uiverse-no-sidebar > .catalog-main {
+    padding: calc(var(--navbar-height, 64px) + 24px) 18px 54px !important;
+  }
+
+  /* Compact Tablets Banners */
+  html body #view-challenges .section-video-banner.rc-stitch-banner,
+  html body #view-leaderboard .lb-video-banner.rc-stitch-banner {
+    min-height: 148px !important;
+    padding: 18px 22px !important;
+  }
+
+  html body #view-challenges .rc-stitch-banner .rc-banner-right {
+    display: none !important;
+  }
+
+  /* Tablet Classification Tables: Eliminate Forced Horizontal Min-Width Overflow */
+  html body .nfs-table-wrap {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  html body .nfs-table-wrap .nfs-uiverse-table {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  html body .nfs-table-wrap .nfs-uiverse-table :is(th, td) {
+    min-width: 0 !important;
+  }
+
+  html body #view-leaderboard .lb-clean-table th,
+  html body #view-leaderboard .lb-clean-table td {
+    padding: 9px 7px !important;
+  }
+
+  html body #view-leaderboard .lb-clean-table .lb-time-val,
+  html body #view-leaderboard .lb-clean-table .stitch-time-main,
+  html body #view-leaderboard .lb-clean-table .stitch-time-ms {
+    font-size: 18px !important;
+  }
+
+  html body #view-leaderboard .nfs-lb-controls.setup-filters-row {
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+  }
+}
+
+/* Portrait & Narrow Tablets (681px - 920px): Hide secondary hardware cols so tables fit smoothly */
+@media (max-width: 920px) and (min-width: 681px) {
+  html body #view-leaderboard .lb-clean-table :is(th, td):is(:nth-child(6), :nth-child(7)) {
+    display: none !important;
+  }
+
+  html body #view-spotlight #hof-cyber-table :is(th, td):nth-child(6) {
+    display: none !important;
+  }
+}
+
+/* 7. Mobile Portrait App-Style Mode (<= 680px & Portrait Phones <= 767px) */
+@media (max-width: 680px), (max-width: 767px) and (orientation: portrait) {
+  html,
+  body {
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    background-color: #070708 !important;
+  }
+
+  html body .secondary-view-wrap {
+    padding: calc(var(--navbar-height, 58px) + 16px) 10px 84px !important;
+    max-width: 100% !important;
+  }
+
+  html body #view-challenges .uiverse-catalog-layout.uiverse-no-sidebar > .catalog-main,
+  html body #view-blog .uiverse-catalog-layout.uiverse-no-sidebar > .catalog-main,
+  html body #view-elements .uiverse-catalog-layout.uiverse-no-sidebar > .catalog-main {
+    padding: calc(var(--navbar-height, 58px) + 16px) 10px 84px !important;
+  }
+
+  html body #view-elements .uiverse-catalog-layout.uiverse-no-sidebar > .catalog-main {
+    padding-top: 14px !important;
+  }
+
+  /* Compact Static Banners on Mobile (Minimize Details, Frame Carrera GT Cleanly) */
+  html body #view-elements .uiverse-hero {
+    min-height: auto !important;
+    padding: calc(var(--navbar-height, 58px) + 22px) 12px 26px !important;
+  }
+
+  html body #view-elements .hero-bg-video {
+    object-position: 68% 52% !important;
+  }
+
+  html body #view-elements .hero-title {
+    font-size: clamp(24px, 8.2vw, 36px) !important;
+  }
+
+  html body #view-elements .hero-subtitle {
+    font-size: 12px !important;
+    margin-bottom: 16px !important;
+  }
+
+  html body #view-challenges .section-video-banner.rc-stitch-banner,
+  html body #view-leaderboard .lb-video-banner.rc-stitch-banner,
+  html body #view-spotlight .v7-hof-header-wrap,
+  html body #view-blacklist .v7-hof-header-wrap {
+    min-height: 0 !important;
+    padding: 14px 12px !important;
+    margin-bottom: 12px !important;
+    border-radius: 8px !important;
+  }
+
+  html body #view-challenges .rc-stitch-banner .rc-banner-right,
+  html body #view-challenges .category-active-title,
+  html body #view-blacklist .v7-hof-controls-row span {
+    display: none !important;
+  }
+
+  html body #view-challenges #rc-banner-prefix {
+    font-size: 18px !important;
+    padding: 3px 10px !important;
+    margin-bottom: 2px !important;
+  }
+
+  html body #view-challenges #rc-banner-main {
+    font-size: 26px !important;
+    padding: 4px 12px !important;
+    white-space: normal !important;
+  }
+
+  html body #view-leaderboard .lb-video-banner .rc-banner-content-wrap {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+
+  html body #view-leaderboard #lb-hero-route-name {
+    font-size: 24px !important;
+  }
+
+  html body #view-leaderboard .lb-banner-wr-card {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 8px 12px !important;
+  }
+
+  html body #view-leaderboard .lb-banner-wr-holder {
+    display: none !important;
+  }
+
+  /* A. Vertical App Filter Menus Across Every Section */
+  html body #view-challenges .catalog-toolbar,
+  html body #view-challenges .catalog-toolbar .toolbar-left,
+  html body #view-leaderboard .nfs-lb-controls.setup-filters-row,
+  html body #view-leaderboard #lb-modality-tabs,
+  html body #view-spotlight .v7-hof-discipline-nav,
+  html body #view-blacklist .v7-hof-discipline-nav,
+  html body #view-telemetry .pilot-dossier-tabs,
+  html body #view-telemetry #telemetry-type-pills,
+  html body #view-blog .catalog-filter-pills,
+  html body #view-tuning #tuning-filter-bar,
+  html body #view-members #members-filter-bar {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    flex-wrap: nowrap !important;
+    width: 100% !important;
+    gap: 6px !important;
+  }
+
+  html body #view-challenges .toolbar-right,
+  html body #routes-catalog-search {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* Basic Vertical Menu Buttons (No Hanging Drips or Bracket Collisions) */
+  html body #view-challenges :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_),
+  html body #view-leaderboard :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_),
+  html body #view-spotlight :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_),
+  html body #view-blacklist :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_),
+  html body #view-blog :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_),
+  html body #view-telemetry :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_),
+  html body #view-tuning :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_),
+  html body #view-members :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_) {
+    width: 100% !important;
+    min-height: 40px !important;
+    padding: 8px 14px !important;
+    margin: 0 !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
+    gap: 10px !important;
+    border-radius: 6px !important;
+    background-image: none !important;
+    background-color: #141619 !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  html body :is(#view-challenges, #view-leaderboard, #view-spotlight, #view-blacklist, #view-blog, #view-telemetry, #view-tuning, #view-members) :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(::before, ::after) {
+    display: none !important;
+  }
+
+  html body :is(#view-challenges, #view-leaderboard, #view-spotlight, #view-blacklist, #view-blog, #view-telemetry, #view-tuning, #view-members) :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_):is(.is-active, .active) {
+    background-color: #f3f6f9 !important;
+    border-color: #ffffff !important;
+    color: #090a0c !important;
+  }
+
+  html body #view-leaderboard .mw-tac-label--stacked {
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 6px !important;
+  }
+
+  html body :is(button, a).mw-tac-btn.mw-tac-btn--silver:not(#_) :is(.mw-tac-label, .mw-tac-line1, .mw-tac-line2, span:not(.mw-tac-icon-slot)) {
+    font-size: 13.5px !important;
+    line-height: 1.1 !important;
+  }
+
+  html body #view-leaderboard .nfs-lb-controls .btn-back-to-tracks.mw-tac-btn--silver:not(#_) {
+    margin: 2px 0 0 0 !important;
+    min-height: 40px !important;
+    padding: 8px 14px !important;
+  }
+
+  /* B. Convert Route & Section Cards Into Vertical App Lists (Not Boxy Grids) */
+  html body #routes-catalog-grid,
+  html body .elements-grid#routes-catalog-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  html body #routes-catalog-grid .stitch-track-card.nfsmw-tactical-card {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+    min-height: 0 !important;
+    padding: 10px 12px !important;
+    border-radius: 8px !important;
+    background: linear-gradient(90deg, rgba(18, 20, 16, 0.96) 0%, rgba(10, 11, 10, 0.98) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-left: 3px solid #c4c83a !important;
+    box-shadow: none !important;
+  }
+
+  html body #routes-catalog-grid .stitch-track-card.nfsmw-tactical-card:is([data-route-type="Sprint"]) {
+    border-left-color: #e2e8f0 !important;
+  }
+
+  html body #routes-catalog-grid .stitch-track-card.nfsmw-tactical-card:is([data-route-type="Drag"]) {
+    border-left-color: #ffae00 !important;
+  }
+
+  html body #routes-catalog-grid .nfsmw-tactical-card :is(.nfsmw-tac-corners, .nfsmw-tac-header-art, .nfsmw-tac-map-box, .nfsmw-tac-subbar, .nfsmw-tac-driver-badge, .nfsmw-tac-label, .nfsmw-tac-record-label, .nfsmw-tac-helmet-icon) {
+    display: none !important;
+  }
+
+  html body #routes-catalog-grid .stitch-track-card.nfsmw-tactical-card .nfsmw-tac-header {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    width: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: none !important;
+    border: none !important;
+  }
+
+  html body #routes-catalog-grid .stitch-track-card.nfsmw-tactical-card .nfsmw-tac-header-inner {
+    padding: 0 !important;
+    background: none !important;
+    gap: 2px !important;
+  }
+
+  html body #routes-catalog-grid .stitch-track-card.nfsmw-tactical-card .nfsmw-tac-modality-label {
+    font-size: 10px !important;
+    letter-spacing: 0.08em !important;
+  }
+
+  html body #routes-catalog-grid .stitch-track-card.nfsmw-tactical-card h4.nfsmw-tac-title {
+    font-size: 16px !important;
+    max-width: 100% !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  html body #routes-catalog-grid .stitch-track-card.nfsmw-tactical-card .nfsmw-tac-footer {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: none !important;
+    border: none !important;
+    display: flex !important;
+    flex-direction: column-reverse !important;
+    align-items: flex-end !important;
+    text-align: right !important;
+    gap: 2px !important;
+  }
+
+  html body #routes-catalog-grid .stitch-track-card.nfsmw-tactical-card .nfsmw-tac-record-val {
+    font-size: 15.5px !important;
+    color: #fde047 !important;
+  }
+
+  html body #routes-catalog-grid .stitch-track-card.nfsmw-tactical-card .nfsmw-tac-driver-val {
+    font-size: 11px !important;
+    color: #cbd5e1 !important;
+    max-width: 120px !important;
+  }
+
+  /* Home Showcase Cards -> Compact Vertical App List */
+  html body #view-elements .home-showcase-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  html body #view-elements .home-showcase-card {
+    min-height: 0 !important;
+    padding: 12px 14px !important;
+    border-radius: 8px !important;
+    gap: 8px !important;
+  }
+
+  html body #view-elements .home-showcase-card :is(.showcase-img-wrap, .showcase-card-ambient, .showcase-card-glare, .glow-border-top) {
+    display: none !important;
+  }
+
+  html body #view-elements .home-showcase-card .showcase-card-footer {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+  }
+
+  html body #view-elements .home-showcase-card .showcase-item-title {
+    font-size: 15px !important;
+  }
+
+  html body #view-elements .home-showcase-card .showcase-item-sub {
+    font-size: 11.5px !important;
+  }
+
+  /* Champion Prize Posters -> Compact List Rows on Mobile */
+  html body #view-blog #champ-prizes-showcase .champ-prizes-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  html body #view-blog #champ-prizes-showcase .champ-prize-card {
+    flex-direction: row !important;
+    align-items: center !important;
+    padding: 8px 10px !important;
+    gap: 12px !important;
+  }
+
+  html body #view-blog #champ-prizes-showcase .champ-prize-poster-wrap {
+    width: 68px !important;
+    min-width: 68px !important;
+    height: 90px !important;
+    aspect-ratio: auto !important;
+    padding: 0 !important;
+    border-radius: 6px !important;
+  }
+
+  html body #view-blog #champ-prizes-showcase .champ-prize-poster-wrap::after,
+  html body #view-blog #champ-prizes-showcase .champ-prize-badge {
+    display: none !important;
+  }
+
+  html body #view-blog #champ-prizes-showcase .champ-prize-body {
+    padding: 0 !important;
+    gap: 6px !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+
+  /* C. Mobile Classification Tables: 4 Fit Columns Only (Zero Horizontal Scroll) */
+  html body .nfs-table-wrap {
+    overflow-x: hidden !important;
+  }
+
+  html body .nfs-table-wrap .nfs-uiverse-table {
+    min-width: 0 !important;
+    width: 100% !important;
+    table-layout: fixed !important;
+  }
+
+  html body .nfs-table-wrap .nfs-uiverse-table :is(th, td) {
+    min-width: 0 !important;
+  }
+
+  /* Track Leaderboard Table (#view-leaderboard): ONLY 4 Columns = RANK | DRIVER | TIME | VIDEO */
+  html body #view-leaderboard .lb-clean-table :is(th, td):is(:nth-child(4), :nth-child(5), :nth-child(6), :nth-child(7), :nth-child(8)) {
+    display: none !important;
+  }
+
+  html body #view-leaderboard .lb-clean-table th,
+  html body #view-leaderboard .lb-clean-table td {
+    padding: 8px 4px !important;
+  }
+
+  html body #view-leaderboard .lb-clean-table :is(th, td):nth-child(1) {
+    width: 46px !important;
+    text-align: center !important;
+  }
+
+  html body #view-leaderboard .lb-clean-table :is(th, td):nth-child(2) {
+    width: auto !important;
+  }
+
+  html body #view-leaderboard .lb-clean-table :is(th, td):nth-child(3) {
+    width: 94px !important;
+    text-align: right !important;
+  }
+
+  html body #view-leaderboard .lb-clean-table :is(th, td):nth-child(9) {
+    width: 62px !important;
+    text-align: center !important;
+  }
+
+  html body #view-leaderboard .lb-clean-table .lb-mw-th-icon {
+    display: none !important;
+  }
+
+  html body #view-leaderboard .lb-clean-table .lb-mw-th-plate {
+    padding: 4px 5px !important;
+    min-width: 0 !important;
+    justify-content: center !important;
+  }
+
+  html body #view-leaderboard .lb-clean-table .lb-mw-th-label {
+    font-size: 10.5px !important;
+    letter-spacing: 0.04em !important;
+  }
+
+  html body #view-leaderboard .lb-clean-table .lb-user-cell {
+    min-height: 0 !important;
+    padding-left: 0 !important;
+  }
+
+  html body #view-leaderboard .lb-clean-table .lb-user-cell::before {
+    display: none !important;
+  }
+
+  html body #view-leaderboard .lb-clean-table .lb-user-name {
+    font-size: 13.5px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: block !important;
+    max-width: 100% !important;
+  }
+
+  html body #view-leaderboard .lb-clean-table .lb-time-val,
+  html body #view-leaderboard .lb-clean-table .stitch-time-main,
+  html body #view-leaderboard .lb-clean-table .stitch-time-ms {
+    font-size: 16px !important;
+    letter-spacing: 0.02em !important;
+  }
+
+  html body #view-leaderboard .lb-clean-table tbody tr:is(.lb-row-rank-1, .lb-row-rank-2, .lb-row-rank-3) :is(.lb-time-val, .stitch-time-display, .stitch-time-main, .stitch-time-ms) {
+    font-size: 17px !important;
+  }
+
+  html body #view-leaderboard .lb-clean-table .btn-table-video {
+    padding: 5px 8px !important;
+    font-size: 10px !important;
+    min-width: 48px !important;
+  }
+
+  /* Top Ranked Table (#view-spotlight): 4 Clean Mobile Columns (Rank | Driver | FIA Points | Best) */
+  html body #view-spotlight #hof-cyber-table :is(th, td):is(:nth-child(3), :nth-child(6), :nth-child(7)) {
+    display: none !important;
+  }
+
+  html body #view-spotlight #hof-cyber-table :is(th, td):nth-child(1) { width: 46px !important; }
+  html body #view-spotlight #hof-cyber-table :is(th, td):nth-child(4) { width: 88px !important; }
+  html body #view-spotlight #hof-cyber-table :is(th, td):nth-child(5) { width: 64px !important; }
+
+  /* Blacklist & Champion Standing Tables: 4 Clean Mobile Columns (Rank | Piloto | Total Points | Bounty) */
+  html body #view-blacklist #blacklist-cyber-table :is(th, td):is(:nth-child(3), :nth-child(4), :nth-child(5)),
+  html body #view-blog #standings-table-wrapper table :is(th, td):is(:nth-child(3), :nth-child(4), :nth-child(5)) {
+    display: none !important;
+  }
+
+  html body #view-blacklist #blacklist-cyber-table :is(th, td):nth-child(1),
+  html body #view-blog #standings-table-wrapper table :is(th, td):nth-child(1) { width: 46px !important; }
+  html body #view-blacklist #blacklist-cyber-table :is(th, td):nth-child(6),
+  html body #view-blog #standings-table-wrapper table :is(th, td):nth-child(6) { width: 82px !important; }
+  html body #view-blacklist #blacklist-cyber-table :is(th, td):nth-child(7),
+  html body #view-blog #standings-table-wrapper table :is(th, td):nth-child(7) { width: 92px !important; }
+
+  /* Season Live Standings Table (#view-blog): 4 Clean Mobile Columns (Pos | Piloto | PTS | Bounty) */
+  html body #view-blog #torneo-panel-seasons table :is(th, td):is(:nth-child(3), :nth-child(4), :nth-child(5), :nth-child(6), :nth-child(9)) {
+    display: none !important;
+  }
+
+  /* Driver Dossier Table (#view-telemetry): 4 Clean Mobile Columns (Puesto | Carreras | Tiempo | Video) */
+  html body #view-telemetry .nfs-uiverse-table :is(th, td):nth-child(4) {
+    display: none !important;
+  }
+
+  html body #view-telemetry .nfs-uiverse-table :is(th, td):nth-child(1) { width: 46px !important; }
+  html body #view-telemetry .nfs-uiverse-table :is(th, td):nth-child(3) { width: 90px !important; }
+  html body #view-telemetry .nfs-uiverse-table :is(th, td):nth-child(5) { width: 64px !important; text-align: center !important; }
+
+  html body #view-telemetry .pilot-recent-when {
+    display: none !important;
+  }
+
+  /* Members Table (#view-members): 4 Clean Mobile Columns (# | Miembro | Rol | Estado) */
+  html body #view-members .discord-member-table {
+    min-width: 0 !important;
+    width: 100% !important;
+    table-layout: fixed !important;
+  }
+
+  html body #view-members .discord-member-table :is(th, td):is(:nth-child(4), :nth-child(5), :nth-child(6)) {
+    display: none !important;
+  }
+
+  /* Compact Shared Cells on Mobile Tables */
+  html body :is(#view-spotlight, #view-blacklist, #view-blog, #view-telemetry, #view-members) :is(th, td) {
+    padding: 8px 5px !important;
+    font-size: 12px !important;
+  }
+
+  html body :is(#view-spotlight, #view-blacklist, #view-blog) .hof-driver-cell {
+    padding-left: 0 !important;
+    min-height: 0 !important;
+  }
+
+  html body :is(#view-spotlight, #view-blacklist, #view-blog) .hof-driver-cell::before {
+    display: none !important;
+  }
+
+  html body :is(#view-spotlight, #view-blacklist, #view-blog) .hof-driver-name {
+    font-size: 13.5px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+}
 

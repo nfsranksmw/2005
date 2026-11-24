@@ -482,6 +482,9 @@ async function prefetchGlobalLeaderboards() {
         const badge = document.getElementById("home-firebase-status-badge");
         if (badge) badge.textContent = "FIREBASE LIVE ✓";
         syncAllCardsWithFirebaseCache();
+        if (typeof window.updateRoutesBannerStats === "function") {
+          window.updateRoutesBannerStats();
+        }
         if (typeof window.renderHallOfFameView === "function") {
           window.renderHallOfFameView();
         }
@@ -643,13 +646,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Mobile drawer accordions toggle
+  // Mobile drawer accordions toggle (clean single-open vertical app accordion)
   document.querySelectorAll(".mobile-accordion-trigger").forEach((trigger) => {
     trigger.addEventListener("click", (e) => {
       e.stopPropagation();
       const parentAcc = trigger.closest(".mobile-nav-accordion");
       if (parentAcc) {
         const isOpen = parentAcc.classList.contains("is-open");
+        document.querySelectorAll("#mobile-nav-drawer .mobile-nav-accordion.is-open").forEach((otherAcc) => {
+          if (otherAcc !== parentAcc) {
+            otherAcc.classList.remove("is-open");
+            const otherTrigger = otherAcc.querySelector(".mobile-accordion-trigger");
+            if (otherTrigger) otherTrigger.setAttribute("aria-expanded", "false");
+          }
+        });
         parentAcc.classList.toggle("is-open", !isOpen);
         trigger.setAttribute("aria-expanded", String(!isOpen));
       }
@@ -1649,9 +1659,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
           <div class="nfsmw-tac-header-inner">
             <div class="nfsmw-tac-modality-row">
-              <svg class="nfsmw-tac-helmet-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <circle cx="12" cy="8" r="4.5"></circle>
-                <path d="M5 19c0-3.5 3.1-6 7-6s7 2.5 7 6v1H5v-1z"></path>
+              <svg class="nfsmw-tac-helmet-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <!-- Racing Helmet with Dark Visor Cutout -->
+                <path fill="currentColor" d="M12 2.2c-3.6 0-6.2 2.5-6.2 6.1 0 2.5 1.4 4.5 3.6 5.2h5.2c2.2-.7 3.6-2.7 3.6-5.2 0-3.6-2.6-6.1-6.2-6.1zm0 8.5c-2.1 0-3.8-.7-4.1-2.5h8.2c-.3 1.8-2 2.5-4.1 2.5z"/>
+                <!-- Racing Suit Shoulders with Chest Tag -->
+                <path fill="currentColor" d="M8.5 14.5h7c2.3 0 4.2 1.7 4.5 4v2.3c0 .6-.4 1-1 1H5c-.6 0-1-.4-1-1v-2.3c.3-2.3 2.2-4 4.5-4zm5 2.4v1.6h3.2v-1.6h-3.2z"/>
               </svg>
               <span class="nfsmw-tac-modality-label">${escapeHtml(typeUpper)}</span>
             </div>
@@ -1852,10 +1864,73 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Interactive Cursor-Reactive Vehicle Loop on Home Hero Banner
+  // Desktop Moving Video Banners vs Mobile Static Image Optimization
   const nfsHeroBanner = document.getElementById("nfs-hero-banner");
+  const desktopBannerMql = window.matchMedia("(min-width: 1025px)");
+  const isMobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent || "");
+
+  function isDesktopVideoEnabled() {
+    return desktopBannerMql.matches && !isMobileUserAgent;
+  }
+
+  function syncResponsiveBannerMedia() {
+    const enableVideo = isDesktopVideoEnabled();
+    document.querySelectorAll("img[data-desktop-video-src]").forEach((fallbackImg) => {
+      const parent = fallbackImg.parentElement;
+      if (!parent) return;
+      const existingVideo = parent.querySelector("video.desktop-banner-video");
+      if (enableVideo) {
+        if (!existingVideo) {
+          const videoEl = document.createElement("video");
+          videoEl.className = `${fallbackImg.className} desktop-banner-video`;
+          videoEl.src = fallbackImg.dataset.desktopVideoSrc;
+          videoEl.autoplay = true;
+          videoEl.loop = true;
+          videoEl.muted = true;
+          videoEl.playsInline = true;
+          videoEl.setAttribute("muted", "");
+          videoEl.setAttribute("playsinline", "");
+          videoEl.preload = "auto";
+          videoEl.style.opacity = "0";
+          const revealVideo = () => {
+            videoEl.style.opacity = "";
+            fallbackImg.style.display = "none";
+          };
+          videoEl.addEventListener("loadeddata", revealVideo, { once: true });
+          parent.insertBefore(videoEl, fallbackImg.nextSibling);
+          const playPromise = videoEl.play();
+          if (playPromise && typeof playPromise.catch === "function") {
+            playPromise.catch(() => {});
+          }
+        }
+      } else {
+        if (existingVideo) {
+          existingVideo.pause();
+          existingVideo.removeAttribute("src");
+          existingVideo.load();
+          existingVideo.remove();
+        }
+        fallbackImg.style.display = "";
+        fallbackImg.style.opacity = "";
+      }
+    });
+
+    if (!enableVideo && nfsHeroBanner) {
+      nfsHeroBanner.style.setProperty("--hero-pan-x", "0px");
+      nfsHeroBanner.style.setProperty("--hero-pan-y", "0px");
+      nfsHeroBanner.style.setProperty("--hero-tilt-x", "0deg");
+      nfsHeroBanner.style.setProperty("--hero-tilt-y", "0deg");
+    }
+  }
+
+  syncResponsiveBannerMedia();
+  if (typeof desktopBannerMql.addEventListener === "function") {
+    desktopBannerMql.addEventListener("change", syncResponsiveBannerMedia);
+  }
+
   if (nfsHeroBanner) {
     nfsHeroBanner.addEventListener("mousemove", (e) => {
+      if (!isDesktopVideoEnabled()) return;
       const rect = nfsHeroBanner.getBoundingClientRect();
       const normX = (e.clientX - rect.left) / rect.width - 0.5;
       const normY = (e.clientY - rect.top) / rect.height - 0.5;
@@ -1925,24 +2000,60 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function updateRoutesBannerStats(cat) {
+    const targetCat = cat || routesViewState.cat || "all";
+    const routesEl = document.getElementById("rc-metric-routes-val");
+    const pilotsEl = document.getElementById("rc-metric-pilots-val");
+    const matchingRoutes = targetCat === "all"
+      ? allRoutes
+      : allRoutes.filter((r) => String(r.type || "").toLowerCase() === String(targetCat).toLowerCase());
+
+    if (routesEl) {
+      routesEl.textContent = String(matchingRoutes.length);
+    }
+
+    if (pilotsEl) {
+      const uniqueDrivers = new Set();
+      matchingRoutes.forEach((route) => {
+        const rKey = sanitizeFirebaseKey(route.name);
+        const fbData = window.NFS_GLOBAL_LEADERBOARDS_CACHE ? window.NFS_GLOBAL_LEADERBOARDS_CACHE[rKey] : null;
+        const cats = route.type === "Circuito"
+          ? ["junkman_single", "junkman_fast", "bmw_single", "bmw_fast", "stock_series"]
+          : ["junkman", "bmw", "stock_series"];
+        cats.forEach((catKey) => {
+          const recs = extractCategoryRecords(fbData, catKey, route);
+          recs.forEach((rec) => {
+            if (rec && rec.driver && String(rec.driver).trim() !== "") {
+              uniqueDrivers.add(String(rec.driver).trim().toLowerCase());
+            }
+          });
+        });
+      });
+      pilotsEl.textContent = String(uniqueDrivers.size);
+    }
+  }
+  window.updateRoutesBannerStats = updateRoutesBannerStats;
+
   renderRoutesCatalog();
+  updateRoutesBannerStats("all");
 
   function updateRoutesBannerTitle(cat) {
     const prefixEl = document.getElementById("rc-banner-prefix");
     const mainEl = document.getElementById("rc-banner-main");
+    updateRoutesBannerStats(cat);
     if (!prefixEl || !mainEl) return;
     if (cat === "Circuito") {
-      prefixEl.textContent = "TABLA DE CLASIFICACIÓN • 29 PISTAS";
-      mainEl.textContent = "CIRCUITO LEADERBOARDS";
+      prefixEl.textContent = "ROUTERS";
+      mainEl.textContent = "CIRCUIT LEADERBOARDS";
     } else if (cat === "Sprint") {
-      prefixEl.textContent = "TABLA DE CLASIFICACIÓN • 46 PISTAS";
+      prefixEl.textContent = "ROUTERS";
       mainEl.textContent = "SPRINT LEADERBOARDS";
     } else if (cat === "Drag") {
-      prefixEl.textContent = "TABLA DE CLASIFICACIÓN • 11 PISTAS";
+      prefixEl.textContent = "ROUTERS";
       mainEl.textContent = "DRAG LEADERBOARDS";
     } else {
-      prefixEl.textContent = "RUTAS, CIRCUITOS &";
-      mainEl.textContent = "WORLD RECORDS";
+      prefixEl.textContent = "ROUTERS";
+      mainEl.textContent = "LEADERBOARDS";
     }
   }
 
@@ -1984,16 +2095,38 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Render Modality Tabs depending on Circuito vs Sprint/Drag
+  // Render Modality Tabs depending on Circuito vs Sprint/Drag (White-Metallic Tactical Plates)
   function renderModalityTabsForRoute(route) {
     if (!lbModalityTabsContainer) return;
+
+    // Reference-exact Leaderboard Session SVG icons (Junkman Single/Fast + BMW M3 GTR Single/Fast)
+    const iconHelmetSingle = `<svg class="mw-icon-default" viewBox="0 0 32 28">
+      <path fill="currentColor" d="M13.8 3.5C8.3 3.5 4 7.7 4 13.1c0 4.3 2.7 7.9 6.8 9.2l4.5 1.1v-4.2l-2.6-.6c-1.1-.3-1.8-1.1-1.8-2.2 0-1.1.9-2 2-2h6.8c.9 0 1.7-.4 2.1-1.1.1-.5.2-1 .2-1.5 0-4.6-3.6-8.3-8.2-8.3zm2.3 8.1h4.2c.2.5.3 1.1.3 1.7h-4.5c-.6 0-1.1-.4-1.1-1s.5-.7 1.1-.7z"/>
+      <path fill="currentColor" d="M23.2 14.5h2.6v9.8h-2.5v-7.3l-1.8 1.1v-2.1l1.7-1.5z"/>
+    </svg>`;
+
+    const iconHelmetFlame = `<svg class="mw-icon-default" viewBox="0 0 32 28">
+      <path fill="currentColor" d="M18.8 5.2c-4.5 0-8.1 3.4-8.1 7.8 0 3.7 2.4 6.8 6 7.9l6.3 1.4c1.1.2 2.1-.6 2.1-1.7v-2.7c0-.8-.5-1.5-1.3-1.7l-3.7-.8c-.8-.2-1.3-.8-1.3-1.6 0-.8.7-1.5 1.5-1.5h4.8c-.4-4-3.6-7.1-7.3-7.1zm1.8 6.4h3.5c.2.5.2 1 .2 1.6h-3.7c-.5 0-.9-.4-.9-.8s.4-.8.9-.8z"/>
+      <path fill="currentColor" d="M1.5 9.2c2.8-.6 5.2-.1 7.3.8-.7 1-1.1 2-1.3 3.1-2.1-.6-4.1-.4-6.2.4 1.2-1.2 1.8-2.1 2.2-2.8-1.1-.2-1.6-.7-2-1.5zm1.2 5.4c2.1-.3 3.7 0 5 .7.3 1 .8 1.9 1.4 2.7-2.2-.2-4.2.2-6 .9 1.1-1.2 1.6-2 1.7-2.8-.9-.2-1.6-.7-2.1-1.5z"/>
+    </svg>`;
+
+    const iconBmwSingle = `<svg class="mw-icon-default" viewBox="0 0 34 28">
+      <path fill="currentColor" d="M7.2 6.8l2-3.4c.5-.8 1.4-1.3 2.4-1.3h8.8c1 0 1.9.5 2.4 1.3l2 3.4c1.5.5 2.5 1.8 2.5 3.4v4.4c0 .7-.5 1.2-1.2 1.2h-1.6v1.6c0 .7-.6 1.2-1.3 1.2h-2.1c-.7 0-1.2-.5-1.2-1.2v-1.6H12.1v1.6c0 .7-.5 1.2-1.2 1.2H8.8c-.7 0-1.3-.5-1.3-1.2v-1.6H5.9c-.7 0-1.2-.5-1.2-1.2v-4.4c0-1.6 1-2.9 2.5-3.4zm3.2-2.7l-1.5 2.5h14.2l-1.5-2.5H10.4zm-2.3 5.2c-.8 0-1.4.6-1.4 1.3s.6 1.3 1.4 1.3h2.6c.4 0 .7-.3.7-.7v-1.2c0-.4-.3-.7-.7-.7H8.1zm13.2 0c-.4 0-.7.3-.7.7v1.2c0 .4.3.7.7.7h2.6c.8 0 1.4-.6 1.4-1.3s-.6-1.3-1.4-1.3h-2.6zm-6.8.3h2.1v2h-2.1v-2zm2.9 0h2.1v2h-2.1v-2z"/>
+      <path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" d="M22.5 19.6a3.9 3.9 0 1 1 5.8 3.2m-1.4 1.2a3.9 3.9 0 0 1-5.6-2.4"/>
+      <path fill="currentColor" d="M29.6 20.4l-2.8 1.2.8 2.9 2-4.1zm-8.6 3.5l2.8-1.2-.8-2.9-2 4.1z"/>
+    </svg>`;
+
+    const iconBmwFast = `<svg class="mw-icon-default" viewBox="0 0 36 28">
+      <path fill="currentColor" d="M1.5 9.2h6.8v1.8H1.5V9.2zm1.8 3.6h5.5v1.8H3.3v-1.8zm-2 3.6h6.8v1.8H1.3v-1.8z"/>
+      <path fill="currentColor" d="M12.4 7.8l2-3.4c.5-.8 1.4-1.3 2.4-1.3h8.8c1 0 1.9.5 2.4 1.3l2 3.4c1.5.5 2.5 1.8 2.5 3.4v4.6c0 .7-.5 1.2-1.2 1.2h-1.6v1.7c0 .7-.6 1.2-1.3 1.2h-2.1c-.7 0-1.2-.5-1.2-1.2V17H17.3v1.7c0 .7-.5 1.2-1.2 1.2H14c-.7 0-1.3-.5-1.3-1.2V17h-1.6c-.7 0-1.2-.5-1.2-1.2v-4.6c0-1.6 1-2.9 2.5-3.4zm3.2-2.7l-1.5 2.5h14.2l-1.5-2.5H15.6zm-2.3 5.2c-.8 0-1.4.6-1.4 1.3s.6 1.3 1.4 1.3h2.6c.4 0 .7-.3.7-.7V11c0-.4-.3-.7-.7-.7h-2.6zm13.2 0c-.4 0-.7.3-.7.7v1.2c0 .4.3.7.7.7h2.6c.8 0 1.4-.6 1.4-1.3s-.6-1.3-1.4-1.3h-2.6zm-6.8.3h2.1v2h-2.1v-2zm2.9 0h2.1v2h-2.1v-2z"/>
+    </svg>`;
+
     if (route.type === "Circuito") {
       const tabs = [
-        { id: "junkman_single", label: "Junkman (Single Lap)" },
-        { id: "junkman_fast", label: "Junkman (Fast Lap)" },
-        { id: "bmw_single", label: "BMW M3 GTR (Single Lap)" },
-        { id: "bmw_fast", label: "BMW M3 GTR (Fast Lap)" },
-        { id: "stock_series", label: "Stock / De Serie" }
+        { id: "junkman_single", line1: "JUNKMAN", line2: "SINGLE LAP", label: "Junkman Single Lap", icon: iconHelmetSingle },
+        { id: "junkman_fast", line1: "JUNKMAN", line2: "FAST LAP", label: "Junkman Fast Lap", icon: iconHelmetFlame },
+        { id: "bmw_single", line1: "BMW M3 GTR", line2: "SINGLE LAP", label: "BMW M3 GTR Single Lap", icon: iconBmwSingle },
+        { id: "bmw_fast", line1: "BMW M3 GTR", line2: "FAST LAP", label: "BMW M3 GTR Fast Lap", icon: iconBmwFast }
       ];
       if (!tabs.some((t) => t.id === activeLeaderboardState.tab)) {
         activeLeaderboardState.tab = "junkman_single";
@@ -2001,19 +2134,20 @@ document.addEventListener("DOMContentLoaded", () => {
       lbModalityTabsContainer.innerHTML = tabs
         .map(
           (t) =>
-            `<button type="button" class="filter-pill-btn glitch-nfs-btn glitch-pill-btn ${activeLeaderboardState.tab === t.id ? "is-active active" : ""}" data-lb-tab="${t.id}" data-text="${escapeHtml(t.label)}">
-              <span>${escapeHtml(t.label)}</span>
-              <svg class="btn-hover-arrow" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"></path>
-              </svg>
+            `<button type="button" class="filter-pill-btn mw-tac-btn mw-tac-btn--silver mw-tac-btn--session ${activeLeaderboardState.tab === t.id ? "is-active active" : ""}" data-lb-tab="${t.id}" data-text="${escapeHtml(t.label)}">
+              <span class="mw-tac-icon-slot" aria-hidden="true">${t.icon}</span>
+              <span class="mw-tac-label mw-tac-label--stacked">
+                <span class="mw-tac-line1">${escapeHtml(t.line1)}</span>
+                <span class="mw-tac-line2">${escapeHtml(t.line2)}</span>
+              </span>
             </button>`
         )
         .join("");
     } else {
+      const routeTypeUpper = String(route.type || "SPRINT").toUpperCase();
       const tabs = [
-        { id: "junkman", label: `${route.type} Junkman` },
-        { id: "bmw", label: `${route.type} BMW M3 GTR` },
-        { id: "stock_series", label: `${route.type} Stock / De Serie` }
+        { id: "junkman", line1: "JUNKMAN", line2: routeTypeUpper, label: `${route.type} Junkman`, icon: iconHelmetFlame },
+        { id: "bmw", line1: "BMW M3 GTR", line2: routeTypeUpper, label: `${route.type} BMW M3 GTR`, icon: iconBmwFast }
       ];
       if (!tabs.some((t) => t.id === activeLeaderboardState.tab)) {
         activeLeaderboardState.tab = "junkman";
@@ -2021,11 +2155,12 @@ document.addEventListener("DOMContentLoaded", () => {
       lbModalityTabsContainer.innerHTML = tabs
         .map(
           (t) =>
-            `<button type="button" class="filter-pill-btn glitch-nfs-btn glitch-pill-btn ${activeLeaderboardState.tab === t.id ? "is-active active" : ""}" data-lb-tab="${t.id}" data-text="${escapeHtml(t.label)}">
-              <span>${escapeHtml(t.label)}</span>
-              <svg class="btn-hover-arrow" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"></path>
-              </svg>
+            `<button type="button" class="filter-pill-btn mw-tac-btn mw-tac-btn--silver mw-tac-btn--session ${activeLeaderboardState.tab === t.id ? "is-active active" : ""}" data-lb-tab="${t.id}" data-text="${escapeHtml(t.label)}">
+              <span class="mw-tac-icon-slot" aria-hidden="true">${t.icon}</span>
+              <span class="mw-tac-label mw-tac-label--stacked">
+                <span class="mw-tac-line1">${escapeHtml(t.line1)}</span>
+                <span class="mw-tac-line2">${escapeHtml(t.line2)}</span>
+              </span>
             </button>`
         )
         .join("");
@@ -2233,7 +2368,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const titleMarkup = `
-      <span class="rc-title-line-white lb-title-prefix">LEADERBOARD • ${modalityWord}</span>
+      <span class="rc-title-line-white lb-title-prefix">BLACKLIST LEADERBOARD - ${modalityWord}</span>
       <span class="rc-title-line-gradient lb-title-line-gradient">
         <span class="lb-title-route-name">${routeNameUpper}</span>
       </span>
@@ -2577,16 +2712,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const headingEl = document.getElementById("hof-main-heading");
     const subHeadingEl = document.getElementById("hof-main-subheading");
     if (headingEl) {
-      if (discipline === "Circuito") headingEl.textContent = "TOP CIRCUITO • 29 PISTAS HOMOLOGADAS";
-      else if (discipline === "Sprint") headingEl.textContent = "TOP SPRINT • 46 TRAZADOS PUNTO A PUNTO";
-      else if (discipline === "Drag") headingEl.textContent = "TOP DRAG • 11 PISTAS DE ACELERACIÓN";
-      else headingEl.textContent = "ROCKPORT ALL-TIME TOP RANKED";
+      if (discipline === "Circuito") headingEl.textContent = "BLACKLIST LEADERBOARDS TOP CIRCUIT";
+      else if (discipline === "Sprint") headingEl.textContent = "BLACKLIST LEADERBOARDS TOP SPRINT";
+      else if (discipline === "Drag") headingEl.textContent = "BLACKLIST LEADERBOARDS TOP DRAG";
+      else headingEl.textContent = "BLACKLIST LEADERBOARDS GLOBAL RANKED";
     }
     if (subHeadingEl) {
-      if (discipline === "Circuito") subHeadingEl.textContent = "Líderes de vuelta rápida y tiempos totales en los 29 circuitos cerrados de Rockport City validados a 128Hz.";
-      else if (discipline === "Sprint") subHeadingEl.textContent = "Maestría y velocidad punta en las 46 rutas Sprint de punto a punto en Rockport.";
-      else if (discipline === "Drag") subHeadingEl.textContent = "Clasificación élite en las 11 pistas de aceleración pura, tracción y cambios perfectos.";
-      else subHeadingEl.textContent = "Clasificación consolidada de pilotos por victorias WR (P1), podios (P2/P3), mejor puesto y puntos FIA en Rockport.";
+      subHeadingEl.textContent = "";
+      subHeadingEl.style.display = "none";
     }
 
     // Populate Vehicle Dropdown
@@ -4957,8 +5090,8 @@ document.addEventListener("DOMContentLoaded", () => {
           const icon = groupIcons[gIdx % groupIcons.length];
           const label = `${icon} ${grp.name.toUpperCase()}`;
           return `
-            <button type="button" class="filter-pill-btn glitch-nfs-btn ${isActive ? "is-active" : ""}" data-champ-group-tab="${gIdx}" data-text="${escapeHtml(label)}">
-              <span>${icon} ${escapeHtml(grp.name.toUpperCase())}</span>
+            <button type="button" class="filter-pill-btn mw-tac-btn mw-tac-btn--silver ${isActive ? "is-active" : ""}" data-champ-group-tab="${gIdx}" data-text="${escapeHtml(label)}">
+              <span class="mw-tac-label">${icon} ${escapeHtml(grp.name.toUpperCase())}</span>
             </button>
           `;
         })
@@ -6024,8 +6157,8 @@ document.addEventListener("DOMContentLoaded", () => {
             </p>
           </div>
           <div style="flex-shrink: 0;">
-            <a href="${escapeHtml(t.challongeUrl)}" target="_blank" rel="noopener noreferrer" class="filter-pill-btn glitch-nfs-btn is-active" data-text="Ver Bracket en Challonge ↗" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none;">
-              <span>Ver Bracket en Challonge ↗</span>
+            <a href="${escapeHtml(t.challongeUrl)}" target="_blank" rel="noopener noreferrer" class="filter-pill-btn mw-tac-btn mw-tac-btn--silver is-active" data-text="Ver Bracket en Challonge ↗" style="text-decoration: none;">
+              <span class="mw-tac-label">Ver Bracket en Challonge ↗</span>
             </a>
           </div>
         </div>
@@ -6243,8 +6376,8 @@ document.addEventListener("DOMContentLoaded", () => {
       quickPilotsContainer.innerHTML = topPilots
         .map(
           (p) => `
-          <button type="button" class="filter-pill-btn glitch-nfs-btn ${p.name === activePilot.name ? "is-active" : ""}" data-select-pilot="${escapeHtml(p.name)}" data-text="${escapeHtml(p.name + " (" + p.wrs + " WRs)")}">
-            <span>${escapeHtml(p.name)} (${p.wrs} WRs)</span>
+          <button type="button" class="filter-pill-btn mw-tac-btn mw-tac-btn--silver ${p.name === activePilot.name ? "is-active" : ""}" data-select-pilot="${escapeHtml(p.name)}" data-text="${escapeHtml(p.name + " (" + p.wrs + " WRs)")}">
+            <span class="mw-tac-label">${escapeHtml(p.name)} (${p.wrs} WRs)</span>
           </button>
         `
         )
@@ -6292,11 +6425,31 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
           </div>
 
-          <!-- Navigation Tabs Strip -->
+          <!-- Navigation Tabs Strip (White-Metallic Tactical Filter Style) -->
           <div class="pilot-dossier-tabs">
-            <button type="button" class="pilot-dossier-tab is-active">RESUMEN</button>
-            <button type="button" class="pilot-dossier-tab" onclick="document.getElementById('telemetry-records-tbody')?.scrollIntoView({behavior:'smooth'})">CARRERAS (${totalRaces})</button>
-            <button type="button" class="pilot-dossier-tab" onclick="switchView('view-leaderboard')">LEADERBOARD</button>
+            <button type="button" class="pilot-dossier-tab mw-tac-btn mw-tac-btn--silver is-active" data-text="RESUMEN" onclick="this.parentElement.querySelectorAll('.pilot-dossier-tab').forEach(b=>b.classList.remove('is-active'));this.classList.add('is-active');document.getElementById('telemetry-pilot-cockpit')?.scrollIntoView({behavior:'smooth'})">
+              <span class="mw-tac-icon-slot" aria-hidden="true">
+                <svg class="mw-icon-default" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+              </span>
+              <span class="mw-tac-label">RESUMEN</span>
+            </button>
+            <button type="button" class="pilot-dossier-tab mw-tac-btn mw-tac-btn--silver" data-text="CARRERAS (${totalRaces})" onclick="this.parentElement.querySelectorAll('.pilot-dossier-tab').forEach(b=>b.classList.remove('is-active'));this.classList.add('is-active');document.getElementById('telemetry-records-tbody')?.scrollIntoView({behavior:'smooth'})">
+              <span class="mw-tac-icon-slot" aria-hidden="true">
+                <svg class="mw-icon-default" viewBox="0 0 28 24">
+                  <path fill="currentColor" d="M13.5 2h5.5v2h-5.5V2zm2.75 3.8c-4.1 0-7.45 3.35-7.45 7.45s3.35 7.45 7.45 7.45 7.45-3.35 7.45-7.45-3.35-7.45-7.45-7.45zm0 12.8c-2.95 0-5.35-2.4-5.35-5.35s2.4-5.35 5.35-5.35 5.35 2.4 5.35 5.35-2.4 5.35-5.35 5.35zm1-8.5h-2v3.8l2.8 2.2 1.25-1.5-2.05-1.6V10.1zM2 9.5h5v1.9H2V9.5zm1.8 3.4h3.6v1.9H3.8v-1.9zM1 16.3h5.4v1.9H1v-1.9z"/>
+                </svg>
+              </span>
+              <span class="mw-tac-label">CARRERAS (${totalRaces})</span>
+            </button>
+            <button type="button" class="pilot-dossier-tab mw-tac-btn mw-tac-btn--silver" data-text="LEADERBOARD" onclick="switchView('view-leaderboard')">
+              <span class="mw-tac-icon-slot" aria-hidden="true">
+                <svg class="mw-icon-default" viewBox="0 0 28 24">
+                  <path fill="currentColor" d="M3.2 4.2l1.6-1 8.8 14.5-1.6 1L3.2 4.2zm21.6 0l-1.6-1-8.8 14.5 1.6 1 8.8-14.5z"/>
+                  <path fill="currentColor" d="M5.4 5.4l6.2-2.2 2.4 5.8-6.2 2.2-2.4-5.8zm2.1 1l.9 2.1 2.2-.8-.9-2.1-2.2.8zm15.1-1l-6.2-2.2-2.4 5.8 6.2 2.2 2.4-5.8zm-2.1 1l-.9 2.1-2.2-.8.9-2.1 2.2.8z"/>
+                </svg>
+              </span>
+              <span class="mw-tac-label">LEADERBOARD</span>
+            </button>
           </div>
 
           <!-- 5-Column Stats Strip -->
@@ -6322,16 +6475,6 @@ document.addEventListener("DOMContentLoaded", () => {
               <div class="pilot-stat-value pilot-stat-car">${escapeHtml(topCarName)}</div>
               <div class="pilot-stat-sub">${topCarCount} carreras</div>
             </div>
-          </div>
-
-          <!-- Sobre el piloto / Resumen técnico -->
-          <div class="pilot-dossier-about">
-            <h3 class="pilot-about-title">Sobre el piloto</h3>
-            <ul class="pilot-about-list">
-              <li>- Piloto oficial homologado en <strong>Rockport City 128Hz</strong> (${escapeHtml(activePilot.country)})</li>
-              <li>- Podios acumulados: <strong>${activePilot.totalPodiums}</strong> (🥇 ${activePilot.wrs} WRs &bull; 🥈 ${activePilot.silver} P2 &bull; 🥉 ${activePilot.bronze} P3)</li>
-              <li>- Desglose por disciplina: <strong>${activePilot.byType.Circuito}</strong> Circuito &bull; <strong>${activePilot.byType.Sprint}</strong> Sprint &bull; <strong>${activePilot.byType.Drag}</strong> Drag</li>
-            </ul>
           </div>
         </div>
       `;
@@ -6376,12 +6519,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     tbody.innerHTML = filtered
       .map((rec) => {
-        const posColor = rec.rank === 1 ? "#fbbf24" : rec.rank === 2 ? "#e2e8f0" : rec.rank === 3 ? "#fb923c" : "#cbd5e1";
+        const rankClass = rec.rank === 1 ? "pilot-rank-1" : rec.rank === 2 ? "pilot-rank-2" : rec.rank === 3 ? "pilot-rank-3" : "pilot-rank-rest";
+        const posColor = rec.rank === 1 ? "#ffd700" : rec.rank === 2 ? "#e5ebf3" : rec.rank === 3 ? "#e08a42" : "#ffffff";
         const typeIcon = rec.type === "Circuito" ? "↻" : rec.type === "Drag" ? "⚡" : "⚑";
         const hasVid = rec.videoUrl && rec.videoUrl !== "#" && String(rec.videoUrl).startsWith("http");
 
         return `
-          <tr class="pilot-recent-row" data-open-route-lb="${escapeHtml(rec.route)}" style="cursor: pointer;">
+          <tr class="pilot-recent-row ${rankClass}" data-open-route-lb="${escapeHtml(rec.route)}" style="cursor: pointer;">
             <td>
               <span class="pilot-recent-pos" style="color: ${posColor};">${rec.rank}.°</span>
             </td>
@@ -6389,11 +6533,11 @@ document.addEventListener("DOMContentLoaded", () => {
               <div class="pilot-recent-route-title" data-open-route-lb="${escapeHtml(rec.route)}">${escapeHtml(rec.route)}</div>
               <div class="pilot-recent-route-sub">${typeIcon} ${escapeHtml(rec.type)}, ${escapeHtml(rec.category)}</div>
             </td>
+            <td style="text-align: right;">
+              <span class="pilot-recent-time ${rec.rank === 1 ? 'is-wr' : ''}" style="color: ${posColor};">${escapeHtml(rec.time)}</span>
+            </td>
             <td>
               <div class="pilot-recent-car">${escapeHtml(rec.car || "-")}</div>
-            </td>
-            <td style="text-align: right;">
-              <span class="pilot-recent-time ${rec.rank === 1 ? 'is-wr' : ''}">${escapeHtml(rec.time)}</span>
             </td>
             <td style="text-align: right;" onclick="event.stopPropagation();">
               <div style="display: inline-flex; align-items: center; gap: 10px; justify-content: flex-end;">
