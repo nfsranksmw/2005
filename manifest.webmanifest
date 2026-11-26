@@ -1,0 +1,55 @@
+{
+  "id": "./",
+  "name": "NFSMW Ranks — Rockport World Records",
+  "short_name": "NFSMW Ranks",
+  "description": "Récords Mundiales oficiales, Leaderboards, Telemetría 128Hz y Torneos Blacklist de Need for Speed: Most Wanted.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "background_color": "#070708",
+  "theme_color": "#070708",
+  "orientation": "any",
+  "lang": "es",
+  "categories": ["games", "sports", "entertainment"],
+  "icons": [
+    {
+      "src": "assets/img/pwa-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/img/pwa-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/img/pwa-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "86 Rutas & Leaderboards",
+      "short_name": "Rutas",
+      "url": "./#view-challenges",
+      "icons": [{ "src": "assets/img/pwa-icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Top Ranked",
+      "short_name": "Top Ranked",
+      "url": "./#view-spotlight",
+      "icons": [{ "src": "assets/img/pwa-icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Driver Dossier",
+      "short_name": "Driver",
+      "url": "./#view-telemetry",
+      "icons": [{ "src": "assets/img/pwa-icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    }
+  ]
+}

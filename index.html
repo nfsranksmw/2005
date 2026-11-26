@@ -2,12 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Need for Speed Most Wanted - Rockport World Records</title>
-  <!-- High-Definition Browser Favicon (White NFS letters on red badge) -->
+  <!-- Progressive Web App (PWA) Support for Mobile & Desktop -->
+  <meta name="theme-color" content="#070708" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="NFSMW Ranks" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <!-- High-Definition Browser Favicon & App Icons -->
   <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/img/pwa-icon-192.png" />
   <link rel="shortcut icon" href="assets/img/favicon.svg" />
-  <link rel="apple-touch-icon" href="assets/img/favicon.svg" />
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png" />
   <!-- Google Fonts: Outfit, Chakra Petch, Montserrat, Chivo, Rajdhani, Plus Jakarta Sans, Inter & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -56,7 +64,10 @@
       <div class="navbar-left">
         <a href="#view-elements" class="uiverse-logo" data-view-target="view-elements" aria-label="NFS Most Wanted Ranks Home">
           <img src="assets/img/logonfsmwranks-svg.svg" alt="NFS Most Wanted Ranks Logo" class="brand-logo-img" />
-          <span class="brand-logo-text">NFSMW RANKS</span>
+          <span class="brand-logo-stack">
+            <span class="brand-logo-text">NFSMW RANKS</span>
+            <span class="brand-logo-sub">ROCKPORT OFFICIAL TELEMETRY &amp; WORLD RECORDS</span>
+          </span>
         </a>
 
         <nav aria-label="Main Navigation">
@@ -69,11 +80,11 @@
               </a>
             </li>
 
-            <!-- 2. NEED FOR SPEED ONLINE (Dropdown: Most Wanted, Carbon, Underground 2) -->
+            <!-- 2. NFS ONLINE (Dropdown: Most Wanted, Carbon, Underground 2) -->
             <li class="nav-item has-megamenu" id="nav-item-nfs-online">
-              <button type="button" class="nav-link nav-link-glitch" id="btn-nfs-online-trigger" data-view-target="view-nfsmwo" data-text="NEED FOR SPEED ONLINE" aria-expanded="false">
-                <span style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981; margin-right: 6px; vertical-align: middle;"></span>
-                <span data-i18n="nav.nfs_online">NEED FOR SPEED ONLINE</span>
+              <button type="button" class="nav-link nav-link-glitch" id="btn-nfs-online-trigger" data-view-target="view-nfsmwo" data-text="NFS ONLINE" aria-expanded="false">
+                <span class="nav-online-dot" aria-hidden="true"></span>
+                <span data-i18n="nav.nfs_online">NFS ONLINE</span>
                 <svg class="nav-chevron" viewBox="0 0 24 24">
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
@@ -117,8 +128,8 @@
 
             <!-- 3. ROUTES & CIRCUITS (with Floating Mega-Menu) -->
             <li class="nav-item has-megamenu" id="nav-item-elements">
-              <button type="button" class="nav-link nav-link-glitch" id="btn-elements-trigger" data-view-target="view-challenges" data-text="LEADERBOARD" aria-expanded="false">
-                <span data-i18n="nav.routes">LEADERBOARD</span>
+              <button type="button" class="nav-link nav-link-glitch" id="btn-elements-trigger" data-view-target="view-challenges" data-text="LEADERBOARDS" aria-expanded="false">
+                <span data-i18n="nav.routes">LEADERBOARDS</span>
                 <svg class="nav-chevron" viewBox="0 0 24 24">
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
@@ -228,8 +239,8 @@
 
             <!-- 3. CHALLENGES & TOURNAMENT (Interactive Dropdown with Amber #FFB800 Highlight & 7 V7 Options) -->
             <li class="nav-item has-megamenu" id="nav-item-torneo">
-              <button type="button" class="nav-link nav-link-glitch" id="btn-torneo-trigger" data-view-target="view-blog" data-text="CHALLENGES & TOURNAMENT" aria-expanded="false">
-                <span data-i18n="nav.challenges_tournament">CHALLENGES &amp; TOURNAMENT</span>
+              <button type="button" class="nav-link nav-link-glitch" id="btn-torneo-trigger" data-view-target="view-blog" data-text="TORNEOS" aria-expanded="false">
+                <span data-i18n="nav.challenges_tournament">TORNEOS</span>
                 <svg class="nav-chevron" viewBox="0 0 24 24">
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
@@ -436,20 +447,26 @@
           </div>
         </div>
 
-        <!-- Mobile Navigation Hamburger Button (Active on screens <= 1090px, tablets & mobile) -->
-        <button type="button" class="btn-mobile-nav-toggle" id="btn-mobile-nav-toggle" aria-label="Abrir menú de navegación" aria-expanded="false">
-          <span class="hamburger-bar"></span>
-          <span class="hamburger-bar"></span>
-          <span class="hamburger-bar"></span>
+        <!-- Mobile Navigation Hamburger Button (Angular HUD Toggle [ MENU // ≡ ] on <= 992px) -->
+        <button type="button" class="btn-mobile-nav-toggle mw-hud-mobile-trigger" id="btn-mobile-nav-toggle" aria-label="Abrir menú de navegación" aria-expanded="false">
+          <span class="mw-hud-cta-corners" aria-hidden="true"></span>
+          <span class="mw-hud-menu-tag">[ MENU //</span>
+          <span class="mw-hud-hamburger-bars" aria-hidden="true">
+            <span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+          </span>
+          <span class="mw-hud-menu-tag">]</span>
         </button>
 
       </div>
 
     </div>
+    <div class="mw-hud-scroll-progress" id="mw-hud-scroll-progress" aria-hidden="true"></div>
   </header>
 
   <!-- ========================================================================
-       MOBILE NAVIGATION DRAWER & FROSTED GLASS BACKDROP
+       MOBILE NAVIGATION DRAWER & FROSTED GLASS BACKDROP (TACTICAL HUD)
        ======================================================================== -->
   <div class="mobile-nav-backdrop" id="mobile-nav-backdrop" aria-hidden="true"></div>
   <aside class="mobile-nav-drawer" id="mobile-nav-drawer" aria-label="Menú Móvil de Navegación" aria-hidden="true">
@@ -464,28 +481,28 @@
     </div>
 
     <div class="mobile-drawer-body">
-      <!-- Quick Top Actions: Comisaría & Submit Record -->
+      <!-- Top Utility Strip: Comisaría/Admin & Discord Community -->
       <div class="mobile-drawer-quick-actions">
         <a href="admin.html" class="mobile-quick-action-btn admin-btn" title="Panel de Comisaría">
-          <span>⚖️ COMISARÍA</span>
+          <span>⚖️ ADMIN / COMISARÍA</span>
         </a>
-        <button type="button" class="mobile-quick-action-btn submit-btn" data-view-target="view-submit">
-          <span>➕ SUBMIT RECORD</span>
+        <button type="button" class="mobile-quick-action-btn" data-open-auth>
+          <span>🎮 DISCORD &amp; AUTH</span>
         </button>
       </div>
 
-      <!-- Main Navigation Links & Accordions -->
-      <nav class="mobile-drawer-nav">
-        <!-- 1. Home -->
+      <!-- Main Navigation Links & Accordions (Min-Height 48px Touch Areas) -->
+      <nav class="mobile-drawer-nav" aria-label="Secciones principales móvil">
+        <!-- 1. HOME -->
         <a href="#view-elements" class="mobile-nav-link is-active" data-view-target="view-elements">
           <span class="mobile-nav-link-left">
             <svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-            <span data-i18n="nav.home">HOME</span>
+            <span>HOME</span>
           </span>
           <span class="mobile-nav-badge">OFICIAL</span>
         </a>
 
-        <!-- 1.5 Need for Speed Online Accordion -->
+        <!-- 2. NEED FOR SPEED ONLINE Accordion -->
         <div class="mobile-nav-accordion" id="mobile-acc-nfs-online">
           <button type="button" class="mobile-accordion-trigger" aria-expanded="false">
             <span class="mobile-nav-link-left">
@@ -494,7 +511,7 @@
             </span>
             <span class="mobile-acc-right">
               <span class="mobile-acc-count" style="color: #10b981;">3 JUEGOS</span>
-              <svg class="mobile-acc-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              <span class="mobile-acc-arrow" aria-hidden="true">&#9662;</span>
             </span>
           </button>
           <div class="mobile-accordion-content">
@@ -513,16 +530,16 @@
           </div>
         </div>
 
-        <!-- 2. Routes & Circuits Accordion -->
+        <!-- 3. LEADERBOARD Accordion -->
         <div class="mobile-nav-accordion" id="mobile-acc-routes">
           <button type="button" class="mobile-accordion-trigger" aria-expanded="false">
             <span class="mobile-nav-link-left">
               <svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
-              <span data-i18n="nav.routes">LEADERBOARD</span>
+              <span>LEADERBOARD</span>
             </span>
             <span class="mobile-acc-right">
               <span class="mobile-acc-count">86 PISTAS</span>
-              <svg class="mobile-acc-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              <span class="mobile-acc-arrow" aria-hidden="true">&#9662;</span>
             </span>
           </button>
           <div class="mobile-accordion-content">
@@ -545,16 +562,16 @@
           </div>
         </div>
 
-        <!-- 3. Challenges & Tournament Accordion -->
+        <!-- 4. RANKED Accordion -->
         <div class="mobile-nav-accordion" id="mobile-acc-telemetria">
           <button type="button" class="mobile-accordion-trigger" aria-expanded="false">
             <span class="mobile-nav-link-left">
               <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
-              <span data-i18n="nav.telemetria_hof">RANKED</span>
+              <span>RANKED</span>
             </span>
             <span class="mobile-acc-right">
-              <span class="mobile-acc-count">2 SECCIONES</span>
-              <svg class="mobile-acc-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              <span class="mobile-acc-count">3 SECCIONES</span>
+              <span class="mobile-acc-arrow" aria-hidden="true">&#9662;</span>
             </span>
           </button>
           <div class="mobile-accordion-content">
@@ -564,7 +581,7 @@
             </button>
             <button type="button" class="mobile-subnav-item" data-view-target="view-blacklist">
               <span>⚡ BLACKLIST 2026 TORNEO</span>
-              <span class="mobile-sub-tag" style="color: #ff4d4f; border-color: rgba(255,77,79,0.4);">Top 10 Rivales</span>
+              <span class="mobile-sub-tag" style="color: #ff4d4f; border-color: rgba(255,77,79,0.4);">Top 8 Rivales</span>
             </button>
             <button type="button" class="mobile-subnav-item" data-view-target="view-telemetry">
               <span>📊 DRIVER</span>
@@ -573,17 +590,16 @@
           </div>
         </div>
 
-        <!-- 6. Comunidad Accordion -->
-
+        <!-- 5. CHALLENGES & TOURNAMENT Accordion -->
         <div class="mobile-nav-accordion" id="mobile-acc-torneo">
           <button type="button" class="mobile-accordion-trigger" aria-expanded="false">
             <span class="mobile-nav-link-left">
               <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-              <span data-i18n="nav.challenges_tournament">CHALLENGES &amp; TOURNAMENT</span>
+              <span>CHALLENGES &amp; TOURNAMENT</span>
             </span>
             <span class="mobile-acc-right">
               <span class="mobile-acc-count">5 SECCIONES</span>
-              <svg class="mobile-acc-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              <span class="mobile-acc-arrow" aria-hidden="true">&#9662;</span>
             </span>
           </button>
           <div class="mobile-accordion-content">
@@ -610,17 +626,16 @@
           </div>
         </div>
 
-        <!-- 4. Hall of Fame & Telemetría Accordion -->
-
+        <!-- 6. COMMUNITY Accordion -->
         <div class="mobile-nav-accordion" id="mobile-acc-comunidad">
           <button type="button" class="mobile-accordion-trigger" aria-expanded="false">
             <span class="mobile-nav-link-left">
               <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-              <span data-i18n="nav.comunidad">COMUNIDAD</span>
+              <span>COMMUNITY</span>
             </span>
             <span class="mobile-acc-right">
-              <span class="mobile-acc-count">6 SECCIONES</span>
-              <svg class="mobile-acc-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              <span class="mobile-acc-count">5 SECCIONES</span>
+              <span class="mobile-acc-arrow" aria-hidden="true">&#9662;</span>
             </span>
           </button>
           <div class="mobile-accordion-content">
@@ -649,17 +664,20 @@
       </nav>
     </div>
 
-    <!-- Drawer Footer: Language & Community -->
+    <!-- Drawer Base Footer: Full-Width Language Selector, SUBMIT RECORD (Olive Barbed-Wire) & INSTALAR APP -->
     <div class="mobile-drawer-footer">
       <div class="mobile-drawer-lang-selector">
-        <span style="font-size: 11px; font-weight: 700; color: #a1a1aa; font-family: var(--font-mono);">IDIOMA:</span>
-        <div style="display: flex; gap: 8px;">
-          <button type="button" class="lang-opt-btn is-active" onclick="changeLanguage('es')">🇪🇸 ES</button>
-          <button type="button" class="lang-opt-btn" onclick="changeLanguage('en')">🇺🇸 EN</button>
+        <span class="mobile-lang-label">IDIOMA // LANG</span>
+        <div class="mobile-lang-btn-row">
+          <button type="button" class="lang-opt-btn" data-drawer-lang="es" onclick="changeLanguage('es')">🇪🇸 ESPAÑOL (ES)</button>
+          <button type="button" class="lang-opt-btn is-active" data-drawer-lang="en" onclick="changeLanguage('en')">🇺🇸 ENGLISH (EN)</button>
         </div>
       </div>
-      <button type="button" class="btn-auth-community" data-open-auth style="width: 100%; justify-content: center; margin-top: 10px;">
-        <span>Comunidad &amp; Discord</span>
+      <button type="button" class="mobile-quick-action-btn submit-btn mobile-drawer-submit-btn mw-hud-olive-barbed" data-view-target="view-submit">
+        <span>➕ SUBMIT RECORD</span>
+      </button>
+      <button type="button" class="mobile-quick-action-btn pwa-install-drawer-btn btn-install-pwa" id="btn-install-pwa-drawer" onclick="triggerPwaInstall()">
+        <span>📲 <span data-pwa-install-label>INSTALAR APP</span></span>
       </button>
     </div>
   </aside>
@@ -669,9 +687,9 @@
        ======================================================================== -->
   <div id="view-elements" class="view-section is-active">
 
-    <!-- HERO SECTION WITH BMW M3 GTR VIDEO BANNER -->
-    <section class="uiverse-hero" id="nfs-hero-banner" aria-label="Hero Banner">
-      <!-- Home Banner Stage: Static Background on Mobile, Moving Video Injected on Desktop -->
+    <!-- 1. TACTICAL ESPORTS HERO SECTION (100% WIDTH, MOST WANTED 2005) -->
+    <section class="uiverse-hero mw-landing-hero" id="nfs-hero-banner" aria-label="Need for Speed Most Wanted Esports Hero">
+      <!-- Adaptive Media Stage: Static Carrera GT on Mobile, Moving Video on Desktop -->
       <div class="hero-bg-stage" id="hero-bg-stage" aria-hidden="true">
         <img
           class="hero-bg-video"
@@ -682,55 +700,76 @@
           decoding="async"
           fetchpriority="high"
         />
-        <div class="hero-bg-vignette"></div>
+        <div class="mw-hero-industrial-layer"></div>
+        <div class="mw-hero-smoke-layer"></div>
+        <div class="hero-bg-vignette mw-hero-vignette"></div>
       </div>
 
-      <div class="hero-inner">
+      <div class="mw-hero-container">
+        <div class="mw-hero-content">
+          <div class="mw-hero-top-row">
+            <div class="mw-hud-eyebrow">
+              <span class="mw-hud-dot"></span>
+              <span data-i18n="landing.hero_eyebrow">// OFFICIAL ROCKPORT TELEMETRY &amp; RANKING ARCHIVE</span>
+            </div>
 
-        <!-- Green Rocket Update Text -->
-        <div class="hero-green-update" data-view-target="view-challenges">
-          <svg viewBox="0 0 24 24">
-            <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path>
-            <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path>
-          </svg>
-          <span><u>86 OFFICIAL TRACKS</u> SYNCED WITH FIREBASE!</span>
+            <div class="mw-hero-lang-toggle" id="hero-bilingual-toggle" role="group" aria-label="Language / Idioma">
+              <button type="button" class="mw-hero-lang-btn is-active" data-hero-lang="es" onclick="changeLanguage('es')">🇪🇸 ES</button>
+              <button type="button" class="mw-hero-lang-btn" data-hero-lang="en" onclick="changeLanguage('en')">🇺🇸 EN</button>
+            </div>
+          </div>
+
+          <h1 class="mw-hero-headline">
+            <span class="mw-hero-headline-main" data-i18n="landing.hero_headline_main">DOMINA LA</span>
+            <span class="mw-hero-headline-accent">BLACKLIST</span>
+          </h1>
+
+          <p class="mw-hero-subtitle" data-i18n="landing.hero_subtitle">
+            R&eacute;cords mundiales verificados en tiempo real con telemetr&iacute;a de 128Hz, pruebas en video oficiales y clasificaciones competitivas en las 86 pistas de Rockport City.
+          </p>
+
+          <!-- Primary & Secondary Tactical HUD CTAs -->
+          <div class="mw-hero-actions">
+            <button type="button" class="mw-hud-cta mw-hud-cta--primary" data-view-target="view-challenges" data-text="VER LEADERBOARDS">
+              <span class="mw-hud-cta-corners" aria-hidden="true"></span>
+              <svg class="mw-hud-cta-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2z"/></svg>
+              <span data-i18n="landing.cta_leaderboards">VER LEADERBOARDS</span>
+            </button>
+
+            <button type="button" class="mw-hud-cta mw-hud-cta--secondary" data-view-target="view-blog" data-text="TORNEOS &amp; CHALLENGER">
+              <span class="mw-hud-cta-corners" aria-hidden="true"></span>
+              <svg class="mw-hud-cta-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>
+              <span data-i18n="landing.cta_tournaments">TORNEOS &amp; CHALLENGER</span>
+            </button>
+
+            <button type="button" id="btn-install-pwa-hero" class="mw-hud-cta mw-hud-cta--utility btn-install-pwa" onclick="triggerPwaInstall()" data-text="INSTALAR APP WEB">
+              <span class="mw-hud-cta-corners" aria-hidden="true"></span>
+              <svg class="mw-hud-cta-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14zm-1-6h-3V8h-2v5H8l4 4 4-4z"/></svg>
+              <span data-pwa-install-label>INSTALAR APP WEB</span>
+            </button>
+          </div>
+          <span class="hero-pwa-hint mw-hero-pwa-hint" id="hero-pwa-hint">Instala la App Web funcional en Android, iPhone o PC</span>
         </div>
 
-        <!-- Requested Title: Monochromatic & Sepia Official NFSMW Typography -->
-        <h1 class="hero-title nfs-graffiti-title-block">
-          <span class="nfs-title-prefix">
-            <span class="nfs-word-needfor">NEED FOR</span>
-            <span class="nfs-word-speed speed-motion-effect">SPEED</span>
-          </span>
-          <span class="nfs-title-main">MOST WANTED</span>
-          <span class="nfs-title-sub">
-            <span class="nfs-word-rockport">ROCKPORT</span>
-            <span class="nfs-word-records">WORLD RECORDS</span>
-          </span>
-        </h1>
-
-        <!-- Subtitle -->
-        <p class="hero-subtitle">
-          Official World Records, Telemetry &amp; Leaderboards for all 86 Rockport Tracks.<br />
-          29 Circuits &bull; 46 Sprints &bull; 11 Drags &bull; Live Firebase Realtime Database.
-        </p>
-
-        <!-- Light Pill Search Bar with Embedded Search Button -->
-        <div class="hero-search-bar">
-          <svg viewBox="0 0 24 24">
-            <circle cx="11" cy="11" r="7"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          <input
-            type="search"
-            id="hero-search-input"
-            class="hero-search-input"
-            placeholder="Buscar vehículo oficial o especificación (ej. BMW M3 GTR, Carrera GT, Junkman)..."
-            autocomplete="off"
-          />
-          <button type="button" class="hero-search-btn btn-nfs-white-cta" id="hero-search-submit-btn">SEARCH</button>
+        <!-- Bottom Live Telemetry Counter Strip (Connected to Firebase RTDB) -->
+        <div class="mw-hero-telemetry-bar" aria-label="Estad&iacute;sticas en vivo de Firebase">
+          <div class="mw-hero-stat-item">
+            <span class="mw-hero-stat-value" id="home-stat-records">--</span>
+            <span class="mw-hero-stat-label" data-i18n="landing.stat_records">R&Eacute;CORDS VERIFICADOS</span>
+          </div>
+          <div class="mw-hero-stat-item">
+            <span class="mw-hero-stat-value" id="home-stat-pilots">--</span>
+            <span class="mw-hero-stat-label" data-i18n="home.active_pilots">PILOTOS ACTIVOS</span>
+          </div>
+          <div class="mw-hero-stat-item">
+            <span class="mw-hero-stat-value" id="home-stat-tracks">86</span>
+            <span class="mw-hero-stat-label" data-i18n="landing.stat_tracks">PISTAS OFICIALES</span>
+          </div>
+          <div class="mw-hero-stat-status">
+            <span class="mw-live-pulse-dot" aria-hidden="true"></span>
+            <span id="home-firebase-status-badge">FIREBASE LIVE SYNC</span>
+          </div>
         </div>
-
       </div>
     </section>
 
@@ -804,162 +843,374 @@
       </div>
     </div>
 
-    <!-- HOME CATALOG LAYOUT: FULL-WIDTH BENTO LIVE FIREBASE + CARS GRID -->
-    <div class="uiverse-catalog-layout uiverse-no-sidebar" id="uiverse-catalog-anchor">
+    <!-- HOME LANDING SECTIONS: STREET RIVALRY + TOP 3 BLACKLIST + FEATURED ROUTES + RANKED/EVENTS BENTO + FOOTER -->
+    <div class="uiverse-catalog-layout uiverse-no-sidebar mw-landing-body" id="uiverse-catalog-anchor">
+      <main class="catalog-main mw-landing-main">
 
-      <!-- Main Home Content Area -->
-      <main class="catalog-main">
-
-        <!-- HOME BENTO TOP: BMW M3 GTR HERO BANNER + LIVE FIREBASE STANDINGS -->
-        <div class="nfs-home-bento">
-          <!-- Left Card: Featured Championship & World Records Banner (Using V7 Image) -->
-          <div class="nfs-bento-card nfs-bento-banner" style="background-image: url('assets/img/hero-bmw-m3-gtr-banner.jpg');">
-            <div class="nfs-bento-content">
-              <span class="info-card-badge">ROCKPORT TELEMETRY HUB &bull; BLACK EDITION 1.3</span>
-              <h2 style="font-size: 24px; font-weight: 800; letter-spacing: -0.02em; color: #fff;">
-                Campeonato Oficial Blacklist &amp; Récords Mundiales
-              </h2>
-              <p style="font-size: 13.5px; color: #d4d4d8; line-height: 1.55;">
-                Explora los 86 trazados oficiales de Need for Speed: Most Wanted (29 Circuitos, 46 Sprints y 11 Drags) conectados en tiempo real a Google Firebase.
-              </p>
-              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 6px;">
-                <button type="button" class="btn-uiverse-create btn-nfs-white-cta" data-view-target="view-challenges" data-text="Explorar 86 Rutas y Circuitos">
-                  <span>EXPLORAR 86 RUTAS Y CIRCUITOS</span>
-                </button>
-                <button type="button" class="filter-pill-btn mw-tac-btn mw-tac-btn--silver" id="btn-home-open-perimeter" data-text="Ver WR City Perimeter (01:20.750)">
-                  <span class="mw-tac-label">Ver WR City Perimeter (01:20.750)</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Right Card: Live Firebase Leaderboard Feed -->
-          <div class="nfs-bento-card">
-            <div style="padding: 14px 16px; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between;">
-              <div>
-                <div style="font-size: 13.5px; font-weight: 700; color: #fff;">Live World Records (Firebase RTDB)</div>
-                <div style="font-size: 11.5px; color: var(--text-secondary);">Haz clic en cualquier récord para abrir su Leaderboard</div>
-              </div>
-              <span class="info-card-badge" id="home-firebase-status-badge">LIVE SYNC</span>
-            </div>
-            <div class="nfs-live-list" id="home-live-leaderboard-list">
-              <!-- Populated dynamically by app-cloner.js from HOME_LIVE_LEADERBOARD_RECORDS + Firebase RTDB -->
-            </div>
-          </div>
+        <div class="mw-telemetry-divider" aria-hidden="true">
+          <span class="mw-telemetry-div-line"></span>
+          <span class="mw-telemetry-div-code">// SEC_00 &bull; BMW_M3_GTR_VS_CARRERA_GT</span>
+          <span class="mw-telemetry-div-line"></span>
         </div>
 
-        <!-- HOME 3-COLUMN SHOWCASE: MOBILE TELEMETRY & ROUTE EXPLORER -->
-        <section class="home-showcase-section" aria-label="Plataforma Móvil & Telemetría">
-          <div class="home-showcase-header">
-            <div class="home-showcase-header-left">
-              <span class="home-showcase-tag">
-                <i class="fa-solid fa-mobile-screen-button text-brand-cyan"></i>
-                ECOSISTEMA NFSMW RANKS PRO
-              </span>
-              <h3 class="home-showcase-title">
-                TELEMETRÍA, RUTAS &amp; COMPETENCIA OFICIAL
-              </h3>
+        <!-- 0. LIVE STREET RIVALRY SHOWCASE: BMW M3 GTR E46 VS PORSCHE CARRERA GT (PHOTOREALISTIC ACTION) -->
+        <section class="mw-landing-section mw-sec-surface mw-sec-surface--grid mw-rivalry-duel-section" id="home-rivalry-duel-section" data-hud-sec="SEC_00" aria-label="BMW M3 GTR E46 vs Porsche Carrera GT Street Rivalry">
+          <div class="mw-section-head">
+            <div>
+              <div class="mw-section-eyebrow" data-i18n="landing.rivalry_eyebrow">// DUELO DE ALTA VELOCIDAD &bull; ROCKPORT 2005 EDITION</div>
+              <h2 class="mw-section-title" data-i18n-html="landing.rivalry_title">BMW M3 GTR E46 <span class="mw-title-slash">VS</span> PORSCHE CARRERA GT</h2>
             </div>
-            <div class="home-showcase-header-right">
-              <a href="#view-challenges" class="btn-uiverse-create btn-nfs-white-cta" data-view-target="view-challenges" data-text="VER LAS 86 PISTAS →">
-                <span>VER LAS 86 PISTAS</span>
-                <i class="fa-solid fa-arrow-right" style="margin-left: 6px;"></i>
-              </a>
-            </div>
+            <div class="mw-section-meta" data-i18n="landing.rivalry_meta">WHEEL-TO-WHEEL // TELEMETR&Iacute;A 128HZ</div>
           </div>
 
-          <div class="home-showcase-grid">
-            <!-- Card 1: EXPLORA RUTAS Y CIRCUITOS -->
-            <article class="home-showcase-card showcase-card-violet group" data-view-target="view-challenges" style="cursor: pointer;">
-              <div class="showcase-card-ambient"></div>
-              <div class="showcase-card-glare"></div>
-              <div class="glow-border-top"></div>
-              
-              <div class="showcase-card-header">
-                <span class="showcase-pill pill-violet">
-                  <i class="fa-solid fa-route"></i>
-                  CATÁLOGO OFICIAL
-                </span>
-                <span class="showcase-pill-badge">86 PISTAS</span>
-              </div>
-
-              <div class="showcase-img-wrap">
-                <img src="assets/img/showcase-rutas-circuitos.png" alt="Explora Rutas y Circuitos - NFSMW Ranks" class="showcase-card-img" loading="lazy" />
-              </div>
-
-              <div class="showcase-card-footer">
-                <div class="showcase-card-info">
-                  <h4 class="showcase-item-title">Explora Rutas y Circuitos</h4>
-                  <p class="showcase-item-sub">29 Circuitos • 46 Sprints • 11 Drags</p>
+          <!-- Dual Photorealistic Action Racing Frames -->
+          <div class="mw-rivalry-photo-grid">
+            <article class="mw-rivalry-photo-card mw-rivalry-photo-card--primary">
+              <span class="mw-card-corners" aria-hidden="true"></span>
+              <div class="mw-rivalry-img-wrap">
+                <img
+                  src="assets/img/race-duel-m3-vs-carrera.jpg"
+                  alt="BMW M3 GTR E46 and Porsche Carrera GT racing wheel-to-wheel in Need for Speed Most Wanted 2005 Rockport City"
+                  class="mw-rivalry-img"
+                  loading="eager"
+                  decoding="async"
+                />
+                <div class="mw-rivalry-img-scrim" aria-hidden="true"></div>
+                <div class="mw-rivalry-cam-badge">
+                  <span class="mw-live-pulse-dot" aria-hidden="true"></span>
+                  <span data-i18n="landing.cam1_tag">CAM 01 // DUELO EN CURVA INDUSTRIAL</span>
                 </div>
-                <button type="button" class="showcase-card-btn btn-nfs-white-cta" data-view-target="view-challenges" data-text="EXPLORAR →">
-                  <span>EXPLORAR</span>
-                  <i class="fa-solid fa-arrow-right"></i>
+                <div class="mw-rivalry-caption-bar">
+                  <div>
+                    <strong data-i18n="landing.cam1_title">BATALLA RUEDA A RUEDA A +380 KM/H</strong>
+                    <span data-i18n="landing.cam1_sub">BMW M3 GTR E46 &amp; Porsche Carrera GT &bull; Asfalto h&uacute;medo de Rockport</span>
+                  </div>
+                  <button type="button" class="mw-rivalry-quick-cta" onclick="openRankedSessionFromHome('bmw_fast')" data-i18n="landing.cam1_btn">VER TIEMPOS &rarr;</button>
+                </div>
+              </div>
+            </article>
+
+            <article class="mw-rivalry-photo-card mw-rivalry-photo-card--secondary">
+              <span class="mw-card-corners" aria-hidden="true"></span>
+              <div class="mw-rivalry-img-wrap">
+                <img
+                  src="assets/img/race-overtake-carrera-m3.jpg"
+                  alt="Porsche Carrera GT attacking BMW M3 GTR E46 through overpass apex drift under highway bridge"
+                  class="mw-rivalry-img"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div class="mw-rivalry-img-scrim" aria-hidden="true"></div>
+                <div class="mw-rivalry-cam-badge">
+                  <span class="mw-live-pulse-dot" aria-hidden="true"></span>
+                  <span data-i18n="landing.cam2_tag">CAM 02 // ADELANTAMIENTO EN PUENTE</span>
+                </div>
+                <div class="mw-rivalry-caption-bar">
+                  <div>
+                    <strong data-i18n="landing.cam2_title">ATAQUE EN V&Eacute;RTICE // FRENOS AL ROJO</strong>
+                    <span data-i18n="landing.cam2_sub">Sector Downtown &bull; Competici&oacute;n Blacklist v1.3</span>
+                  </div>
+                  <button type="button" class="mw-rivalry-quick-cta" onclick="openRankedSessionFromHome('junkman_fast')" data-i18n="landing.cam2_btn">DUELOS JUNKMAN &rarr;</button>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- Competing Icons Spec & Telemetry Comparison Cards -->
+          <div class="mw-rivalry-machines-grid">
+            <!-- Machine 01: BMW M3 GTR E46 -->
+            <article class="mw-rivalry-machine-card mw-machine-m3">
+              <span class="mw-card-corners" aria-hidden="true"></span>
+              <div class="mw-machine-head">
+                <div>
+                  <div class="mw-machine-tag" data-i18n="landing.m3_tag">ICONO HERO // CATEGOR&Iacute;A BMW NO JUNKMAN</div>
+                  <h3 class="mw-machine-name">BMW M3 GTR E46 <span class="mw-machine-num">#46</span></h3>
+                </div>
+                <span class="mw-machine-class-pill">V8 RACING</span>
+              </div>
+
+              <p class="mw-machine-desc" data-i18n="landing.m3_desc">
+                La leyenda indiscutible de Rockport City. Chasis tubular de competici&oacute;n, alta carga aerodin&aacute;mica y el paso por curva m&aacute;s estable de toda la Blacklist.
+              </p>
+
+              <div class="mw-machine-specs-row">
+                <div class="mw-machine-spec">
+                  <span data-i18n="landing.spec_engine">MOTOR</span>
+                  <strong>4.0L P60B40 V8</strong>
+                </div>
+                <div class="mw-machine-spec">
+                  <span data-i18n="landing.spec_power">POTENCIA</span>
+                  <strong>444 HP</strong>
+                </div>
+                <div class="mw-machine-spec">
+                  <span data-i18n="landing.spec_top">VEL. PUNTA</span>
+                  <strong>389 KM/H</strong>
+                </div>
+                <div class="mw-machine-spec">
+                  <span>0-100 KM/H</span>
+                  <strong>3.2s / 1,120 KG</strong>
+                </div>
+              </div>
+
+              <div class="mw-machine-actions">
+                <button type="button" class="mw-hud-cta mw-hud-cta--primary" onclick="openRankedSessionFromHome('bmw_single')" data-text="RÉCORDS BMW M3 GTR">
+                  <span class="mw-hud-cta-corners" aria-hidden="true"></span>
+                  <span data-i18n="landing.m3_cta">R&Eacute;CORDS BMW M3 GTR &rarr;</span>
+                </button>
+                <button type="button" class="mw-hud-cta mw-hud-cta--secondary" data-view-target="view-tuning" data-text="VER SETUP">
+                  <span class="mw-hud-cta-corners" aria-hidden="true"></span>
+                  <span data-i18n="landing.view_setup">VER SETUP</span>
                 </button>
               </div>
             </article>
 
-            <!-- Card 2: RÉCORDS Y TELEMETRÍA 128Hz -->
-            <article class="home-showcase-card showcase-card-cyan group" data-view-target="view-challenges" style="cursor: pointer;">
-              <div class="showcase-card-ambient"></div>
-              <div class="showcase-card-glare"></div>
-              <div class="glow-border-top"></div>
-
-              <div class="showcase-card-header">
-                <span class="showcase-pill pill-cyan">
-                  <i class="fa-solid fa-satellite-dish"></i>
-                  TELEMETRÍA 128Hz
-                </span>
-                <span class="showcase-pill-badge badge-cyan">CLOUD SYNC</span>
-              </div>
-
-              <div class="showcase-img-wrap">
-                <img src="assets/img/showcase-records-telemetria.png" alt="Récords y Telemetría 128Hz - NFSMW Ranks" class="showcase-card-img" loading="lazy" />
-              </div>
-
-              <div class="showcase-card-footer">
-                <div class="showcase-card-info">
-                  <h4 class="showcase-item-title">Récords &amp; Telemetría 128Hz</h4>
-                  <p class="showcase-item-sub">Tiempos por sector, telemetría y curvas de aceleración</p>
+            <!-- Machine 02: Porsche Carrera GT -->
+            <article class="mw-rivalry-machine-card mw-machine-cgt">
+              <span class="mw-card-corners" aria-hidden="true"></span>
+              <div class="mw-machine-head">
+                <div>
+                  <div class="mw-machine-tag" data-i18n="landing.cgt_tag">REY JUNKMAN // VELOCIDAD TERMINAL EXTREMA</div>
+                  <h3 class="mw-machine-name">PORSCHE CARRERA GT <span class="mw-machine-num">V10</span></h3>
                 </div>
-                <button type="button" class="showcase-card-btn btn-nfs-white-cta" data-view-target="view-challenges" data-text="INSPECCIONAR →">
-                  <span>INSPECCIONAR</span>
-                  <i class="fa-solid fa-arrow-right"></i>
+                <span class="mw-machine-class-pill mw-pill-gold">FULL JUNKMAN</span>
+              </div>
+
+              <p class="mw-machine-desc" data-i18n="landing.cgt_desc">
+                La cumbre de la aceleraci&oacute;n y fuerza bruta con mejoras Junkman completas. El rival directo capaz de pulverizar r&eacute;cords en autopistas y sprints de alta velocidad.
+              </p>
+
+              <div class="mw-machine-specs-row">
+                <div class="mw-machine-spec">
+                  <span data-i18n="landing.spec_engine">MOTOR</span>
+                  <strong>5.7L V10 DOHC</strong>
+                </div>
+                <div class="mw-machine-spec">
+                  <span data-i18n="landing.spec_power">POTENCIA</span>
+                  <strong>850+ HP</strong>
+                </div>
+                <div class="mw-machine-spec">
+                  <span data-i18n="landing.spec_top">VEL. PUNTA</span>
+                  <strong>405+ KM/H</strong>
+                </div>
+                <div class="mw-machine-spec">
+                  <span>0-100 KM/H</span>
+                  <strong>2.4s / 1,250 KG</strong>
+                </div>
+              </div>
+
+              <div class="mw-machine-actions">
+                <button type="button" class="mw-hud-cta mw-hud-cta--primary" onclick="openRankedSessionFromHome('junkman_single')" data-text="RÉCORDS JUNKMAN">
+                  <span class="mw-hud-cta-corners" aria-hidden="true"></span>
+                  <span data-i18n="landing.cgt_cta">R&Eacute;CORDS JUNKMAN &rarr;</span>
                 </button>
-              </div>
-            </article>
-
-            <!-- Card 3: DOMINA CADA DISTRITO -->
-            <article class="home-showcase-card showcase-card-amber group" data-view-target="view-challenges" style="cursor: pointer;">
-              <div class="showcase-card-ambient"></div>
-              <div class="showcase-card-glare"></div>
-              <div class="glow-border-top"></div>
-
-              <div class="showcase-card-header">
-                <span class="showcase-pill pill-amber">
-                  <i class="fa-solid fa-map-location-dot"></i>
-                  RADAR DE DISTRITOS
-                </span>
-                <span class="showcase-pill-badge badge-amber">S1-S4 GPS</span>
-              </div>
-
-              <div class="showcase-img-wrap">
-                <img src="assets/img/showcase-domina-distritos.png" alt="Domina Cada Distrito - NFSMW Ranks" class="showcase-card-img" loading="lazy" />
-              </div>
-
-              <div class="showcase-card-footer">
-                <div class="showcase-card-info">
-                  <h4 class="showcase-item-title">Domina Cada Distrito</h4>
-                  <p class="showcase-item-sub">Downtown, Camden Beach, Rosewood y Turnpike</p>
-                </div>
-                <button type="button" class="showcase-card-btn btn-nfs-white-cta" data-view-target="view-challenges" data-text="VER SECTORES →">
-                  <span>VER SECTORES</span>
-                  <i class="fa-solid fa-arrow-right"></i>
+                <button type="button" class="mw-hud-cta mw-hud-cta--secondary" data-view-target="view-tuning" data-text="VER SETUP">
+                  <span class="mw-hud-cta-corners" aria-hidden="true"></span>
+                  <span data-i18n="landing.view_setup">VER SETUP</span>
                 </button>
               </div>
             </article>
           </div>
         </section>
+
+        <div class="mw-telemetry-divider" aria-hidden="true">
+          <span class="mw-telemetry-div-line"></span>
+          <span class="mw-telemetry-div-code">// SEC_01 &bull; BLACKLIST_2026</span>
+          <span class="mw-telemetry-div-line"></span>
+        </div>
+
+        <!-- 1. TOP 3 BLACKLIST 2026 // LÍDERES ACTUALES DEL TORNEO (LIVE FIREBASE) -->
+        <section class="mw-landing-section mw-sec-surface mw-sec-surface--carbon" id="home-top3-section" data-hud-sec="SEC_01" aria-label="Top 3 Blacklist 2026 Líderes del Torneo">
+          <div class="mw-section-head">
+            <div>
+              <div class="mw-section-eyebrow" data-i18n="landing.top3_eyebrow">// TORNEO OFICIAL BLACKLIST 2026</div>
+              <h2 class="mw-section-title" data-i18n="landing.top3_title">L&Iacute;DERES DE LA BLACKLIST 2026</h2>
+            </div>
+            <div class="mw-section-meta" data-i18n="landing.top3_meta">TOP 3 TORNEO // TIEMPO REAL</div>
+          </div>
+
+          <div class="mw-top3-grid" id="home-top3-blacklist-grid">
+            <!-- Dynamically populated from Blacklist 2026 Torneo (Firebase RTDB) by renderHomeLandingShowcase() -->
+          </div>
+
+          <div class="mw-top3-footer-action">
+            <button type="button" class="mw-hud-wide-btn" data-view-target="view-blacklist" data-text="[ VER CLASIFICACI&Oacute;N COMPLETA BLACKLIST 2026 &rarr; ]">
+              <span class="mw-hud-cta-corners" aria-hidden="true"></span>
+              <span data-i18n="landing.top3_btn_all">[ VER CLASIFICACI&Oacute;N COMPLETA BLACKLIST 2026 &rarr; ]</span>
+            </button>
+          </div>
+        </section>
+
+        <div class="mw-telemetry-divider" aria-hidden="true">
+          <span class="mw-telemetry-div-line"></span>
+          <span class="mw-telemetry-div-code">// SEC_02 &bull; ROCKPORT_TRACKS</span>
+          <span class="mw-telemetry-div-line"></span>
+        </div>
+
+        <!-- 2. EXPLORAR POR PISTA Y MODALIDAD (TARJETAS DE RUTA CON MINIMAPA) -->
+        <section class="mw-landing-section mw-sec-surface mw-sec-surface--grid" id="home-routes-section" data-hud-sec="SEC_02" aria-label="Explorar por Pista y Modalidad">
+          <div class="mw-section-head">
+            <div>
+              <div class="mw-section-eyebrow" data-i18n="landing.routes_eyebrow">// ROCKPORT TRACK ARCHIVE</div>
+              <h2 class="mw-section-title" data-i18n="landing.routes_title">SELECCIONAR CIRCUITO O SPRINT</h2>
+            </div>
+            <div class="mw-modality-quick-links" id="home-modality-filter-bar" role="tablist" aria-label="Filtrar pistas por modalidad">
+              <button type="button" class="mw-quick-mod-btn is-active" data-home-route-filter="all" role="tab" aria-selected="true">
+                <svg class="mw-mod-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+                <span data-i18n="landing.routes_all">ALL TRACKS</span>
+                <span class="mw-mod-count">86</span>
+              </button>
+              <button type="button" class="mw-quick-mod-btn" data-home-route-filter="Circuito" role="tab" aria-selected="false">
+                <svg class="mw-mod-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polyline points="21 3 21 9 15 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span data-i18n="landing.routes_circuit">CIRCUIT</span>
+                <span class="mw-mod-count">29</span>
+              </button>
+              <button type="button" class="mw-quick-mod-btn" data-home-route-filter="Sprint" role="tab" aria-selected="false">
+                <svg class="mw-mod-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17l6-6 4 4 6-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="15 7 20 7 20 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span data-i18n="landing.routes_sprint">SPRINT</span>
+                <span class="mw-mod-count">46</span>
+              </button>
+              <button type="button" class="mw-quick-mod-btn" data-home-route-filter="Drag" role="tab" aria-selected="false">
+                <svg class="mw-mod-icon" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="6" x2="5" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="19" y1="6" x2="19" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="9" y1="12" x2="15" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polyline points="13 9 16 12 13 15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span data-i18n="landing.routes_drag">DRAG</span>
+                <span class="mw-mod-count">11</span>
+              </button>
+              <button type="button" class="mw-quick-mod-btn mw-quick-mod-btn--all-link" id="btn-home-open-routes-cat" title="Abrir catálogo completo de pistas">
+                <span data-i18n="landing.routes_view_all">VER TODAS</span>
+                <span class="mw-mod-arrow">&rarr;</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="mw-featured-routes-grid" id="home-featured-routes-grid">
+            <!-- Dynamically populated with 4 clickable .nfsmw-tactical-card route cards -->
+          </div>
+        </section>
+
+        <div class="mw-telemetry-divider" aria-hidden="true">
+          <span class="mw-telemetry-div-line"></span>
+          <span class="mw-telemetry-div-code">// SEC_03 &bull; RANKED_TOURNAMENTS</span>
+          <span class="mw-telemetry-div-line"></span>
+        </div>
+
+        <!-- 3. SESIONES RANKED & TORNEOS (GRID MODULAR BENTO HUD) -->
+        <section class="mw-landing-section mw-sec-surface mw-sec-surface--carbon" id="home-bento-section" data-hud-sec="SEC_03" aria-label="Sesiones Ranked y Torneos">
+          <div class="mw-section-head">
+            <div>
+              <div class="mw-section-eyebrow" data-i18n="landing.bento_eyebrow">// COMPETITIVE HUB &bull; TELEMETR&Iacute;A &amp; EVENTOS</div>
+              <h2 class="mw-section-title" data-i18n-html="landing.bento_title">SESIONES RANKED <span class="mw-title-slash">&amp;</span> TORNEOS</h2>
+            </div>
+          </div>
+
+          <div class="mw-bento-hud-grid">
+            <!-- Panel Izquierdo: RANKED SESSIONS // MODOS OFICIALES -->
+            <div class="mw-bento-panel mw-bento-panel--sessions">
+              <span class="mw-panel-corners" aria-hidden="true"></span>
+              <div class="mw-bento-panel-head">
+                <span class="mw-bento-tag">// DIRECT ACCESS</span>
+                <h3 class="mw-bento-title" data-i18n-html="landing.sessions_title">RANKED SESSIONS <span class="mw-title-slash">//</span> MODOS OFICIALES</h3>
+                <p class="mw-bento-desc" data-i18n="landing.sessions_desc">Accede directamente a los tiempos oficiales por categor&iacute;a t&eacute;cnica de preparaci&oacute;n y vuelta r&aacute;pida.</p>
+              </div>
+
+              <div class="mw-sessions-access-grid">
+                <button type="button" class="mw-session-access-btn" onclick="openRankedSessionFromHome('junkman_single')">
+                  <span class="mw-session-icon" aria-hidden="true">
+                    <svg viewBox="0 0 32 28"><path fill="currentColor" d="M13.8 3.5C8.3 3.5 4 7.7 4 13.1c0 4.3 2.7 7.9 6.8 9.2l4.5 1.1v-4.2l-2.6-.6c-1.1-.3-1.8-1.1-1.8-2.2 0-1.1.9-2 2-2h6.8c.9 0 1.7-.4 2.1-1.1.1-.5.2-1 .2-1.5 0-4.6-3.6-8.3-8.2-8.3zm2.3 8.1h4.2c.2.5.3 1.1.3 1.7h-4.5c-.6 0-1.1-.4-1.1-1s.5-.7 1.1-.7z"/><path fill="currentColor" d="M23.2 14.5h2.6v9.8h-2.5v-7.3l-1.8 1.1v-2.1l1.7-1.5z"/></svg>
+                  </span>
+                  <span class="mw-session-text">
+                    <strong>JUNKMAN SINGLE LAP</strong>
+                    <small data-i18n="landing.sess_j_single_sub">Vuelta individual con mejoras Junkman</small>
+                  </span>
+                  <span class="mw-session-arrow">&rarr;</span>
+                </button>
+
+                <button type="button" class="mw-session-access-btn" onclick="openRankedSessionFromHome('junkman_fast')">
+                  <span class="mw-session-icon" aria-hidden="true">
+                    <svg viewBox="0 0 32 28"><path fill="currentColor" d="M18.8 5.2c-4.5 0-8.1 3.4-8.1 7.8 0 3.7 2.4 6.8 6 7.9l6.3 1.4c1.1.2 2.1-.6 2.1-1.7v-2.7c0-.8-.5-1.5-1.3-1.7l-3.7-.8c-.8-.2-1.3-.8-1.3-1.6 0-.8.7-1.5 1.5-1.5h4.8c-.4-4-3.6-7.1-7.3-7.1zm1.8 6.4h3.5c.2.5.2 1 .2 1.6h-3.7c-.5 0-.9-.4-.9-.8s.4-.8.9-.8z"/><path fill="currentColor" d="M1.5 9.2c2.8-.6 5.2-.1 7.3.8-.7 1-1.1 2-1.3 3.1-2.1-.6-4.1-.4-6.2.4 1.2-1.2 1.8-2.1 2.2-2.8-1.1-.2-1.6-.7-2-1.5zm1.2 5.4c2.1-.3 3.7 0 5 .7.3 1 .8 1.9 1.4 2.7-2.2-.2-4.2.2-6 .9 1.1-1.2 1.6-2 1.7-2.8-.9-.2-1.6-.7-2.1-1.5z"/></svg>
+                  </span>
+                  <span class="mw-session-text">
+                    <strong>JUNKMAN FAST LAP</strong>
+                    <small data-i18n="landing.sess_j_fast_sub">Mejor vuelta lanzada Junkman</small>
+                  </span>
+                  <span class="mw-session-arrow">&rarr;</span>
+                </button>
+
+                <button type="button" class="mw-session-access-btn" onclick="openRankedSessionFromHome('bmw_single')">
+                  <span class="mw-session-icon" aria-hidden="true">
+                    <svg viewBox="0 0 34 28"><path fill="currentColor" d="M7.2 6.8l2-3.4c.5-.8 1.4-1.3 2.4-1.3h8.8c1 0 1.9.5 2.4 1.3l2 3.4c1.5.5 2.5 1.8 2.5 3.4v4.4c0 .7-.5 1.2-1.2 1.2h-1.6v1.6c0 .7-.6 1.2-1.3 1.2h-2.1c-.7 0-1.2-.5-1.2-1.2v-1.6H12.1v1.6c0 .7-.5 1.2-1.2 1.2H8.8c-.7 0-1.3-.5-1.3-1.2v-1.6H5.9c-.7 0-1.2-.5-1.2-1.2v-4.4c0-1.6 1-2.9 2.5-3.4zm3.2-2.7l-1.5 2.5h14.2l-1.5-2.5H10.4z"/></svg>
+                  </span>
+                  <span class="mw-session-text">
+                    <strong>BMW M3 GTR SINGLE LAP</strong>
+                    <small data-i18n="landing.sess_b_single_sub">Vuelta oficial homologada M3 GTR</small>
+                  </span>
+                  <span class="mw-session-arrow">&rarr;</span>
+                </button>
+
+                <button type="button" class="mw-session-access-btn" onclick="openRankedSessionFromHome('bmw_fast')">
+                  <span class="mw-session-icon" aria-hidden="true">
+                    <svg viewBox="0 0 36 28"><path fill="currentColor" d="M1.5 9.2h6.8v1.8H1.5V9.2zm1.8 3.6h5.5v1.8H3.3v-1.8zm-2 3.6h6.8v1.8H1.3v-1.8z"/><path fill="currentColor" d="M12.4 7.8l2-3.4c.5-.8 1.4-1.3 2.4-1.3h8.8c1 0 1.9.5 2.4 1.3l2 3.4c1.5.5 2.5 1.8 2.5 3.4v4.6c0 .7-.5 1.2-1.2 1.2h-1.6v1.7c0 .7-.6 1.2-1.3 1.2h-2.1c-.7 0-1.2-.5-1.2-1.2V17H17.3v1.7c0 .7-.5 1.2-1.2 1.2H14c-.7 0-1.3-.5-1.3-1.2V17h-1.6c-.7 0-1.2-.5-1.2-1.2v-4.6c0-1.6 1-2.9 2.5-3.4zm3.2-2.7l-1.5 2.5h14.2l-1.5-2.5H15.6z"/></svg>
+                  </span>
+                  <span class="mw-session-text">
+                    <strong>BMW M3 GTR FAST LAP</strong>
+                    <small data-i18n="landing.sess_b_fast_sub">R&eacute;cord de vuelta r&aacute;pida M3 GTR</small>
+                  </span>
+                  <span class="mw-session-arrow">&rarr;</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Panel Derecho: CHALLENGES & BLACKLIST TOURNAMENTS -->
+            <div class="mw-bento-panel mw-bento-panel--events">
+              <span class="mw-panel-corners" aria-hidden="true"></span>
+              <div class="mw-bento-panel-head">
+                <div class="mw-event-status-row">
+                  <span class="mw-event-active-badge"><span class="mw-live-pulse-dot"></span> [ STATUS: ACTIVE ]</span>
+                  <span class="mw-bento-tag">SEASON 2026 // ROCKPORT</span>
+                </div>
+                <h3 class="mw-bento-title" data-i18n="landing.events_title">CHALLENGES &amp; BLACKLIST TOURNAMENTS</h3>
+                <p class="mw-bento-desc" data-i18n="landing.events_desc">
+                  Compite en retos comunitarios semanales de 4 niveles, escala en la clasificaci&oacute;n Blacklist 2026 y revisa llaves, brackets y resultados homologados.
+                </p>
+              </div>
+
+              <div class="mw-event-highlights">
+                <div class="mw-event-metric">
+                  <span data-i18n="landing.events_format_label">FORMATO</span>
+                  <strong data-i18n="landing.events_format_val">4 GRUPOS &bull; 32 RETOS</strong>
+                </div>
+                <div class="mw-event-metric">
+                  <span data-i18n="landing.events_verif_label">VERIFICACI&Oacute;N</span>
+                  <strong>VIDEO 60FPS // v1.3</strong>
+                </div>
+              </div>
+
+              <div class="mw-bento-event-actions">
+                <button type="button" class="mw-hud-cta mw-hud-cta--primary" data-view-target="view-blog" data-text="[ VER TORNEOS Y BRACKETS ]">
+                  <span class="mw-hud-cta-corners" aria-hidden="true"></span>
+                  <span data-i18n="landing.events_cta_brackets">[ VER TORNEOS Y BRACKETS ]</span>
+                </button>
+                <a href="https://discord.gg/pgP45wSN8K" target="_blank" rel="noopener noreferrer" class="mw-hud-cta mw-hud-cta--secondary" data-text="UNIRSE A LA COMUNIDAD">
+                  <span class="mw-hud-cta-corners" aria-hidden="true"></span>
+                  <span data-i18n="landing.events_cta_community">UNIRSE A LA COMUNIDAD</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. MINIMALIST TACTICAL FOOTER (Telemetry Status & Socials) -->
+        <footer class="mw-landing-footer mw-landing-footer--slim" aria-label="Pie de página NFSMW Ranks">
+          <div class="mw-footer-bottom">
+            <span>&copy; 2026 NFSMW RANKS &bull; BLACK EDITION v1.3</span>
+            <div class="mw-footer-socials">
+              <a href="https://discord.gg/pgP45wSN8K" target="_blank" rel="noopener noreferrer" class="mw-footer-social-btn" aria-label="Discord Oficial">DISCORD</a>
+              <a href="https://www.youtube.com/results?search_query=NFSMW+World+Records" target="_blank" rel="noopener noreferrer" class="mw-footer-social-btn" aria-label="YouTube Récords">YOUTUBE</a>
+            </div>
+            <span class="mw-footer-db-status" id="home-footer-firebase-status">
+              <span class="mw-live-pulse-dot" aria-hidden="true"></span>
+              <span>FIREBASE RTDB // ONLINE SYNC</span>
+            </span>
+          </div>
+        </footer>
 
       </main>
 
@@ -1140,6 +1391,9 @@
             <span class="mw-tac-label">ESC // VOLVER A RUTAS</span>
           </button>
         </div>
+
+        <!-- Mobile Swipe HUD Telemetry Hint (Visible <= 992px) -->
+        <div class="mw-table-swipe-hint" aria-hidden="true">&lt;&lt; DESLIZA PARA VER TELEMETR&Iacute;A COMPLETA &gt;&gt;</div>
 
         <!-- Firebase Leaderboard Table (1:1 Reference Styling) -->
         <div class="nfs-table-wrap">
@@ -4022,6 +4276,54 @@
         <a href="https://discord.gg/pgP45wSN8K" target="_blank" rel="noopener noreferrer" class="btn-discord-floating-cta">
           <span>UNIRME AL SERVIDOR DISCORD</span>
         </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Native Mobile Bottom App Tab Bar (Only Visible on Mobile Devices <= 680px) -->
+  <nav class="mobile-app-bottom-nav" id="mobile-app-bottom-nav" aria-label="Navegación rápida móvil">
+    <button type="button" class="mobile-bottom-tab is-active" data-view-target="view-elements">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      <span>Inicio</span>
+    </button>
+    <button type="button" class="mobile-bottom-tab" data-view-target="view-challenges">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+      <span>Rutas</span>
+    </button>
+    <button type="button" class="mobile-bottom-tab" data-view-target="view-spotlight">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg>
+      <span>Ranked</span>
+    </button>
+    <button type="button" class="mobile-bottom-tab" data-view-target="view-telemetry">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+      <span>Driver</span>
+    </button>
+    <button type="button" class="mobile-bottom-tab" id="btn-mobile-bottom-menu" onclick="openMobileDrawer()">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+      <span>Menú</span>
+    </button>
+  </nav>
+
+  <!-- Functional PWA Install Guide Modal (For iOS Safari, Firefox & Browsers Without Native Prompt) -->
+  <div class="pwa-install-modal-backdrop" id="pwa-install-modal" hidden role="dialog" aria-modal="true" aria-labelledby="pwa-modal-title">
+    <div class="pwa-install-modal-card">
+      <div class="pwa-install-modal-head">
+        <div class="pwa-install-modal-brand">
+          <img src="assets/img/pwa-icon-192.png" alt="NFSMW Ranks App" class="pwa-install-modal-icon" />
+          <div>
+            <h3 id="pwa-modal-title">INSTALAR NFSMW RANKS APP</h3>
+            <p id="pwa-modal-subtitle">Aplicación Web Progresiva (PWA)</p>
+          </div>
+        </div>
+        <button type="button" class="pwa-install-modal-close" id="btn-close-pwa-modal" onclick="closePwaInstallModal()" aria-label="Cerrar">&times;</button>
+      </div>
+      <div class="pwa-install-modal-body" id="pwa-install-modal-steps">
+        <!-- Populated dynamically with OS/browser-specific instructions -->
+      </div>
+      <div class="pwa-install-modal-foot">
+        <button type="button" class="mw-tac-btn mw-tac-btn--silver is-active" onclick="closePwaInstallModal()" data-text="ENTENDIDO">
+          <span class="mw-tac-label">ENTENDIDO</span>
+        </button>
       </div>
     </div>
   </div>
