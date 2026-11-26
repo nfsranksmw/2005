@@ -12988,3 +12988,3523 @@ html body #mobile-nav-drawer .mobile-quick-action-btn.submit-btn {
   }
 }
 
+/* ==========================================================================
+   8. FUNCTIONAL PWA INSTALL BUTTONS, MODAL & NATIVE MOBILE APP UX POLISH
+   ========================================================================== */
+
+/* Home Hero PWA Install Strip */
+.hero-pwa-install-wrap {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  position: relative;
+  z-index: 15;
+}
+
+.hero-pwa-hint {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  color: #cbd5e1;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95);
+  letter-spacing: 0.03em;
+}
+
+.btn-install-pwa-nav {
+  gap: 6px !important;
+  white-space: nowrap !important;
+}
+
+.btn-install-pwa.is-installed {
+  border-color: rgba(16, 185, 129, 0.65) !important;
+}
+
+/* Drawer Full-Width PWA Install Action */
+.mobile-drawer-quick-actions .pwa-install-drawer-btn {
+  grid-column: 1 / -1 !important;
+  min-height: 44px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  background: linear-gradient(180deg, #ffffff 0%, #dbe1e8 100%) !important;
+  border: 1px solid #ffffff !important;
+  border-radius: 6px !important;
+  color: #090a0c !important;
+  font-family: 'Barlow Condensed', 'Anton', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  cursor: pointer !important;
+}
+
+/* Mobile Bottom App Navigation Bar (Hidden on Desktop/Tablet) */
+.mobile-app-bottom-nav {
+  display: none;
+}
+
+/* Interactive PWA Guide Modal */
+.pwa-install-modal-backdrop[hidden] {
+  display: none !important;
+}
+
+.pwa-install-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2100;
+  background: rgba(0, 0, 0, 0.84);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.pwa-install-modal-card {
+  width: 100%;
+  max-width: 440px;
+  background: linear-gradient(180deg, #131518 0%, #090a0c 100%);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-top: 2px solid #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.95);
+  overflow: hidden;
+  color: #f8fafc;
+}
+
+.pwa-install-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pwa-install-modal-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pwa-install-modal-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+}
+
+.pwa-install-modal-brand h3 {
+  font-family: 'Anton', 'Barlow Condensed', sans-serif;
+  font-size: 20px;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  margin: 0;
+}
+
+.pwa-install-modal-brand p {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  color: #94a3b8;
+  margin: 2px 0 0;
+}
+
+.pwa-install-modal-close {
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.pwa-install-modal-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pwa-step-box {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 3px solid #ffffff;
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+
+.pwa-step-box.pwa-step-done {
+  border-left-color: #10b981;
+}
+
+.pwa-step-box strong {
+  display: block;
+  font-size: 13px;
+  color: #ffffff;
+  margin-bottom: 3px;
+}
+
+.pwa-step-box p {
+  margin: 0;
+  font-size: 12.5px;
+  color: #cbd5e1;
+  line-height: 1.45;
+}
+
+.pwa-install-modal-foot {
+  padding: 12px 16px 16px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Deep Mobile Optimization (<= 680px & Portrait Phones <= 767px) */
+@media (max-width: 680px), (max-width: 767px) and (orientation: portrait) {
+  button,
+  a,
+  select,
+  input {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Prevent iOS Safari / Android Chrome Auto-Zoom on Search & Form Inputs */
+  input[type="text"],
+  input[type="search"],
+  input[type="email"],
+  input[type="url"],
+  input[type="number"],
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+
+  /* Safe-area aware mobile header */
+  html body .uiverse-navbar {
+    height: calc(56px + env(safe-area-inset-top, 0px)) !important;
+    padding-top: env(safe-area-inset-top, 0px) !important;
+  }
+
+  html body .btn-install-pwa-nav {
+    display: none !important;
+  }
+
+  /* Drawer full viewport height & safe area */
+  html body #mobile-nav-drawer.mobile-nav-drawer {
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    padding-top: env(safe-area-inset-top, 0px) !important;
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+  }
+
+  /* Bottom Native App Bar Safe Spacing Across Every Section */
+  html body .secondary-view-wrap,
+  html body #view-challenges .uiverse-catalog-layout.uiverse-no-sidebar > .catalog-main,
+  html body #view-blog .uiverse-catalog-layout.uiverse-no-sidebar > .catalog-main,
+  html body #view-elements .uiverse-catalog-layout.uiverse-no-sidebar > .catalog-main,
+  html body #view-tuning .tuning-hub-container,
+  html body #view-submit .homologation-container,
+  html body #view-download .dl-vertical-container,
+  html body #view-members .members-section-inner,
+  html body .nfsmwo-web-section {
+    padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  html body .tracker-section-header {
+    padding: calc(var(--navbar-height, 56px) + 14px) 12px 16px !important;
+  }
+
+  html body :is(#view-tuning, #view-submit, #view-rules, #view-download, #view-members) {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+
+  /* Home Hero Search & PWA Install Mobile Fit */
+  html body #view-elements .hero-search-bar {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding: 4px 4px 4px 10px !important;
+    border-radius: 10px !important;
+    gap: 6px !important;
+  }
+
+  html body #view-elements .hero-search-bar .hero-search-input {
+    min-width: 0 !important;
+    width: 100% !important;
+    flex: 1 1 auto !important;
+    font-size: 15px !important;
+  }
+
+  html body #view-elements .hero-search-bar .hero-search-btn {
+    padding: 9px 12px !important;
+    font-size: 12px !important;
+    flex-shrink: 0 !important;
+  }
+
+  html body #view-elements .hero-pwa-install-wrap {
+    width: 100% !important;
+    margin-top: 14px !important;
+    gap: 8px !important;
+  }
+
+  html body #view-elements :is(#btn-install-pwa-hero, #btn-home-open-perimeter).mw-tac-btn--silver:not(#_) {
+    width: 100% !important;
+    min-height: 44px !important;
+    margin: 0 !important;
+    border-radius: 8px !important;
+    justify-content: center !important;
+  }
+
+  html body #view-elements :is(#btn-install-pwa-hero, #btn-home-open-perimeter).mw-tac-btn--silver:not(#_):is(::before, ::after) {
+    display: none !important;
+  }
+
+  html body #view-elements .hero-pwa-hint {
+    font-size: 10.5px !important;
+    text-align: center !important;
+  }
+
+  /* Home Bento Banner & Live World Records Mobile List */
+  html body #view-elements .nfs-bento-card.nfs-bento-banner {
+    min-height: 0 !important;
+    padding: 16px 14px !important;
+    border-radius: 10px !important;
+  }
+
+  html body #view-elements .nfs-bento-banner h2 {
+    font-size: 19px !important;
+    line-height: 1.2 !important;
+  }
+
+  html body #view-elements .nfs-bento-banner p {
+    font-size: 12.5px !important;
+  }
+
+  html body #view-elements .nfs-bento-banner .btn-uiverse-create,
+  html body #view-elements #btn-home-open-perimeter.mw-tac-btn--silver:not(#_) {
+    width: 100% !important;
+    justify-content: center !important;
+    margin: 0 !important;
+  }
+
+  html body #view-elements .home-showcase-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+  }
+
+  html body #view-elements .home-showcase-title {
+    font-size: 18px !important;
+  }
+
+  html body #view-elements .nfs-live-row {
+    padding: 10px 12px !important;
+    gap: 8px !important;
+  }
+
+  /* Tuning / Members / Online Web Views Compact Mobile Stack */
+  html body #view-tuning .tuning-controls-bar,
+  html body #view-members .members-controls-bar,
+  html body .mwo-hud-bar,
+  html body .mwo-utility-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+
+  html body #view-tuning .tuning-car-hero {
+    height: 148px !important;
+  }
+
+  html body .mwo-hero-stage {
+    min-height: 0 !important;
+    padding-top: calc(var(--navbar-height, 56px) + 12px) !important;
+  }
+
+  /* Show Native Mobile Bottom App Tab Bar */
+  html body #mobile-app-bottom-nav.mobile-app-bottom-nav {
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    align-items: center !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: calc(58px + env(safe-area-inset-bottom, 0px)) !important;
+    padding: 4px 4px env(safe-area-inset-bottom, 0px) 4px !important;
+    background: rgba(8, 9, 11, 0.96) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.16) !important;
+    box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.88) !important;
+    z-index: 950 !important;
+  }
+
+  html body .mobile-bottom-tab {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 3px !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 6px !important;
+    padding: 5px 2px !important;
+    color: #94a3b8 !important;
+    font-family: 'Barlow Condensed', 'Inter', sans-serif !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.04em !important;
+    text-transform: uppercase !important;
+    cursor: pointer !important;
+  }
+
+  html body .mobile-bottom-tab svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  html body .mobile-bottom-tab.is-active {
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  /* Keep Floating Pills Only on Home Above Bottom Nav So Tables & Lists Stay 100% Unobstructed */
+  html body:not([data-active-view="view-elements"]) :is(.nfsmwo-floating-wrapper, .discord-floating-wrapper) {
+    display: none !important;
+  }
+
+  html body[data-active-view="view-elements"] .nfsmwo-floating-wrapper {
+    bottom: calc(66px + env(safe-area-inset-bottom, 0px)) !important;
+    left: 10px !important;
+    z-index: 900 !important;
+  }
+
+  html body[data-active-view="view-elements"] .discord-floating-wrapper {
+    bottom: calc(66px + env(safe-area-inset-bottom, 0px)) !important;
+    right: 10px !important;
+    z-index: 900 !important;
+  }
+}
+
+/* ==========================================================================
+   9. HOME ESPORTS LANDING PAGE — NEED FOR SPEED MOST WANTED (2005)
+   Strict 3-Color Discipline: Black (#050506), White (#ffffff),
+   Subtle Olive-Gold / Amber-Orange (#b8b030 / #f59e0b / #ff8c00)
+   Sharp 0px Tactical Borders + White HUD L-Corner Brackets
+   ========================================================================== */
+
+/* 9.1 Hero Section Táctico */
+html body #view-elements .mw-landing-hero.uiverse-hero {
+  position: relative !important;
+  min-height: clamp(560px, 76vh, 760px) !important;
+  padding: calc(var(--navbar-height, 64px) + 46px) 0 0 !important;
+  background-color: #050506 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-end !important;
+  text-align: left !important;
+  overflow: hidden !important;
+}
+
+.mw-hero-industrial-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: url("../img/top-ranked-industrial-bg.jpg") center bottom / cover no-repeat;
+  opacity: 0.24;
+  mix-blend-mode: luminosity;
+  pointer-events: none;
+}
+
+.mw-hero-smoke-layer {
+  position: absolute;
+  inset: -12%;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(50% 42% at 22% 72%, rgba(0, 0, 0, 0.88) 0%, transparent 72%),
+    radial-gradient(46% 38% at 78% 28%, rgba(0, 0, 0, 0.72) 0%, transparent 70%),
+    radial-gradient(60% 48% at 52% 96%, rgba(5, 5, 6, 0.96) 0%, transparent 76%);
+  animation: mwSmokeDrift 18s ease-in-out infinite alternate;
+}
+
+@keyframes mwSmokeDrift {
+  0% { transform: translate3d(-1.5%, 0, 0) scale(1); }
+  100% { transform: translate3d(1.5%, -1.5%, 0) scale(1.04); }
+}
+
+.mw-hero-vignette {
+  z-index: 3 !important;
+  background:
+    linear-gradient(90deg, rgba(5, 5, 6, 0.95) 0%, rgba(5, 5, 6, 0.72) 48%, rgba(5, 5, 6, 0.42) 100%),
+    linear-gradient(180deg, rgba(5, 5, 6, 0.65) 0%, rgba(5, 5, 6, 0.22) 42%, rgba(5, 5, 6, 0.96) 100%) !important;
+}
+
+.mw-hero-container {
+  position: relative;
+  z-index: 6;
+  width: 100%;
+  max-width: 1580px;
+  margin: 0 auto;
+  padding: 24px clamp(18px, 3vw, 44px) 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 36px;
+}
+
+.mw-hero-content {
+  max-width: 820px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.mw-hud-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 5px 12px;
+  background: rgba(8, 9, 10, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-left: 3px solid #f59e0b;
+  border-radius: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #e4e4e7;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.mw-hud-dot,
+.mw-live-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 0;
+  background: #f59e0b;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.85);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.mw-hero-headline {
+  margin: 0 0 14px;
+  display: flex;
+  flex-direction: column;
+  line-height: 0.94;
+  text-transform: uppercase;
+}
+
+.mw-hero-headline-main {
+  font-family: 'Barlow Condensed', 'Anton', sans-serif;
+  font-size: clamp(32px, 4.4vw, 58px);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #e4e4e7;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.95);
+}
+
+.mw-hero-headline-accent {
+  font-family: 'Anton', 'Barlow Condensed', Impact, sans-serif;
+  font-size: clamp(54px, 8.2vw, 112px);
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  color: #ffffff;
+  text-shadow:
+    0 5px 0 #000000,
+    0 12px 34px rgba(0, 0, 0, 0.96);
+  position: relative;
+  display: inline-block;
+}
+
+.mw-hero-headline-accent::after {
+  content: "";
+  display: block;
+  width: 120px;
+  height: 4px;
+  margin-top: 8px;
+  background: linear-gradient(90deg, #c8ba3e 0%, #f59e0b 65%, transparent 100%);
+}
+
+.mw-hero-subtitle {
+  margin: 0 0 26px;
+  max-width: 620px;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(14px, 1.25vw, 16.5px);
+  line-height: 1.6;
+  color: #d4d4d8;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.95);
+}
+
+/* Primary, Secondary & Utility HUD Buttons (0px Borders + White L-Brackets) */
+.mw-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+}
+
+.mw-hud-cta {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  min-height: 48px !important;
+  padding: 12px 24px !important;
+  border-radius: 0 !important;
+  font-family: 'Barlow Condensed', 'Anton', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.09em !important;
+  text-transform: uppercase !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease !important;
+  overflow: visible !important;
+}
+
+.mw-hud-cta-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.mw-hud-cta-corners,
+.mw-panel-corners,
+.mw-card-corners {
+  position: absolute;
+  inset: -4px;
+  pointer-events: none;
+  z-index: 3;
+  background-repeat: no-repeat;
+  background-position:
+    top left, top left,
+    top right, top right,
+    bottom left, bottom left,
+    bottom right, bottom right;
+  background-image:
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(#ffffff, #ffffff);
+  background-size:
+    12px 2px, 2px 12px,
+    12px 2px, 2px 12px,
+    12px 2px, 2px 12px,
+    12px 2px, 2px 12px;
+}
+
+/* Primary: Olive-Gold Worn Barbed Wire High-Contrast */
+.mw-hud-cta--primary {
+  color: #090a07 !important;
+  border: 1px solid #e2d878 !important;
+  background-color: #b8b236 !important;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='12' viewBox='0 0 120 12'%3E%3Cpath d='M0 6 Q30 2 60 7 T120 5' stroke='%23090a07' stroke-width='1.35' fill='none' opacity='0.55'/%3E%3Cg stroke='%23090a07' stroke-width='1.1' opacity='0.65'%3E%3Cline x1='24' y1='1.5' x2='30' y2='10'/%3E%3Cline x1='30' y1='1.5' x2='24' y2='10'/%3E%3Cline x1='84' y1='2' x2='90' y2='10.5'/%3E%3Cline x1='90' y1='2' x2='84' y2='10.5'/%3E%3C/g%3E%3C/svg%3E"),
+    linear-gradient(135deg, #d8ce58 0%, #a9a22b 55%, #847d1d 100%) !important;
+  background-repeat: repeat-x, no-repeat !important;
+  background-position: bottom left, center !important;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.8) !important;
+}
+
+.mw-hud-cta--primary:hover {
+  background-color: #ffffff !important;
+  background-image: linear-gradient(180deg, #ffffff 0%, #e5e7eb 100%) !important;
+  border-color: #ffffff !important;
+  color: #050506 !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Secondary: Dark Translucent + White Tactical Border */
+.mw-hud-cta--secondary {
+  color: #ffffff !important;
+  background: rgba(10, 11, 13, 0.78) !important;
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+}
+
+.mw-hud-cta--secondary:hover {
+  background: rgba(255, 255, 255, 0.14) !important;
+  border-color: #f59e0b !important;
+  color: #ffffff !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Utility: Compact PWA Install */
+.mw-hud-cta--utility {
+  color: #e4e4e7 !important;
+  background: rgba(14, 15, 17, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  padding: 12px 18px !important;
+  font-size: 14.5px !important;
+}
+
+.mw-hud-cta--utility:hover {
+  background: #ffffff !important;
+  color: #050506 !important;
+  border-color: #ffffff !important;
+  transform: translateY(-2px) !important;
+}
+
+.mw-hero-pwa-hint {
+  margin-top: 10px;
+  color: #a1a1aa !important;
+  font-size: 11px !important;
+}
+
+/* Bottom Live Telemetry Bar */
+.mw-hero-telemetry-bar {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+  align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(7, 8, 9, 0.9);
+  margin: 0 calc(clamp(18px, 3vw, 44px) * -1);
+  padding: 0 clamp(18px, 3vw, 44px);
+}
+
+.mw-hero-stat-item {
+  padding: 18px 20px 18px 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mw-hero-stat-item:not(:first-child) {
+  padding-left: 24px;
+}
+
+.mw-hero-stat-value {
+  font-family: 'Anton', 'Barlow Condensed', sans-serif;
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.03em;
+}
+
+.mw-hero-stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #d6c656;
+  text-transform: uppercase;
+}
+
+.mw-hero-stat-status {
+  padding-left: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #e4e4e7;
+  white-space: nowrap;
+}
+
+/* 9.2 Main Landing Sections Container */
+.mw-landing-main {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 64px !important;
+  padding-top: 48px !important;
+  padding-bottom: 36px !important;
+  background: #050506 !important;
+}
+
+.mw-landing-section {
+  width: 100%;
+  max-width: 1580px;
+  margin: 0 auto;
+}
+
+.mw-section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.mw-section-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #f59e0b;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.mw-section-title {
+  margin: 0;
+  font-family: 'Anton', 'Barlow Condensed', Impact, sans-serif;
+  font-size: clamp(28px, 3.3vw, 44px);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.02;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.mw-title-slash {
+  color: #f59e0b;
+}
+
+.mw-section-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #a1a1aa;
+  letter-spacing: 0.1em;
+}
+
+/* 9.3 Section 2: TOP 3 BLACKLIST Cards */
+.mw-top3-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.mw-top3-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 22px;
+  border-radius: 0;
+  background: linear-gradient(180deg, #111214 0%, #08090a 100%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  cursor: pointer;
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.mw-top3-card:hover {
+  transform: translateY(-4px);
+  border-color: #ffffff;
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.85);
+}
+
+/* Special #01 Leader Treatment: Worn Olive-Gold + Barbed Wire */
+.mw-top3-card.is-leader {
+  background:
+    radial-gradient(90% 70% at 85% 15%, rgba(212, 186, 54, 0.24) 0%, transparent 65%),
+    linear-gradient(155deg, #4b4714 0%, #24210a 42%, #0c0c09 100%);
+  border: 1px solid #d6c656;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.88);
+}
+
+.mw-top3-barbed-wire {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 46px;
+  pointer-events: none;
+  opacity: 0.65;
+  z-index: 1;
+}
+
+.mw-top3-card > *:not(.mw-card-corners):not(.mw-top3-barbed-wire) {
+  position: relative;
+  z-index: 2;
+}
+
+.mw-top3-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.mw-top3-rank-num {
+  font-family: 'Anton', 'Barlow Condensed', sans-serif;
+  font-size: 46px;
+  line-height: 0.9;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+}
+
+.mw-top3-card.is-leader .mw-top3-rank-num {
+  color: #f6e27a;
+}
+
+.mw-top3-badge {
+  padding: 4px 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(5, 5, 6, 0.72);
+  color: #ffffff;
+}
+
+.mw-top3-card.is-leader .mw-top3-badge {
+  background: #d6c656;
+  border-color: #f6e27a;
+  color: #050506;
+}
+
+.mw-top3-pilot-name {
+  margin: 0 0 4px;
+  font-family: 'Anton', 'Barlow Condensed', sans-serif;
+  font-size: 30px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #ffffff;
+  line-height: 1.05;
+}
+
+.mw-top3-track-ref {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #d4d4d8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.mw-top3-metrics {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  padding: 12px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.mw-top3-metric {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.mw-top3-metric span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.09em;
+  color: #a1a1aa;
+}
+
+.mw-top3-metric strong {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: right;
+}
+
+.mw-top3-metric strong.mw-top3-time {
+  font-family: 'Anton', 'Barlow Condensed', sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  color: #f59e0b;
+}
+
+.mw-top3-card.is-leader .mw-top3-metric strong.mw-top3-time {
+  color: #f6e27a;
+}
+
+.mw-top3-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.mw-top3-video-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 14px;
+  border: 1px solid #ffffff;
+  background: #ffffff;
+  color: #050506;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+
+.mw-top3-video-btn:hover {
+  background: #f59e0b;
+  border-color: #f59e0b;
+  color: #050506;
+}
+
+.mw-top3-dossier-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #d4d4d8;
+}
+
+.mw-top3-footer-action {
+  margin-top: 22px;
+}
+
+.mw-hud-wide-btn {
+  position: relative;
+  width: 100%;
+  min-height: 52px;
+  padding: 14px 20px;
+  border-radius: 0;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(12, 13, 15, 0.92);
+  color: #ffffff;
+  font-family: 'Barlow Condensed', 'Anton', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.mw-hud-wide-btn:hover {
+  background: #ffffff;
+  color: #050506;
+  border-color: #ffffff;
+}
+
+/* 9.4 Section 3: Featured Routes Grid */
+.mw-modality-quick-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mw-quick-mod-btn {
+  padding: 7px 14px;
+  border-radius: 0;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  background: #0d0e10;
+  color: #e4e4e7;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+
+.mw-quick-mod-btn:hover,
+.mw-quick-mod-btn.is-active {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #050506;
+}
+
+.mw-featured-routes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+
+/* 9.5 Section 4: Asymmetric Bento HUD (Ranked Sessions + Events) */
+.mw-bento-hud-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 24px;
+}
+
+.mw-bento-panel {
+  position: relative;
+  padding: 26px;
+  border-radius: 0;
+  background: rgba(11, 12, 14, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 22px;
+}
+
+.mw-bento-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #a1a1aa;
+  text-transform: uppercase;
+}
+
+.mw-bento-title {
+  margin: 6px 0 8px;
+  font-family: 'Anton', 'Barlow Condensed', sans-serif;
+  font-size: clamp(24px, 2.5vw, 34px);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.mw-bento-desc {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: #a1a1aa;
+}
+
+.mw-sessions-access-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.mw-session-access-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 0;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: #08090a;
+  color: #ffffff;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.mw-session-access-btn:hover {
+  border-color: #f59e0b;
+  background: #141517;
+  transform: translateY(-2px);
+}
+
+.mw-session-icon {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #f59e0b;
+  flex-shrink: 0;
+}
+
+.mw-session-icon svg {
+  width: 24px;
+  height: 22px;
+}
+
+.mw-session-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.mw-session-text strong {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 15.5px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+}
+
+.mw-session-text small {
+  font-size: 11px;
+  color: #a1a1aa;
+}
+
+.mw-session-arrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  color: #a1a1aa;
+}
+
+.mw-session-access-btn:hover .mw-session-arrow {
+  color: #ffffff;
+}
+
+.mw-event-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.mw-event-active-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 10px;
+  border: 1px solid #f59e0b;
+  background: rgba(245, 158, 11, 0.12);
+  color: #f6e27a;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.mw-event-highlights {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 14px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.mw-event-metric span {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: #a1a1aa;
+  letter-spacing: 0.1em;
+}
+
+.mw-event-metric strong {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.05em;
+}
+
+.mw-bento-event-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* 9.6 Section 5: Minimalist Tactical Footer */
+.mw-landing-footer {
+  width: 100%;
+  max-width: 1580px;
+  margin: 0 auto;
+  padding: 28px 0 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.mw-footer-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.mw-footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mw-footer-logo {
+  height: 32px;
+  width: auto;
+}
+
+.mw-footer-title {
+  font-family: 'Anton', 'Barlow Condensed', sans-serif;
+  font-size: 20px;
+  letter-spacing: 0.06em;
+  color: #ffffff;
+}
+
+.mw-footer-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: #a1a1aa;
+  letter-spacing: 0.08em;
+}
+
+.mw-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.mw-footer-links button {
+  background: transparent;
+  border: none;
+  color: #d4d4d8;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 2px 0;
+  transition: color 0.16s ease;
+}
+
+.mw-footer-links button:hover {
+  color: #f59e0b;
+}
+
+.mw-footer-socials {
+  display: flex;
+  gap: 8px;
+}
+
+.mw-footer-social-btn {
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: #0c0d0f;
+  color: #ffffff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  transition: background-color 0.16s ease, color 0.16s ease, border-color 0.16s ease;
+}
+
+.mw-footer-social-btn:hover {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #050506;
+}
+
+.mw-footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #71717a;
+}
+
+.mw-footer-db-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #d4d4d8;
+}
+
+/* 9.7 Guaranteed Immediate Visibility (NO opacity: 0 scroll hiding) + Rank Boxes + Navbar Clean Fit */
+#view-elements .mw-landing-body,
+#view-elements .mw-landing-main,
+#view-elements .mw-landing-section,
+#view-elements .mw-landing-footer {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
+
+/* Top 3 Rank Boxes (Cream-Olive for #01, Steel-Gray for #02 & #03) & Translucent Carbon Cards */
+.mw-top3-card:not(.is-leader) {
+  background: rgba(20, 20, 20, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+}
+
+.mw-top3-rank-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 58px;
+  height: 48px;
+  padding: 0 12px;
+  border-radius: 0;
+  font-family: 'Anton', 'Barlow Condensed', sans-serif;
+  font-size: 30px;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(180deg, #3b4048 0%, #23262b 100%);
+  border: 1px solid rgba(203, 213, 225, 0.45);
+  color: #f1f5f9;
+}
+
+.mw-top3-card.is-leader .mw-top3-rank-box {
+  background: linear-gradient(180deg, #e7de9e 0%, #bfb552 100%);
+  border: 1px solid #fff7c2;
+  color: #090a07;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.55);
+}
+
+.mw-top3-barbed-top {
+  top: 0;
+  bottom: auto;
+  height: 30px;
+}
+
+.mw-top3-barbed-bottom {
+  top: auto;
+  bottom: 0;
+  height: 24px;
+}
+
+.mw-top3-metric strong.mw-top3-delta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 800;
+  color: #f59e0b;
+  letter-spacing: 0.04em;
+}
+
+/* Ranked Sessions Olive-Gold Hover */
+.mw-session-access-btn:hover {
+  border-color: #c8ba3e !important;
+  background: linear-gradient(135deg, rgba(164, 156, 42, 0.24) 0%, rgba(16, 17, 14, 0.96) 100%) !important;
+  transform: translateY(-2px);
+}
+
+.mw-session-access-btn:hover .mw-session-icon {
+  border-color: #d6c656 !important;
+  color: #f6e27a !important;
+  background: rgba(214, 198, 86, 0.16) !important;
+}
+
+/* Sleek Top Navbar Redesign (Promoted from Landing Footer Pill Bar + Full Dropdown Support) */
+html body header.uiverse-navbar {
+  background: rgba(7, 8, 10, 0.96) !important;
+  background-image: none !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.72) !important;
+}
+
+html body .uiverse-navbar .navbar-wrap {
+  gap: 14px !important;
+  padding: 0 22px !important;
+  min-height: 64px !important;
+}
+
+html body .uiverse-navbar .navbar-left {
+  display: flex !important;
+  align-items: center !important;
+  gap: 22px !important;
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+}
+
+/* Brand Block Matching Sleek NFSMW Ranks + Telemetry Subtitle */
+html body .uiverse-navbar .uiverse-logo {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 11px !important;
+  text-decoration: none !important;
+  flex-shrink: 0 !important;
+  padding: 2px 0 !important;
+}
+
+html body .uiverse-navbar .brand-logo-img {
+  height: 32px !important;
+  width: auto !important;
+  flex-shrink: 0 !important;
+  border-radius: 6px !important;
+}
+
+html body .uiverse-navbar .brand-logo-stack {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 2px !important;
+  line-height: 1 !important;
+}
+
+html body .uiverse-navbar .brand-logo-text {
+  font-family: 'Anton', 'Barlow Condensed', sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.06em !important;
+  color: #ffffff !important;
+  line-height: 1 !important;
+  text-transform: uppercase !important;
+}
+
+html body .uiverse-navbar .brand-logo-sub {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 9.5px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.08em !important;
+  color: #9ca3af !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  line-height: 1.15 !important;
+}
+
+/* Sleek Dark Pill Navigation Buttons (Clean Border, Rounded 7px, Fluid Hover & Dropdown) */
+html body .uiverse-navbar .uiverse-nav-list {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-wrap: nowrap !important;
+}
+
+html body .uiverse-navbar .nav-link:not(#_),
+html body .uiverse-navbar .nav-link-glitch:not(#_) {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  height: 32px !important;
+  padding: 0 11px !important;
+  border-radius: 7px !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  background: rgba(14, 15, 18, 0.92) !important;
+  background-image: none !important;
+  color: #f4f4f5 !important;
+  font-family: 'Barlow Condensed', sans-serif !important;
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.07em !important;
+  text-transform: uppercase !important;
+  text-shadow: none !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45) !important;
+  white-space: nowrap !important;
+  transform: none !important;
+  transition: border-color 0.16s ease, background-color 0.16s ease, color 0.16s ease, box-shadow 0.16s ease, transform 0.14s ease !important;
+}
+
+/* Strip Legacy Outer L-Brackets (::before) and White Paint Drip (::after) on Top Navbar Pills */
+html body .uiverse-navbar .nav-link:not(#_)::before,
+html body .uiverse-navbar .nav-link-glitch:not(#_)::before,
+html body .uiverse-navbar .nav-link:not(#_)::after,
+html body .uiverse-navbar .nav-link-glitch:not(#_)::after,
+html body .uiverse-navbar .nav-link:not(#_):hover::before,
+html body .uiverse-navbar .nav-link:not(#_):hover::after,
+html body .uiverse-navbar .nav-link:not(#_).is-active::before,
+html body .uiverse-navbar .nav-link:not(#_).is-active::after,
+html body .uiverse-navbar .nav-link:not(#_).active::before,
+html body .uiverse-navbar .nav-link:not(#_).active::after,
+html body .uiverse-navbar .nav-item.has-megamenu:hover > .nav-link:not(#_)::before,
+html body .uiverse-navbar .nav-item.has-megamenu:hover > .nav-link:not(#_)::after,
+html body .uiverse-navbar .nav-item.has-megamenu.dropdown-open > .nav-link:not(#_)::before,
+html body .uiverse-navbar .nav-item.has-megamenu.dropdown-open > .nav-link:not(#_)::after {
+  display: none !important;
+  opacity: 0 !important;
+  content: none !important;
+}
+
+html body .uiverse-navbar .nav-online-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  flex-shrink: 0;
+}
+
+html body .uiverse-navbar .nav-link .nav-chevron {
+  width: 12px !important;
+  height: 12px !important;
+  margin-left: 1px !important;
+  color: #a1a1aa !important;
+  stroke: currentColor !important;
+  transition: transform 0.18s ease, color 0.16s ease !important;
+}
+
+/* Hover / Open Dropdown / Active States: Refined Dark-Gold Pill Accent (No Bright White Box) */
+html body .uiverse-navbar .nav-link:not(#_):hover,
+html body .uiverse-navbar .nav-link-glitch:not(#_):hover,
+html body .uiverse-navbar .nav-item.has-megamenu:hover > .nav-link:not(#_),
+html body .uiverse-navbar .nav-item.has-megamenu.dropdown-open > .nav-link:not(#_) {
+  color: #ffffff !important;
+  border-color: rgba(214, 198, 86, 0.85) !important;
+  background: rgba(214, 198, 86, 0.14) !important;
+  background-image: none !important;
+  box-shadow: 0 0 14px rgba(214, 198, 86, 0.18), 0 4px 12px rgba(0, 0, 0, 0.6) !important;
+  transform: translateY(-1px) !important;
+}
+
+html body .uiverse-navbar .nav-link:not(#_).is-active,
+html body .uiverse-navbar .nav-link:not(#_).active {
+  color: #ffffff !important;
+  border-color: #d6c656 !important;
+  background: rgba(214, 198, 86, 0.15) !important;
+  background-image: none !important;
+  box-shadow: inset 0 0 0 1px rgba(214, 198, 86, 0.2), 0 0 12px rgba(214, 198, 86, 0.16) !important;
+  transform: none !important;
+}
+
+html body .uiverse-navbar .nav-link:not(#_):hover span,
+html body .uiverse-navbar .nav-link:not(#_).is-active span,
+html body .uiverse-navbar .nav-link:not(#_).active span,
+html body .uiverse-navbar .nav-item.has-megamenu:hover > .nav-link:not(#_) span,
+html body .uiverse-navbar .nav-item.has-megamenu.dropdown-open > .nav-link:not(#_) span {
+  color: #ffffff !important;
+}
+
+html body .uiverse-navbar .nav-link:not(#_):hover .nav-chevron,
+html body .uiverse-navbar .nav-link:not(#_).is-active .nav-chevron,
+html body .uiverse-navbar .nav-link:not(#_).active .nav-chevron,
+html body .uiverse-navbar .nav-item.has-megamenu:hover > .nav-link:not(#_) .nav-chevron,
+html body .uiverse-navbar .nav-item.has-megamenu.dropdown-open > .nav-link:not(#_) .nav-chevron {
+  color: #f6e27a !important;
+}
+
+html body .uiverse-navbar .nav-item.has-megamenu:hover > .nav-link .nav-chevron,
+html body .uiverse-navbar .nav-item.has-megamenu.dropdown-open > .nav-link .nav-chevron {
+  transform: rotate(180deg) !important;
+}
+
+/* Harmonized Dropdown Menus & Submenu Items — 100% Coherent with Sleek Top Pill Navbar */
+html body .uiverse-navbar .elements-mega-menu,
+html body .uiverse-navbar .nav-dropdown-menu {
+  top: calc(100% + 10px) !important;
+  min-width: 256px !important;
+  max-width: 340px !important;
+  padding: 8px !important;
+  border-radius: 10px !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  background: rgba(10, 11, 14, 0.98) !important;
+  background-image: none !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(214, 198, 86, 0.08) !important;
+}
+
+/* Strip Legacy Outer White L-Brackets & Vertical Tree Connector Line on Dropdown Panel */
+html body .uiverse-navbar .elements-mega-menu::before,
+html body .uiverse-navbar .nav-dropdown-menu::before {
+  display: none !important;
+  content: none !important;
+  opacity: 0 !important;
+}
+
+/* Preserve Invisible Hover Bridge Between Navbar Pill and Dropdown Panel */
+html body .uiverse-navbar .elements-mega-menu::after,
+html body .uiverse-navbar .nav-dropdown-menu::after {
+  content: "" !important;
+  top: -14px !important;
+  height: 14px !important;
+}
+
+html body .uiverse-navbar .mega-menu-grid,
+html body .uiverse-navbar .submenu-grid {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 5px !important;
+}
+
+/* Individual Dropdown Submenu Rows: Sleek Dark Pill Matching Top Navbar (No Rivets / No Tree / No Paint Drip) */
+html body .uiverse-navbar .mega-item:not(#_),
+html body .uiverse-navbar .submenu-item:not(#_),
+html body .uiverse-navbar .dropdown-glitch-item:not(#_) {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 10px !important;
+  width: 100% !important;
+  padding: 8px 11px !important;
+  border-radius: 7px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: rgba(17, 19, 23, 0.88) !important;
+  background-image: none !important;
+  color: #f4f4f5 !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  transform: none !important;
+  transition: border-color 0.16s ease, background-color 0.16s ease, color 0.16s ease, transform 0.14s ease !important;
+}
+
+/* Remove Legacy "01 //" Counter Prefix (::before) and White Paint Drip (::after) on Submenu Items */
+html body .uiverse-navbar .mega-item:not(#_)::before,
+html body .uiverse-navbar .submenu-item:not(#_)::before,
+html body .uiverse-navbar .dropdown-glitch-item:not(#_)::before,
+html body .uiverse-navbar .mega-item:not(#_)::after,
+html body .uiverse-navbar .submenu-item:not(#_)::after,
+html body .uiverse-navbar .dropdown-glitch-item:not(#_)::after,
+html body .uiverse-navbar .mega-item:not(#_):hover::before,
+html body .uiverse-navbar .submenu-item:not(#_):hover::before,
+html body .uiverse-navbar .mega-item:not(#_).is-active::before,
+html body .uiverse-navbar .submenu-item:not(#_).is-active::before,
+html body .uiverse-navbar .mega-item:not(#_):hover::after,
+html body .uiverse-navbar .submenu-item:not(#_):hover::after,
+html body .uiverse-navbar .mega-item:not(#_).is-active::after,
+html body .uiverse-navbar .submenu-item:not(#_).is-active::after,
+html body .uiverse-navbar .dropdown-glitch-item:not(#_):hover::after,
+html body .uiverse-navbar .dropdown-glitch-item:not(#_).is-active::after {
+  display: none !important;
+  content: none !important;
+  opacity: 0 !important;
+}
+
+html body .uiverse-navbar .mega-item .submenu-label,
+html body .uiverse-navbar .submenu-item .submenu-label {
+  font-family: 'Barlow Condensed', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.07em !important;
+  text-transform: uppercase !important;
+  color: #f4f4f5 !important;
+  text-shadow: none !important;
+}
+
+html body .uiverse-navbar .mega-item .uiverse-menu-icon-box,
+html body .uiverse-navbar .submenu-item .uiverse-menu-icon-box {
+  width: 26px !important;
+  height: 26px !important;
+  border-radius: 6px !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  color: #e4e4e7 !important;
+  flex-shrink: 0 !important;
+}
+
+/* Submenu Hover & Active: Smooth Dark-Gold Accent Pill (Coherent with Top Navbar) */
+html body .uiverse-navbar .mega-item:not(#_):hover,
+html body .uiverse-navbar .submenu-item:not(#_):hover,
+html body .uiverse-navbar .dropdown-glitch-item:not(#_):hover {
+  border-color: rgba(214, 198, 86, 0.72) !important;
+  background: rgba(214, 198, 86, 0.14) !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55) !important;
+  transform: translateX(2px) !important;
+}
+
+html body .uiverse-navbar .mega-item:not(#_).is-active,
+html body .uiverse-navbar .submenu-item:not(#_).is-active,
+html body .uiverse-navbar .dropdown-glitch-item:not(#_).is-active {
+  border-color: rgba(214, 198, 86, 0.85) !important;
+  background: rgba(214, 198, 86, 0.18) !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  box-shadow: inset 0 0 0 1px rgba(214, 198, 86, 0.2) !important;
+  transform: none !important;
+}
+
+html body .uiverse-navbar .mega-item:not(#_):hover .submenu-label,
+html body .uiverse-navbar .submenu-item:not(#_):hover .submenu-label,
+html body .uiverse-navbar .mega-item:not(#_).is-active .submenu-label,
+html body .uiverse-navbar .submenu-item:not(#_).is-active .submenu-label,
+html body .uiverse-navbar .dropdown-glitch-item:not(#_):hover .submenu-label,
+html body .uiverse-navbar .dropdown-glitch-item:not(#_).is-active .submenu-label {
+  color: #ffffff !important;
+  text-shadow: none !important;
+}
+
+html body .uiverse-navbar .mega-item:not(#_):hover .uiverse-menu-icon-box,
+html body .uiverse-navbar .submenu-item:not(#_):hover .uiverse-menu-icon-box,
+html body .uiverse-navbar .mega-item:not(#_).is-active .uiverse-menu-icon-box,
+html body .uiverse-navbar .submenu-item:not(#_).is-active .uiverse-menu-icon-box {
+  border-color: rgba(214, 198, 86, 0.65) !important;
+  background: rgba(214, 198, 86, 0.18) !important;
+  color: #f6e27a !important;
+  box-shadow: none !important;
+}
+
+/* Harmonized Language & Submit Record Dropdowns */
+html body .uiverse-navbar .lang-dropdown-menu,
+html body .uiverse-navbar .create-dropdown {
+  padding: 6px !important;
+  border-radius: 10px !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  background: rgba(10, 11, 14, 0.98) !important;
+  background-image: none !important;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.9) !important;
+}
+
+html body .uiverse-navbar .lang-opt-btn,
+html body .uiverse-navbar .create-dropdown-item {
+  border-radius: 7px !important;
+  border: 1px solid transparent !important;
+  background: transparent !important;
+  color: #f4f4f5 !important;
+  font-family: 'Barlow Condensed', sans-serif !important;
+  font-size: 13.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+}
+
+html body .uiverse-navbar .lang-opt-btn:hover,
+html body .uiverse-navbar .lang-opt-btn.is-active,
+html body .uiverse-navbar .create-dropdown-item:hover {
+  border-color: rgba(214, 198, 86, 0.7) !important;
+  background: rgba(214, 198, 86, 0.14) !important;
+  color: #ffffff !important;
+}
+
+/* Dynamic Landing Page Modality Pill Bar (#home-routes-section — Coherent with Top Navbar, Zero Orange Lightning) */
+html body #home-routes-section .mw-modality-quick-links {
+  display: inline-flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  padding: 5px !important;
+  border-radius: 10px !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  background: rgba(10, 11, 14, 0.92) !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55) !important;
+}
+
+html body #home-routes-section button.mw-quick-mod-btn:not(#_) {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  height: 34px !important;
+  padding: 0 12px !important;
+  border-radius: 7px !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  background: rgba(17, 19, 23, 0.94) !important;
+  background-image: none !important;
+  color: #e4e4e7 !important;
+  font-family: 'Barlow Condensed', sans-serif !important;
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.07em !important;
+  text-transform: uppercase !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  transition: border-color 0.16s ease, background-color 0.16s ease, color 0.16s ease, transform 0.14s ease, box-shadow 0.16s ease !important;
+}
+
+html body #home-routes-section button.mw-quick-mod-btn:not(#_)::before,
+html body #home-routes-section button.mw-quick-mod-btn:not(#_)::after {
+  display: none !important;
+  content: none !important;
+  opacity: 0 !important;
+}
+
+html body #home-routes-section .mw-quick-mod-btn .mw-mod-icon {
+  width: 14px !important;
+  height: 14px !important;
+  color: #a1a1aa !important;
+  flex-shrink: 0 !important;
+  transition: color 0.16s ease !important;
+}
+
+html body #home-routes-section .mw-quick-mod-btn .mw-mod-count {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 22px !important;
+  height: 18px !important;
+  padding: 0 5px !important;
+  border-radius: 5px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #a1a1aa !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  transition: background-color 0.16s ease, color 0.16s ease !important;
+}
+
+html body #home-routes-section button.mw-quick-mod-btn:not(#_):hover {
+  border-color: rgba(214, 198, 86, 0.8) !important;
+  background: rgba(214, 198, 86, 0.14) !important;
+  color: #ffffff !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 14px rgba(214, 198, 86, 0.16) !important;
+}
+
+html body #home-routes-section button.mw-quick-mod-btn:not(#_):hover .mw-mod-icon {
+  color: #f6e27a !important;
+}
+
+html body #home-routes-section button.mw-quick-mod-btn:not(#_):hover .mw-mod-count {
+  background: rgba(214, 198, 86, 0.24) !important;
+  color: #fffef5 !important;
+}
+
+html body #home-routes-section button.mw-quick-mod-btn:not(#_).is-active {
+  border-color: #d6c656 !important;
+  background: linear-gradient(135deg, rgba(164, 156, 42, 0.34) 0%, rgba(21, 22, 16, 0.96) 100%) !important;
+  color: #ffffff !important;
+  box-shadow: inset 0 0 0 1px rgba(214, 198, 86, 0.22), 0 0 16px rgba(214, 198, 86, 0.2) !important;
+  transform: none !important;
+}
+
+html body #home-routes-section button.mw-quick-mod-btn:not(#_).is-active .mw-mod-icon {
+  color: #f6e27a !important;
+}
+
+html body #home-routes-section button.mw-quick-mod-btn:not(#_).is-active .mw-mod-count {
+  background: #d6c656 !important;
+  color: #090a07 !important;
+}
+
+html body #home-routes-section button.mw-quick-mod-btn.mw-quick-mod-btn--all-link:not(#_) {
+  border-color: rgba(255, 255, 255, 0.22) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #f6e27a !important;
+}
+
+html body #home-routes-section button.mw-quick-mod-btn.mw-quick-mod-btn--all-link:not(#_):hover {
+  border-color: #f6e27a !important;
+  background: #d6c656 !important;
+  color: #090a07 !important;
+}
+
+/* Right Navbar Controls (Admin, Language Selector, Submit Record) — Cohesive Sleek Pills */
+html body .uiverse-navbar .navbar-right {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-shrink: 0 !important;
+  margin-left: auto !important;
+}
+
+html body .uiverse-navbar .btn-uiverse-admin,
+html body .uiverse-navbar .btn-lang-selector {
+  height: 32px !important;
+  padding: 0 10px !important;
+  border-radius: 7px !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  background: rgba(16, 17, 20, 0.94) !important;
+  background-image: none !important;
+  color: #e4e4e7 !important;
+  font-family: 'Barlow Condensed', sans-serif !important;
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  gap: 5px !important;
+  white-space: nowrap !important;
+  box-shadow: none !important;
+}
+
+html body .uiverse-navbar .btn-uiverse-admin:hover,
+html body .uiverse-navbar .btn-lang-selector:hover {
+  border-color: rgba(214, 198, 86, 0.8) !important;
+  background: rgba(214, 198, 86, 0.14) !important;
+  color: #ffffff !important;
+}
+
+html body .uiverse-navbar .btn-uiverse-create {
+  height: 32px !important;
+  padding: 0 12px !important;
+  border-radius: 7px !important;
+  border: 1px solid rgba(214, 198, 86, 0.72) !important;
+  background: linear-gradient(135deg, rgba(164, 156, 42, 0.34) 0%, rgba(18, 19, 14, 0.96) 100%) !important;
+  color: #fffef5 !important;
+  font-family: 'Barlow Condensed', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.07em !important;
+  text-transform: uppercase !important;
+  gap: 5px !important;
+  white-space: nowrap !important;
+  box-shadow: 0 0 12px rgba(164, 156, 42, 0.2) !important;
+}
+
+html body .uiverse-navbar .btn-uiverse-create:hover {
+  border-color: #f6e27a !important;
+  background: linear-gradient(135deg, #c8ba3e 0%, #988e25 100%) !important;
+  color: #090a07 !important;
+}
+
+html body .uiverse-navbar .btn-uiverse-create:hover svg {
+  stroke: #090a07 !important;
+}
+
+@media (max-width: 1520px) and (min-width: 1181px) {
+  html body .uiverse-navbar .navbar-wrap {
+    padding: 0 14px !important;
+    gap: 10px !important;
+  }
+
+  html body .uiverse-navbar .navbar-left {
+    gap: 14px !important;
+  }
+
+  html body .uiverse-navbar .brand-logo-text {
+    font-size: 18px !important;
+  }
+
+  html body .uiverse-navbar .brand-logo-sub {
+    font-size: 8.5px !important;
+  }
+
+  html body .uiverse-navbar .uiverse-nav-list {
+    gap: 6px !important;
+  }
+
+  html body .uiverse-navbar .nav-link:not(#_),
+  html body .uiverse-navbar .nav-link-glitch:not(#_) {
+    padding: 0 9px !important;
+    font-size: 12.5px !important;
+  }
+}
+
+@media (max-width: 1360px) {
+  html body .uiverse-navbar .brand-logo-sub {
+    display: none !important;
+  }
+}
+
+.mw-landing-footer--slim {
+  padding: 16px 0 8px !important;
+}
+
+.mw-landing-footer--slim .mw-footer-bottom {
+  border-top: none !important;
+  padding-top: 0 !important;
+}
+
+/* ============================================================================
+   10. HUD INTERACTIVE HOVER PHYSICS, SCROLL CHOREOGRAPHY, PARALLAX & DEPTH
+   ============================================================================ */
+
+/* 10.1 Top 2px Olive-Gold HUD Scroll Progress Line */
+.mw-hud-scroll-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  transform-origin: left center;
+  transform: scaleX(var(--scroll-progress, 0));
+  background: linear-gradient(90deg, #9fa82e 0%, #c8ce56 75%, #f2f5a8 100%);
+  box-shadow: 0 0 10px rgba(200, 206, 86, 0.75);
+  pointer-events: none;
+  z-index: 30;
+  will-change: transform;
+}
+
+/* 10.2 Dynamic Compact Sticky Glass Navbar (> 50px scroll) + Active Section Underline */
+html body header.uiverse-navbar {
+  transition: background-color 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease !important;
+}
+
+html body header.uiverse-navbar.is-scrolled {
+  background: rgba(10, 10, 10, 0.94) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border-bottom-color: rgba(200, 206, 86, 0.26) !important;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.88) !important;
+}
+
+html body header.uiverse-navbar.is-scrolled .navbar-wrap {
+  min-height: 52px !important;
+  transition: min-height 0.22s ease !important;
+}
+
+html body header.uiverse-navbar.is-scrolled .brand-logo-img {
+  height: 28px !important;
+  transition: height 0.22s ease !important;
+}
+
+html body header.uiverse-navbar.is-scrolled .brand-logo-text {
+  font-size: 18px !important;
+}
+
+html body .uiverse-navbar .nav-link:not(#_).is-scroll-section-active {
+  border-bottom: 2px solid #c8ce56 !important;
+  box-shadow: 0 4px 14px -4px rgba(200, 206, 86, 0.45) !important;
+}
+
+/* 10.3 Hero Parallax Hardware Acceleration */
+#view-elements #hero-bg-stage .hero-bg-video,
+#view-elements #hero-bg-stage .mw-hero-smoke-layer {
+  will-change: transform;
+}
+
+/* 10.4 Tactical Spotlight Cursor Effect (--mouse-x, --mouse-y) on Cards & Panels */
+.mw-top3-card,
+.mw-home-route-card,
+.mw-bento-panel {
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+}
+
+.mw-top3-card::before,
+.mw-home-route-card::before,
+.mw-bento-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  opacity: 0;
+  background: radial-gradient(
+    350px circle at var(--mouse-x) var(--mouse-y),
+    rgba(180, 188, 72, 0.14),
+    transparent 70%
+  );
+  transition: opacity 0.24s ease;
+}
+
+.mw-top3-card:hover::before,
+.mw-home-route-card:hover::before,
+.mw-bento-panel:hover::before {
+  opacity: 1;
+}
+
+/* 10.5 HUD L-Brackets Outward 4px Expansion + Shift to Olive-Gold (#d4d798) */
+.mw-hud-cta-corners,
+.mw-panel-corners,
+.mw-card-corners,
+.mw-home-route-card .nfsmw-tac-corners {
+  transition: inset 0.2s cubic-bezier(0.22, 1, 0.36, 1), filter 0.2s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+.mw-hud-cta:hover > .mw-hud-cta-corners,
+.mw-hud-wide-btn:hover > .mw-hud-cta-corners,
+.mw-top3-card:hover > .mw-card-corners,
+.mw-bento-panel:hover > .mw-panel-corners,
+.mw-home-route-card:hover > .nfsmw-tac-corners {
+  inset: -8px !important;
+  background-image:
+    linear-gradient(#d4d798, #d4d798),
+    linear-gradient(#d4d798, #d4d798),
+    linear-gradient(#d4d798, #d4d798),
+    linear-gradient(#d4d798, #d4d798),
+    linear-gradient(#d4d798, #d4d798),
+    linear-gradient(#d4d798, #d4d798),
+    linear-gradient(#d4d798, #d4d798),
+    linear-gradient(#d4d798, #d4d798) !important;
+  filter: drop-shadow(0 0 6px rgba(212, 215, 152, 0.55)) !important;
+}
+
+/* 10.6 Route Cards Elevation (-5px), Olive-Gold Top Edge & Luminous SVG Track Pulse */
+.mw-home-route-card {
+  transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.22s ease, box-shadow 0.24s ease !important;
+}
+
+.mw-home-route-card:hover {
+  transform: translateY(-5px) !important;
+  border-color: rgba(212, 215, 152, 0.6) !important;
+  border-top: 2px solid #d4d798 !important;
+  box-shadow: 0 22px 42px rgba(0, 0, 0, 0.88), 0 0 24px rgba(180, 188, 72, 0.14) !important;
+}
+
+.nfsmw-tac-map-pulse {
+  opacity: 0;
+  stroke-dasharray: 22 78;
+  stroke-dashoffset: 100;
+  filter: drop-shadow(0 0 5px #f6e27a) drop-shadow(0 0 10px rgba(200, 206, 86, 0.85));
+  transition: opacity 0.22s ease;
+}
+
+.mw-home-route-card:hover .nfsmw-tac-map-pulse,
+.nfsmw-tactical-card:hover .nfsmw-tac-map-pulse {
+  opacity: 1;
+  animation: mwTrackPulseSweep 1.35s linear infinite;
+}
+
+@keyframes mwTrackPulseSweep {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* 10.7 Diagonal Light Glint Sweep (0.45s) + Text Micro-Shift (translateX(3px)) on Primary & Ranked Buttons */
+.mw-session-access-btn {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.mw-hud-cta::after,
+.mw-hud-wide-btn::after,
+.mw-session-access-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  clip-path: inset(0);
+  background: linear-gradient(
+    115deg,
+    transparent 24%,
+    rgba(255, 255, 255, 0.38) 48%,
+    rgba(212, 215, 152, 0.45) 54%,
+    transparent 76%
+  );
+  background-size: 230% 100%;
+  background-position: 180% 0;
+  opacity: 0;
+}
+
+.mw-hud-cta:hover::after,
+.mw-hud-wide-btn:hover::after,
+.mw-session-access-btn:hover::after {
+  opacity: 1;
+  animation: mwButtonGlintSweep 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes mwButtonGlintSweep {
+  0% {
+    background-position: 180% 0;
+    opacity: 0.9;
+  }
+  100% {
+    background-position: -90% 0;
+    opacity: 0;
+  }
+}
+
+.mw-hud-cta > span:not(.mw-hud-cta-corners),
+.mw-hud-wide-btn > span:not(.mw-hud-cta-corners),
+.mw-session-access-btn .mw-session-text {
+  position: relative;
+  z-index: 3;
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+.mw-hud-cta:hover > span:not(.mw-hud-cta-corners),
+.mw-hud-wide-btn:hover > span:not(.mw-hud-cta-corners),
+.mw-session-access-btn:hover .mw-session-text {
+  transform: translateX(3px) !important;
+}
+
+/* 10.8 Staggered Cascade Entrance (18px slide-up, 90ms delay, Failsafe Guarantee) */
+.mw-top3-card.mw-stagger-init,
+.mw-home-route-card.mw-stagger-init,
+.mw-bento-panel.mw-stagger-init {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.mw-top3-card.mw-stagger-visible,
+.mw-home-route-card.mw-stagger-visible,
+.mw-bento-panel.mw-stagger-visible {
+  opacity: 1 !important;
+  transform: none;
+  transition:
+    opacity 0.42s cubic-bezier(0.22, 1, 0.36, 1) var(--stagger-delay, 0ms),
+    transform 0.42s cubic-bezier(0.22, 1, 0.36, 1) var(--stagger-delay, 0ms),
+    border-color 0.22s ease,
+    box-shadow 0.24s ease;
+}
+
+/* Ensure hover transforms remain instant after entrance */
+.mw-top3-card.mw-stagger-visible:hover {
+  transform: translateY(-4px) !important;
+  transition-delay: 0ms !important;
+}
+
+.mw-home-route-card.mw-stagger-visible:hover {
+  transform: translateY(-5px) !important;
+  transition-delay: 0ms !important;
+}
+
+/* 10.9 Alternating Visual Section Depth (Deep Carbon vs Tactical 32px Grid + Vignette) & Telemetry Dividers */
+.mw-landing-main {
+  gap: 28px !important;
+  padding-top: 24px !important;
+}
+
+.mw-sec-surface {
+  position: relative;
+  padding: 36px clamp(16px, 2.4vw, 34px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.mw-sec-surface--carbon {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255, 255, 255, 0.025) 0%, transparent 70%),
+    linear-gradient(180deg, #090a0c 0%, #050506 100%);
+}
+
+.mw-sec-surface--grid {
+  background-color: #070809;
+  background-image:
+    radial-gradient(ellipse 75% 90% at 50% 50%, transparent 45%, rgba(4, 4, 5, 0.92) 100%),
+    radial-gradient(circle, rgba(212, 215, 152, 0.15) 1px, transparent 1px),
+    linear-gradient(to right, rgba(255, 255, 255, 0.032) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.032) 1px, transparent 1px);
+  background-size: 100% 100%, 32px 32px, 32px 32px, 32px 32px;
+}
+
+.mw-telemetry-divider {
+  width: 100%;
+  max-width: 1580px;
+  margin: 4px auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.mw-telemetry-div-line {
+  flex: 1 1 auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.08) 20%, rgba(255, 255, 255, 0.14) 50%, rgba(255, 255, 255, 0.08) 80%, transparent 100%);
+}
+
+.mw-telemetry-div-code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: rgba(212, 215, 152, 0.72);
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding: 3px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(10, 11, 13, 0.85);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mw-top3-card.mw-stagger-init,
+  .mw-home-route-card.mw-stagger-init,
+  .mw-bento-panel.mw-stagger-init {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .nfsmw-tac-map-pulse,
+  .mw-hud-cta::after,
+  .mw-hud-wide-btn::after,
+  .mw-session-access-btn::after {
+    animation: none !important;
+  }
+}
+
+/* ============================================================================
+   11. 100% MOBILE & TOUCH RESPONSIVE OPTIMIZATION (<= 992px, <= 768px, <= 640px, hover: none)
+   Desktop (> 992px) layout, styles & Firebase listeners remain 100% untouched.
+   ============================================================================ */
+
+/* Global Horizontal Overflow Prevention */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* Desktop Default: Hide mobile table swipe hint */
+.mw-table-swipe-hint {
+  display: none;
+}
+
+/* Tablet Landscape Breakpoint (> 992px - 1199px preserved cleanly) */
+@media (max-width: 1199px) and (min-width: 993px) {
+  .mw-featured-routes-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .mw-top3-grid,
+  .mw-bento-hud-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 11.1 Mobile / Tablet Header, Tactical HUD Drawer & Scrollable Leaderboard (<= 992px) */
+@media (max-width: 992px) {
+  :root {
+    --navbar-height: 60px;
+  }
+
+  /* Compact 60px Mobile Navbar: Logo Left + [ MENU // ≡ ] Right Only */
+  html body header.uiverse-navbar {
+    height: calc(60px + env(safe-area-inset-top, 0px)) !important;
+    padding-top: env(safe-area-inset-top, 0px) !important;
+  }
+
+  html body header.uiverse-navbar .navbar-wrap,
+  html body header.uiverse-navbar.is-scrolled .navbar-wrap {
+    min-height: 60px !important;
+    height: 60px !important;
+    padding: 0 14px !important;
+    gap: 10px !important;
+  }
+
+  html body .uiverse-navbar .uiverse-nav-list,
+  html body .uiverse-navbar .brand-logo-sub,
+  html body .uiverse-navbar #btn-admin-nav,
+  html body .uiverse-navbar .lang-selector-wrap,
+  html body .uiverse-navbar .create-menu-wrapper {
+    display: none !important;
+  }
+
+  html body .uiverse-navbar .brand-logo-img {
+    height: 30px !important;
+  }
+
+  html body .uiverse-navbar .brand-logo-text {
+    font-size: 18px !important;
+    letter-spacing: 0.05em !important;
+  }
+
+  /* Angular HUD Hamburger Trigger [ MENU // ≡ ] with White L-Brackets */
+  html body .uiverse-navbar #btn-mobile-nav-toggle.btn-mobile-nav-toggle {
+    position: relative !important;
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 7px !important;
+    width: auto !important;
+    height: 38px !important;
+    padding: 0 12px !important;
+    border-radius: 0 !important;
+    background: rgba(12, 13, 12, 0.94) !important;
+    border: 1px solid rgba(255, 255, 255, 0.34) !important;
+    color: #f4f4f6 !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.65) !important;
+    overflow: visible !important;
+  }
+
+  html body .uiverse-navbar #btn-mobile-nav-toggle .mw-hud-cta-corners {
+    inset: -3px !important;
+    background-size:
+      10px 2px, 2px 10px,
+      10px 2px, 2px 10px,
+      10px 2px, 2px 10px,
+      10px 2px, 2px 10px !important;
+  }
+
+  html body .uiverse-navbar #btn-mobile-nav-toggle .mw-hud-menu-tag {
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.06em !important;
+    color: #f4f4f6 !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+  }
+
+  html body .uiverse-navbar #btn-mobile-nav-toggle .mw-hud-hamburger-bars {
+    display: inline-flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 3.5px !important;
+    width: 15px !important;
+    height: 14px !important;
+  }
+
+  html body .uiverse-navbar #btn-mobile-nav-toggle .hamburger-bar {
+    width: 15px !important;
+    height: 2px !important;
+    background-color: #c8ce56 !important;
+    border-radius: 0 !important;
+  }
+
+  html body .uiverse-navbar #btn-mobile-nav-toggle.is-active {
+    border-color: #c8ce56 !important;
+  }
+
+  html body .uiverse-navbar #btn-mobile-nav-toggle.is-active .hamburger-bar:nth-child(1) {
+    transform: translateY(5.5px) rotate(45deg) !important;
+  }
+
+  html body .uiverse-navbar #btn-mobile-nav-toggle.is-active .hamburger-bar:nth-child(3) {
+    transform: translateY(-5.5px) rotate(-45deg) !important;
+  }
+
+  /* Tactical HUD Drawer Panel: rgba(10, 10, 10, 0.97) + Blur(12px) + #c8ce56 Border */
+  html body #mobile-nav-drawer.mobile-nav-drawer {
+    width: min(370px, 92vw) !important;
+    background: rgba(10, 10, 10, 0.97) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-left: 2px solid #c8ce56 !important;
+    box-shadow: -20px 0 56px rgba(0, 0, 0, 0.94) !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+  }
+
+  html body #mobile-nav-drawer .mobile-drawer-header {
+    min-height: 60px !important;
+    padding: 12px 16px !important;
+    border-bottom: 1px solid rgba(200, 206, 86, 0.24) !important;
+  }
+
+  html body #mobile-nav-drawer .mobile-drawer-body {
+    padding: 12px 14px !important;
+    gap: 10px !important;
+  }
+
+  html body #mobile-nav-drawer .mobile-drawer-quick-actions {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  html body #mobile-nav-drawer .mobile-drawer-quick-actions .mobile-quick-action-btn {
+    min-height: 40px !important;
+    border-radius: 0 !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #e4e4e7 !important;
+    font-family: 'Barlow Condensed', sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+  }
+
+  html body #mobile-nav-drawer .mobile-drawer-nav {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  /* Large 48px Touch Areas for All 6 Main Sections */
+  html body #mobile-nav-drawer :is(.mobile-nav-link, .mobile-accordion-trigger) {
+    min-height: 48px !important;
+    padding: 10px 14px !important;
+    border-radius: 0 !important;
+    background: rgba(20, 22, 18, 0.85) !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    color: #f4f4f5 !important;
+    font-family: 'Barlow Condensed', 'Anton', sans-serif !important;
+    font-size: 16.5px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.06em !important;
+  }
+
+  html body #mobile-nav-drawer .mobile-nav-accordion {
+    border-radius: 0 !important;
+    border: none !important;
+    background: transparent !important;
+  }
+
+  html body #mobile-nav-drawer .mobile-nav-accordion.is-open .mobile-accordion-trigger {
+    border-color: #c8ce56 !important;
+    border-left: 3px solid #c8ce56 !important;
+    background: rgba(200, 206, 86, 0.14) !important;
+    color: #ffffff !important;
+  }
+
+  html body #mobile-nav-drawer .mobile-acc-arrow {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 16px !important;
+    line-height: 1 !important;
+    color: #c8ce56 !important;
+    transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1) !important;
+  }
+
+  html body #mobile-nav-drawer .mobile-nav-accordion.is-open .mobile-acc-arrow {
+    transform: rotate(180deg) !important;
+  }
+
+  html body #mobile-nav-drawer .mobile-accordion-content {
+    background: rgba(12, 13, 12, 0.96) !important;
+    border: 1px solid rgba(200, 206, 86, 0.28) !important;
+    border-top: none !important;
+    padding: 8px !important;
+    gap: 6px !important;
+  }
+
+  html body #mobile-nav-drawer .mobile-subnav-item {
+    min-height: 44px !important;
+    border-radius: 0 !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    background: rgba(22, 24, 22, 0.92) !important;
+    color: #f4f4f5 !important;
+  }
+
+  html body #mobile-nav-drawer :is(.mobile-nav-link.is-active, .mobile-subnav-item.is-active) {
+    background: rgba(200, 206, 86, 0.2) !important;
+    border-color: #c8ce56 !important;
+    border-left: 3px solid #c8ce56 !important;
+    color: #ffffff !important;
+  }
+
+  /* Drawer Base Footer: Full-Width Language, SUBMIT RECORD (Olive Barbed-Wire) & INSTALAR APP */
+  html body #mobile-nav-drawer .mobile-drawer-footer {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 9px !important;
+    padding: 12px 14px calc(14px + env(safe-area-inset-bottom, 0px)) !important;
+    background: rgba(8, 9, 8, 0.98) !important;
+    border-top: 1px solid rgba(200, 206, 86, 0.34) !important;
+  }
+
+  html body #mobile-nav-drawer .mobile-drawer-lang-selector {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 6px !important;
+    width: 100% !important;
+  }
+
+  html body #mobile-nav-drawer .mobile-lang-label {
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.1em !important;
+    color: #a1a1aa !important;
+  }
+
+  html body #mobile-nav-drawer .mobile-lang-btn-row {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  html body #mobile-nav-drawer .mobile-lang-btn-row .lang-opt-btn {
+    width: 100% !important;
+    min-height: 40px !important;
+    justify-content: center !important;
+    border-radius: 0 !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    background: #141514 !important;
+    color: #e4e4e7 !important;
+  }
+
+  html body #mobile-nav-drawer .mobile-lang-btn-row .lang-opt-btn.is-active {
+    border-color: #c8ce56 !important;
+    background: rgba(200, 206, 86, 0.18) !important;
+    color: #ffffff !important;
+  }
+
+  html body #mobile-nav-drawer .mobile-drawer-submit-btn.mw-hud-olive-barbed {
+    width: 100% !important;
+    min-height: 46px !important;
+    border-radius: 0 !important;
+    border: 1px solid #e2d878 !important;
+    background-color: #b8b236 !important;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='12' viewBox='0 0 120 12'%3E%3Cpath d='M0 6 Q30 2 60 7 T120 5' stroke='%23090a07' stroke-width='1.35' fill='none' opacity='0.55'/%3E%3Cg stroke='%23090a07' stroke-width='1.1' opacity='0.65'%3E%3Cline x1='24' y1='1.5' x2='30' y2='10'/%3E%3Cline x1='30' y1='1.5' x2='24' y2='10'/%3E%3Cline x1='84' y1='2' x2='90' y2='10.5'/%3E%3Cline x1='90' y1='2' x2='84' y2='10.5'/%3E%3C/g%3E%3C/svg%3E"),
+      linear-gradient(135deg, #d8ce58 0%, #a9a22b 55%, #847d1d 100%) !important;
+    background-repeat: repeat-x, no-repeat !important;
+    background-position: bottom left, center !important;
+    color: #090a07 !important;
+    font-family: 'Barlow Condensed', 'Anton', sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+  }
+
+  html body #mobile-nav-drawer #btn-install-pwa-drawer {
+    width: 100% !important;
+    min-height: 44px !important;
+    border-radius: 0 !important;
+    background: rgba(255, 255, 255, 0.94) !important;
+    border: 1px solid #ffffff !important;
+    color: #090a0a !important;
+    font-family: 'Barlow Condensed', 'Anton', sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.07em !important;
+  }
+
+  /* Hero Mobile Repositioning (70% center) + Darker Contrast Vignette + 2x2 Telemetry Grid */
+  html body #view-elements #hero-bg-stage .hero-bg-video {
+    object-position: 70% center !important;
+    transform: none !important;
+  }
+
+  html body #view-elements .mw-hero-industrial-layer {
+    background-position: 70% center !important;
+  }
+
+  html body #view-elements .mw-hero-vignette {
+    background: linear-gradient(180deg, rgba(10, 10, 10, 0.75) 0%, rgba(10, 10, 10, 0.92) 85%, #0a0a0a 100%) !important;
+  }
+
+  html body #view-elements .mw-hero-telemetry-bar {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  html body #view-elements .mw-hero-stat-item {
+    padding: 14px 10px !important;
+    text-align: center !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
+  }
+
+  html body #view-elements .mw-hero-stat-item:nth-child(2) {
+    border-right: none !important;
+  }
+
+  html body #view-elements .mw-hero-stat-item:nth-child(3) {
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+  }
+
+  html body #view-elements .mw-hero-stat-status {
+    grid-column: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    padding: 14px 8px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    font-size: 10.5px !important;
+    white-space: nowrap !important;
+  }
+
+  /* Swipeable Filter Bars on Leaderboards / Routes / Top Ranked */
+  html body #view-challenges .catalog-toolbar .toolbar-left,
+  html body #view-leaderboard #lb-modality-tabs,
+  html body #view-spotlight .v7-hof-discipline-nav,
+  html body #home-routes-section .mw-modality-quick-links {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    gap: 8px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 4px 2px 6px !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  html body #view-challenges .catalog-toolbar .toolbar-left::-webkit-scrollbar,
+  html body #view-leaderboard #lb-modality-tabs::-webkit-scrollbar,
+  html body #view-spotlight .v7-hof-discipline-nav::-webkit-scrollbar,
+  html body #home-routes-section .mw-modality-quick-links::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  html body :is(#view-challenges .toolbar-left, #view-leaderboard #lb-modality-tabs, #view-spotlight .v7-hof-discipline-nav) .filter-pill-btn:not(#_),
+  html body #home-routes-section .mw-quick-mod-btn:not(#_) {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    white-space: nowrap !important;
+    min-height: 38px !important;
+  }
+
+  html body #view-leaderboard .nfs-lb-controls.setup-filters-row {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+
+  html body #view-leaderboard .nfs-lb-controls .btn-back-to-tracks {
+    align-self: flex-start !important;
+    width: auto !important;
+  }
+
+  /* Leaderboard Table Touch Container + Sticky RANK & DRIVER Columns + Full 8+ Telemetry Scroll */
+  html body #view-leaderboard .mw-table-swipe-hint {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 7px 10px !important;
+    margin-bottom: 8px !important;
+    background: rgba(200, 206, 86, 0.08) !important;
+    border: 1px solid rgba(200, 206, 86, 0.25) !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.1em !important;
+    color: #c8ce56 !important;
+    text-align: center !important;
+  }
+
+  html body #view-leaderboard .nfs-Leaderboard-panel {
+    overflow: clip !important;
+  }
+
+  html body #view-leaderboard .nfs-table-wrap {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  html body #view-leaderboard .lb-clean-table {
+    min-width: 820px !important;
+    width: 100% !important;
+    table-layout: auto !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+  }
+
+  html body #view-leaderboard .lb-clean-table :is(th, td):is(:nth-child(4), :nth-child(5), :nth-child(6), :nth-child(7), :nth-child(8)) {
+    display: table-cell !important;
+  }
+
+  html body #view-leaderboard .lb-clean-table th,
+  html body #view-leaderboard .lb-clean-table td {
+    padding: 10px 8px !important;
+    white-space: nowrap !important;
+  }
+
+  /* Sticky Column 1: RANK */
+  html body #view-leaderboard .lb-clean-table :is(th.lb-mw-th, th, td):nth-child(1) {
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 3 !important;
+    background: #141414 !important;
+    width: 56px !important;
+    min-width: 56px !important;
+    max-width: 56px !important;
+    text-align: center !important;
+  }
+
+  /* Sticky Column 2: DRIVER */
+  html body #view-leaderboard .lb-clean-table :is(th.lb-mw-th, th, td):nth-child(2) {
+    position: sticky !important;
+    left: 56px !important;
+    z-index: 2 !important;
+    background: #141414 !important;
+    min-width: 132px !important;
+    max-width: 162px !important;
+    border-right: 1px solid rgba(200, 206, 86, 0.25) !important;
+    box-shadow: 6px 0 14px rgba(0, 0, 0, 0.72) !important;
+  }
+
+  html body #view-leaderboard .lb-clean-table thead th.lb-mw-th:nth-child(1) {
+    z-index: 5 !important;
+    background: #141414 !important;
+  }
+
+  html body #view-leaderboard .lb-clean-table thead th.lb-mw-th:nth-child(2) {
+    z-index: 4 !important;
+    background: #141414 !important;
+  }
+
+  html body #view-leaderboard .lb-clean-table .lb-user-name {
+    max-width: 142px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: block !important;
+  }
+}
+
+/* 11.2 Tactical HUD Cards in Single Column, 10px L-Brackets, 170px Minimap & Ranked Stack (<= 768px) */
+@media (max-width: 768px) {
+  html body #view-elements .uiverse-catalog-layout.uiverse-no-sidebar > .catalog-main.mw-landing-main {
+    padding: 18px 14px calc(86px + env(safe-area-inset-bottom, 0px)) !important;
+    gap: 22px !important;
+  }
+
+  html body #view-elements .mw-sec-surface {
+    padding: 22px 14px !important;
+  }
+
+  html body #view-elements .mw-hero-container {
+    padding: 12px 14px 0 !important;
+    gap: 22px !important;
+  }
+
+  html body #view-elements .mw-hero-actions {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+
+  html body #view-elements .mw-hero-actions .mw-hud-cta {
+    width: 100% !important;
+    min-height: 48px !important;
+  }
+
+  html body #view-elements .mw-hero-telemetry-bar {
+    margin: 0 -14px !important;
+  }
+
+  /* 1-Column Tactical Grids (Top 3, Route Cards, Bento Panels) with 16px Gap */
+  html body #home-top3-blacklist-grid,
+  html body #home-featured-routes-grid,
+  html body .mw-bento-hud-grid,
+  html body .mw-sessions-access-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* Scale HUD White L-Brackets to 10px so they never collide with internal text */
+  html body :is(.mw-hud-cta-corners, .mw-panel-corners, .mw-card-corners, .mw-home-route-card .nfsmw-tac-corners) {
+    inset: -3px !important;
+    background-size:
+      10px 2px, 2px 10px,
+      10px 2px, 2px 10px,
+      10px 2px, 2px 10px,
+      10px 2px, 2px 10px !important;
+  }
+
+  /* MOST WANTED #01 & Top 3 Card Internal Breathing Space + Full-Width [ VER VIDEO ] (42px+) */
+  html body .mw-top3-card {
+    padding: 20px 14px 16px !important;
+    gap: 14px !important;
+  }
+
+  html body .mw-top3-card-top {
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+  }
+
+  html body .mw-top3-rank-box {
+    min-width: 50px !important;
+    height: 42px !important;
+    font-size: 26px !important;
+    font-variant-numeric: tabular-nums !important;
+  }
+
+  html body .mw-top3-pilot-name {
+    font-size: clamp(22px, 6.2vw, 28px) !important;
+    line-height: 1.05 !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  html body .mw-top3-metric strong.mw-top3-time,
+  html body .mw-top3-metric strong.mw-top3-delta {
+    font-variant-numeric: tabular-nums !important;
+  }
+
+  html body .mw-top3-card-foot {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+
+  html body .mw-top3-video-btn {
+    width: 100% !important;
+    min-height: 42px !important;
+    justify-content: center !important;
+    font-size: 14px !important;
+  }
+
+  html body .mw-top3-dossier-link {
+    align-self: flex-end !important;
+  }
+
+  /* Restore Full Tactical Route Card WITH 170px SVG Minimap + High-Contrast Footer on Home */
+  html body #home-featured-routes-grid .nfsmw-tactical-card {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: space-between !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    min-height: 0 !important;
+    border-left: 1px solid rgba(255, 255, 255, 0.18) !important;
+  }
+
+  html body #home-featured-routes-grid .nfsmw-tactical-card .nfsmw-tac-corners {
+    display: block !important;
+  }
+
+  html body #home-featured-routes-grid .nfsmw-tactical-card .nfsmw-tac-header {
+    width: 100% !important;
+    padding: 12px 14px 10px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+  }
+
+  html body #home-featured-routes-grid .nfsmw-tactical-card .nfsmw-tac-header-inner {
+    padding: 0 !important;
+  }
+
+  html body #home-featured-routes-grid .nfsmw-tactical-card h4.nfsmw-tac-title {
+    font-size: 20px !important;
+    max-width: 100% !important;
+  }
+
+  html body #home-featured-routes-grid .nfsmw-tactical-card .nfsmw-tac-map-box {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    height: 170px !important;
+    min-height: 170px !important;
+    max-height: 170px !important;
+    padding: 6px 8px 4px !important;
+  }
+
+  html body #home-featured-routes-grid .nfsmw-tactical-card .nfsmw-tac-map-svg {
+    width: 100% !important;
+    height: 126px !important;
+    flex: 1 1 auto !important;
+  }
+
+  html body #home-featured-routes-grid .nfsmw-tactical-card .nfsmw-tac-footer {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    padding: 10px 12px !important;
+    background: #090a0c !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.16) !important;
+    gap: 10px !important;
+  }
+
+  html body #home-featured-routes-grid .nfsmw-tactical-card .nfsmw-tac-label,
+  html body #home-featured-routes-grid .nfsmw-tactical-card .nfsmw-tac-record-label {
+    display: inline-block !important;
+    font-size: 11.5px !important;
+  }
+
+  html body #home-featured-routes-grid .nfsmw-tactical-card .nfsmw-tac-driver-wrap {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+
+  html body #home-featured-routes-grid .nfsmw-tactical-card .nfsmw-tac-driver-val {
+    color: #ffffff !important;
+    max-width: 100% !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    font-size: 14.5px !important;
+  }
+
+  html body #home-featured-routes-grid .nfsmw-tactical-card .nfsmw-tac-record-val {
+    color: #f6e27a !important;
+    font-variant-numeric: tabular-nums !important;
+    font-size: 15.5px !important;
+  }
+
+  /* Ranked Sessions: Single Column, min-height 52px, Crisp Left Icon */
+  html body .mw-bento-panel {
+    padding: 18px 14px !important;
+    gap: 16px !important;
+  }
+
+  html body .mw-session-access-btn {
+    width: 100% !important;
+    min-height: 52px !important;
+    padding: 12px 14px !important;
+  }
+
+  html body .mw-bento-event-actions,
+  html body .mw-event-highlights {
+    grid-template-columns: 1fr !important;
+    flex-direction: column !important;
+  }
+}
+
+/* 11.3 Fluid Phone Hero Headline & Small Viewports (<= 640px & <= 480px) */
+@media (max-width: 640px) {
+  html body #view-elements .mw-landing-hero.uiverse-hero {
+    min-height: auto !important;
+    padding: calc(var(--navbar-height, 60px) + 18px) 0 0 !important;
+  }
+
+  html body #view-elements .mw-hero-headline {
+    font-size: clamp(2.5rem, 11.5vw, 4.2rem) !important;
+    line-height: 0.95 !important;
+  }
+
+  html body #view-elements .mw-hero-headline-main {
+    font-size: clamp(1.55rem, 6.8vw, 2.4rem) !important;
+    line-height: 0.95 !important;
+  }
+
+  html body #view-elements .mw-hero-headline-accent {
+    font-size: clamp(2.5rem, 11.5vw, 4.2rem) !important;
+    line-height: 0.95 !important;
+    max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  html body #view-elements .mw-hero-stat-value {
+    font-size: 26px !important;
+  }
+
+  html body #view-elements .mw-hero-stat-label {
+    font-size: 9.5px !important;
+    letter-spacing: 0.06em !important;
+  }
+
+  html body #view-elements .mw-hud-wide-btn {
+    font-size: 14.5px !important;
+    letter-spacing: 0.08em !important;
+    padding: 12px 14px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  html body .uiverse-navbar #btn-mobile-nav-toggle.btn-mobile-nav-toggle {
+    padding: 0 9px !important;
+    gap: 5px !important;
+  }
+
+  html body .uiverse-navbar #btn-mobile-nav-toggle .mw-hud-menu-tag {
+    font-size: 10px !important;
+  }
+
+  html body #view-elements .mw-hud-eyebrow {
+    font-size: 9.5px !important;
+    padding: 4px 9px !important;
+  }
+
+  html body #view-elements .mw-hero-subtitle {
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+    margin-bottom: 18px !important;
+  }
+}
+
+/* 11.4 Touch Devices (@media (hover: none)): 60fps Performance & Instant Tactile :active Feedback */
+@media (hover: none) {
+  html body :is(.mw-top3-card, .mw-home-route-card, .mw-bento-panel)::before,
+  html body :is(.mw-hud-cta, .mw-hud-wide-btn, .mw-session-access-btn)::after,
+  html body .nfsmw-tac-map-pulse {
+    display: none !important;
+    opacity: 0 !important;
+    animation: none !important;
+  }
+
+  html body #view-elements #hero-bg-stage .hero-bg-video,
+  html body #view-elements #hero-bg-stage .mw-hero-smoke-layer {
+    animation: none !important;
+    transform: none !important;
+    will-change: auto !important;
+  }
+
+  html body :is(.mw-top3-card, .mw-home-route-card, .mw-bento-panel, .mw-hud-cta, .mw-hud-wide-btn, .mw-session-access-btn, .mw-quick-mod-btn):hover {
+    transform: none !important;
+  }
+
+  html body :is(.mw-rivalry-photo-card, .mw-rivalry-machine-card, .mw-top3-card, .mw-home-route-card, .mw-bento-panel, .mw-hud-cta, .mw-hud-wide-btn, .mw-session-access-btn, .mw-quick-mod-btn, .btn-mobile-nav-toggle, .mobile-nav-link, .mobile-accordion-trigger, .mobile-subnav-item):active {
+    transform: scale(0.985) !important;
+    border-color: #c8ce56 !important;
+    box-shadow: 0 0 0 1px rgba(200, 206, 86, 0.55), 0 0 16px rgba(200, 206, 86, 0.28) !important;
+    transition: transform 0.08s ease, border-color 0.08s ease, box-shadow 0.08s ease !important;
+  }
+}
+
+/* ============================================================================
+   12. STREET RIVALRY RACING SHOWCASE (BMW M3 GTR E46 VS PORSCHE CARRERA GT)
+       & HERO BILINGUAL ES / EN TOGGLE
+   ============================================================================ */
+.mw-hero-top-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.mw-hero-top-row .mw-hud-eyebrow {
+  margin-bottom: 0 !important;
+}
+
+.mw-hero-lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(8, 9, 10, 0.88);
+  border: 1px solid rgba(200, 206, 86, 0.45);
+  padding: 2px;
+  gap: 2px;
+}
+
+.mw-hero-lang-btn {
+  border: none;
+  background: transparent;
+  color: #a1a1aa;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: background-color 0.16s ease, color 0.16s ease;
+}
+
+.mw-hero-lang-btn:hover {
+  color: #ffffff;
+}
+
+.mw-hero-lang-btn.is-active {
+  background: linear-gradient(135deg, #c8ba3e 0%, #9b9325 100%);
+  color: #090a07;
+}
+
+/* Dual Photorealistic Action Racing Gallery */
+.mw-rivalry-photo-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 18px;
+}
+
+.mw-rivalry-photo-card {
+  position: relative;
+  border-radius: 0;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: #08090b;
+  overflow: visible;
+  transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.22s ease, box-shadow 0.24s ease;
+}
+
+.mw-rivalry-photo-card:hover {
+  transform: translateY(-4px);
+  border-color: #c8ce56;
+  box-shadow: 0 22px 46px rgba(0, 0, 0, 0.88), 0 0 28px rgba(200, 206, 86, 0.16);
+}
+
+.mw-rivalry-photo-card:hover > .mw-card-corners {
+  inset: -8px !important;
+  background-image:
+    linear-gradient(#d4d798, #d4d798),
+    linear-gradient(#d4d798, #d4d798),
+    linear-gradient(#d4d798, #d4d798),
+    linear-gradient(#d4d798, #d4d798),
+    linear-gradient(#d4d798, #d4d798),
+    linear-gradient(#d4d798, #d4d798),
+    linear-gradient(#d4d798, #d4d798),
+    linear-gradient(#d4d798, #d4d798) !important;
+}
+
+.mw-rivalry-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  min-height: 280px;
+  overflow: hidden;
+  background: #050506;
+}
+
+.mw-rivalry-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), filter 0.35s ease;
+}
+
+.mw-rivalry-photo-card:hover .mw-rivalry-img {
+  transform: scale(1.045);
+  filter: contrast(1.05) saturate(1.06);
+}
+
+.mw-rivalry-img-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(6, 7, 9, 0.52) 0%, rgba(6, 7, 9, 0) 32%, rgba(6, 7, 9, 0.18) 62%, rgba(6, 7, 9, 0.94) 100%);
+}
+
+.mw-rivalry-cam-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 10px;
+  background: rgba(8, 9, 10, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-left: 3px solid #c8ce56;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #f4f4f5;
+  text-transform: uppercase;
+}
+
+.mw-rivalry-caption-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+}
+
+.mw-rivalry-caption-bar strong {
+  display: block;
+  font-family: 'Anton', 'Barlow Condensed', sans-serif;
+  font-size: clamp(18px, 1.8vw, 24px);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.96);
+  line-height: 1.05;
+}
+
+.mw-rivalry-caption-bar span {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #e4e4e7;
+  margin-top: 3px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.96);
+}
+
+.mw-rivalry-quick-cta {
+  flex-shrink: 0;
+  padding: 8px 13px;
+  border: 1px solid #c8ce56;
+  background: rgba(12, 13, 10, 0.9);
+  color: #f6e27a;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.16s ease, color 0.16s ease;
+}
+
+.mw-rivalry-quick-cta:hover {
+  background: #c8ce56;
+  color: #090a07;
+}
+
+/* Competing Icon Machine Spec Cards */
+.mw-rivalry-machines-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.mw-rivalry-machine-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 20px 22px;
+  border-radius: 0;
+  background: rgba(12, 13, 15, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.mw-rivalry-machine-card.mw-machine-m3 {
+  border-top: 3px solid #38bdf8;
+  background:
+    radial-gradient(80% 60% at 90% 10%, rgba(56, 189, 248, 0.12) 0%, transparent 65%),
+    rgba(12, 13, 16, 0.95);
+}
+
+.mw-rivalry-machine-card.mw-machine-cgt {
+  border-top: 3px solid #c8ce56;
+  background:
+    radial-gradient(80% 60% at 90% 10%, rgba(200, 206, 86, 0.14) 0%, transparent 65%),
+    rgba(12, 13, 12, 0.95);
+}
+
+.mw-rivalry-machine-card:hover {
+  transform: translateY(-4px);
+  border-color: #c8ce56;
+}
+
+.mw-rivalry-machine-card:hover > .mw-card-corners {
+  inset: -8px !important;
+  background-image:
+    linear-gradient(#d4d798, #d4d798),
+    linear-gradient(#d4d798, #d4d798),
+    linear-gradient(#d4d798, #d4d798),
+    linear-gradient(#d4d798, #d4d798),
+    linear-gradient(#d4d798, #d4d798),
+    linear-gradient(#d4d798, #d4d798),
+    linear-gradient(#d4d798, #d4d798),
+    linear-gradient(#d4d798, #d4d798) !important;
+}
+
+.mw-rivalry-machine-card > *:not(.mw-card-corners) {
+  position: relative;
+  z-index: 2;
+}
+
+.mw-machine-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.mw-machine-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #a1a1aa;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.mw-machine-name {
+  margin: 0;
+  font-family: 'Anton', 'Barlow Condensed', sans-serif;
+  font-size: clamp(22px, 2.3vw, 30px);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+
+.mw-machine-num {
+  color: #38bdf8;
+}
+
+.mw-machine-cgt .mw-machine-num {
+  color: #f6e27a;
+}
+
+.mw-machine-class-pill {
+  padding: 4px 10px;
+  border: 1px solid rgba(56, 189, 248, 0.55);
+  background: rgba(56, 189, 248, 0.12);
+  color: #e0f2fe;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.mw-machine-class-pill.mw-pill-gold {
+  border-color: rgba(200, 206, 86, 0.65);
+  background: rgba(200, 206, 86, 0.16);
+  color: #fef08a;
+}
+
+.mw-machine-desc {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: #d4d4d8;
+}
+
+.mw-machine-specs-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  padding: 12px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mw-machine-spec span {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  color: #a1a1aa;
+  letter-spacing: 0.08em;
+}
+
+.mw-machine-spec strong {
+  display: block;
+  margin-top: 2px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+}
+
+.mw-machine-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (max-width: 992px) {
+  .mw-rivalry-photo-grid,
+  .mw-rivalry-machines-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .mw-rivalry-img-wrap {
+    min-height: 200px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .mw-rivalry-machine-card {
+    padding: 16px 14px !important;
+  }
+
+  .mw-machine-specs-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .mw-machine-actions {
+    flex-direction: column !important;
+  }
+
+  .mw-machine-actions .mw-hud-cta {
+    width: 100% !important;
+    min-height: 44px !important;
+  }
+
+  .mw-rivalry-caption-bar {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    padding: 10px 12px !important;
+  }
+}
+
+.mw-rivalry-machine-card,
+.mw-rivalry-photo-card {
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+}
+
+.mw-rivalry-machine-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  opacity: 0;
+  background: radial-gradient(
+    350px circle at var(--mouse-x) var(--mouse-y),
+    rgba(180, 188, 72, 0.14),
+    transparent 70%
+  );
+  transition: opacity 0.24s ease;
+}
+
+.mw-rivalry-machine-card:hover::before {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .mw-rivalry-machine-card::before {
+    display: none !important;
+    opacity: 0 !important;
+  }
+
+  .mw-rivalry-photo-card:hover .mw-rivalry-img {
+    transform: none !important;
+  }
+}
+
+
+

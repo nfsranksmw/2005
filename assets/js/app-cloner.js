@@ -1071,6 +1071,15 @@ document.addEventListener("DOMContentLoaded", () => {
       link.classList.toggle("is-active", link.dataset.viewTarget === navTarget);
     });
 
+    const bottomTarget = (cleanId === "view-blacklist" || cleanId === "view-blog") ? "view-spotlight" : navTarget;
+    document.querySelectorAll("#mobile-app-bottom-nav .mobile-bottom-tab").forEach((tab) => {
+      if (!tab.dataset.viewTarget) return;
+      tab.classList.toggle("is-active", tab.dataset.viewTarget === bottomTarget);
+    });
+    if (document.body) {
+      document.body.dataset.activeView = cleanId;
+    }
+
     if (cleanId === "view-blog" && typeof switchTorneoTab === "function") {
       switchTorneoTab(subTab || torneoState.activeTab || "standings");
     } else if (cleanId === "view-blacklist" && typeof window.renderBlacklistView === "function") {
@@ -1567,11 +1576,12 @@ document.addEventListener("DOMContentLoaded", () => {
           <path d="M84 166 L162 152 L226 172" />
         </g>
 
-        <!-- Glowing Cream-Gold Track Route (Outer Halo + Main Path + Center Groove) -->
+        <!-- Glowing Cream-Gold Track Route (Outer Halo + Main Path + Center Groove + Interactive Hover Pulse) -->
         <path d="${preset.d}" fill="none" stroke="rgba(236, 214, 146, 0.24)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" />
         <path d="${preset.d}" fill="none" stroke="rgba(248, 232, 180, 0.45)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
         <path d="${preset.d}" fill="none" stroke="#f5e7bd" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" />
         <path d="${preset.d}" fill="none" stroke="#23211a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        <path class="nfsmw-tac-map-pulse" d="${preset.d}" pathLength="100" fill="none" stroke="#fff6b8" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round" />
 
         <!-- Checkered Start/Finish Flag -->
         <g transform="translate(${fx - 10}, ${fy - 8})">
@@ -1931,6 +1941,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (nfsHeroBanner) {
     nfsHeroBanner.addEventListener("mousemove", (e) => {
       if (!isDesktopVideoEnabled()) return;
+      if (window.matchMedia && window.matchMedia("(hover: none)").matches) return;
       const rect = nfsHeroBanner.getBoundingClientRect();
       const normX = (e.clientX - rect.left) / rect.width - 0.5;
       const normY = (e.clientY - rect.top) / rect.height - 0.5;
@@ -4004,6 +4015,9 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
               localStorage.setItem("nfs_blacklist_championship_2026_v6", JSON.stringify(data));
             } catch (eStore) {}
+            if (typeof renderHomeLandingShowcase === "function") {
+              renderHomeLandingShowcase();
+            }
             break;
           }
         }
@@ -6639,13 +6653,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 4.9 Antigravity UI & Motion Design: 3D Spatial Tilt Interaction on Interactive Buttons
+  // 4.9 Antigravity UI & Motion Design: 3D Spatial Tilt Interaction (Desktop Mouse Only)
   function initAntigravitySpatialButtons() {
     if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     let activeSpatialBtn = null;
 
     document.addEventListener("pointermove", (e) => {
+      if (e.pointerType && e.pointerType !== "mouse") return;
+      if (window.innerWidth <= 1024) return;
       const btn = e.target.closest(".filter-pill-btn, .stage-action-btn, #view-challenges .sidebar-btn, #view-blog .sidebar-btn");
       if (!btn) {
         if (activeSpatialBtn) {
@@ -6687,8 +6703,539 @@ document.addEventListener("DOMContentLoaded", () => {
 
   initAntigravitySpatialButtons();
 
-  // Prefetch all 86 track leaderboards from Firebase RTDB in the background, then refresh Hall of Fame & Telemetry
+  // ==========================================================================
+  // 4.10 HOME ESPORTS LANDING PAGE (LIVE FIREBASE STATS, TOP 3, FEATURED ROUTES & REVEAL)
+  // ==========================================================================
+  window.openRankedSessionFromHome = function (tabId) {
+    const targetRoute = allRoutes.find((r) => (r.type || "").toLowerCase() === "circuito") || allRoutes[0];
+    if (!targetRoute) return;
+    loadRouteLeaderboard(targetRoute, tabId || "junkman_single");
+    switchView("view-leaderboard");
+  };
+
+  let homeRouteFilterCat = "all";
+
+  function getHomeBlacklist2026Top3() {
+    const allDrivers = (typeof currentBlacklistDrivers !== "undefined" && Array.isArray(currentBlacklistDrivers) && currentBlacklistDrivers.length)
+      ? currentBlacklistDrivers
+      : (typeof DEFAULT_BLACKLIST_DRIVERS !== "undefined" ? DEFAULT_BLACKLIST_DRIVERS : []);
+
+    const ENROLLED_TOP8_RANKS = [1, 3, 4, 5, 6, 7, 8, 10];
+    const participants = allDrivers.filter((d) => {
+      if (!d || d.eliminated || d.isEliminated || d.deleted || d.isPlaceholder) return false;
+      const nameStr = String(d.name || d.alias || "").trim().toLowerCase();
+      if (nameStr.startsWith("open") || nameStr.startsWith("plaza") || nameStr.startsWith("cpu_") || nameStr === "por disputar" || nameStr === "en espera") return false;
+      if (d.rank === 14 || d.rank === 15 || nameStr.includes("flow") || nameStr.includes("kayine") || nameStr.includes("kaji")) return false;
+      return ENROLLED_TOP8_RANKS.includes(Number(d.rank));
+    });
+
+    participants.sort((a, b) => {
+      const rA = (typeof a._numericRep === "number") ? a._numericRep : (parseInt(String(a.rep || "0").replace(/[^0-9]/g, ""), 10) || 0);
+      const rB = (typeof b._numericRep === "number") ? b._numericRep : (parseInt(String(b.rep || "0").replace(/[^0-9]/g, ""), 10) || 0);
+      if (rB !== rA) return rB - rA;
+
+      const ptsA = typeof calculateDriverPoints === "function" ? calculateDriverPoints(a) : (a.totalPoints || a.points || 0);
+      const ptsB = typeof calculateDriverPoints === "function" ? calculateDriverPoints(b) : (b.totalPoints || b.points || 0);
+      if (ptsB !== ptsA) return ptsB - ptsA;
+
+      const p1A = (a.victories && a.victories.p1) || 0;
+      const p1B = (b.victories && b.victories.p1) || 0;
+      if (p1B !== p1A) return p1B - p1A;
+
+      const p2A = (a.victories && a.victories.p2) || 0;
+      const p2B = (b.victories && b.victories.p2) || 0;
+      if (p2B !== p2A) return p2B - p2A;
+
+      const p3A = (a.victories && a.victories.p3) || 0;
+      const p3B = (b.victories && b.victories.p3) || 0;
+      if (p3B !== p3A) return p3B - p3A;
+
+      return Number(a.rank) - Number(b.rank);
+    });
+
+    return participants.slice(0, 3);
+  }
+
+  function renderHomeLandingShowcase() {
+    // 1. Live Telemetry Counters from Firebase Cache + Routes Data
+    const statRecordsEl = document.getElementById("home-stat-records");
+    const statPilotsEl = document.getElementById("home-stat-pilots");
+    const statTracksEl = document.getElementById("home-stat-tracks");
+    const footerDbEl = document.getElementById("home-footer-firebase-status");
+
+    const globalDrivers = typeof buildGlobalDriversDatabase === "function"
+      ? buildGlobalDriversDatabase("global")
+      : [];
+
+    let totalVerifiedRecords = 0;
+    allRoutes.forEach((route) => {
+      const rKey = sanitizeFirebaseKey(route.name);
+      const fbData = window.NFS_GLOBAL_LEADERBOARDS_CACHE ? window.NFS_GLOBAL_LEADERBOARDS_CACHE[rKey] : null;
+      const cats = route.type === "Circuito"
+        ? ["junkman_single", "junkman_fast", "bmw_single", "bmw_fast"]
+        : ["junkman", "bmw"];
+      cats.forEach((catKey) => {
+        const recs = extractCategoryRecords(fbData, catKey, route);
+        totalVerifiedRecords += Array.isArray(recs) ? recs.length : 0;
+      });
+    });
+
+    if (statRecordsEl) animateHomeCounter(statRecordsEl, totalVerifiedRecords, true);
+    if (statPilotsEl) animateHomeCounter(statPilotsEl, globalDrivers.length || 0, false);
+    if (statTracksEl) animateHomeCounter(statTracksEl, allRoutes.length || 86, false);
+
+    const isEn = (typeof window.getCurrentLanguage === "function"
+      ? window.getCurrentLanguage()
+      : (localStorage.getItem("nfs_lang") || "en")) === "en";
+
+    if (footerDbEl && window.NFS_GLOBAL_LEADERBOARDS_CACHE) {
+      footerDbEl.innerHTML = `<span class="mw-live-pulse-dot" aria-hidden="true"></span><span>FIREBASE RTDB // ${isEn ? "LIVE SYNC" : "SINCRONIZACI\u00D3N EN VIVO"} (${totalVerifiedRecords.toLocaleString("es-ES")} RECS)</span>`;
+    }
+
+    // 2. Top 3 Blacklist 2026 Torneo Leaders (#home-top3-blacklist-grid) with Live REP & PTS Delta vs #01
+    const top3Grid = document.getElementById("home-top3-blacklist-grid");
+    if (top3Grid) {
+      const top3 = getHomeBlacklist2026Top3();
+      const leaderRep = top3[0]
+        ? ((typeof top3[0]._numericRep === "number") ? top3[0]._numericRep : (parseInt(String(top3[0].rep || "0").replace(/[^0-9]/g, ""), 10) || 0))
+        : 0;
+      const leaderPts = top3[0]
+        ? (typeof calculateDriverPoints === "function" ? calculateDriverPoints(top3[0]) : (top3[0].totalPoints || top3[0].points || 0))
+        : 0;
+
+      if (top3.length > 0) {
+        top3Grid.innerHTML = top3.map((d, idx) => {
+          const pos = idx + 1;
+          const posStr = String(pos).padStart(2, "0");
+          const isLeader = pos === 1;
+          const v = d.victories || { p1: 0, p2: 0, p3: 0, p4: 0 };
+          const totalPts = typeof calculateDriverPoints === "function" ? calculateDriverPoints(d) : (d.totalPoints || d.points || 0);
+          const repNum = (typeof d._numericRep === "number") ? d._numericRep : (parseInt(String(d.rep || "0").replace(/[^0-9]/g, ""), 10) || 0);
+          const displayRep = `$${repNum.toLocaleString("es-ES")} REP`;
+          const displayPts = `${Math.round(totalPts).toLocaleString("es-ES")} PTS`;
+          const displayCar = d.ride || d.car || "Porsche Carrera GT";
+          const podiumSummary = `P1: ${v.p1 || 0} \u2022 P2: ${v.p2 || 0} \u2022 P3: ${v.p3 || 0}`;
+
+          // Match global driver record for best video if no channel url
+          const matchedGlobal = globalDrivers.find((g) => String(g.name || "").trim().toLowerCase() === String(d.name || "").trim().toLowerCase());
+          const bestEntry = matchedGlobal && Array.isArray(matchedGlobal.recordsList) && matchedGlobal.recordsList.length > 0
+            ? (matchedGlobal.recordsList.find((r) => r.rank === 1) || matchedGlobal.recordsList[0])
+            : null;
+          const videoUrl = d.youtube || (bestEntry && bestEntry.videoUrl) ||
+            ("https://www.youtube.com/results?search_query=" + encodeURIComponent(`NFSMW ${d.name} Blacklist 2026`));
+
+          let deltaLabel = isEn ? "TOURNAMENT LEADER" : "L\u00CDDER DEL TORNEO";
+          if (!isLeader) {
+            const repGap = Math.max(0, leaderRep - repNum);
+            const ptsGap = Math.max(0, Math.round(leaderPts - totalPts));
+            deltaLabel = repGap > 0
+              ? `-$${repGap.toLocaleString("es-ES")} REP`
+              : `-${ptsGap.toLocaleString("es-ES")} PTS vs #01`;
+          }
+
+          return `
+            <article class="mw-top3-card ${isLeader ? "is-leader" : `is-rank-${pos}`}" data-open-pilot="${escapeHtml(d.name)}">
+              <span class="mw-card-corners" aria-hidden="true"></span>
+              ${isLeader ? `
+                <svg class="mw-top3-barbed-wire mw-top3-barbed-top" viewBox="0 0 420 34" preserveAspectRatio="none" aria-hidden="true">
+                  <path d="M0 14 Q70 6 140 16 T280 12 T420 15" stroke="#090a07" stroke-width="2" fill="none" />
+                  <g stroke="#090a07" stroke-width="1.6" stroke-linecap="round">
+                    <line x1="48" y1="6" x2="58" y2="18"/><line x1="58" y1="6" x2="48" y2="18"/>
+                    <line x1="164" y1="8" x2="174" y2="20"/><line x1="174" y1="8" x2="164" y2="20"/>
+                    <line x1="278" y1="6" x2="288" y2="18"/><line x1="288" y1="6" x2="278" y2="18"/>
+                    <line x1="368" y1="7" x2="378" y2="19"/><line x1="378" y1="7" x2="368" y2="19"/>
+                  </g>
+                </svg>
+                <svg class="mw-top3-barbed-wire mw-top3-barbed-bottom" viewBox="0 0 420 26" preserveAspectRatio="none" aria-hidden="true">
+                  <path d="M0 12 Q80 18 160 10 T320 15 T420 11" stroke="#090a07" stroke-width="1.8" fill="none" />
+                  <g stroke="#090a07" stroke-width="1.5" stroke-linecap="round">
+                    <line x1="72" y1="6" x2="80" y2="17"/><line x1="80" y1="6" x2="72" y2="17"/>
+                    <line x1="220" y1="5" x2="228" y2="16"/><line x1="228" y1="5" x2="220" y2="16"/>
+                    <line x1="340" y1="6" x2="348" y2="17"/><line x1="348" y1="6" x2="340" y2="17"/>
+                  </g>
+                </svg>
+              ` : ""}
+              <div class="mw-top3-card-top">
+                <span class="mw-top3-rank-box">${posStr}</span>
+                <span class="mw-top3-badge">${isLeader ? "BLACKLIST 2026 #01" : `BLACKLIST 2026 #${posStr}`}</span>
+              </div>
+              <div class="mw-top3-pilot-block">
+                <h3 class="mw-top3-pilot-name">${escapeHtml(d.name)}</h3>
+                <div class="mw-top3-track-ref">${escapeHtml(podiumSummary)} &bull; ${escapeHtml(displayPts)}</div>
+              </div>
+              <div class="mw-top3-metrics">
+                <div class="mw-top3-metric">
+                  <span>${isEn ? "TOURNAMENT BOUNTY" : "RECOMPENSA TORNEO"}</span>
+                  <strong class="mw-top3-time">${escapeHtml(displayRep)}</strong>
+                </div>
+                ${!isLeader ? `
+                <div class="mw-top3-metric">
+                  <span>${isEn ? "GAP VS #01" : "DIFERENCIA VS #01"}</span>
+                  <strong class="mw-top3-delta">${escapeHtml(deltaLabel)}</strong>
+                </div>` : `
+                <div class="mw-top3-metric">
+                  <span>${isEn ? "TOTAL POINTS" : "PUNTOS TOTALES"}</span>
+                  <strong>${escapeHtml(displayPts)}</strong>
+                </div>`}
+                <div class="mw-top3-metric">
+                  <span>${isEn ? "OFFICIAL VEHICLE" : "VEH\u00CDCULO OFICIAL"}</span>
+                  <strong>${escapeHtml(displayCar)}</strong>
+                </div>
+                <div class="mw-top3-metric">
+                  <span>${isEn ? "P1 VICTORIES" : "VICTORIAS P1"}</span>
+                  <strong>${escapeHtml(String(v.p1 || 0))} ${isEn ? "WINS" : "VICTORIAS"}</strong>
+                </div>
+              </div>
+              <div class="mw-top3-card-foot">
+                <a href="${escapeHtml(videoUrl)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="mw-top3-video-btn">
+                  <span>${isEn ? "[ WATCH VIDEO ]" : "[ VER VIDEO ]"}</span>
+                </a>
+                <span class="mw-top3-dossier-link">${isEn ? "DOSSIER" : "EXPEDIENTE"} &rarr;</span>
+              </div>
+            </article>
+          `;
+        }).join("");
+      }
+    }
+
+    // 3. Featured Routes by Modality (#home-featured-routes-grid) with Dynamic Landing Modality Filter
+    const routesGrid = document.getElementById("home-featured-routes-grid");
+    if (routesGrid && allRoutes.length > 0) {
+      const circuits = allRoutes.filter((r) => (r.type || "").toLowerCase() === "circuito");
+      const sprints = allRoutes.filter((r) => (r.type || "").toLowerCase() === "sprint");
+      const drags = allRoutes.filter((r) => (r.type || "").toLowerCase() === "drag");
+
+      let featured = [];
+      if (homeRouteFilterCat === "Circuito") {
+        featured = circuits.slice(0, 4);
+      } else if (homeRouteFilterCat === "Sprint") {
+        featured = sprints.slice(0, 4);
+      } else if (homeRouteFilterCat === "Drag") {
+        featured = drags.slice(0, 4);
+      } else {
+        featured = [circuits[0], sprints[0], drags[0], circuits[1] || sprints[1]].filter(Boolean);
+      }
+
+      routesGrid.innerHTML = featured.map((route) => {
+        const rKey = sanitizeFirebaseKey(route.name);
+        const wr = getRouteWRData(route);
+        const meta = getRouteMeta(route.name, route.type);
+        const rawType = route.type || "Circuito";
+        const typeUpper = rawType === "Circuito" ? "CIRCUIT" : String(rawType).toUpperCase();
+        const mapSvg = buildTacticalRouteMapSvg(route.name, rawType);
+        const distVal = route.length || meta.distance || "7.4 km";
+
+        return `
+          <article class="uiverse-cosmic-card stitch-track-card nfsmw-track-card nfsmw-tactical-card mw-home-route-card"
+            data-open-route-lb="${escapeHtml(route.name)}"
+            data-route-name="${escapeHtml(route.name)}"
+            data-route-type="${escapeHtml(rawType)}">
+            <span class="nfsmw-tac-corners" aria-hidden="true"></span>
+            <div class="nfsmw-tac-header">
+              <svg viewBox="0 0 360 96" preserveAspectRatio="none" class="nfsmw-tac-header-art" aria-hidden="true">
+                <path d="M0 10 Q45 5 90 11 T180 9 T270 12 T360 8" stroke="#090a07" stroke-width="2" fill="none" />
+                <g stroke="#090a07" stroke-width="1.6" stroke-linecap="round">
+                  <line x1="28" y1="4" x2="36" y2="14" /><line x1="36" y1="4" x2="28" y2="14" />
+                  <line x1="112" y1="6" x2="120" y2="16" /><line x1="120" y1="6" x2="112" y2="16" />
+                  <line x1="216" y1="5" x2="224" y2="15" /><line x1="224" y1="5" x2="216" y2="15" />
+                  <line x1="312" y1="4" x2="320" y2="14" /><line x1="320" y1="4" x2="312" y2="14" />
+                </g>
+                <path d="M0 86 Q55 91 110 85 T220 88 T360 84" stroke="#090a07" stroke-width="2" fill="none" />
+                <g stroke="#090a07" stroke-width="1.6" stroke-linecap="round">
+                  <line x1="48" y1="81" x2="56" y2="91" /><line x1="56" y1="81" x2="48" y2="91" />
+                  <line x1="176" y1="80" x2="184" y2="90" /><line x1="184" y1="80" x2="176" y2="90" />
+                  <line x1="296" y1="80" x2="304" y2="90" /><line x1="304" y1="80" x2="296" y2="90" />
+                </g>
+              </svg>
+              <div class="nfsmw-tac-header-inner">
+                <div class="nfsmw-tac-modality-row">
+                  <svg class="nfsmw-tac-helmet-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill="currentColor" d="M12 2.2c-3.6 0-6.2 2.5-6.2 6.1 0 2.5 1.4 4.5 3.6 5.2h5.2c2.2-.7 3.6-2.7 3.6-5.2 0-3.6-2.6-6.1-6.2-6.1zm0 8.5c-2.1 0-3.8-.7-4.1-2.5h8.2c-.3 1.8-2 2.5-4.1 2.5z"/>
+                  </svg>
+                  <span class="nfsmw-tac-modality-label">${escapeHtml(typeUpper)}</span>
+                </div>
+                <h4 class="stitch-card-title nfsmw-tac-title" title="${escapeHtml(route.name)}">${escapeHtml(route.name)}</h4>
+              </div>
+            </div>
+            <div class="nfsmw-tac-map-box">
+              ${mapSvg}
+              <div class="nfsmw-tac-ruler-bar" aria-hidden="true">
+                <div class="nfsmw-tac-ruler-left">
+                  <span class="nfsmw-tac-ruler-ticks"></span>
+                  <div class="nfsmw-tac-ruler-nums"><span>0</span><span>50</span><span>100</span></div>
+                </div>
+                <div class="nfsmw-tac-ruler-right">
+                  <span class="nfsmw-tac-ruler-district">${escapeHtml(meta.district)} &bull; ${escapeHtml(distVal)}</span>
+                </div>
+              </div>
+            </div>
+            <div class="nfsmw-tac-footer">
+              <div class="nfsmw-tac-driver-wrap">
+                <span class="nfsmw-tac-label">DRIVER:</span>
+                <span class="driver-name nfsmw-tac-driver-val" data-wr-driver="${rKey}">${escapeHtml(wr.driver)}</span>
+              </div>
+              <div class="nfsmw-tac-record-wrap">
+                <span class="nfsmw-tac-record-label">RECORD:</span>
+                <span class="stitch-num record-time nfsmw-tac-record-val" data-wr-time="${rKey}">${escapeHtml(wr.time)}</span>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+  }
+
+  // Smooth Numeric Upward Counter Animation for Live Hero Stats (1388 / 31 / 86)
+  const homeCounterLastTarget = new WeakMap();
+  const homeCounterRafMap = new WeakMap();
+  function animateHomeCounter(el, targetValue, useLocale) {
+    if (!el) return;
+    const cleanTarget = Math.max(0, Math.round(Number(targetValue) || 0));
+    const prevTarget = homeCounterLastTarget.get(el);
+    if (prevTarget === cleanTarget) return;
+    const startVal = typeof prevTarget === "number" ? prevTarget : 0;
+    homeCounterLastTarget.set(el, cleanTarget);
+
+    const prevRaf = homeCounterRafMap.get(el);
+    if (prevRaf) cancelAnimationFrame(prevRaf);
+
+    const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion || cleanTarget === startVal) {
+      el.textContent = useLocale ? cleanTarget.toLocaleString("es-ES") : String(cleanTarget);
+      return;
+    }
+
+    const duration = 680;
+    const startTime = performance.now();
+    function step(now) {
+      const t = Math.min(1, (now - startTime) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const val = Math.round(startVal + (cleanTarget - startVal) * eased);
+      el.textContent = useLocale ? val.toLocaleString("es-ES") : String(val);
+      if (t < 1) {
+        homeCounterRafMap.set(el, requestAnimationFrame(step));
+      } else {
+        el.textContent = useLocale ? cleanTarget.toLocaleString("es-ES") : String(cleanTarget);
+      }
+    }
+    homeCounterRafMap.set(el, requestAnimationFrame(step));
+  }
+
+  // Failsafe Staggered Card Cascade Reveal (18px slide-up, 90ms stagger + 700ms mandatory failsafe)
+  let homeStaggerObserver = null;
+  function triggerHomeStaggerReveal(scopeRoot) {
+    const root = scopeRoot || document.getElementById("view-elements");
+    if (!root) return;
+    const cards = Array.from(root.querySelectorAll(".mw-rivalry-photo-card, .mw-rivalry-machine-card, .mw-top3-card, .mw-home-route-card, .mw-bento-panel"));
+    if (!cards.length) return;
+
+    const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion || typeof IntersectionObserver === "undefined") {
+      cards.forEach((c) => {
+        c.classList.remove("mw-stagger-init");
+        c.classList.add("mw-stagger-visible");
+      });
+      return;
+    }
+
+    if (homeStaggerObserver) {
+      homeStaggerObserver.disconnect();
+    }
+
+    // Group stagger index per parent container so each section cascades cleanly (0ms, 90ms, 180ms, 270ms)
+    const parentCounts = new Map();
+    cards.forEach((card) => {
+      if (card.dataset.mwStaggerDone === "1") return;
+      const p = card.parentElement || root;
+      const idx = parentCounts.get(p) || 0;
+      parentCounts.set(p, idx + 1);
+      card.style.setProperty("--stagger-delay", `${Math.min(idx, 5) * 90}ms`);
+      card.classList.add("mw-stagger-init");
+      card.classList.remove("mw-stagger-visible");
+    });
+
+    const revealCard = (card) => {
+      if (!card) return;
+      card.dataset.mwStaggerDone = "1";
+      card.classList.remove("mw-stagger-init");
+      card.classList.add("mw-stagger-visible");
+    };
+
+    homeStaggerObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            revealCard(entry.target);
+            if (homeStaggerObserver) homeStaggerObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.05, rootMargin: "0px 0px -20px 0px" }
+    );
+
+    cards.forEach((card) => {
+      if (card.dataset.mwStaggerDone !== "1") {
+        homeStaggerObserver.observe(card);
+      }
+    });
+
+    // Mandatory 700ms failsafe: guarantee ZERO elements ever stay invisible
+    setTimeout(() => {
+      cards.forEach((card) => {
+        revealCard(card);
+      });
+    }, 700);
+  }
+
+  // Tactical Spotlight Mouse Tracking (--mouse-x, --mouse-y) + Scroll Choreography (Progress, Sticky HUD, Parallax)
+  function initHomeInteractivePhysics() {
+    const isTouchHoverNone = () => !!(window.matchMedia && window.matchMedia("(hover: none)").matches);
+    const homeView = document.getElementById("view-elements");
+    if (homeView && !homeView.dataset.mwSpotlightBound) {
+      homeView.dataset.mwSpotlightBound = "1";
+      homeView.addEventListener(
+        "mousemove",
+        (ev) => {
+          if (isTouchHoverNone()) return;
+          const card = ev.target && ev.target.closest
+            ? ev.target.closest(".mw-rivalry-photo-card, .mw-rivalry-machine-card, .mw-top3-card, .mw-home-route-card, .mw-bento-panel")
+            : null;
+          if (!card) return;
+          const rect = card.getBoundingClientRect();
+          const x = Math.round(ev.clientX - rect.left);
+          const y = Math.round(ev.clientY - rect.top);
+          card.style.setProperty("--mouse-x", `${x}px`);
+          card.style.setProperty("--mouse-y", `${y}px`);
+        },
+        { passive: true }
+      );
+    }
+
+    if (window.__mwScrollChoreographyBound) return;
+    window.__mwScrollChoreographyBound = true;
+
+    const navbar = document.querySelector("header.uiverse-navbar");
+    const progressEl = document.getElementById("mw-hud-scroll-progress");
+    const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let rafPending = false;
+
+    const sectionNavMap = [
+      { secId: "home-bento-section", navId: "btn-torneo-trigger" },
+      { secId: "home-routes-section", navId: "btn-elements-trigger" },
+      { secId: "home-top3-section", navId: "btn-telemetria-trigger" },
+      { secId: "nfs-hero-banner", navId: "nav-link-home" }
+    ];
+
+    function updateScrollFrame() {
+      rafPending = false;
+      const scrollY = window.scrollY || window.pageYOffset || 0;
+      const docEl = document.documentElement;
+      const maxScroll = Math.max(1, (docEl.scrollHeight || 0) - (window.innerHeight || 0));
+      const progress = Math.min(1, Math.max(0, scrollY / maxScroll));
+
+      // 1. Top 2px HUD Scroll Progress Line
+      if (progressEl) {
+        progressEl.style.setProperty("--scroll-progress", progress.toFixed(4));
+      }
+
+      // 2. Compact Sticky Glass Navbar (> 50px)
+      if (navbar) {
+        navbar.classList.toggle("is-scrolled", scrollY > 50);
+      }
+
+      // 3. Subtle 3D Hero Parallax (Desktop Hover Only — Disabled on Mobile/Touch 60fps) & Section Scroll Spy
+      const isHomeActive = homeView && homeView.classList.contains("is-active");
+      const heroMedia = document.querySelector("#hero-bg-stage .hero-bg-video");
+      const heroSmoke = document.querySelector("#hero-bg-stage .mw-hero-smoke-layer");
+      const allowParallax = isHomeActive && !reduceMotion && !isTouchHoverNone() && window.innerWidth > 992;
+
+      if (isHomeActive) {
+        if (allowParallax) {
+          const clampedY = Math.min(scrollY, 900);
+          if (heroMedia) {
+            heroMedia.style.transform = `translate3d(0, ${(clampedY * 0.22).toFixed(1)}px, 0) scale(1.06)`;
+          }
+          if (heroSmoke) {
+            heroSmoke.style.transform = `translate3d(0, ${(clampedY * 0.36).toFixed(1)}px, 0)`;
+          }
+        } else {
+          if (heroMedia && heroMedia.style.transform) heroMedia.style.transform = "";
+          if (heroSmoke && heroSmoke.style.transform) heroSmoke.style.transform = "";
+        }
+
+        const anchorY = (window.innerHeight || 800) * 0.38;
+        let activeNavId = "nav-link-home";
+        for (const item of sectionNavMap) {
+          const secEl = document.getElementById(item.secId);
+          if (!secEl) continue;
+          const r = secEl.getBoundingClientRect();
+          if (r.top <= anchorY && r.bottom >= 120) {
+            activeNavId = item.navId;
+            break;
+          }
+        }
+        document.querySelectorAll(".uiverse-navbar .nav-link.is-scroll-section-active").forEach((n) => {
+          if (n.id !== activeNavId) n.classList.remove("is-scroll-section-active");
+        });
+        const targetNav = document.getElementById(activeNavId);
+        if (targetNav) targetNav.classList.add("is-scroll-section-active");
+      } else {
+        document.querySelectorAll(".uiverse-navbar .nav-link.is-scroll-section-active").forEach((n) => {
+          n.classList.remove("is-scroll-section-active");
+        });
+      }
+    }
+
+    const scheduleFrame = () => {
+      if (rafPending) return;
+      rafPending = true;
+      requestAnimationFrame(updateScrollFrame);
+    };
+
+    window.addEventListener("scroll", scheduleFrame, { passive: true });
+    window.addEventListener("resize", scheduleFrame, { passive: true });
+    updateScrollFrame();
+  }
+
+  // Dynamic Home Landing Modality Filter Tabs (ALL TRACKS / CIRCUIT / SPRINT / DRAG + VER TODAS)
+  document.querySelectorAll("[data-home-route-filter]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const cat = btn.dataset.homeRouteFilter || "all";
+      homeRouteFilterCat = cat;
+      document.querySelectorAll("[data-home-route-filter]").forEach((b) => {
+        const active = b.dataset.homeRouteFilter === cat;
+        b.classList.toggle("is-active", active);
+        b.setAttribute("aria-selected", active ? "true" : "false");
+      });
+      renderHomeLandingShowcase();
+      triggerHomeStaggerReveal(document.getElementById("home-routes-section"));
+    });
+  });
+
+  const btnHomeOpenRoutesCat = document.getElementById("btn-home-open-routes-cat");
+  if (btnHomeOpenRoutesCat) {
+    btnHomeOpenRoutesCat.addEventListener("click", () => {
+      const cat = homeRouteFilterCat || "all";
+      routesViewState.cat = cat;
+      routesViewState.district = "all";
+      document.querySelectorAll("[data-routes-cat]").forEach((b) => {
+        b.classList.toggle("is-active", b.dataset.routesCat === cat);
+      });
+      if (typeof updateRoutesBannerTitle === "function") updateRoutesBannerTitle(cat);
+      switchView("view-challenges", null, { cat });
+      renderRoutesCatalog();
+    });
+  }
+
+  window.renderHomeLandingShowcase = renderHomeLandingShowcase;
+  window.triggerHomeStaggerReveal = triggerHomeStaggerReveal;
+  renderHomeLandingShowcase();
+  initHomeInteractivePhysics();
+  triggerHomeStaggerReveal();
+
+  // Prefetch all 86 track leaderboards from Firebase RTDB in the background, then refresh Hall of Fame, Home & Telemetry
   prefetchGlobalLeaderboards().then(() => {
+    renderHomeLandingShowcase();
     renderHallOfFameView();
     renderBlacklistView();
     renderTelemetryDossierView(telemetryState.pilotName);
@@ -6723,5 +7270,164 @@ document.addEventListener("DOMContentLoaded", () => {
       switchView(qView, qTab);
     }
   }
+
+  if (document.body && !document.body.dataset.activeView) {
+    const activeSec = document.querySelector(".view-section.is-active");
+    document.body.dataset.activeView = activeSec ? activeSec.id : "view-elements";
+  }
+
+  // ==========================================================================
+  // 5. PROGRESSIVE WEB APP (PWA) SERVICE WORKER & FUNCTIONAL INSTALL FLOW
+  // ==========================================================================
+  let deferredPwaPrompt = window.__nfsDeferredInstallPrompt || null;
+
+  function isPwaStandalone() {
+    return (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) ||
+      window.navigator.standalone === true;
+  }
+
+  function updatePwaInstallButtons() {
+    const installed = isPwaStandalone();
+    const isEn = localStorage.getItem("nfs_lang") === "en";
+    document.querySelectorAll(".btn-install-pwa").forEach((btn) => {
+      btn.classList.toggle("is-installed", installed);
+      const labelEl = btn.querySelector("[data-pwa-install-label]");
+      if (labelEl) {
+        if (installed) {
+          labelEl.textContent = isEn ? "APP INSTALLED" : "✓ APP INSTALADA";
+        } else if (btn.classList.contains("btn-install-pwa-nav")) {
+          labelEl.textContent = isEn ? "Install App" : "Instalar App";
+        } else {
+          labelEl.textContent = isEn ? "INSTALL WEB APP" : "INSTALAR APP WEB";
+        }
+      }
+      if (installed) {
+        btn.setAttribute("data-text", isEn ? "APP INSTALLED" : "APP INSTALADA");
+      } else {
+        btn.setAttribute("data-text", isEn ? "INSTALL WEB APP" : "INSTALAR APP WEB");
+      }
+    });
+    const hintEl = document.getElementById("hero-pwa-hint");
+    if (hintEl) {
+      hintEl.textContent = installed
+        ? (isEn ? "Running in standalone Web App mode" : "Ejecutando como App Web instalada")
+        : deferredPwaPrompt
+          ? (isEn ? "One-click installation ready for your device" : "Instalación directa lista en 1 clic para tu dispositivo")
+          : (isEn ? "Install functional Web App on Android, iPhone or PC" : "Instala la App Web funcional en Android, iPhone o PC");
+    }
+  }
+
+  function openPwaInstallModal(mode) {
+    const modal = document.getElementById("pwa-install-modal");
+    const stepsEl = document.getElementById("pwa-install-modal-steps");
+    const subtitleEl = document.getElementById("pwa-modal-subtitle");
+    if (!modal || !stepsEl) return;
+
+    const ua = navigator.userAgent || "";
+    const isIOS = /iPad|iPhone|iPod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    const isAndroid = /Android/i.test(ua);
+    const isFirefox = /Firefox|FxiOS/i.test(ua);
+
+    if (mode === "installed") {
+      if (subtitleEl) subtitleEl.textContent = "Aplicación Web Activa";
+      stepsEl.innerHTML = `
+        <div class="pwa-step-box pwa-step-done">
+          <strong>✓ NFSMW Ranks ya está instalada</strong>
+          <p>Estás utilizando la aplicación web en modo pantalla completa e independiente.</p>
+        </div>
+      `;
+    } else if (isIOS) {
+      if (subtitleEl) subtitleEl.textContent = "Instalación en iPhone / iPad (iOS)";
+      stepsEl.innerHTML = `
+        <div class="pwa-step-box"><strong>1. Toca el botón Compartir</strong><p>Pulsa el ícono <strong>Compartir (cuadrado con flecha hacia arriba)</strong> en la barra de Safari o Chrome.</p></div>
+        <div class="pwa-step-box"><strong>2. Selecciona "Añadir a pantalla de inicio"</strong><p>Desliza hacia abajo en el menú y toca <strong>Añadir a pantalla de inicio</strong>.</p></div>
+        <div class="pwa-step-box"><strong>3. Confirma "Añadir"</strong><p>La App <strong>NFSMW Ranks</strong> quedará lista en tu pantalla principal a pantalla completa.</p></div>
+      `;
+    } else if (isAndroid) {
+      if (subtitleEl) subtitleEl.textContent = isFirefox ? "Instalación en Android (Firefox)" : "Instalación en Android (Chrome / Edge / Brave)";
+      stepsEl.innerHTML = isFirefox
+        ? `
+          <div class="pwa-step-box"><strong>1. Abre el menú de Firefox (⋮)</strong><p>Toca los tres puntos en la esquina inferior o superior derecha.</p></div>
+          <div class="pwa-step-box"><strong>2. Toca "Instalar" o "Añadir a la pantalla de inicio"</strong><p>Confirma para crear el acceso directo funcional de NFSMW Ranks.</p></div>
+        `
+        : `
+          <div class="pwa-step-box"><strong>1. Abre el menú del navegador (⋮)</strong><p>En Chrome, Brave o Edge móvil, toca los tres puntos en la esquina superior derecha.</p></div>
+          <div class="pwa-step-box"><strong>2. Selecciona "Instalar aplicación"</strong><p>Toca <strong>Instalar aplicación</strong> (o <em>Añadir a pantalla de inicio</em>) y acepta.</p></div>
+          <div class="pwa-step-box"><strong>3. Abre desde tu menú de apps</strong><p>Funcionará como aplicación nativa con carga rápida de rutas y récords.</p></div>
+        `;
+    } else {
+      if (subtitleEl) subtitleEl.textContent = isFirefox ? "Instalación en Escritorio (Firefox)" : "Instalación en PC (Chrome / Edge / Brave)";
+      stepsEl.innerHTML = isFirefox
+        ? `
+          <div class="pwa-step-box"><strong>Usa Chrome, Edge o Brave para instalación nativa en PC</strong><p>O añade esta página a tus marcadores/accesos directos de escritorio para abrirla rápidamente.</p></div>
+        `
+        : `
+          <div class="pwa-step-box"><strong>1. Haz clic en el ícono de Instalar (⊕ / monitor)</strong><p>Ubicado en el extremo derecho de la barra de direcciones arriba en Chrome, Edge o Brave.</p></div>
+          <div class="pwa-step-box"><strong>2. O desde el menú (⋮) → "Guardar y compartir" → "Instalar aplicación"</strong><p>Confirma clicando en <strong>Instalar</strong> para abrir NFSMW Ranks como ventana de app independiente.</p></div>
+        `;
+    }
+
+    modal.hidden = false;
+    document.body.style.overflow = "hidden";
+  }
+
+  window.closePwaInstallModal = function () {
+    const modal = document.getElementById("pwa-install-modal");
+    if (modal) modal.hidden = true;
+    document.body.style.overflow = "";
+  };
+
+  window.triggerPwaInstall = async function () {
+    closeMobileDrawer();
+    if (isPwaStandalone()) {
+      openPwaInstallModal("installed");
+      return;
+    }
+    if (deferredPwaPrompt) {
+      try {
+        deferredPwaPrompt.prompt();
+        const choice = await deferredPwaPrompt.userChoice;
+        if (choice && choice.outcome === "accepted") {
+          deferredPwaPrompt = null;
+          window.__nfsDeferredInstallPrompt = null;
+        }
+        updatePwaInstallButtons();
+        return;
+      } catch (err) {
+        // Fallback to manual instructions modal below
+      }
+    }
+    openPwaInstallModal("guide");
+  };
+
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPwaPrompt = e;
+    window.__nfsDeferredInstallPrompt = e;
+    updatePwaInstallButtons();
+  });
+
+  window.addEventListener("appinstalled", () => {
+    deferredPwaPrompt = null;
+    window.__nfsDeferredInstallPrompt = null;
+    updatePwaInstallButtons();
+    closePwaInstallModal();
+  });
+
+  const pwaModalEl = document.getElementById("pwa-install-modal");
+  if (pwaModalEl) {
+    pwaModalEl.addEventListener("click", (e) => {
+      if (e.target === pwaModalEl) closePwaInstallModal();
+    });
+  }
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closePwaInstallModal();
+  });
+
+  if ("serviceWorker" in navigator && (window.location.protocol === "https:" || window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")) {
+    navigator.serviceWorker.register("./sw.js", { scope: "./" }).catch(() => {});
+  }
+
+  updatePwaInstallButtons();
 });
 

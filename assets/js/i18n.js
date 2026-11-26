@@ -10,10 +10,12 @@
   const enTranslations = {
     // Navigation & Global Header
     "nav.home": "HOME",
+    "nav.nfs_online": "NFS ONLINE",
     "nav.nfsmwo_web": "NFSMWO WEB",
     "nav.leaderboards": "LEADERBOARDS",
-    "nav.routes": "LEADERBOARD",
-    "nav.challenges_tournament": "CHALLENGES & TOURNAMENT",
+    "nav.routes": "LEADERBOARDS",
+    "nav.challenges_tournament": "TOURNAMENTS",
+    "nav.comunidad": "COMMUNITY",
     "nav.weekly_challenges": "Weekly Challenges",
     "nav.blacklist_groups": "Blacklist Groups & Rivals",
     "nav.standings": "Championship Standings",
@@ -240,6 +242,62 @@
     "submit.field_notes": "Telemetry Notes / Setup Details",
     "submit.btn_submit_record": "SEND RECORD FOR REVIEW",
 
+    // Landing Page Tactical Bilingual Strings (ES & EN)
+    "landing.hero_eyebrow": "// OFFICIAL ROCKPORT TELEMETRY & RANKING ARCHIVE",
+    "landing.hero_headline_main": "DOMINATE THE",
+    "landing.hero_subtitle": "Real-time verified world records with 128Hz telemetry, official video proof, and competitive standings across all 86 Rockport City tracks.",
+    "landing.cta_leaderboards": "VIEW LEADERBOARDS",
+    "landing.cta_tournaments": "TOURNAMENTS & CHALLENGES",
+    "landing.stat_records": "VERIFIED RECORDS",
+    "landing.stat_tracks": "OFFICIAL TRACKS",
+    "landing.rivalry_eyebrow": "// HIGH-SPEED STREET RIVALRY • ROCKPORT 2005 EDITION",
+    "landing.rivalry_title": "BMW M3 GTR E46 <span class=\"mw-title-slash\">VS</span> PORSCHE CARRERA GT",
+    "landing.rivalry_meta": "WHEEL-TO-WHEEL // 128HZ TELEMETRY",
+    "landing.cam1_tag": "CAM 01 // INDUSTRIAL CURVE BATTLE",
+    "landing.cam1_title": "WHEEL-TO-WHEEL BATTLE AT +380 KM/H",
+    "landing.cam1_sub": "BMW M3 GTR E46 & Porsche Carrera GT • Wet Rockport Asphalt",
+    "landing.cam1_btn": "VIEW TIMES →",
+    "landing.cam2_tag": "CAM 02 // BRIDGE APEX OVERTAKE",
+    "landing.cam2_title": "APEX ATTACK // GLOWING BRAKE ROTORS",
+    "landing.cam2_sub": "Downtown Sector • Blacklist Competition v1.3",
+    "landing.cam2_btn": "JUNKMAN DUELS →",
+    "landing.m3_tag": "HERO ICON // BMW NO JUNKMAN CLASS",
+    "landing.m3_desc": "The undisputed legend of Rockport City. Tubular race chassis, GT downforce, and unmatched cornering grip across every Blacklist circuit.",
+    "landing.cgt_tag": "JUNKMAN KING // EXTREME TOP SPEED",
+    "landing.cgt_desc": "The pinnacle of straight-line velocity and brutal full-Junkman acceleration built to shatter highway and sprint world records.",
+    "landing.spec_engine": "ENGINE",
+    "landing.spec_power": "POWER",
+    "landing.spec_top": "TOP SPEED",
+    "landing.m3_cta": "BMW M3 GTR RECORDS →",
+    "landing.cgt_cta": "JUNKMAN RECORDS →",
+    "landing.view_setup": "VIEW SETUP",
+    "landing.top3_eyebrow": "// OFFICIAL BLACKLIST 2026 TOURNAMENT",
+    "landing.top3_title": "BLACKLIST 2026 LEADERS",
+    "landing.top3_meta": "TOP 3 TOURNAMENT // LIVE",
+    "landing.top3_btn_all": "[ VIEW FULL BLACKLIST 2026 STANDINGS → ]",
+    "landing.routes_eyebrow": "// ROCKPORT TRACK ARCHIVE",
+    "landing.routes_title": "SELECT CIRCUIT OR SPRINT",
+    "landing.routes_all": "ALL TRACKS",
+    "landing.routes_circuit": "CIRCUIT",
+    "landing.routes_sprint": "SPRINT",
+    "landing.routes_drag": "DRAG",
+    "landing.routes_view_all": "VIEW ALL",
+    "landing.bento_eyebrow": "// COMPETITIVE HUB • TELEMETRY & EVENTS",
+    "landing.bento_title": "RANKED SESSIONS <span class=\"mw-title-slash\">&amp;</span> TOURNAMENTS",
+    "landing.sessions_title": "RANKED SESSIONS <span class=\"mw-title-slash\">//</span> OFFICIAL MODES",
+    "landing.sessions_desc": "Jump straight into official leaderboards filtered by technical tuning setup and flying lap format.",
+    "landing.sess_j_single_sub": "Single lap with Junkman performance upgrades",
+    "landing.sess_j_fast_sub": "Fastest flying lap with Junkman upgrades",
+    "landing.sess_b_single_sub": "Official homologated M3 GTR single lap",
+    "landing.sess_b_fast_sub": "Official M3 GTR fastest flying lap record",
+    "landing.events_title": "CHALLENGES & BLACKLIST TOURNAMENTS",
+    "landing.events_desc": "Compete in 4-tier weekly community challenges, climb the Blacklist 2026 standings, and inspect verified brackets and results.",
+    "landing.events_format_label": "FORMAT",
+    "landing.events_format_val": "4 GROUPS • 32 CHALLENGES",
+    "landing.events_verif_label": "VERIFICATION",
+    "landing.events_cta_brackets": "[ VIEW TOURNAMENTS & BRACKETS ]",
+    "landing.events_cta_community": "JOIN THE COMMUNITY",
+
     // Footer & Partner Links
     "footer.powered_by": "PRODUCED BY & POWERED BY"
   };
@@ -247,10 +305,12 @@
   const esTranslations = {
     // Navigation & Global Header
     "nav.home": "INICIO",
+    "nav.nfs_online": "NFS ONLINE",
     "nav.nfsmwo_web": "NFSMWO WEB",
     "nav.leaderboards": "TABLAS DE CLASIFICACIÓN",
-    "nav.routes": "LEADERBOARD",
-    "nav.challenges_tournament": "DESAFÍOS & TORNEO",
+    "nav.routes": "LEADERBOARDS",
+    "nav.challenges_tournament": "TORNEOS",
+    "nav.comunidad": "COMMUNITY",
     "nav.weekly_challenges": "Desafíos Semanales",
     "nav.blacklist_groups": "Grupos y Rivales Blacklist",
     "nav.standings": "Clasificación del Campeonato",
@@ -476,6 +536,62 @@
     "submit.field_screenshot": "URL de Captura de Pantalla / Foto",
     "submit.field_notes": "Notas de Telemetría / Detalles del Setup",
     "submit.btn_submit_record": "ENVIAR REGISTRO A REVISIÓN",
+
+    // Landing Page Tactical Bilingual Strings (ES)
+    "landing.hero_eyebrow": "// ARCHIVO OFICIAL DE TELEMETRÍA Y RÉCORDS DE ROCKPORT",
+    "landing.hero_headline_main": "DOMINA LA",
+    "landing.hero_subtitle": "Récords mundiales verificados en tiempo real con telemetría de 128Hz, pruebas en video oficiales y clasificaciones competitivas en las 86 pistas de Rockport City.",
+    "landing.cta_leaderboards": "VER LEADERBOARDS",
+    "landing.cta_tournaments": "TORNEOS & CHALLENGER",
+    "landing.stat_records": "RÉCORDS VERIFICADOS",
+    "landing.stat_tracks": "PISTAS OFICIALES",
+    "landing.rivalry_eyebrow": "// DUELO DE ALTA VELOCIDAD • ROCKPORT 2005 EDITION",
+    "landing.rivalry_title": "BMW M3 GTR E46 <span class=\"mw-title-slash\">VS</span> PORSCHE CARRERA GT",
+    "landing.rivalry_meta": "WHEEL-TO-WHEEL // TELEMETRÍA 128HZ",
+    "landing.cam1_tag": "CAM 01 // DUELO EN CURVA INDUSTRIAL",
+    "landing.cam1_title": "BATALLA RUEDA A RUEDA A +380 KM/H",
+    "landing.cam1_sub": "BMW M3 GTR E46 y Porsche Carrera GT • Asfalto húmedo de Rockport",
+    "landing.cam1_btn": "VER TIEMPOS →",
+    "landing.cam2_tag": "CAM 02 // ADELANTAMIENTO EN PUENTE",
+    "landing.cam2_title": "ATAQUE EN VÉRTICE // FRENOS AL ROJO",
+    "landing.cam2_sub": "Sector Downtown • Competición Blacklist v1.3",
+    "landing.cam2_btn": "DUELOS JUNKMAN →",
+    "landing.m3_tag": "ÍCONO HERO // CATEGORÍA BMW NO JUNKMAN",
+    "landing.m3_desc": "La leyenda indiscutible de Rockport City. Chasis tubular de competición, alta carga aerodinámica y el paso por curva más estable de toda la Blacklist.",
+    "landing.cgt_tag": "REY JUNKMAN // VELOCIDAD TERMINAL EXTREMA",
+    "landing.cgt_desc": "La cumbre de la aceleración y fuerza bruta con mejoras Junkman completas. El rival directo capaz de pulverizar récords en autopistas y sprints.",
+    "landing.spec_engine": "MOTOR",
+    "landing.spec_power": "POTENCIA",
+    "landing.spec_top": "VEL. PUNTA",
+    "landing.m3_cta": "RÉCORDS BMW M3 GTR →",
+    "landing.cgt_cta": "RÉCORDS JUNKMAN →",
+    "landing.view_setup": "VER SETUP",
+    "landing.top3_eyebrow": "// TORNEO OFICIAL BLACKLIST 2026",
+    "landing.top3_title": "LÍDERES DE LA BLACKLIST 2026",
+    "landing.top3_meta": "TOP 3 TORNEO // TIEMPO REAL",
+    "landing.top3_btn_all": "[ VER CLASIFICACIÓN COMPLETA BLACKLIST 2026 → ]",
+    "landing.routes_eyebrow": "// ARCHIVO DE PISTAS ROCKPORT",
+    "landing.routes_title": "SELECCIONAR CIRCUITO O SPRINT",
+    "landing.routes_all": "TODAS LAS PISTAS",
+    "landing.routes_circuit": "CIRCUITO",
+    "landing.routes_sprint": "SPRINT",
+    "landing.routes_drag": "DRAG",
+    "landing.routes_view_all": "VER TODAS",
+    "landing.bento_eyebrow": "// HUB COMPETITIVO • TELEMETRÍA & EVENTOS",
+    "landing.bento_title": "SESIONES RANKED <span class=\"mw-title-slash\">&amp;</span> TORNEOS",
+    "landing.sessions_title": "RANKED SESSIONS <span class=\"mw-title-slash\">//</span> MODOS OFICIALES",
+    "landing.sessions_desc": "Accede directamente a los tiempos oficiales por categoría técnica de preparación y vuelta rápida.",
+    "landing.sess_j_single_sub": "Vuelta individual con mejoras Junkman",
+    "landing.sess_j_fast_sub": "Mejor vuelta lanzada Junkman",
+    "landing.sess_b_single_sub": "Vuelta oficial homologada M3 GTR",
+    "landing.sess_b_fast_sub": "Récord de vuelta rápida M3 GTR",
+    "landing.events_title": "DESAFÍOS Y TORNEOS BLACKLIST",
+    "landing.events_desc": "Compite en retos comunitarios semanales de 4 niveles, escala en la clasificación Blacklist 2026 y revisa llaves, brackets y resultados homologados.",
+    "landing.events_format_label": "FORMATO",
+    "landing.events_format_val": "4 GRUPOS • 32 RETOS",
+    "landing.events_verif_label": "VERIFICACIÓN",
+    "landing.events_cta_brackets": "[ VER TORNEOS Y BRACKETS ]",
+    "landing.events_cta_community": "UNIRSE A LA COMUNIDAD",
 
     // Footer & Partner Links
     "footer.powered_by": "PRODUCIDO Y PATROCINADO POR"
@@ -912,9 +1028,9 @@
           : (isEn ? enTranslations[key] : esTranslations[key]);
         if (trans) {
           el.textContent = trans;
-          const parentNav = el.closest('.nav-link');
-          if (parentNav && parentNav.hasAttribute('data-text')) {
-            parentNav.setAttribute('data-text', trans);
+          const parentBtn = el.closest('[data-text]');
+          if (parentBtn && parentBtn.hasAttribute('data-text')) {
+            parentBtn.setAttribute('data-text', trans);
           }
         }
       });
@@ -1040,6 +1156,13 @@
         if (optEn) optEn.classList.remove('is-active');
       }
     }
+
+    document.querySelectorAll('.mobile-drawer-lang-selector [data-drawer-lang]').forEach(btn => {
+      btn.classList.toggle('is-active', btn.dataset.drawerLang === lang);
+    });
+    document.querySelectorAll('#hero-bilingual-toggle [data-hero-lang]').forEach(btn => {
+      btn.classList.toggle('is-active', btn.dataset.heroLang === lang);
+    });
   }
 
   // Helper: Translate placeholders and tooltip titles
@@ -1089,6 +1212,8 @@
       if (typeof window.renderChallengesGrid === 'function') window.renderChallengesGrid();
       if (typeof window.filterRoutes === 'function') window.filterRoutes();
       if (typeof window.renderHallOfFameView === 'function') window.renderHallOfFameView();
+      if (typeof window.renderHomeLandingShowcase === 'function') window.renderHomeLandingShowcase();
+      if (typeof window.triggerHomeStaggerReveal === 'function') window.triggerHomeStaggerReveal();
     } catch (e) {
       console.warn('[i18n] Note during dynamic controller refresh:', e);
     }
